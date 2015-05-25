@@ -1,0 +1,602 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+	<title>Electronics notes</title>
+	<!-- META_INSERT -->
+	<meta name="description" content="Electronics notes on resistors, with resistor colour code interactive javascript application, wheatstone bridges applied to sensing, amplifiers, capacitors, inductors and circuit analysis using things like Kirchoff's voltage and current laws">
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+	<script type="text/x-mathjax-config">
+		MathJax.Hub.Config({
+			tex2jax: {
+				inlineMath: [['$','$'], ['\\(','\\)']]
+			},
+			displayAlign: "left",
+			displayIndent: "2em"
+		});
+	</script>
+
+	<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+
+	<script>
+		function JEHCanvasElement() {
+		}
+
+		JEHCancasElement.prototype.containsPoint
+
+		function JEHCanvas(id, onClickCallback) {
+			self.canvas = $("#myCanvas");
+			self.ctx = self.canvas[0].getContext("2d");
+			self.ctx.textBaseline = 'top'; // important!
+			self.objects = [];
+			self.onClickCallback = onClickCallback;
+		}
+
+		JEHCanvas.prototype.getTextDimensions = function(text) {
+			// Slight modifications to answer from
+			// http://stackoverflow.com/questions/1134586/how-can-you-find-the-height-of-text-on-an-html-canvas
+			var text = $('<span>Hg</span>').css({ fontFamily: self.ctx.font });
+			var block = $('<div style="display: inline-block; width: 1px; height: 0px;"></div>');
+			var div = $('<div></div>');
+			var body = $('body');
+			
+			div.append(text, block);
+			body.append(div);
+			
+			try {
+				var result = {};
+				block.css({ verticalAlign: 'baseline' });
+				result.ascent = block.offset().top - text.offset().top;
+				block.css({ verticalAlign: 'bottom' });
+				result.height = block.offset().top - text.offset().top;
+				result.descent = result.height - result.ascent;
+			} finally {
+				div.remove();
+			}
+			
+			result.width = ctx.measureText(ext).width;
+			
+			return result;
+		};
+
+		JEHCanvas.prototype.addObject = function(obj, doRender) {
+			if( ('drawOnCanvas' in obj) && ('containsPoint' in obj) ) {
+				self.objects.push(obj);
+				if(typeof doRender !== 'undefined') {
+					obj.drawOnCanvas(this);
+				}
+			}
+			else {
+				console.log('### WARNING: JEHCanvas.addObject: Object "' + obj + '" does not have correct interface methods');
+			}
+		}
+
+		function JEHBox(x, y, width, height, options) {
+			this.x          = x;
+			this.y          = y;
+			this.width      = width;
+			this.height     = height;
+			if( typeof options != 'undefined' ) {
+				this.text       = "text"       in options ? options.text       : null;
+				this.lineColour = "lineColour" in options ? options.lineColour : null;
+				this.lineWidth  = "lineWidth"  in options ? options.lineWidth  : "1px";
+				this.fillColour = "fillColour" in options ? options.fillColour : null;
+				this.textColour = "textColour" in options ? options.textColour : "#000000";
+				this.textFont   = "textFont"   in options ? options.textFont   : "10pt Arial";
+			}
+		}
+
+		JEHBox.prototype.containsPoint = function(x,y) {
+			return (x >= this.x) && 
+			       (x <= this.x + this.width) &&
+			       (y >= this.y) && 
+			       (y <= this.y + this.height);
+		}
+
+		JEHBox.prototype.drawOnCanvas = function(jehCanvas) {
+			var ctx = jehCanvas.ctx
+			if(this.fillColour !== null) {
+				ctx.fillStyle = this.fillColour;
+				ctx.fillRect(this.x, this.y, this.width, this.height);
+			}
+
+			if(this.lineColour !== null) {
+				ctx.beginPath();
+				ctx.strokeStyle = this.lineColour;
+				ctx.rect(this.x, this.y, this.width, this.height);
+				ctx.stroke();
+			}
+
+			if( this.text != null ) {
+				ctx.fillStyle = this.textColour;
+				ctx.font      = this.textFont;
+				var textProps = jehCanvas.getTextDimensions(this.text)
+				var textX = this.x + (this.width  - textProps.width) / 2;
+				var textY = this.y + (this.height - textProps.height) / 2;
+				ctx.fillText(this.text, textX, textY);
+			}
+		}
+
+		JEHBox.prototype.toString = function() {
+				return "[JEHBox: x=" + this.x + ", y=" + this.y + " w=" + this.width + ", h=" + this.height + "]"
+		}
+
+		JEHValueBox(x, y, value, bgColor) {
+			var values = {1e6:'M', 1e3:'k', 1:''};
+			var valueTxt = value.toString()
+			for (var multiplier in values) {
+				if (object.hasOwnProperty(multiplier)) {
+					if (value/multiplier >= 1) {
+						valueTxt = (value/multiplier).toString() + values[multiplier];
+					}
+				}
+			}
+			JEHBox.call(this, x, y, 200, 50, {fillColour:bgColour, text:valueTxt});
+			this.value = value;
+		}
+
+		JEHValueBox.prototype = Object.create(JEHBox.proptotype, {
+					constructor: {
+						value: JEHValueBox;
+					}
+				});
+
+
+
+
+		function jeh_DrawResistor(ctx, x, y, bodyColour, c1, c2, c3, c4, resistanceTxt) {
+			var width = 125;
+			var height = 25;
+			var barWidth = 10;
+			var middleY = y+height/2;
+
+			ctx.strokeStyle="#000000";
+
+			ctx.moveTo(x,middleY);
+			ctx.lineTo(x+10,middleY);
+			ctx.stroke();
+	
+			x += 10;
+			ctx.fillStyle = bodyColour;
+			ctx.fillRect(x, y, width, height);
+			ctx.beginPath();
+			ctx.rect(x, y, width, height);
+			ctx.stroke();
+
+			ctx.fillStyle = c1;
+			ctx.fillRect(x+20, y, barWidth, height);
+			ctx.fillStyle = c2;
+			ctx.fillRect(x+40, y, barWidth, height);
+			ctx.fillStyle = c3;
+			ctx.fillRect(x+60, y, barWidth, height);
+			ctx.fillStyle = c4;
+			ctx.fillRect(x+95, y, barWidth, height);
+
+			ctx.moveTo(x+width,middleY);
+			ctx.lineTo(x+width+10,middleY);
+			ctx.stroke();
+
+			ctx.fillStyle = "white";
+			ctx.fillRect(x, y + height + 15, 180, 20);
+			ctx.fillStyle = "black";
+			ctx.font      = "10pt Arial";
+			ctx.fillText(resistanceTxt, x, y + height + 30);
+
+		}
+
+		function jeh_DrawValueBox(ctx, x, y, width, height, text, boxValue, colour, withBox, colIndex, boxType) {
+			if( false ) {
+				if(withBox) {
+					ctx.fillStyle = colour;
+					ctx.fillRect(x, y, width, height);
+					ctx.beginPath();
+					ctx.strokeStyle="#000000";
+					ctx.rect(x, y, width, height);
+					ctx.stroke();
+				}
+	
+				if(colour == 'black' && withBox) {
+					ctx.fillStyle = "white";
+				} else {
+					ctx.fillStyle = "black";
+				}
+	
+				ctx.font      = "10pt Arial";
+				var metrics       = ctx.measureText(text);
+				var textX = x + (width - metrics.width) / 2;
+				var textY = y + 15; // Hacky... getting text height seems painful :(
+				ctx.fillText(text, textX, textY);
+			}
+			
+			var t = new Box(x, y, width, height, {"text" : text, "fillColour" : colour, "lineColour" : "#000000", "textColour": "#000000"} );
+			t.drawOnCanvas(ctx);
+	
+			return {'box': t, 'x1':x, 'y1':y, 'x2':x+width, 'y2':y+height, 'text':text, 'value':boxValue, 'colour':colour, 'colIndex':colIndex, 'type':boxType};
+		}
+
+		function jeh_DrawAllValueBoxes(ctx, startX, startY)  {
+			var boxColours     = ['silver', 'gold', 'black', 'brown', 'red', 'orange', 'yellow', 'green', 'blue', 'purple', 'gray', 'white'];
+			var multiplierTxt  = ['0.01' , '0.1', '1', '10', '100', '1K', '10K', '100K', '1M', '10M', null, null];
+			var multiplierVal  = [0.01 , 0.1, 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, null, null];
+			var tolerancesTxt  = ['10', '5', null, '1', '2', null, null, '0.5','0.25', '0.1', null, null];
+			var tolerancesVal  = [10, 5, null, 1, 2, null, null, 0.5, 0.25, 0.1, null, null];
+
+			var boxInfs = [];
+			for(var col = 0; col < 5; ++col) {
+				for(var i = 0; i < 12; ++i) {
+					if(col == 0) {
+						// Draw the text for each colour
+						offX = 0;
+						jeh_DrawValueBox(ctx, startX + offX,   startY + i*30, 50, 25, boxColours[i], 0, boxColours[i], false, col, 0);
+					} 
+					else if(col < 3) {
+						if(i > 1) {
+							// Draw in resistive values but not for silver or gold... these
+							// only apply to multipliers or tolerances
+							offX = col * 60;
+							r = jeh_DrawValueBox(ctx, startX + offX,  startY + i*30, 50, 25, i-2, (i-2)*(col == 1 ? 10 : 1), boxColours[i], true, col, 1);
+							boxInfs.push(r);
+						}
+					} 
+					else if( col == 3 ) {
+						// Draw in the multipliers
+						offX = 180;
+						if(multiplierTxt[i] != null) {
+							r = jeh_DrawValueBox(ctx, offX, startY + i*30, 50, 25, multiplierTxt[i], multiplierVal[i], boxColours[i], true, col, 2);
+							boxInfs.push(r);
+						}
+					}
+					else if( col == 4 ) {
+						// Draw in the tolerances
+						offX = 240;
+						if(tolerancesTxt[i] != null) {
+							r = jeh_DrawValueBox(ctx, offX, startY + i*30, 50, 25, tolerancesTxt[i], tolerancesVal[i], boxColours[i], true, col, 3);
+							boxInfs.push(r);
+						}
+					}
+				}
+			}
+
+			return boxInfs;
+		}
+
+		$(function(){
+			var myCanvas = $("#myCanvas");
+			var ctx = myCanvas[0].getContext("2d");
+			var boxInfs = jeh_DrawAllValueBoxes(ctx, 0, 100);
+			var selectedResistances = [null, null];
+			var selectedTolerance  = null;
+			var selectedMultiplier = null;
+			var resistorBkgdColour =  "#e6e8c5";
+			var resistorX = 60 + (180+50-145)/2;
+			var resistorY = 10;
+			jeh_DrawResistor(ctx, resistorX, resistorY, resistorBkgdColour, resistorBkgdColour, resistorBkgdColour, resistorBkgdColour, resistorBkgdColour, "Select colour bands");
+
+			myCanvas.click(function(e) {
+				var posX = e.pageX - $(this).position().left;
+				var posY = e.pageY - $(this).position().top;
+				//console.log("----------------------------------------\n");
+				//console.log("Cursor:");
+				//console.log("\tpageX,Y: " + e.pageX + ", " + e.pageY);
+				//console.log("\tthisX,Y: " +  $(this).position().left + ", " + $(this).position().top);
+				//console.log("\tposX,Y: " + posX + ", " + posY);
+				for( var i = 0; i < boxInfs.length; ++i ) {
+					bi = boxInfs[i];
+					if( bi.box.containsPoint(posX, posY) ) {
+						//console.log("Box:");
+						//console.log("\tx: [" + bi.x1 + ", " + bi.x2 + "],\ty: [" + bi.y1 + ", " + bi.y2 + "],\t" + bi.colour);
+						if(bi['type'] == 1) {
+							resColIndex = bi['colIndex'] - 1;
+							selectedResistances[resColIndex] = bi;
+						}
+						else if(bi['type'] == 2) {
+							selectedMultiplier = bi;
+						}
+						else if(bi['type'] == 3) {
+							selectedTolerance = bi;
+						}
+	
+						
+						var resistance = 0;
+						var msg = "Select colour bands";
+						var allColoursSelected = selectedResistances[0] != null && selectedResistances[1] != null && selectedMultiplier !=null && selectedTolerance!= null;
+	
+						if(allColoursSelected) {
+							var unitsMagnitude = "";
+							resistance = selectedResistances[0]['value'] + selectedResistances[1]['value'];
+							resistance = resistance * selectedMultiplier['value'];
+							if(resistance > 1e6) {
+								resistance /= 1e6;
+								unitsMagnitude = "M";
+							}
+							else if(resistance > 1e3) {
+								resistance /= 1e3;
+								unitsMagnitude = "k";
+							}
+							msg = "R: " + resistance + unitsMagnitude + "\u2126 \u00B1 " + selectedTolerance['text'] + "%";
+						}
+	
+						jeh_DrawResistor(ctx, resistorX, resistorY,  "#e6e8c5", 
+							selectedResistances[0] != null ? selectedResistances[0]['colour'] : "#e6e8c5", 
+							selectedResistances[1] != null ? selectedResistances[1]['colour'] : "#e6e8c5", 
+							selectedMultiplier != null ? selectedMultiplier['colour'] : "#e6e8c5", 
+							selectedTolerance != null ? selectedTolerance['colour'] : "#e6e8c5", 
+							msg );
+					}
+				}
+			});
+		});
+	</script>
+</head>
+
+<body>
+	<div id="header">
+		-- This is JEHTech --
+	</div>
+
+	<div id="sidebar">
+		<h1 class="title">Links...</h1>
+		<div id="includedContent"></div>
+	</div>
+
+	<div id="content">
+		<h1 class="title">Electronics Notes...</h1>
+		<h2>Page Contents</h2>
+		<div id="page_contents">
+		</div>
+
+		<h2>Charge, Current, Voltage</h2>
+		<div>
+			<h3>Conventional Current And Charge</h3>
+			<p>
+				<img src="##IMG_DIR##/conventional_current.png" width="150" style="float:left">
+				Historically positive charge moves throught the circuit from the positive to negative terminals. This is called <em>conventional</em> current.
+				We now know that it is, in fact, the flow of electrons from the negative to positive terminals that is current. Due to the historical precident
+				current is still often shown as conventional current.
+			</p>
+			<p>
+				Current, $i$, is the amount of charge, $q$, that moves through a point in the circuit at any time.
+				$$i = \frac{\mathrm dq}{\mathrm dt}$$
+				Charge, $q$, is measured in Coulombs. One electron has a charge of $-1.6 \times 10^{-19}$ Coulombs. This is the smallest
+				unit of charge possible.
+			</p>
+			<h3 style="clear: both;">Voltage</h3>
+			<p>
+				Voltage, $V$, is the amouont of work (in Joules) that must be done per unit charge to move between two points in a field.
+				$$V_{ab} = \frac{\mathrm dw}{\mathrm dq}$$
+			</p>
+			<h3 style="clear: both;">Ohm's Law</h3>
+			<div>
+				$$V = iR$$
+			</div>
+			<h3 style="clear: both;">Kirchoff's Laws</h3>
+			<p>
+				Two important laws: <em>Kirchoff's voltage law</em> and <em>Kirchoff's current law</em>.
+			</p>
+			<p>
+				Kirchoff's current law says that the sum of currents flowing into a node must equal the sum of currents leaving a node.
+				This is often expressed in another way: the sum of currents entering a node must always be zero. This works because we
+				label, by convention, all currents entering the node as positive and all currents leaving the node as negative.
+			</p>
+			<p>
+				Kirchoff's voltage law says that the sum of voltages around a closed circuit must be zero
+			</p>
+		</div>
+		
+
+		<h2>Resistance</h2>
+		<div>
+			<h3 style="clear:both;">Resistor Colour Codes</h3>
+			<div>
+				<canvas id="myCanvas" width="300" height="470" style="margin: px; border:1px solid #000000; float: left;">
+				</canvas>
+				<p>
+					In the drawing to the left you can click on the value-boxes to change the colour bands on
+					the resistor to find out the resistance represented by the colour encoding. Note it only shows
+					a 4-band resistor. 5 and 6 colour bands are possible but not shown here.
+				</p>
+				<p>
+					Note: Sometimes the click event on the canvas doesn't fire... not quite sure why that is. If first click
+					doesn't work, persevere :)
+				</p>
+				<p>
+				Some popular ways of remembering the resistor colour codes include 
+				&quot;<u>B</u>ad <u>B</u>oys <u>R</u>avish <u>O</u>ur <u>Y</u>oung <u>G</u>irls <u>B</u>ut <u>V</u>iolet <u>G</u>ives <u>W</u>illingly&quot; 
+				and my fav, 
+				&quot;<u>B</u>ad <u>B</u>ooze <u>R</u>ots <u>O</u>ur <u>Y</u>oug <u>G</u>uts, <u>B</u>ut <u>V</u>odka <u>G</u>oes <u>W</u>ell&quot;.
+				</p>
+			</div>
+			<h3 style="clear:both;">Resistor's In Series</h3>
+			<div>
+				<img src="##IMG_DIR##/resistors_in_parallel.png" width="300" style="float:left">
+				<p>
+					Resistors in series can be &quot;collapsed&quot; into an eqivalent single resitor with a resistance that
+					is the sum of all the resistances of the individual resistors.
+				</p>
+				<p>
+					Using <em>Kirchoff's voltage law</em>:
+
+					$$V_1 + V_2 + V3 - V_s = 0$$
+
+					Using $V = iR$ we can substitute in for the individual voltages across each resistor. Note that because
+					this is a closed loop the current though each resistor will be the same (as there is no path in which
+					the current can &quot;split&quot; up).
+
+					$$iR_1 + iR_2 + iR3 - V_s = 0$$
+					$$\therefore V_s = iR_1 + iR_2 + iR3$$
+
+					Now, $V_s$ can also be re-written using $V = iR$ as $V_s = iR_t$, where $R_t$ is the equivalent, total,
+					resistance of the resistors in series...
+
+					$$\therefore iR_t = iR_1 + iR_2 + iR3$$
+					$$\mathbf{\therefore R_t = R_1 + R_2 + R_3}$$
+				</p>
+			</div>
+
+			<h3 style="clear:both;">Resistor's In Parallel</h3>
+			<div>
+				<img src="##IMG_DIR##/resistors_in_par.png" width="400" style="float:left">
+				<p>
+					Resistors in parallel can also be &quot;collapsed&quot; into an equivalent single resitor...
+				</p>
+				<p>
+					Using <em>Kirchoff's current law</em> we can say that $i_t = i_1 + i_2 + i_3$. Using $V = iR$,
+					we can say the following:
+
+					$$\begin{array}{ccc}
+						V = i_1R_1 & V = i_2R_2 & V = i_3R_3 \\
+						\therefore i_1 = \frac{V}{R_1} & \therefore i_2 = \frac{V}{R_2} & \therefore i_3 = \frac{V}{R_3}
+					\end{array}$$
+
+					Subsituting the above back into $i_t = i_1 + i_2 + i_3$, gives us the following.
+
+					$$ i_t = \frac{V}{R_1} + \frac{V}{R_2} + \frac{V}{R_3}$$
+
+					And, of course, $i_t$ can also be re-written, giving the solution:
+
+					$$\frac{V}{R_t} = \frac{V}{R_1} + \frac{V}{R_2} + \frac{V}{R_3}$$
+					$$\mathbf{\therefore \frac{1}{R_t} = \frac{1}{R_1} + \frac{1}{R_2} + \frac{1}{R_3}}$$
+			</div>
+
+			<h3 style="clear:both;">Voltage Divider</h3>
+			<div>
+				<img src="##IMG_DIR##/voltage_divider.png" width="200" style="float:left">
+				<p>
+					Using Ohm's law we know the following.
+					$$V_1 = iR_1 \implies i = \frac{V_1}{R_1}$$
+					$$V_2 = iR_2 \implies i = \frac{V_2}{R_2}$$
+
+					Using Kirchoff's voltage law, and substituting in the above, we know that,
+					$$\begin{align}
+					V_t & = V_1 + V_2 \\
+					    & = iR_1 + iR_2 \\
+						 & = i(R_1 + R_2)
+					\end{align}$$
+
+					This means that we can say,
+
+					$$i = \frac{V_t}{R_t} = \frac{V_1}{R_1} = \frac{V_2}{R_2}$$
+
+					Substituting $i = \frac{V_1}{R_1}$ into $V_t = i(R_1 + R_2)$ gives...
+
+					$$V_t = \frac{V_1}{R_1}(R_1+R_2)$$
+					$$\mathbf{\therefore V_1 = V_t \times \frac{R_1}{R_1+R_2}}$$
+
+					Substituting $i = \frac{V_2}{R_2}$ into $V_t = i(R_1 + R_2)$ gives...
+
+					$$V_t = \frac{V_2}{R_2}(R_1+R_2)$$
+					$$\mathbf{\therefore V_2 = V_t \times \frac{R_2}{R_1+R_2}}$$
+
+					In words, we can say that <em>the voltage across the second resistor is proportional to the ratio of the second resistance to the total resistance</em>.
+				</p>
+				<p>
+					One issue to be aware of is that any load placed across $R_2$, i.e., in parallel with $R_2$, will
+					change the effective resistance of that node (remember resistors in parallel can be &quot;collapsed&quot; into an equivalent 
+					single reistor). Therefore, be aware that the load across $R_2$ will also influence the ratio of voltage division.
+				</p>
+			</div>
+
+			<h3 style="clear:both;">Current Divider</h3>
+			<div>
+				<img src="##IMG_DIR##/current_divider.png" width="250" style="float:left">
+				<p style="float:left">
+					$$i_tR_t = i_1R_1 $$
+					$$\begin{align}
+					i_1 & = \frac{i_tR_1}{R_1} \\
+					    & = \frac{\frac{R_1R_2}{R_1+R_2}}{R_1} \times i_t \\
+						 & = \frac{R_2}{R_1+R_2} \times i_t
+					\end{align}$$
+				</p>
+			</div>
+
+			<h3 style="clear:both;">The Wheatstone Bridge</h3>
+			<div>
+				<img src="##IMG_DIR##/wheatstone_bridge.png" width="300" style="float:left">
+				<p>
+					The <a href="http://www.ti.com/lit/ml/slyp163/slyp163.pdf" target="_blank">Wheatstone Bridge</a> is a circuit for measuring resistance 
+					very accurately. This material is based on the link to the Texas Instrument tutorial...
+				</p>
+				<p>
+					Using Kirchoff's voltage law around the loop consisting of $R_2$, $V_{out}$ and $R_4$ we get the following.
+
+					$$-V_2 + V_{out} + V_4 = 0$$
+					$$\therefore V_{out} = V_2 - V_4$$
+
+					We can find the voltage across $R_2$ and $R_4$ by using the formula for voltage dividers: $R_1$ and $R_2$ are
+					one voltage divider and $R_3$ and $R_4$ are the other voltage divider. Using the voltage divider formula we get
+					the following two results:
+
+					$$V_2 = \frac{R_2}{R_1+R_2} \times V_t, \qquad V_4 = \frac{R_4}{R_3+R_4} \times V_t$$
+
+					Here $V_t$ is the supply voltage. Substituting these into the first formula we get...
+
+					$$
+					\begin{align}
+					V_{out} & = \left(\frac{R_2}{R_1+R_2} \times V_t\right) - \left(\frac{R_4}{R_3+R_4} \times V_t\right) \\
+					        & = \left(\frac{R_2}{R_1+R_2} - \frac{R_4}{R_3+R_4}\right) \times V_t
+					\end{align}
+					$$
+
+					If three out of the four resistances are known and the current across the $V_{out}$ branch is zero, the
+					third resistance can be calculated.
+				</p>
+				<p>
+					Let's say that we don't know the resistance of $R_3$. If we set all the other resistors to be equal so that
+					$R_1 = R_2 = R_4$, then the above formula simplified to the following....
+
+					$$V_{out} = \left(\frac{1}{2} - \frac{R_k}{R_u+R_k}\right) \times V_t$$
+
+					Where $R_k$ is the known resistance and $R_u$ is the unknown resistance. This assumes that $R_u$ is roughly equal to $R_1$
+					and that all $R_k$ resistors are very closely matched. 
+				</p>
+
+				<p>
+					A simple re-arrangement gives us...
+
+					$$V_{out} = \frac{1}{2} \times V_t - \frac{R_k}{R_u+R_k} \times V_t$$
+				</p>
+				<p>
+					In the above, $V_{out}$, $V_t$, and $R_k$ are all known. We know $V_{out}$ because we can measure it and the
+					other known parameters are already set apriori. With more simple re-arrangement we get...
+
+					$$0.5V_t - V_{out} = \frac{R_k}{R_u+R_k} \times V_t $$
+					$$\therefore \frac{0.5V_t - V_{out}}{V_t} = \frac{R_k}{R_u+R_k} $$
+					$$\therefore \frac{V_t}{0.5V_t - V_{out}} = \frac{R_u + R_k}{R_k} $$
+					$$\therefore \frac{V_t \cdot R_k}{0.5V_t - V_{out}} = R_u + R_k $$
+					$$\therefore \mathbf{R_u = \frac{V_t \cdot R_k}{0.5V_t - V_{out}} - R_k} $$
+				</p>
+
+				<img src="##IMG_DIR##/wheatstone_is_non_linear.png" width="400" style="float:left;">
+
+				<p>
+					And now we can calculate the unknown resistance... why is this useful? Because <em>this unknown resistance is our sensor</em>.
+					It could be a thermistor, LDR, or whatever... something that changes resistance due to the thing we're trying to measure.
+				</p>
+				<p>
+					One thing to note is that the $V_{out}$ of the Wheatstone Bridge is non-linear as the figure to the 
+					left shows: $V_{out}$ does not change linearly with changes in the unknown resistance $R_u$! In the figure I just
+					picked pretty arbirary values for the various knowns.
+				</p>
+				<p>
+					So... why use this rather complex arrangement to measure an unknown resistance when we could do
+					the same using a simple voltage divider? The answer lies in the <em>sensitivity</em> of the measurement
+					system. This is covered in the next section.
+				</p>
+			</div>
+
+			
+		</div>
+
+		<h2 style="clear:both;">Amplifiers</h2>
+		<div>
+		</div>
+
+		<h2>Capacitance</h2>
+		<div>
+		</div>
+	</div>
+</body>
+</html>
+
+

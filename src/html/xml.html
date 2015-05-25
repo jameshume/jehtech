@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+	<title>XML notes</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+	<div id="header">
+		-- This is JEHTech --
+	</div>
+
+	<div id="sidebar">
+		<h1 class="title">Links...</h1>
+		<div id="includedContent"></div>
+	</div>
+
+	<div id="content">
+		<h1 class="title">XML Notes...</h1>
+		<p>
+			Mostly just notes from various books on XML, most noteably &quot;Beginning XML 5<sup>th</sup>
+			Edition&quot;, J Fawcett et al, Wrox Press.
+		</p>
+
+		<h2>Contents</h2>
+		<ol>
+			<li><a href="#URL_vs_URI_vs_URN">URL, URI or URN?</a></li>
+			<li><a href="#namespaces">Namespaces</a></li>
+			<li><a href="#dtds">Document Type Definitions (DTDs)</a></li>
+			<li><a href="#xpath">XPath</a></li>
+		</ol>
+
+		<h2><a id="URL_vs_URI_vs_URN"></a>URL, URI or URN?</h2>
+		<p>
+			URL is <u>U</u>niform <u>R</u>esource <u>L</u>ocator.<br/>
+			<tt style="padding-left:12pt">[Scheme]://[Domain]:[Port]/[Path]?[QueryString]#[FragmentId]</tt><br/>
+			URL points to something &quot;real&quot;, i.e., a resource on a network which can be located using the URL.
+		</p>
+		<p>
+			URN is <u>U</u>niform <u>R</u>esource <u>N</u>ame.<br/>
+			<tt style="padding-left:12pt">urn:[namespace identifier]:[namespace specific string]</tt><br/>
+			&quot;Namespace identifier&quot; is just a string that identifies how the &quot;namespace specific string&quot;
+			should be evaluated. It is usually refistered with IANA. E.g.<br/>
+			<tt style="padding-left:12pt">isbn:1234567891234</tt>
+		</p>
+		<p>URI is <u>U</u>niform <u>R</u>esource <u>I</u>dentifier. It is a superset of URL and includes URLs and
+		   URNs. URI is just a unique string that identifies something and does not have to have any other meaning other than that. I.e.,
+			it does not have to &quot;point&quot; to anything real.
+		</p>
+
+		<h2><a id="namespaces"></a>Namespaces</h2>
+		<h3>Default</h3>
+		<p>
+			A way of grouping elements under a common heading in order to differentiate them from similarly named items. 
+			Usually use a URL, URN (or URI). Note that namespaces that look like URLs are not URLs, the URL string is just 
+			used as a guaranteably unqiue identifer.
+		</p>
+		<p>
+		To include a node and all children added it to the node using &quot;<tt>xmlns=URI</tt>&quot; as such:
+		</p>
+		<pre>&lt;parent_node <b><u>xmlns=&quot;URI&quot;</u></b>&gt;
+   &lt;child1&gt; ... &lt;/child1&gt;
+   ...
+   &lt;childN&gt; ... &lt;/childN&gt;
+&lt;/parent_node&gt;</pre>
+		<p>
+			In the above <tt>parent_node</tt> and recursively, any of its children, are in the namespace identified by the URI.
+		</p><p>
+			This is call a <em>default namespace</em> and does <em>not</em> apply to attributes. Attribute namespaces must be
+			serparately declared.
+		</p>
+		<h3>Explicit</h3>
+		<p>
+			Explicit namespace declaration needs a prefix to represent it (must not include colon or be reserved, e.g., &quot;xmlns&quot;, &quot;xml&quot;...).
+			Declare it using &quot;<tt>xmlns:&lt;tag-name&gt;=&quot;URI&quot;</tt>&quot;
+		</p>
+		<p>Note that declaring a namespace tag does not associated it any nodes in the document.</p>
+		<pre>&lt;parent_node <b><u>xmlns:mytag=&quot;URI&quot;</u></b>&gt;
+   &lt;child1&gt; ... &lt;/child1&gt;
+   ...
+   &lt;childN&gt; ... &lt;/childN&gt;
+&lt;/parent_node&gt;</pre>
+		<p>In the above a tag by which to refer to the namespace is decalred. The tag is called &quot;mytag&quot;. As said, this just 
+		declares it. No nodes have yet been associated with it. To associate nodes with it use the following:</p>
+		<pre>&lt;<b><u>mytag:</u></b>parent_node xmlns:mytag=&quot;URI&quot;&gt;
+   &lt;child1&gt; ... &lt;/child1&gt;
+   ...
+   &lt;childN&gt; ... &lt;/childN&gt;
+&lt;/<b><u>mytag:</u></b>parent_node&gt;</pre>
+		<p>
+			The above associates the <tt>parent_node</tt> with the namespace identified by <tt>mytag</tt>, and all of 
+			its children. Therefore each child node is also associated with the &quot;<tt>mytag</tt>&quot; namespace. To put attributes
+			in the name space the same &quot;<tt>mytag:</tt>&quot; prefix must be put before attribute names.
+		</p>
+
+		<h2><a id="dtds"></a>Document Type Definitions (DTDs)</h2>
+		<p>
+			Used to give rules for verifying the vocab of the document and its structure. Associate with a document 
+			internally by including inline with document or externally by references a separate DTD file.
+		</p>
+		<p>Declare a DTD using...
+		</p>
+		<pre>&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;<b><u>!DOCTYPE</u></b> name [
+	... <i>internal subset declarations</i> ...
+]&gt;</pre>
+		<p>Here <tt>name</tt> is the <em>exact</em> name of the root element in the XML doc. DTD declaration must be first line of doc
+		(apart from XML ver). To use external subset declarations from another file use <tt>&lt;!DOCTYPE name SYSTEM &quot;URI&quot; [ ]&gt;</tt>.
+		</p>
+		<p>Inside the <tt>DOCTYPE</tt> specification there are 3 basic parts:
+		</p>
+		<ul>
+			<li>Elements</li>
+			<li>Attributes</li>
+			<li>Entities</li>
+		</ul>
+		<h3>Elements</h3>
+		<p>
+			Must declare each element that can appear in the document <em>including any namespace prefix</em> (a restriction that XML 
+			schemas overcome). Some elements can be tagged as required and others can be optional. 
+		</p><p>Declare using...
+		</p>
+		<pre>&lt;<b><u>!ELEMENT</u></b> name (content-model)&gt;
+             ^     ^
+             ^     Allowed child elements, text, a mixuture or empty
+             ^
+             Name of element as it appears in XML doc including namespace prefixes</pre>
+		<p>
+			The element content-model just specifies what can be a child of this element (named &quot;<tt>name</tt>&quot;). It can 
+			be a sequence, or multually-exclusive choice, of elements and any combination of these two.
+		</p>
+		<p>
+		<b>Sequences:</b> A sequence has <em>defined order</em> and looks like a tuple: a comma separated list of names: <tt>(name1, name2, ..., nameN)</tt>. Any element
+		with these children must contain <em>all</em> the children, no more and no less, and they must appear in the defined order.
+		</p><p>
+			<b>Choices:</b> A choice defines a multually-exclusive set of children: <tt>(name1 | name2 | ... | nameN)</tt>. An element with these children
+			may contain one or the other but not both.
+		</p>
+		<p>Sequences and choices can be combined: e.g., <tt>(name1, (name2 | name3)</tt> that the node this appies to must have its first child
+			element as <tt>name1</tt> and then a second child element which must be either <tt>name2</tt> or <tt>name3</tt>. It must have exactly
+			two children in this order.
+		</p><p>
+			<b>Text &amp; Mixed Content:</b> Mixed content is any content where text is allowed. To say that text is allowed just 
+			substiute <tt>#PCDATA</tt> in where you would have put an element name in the choice specification above. It stands 
+			for Parsed Character Data. The &quot;Parsed&qout; part of the name implies that the interpretter will interpret any XML
+			reserved characters found within. To specify mixed content you <em>must use the choice mechanism</em> and
+			the <tt>#PCDATA</tt> must be the first item in the choice. Do it like this:
+		</p>
+		<pre>&lt;!ELEMENT name (<b><u>#PCDATA</u></b> | el1 | ... | elN) <b><u>*</u></b>&gt;</pre>
+		<p>The <tt><b><u>*</u></b></tt> is used to say that the sequence can repeat zero or many times, like in a normal regular expression.
+		Standard regexp operators <tt><b><u>*</u></b></tt>, <tt><b><u>+</u></b></tt>, and <tt><b><u>?</u></b></tt> apply here.
+		</p><p>
+			<b>Empty:</b> <tt>&lt;!ELEMENT name <b><u>EMPTY</u></b>&gt;</tt> specifies the element named &quot;<tt>name</tt>&quot; may not have any children.
+		</p>
+			<b>Any:</b> <tt>&lt;!ELEMENT name <b><u>ANY</u></b>&gt;</tt> specifies the element named &quot;<tt>name</tt>&quot; may an content.
+
+		<h3>Attributes</h3>
+		<p>
+			Instead of declaring allowable content models for elements, you declare a list of allowable attributes for each element 
+			using <tt>ATTLIST</tt> declarations:
+		</p>
+		<pre>&lt;!ELEMENT el-name (content-model)&gt;
+&lt;!ATTLIST el-name attr_1-name attr_1-type ...
+                  attr_2-name attr_2-type ...
+                  ...
+                  attr_N-name attr_N-type ...&gt;</pre>
+		<p>Attribute types:</p>
+			<table>
+				<tr><th>Type</th><th>Description</th></tr>
+				<tr>
+					<td><tt>CDATA</tt></td>
+					<td>Character data, unparsed. Parser can ignore XML reserver characters.</td>
+				</tr>
+				<tr>
+					<td><tt>ID</tt></td>
+					<td>Attribute value uniquely identifies containing element.</td>
+				</tr>
+				<tr>
+					<td><tt>IDREF(S)</tt></td>
+					<td><tt>IDREF</tt> indicates attribute value is a reference, by <tt>ID</tt>, to an element. <tt>IDREFS</tt> is a whitespace separated list of the former.</td>
+				</tr>
+				<tr>
+					<td><tt>ENTITY</tt></td>
+					<td>Attr is reference to external unparsed entity</td>
+				</tr>
+				<tr>
+					<td><tt>ENTITIES</tt></td>
+					<td>Whitespace separated list of <tt>ENTITY</tt></td>
+				</tr>
+				<tr>
+					<td><tt>NMTOKEN(S)</tt></td>
+					<td>Attribute is a name token: a string of character data. The plural is a whitespace separated list of the former.</td>
+				</tr>
+				<tr>
+					<td>Enumerated list</td>
+					<td>List of possible values attribute may take specified using the same choice mechanism used for element declarations.</td>
+				</tr>
+			</table>
+
+		<h4>Default Value</h4>
+		<pre>&lt;!ATTLIST element-name attr-name (attr1 | attr2 | ... | attrN) <b>&quot;attrM&quot;&gt;</b></pre>
+		<p>
+			Will declare for the element named &quot;<tt>element-name</tt>&quot; an allowable attribute named
+			&quot;<tt>attr-name</tt>&quot; that may have any of the values represented by &quot;<tt>attr1</tt>&quot;
+			through &quot;<tt>attrN</tt>&quot;. If no attribute is present a validating parser will add
+			the default attribute specified in quotes at the end, ie. &quot;<tt>attrM</tt>&quot;.
+		</p>
+
+		<h4>Fixed Value</h4>
+		<p><tt>#FIXED</tt> say's that an attribute's value can not change. Operate like default values. Validating
+		parser will insert this if not found.</p>
+
+		<h4>Required Value</h4>
+		<p><tt>#REQUIRED</tt> say's that an attribute is required and must be included in the XML doc</p>
+
+		<h4>No Default Value (Implied)</h4>
+		<pre>&lt;!ATTLIST element-name attr-name (attr1 | attr2 | ... | attrN) <b>#IMPLIED</b>&gt;</pre>
+		<p><tt>#IMPLIED</tt> means attribute does not need to appear in element and has no default value.
+			More specifically, it has no fixed value, no default and is not required.
+		</p>
+
+		<h2><a id="xpath"></a>XPath</h2>
+		<p>Used to specify/select parts of XML documents of interest</p>
+
+	</div>
+</body>
+</html>
+
+

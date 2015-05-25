@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+	<title>Contact JEH-Tech</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+
+	<script src='https://www.google.com/recaptcha/api.js'></script>
+</head>
+
+<body>
+	<div id="header">
+		-- This is JEHTech --
+	</div>
+
+	<div id="sidebar">
+		<h1 class="title">Links...</h1>
+		<div id="includedContent"></div>
+	</div>
+
+	<div id="content">
+		<h1 class="title">Contact JEH-Tech</h1>
+		<p>Seen and error or want to comment? Please keep it polite and constructive...</p>
+		<form method="POST" action="receiveContact.php">
+			<table style="border:0px;">
+				<tr><td>Name:</td><td><input type="text" name="name"></input></td></tr>
+				<tr><td>Email:</td><td><input type="text" name="email"></input></td></tr>
+				<tr><td>Confirm:</td><td><input type="text" name="email2"></input></td></tr>
+				<tr><td>Message:</td><td><textarea cols="80" rows="10" name="comment">Enter text here...</textarea></td></tr>
+				<tr><td></td><td><div class="g-recaptcha" data-sitekey="6LfjlQITAAAAAPlP-_LjYellMnMRynxwIVFLT5gV"></div></td></tr>
+				<tr><td colspan="2"><input type="submit" value="Submit"></td><tr>
+			</table>			
+		</form>
+		<p>
+			The text fields can only contain alpha-numerics, hyphens and single quotes. The email can also include the at symbol.
+		</p>
+	</div>
+</body>
+</html>
+
+

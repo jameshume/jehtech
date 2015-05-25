@@ -1,0 +1,335 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+	<title>NumPy Notes</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+	<script> 
+		$(function(){
+			AddLinkToTeleTypeText({
+				"ndarray"  : "http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html",
+				"array"    : "http://docs.scipy.org/doc/numpy/reference/generated/numpy.array.html",
+				"empty"    : "http://docs.scipy.org/doc/numpy/reference/generated/numpy.empty.html#numpy.empty",
+				"zeros"    : "http://docs.scipy.org/doc/numpy/reference/generated/numpy.zeros.html#numpy.zeros",
+				"ones"     : "http://docs.scipy.org/doc/numpy/reference/generated/numpy.ones.html#numpy.ones",
+				"arange"   : "http://docs.scipy.org/doc/numpy/reference/generated/numpy.arange.html#numpy.arange",
+				"linspace" : "http://docs.scipy.org/doc/numpy/reference/generated/numpy.linspace.html#numpy.linspace",
+				"copy"     : "http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.copy.html#numpy.ndarray.copy",
+				"randn"    : "http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.randn.html#numpy.random.randn",
+				"where"    : "http://docs.scipy.org/doc/numpy/reference/generated/numpy.where.html#numpy.where",
+				"putmask"  : "http://docs.scipy.org/doc/numpy/reference/generated/numpy.putmask.html#numpy.putmask",
+				"mean"     : "http://docs.scipy.org/doc/numpy/reference/generated/numpy.mean.html#numpy.mean",
+				"std"      : "http://docs.scipy.org/doc/numpy/reference/generated/numpy.std.html#numpy.std",
+				"var"      : "http://docs.scipy.org/doc/numpy/reference/generated/numpy.var.html#numpy.var",
+				"nanmean"  : "http://docs.scipy.org/doc/numpy/reference/generated/numpy.nanmean.html#numpy.nanmean",
+				"nanstd"   : "http://docs.scipy.org/doc/numpy/reference/generated/numpy.nanstd.html#numpy.nanstd",
+				"nanvar"   : "http://docs.scipy.org/doc/numpy/reference/generated/numpy.nanvar.html#numpy.nanvar",
+			});
+		});
+	</script>
+</head>
+
+<body>
+	<div id="header">
+		-- This is JEHTech --
+	</div>
+
+	<div id="sidebar">
+		<h1 class="title">Links...</h1>
+		<div id="includedContent"></div>
+	</div>
+
+	<div id="content">
+		<h1 class="title">NumPy Notes</h1>
+		<h2>Page Contents</h2>
+		<div id="page_contents">
+		</div>
+
+<h2>Preamble...</h2>
+<div>
+			<p>
+				<a href="http://www.numpy.org/" target="_blank">Numpy</a> &quot;...is the fundamental package for 
+				scientific computing with Python...&quot;. Good for fast maths... mostly due to vectorization (batch operation
+				on datasets without needing loops) implemented in the compiled modules underneath the Python interface, which,
+				where possible, will take advantage of hardware vectorization. A lot of the more complex underlying modules 
+				for things like linear algebra, matrix operations etc, are build using the help of
+				oftware libraries, available under BSD style licences, such as <a href="http://www.netlib.org/blas/" target="_blank">BLAS</a>
+				and derivatives like <a href="http://www.netlib.org/lapack/" target="_blank">LAPACK</a>. 
+			</p>
+<pre class="prettyprint linenums lang-python">
+import numpy as np
+</pre>
+</div>
+
+		<h2>References</h2>
+		<div>
+			<ul>
+				<li>
+					<a href="http://shop.oreilly.com/product/0636920023784.do" target="_blank">Python for Data Analysis</a>, Wes McKinney, O'Reilly Media 
+				</li>
+				<li>
+					<a href="https://www.packtpub.com/big-data-and-business-intelligence/numpy-beginner%E2%80%99s-guide-second-edition" target="_blank">NumPy Beginner's Guide</a>, Ivan Idris, Packt Publishing 
+				</li>
+			</ul>
+		</div>
+
+		<h2>Arrays</h2>
+		<div>
+			<h3>Intro</h3>
+			<p>
+			The Numpy array object is <tt>ndarray</tt>. 
+			Create it using any iterable via, typically, the function <tt>np.array()</tt>. 
+			The most basic properties are <tt>dtype</tt> giving the underlying machine datatype, <tt>shape</tt>giving the length of each dimension and 
+			<tt>ndim</tt> giving the number of dimensions...
+			</p>
+<pre class="prettyprint linenums lang-python">
+&gt;&gt;&gt; a = np.array([1,2,3,4])
+&gt;&gt;&gt; a
+array([1, 2, 3, 4])
+&gt;&gt;&gt; a.dtype
+dtype('int32')
+&gt;&gt;&gt; a.shape
+(4,)
+&gt;&gt;&gt; a.ndim
+1
+</pre>
+			<p>
+				Can also create arrays using functions such as <tt>zeros()</tt>, <tt>ones()</tt>, <tt>empty()</tt>, <tt>arange()</tt> and other
+				<a target="_blank" href="http://docs.scipy.org/doc/numpy/reference/routines.array-creation.html">array creation routines</a>.
+				Caution with <tt>empty()</tt>: it does <em>not</em> create a zeroed array... it could well be filled with junk!
+<F5>			<a name="numpy_slice"></a>
+			<h3>Slices</h3>
+			<p>
+				Slicing <tt>ndarray</tt>s generally works like normal Python list slicing except for the rather important caveat
+				that NumPy arrays slices are not, unlike lists, copies of the array data. <em>NumPy slices are like views into an array</em>.
+			</p>
+				In the following code snippet a slice from array <tt>a</tt> is stored in <tt>b</tt>. If <tt>a</tt> were a list then
+				<tt>b</tt> would contain an independent copy of the slice data. But in the example below we see that modifying <tt>b</tt>
+				changes the data in <tt>a</tt>! Thus NumPy array slices are more like <em>views into an array</em>
+			</p>
+			
+<pre class="prettyprint linenums lang-python">
+&gt;&gt;&gt; a = np.array([1,2,3,4,5,6])
+<b>&gt;&gt;&gt; b = a[2:4] #&lt;&lt; 'b' will be a VIEW into 'a'</b>
+&gt;&gt;&gt; b
+array([3, 4])
+&gt;&gt;&gt; b[:] = 111
+&gt;&gt;&gt; b
+array([111, 111])
+&gt;&gt;&gt; a
+<b>array([1, 2, 111, 111, 5, 6]) #&lt;&lt; Modifying 'b' changes 'a'!!</b>
+</pre>
+
+			<p>
+				To get a copy of the array slice, you would have to explicity tell NumPy to copy the data
+				using the <tt>copy()</tt> function:
+			</p>
+
+<pre class="prettyprint linenums lang-python">
+&gt;&gt;&gt; a = np.array([1,2,3,4,5,6])
+<b>&gt;&gt;&gt; b = a[2:4].copy() #&lt;&lt; Here we take a COPY</b> 
+&gt;&gt;&gt; b
+array([3, 4])
+&gt;&gt;&gt; b[:] = 111
+&gt;&gt;&gt; b
+array([111, 111])
+&gt;&gt;&gt; a
+<b>array([1, 2, 3, 4, 5, 6]) #&lt;&lt; Modifying 'b' does NOT change 'a' here</b>
+</pre>
+
+			<p>
+				It is, however, worth noting, that this is not the case when assigning into an array slice.
+				Take the following example...
+			</p>
+
+<pre class="prettyprint linenums lang-python">
+&gt;&gt;&gt; a = np.array([1,2,3,4,5,6])
+&gt;&gt;&gt; c = np.array([999,999])
+
+&gt;&gt;&gt; a[0:2] = c
+&gt;&gt;&gt; a
+array([999, 999, 111, 111,   5,   6])
+
+<b>&gt;&gt;&gt; c[:] = 0 #&lt;&lt; Modifying 'c' here will not change 'a'</b> 
+&gt;&gt;&gt; c
+array([0, 0])
+
+&gt;&gt;&gt; a
+array([999, 999, 111, 111,   5,   6])
+</pre>
+
+			<h3>Boolean Indexing</h3>
+			<p>A few things to note:</p>
+			<ol>
+				<li>
+				The boolean array <em>must</em> be of the same length as the axis it's indexing,
+				</li>
+				<li>
+				The Python keywords &quot;<tt>and</tt>&quot; and &quot;<tt>or</tt>&quot; do not work with boolean arrays, use &quot;<tt>&amp;</tt>&quot; and &quot;<tt>|</tt>&quot;,
+				</li>
+				<li>
+					Selecting data from an array by boolean indexing always creates a copy of the data,
+					even if the returned array is unchanged.
+				</li>
+			</ol>
+
+			<p>
+				For example, an array of student names and an array of their test scores. To select just the students with a
+				score above, say, 70 percent, we would do the following:
+			</p>
+<pre class="prettyprint linenums lang-python">
+&gt;&gt;&gt; import numpy as np
+&gt;&gt;&gt; a = np.array(['James', 'John', 'Mike', 'Mark', 'Oliver', 'Peter'])
+&gt;&gt;&gt; b = np.array([ 85,     56,     77,     88,     66,       88     ])
+
+&gt;&gt;&gt; b &gt; 70
+array([ True, False,  True,  True, False,  True], dtype=bool)
+
+&gt;&gt;&gt; a[b &gt; 70]
+array(['James', 'Mike', 'Mark', 'Peter'], dtype='|S6')
+</pre>
+
+			<p>
+				This concept extends to multi-dimensional arrays. Lets say each student has sat 4 exams and we want to
+				to see exam scores for certain students...
+			</p>
+<pre class="prettyprint linenums lang-python">
+&gt;&gt;&gt; import numpy as np
+&gt;&gt;&gt; a = np.array(['James', 'John', 'Mike', 'Mark', 'Oliver', 'Peter'])
+&gt;&gt;&gt; b = np.array([[ 85,     56,     77,     88,     66,       54     ],
+...               [ 66,     73,     65,     73,     28,       34     ],
+...               [ 74,     56,     73,     74,     49,       56     ],
+...               [ 35,     42,     54,     65,     87,       27     ]])
+
+&gt;&gt;&gt; mask = (a == 'James') | (a=='Oliver')
+&gt;&gt;&gt; mask
+array([ True, False, False, False,  True, False], dtype=bool)
+
+&gt;&gt;&gt; b[:,mask]
+array([[85, 66],
+       [66, 28],
+       [74, 49],
+       [35, 87]])
+
+</pre>
+
+			<p>It is also possible to mask rows...
+			</p>
+
+<pre class="prettyprint linenums lang-python">
+&gt;&gt;&gt; mask_rows = np.array([True, False, True, False])
+&gt;&gt;&gt; b[mask_rows]
+array([[85, 56, 77, 88, 66, 54],
+       [74, 56, 73, 74, 49, 56]])
+</pre>
+			<p>In the above <tt>b[mask_rows]</tt> is equivalent to <tt>b[mask_rows, :]</tt>. Also note that the
+				mask must also be a NumPy array, it cannot be, for example, a plain list... that won't work
+				as you expect! 
+			</p>
+
+			<h3>Index With Integers - Fancy Indexing</h3>
+			<p>Use integers to specify which row/column to select and in what order</p>
+<pre class="prettyprint linenums lang-python">
+&gt;&gt;&gt; a = np.array( [[0,1,2,3],[4,5,6,7],[8,9,10,11]] )
+&gt;&gt;&gt; a[[2,1], :]
+array([[ 8,  9, 10, 11],
+       [ 4,  5,  6,  7]])
+
+&gt;&gt;&gt; a[:, [2,1]]
+array([[ 2,  1],
+       [ 6,  5],
+       [10,  9]])
+
+&gt;&gt;&gt; a[[2,1], [2,1]]
+array([ 10, 5])
+</pre>
+			<h3>Condition Logic</h3>
+			<p>
+				<tt>np.where()</tt> is the vectorized verions of the ternary &quot;<tt>x if cond else y</tt>&quot; 
+				operator.
+			</p>
+			<p>
+				<tt>np.putmask()</tt> replaces elements of an array based on conditions.
+			</p>
+<pre class="prettyprint linenums lang-python">
+&gt;&gt;&gt; x = np.arange(6).reshape(2, 3)
+&gt;&gt;&gt; np.putmask(x, x&gt;2, x**2)
+&gt;&gt;&gt; x
+array([[ 0,  1,  2],
+       [ 9, 16, 25]])
+</pre>
+
+			<h3>Statistics (and how axis numbering works)</h3>
+			<p>
+			There are a few <a target="blank" href="http://docs.scipy.org/doc/numpy/reference/routines.statistics.html">statistical measures</a> 
+			that can be efficiently made across an array including the <tt>mean()</tt>, <tt>std()</tt>, <tt>var()</tt> 
+			and their not-a-number-ignoring equivalents <tt>nanmean()</tt>, <tt>nanstd()</tt>, <tt>nanvar()</tt>. 
+			These can be computed along any array &quot;axis&quot; or for the entire array...
+			</p>
+			<p>I was a little surprised with how numpy labeled the axes... for 2D arrays here's how it works:
+			</p>
+<pre class="prettyprint linenums lang-python" style="float:left; clear:both;">
+&gt;&gt;&gt; a = np.arange(4).reshape(2,2)
+&gt;&gt;&gt; a
+array([[0, 1],
+       [2, 3]])
+&gt;&gt;&gt; a.mean()  # Compute mean of entire array
+1.5
+&gt;&gt;&gt; a.mean(0) # Mean of each column
+array([ 1.,  2.])
+&gt;&gt;&gt; a.mean(1) # Mean of each row
+array([ 0.5,  2.5])
+</pre>
+<img src="##IMG_DIR##/python/2d_array.png" style="float: left; width:202px; height: 189">
+
+			<p style="clear:both;">
+				Because we index the 2D array as <tt>array[row][col]</tt> it makes sense to me that the column-axis 
+				number is <tt>0</tt> and the row-axis number is <tt>1</tt>.
+			</p>
+			<p>For 3D arrays it works like this...</p>
+<pre class="prettyprint linenums lang-python" style="float:left; clear:both;">
+&gt;&gt;&gt; b = np.arange(8).reshape(2,2,2)
+&gt;&gt;&gt; b
+array([[[0, 1],
+        [2, 3]],
+       [[4, 5],
+        [6, 7]]])
+&gt;&gt;&gt; b.mean()  # Compute mean of entire array
+3.5
+&gt;&gt;&gt; b.mean(0) # Mean of each depth
+array([[ 2.,  3.],
+       [ 4.,  5.]])
+&gt;&gt;&gt; b.mean(1) # Mean of each column
+array([[ 1.,  2.],
+       [ 5.,  6.]])
+&gt;&gt;&gt; b.mean(2) # Mean of each row
+array([[ 0.5,  2.5],
+       [ 4.5,  6.5]])
+</pre>
+<img src="##IMG_DIR##/python/3d_array.png" style="float: left; width:303px; height: 282">
+			<p style="clear:both;">
+				Note: The call <tt>b.mean(xxx)</tt> is the same as <tt>b.mean(axis=xxx)</tt>. 
+			</p>
+			<p>
+				The 3D array above is indexed as <tt>[depth][row][col]</tt> as python is row-major (i.e. 
+				fastest increasing index on the right). 
+			<p> I had expected that the axes would numbered from zero, zero being the 
+				fastest increasing index (i.e., col). The next fastest increasing index (i.e, row) is numbered <tt>1</tt> and so on. Therefore,
+				in this case axis <tt>0</tt> would be column, axis  <tt>1</tt> would be row and axis  <tt>2</tt> would be depth.
+			</p>
+			<p>
+				This is <em>not the case</em> as we can see!! The actual numbering makes sense if we think of a 1D array as being only rows, so the row-axis
+				would be labeled <tt>0</tt>. Adding a dimension causes all other axis to have their label incremented by 1 and the new
+			axis to be labeled zero. This is how the axis numbering really works and this is what is shown in the image above.
+			</p>
+			<p>Thus, a 1D array has only rows so the row-axis is labeled <tt>0</tt>. A 2D array has a new dimension, columns. So increment the row column label
+				so that it is now labeled <tt>1</tt>. The new dimension (axis), column, is now labeled <tt>0</tt>. A 3D array adds yet another dimension, depth. So increment 
+				the labels of the existing axes so that row now becomes <tt>2</tt>, column <tt>1</tt>, and the new axis <tt>0</tt>.
+			</div> <!-- End of H2 children containing div -->
+	</div>
+</body>
+</html>
+
+

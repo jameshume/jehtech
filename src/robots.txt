@@ -1,0 +1,6 @@
+# Robots.txt file from http://www.jeh-tech.com
+
+Sitemap: http://www.jeh-tech.com/sitemap.xml
+
+User-agent: *
+Disallow:

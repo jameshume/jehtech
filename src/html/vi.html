@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+	<title>(G)Vim notes</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+  <div id="header">
+	  -- This is JEHTech --
+  </div>
+
+   <div id="sidebar">
+    <h1 class="title">Links...</h1>
+    <div id="includedContent"></div>
+  </div>
+
+  <div id="content">
+    <h1 class="title">Vim</h1>
+	 <p>
+    Just a collection of Vi/Vim stuff that I find most useful and often forget
+    and then end up having to search for time and time again...
+	 </p>
+    <h2>Deleting lines...</h2>
+    <pre>:g/regexp/d   -- delete lines matching regexp
+:g/regexp/    -- just highlight but don't delete lines that would be delete
+:g!/regexp/d  -- delete lines NOT matching regexp
+:v/regexp/d  -- delete lines NOT matching regexp (same as above)</pre>
+    <h2>Editor Font</h2>
+	 <h3>Type Face</h3>
+    <p>To bring up a font selecton dialog type the following (works on Windows and Linux but not all platforms may support it).</p>
+    <pre>set <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#'guifont'">guifont</a>=*</pre>
+    <p>To see what font you have set type the following.</p>
+    <pre>set <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#'guifont'">guifont</a>?</pre>
+    <p>To set the font using the command rather than a dialog box use the following (the font name depends on the GUI used).
+       On windows you can use a '_' instead of a space, otherwise you must escape the space. To include commans in font name you must escape them.</p>
+    <pre>set <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#'guifont'">guifont</a>=courier_new:h12</pre>
+	<h3>Colours</h3>
+	<p>I find the default Vim colour for comments against a dark background. There are a couple of options.
+	</p>
+	<ul>
+		<li>
+		<tt><a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#'background'">:background=(dark|light)</a></tt> will set colours to be best readable on a dark or light background.
+		</li>
+	 	<li>
+		<tt><a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/syntax.html#:colorscheme">:colorscheme {name}</a></tt> will choose a scheme from <tt><a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#'runtimepath'">runtimepath</a>/colours/{name}.vim</tt>. To find the runtime path in Vim just use the command <tt>:echo $VIMRUNTIME</tt>. Some of the default schemes that ship include &quot;default&quot;, &quot;desert.vim&quot; etc. You can then add your choice of scheme into your <tt>.vimrc</tt> file.
+		</li>
+	</ul>
+
+	<h2>Miscellaneous</h2>
+	<h3>Veritcal Line For Page Edge</h3>
+	<p>
+		If you want to make sure you're code is only 80, 100 or whatever characters in width and want a vertical guide line on that column use the following:
+	</p>
+	<pre>:set colorcolumn=80</pre>
+	<p>
+		The above puts a vertical coloured column at column 80. You can have multiple vertical lines using a comma seperated list.
+	</p>
+
+	<h2>Vim Plugins</h2>
+	<p>Two very usefule links are:</p>
+	<ul><li><a target="_blank" href="http://www.sontek.net/blog/2011/05/07/turning_vim_into_a_modern_python_ide.html#refactoring-and-go-to-definition">
+			Turning Vim into a mordern Python IDE</a>, and</li>
+		<li><a href="http://blog.dispatched.ch/2009/05/24/vim-as-python-ide/" target="_blank">VIM as Python IDE</a></li>
+	</ul>
+
+	<h3><a name="pathogen.vim"/>Pathogen.Vim</h3>
+	<p>
+		<a target="_blank" href="https://github.com/tpope/vim-pathogen">Pathogen.vim</a>, as the website says, 
+		&quot;...makes it super easy to install plugins and runtime files in their own private directories...&quot;.
+		To install just run the following (on your Linux box) and it will run straight out of the box.
+	</p>
+	<pre>mkdir -p ~/.vim/autoload ~/.vim/bundle &amp;&amp; \
+curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim</pre>
+	<p>Then <a href="#edit_vimrc">edit your .vimrc file</a> to contain the following</p>
+	<pre>execute pathogen#infect()
+syntax on
+filetype plugin indent on</pre>
+	<p>
+		Now any puglins you install to <tt>~/.vim/bundle</tt> will be automatically available to you. Yay!
+	</p>
+
+	 <h3>Better Code Navigation</h3>
+	 <p>
+		 Thank you Munen Alain M. Lafon for the article <a href="http://blog.dispatched.ch/2009/05/24/vim-as-python-ide/" target="_blank">VIM as Python IDE</a>,
+		 which the following is taken from. Loved this Vim plugin... it seems to work with everything from C to Python to SQL.
+	 </p><p>
+		 Install <a target="_blank" href="http://sourceforge.net/projects/ctags/files/ctags/">Exuberant Ctags</a> 
+		 (the CTags which was distributed with my system was out of date so check this). I installed CTags 5.8 and it worked fine.
+		 To do this download the <tt>.tar.tgz</tt> file to a folder of your choice. Change directory to that folder and run the following 
+		 (modifying CTags version if there is a mroe up to date one!).
+	 </p>
+	 <pre>tar xzvf ctags-5.8.tar.gz
+cd ctags-5.8
+./configure
+make
+sudo make install</pre>
+	<p>
+		Don't worry about the odd compilation warning. I had a couple. As long as the make install looks something
+		like the following you'll be okay
+	</p>
+	<pre>enigma@enigma-VirtualBox:~/Downloads/ctags-5.8$ sudo make install
+cp ctags /usr/local/bin/ctags  &amp;&amp;  chmod 755 /usr/local/bin/ctags
+cp ./ctags.1 /usr/local/share/man/man1/ctags.1  &amp;&amp;  chmod 644 /usr/local/share/man/man1/ctags.1</pre>
+	<p>
+		Installing the navigation pugin <a target="_blank" href="http://vim-taglist.sourceforge.net/">Vim-TagList</a>
+		is straightforward. From the zip file, I downloaded <tt>tag_list46.zip</tt> just extract the contents into your
+		<tt>~/.vim</tt> directory so that <tt>taglist.vim</tt> goes into your <tt>~/.vim/plugin</tt> directory and
+		<tt>taglist.txt</tt> does into your <tt>~/.vim/doc</tt> directory.
+	</p><p>
+		Now to get a code navigation pane on the LHS of your Vim window enter the vim command 
+		<tt><a target="_blank" href="http://vim-taglist.sourceforge.net/manual.html#:TlistOpen">:TlistOpen</a></tt> and
+		there you go! Proper IDE style code navigation pane...
+	</p>
+
+    <h2>Make Linux Vim Key Shortcuts Behave Like Windows</h2>
+    <p>I use Vim a lot on Windows and like the cut/copy/paste key shortcuts. Wanted to replicate on my Linux box.
+       The following <a href="http://superuser.com/questions/10588/how-to-make-cut-copy-paste-in-gvim-on-ubuntu-work-with-ctrlx-ctrlc-ctrlv#10604" target="_blank">tip</a> by 
+       <a href="http://superuser.com/users/1695/ludwig-weinzierl" target="_blanK">Ludwig Weinzierl</a>
+       did the trick nicely...
+    </p>
+    <p>Add the following lines to your _vimrc or .vimrc</p>
+    <pre>source $VIMRUNTIME/mswin.vim
+behave mswin</pre>
+
+    <h2>My .vimrc file</h2>
+    <h3>How I Like It</h3>
+    <p>This is the contents of my .vimrc file. I often forget where it is on my Windows system so 
+       <a name="edit_vimrc" href="http://vim.wikia.com/wiki/Open_vimrc_file" target="_blank">this wiki article</a> very useful. 
+       In brief... you can easily edit .(g)vimrc 
+       files from within Vim using the following.</p>
+       <pre>:e $MYVIMRC
+:e $MYGVIMRC</pre>
+    <p>There is the small caveat that the above only works if Vim has found your <tt>.vimrc</tt> file.
+       If one doesn't exist create it in your home directory...</p>
+    <p> And this is my current file...</p>
+    <pre>set <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#'hlsearch'">hlsearch</a>          -- Heighlight all search patterns matches
+set <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#'incsearch'">incsearch</a>         -- Move cursor to matched string, while typing 
+set <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#'autoindent'">autoindent</a>        -- keep the indent of the previous line
+set <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#'noexpandtab'">noexpandtab</a>       -- tabs are never replaced by spaces
+set <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#'tabstop'">tabstop</a>=3         -- how many columns a tab counts for
+set <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#'shiftwidth'">shiftwidth</a>=3      -- columnsindented by the reindent operations
+set <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#'list'">list</a>              -- turn on special character display
+set <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#'listchars'">listchars</a>=tab:\|\ -- make only tabs replaced by a pipe and space
+set <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#'colorcolumn'">colorcolumn=80</a>              -- Highlight 80th column as guide 
+
+execute pathogen#infect()
+<a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/syntax.html#:syntax">syntax</a> on
+<a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/filetype.html#filetype">filetype</a> plugin indent on
+
+source $VIMRUNTIME/<a target="_blank" href="http://vim.cybermirror.org/runtime/mswin.vim">mswin.vim</a>
+<a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/gui.html#:behave">behave</a> mswin</pre>
+    <p>Or, if you want to get fancy with the listchars settings...</p>
+    <pre>set <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#'encoding'">encoding</a>=utf-8
+set <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#'listchars'">listchars</a>=tab:&raquo;.,trail:&middot;</pre>
+
+	<h3>Debugging</h3>
+	<p>
+	 	Strangely I found when editing <a href="yorick.html">Yorick</a> script files (a <tt>.i</tt> extension)
+		the tab settings in my <tt>.vimrc</tt> file were being ignored (or superceeded). Thank you to this
+		<a href="http://stackoverflow.com/questions/305574/can-i-stop-settings-in-vimrc-from-being-overwritten-by-plugins" target="_blank">SO question</a> 
+		for helping out!
+	</p>
+	<p>
+		To see a <em>list of <tt>.vim</tt> files loaded</em> use the command <tt>:scriptnames</tt>. On my system this fave
+		the following output, which I've snipped to save space...
+	</p>
+	<pre>  1: /usr/share/vim/vimrc
+  2: /usr/share/vim/vim73/debian.vim
+&lt;snip&gt;
+ 11: ~/.vimrc
+ 12: /usr/share/vim/vim73/mswin.vim
+&lt;snip&gt;
+ 23: /usr/share/vim/gvimrc
+ 24: /usr/share/vim/vim73/syntax/progress.vim
+	</pre>
+	<p>Doing a <tt>grep</tt> I then found in <tt>progress.vim</tt>, the line &quot;<tt>/usr/share/vim/vim73/syntax/progress.vim:set expandtab</tt>&quot;.
+	So that's the culprit. This could also have been achieved using the command 
+	<tt>:verbose set expandtab <b>?</b></tt>, where
+	the question mark is very important! This will report where the value was last set, and indeed, I did see...
+	</p>
+	<pre>expandtab
+        Last set from /usr/share/vim/vim73/syntax/progress.vim</pre>
+  </div>
+</body>
+</html>
+

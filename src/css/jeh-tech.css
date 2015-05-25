@@ -1,0 +1,250 @@
+/* latin-ext */
+@font-face {
+	font-family: 'Spinnaker';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Spinnaker'), local('Spinnaker-Regular'), url(http://fonts.gstatic.com/s/spinnaker/v8/W7zI5bHqD9Cyn2evfF7QnxJtnKITppOI_IvcXXDNrsc.woff2) format('woff2');
+	unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+	font-family: 'Spinnaker';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Spinnaker'), local('Spinnaker-Regular'), url(http://fonts.gstatic.com/s/spinnaker/v8/WxzDAY6mC9v3znSJEtCoW1tXRa8TVwTICgirnJhmVJw.woff2) format('woff2');
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+
+body { 
+	font-family: Spinnaker,Arial,Helvetica,sans-serif;
+	font-size:   14px;
+	width:       100%;
+	padding:     0px;
+	margin:      0px;
+	border:      0px;
+ }
+
+.box_container {
+	width:100%;
+}
+
+img { 
+	max-width: 100%;
+}
+
+.info, .warning {
+	margin: 10px 0px;
+	padding:5px 10px 5px 65px;
+	background-repeat: no-repeat;
+	background-position: 10px center;
+	background-size: 40px 40px;
+	width: auto;
+	display:inline-block;
+	text-align: left;
+	min-height: 40px;
+	border-radius: 5px;
+}
+
+.info {
+	color: #30300A;
+	border: 1px solid #30300A;
+	background-color: #E1E3C3;
+	background-image: url('images/jeh-tech/icons/notepad.png');
+}
+
+.warning {
+	color: #662B2B;
+	border: 1px solid #662B2B;
+	background-color: #F7D0D0;
+	background-image: url('images/jeh-tech/icons/alert.png');
+}
+
+ol.linenums li 	{ border-left:1px solid grey; padding-left:5px;
+		}
+	  
+ol.linenums li:nth-child(n)	{ list-style: decimal-leading-zero;
+				}
+
+pre.prettyprint	{ border: 1px solid lightgray;
+		  border-right: 0px;
+		  border-left: 5px solid gray; 
+		}
+
+pre { 
+	border-left:  5px solid gray;
+	padding-left: 5px;
+	font-family:  "Consolas", "Courier New", Courier, mono, serif;
+	border:       1px solid lightgray;
+	border-right: 0px;
+	border-left:  5px solid gray;
+}
+
+h1, h2, h3 {
+	border-left:  0px;
+	border-right: 0px;
+	border-top:   0px;
+	margin:       0px;
+	font-weight:  bolder;
+}
+
+h1 {
+	border-bottom:    3px solid gray; 
+	height:           40px;
+	background-color: #CAD7E3;
+}
+
+h1.title {
+	margin-top: 0px; 
+}
+
+h2 {
+	border-bottom: 1px solid gray; 
+	background-color: #E4EBF2;
+}
+
+h3 {
+	border-bottom: 1px solid gray;
+}
+
+#header	{ margin:           0px; 
+	  padding:          0px; 
+	  background-color: #9DB3C7; 
+	  height:           40px; 
+	  text-align:       center; 
+	  vertical-align:   center; 
+	  width:            100%;
+	  font-size: 16px;
+	  font-weight: bolder;
+	}
+
+table 	{ margin: 0;
+	  border: 1px solid gray;
+	}
+
+table, td	{ vertical-align: top;
+		  text-align:     left;
+		}
+
+table th	{ font-weight:bold;
+		  background-color: #E4EBF2;
+		}
+
+table caption   { background-color: #CAD7E3;
+		}
+
+blockquote {
+	font: 14px/20px italic Times, serif;
+	padding: 8px;
+	background-color: #faebbc;
+	border-top: 1px solid #e1cc89;
+	border-bottom: 1px solid #e1cc89;
+	margin: 5px;
+	background-image: url(images/jeh-tech/openquote1.gif);
+	background-position: top left;
+	background-repeat: no-repeat;
+	text-indent: 23px;
+	}
+	
+blockquote span {
+	display: block;
+	background-image: url(images/jeh-tech/closequote1.gif);
+	background-repeat: no-repeat;
+	background-position: bottom right;
+	text-align: left;
+	padding-right: 23px;
+}
+
+#content {
+	margin: 0px;
+	width: 100%;
+}
+
+@media screen {
+	#header { 
+		background-image: url(images/jeh-tech/PCB_bkdg.jpg);
+		background-position: 0px 0px;
+	}
+
+	#content { 
+		border-left:      1px solid black; 
+		margin:           0px 0px 0px 250px; 
+		width:            auto; 
+		padding:          0px;
+		padding-left: 10px;
+	}
+
+	#sidebar { 
+		border:   0px solid green; 
+		margin:   0px 0px 0px 0px; 
+		padding:  0px; 
+		width:    250px; 
+		position: fixed;
+		top: 40px;
+		left: 0px;
+		overflow-y: auto;
+		overflow-x: hidden;
+	}
+
+	h1, h2 {
+		margin-left: -10px; 
+		padding-left: 10px; 
+		width:100%;
+		display: block;
+	}
+
+	#content h1 {
+		background-image: url(images/jeh-tech/PCB_bkdg.jpg);
+		background-position: -251px -40px;
+		z-index: 1000; // Make sure things like MathJax renderings are behind this with JS makes it fixed for scroll
+	}
+
+	#sidebar h1 {
+		background-image: url(images/jeh-tech/PCB_bkdg.jpg);
+		background-position: 10px -40px;
+	}
+
+	a { 
+		font-weight: bold; 
+		font-style: italic;
+	}
+
+	pre { 
+		overflow: auto;
+	}
+
+	expander span { 
+		background-color: #CAD7E3; 
+		width: auto;
+	}
+	expander span:hover{ 
+		background-color: #E4EBF2; 
+	}
+
+	expander img { 
+		vertical-align: middle; 
+	}
+
+	detailed_content { 
+		display: none;
+	}
+}
+
+@media print {
+	/* From http://stackoverflow.com/questions/248011/how-do-i-wrap-text-in-a-pre-tag */
+	pre	{ white-space: pre-wrap;       /* CSS 3 */
+		  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+		  white-space: -pre-wrap;      /* Opera 4-6 */
+		  white-space: -o-pre-wrap;    /* Opera 7 */
+		  word-wrap: break-word;       /* Internet Explorer 5.5+ */
+		}
+
+	#content	{ border:  0px;
+			  margin:  0px 50px 0px 50px; 
+			  width:   auto; 
+			  padding: 0px;
+			}
+      
+
+	#sidebar	{ display: none; 
+			}
+}

@@ -1,0 +1,249 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+	<title>Model View Controller (MVC), Model View Presenter (MVP) Pattern</title>
+	<!-- META_INSERT -->
+	<meta name="description" content="Notes on model-view-controller and model-view-presenter patterns and their application to GUI development">
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+	<div id="header">
+		-- This is JEHTech --
+	</div>
+
+	<div id="sidebar">
+		<h1 class="title">Links...</h1>
+		<div id="includedContent"></div>
+	</div>
+
+	<div id="content">
+		<h1 class="title">Model View Controller/Presenter (MVC/P) Notes</h1>
+		<h2>Introduction</h2>
+		<p>
+			I first learnt about MVC when playing with <a href="http://rubyonrails.org/" target="_blank">Rails</a> 
+			and just followed &quot;the book&quot; without really considering
+			the architecture that closely... it is intuitively &quot;easy&quot; (or so I thought) to understand and has obvious
+			benifits.
+		</p>
+		<p>
+			From my own perspective, it was <a href="http://rubyonrails.org/" target="_blank">Rails</a> that &quot;popularised&quot; 
+			this pattern for me. Before then I'd written
+			web applications using the standard LAMP combiniation and through trial and error had my own seperation of various
+			logical components that helped but was not as strict or as formalised as MVC. So, learning about MVC for web development
+			was a boon.
+		</p>
+		<p>
+			Where I started to get a little confused was when trying to use MVC not to write a web based application but a
+			desktop GUI. This soon got me thinking and I realised that I didn't have a good an understanding of MVC as I 
+			thought. Googling around for articles there also appears to be some confusion between various posts, especially in individual blogs. This note 
+			covers the best articles I found and my interpretation of them and current understanding of MVC. 
+		</p>
+		<h2>What Got Me Thinking</h2>
+		<p>
+			Below is a really simplified version of something I was working on. I want to have a test and associated description. However,
+			I know there are going to be potentially many versions of the test so I want to record the versions along with a little
+			change note. The highly simplified database I had in mind is shown below.
+		</p><p style="text-align:center;">
+			<img src="##IMG_DIR##/SimpleDB_MVC_Problem.png" style="max-width:100%;"/>
+		</p><p>
+			I wanted to have a little database management GUI. Something like the following. I want to create a test manager, but I 
+			want to embed into the one window two lists. The first list displays the tests. When a test is clicked it updates the 
+			second list with the versions of the test available.
+		</p><p style="text-align:center;">
+			<img src="##IMG_DIR##/Simple_DB_For_MVC_GUI.png" style="max-width:100%;"/>
+		</p><p>
+			So, why a problem? In the articles and threads I had read, I had always thought there was a 1:1 relationship between view, model and
+			controller. To represent just the Test table, for example, was easy. Initialise a model, view and controller and coordinate. When 
+			the window shows, the controller requests from the model all the test data. The model then publishes a &quot;test data retrieved&quot;
+			event and then the view is populated.
+		</p><p>
+			Examples I have seen do something like this.
+			<pre>v = CreateView(Test)
+m = CreateModel(Test)
+c = CreateController(Test, m, v)</pre>
+		</p><p>
+			My first simple view into just the test table (i.e., not including the test versions), in pseudo code, looked something like the following.
+		<div>
+			<pre style="float:left; margin-right:10px;">class View {
+   View() {
+      Add list control
+      Display loading message in list control
+      Add buttons
+      Disable buttons
+   }
+
+   OnAddClick() {
+      Publish request to add a new test record
+      Disable the add button 
+      Change add button text to &quot;Adding...&quot;
+   }
+
+   OnDeleteClick() {
+      Publish request to delete the selected test record
+      Disable the delete button
+      Change the delete button text to &quot;Deleting...&quot;
+   }
+
+   LoadTestList(lst) {
+      Clear the list control
+      Load all data from list of rows in lst into the list 
+      Enable buttons
+   }
+
+   Add(testRecord) {
+      The add request has been completed
+      Add the new record into the list control
+      Renable add button and change its label to &quot;Add&quot;
+   }
+
+   Delete(testRecord) {
+      The delete request has been copleted
+      Delete the specified record from the list control
+      Renable delete button and change its label to &quot;Delete&quot;
+   }
+}</pre>
+
+		<pre style="float:left;">class Controller {
+   Controller(model, view) {
+      Subscribe to all events model publishes
+      Subscribe to all events view publishes
+      Request list of tests from model
+   }
+
+   ModelRequestComplete(data) {
+      if entire list {
+         model.LoadTestList(data)
+      } else if add complete {
+         model.Add(data)
+      } else if delete complete {
+         model.Delete(data)
+      }
+   }
+
+   ViewRequests(data) {
+      if add requested {
+         start thread to get model to add record
+      } else if delete request {
+         start thread to get model to delete record
+      }
+   }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+			</pre>
+		</p><p style="clear: left;">
+			Okay, so it seems reasonable. The model has no idea about the view or controller. It just receives requests to set/get something
+			and sends out events to the world in general when it completes a request. This allows anything using the model to do so 
+			asynchronously. I.e., whilst the model is servicing a request the requester can go away and do other things and just respond
+			to a completion event when the model has finished doing the work.
+		</p><p style="font-weight: bold;">
+			First question: The controller seems pretty thin. Why is it relevant here? What should it really be doing?
+		</p><p>
+			The above structure has already led to my first thought... the controller doesn't really seem to be doing very much. In fact, it
+			wouldn't make much difference if it didn't exist and the view contained all the controller logic. It might even be cleaner
+			because the controller isn't doing much more than passing messages between the view and model. Okay, it is launching threads to use
+			the model so that the GUI can remain responsive whilse a request is being processed, but the GUI could do that, and probably
+			should be the one deciding whether it wants to use the model asynchronously or not.
+		</p><p style="font-weight: bold;">
+			Second question: A window combining views... How should this be structured using MVC?
+		</p><p>
+			Now if I add a second list to the window I have the following issue. I wanted to use my generic view and just add in the second list. 
+			So we click the test list... the view sends a request to get test versions associated with the highlighted test. 
+			It must disable the test list whilst data is being retrieved and also clear the version list and display some kind of 
+			&quot;loading&quot; message. When the data is retrieved the view must populate the version list and re-enable the test list and 
+			hide the &quot;loading&quot; message. 
+		</p><p>
+			My issue is that this isn't really one view, model and controller. The controller needs to use two models. 
+			Then does it use 1 or 2 views? If it uses 2 views should I really have 2 controllers? What if I have more than 2 views that depend on the 
+			test list being clicked, for example if there is a list for tags associated with a test type?
+		</p><p>
+			So, as you can see I had a few questions, which lead me to learn what I've put down in the following sections...
+		</p>
+		
+		<h2>MVC, The Theory</h2>
+		<h3>References</h3>
+		<p>
+			MVC seems to have been conceived of in the world of SmallTalk, not a language I know anything about apart from 
+			hearing it mentioned here and there. Reading about it from this historical perspective did clear a few things up for me.
+			I ended up reading the following articles, which appear to be written by folks who were intimately involved in 
+			coming up with these patterns. Apparently Trygve Reenskaug was the originator (according to Pattern Oriented Software
+			Architecture For Dummies) but it was first widly seen by people in SmallTalk.
+		</p>
+		<ol>
+			<li><a href="http://heim.ifi.uio.no/~trygver/1979/mvc-1/1979-05-MVC.pdf" target+"_blank">Thing-Model-View-Editor</a> by Trygve Reenskaug. [Last accessed 10-Feb-2015]</li>
+			<li><a href="http://www.itu.dk/courses/VOP/E2005/VOP2005E/8_mvc_krasner_and_pope.pdf" target="_blank">A Description of the MVC User Interface Paradigm in the SmallTalk-80 System</a>. [Last accessed 09-Feb-2015]</li>
+			<li><a href="http://www.object-arts.com/downloads/papers/TwistingTheTriad.PDF" target="_blank">Twisting the Triad, the Evolution of the Dolphin SmallTalk MVP Application Framework</a>. [Last accessed 09-Feb-2015]</li>
+		</ol>
+		<h3>Summary</h3>
+		<p>
+			The general strategy of MVC is to split up the responsibility for storing the data (the model), displaying the data 
+			(the view), and managing the user interaction between the two (the controller) into seperate modules. A programmer can then modify one
+			component without needing to know <em>everything</em>, or indeed <em>(almost) anything</em> about the other components.
+		</p><p>
+			For example, if the view
+			for a text box is jazzed up, the view designer doing the fancy graphics stuff doesn't need to know how
+			the text is stored or how the user enters the text. S/he just needs to know that s/he magically receives a message with information about what text
+			to display and with this should display the text however desired.
+		</p><p>
+			Or as another example, a view on an address book retrieves a list of all names beginning with 'L' through the model. The model
+			stores the addresses in a raw binary file. Now the software is to be ugraded to store the address book in XML. Because the view is
+			seperate from the model the storage can easily be changed without having to touch a single line of code in the view.
+		</p><p>
+			The split of responsibilities is easy enough to understand, but it was the description of the controller that ellucidated things
+			for me. In my development so far the controller seemed to be waifer thin and wasn't really doing a lot other than forwarding
+			messages between the view and model. I couldn't really see the point of it... until I read both the articles. In the SmallTalk world the 
+			controller would do things like detect the key press, or detect the mouse click and figure out if the key press would modify the model or whether
+			the mouse click was inside the view etc. Now, however, in modern OS architectures, most of this controller functionality already exists so the 
+			controller starts to become rather thin. As Andrew Bower et al say, &quot;...the idea of a controller did not fit neatly ... most modern graphical 
+			operating systems, provide a set of native widgets ... [which] already include most of the controller functionality embodied as part of the underlying 
+			operating system control...&quot;.
+		</p><p>
+			In summary then, we have 3 components:
+		</p>
+		<ol>
+			<li><b>Model</b>: The components of the system that &quot;...simulate the application domain...&quot;. For example, a counter would
+			    store its value as an integer. The model is the combination of the integer itself, the rules that specify what values it may take, and the interface
+				 through which it is modified. These make up the &quot;application domain&quot; - the idea of a real-world counter.
+			</li>
+			<li><b>View</b>: How the model is displayed. So for a counter in a GUI it might display a box and a set of up/down arrows and the 
+			          current value of the counter, which it reads from the model
+			</li>
+			<li><b>Controller</b>: The interface between the model, view and input device.
+			</li>
+		</ol>
+		<p style="text-align: center;">
+			<img src="##IMG_DIR##/MVC_From_SmallTalk_Article.png" style="max-width:100%"/>
+		</p><p>
+			The diagram above shows roughly how the interactions would take place. A user does something like hitting a key. The
+			controller interprets the key press. Is it the enter key? Is it a normal character? I.e., the controller has knowledge
+			about what the key does/signifies and starts a set of events. 
+		</p><p>
+			If the key was a character, for example, the controller could message the model and ask it to append the new chracter to its character store. 
+			The model would do this and then signal, either using a publish/subscribe or other mechanism, to the world in general that it had 
+			made such an update. The view could then listen for and receive this update and query the model for the new text and display it however
+			it wanted.
+		</p><p>
+			On the press of the return key, on the other hand, the controller might not ask the model to update its string store. It might
+			instead signal the view to do something special, or signal another controller that the user has finished entering data.
+		</p><p>
+			TODO - COMPLETE ARTICLE
+		</p>
+
+
+	</div>
+</body>
+</html>
+

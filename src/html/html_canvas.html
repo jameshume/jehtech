@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+	<title>JEH-Tech: HTML Canvas</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+<script>
+// AWESOME LINKS
+// http://www.w3.org/TR/2dcontext/
+// http://cheatsheetworld.com/programming/html5-canvas-cheat-sheet/
+	$(function(){
+		var c = document.getElementById("myCanvas");
+		var ctx = c.getContext("2d");
+
+		var w = 30;
+		var h = 30;
+
+		function drawRect(_x, _y, _w, _h, _lw, _pad) {
+			//http://tutorials.jenkov.com/html5-canvas/stroke-fill.html
+			ctx.lineWidth   = _lw;
+			ctx.strokeStyle = "purple";
+			ctx.strokeRect(_x, _y, _w, _h);
+			ctx.fillStyle = "red";
+			ctx.fillRect(_x+_pad, _y+_pad, _w-2*_pad, _h-2*_pad);
+		}
+
+		function drawRect2(_x, _y, _w, _h, _lw, _pad) {
+			//http://www.html5canvastutorials.com/tutorials/html5-canvas-rectangles/
+			ctx.moveTo(_x,_y);
+			ctx.beginPath();
+			ctx.rect(_x, _y, _w, _h);
+			ctx.fillStyle = 'yellow';
+			ctx.fill();
+			ctx.lineWidth = _lw;
+			ctx.strokeStyle = 'blue';
+			ctx.stroke();
+		}
+
+		function drawHorizGridLine(_y) {
+			ctx.lineWidth = 1;
+			ctx.strokeStyle = 'black';
+			ctx.beginPath();
+			ctx.moveTo(0,_y);
+			ctx.lineTo(180,_y);
+			ctx.stroke();
+		}
+
+		var x = 10;
+		var y = 10-h;
+		var lw_curr = 1;
+		for(lw_curr = 1; lw_curr < 4; ++lw_curr) {
+			y += h + 10;
+			x = 10;      drawRect(x, y, w, h, lw_curr, 0);
+			x += w + 10; drawRect(x, y, w, h, lw_curr, 1);
+			x += w + 10; drawRect(x, y, w, h, lw_curr, 2);
+			x += w + 10; drawRect(x, y, w, h, lw_curr, 3);
+		}
+
+		y += 20;
+		for(lw_curr = 1; lw_curr < 4; ++lw_curr) {
+			y += h + 10;
+			x = 10;      drawRect2(x, y, w, h, lw_curr, 0);
+			x += w + 10; drawRect2(x, y, w, h, lw_curr, 1);
+			x += w + 10; drawRect2(x, y, w, h, lw_curr, 2);
+			x += w + 10; drawRect2(x, y, w, h, lw_curr, 3);
+		}
+
+		y += h + 20;
+		x = 10;      drawRect2(x, y, w, h, 10, 10);
+		x += w + 10; drawRect2(x, y, w, h, 5, 1);
+		x += w + 10; drawRect2(x, y, w, h, 3, 1);
+		x += w + 10; drawRect2(x, y, w, h, 1, 1);
+		drawHorizGridLine(y);
+		drawHorizGridLine(y-4);
+		drawHorizGridLine(y+4);
+
+
+		y += h + 20;
+		x = 10;      drawRect2(x, y, w, h, 10, 10);
+		x += w + 10; drawRect2(x, y, w, h, 5, 1);
+		x += w + 10; drawRect2(x, y, w, h, 3, 1);
+		x += w + 10; drawRect2(x, y, w, h, 1, 1);
+		drawHorizGridLine(y);
+		drawHorizGridLine(y-2);
+		drawHorizGridLine(y+2);
+
+
+		y += h + 20;
+		x = 10;      drawRect2(x, y, w, h, 10, 10);
+		x += w + 10; drawRect2(x, y, w, h, 5, 1);
+		x += w + 10; drawRect2(x, y, w, h, 3, 1);
+		x += w + 10; drawRect2(x, y, w, h, 1, 1);
+		drawHorizGridLine(y);
+		drawHorizGridLine(y-1);
+		drawHorizGridLine(y+1);
+});
+</script>
+
+</head>
+
+<body>
+	<div id="header">
+		-- This is JEHTech --
+	</div>
+
+	<div id="sidebar">
+		<h1 class="title">Links...</h1>
+		<div id="includedContent"></div>
+	</div>
+
+	<div id="content">
+		<h1 class="title">HTML Canvas</h1>
+		<h2>Drawing Rectangles With Borders</h2>
+		<div>
+			<canvas id="myCanvas" width="180" height="450" style="border:1px solid black; margin: 5px; float: left;">
+				Your browser does not support the HTML5 canvas tag.
+			</canvas>
+
+			<p>
+				Drawing rectangles with borders is actually quite easy, but before I had properly learnt how to do this
+				I had found some tutorials online suggesting that one should stroke a rectange and then fill a second
+				rectangle inside it to fill the outer rectangle
+				<a href="http://tutorials.jenkov.com/html5-canvas/stroke-fill.html" target="_blank">[1]</a>.
+				This is <em>NOT</em> the way to do it as I found out from HTML Canvas tutorials 
+				<a href="http://www.html5canvastutorials.com/tutorials/html5-canvas-rectangles/" target="_blank">[2]</a>,
+				which presents the better way of doing this.
+			</p>
+			<p>
+				Recently I wanted to detect clicks inside boxes in an HTML canvas and this got me thinking about
+				the <tt>lineWidth</tt> canvas-context property. When I plot a rectangle with a border <tt>lineWidth</tt>
+				greater than 1, does the width of the border overspill the <tt>(x, y, x+width, y_height)</tt> region
+				I plot it in? The diagram below tries to explain this a little more clearly.
+			</p>
+			<p>
+				<img src="##IMG_DIR##/linewidth_html_canv.png">
+			</p>
+			<p>
+				The diagram above shows one bold line representing the top left corner of a rectangle. Around it is 
+				the rest of the border than consitutes the line width. My first question is, if I draw a rectangle 
+				on an HTML 5 canvas at <tt>(x, y)</tt>, does that coordinate refer to the outermost pixel of the 
+				border or the &quot;centre line&quot; of the border?
+			</p>
+			<p>
+				The answer is that it refers to the centre line of the border and the rest of the line width is
+				drawn either side of this centre line. So, I assume that if the <tt>lineWidth</tt> is odd then
+				<tt>a</tt> and <tt>b</tt> on the diagram are equal, otherwise either one is 1 pixel larger than the
+				other or both are fractions of a pixel. Plus any antiailisaing.
+			</p>
+			<p>
+				The answer seems to be that yes, the border would overspill the region of the actual rectangle. So the
+				question then becomes, by how much? It would seem reasonable that either side of the line we would get,
+				at least for odd widths, <tt>lineWidth/2</tt> either side of the line.
+			</p>
+			<p>
+				Before I looked at  
+				<a href="http://www.html5canvastutorials.com/tutorials/html5-canvas-rectangles/" target="_blank">[2]</a>,
+				I had a little problem... if I stroked the border of a rectangle (<tt>strokeRect()</tt>) and then used another rectangle
+				to fill it in (<tt>fillRect()</tt>)
+			<p>
+				
+			</p>
+		</div>
+	</div>
+</body>
+</html>

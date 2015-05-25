@@ -1,0 +1,342 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  <title>PyPlot Notes</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+	<div id="header">
+		-- This is JEHTech --
+	</div>
+
+	<div id="sidebar">
+		<h1 class="title">Links...</h1>
+		<div id="includedContent"></div>
+	</div>
+
+	<div id="content">
+		<h1 class="title">PyPlot: Graphs In Python Notes</h1>
+		<p>Get <a href="http://matplotlib.org/Matplotlib.pdf" target="_blank">the manual</a>.</p>
+
+<h2>Page Contents</h2>
+<div id="page_contents">
+</div>
+
+<h2>Basics</h2>
+<div>
+		<p>Import the library!</p>
+<pre class="prettyprint linenums lang-python">
+import matplotlib.pyplot as pl
+</pre>
+		<h3>Creating Plots, Current Figure, Current Axis</h3>
+		<p>
+		Pyplot works on the current <a href="http://matplotlib.org/api/figure_api.html" target="_blank">figure</a> 
+		and <a href="http://matplotlib.org/api/axes_api.html" target="_blank">axis</a>. 
+		All commands work to add plot elements to the current figure and axis.
+			The function <tt>
+			<a href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.gca" target="_blank">gca()</a></tt> 
+			returns the current axes (<tt>Axes</tt> object instance).
+		</p>
+		<p>
+			A figure and axes are created by default for any plot if you do not specify anything. Within the 
+			figure one default subplot (<tt><a href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.subplot" target="_blank">subplot(111)</a></tt>) is also created by default. It seems the function
+			<tt><a target="_blank" href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.subplots">subplots()</a></tt>, 
+			plural is now the prefered way from various posts and comments I've seen... it offers more convenience.
+		</p>
+		<p>
+		Using <tt>subplots()</tt> you create the layout of subplots in one call and are returned the 
+		<a href="http://matplotlib.org/api/figure_api.html" target="_blank">figure</a> and 
+		<a href="http://matplotlib.org/api/axes_api.html" target="_blank">axes</a>
+			objects (single axis or array if many subplots) for the plot. For example, creating a default graph with one subplot you do the following.
+		</p>
+<pre class="prettyprint linenums lang-python">
+fig, ax = pl.subplots(nrows=2) # ax will be an array with 2 axis
+</pre>
+		<p>
+			This is just a little simpler than using the <tt>subplot()</tt> function where you would do the 
+			following.
+		</p>
+<pre class="prettyprint linenums lang-python">
+fig = pl.figure(1)
+ax1 = pl.subplot(211, 1)
+ax2 = pl.subplot(211, 2)
+</pre>
+		<h3>Plot Returns A Set Of Lines</h3>
+		<p>
+		The function <tt>plt.plot()</tt> (and the axis plot function) returns a list of lines (<tt><a href="http://matplotlib.org/api/lines_api.html" target="_blank">Line2D</a></tt> instances). The line
+			objects have properties settable using the <tt>setp()</tt> command or as keyword arguments when
+			<tt>plot()</tt>ing the lines. Some useul properties:
+			<table>
+				<tr><th>Property</th><th>Value Type</th></tr>
+				<tr><td><a href="http://matplotlib.org/api/lines_api.html#matplotlib.lines.Line2D.set_color" target="_blank">color</a></td>
+				    <td>any matplot lib colour</td></tr>
+				<tr><td><a href="http://matplotlib.org/api/artist_api.html#matplotlib.artist.Artist.set_label" target="_blank">label</a></td>
+				    <td>any string</td></tr>
+				<tr><td><a href="http://matplotlib.org/api/lines_api.html#matplotlib.lines.Line2D.set_linestyle" target="_blank">linestyle</a></td>
+				    <td>'-', '--', '-.', ':'</td></tr>
+				<tr><td><a href="http://matplotlib.org/api/lines_api.html#matplotlib.lines.Line2D.set_linewidth" target+"_blank">linewidth</a></td>
+				    <td>line width in points (float values)</td></tr>
+				<tr><td><a href="http://matplotlib.org/api/lines_api.html#matplotlib.lines.Line2D.set_marker" target="_blank">marker</a></td>
+					<td>See <a href="http://matplotlib.org/api/markers_api.html#module-matplotlib.markers" target="_blank">marker styles</a></td></tr>
+			</table>
+		</p>
+		<p>
+			For example, when plotting one line a list of size 1, containing one <tt>Line2D</tt> instance is returned. In the little
+			snippet below I wanted to plot a set of data points and then plot a curve fit to that line, but display the curve fit using the same
+			colour, just different line style:
+		</p>
+<pre class="prettyprint linenums lang-python">
+fig, ax = pl.subplots()
+fig.set_figwidth(15)
+fig.set_figheight(10)
+...&lt;snip&gt;...
+#
+# Plot the data points and get the line instance.
+line, = ax.plot(xSeries, ySeries)
+#   ^
+#   Note: the comma here to unpack the returned list, otherwise line is 
+#         a list, not a Line2D instance
+...&lt;snip&gt;...
+#
+# Fit two blended guassians to the data set
+popt_gauss, pcov_gauss = opt.curve_fit(
+                two_gauss_curves, 
+                xSeries, 
+                ySeries,
+                p0=(1, 70, 1, 1, 80, 1))
+
+h1, u1, s1, h2, u2, s2 = popt_gauss
+
+#
+# Get the colour used for the data set and plot the fitted curve in 
+# the same colour. If we didn't do this the curve fit and data would
+# be in two seperate colours.
+lc = line.get_color()
+lineFit, = ax.plot(xSeries, two_gauss_curves(xSeries, *popt_gauss))
+#      ^
+#      Note: the comma here to unpack the returned list, otherwise line is 
+#            a list, not a Line2D instance
+
+ax.axvline(x=u1, linestyle="--", color=lc)
+ax.axvline(x=u2, linestyle="--", color=lc)
+ax.text(u1, h1, " h={:.2f}".format(h1), color=lc)
+ax.text(u2, h2, " h={:.2f}".format(h2), color=lc)
+
+#
+# Set the colour of the curve fit we plotted and the linestyle
+lineFit.set_color(lc)
+lineFit.set_linestyle('-.')
+</pre>
+		<h3>Set The Figure Size</h3>
+<pre class="prettyprint linenums lang-python">
+fig.set_figwidth(15)
+fig.set_figheight(10)
+</pre>
+
+		<h3>Get X/Y Axis Limits</h3>
+		<p>
+			Wanted to get the X or Y axis limits as used for the graph. This isn't always the min/max of the
+			axis data series so use the functions 
+			<tt><a target="_blank" href="http://matplotlib.org/api/axes_api.html#matplotlib.axes.Axes.get_xlim">get_xlim()</a></tt> and
+			<tt><a target="_blank" href="http://matplotlib.org/api/axes_api.html#matplotlib.axes.Axes.get_ylim">get_lim()</a></tt>...
+		</p>
+<pre class="prettyprint linenums lang-python">
+ax.get_xlim() # Get x-axis limits as a tuple (min, max)
+ax.get_xlim() # Get y-axis limits as a tuple (min, max)
+</pre>
+
+		<h3>Adjust The Major And Minor Grids</h3>
+		<p>
+			Inspired by this <a target="_blank" href="http://stackoverflow.com/questions/24943991/matplotlib-change-grid-interval-and-specify-tick-labels#24953575">SO answer</a>.
+		</p><p>
+			I wanted to be able to increase the ganularity of the the grid so that I could have a guide for
+			every unit increment on the x-axis, as the current grid was a little too &quot;broad&quot;. The grid displayed
+			by default just shows guide lines for the major ticks. The solution is to add in minor ticks as well.
+		</p><p>
+			I wanted to set the minor x-ticks, based on whatever scale
+			pyplot had decided to use for the x-axis, so used <tt><a target="_blank" href="http://matplotlib.org/api/axes_api.html#matplotlib.axes.Axes.get_xlim">get_xlim()</a></tt>
+			to get the x-axis limits. Then using <tt><a target="_blank" href="http://matplotlib.org/api/axes_api.html#matplotlib.axes.Axes.get_xticks">get_xticks()</a></tt> 
+			I was able to find the number of major ticks and therefore the gap, in units, between each major tick, and thus 
+			create the positions for the minor ticks at unit intervals. The function 
+			<tt><a target="_blank" href="http://matplotlib.org/api/axes_api.html#matplotlib.axes.Axes.grid">grid()</a></tt> lets you select whether you show
+			the major, minor, or both ticks and lets you set the transparency of the grid lines as well...
+		</p>
+<pre class="prettyprint linenums lang-python">
+fig, ax = pl.subplots()
+...&lt;snip data plotting stuff&gt;...
+# Note: All data series must have been plotted at this point!
+xAxisMin, xAxisMax = ax.get_xlim()   # Get the min/max limits of x-axis as chosen by pyplot to fit data
+xRange = xAxisMax - xAxisMin
+numTicks = len(ax.get_xticks())      # Get the number of major ticks on the x-axis
+majorTickWidth = xRange/(numTicks-1) # Figure out number of units between each tick
+xMinorTicks =                        # Create the minor tick positions in x-axis coordinates
+    np.linspace(                     # and then set them
+        xAxisMin, 
+        xAxisMax, 
+        (numTicks - 1) * majorTickWidth + 1)
+ax.set_xticks(xMinorTicks, minor=True)
+ax.grid(which='minor', alpha=0.5)    # Show minor ticks slighly duller than the major ticks
+ax.grid(which='major', alpha=0.75)
+
+</pre>
+
+
+		<h3>View Port</h3>
+		<p>Set the axis view port using <tt>plt.axis([x-min, x-max, y-min, y-max])</tt> function.
+		<h3>Basic Annotation</h3>
+		<h4>Titles, labels etc</h4>
+		<p>
+			Use <tt>.title()</tt> to set the graph title, <tt>.xlabel()</tt> tp set the x-axis label,
+			<tt>.ylabel()</tt> to set the y-axis label and <tt>.legend()</tt> to add a legend. <tt>.grid()</tt>
+			also useful to add a grid to plot.
+		</p>
+		<h4>Adding Horizontal And Vertical &quot;Guides&quot;</h4>
+		<p>
+		Use <tt><a href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.axvline" target="_blank">axvline(x=...)</a></tt> 
+		to plot a vertical line across the axes. Use 
+		<tt><a href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.axhline" target="_blank">axhline(y=...)</a></tt> 
+		to plot a horizontal line across the axes.
+</div>
+
+<h2>Sub Plots</h2>
+<div>
+		<p>
+			You can split up the figure into many different sub-graphs and these graphs can also
+			share an axis and be laid out in all sorts of manners
+		</p>
+		<p>
+			The following example shows two subplot instances. Both the same except that in the first
+			the x-axis are independent and in the second they are shared...
+		</p>
+		<div style="clear:both; float:left; border: 1px solid gray; margin-right:20px;">
+			<div style="text-align: center; width:100%; font-weight:bold; margin-bottom:8pt;">Independent x-axes</div>
+			<img src="##IMG_DIR##/python/subplt_independent_x_axis.png">
+			<div style="width:339px">
+				The x-axes are independently plotted and labeled.
+			</div>
+		</div>
+		<div style="float:left; border: 1px solid gray;">
+			<div style="text-align: center; width:100%; font-weight:bold; margin-bottom:8pt;">Shared x-axes</div>
+			<img src="##IMG_DIR##/python/subplt_shared_x_axis.png">
+			<div style="width:339px">
+				The x-axes are shared. Because there are multiple rows the x-axes on all but
+				the final row are hidden and the axis used in the final row sets the tick
+				rate for all the other x-axes.
+			</div>
+		</div>
+
+		<p style="clear:both; padding-top: 8pt;">
+			The code used to produce the two graphs above is as follows.
+		</p>
+<pre class="prettyprint linenums lang-python">
+import matplotlib.pyplot as pl
+import numpy as np
+
+fig, ax = pl.subplots(nrows=2, sharex=True)
+fig.<a href="http://matplotlib.org/faq/howto_faq.html#howto-subplots-adjust" target="_blank">subplots_adjust(hspace=0.4)</a>
+
+y = np.arange(10)
+x = np.arange(10)
+
+ax[0].plot(x,y)
+ax[0].set_title("Linear")
+ax[0].set_xlabel("x-axis")
+ax[0].set_ylabel("y-axis")
+
+ax[1].plot(x*2,y**2)
+ax[1].set_title("Square")
+ax[1].set_xlabel("x-axis")
+ax[1].set_ylabel("y-axis")
+</pre>
+		<p>
+			Very useful is the <a href="http://matplotlib.org/faq/howto_faq.html#howto-subplots-adjust" target="_blank"><tt>subplots_adjust()</tt></a> 
+			function as I found sometimes the plots were bunched too close. This allows one to set the padding between plots and more...
+		</p>
+</div>
+
+<h2 style="clear:both;">Bar Graphs</h2>
+<div>
+		<p>
+			Here I wanted to create a bar graph of cross-correlation scores. Above the top threshold
+			I wanted the bars to be one colour, between the top and a medium theshold I wanted the bars
+			another colour, below the minimum threshold yet another colour and everything else in a
+			different colour. 
+		</p>
+		<p> 
+			I also wanted the bar labels to be in the middle of the bars and for the text to be
+			vertically stacked.
+		</p>
+
+		
+<pre class="prettyprint linenums lang-python">
+import matplotlib.pyplot as pl
+import numpy as np
+
+ycol       = [x for x in 'abcdefghijklmnopqrst']
+corr       = np.linspace(0,20, len(ycol)) / 20
+bar_coords = np.arange(corr.size, dtype='float64')
+bar_width  = 1.0 # Note must have suffix '.0' to make it 
+                 # float otherwise div/2 is zero!
+
+fig, ax = pl.subplots()
+ax.set_ylabel("Correlation score")
+ax.set_xlabel("Sample string thing")
+ax.set_title("Some correlations")
+
+#
+# Create the bar graph... list of bars in graph returned
+bars = ax.bar(bar_coords, corr, width=bar_width)
+#             ^           ^     ^
+#             ^           ^     scalar width of each bar
+#             ^           heights of the bars 
+#             x corrdinates of left sides of bars
+
+
+#
+# Set the location of the x-axis bar labels to the center
+# of each bar and rotate the text so it is vertical
+ax.set_xticks(bar_coords + bar_width/2)            # Set xticks locations to center of bar
+ax.set_xticklabels(ycol, rotation=90, fontsize=8)  # Set xtick labels
+
+#
+# Define thresholds for bar colouring...
+upper_thresh        = 0.9
+middle_upper_thresh = 0.75
+middle_lower_thresh = 0.6
+lower_thresh        = 0.2
+
+#
+# Draw thresholds on axes...
+ax.axhline(y=upper_thresh,        color='red')
+ax.axhline(y=middle_upper_thresh, color='yellow')
+ax.axhline(y=middle_lower_thresh, color='yellow')
+ax.axhline(y=lower_thresh,        color='blue')
+
+#
+# Colour the bars based on areas/thresholds of interest....
+for bar in bars:
+	height = bar.get_height()
+	if height &gt;= upper_thresh:
+		bar.set_facecolor('red')
+	elif height &gt;= middle_lower_thresh and height &lt;= middle_upper_thresh:
+		bar.set_facecolor('yellow')
+	elif height &lt;= lower_thresh:
+		bar.set_facecolor('blue')
+	else:
+		bar.set_facecolor('gray')
+</pre>
+		<p>This produces the following plot...
+		</p>
+		<p>
+			<img src="##IMG_DIR##/python/coloured_bar_graph.png">
+		</p>
+</div>
+	</div>
+</body>
+</html>
+
+

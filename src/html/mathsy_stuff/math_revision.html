@@ -1,0 +1,467 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+	<title>Maths notes</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+	<script type="text/x-mathjax-config">
+		MathJax.Hub.Config({
+			tex2jax: {
+				inlineMath: [['$','$'], ['\\(','\\)']]
+			},
+			displayAlign: "left",
+			displayIndent: "2em"
+		});
+	</script>
+	<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+	<style>
+		ul li .MathJax {font-size: 3em;}
+	</style>
+
+	<script> 
+	MathJax.Hub.Queue(function () {
+		$("#dialog").dialog("close")
+	});
+
+	$(function(){
+		$("#dialog").dialog({ autoOpen: false, resizable: false });
+		$('#dialog').parent().css({position:"fixed"}).end().dialog('open');
+	});
+  </script>     
+</head>
+
+<body>
+  <div id="header">
+	  -- This is JEHTech --
+  </div>
+
+<div id="dialog" title="Page still rendering...">
+	<table style="width: 100%; margin: 0px; padding: 0px; border: 0px;">
+		<tr>
+			<td style="vertical-align:bottom !important; padding:0px; margin: 0px; width:60px;">
+				<img src="##IMG_DIR##/loading_animation.gif" style="width:50px; height:50px;">
+			</td>
+			<td>
+				MathJax is busy rendering this page. Dialog will auto-close when ready. Please wait...
+			</td>
+		</tr>
+	</table>
+</div>
+
+   <div id="sidebar">
+    <h1 class="title">Links...</h1>
+    <div id="includedContent"></div>
+  </div>
+
+  <div id="content">
+    <h1 class="title">Maths</h1>
+	 <p>
+    Various notes (crib sheet) from trying to understand various things... really just stuff you'd find in any old math text book. Oh and this is a useful <a target = "_blank" href="http://meta.math.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference">MathJax reference on StackExchange</a>.
+    </p>
+	 <h2>Page Contents</h2>
+	 <div id="page_contents">
+	 </div>
+
+<h2>Partial fractions</h2>
+<div>
+    <p>The rules are...</p>
+    <ul><li>Numerator must be lower degree than denominator. If not, then first divide out.</li>
+        <li>Factorise denominator into its prime factors.</li>
+	<li>A linear factor $s+a$ gives partial fraction $A \over (s+a)$</li>
+	<li>A repeated factor $(s+a)^2$ gives ${A \over (s+a)} + {B \over (s+a)^2}$</li>
+	<li>Similarly $(s+a)^3$ gives ${A \over (s+a)} + { B \over (s + a)^2} + {C \over (s + a)^3}$ </li>
+	<li>A quadratic factor $(s^2 + ps + q)$ gives ${Ps + Q} \over {s^2 + ps + q}$ </li>
+	<li>A repeated quadratic factor $(s^2+ps+q)^2$ gives ${{Ps+Q} \over {s^2+ps+q}} + {{Rs+T} \over {(s^2+ps+q)^2}}$</li>
+    </ul>
+    <p>For example,
+       $${3s^2 - 4s + 11} \over {(s + 3)(s - 2)^2}$$
+       Has partial fractions of the form...
+       $${A \over (s+3)} + {B \over (s-2)} + {C \over {(s-2)^2}}$$
+    </p>
+</div>
+
+<h2>Trig Identities</h2>
+<div>
+    <h3>Sum and product formulas</h3>
+    <p style="align:left;">
+       $$\sin(a)·\cos(b) = \frac12 [\sin(a+b)+\sin(a-b)]$$
+       $$\cos(a)·\sin(b) = \frac12 [\sin(a+b)-\sin(a-b) ]$$
+       $$\sin(a)·\sin(b) = \frac12 [\cos(a-b)-\cos(a+b)]$$
+       $$\cos(a)·\cos(b) = \frac12 [\cos(a+b)+\cos(a-b)]$$
+
+       $$\sin(a)+\sin(b) = 2\ \sin(\frac{a+b}{2})\ \cos(\frac{a-b}{2})$$
+       $$\sin(a)-\sin(b) = 2\ \cos(\frac{a+b}2)\ \sin(\frac{a-b}2)$$
+       $$\cos(a)+\cos(b) = 2\ \cos(\frac{a+b}2)\ \cos(\frac{a-b}2)$$
+       $$\cos(a)-\cos(b) = 2\ \sin(\frac{a+b}2)\ \sin(\frac{a-b}2)$$
+    </p>
+
+    <h3>Reduction Formulas</h3>
+    <p>
+       $$\sin(-\theta)=-\sin(\theta)$$
+       $$\sin(\theta)=-\sin(\theta - \pi)$$
+
+       $$\mp\sin(\theta)=\cos(\theta \pm \frac{\pi}2)$$
+
+       $$\cos(-\theta)=\cos(\theta)$$
+       $$\cos(\theta)=-\cos(\theta-\pi)$$
+
+       $$\pm\cos(\theta)=\sin(\theta \pm \frac{\pi}2)$$
+
+       $$\tan(-\theta)=-\tan(\theta)$$
+       $$\tan(\theta)=\tan(\theta - \pi)$$
+    </p>
+
+    <h3>Pythagorean Identities</h3>
+    <p>
+       $$\sin^2 (\theta)+\cos^2 (\theta)=1$$
+       $$\tan^2 (\theta)+1=\sec^2 (\theta)$$
+       $$\cot^2 (\theta)+1=csc^2 (\theta)$$
+    </p>
+    <h3>Sum or Difference of Two Angles</h3>
+    <p>
+       $$\sin(a \pm b) = \sin(a)\cos(b) \pm \cos(a)\sin(b)$$
+       $$\cos(a \pm b) = \cos(a)\cos(b) \mp \sin(a)\sin(b)$$
+       $$\tan(a \pm b) = \frac{\tan(a) \pm \tan(b)}{1 \mp \tan(a)\tan(b)}$$
+    </p>
+    <h3>Double Angle Formulas</h3>
+    <p>
+       $$\sin(2\theta)=2\sin(\theta)\cos(\theta)$$
+       $$\cos(2\theta)=1-2\sin^2(\theta)$$
+       $$\cos(2\theta)=2\cos^2(\theta)-1$$
+       $$\cos(2\theta)=\cos^2(\theta)-\sin^2(\theta)$$
+       $$\tan(2\theta)=\frac{2\tan(\theta)}{1-\tan^2(\theta)}$$
+    </p>
+ </div>
+
+    <h2>Logarithms</h2>
+    <p>
+       $$\log_a(a^u )=u$$
+       $$a^{\log_a(u)}=u$$
+       $$\log_a(uv)=\log_a(u)+\log_a(v)$$
+       $$\log_a(\frac uv)=\log_a(u)-\log_a(v)$$
+       $$\log_a(u^n)=n\log_a(u)$$
+       $$\log_a(u)=\frac{\log_b(u)}{\log_b(a)}$$
+    </p>
+
+<h2>Series</h2>
+<div>
+    <h3>Basic Series</h3>
+    <p>
+       <img src="##IMG_DIR##/SumSeries.png" style="float:left;">
+       Consider summing the numbers in the series $1,2,3,4$. For each number in the series, $n$ imagine stacking $n$ blocks to the left of the last stack.... you'd build up the triangle shown to the left. It's basically one half of a square. Trouble is if you divide the square by 2 you would chop off the top half of each block at the top of its stack. Therefore for each number in the series you have &quot;lost&quot; half a block. 
+		 </p><p>Therefore the total number of blocks is...
+       $$number\_of\_blocks = \frac{n^2}{2} + \frac{n}{2} = \frac{n(n+1)}2$$
+		Where $n^2/2$ is half of the square and $n/2$ is the total of all the halves that we &quot;cut&quot; off (but didn't mean to) when we took the half.
+
+	</p><p style="clear:left; padding-top:10px;">
+		 Therefore, we can say...
+       $$\sum_1^n n = \frac{n(n+1)}2 $$
+		 And...
+       $$\sum_1^n n^2 = \frac{n(n+1)(2n+1)}6$$
+       $$\sum_1^n n^3 = \left(\frac{n(n+1)}2\right) ^2$$
+    </p>    
+
+    <h3>Arithmetic Progression</h3>
+    <p>
+       $$x(n)=a_1,a_1+d,a_1+2d,\ldots$$
+       $$S_n=na+\frac{(n-1)d}2$$
+    </p>
+
+    <h3>Geometric Progression</h3>
+    <p>
+       $$x(n)=a,ar,ar^2,ar^3,\ldots,ar^n,\ldots$$
+       $$S_n= \frac{a(1+r^n)}{1-r},n&gt;0$$
+       If $|r|&lt;1$, then as $n \to \infty$, $r^n \to 0$,
+       $$S_\infty = \frac{a}{1-r}$$
+       Or, if $n&lt;0$ (useful for the z-transform), then
+       $$S_\infty=\frac{ar}{r-1}$$
+    </p>
+
+    <h3>Binomial Theorem</h3>
+    <p>The binomial thorem is summarised as...
+    $$(1+x)^n = 1 + nx + \frac{n(n-1)}{2!} x^2 + \frac{n(n-1)(n-2)}{3!} x^3 + \cdots + \frac{n(n-1)(n-2) \ldots 1}{(n-1)!} x^n$$
+    Where the n<sup>th</sup> term is given by the following equation.
+    $$u_a = \frac{xn!}{a!(n-a)!}$$
+    </p>
+    
+    <h3>Exponential Series</h3>
+    <p>The exponential series is defined as...
+       $$e = \left(1+\frac 1x\right)^n,\ n \to \infty$$
+       This is why $e=2.71828\ldots$
+    </p><p>The constant $e$ can be expanded as follows...
+       $$e = 1 + 1 + \frac{1}{2!} + \frac{1}{3!} + \frac{1}{4!} + \cdots$$
+       And powers of $e$ as ...
+       $$e^x = 1 + x + \frac{x^2}{2!} + \frac{x^3}{3!} + \cdots$$
+       $$e^{kx} = 1 + kx + \frac{(kx)^2}{2!} + \frac{(kx)^3}{3!} + \cdots$$
+    </p>
+
+    <h3>Malclauren’s Theorem</h3>
+    <p>Attempts to express a function as a polynomial.
+       $$f(x)=a_0 + a_1 x + a_2 x^2 + a_3 x^3 + \cdots +a_n x^n$$
+       Note that the series must be shown to converge. 
+       Need to figure out the $a_i$ coefficients. Notice the following.
+       $$f(x)=a_0+a_1 x+a_2 x^2+a_3 x^3+a_4 x^4+a_5 x^5+a_6 x^6+\cdots$$
+       $$f' (x)=a_1+2a_2 x+3a_3 x^2+4a_4 x^3+5a_5 x^4+6a_6 x^5+\cdots$$
+       $$f'' (x)=2a_2+3·2a_3 x+4·3a_4 x^2+5·4a_5 x^3+6·5a_6 x^4+\cdots$$
+       $$f''' (x)=3·2a_3+4·3·2a_4 x+5·4·3a_5 x^2+6·5·4a_6 x^3+\cdots$$
+
+       Notice then...
+
+       $$f(0)=a_0$$
+       $$f' (0)=a_1$$
+       $$f'' (0)=2!a_2$$
+       $$f''' (0)=3!a_3 \ldots$$
+       And so on...<br/>
+       It thus looks like, and indeed is the case, that:
+       $$a_n = {\frac{\operatorname{d}^nf}{\operatorname{d}x^n}} \Big/ {n!}$$
+    </p>
+    <p>The above definition can then be used to derive the expansion 
+       of $e^x$, which is why we were able to say:
+       $$e^x = 1 + x + \frac{x^2}{2!} + \frac{x^3}{3!} + \cdots$$
+       Remember, the series must be shown to converge! This is easily seen because 
+       the denominator is growing at a faster rate than the numerator.
+    </p>
+    <p>
+       Using this we can derive Euler's Formula.
+       $$\cos(x) = 1 - \frac{x^2}{2!} + \frac{x^4}{4!} - \frac{x^6}{6!} + \frac{x^8}{8!} - \cdots$$
+       $$\sin(x) =  x - \frac{x^3}{3!} + \frac{x^5}{5!} - \frac{x^7}{7!} + \frac{x^9}{9!} - \cdots$$
+    </p><p>
+       Summing the above two expansions we get...
+       $$\cos(x) + \sin(x) = 1 + x - \frac{x^2}{2!} - \frac{x^3}{3!} + \frac{x^4}{4!} + \frac{x^5}{5!} - \frac{x^6}{6!} - \frac{x^7}{7!} + \cdots$$
+       Doing a similar expansion for $e^{jx}$ we get the following and can then see how we get Euler's formula...
+       $$\begin{align}
+       e^{jx} &amp; = 1 + jx + \frac{(jx)^2}{2!} + \frac{(jx)^3}{3!} + \frac{(jx)^4}{4!} + \cdots \\
+       &amp; = 1 + jx + \frac{x^2}{2!} + \frac{jx^3}{3!} + \frac{x^4}{4!} + + \frac{jx^5}{5!} + \cdots \\
+       &amp; = \cos(x) + j\sin(x)
+       \end{align}$$
+       </p>
+</div> 
+
+<h2>Combinations &amp; Permutations</h2>
+	 <p>
+	 	Selecting $r$ samples from a set of $n$ samples at random. If the order of the elements matters then it is
+		a <em>permutation</em>, otherwise it is a <em>combination</em>.
+
+		$$Permutations = {_{n}P_r} = \frac{n!}{(n-r)!}$$
+
+		If I have a set of $n$ objects and I select $r = 2$ objects, on the first selections I can choose from
+		$n$ objects. For the second selection I can choose from $n-1$ objects. This looks like the beginning of
+		a factorial, but the factorial would look like this.
+
+		$$ n! = n(n-1)(n-2)(n-3)...1$$
+
+		We only want the first 2 terms. To get rid of the remaining terms we need to divide by $(n-2)(n-3)...1$, in
+		other words, $(n-r)!$. Hence the formula above.
+	</p>
+	<p>
+		With combinations the order is not important. This time take $r = 3$... for every choice I make there will be
+		$3 \times 2$ permutations with the same elements, which is one combination (as order is now not important). This
+		is the case because the 3 elements can be ordered any how and count as the same object. $(a,b,c)$ and $(b,a,b)$
+		are no different. Out of all sets containing only these elements there must be $3!$ permutations. Therefore need
+		to get rid of this count from ${_{n}P_r}$ by divifing by $r!$ in the general case...
+
+		$$Combinations = {_{n}C_r} = \frac{{_{n}P_r}}{r!} = \frac{n!}{r!(n-r)!}$$
+	</p>
+
+<h2>Limits</h2>
+<div>
+       <p>Intuitively,
+       $$\lim_{x\to c} f(x)=L$$
+          If $f$ is defined near (but not necessarily at) $c$ and $\operatorname{f}(x)$ approaches $L$
+	  as $x$ approaches $c$. More rigorously, let $f$ be defined at all $x$ in an open interval
+	  containing $c$, except possibly at $c$ itself. Then,
+
+	  $$\lim_{x\to c} f(x)=L$$
+
+	  If and only if for each $e&gt;0$, there exists $d&gt;0$ such that if $0&lt;Z|x-c|&lt;d$ 
+	  then $|f(x)-L|&lt; e$. 
+       </p><p> 
+	  I.e., no matter how close to $L$ we get, there is always a value of $x$ arbitrarily close to $c$, 
+	  but which is not $c$, that yields this value close to $L$.
+       </p>
+       <h3>Limit Properties</h3>
+       <table style="border: 0px;">
+         <tr><td>Uniquness:</td>
+	     <td>If $\lim f(x) = L_1$ and $\lim f(x) = L_2$ then $L_1 = L_2$</td>
+	 </tr>
+         <tr><td>Addition:</td>
+	     <td>$\lim [f(x) + g(x)] = \lim f(x) + \lim g(x)$</td>
+	 </tr>
+         <tr><td>Scalar multiplication:</td>
+	     <td>$\lim [\alpha f(x)] = \alpha \lim f(x)$</td>
+	 </tr>
+         <tr><td>Multiplication:</td>
+	     <td>$\lim [f(x) g(x)] = \lim f(x) \lim g(x)$</td>
+	 </tr>
+         <tr><td>Division:</td>
+		 <td>$\lim \left[\frac{f(x)}{g(x)}\right] = \frac{\lim f(x)}{\lim g(x)},\ g(x) \neq 0$</td>
+	 </tr>
+         <tr><td>Powers:</td>
+	     <td>$\lim [f(x)^n] = [\lim f(x)]^n,\ \forall n \gt 0$</td>
+	 </tr>
+       </table>
+       <h3>L'Hopital's Rule</h3>
+       <p>Can be summarised as follows...
+          $$\lim_{x\to a} \left\{\frac{f(x)}{g(x)}\right\} = \lim_{x\to a} \left\{\frac{f'(x)}{g'(x)}\right\}$$
+          L’Hopital’s rule can be used when the normal limit is indeterminate. For example...
+
+          $$\lim_{x\to 0} \frac{\cosh(x)-e^x}{x}$$
+
+          Substituting in $0$ gives $(1-1)/0$, which is indeterminate. So, apply L'Hopital's rule by 
+	  differentiating numerator and denominator separately...
+
+	  $$\lim_{x\to 0} \frac{\cosh(x)-e^x}{x} = \lim_{x\to 0} \frac{\sinh(x)-e^x}{1}$$
+
+	  Substitute in $0$ for $x$ gives $-1$. Therefore...
+
+	   $$\lim_{x\to 0} \frac{\cosh(x)-e^x}{x} = -1$$
+       </p>
+</div>
+
+<h2>Differentiation</h2>
+<div>
+		<h3>Basic Differential Coefficients</h3>
+		<div style="float:left;">
+		$$\frac{d}{dx}(x^n) = nx^{n-1}\\
+			\frac{d}{dx}(\ln x) = \frac{1}{x}\\
+			\frac{d}{dx}(e^{kx}) = ke^{kx}\\
+			\frac{d}{dx}(a^x) = a^x\ln a\\
+			\frac{d}{dx}(\cos x) = -\sin x\\
+			\frac{d}{dx}(\sin x) = \cos x\\
+			\frac{d}{dx}(\tan x) = \sec^2 x$$
+		</div>
+		<div style="float:left;">
+			$$\frac{d}{dx}(\cosh x) = \sinh x\\
+			\frac{d}{dx}(\sin^{-1} x) = \frac{1}{\sqrt{1-x^2}}\\
+			\frac{d}{dx}(\cos^{-1} x) = \frac{-1}{\sqrt{1-x^2}}\\
+			\frac{d}{dx}[\ln(f(x))] = \frac{f'(x)}{f(x)}\\
+			\frac{d}{dx}(c^{ax}) = c^{ax}\ln(ca)\\
+			\frac{d}{dx}(x^x) = x^x(1+\ln x)$$
+		</div>
+		<h3 style="clear:both;">Chain Rule</h3>
+		<p>
+			$$\frac{dy}{dx} = \frac{dy}{du} \times \frac{du}{dx}$$
+		</p>
+		<h3>Quotient Rule</h3>
+		<p>
+			$$\frac{dy}{dx} = \frac{v\frac{du}{dx} \times y\frac{dv}{dx}}{v^2}$$
+		</p>
+		<h3>Product Rule</h3>
+		<p>
+			$$\frac{dy}{dx} = u\frac{dv}{dx} \times v\frac{du}{dx}$$
+		</p>
+</div>
+
+<h2>Integration</h2>
+<div>
+	<h3>Basic Integrals</h3>
+	<div style="float:left;">
+	$$	\int{x^n \;\mathrm dx} = \frac{x^{n+1}}{n+1} + C\\
+		\int{\frac{1}{x} \;\mathrm dx} = \ln x + C\\
+		\int{e^{kx} \;\mathrm dx} = \frac{e^{kx}}{k} + C\\
+		\int{a^x \;\mathrm dx} = \frac{a^x}{\ln a} + C\\
+		\int{\sin x \;\mathrm dx} = -\cos x + C\\
+		\int{\cos x \;\mathrm dx} = \sin x + C$$
+	</div>
+	<div style="float:left;">
+		$$\int{\sec^2 x \;\mathrm dx} = \tan x + C\\
+		\int{\sinh x \;\mathrm dx} = \cosh x + C\\
+		\int{\frac{1}{\sqrt{1 - x^2}} \;\mathrm dx} = \sin^{-1} x + C\\
+		\int{\frac{-1}{\sqrt{1 - x^2}} \;\mathrm dx} = \cos^{-1} x + C\\
+		\int{\frac{f'(x)}{f(x)} \;\mathrm dx} = \ln[f(x)] + C$$
+	</div>
+	<h3 style="clear: both;">Integration Of Linear Factors</h3>
+	<p>
+		Use variable substitution, for example, if the integral is
+
+		$$y = \int{(ax + b)^n \;\mathrm dx}$$
+
+		Then put $u = ax + b$, giving...
+
+		$$y = \int{u^n \;\mathrm dx}$$
+
+		But now we need to integrate with respect to $u$, not $x$!. In other words we need to go from the above integral to
+		something like,
+
+		$$y = \int{??? \;\mathrm du}$$
+
+		
+		
+		
+		We can use the chain rule as follows...
+
+		$$\frac{dy}{du} = \frac{dy}{dx} \; \frac{dx}{du}$$
+
+		By integrating both sides of the equation with respect to $u$ we get....
+
+		$$y = \int{\frac{dy}{dx} \; \frac{dx}{du} \;\mathrm du}$$
+
+		We now have an integral of some function with respect to $u$. We can find $dy/dx$ 
+		from the definition of the original integral (just differentiate both sides!). We can find $dx/du$ 
+		by firstly rearranging $u = ax + b$ to...
+
+		$$x = \frac{u - b}{a}$$
+
+		Then take the derivative with respect to $u$ to get
+
+		$$\frac{dx}{du} = \frac{1}{a}$$
+
+		Notice how, that because the &quot;thing&quot; (factor) that is raised to a power in the integral is a linear function, the $x$ terms
+		will always dissapear, leaving only a constant, which can be differentiated w.r.t $u$. If $x$ terms remained after differentiating
+		the &quot;thing&quot; (factor), it would stop us doing our desired integration w.r.t $u$! 
+		
+		Now we can see that...
+
+		$$\frac{dy}{dx} \; \frac{dx}{du} = (ax + b)^n \cdot \frac{1}{a} = u^n \cdot \frac{1}{a}$$
+
+		Substitute this into our integral and we have...
+
+		$$y = \int{u^n \cdot \frac{1}{a} \;\mathrm du}$$
+
+		This we know how to integrate the above using the list of standard integrals.
+
+		$$y = \frac{u^{n+1}}{a(n+1)} + C$$
+
+		Now we can substitute back in for $u$ to obtain the answer
+
+		$$y = \frac{(ax + b)^{n+1}}{a(n+1)} + C$$
+	</p>
+	<p>
+		One point to note is as follows. I always remember being taught to re-arrange the substitution that was made...
+
+		$$\frac{dx}{du} = \frac{1}{a}$$
+
+		To...
+
+		$$\mathrm dx = \frac{\mathrm du}{a}$$
+
+		..And then subsitute for the $\mathrm dx$ term in the integral. However, <em>this is not strictly correct</em> as far
+		as I understand because a differential coefficient is <em>not</em> a fraction... it is a limit:
+
+		$$\frac{\mathrm dy}{\mathrm dx} = \lim_{a\to\infty}{\frac{f(x+a)-f(x)}{a}}$$
+		
+		So, as we can see $\mathrm dy / \mathrm dx$ is not really a fraction... hence the above method and explanation, 
+		even if the &quot;trick&quot; I was taught works.
+	</p>
+	<h3>Integration By Parts</h3>
+	<p>
+	</p>
+</div>
+
+		<h2>Phasors</h2>
+		<p>
+		 	This awesome GIF is produced by 
+			<a href="http://www.radartutorial.eu/index.en.html" target="_blank">RadarTutorial.eu</a>, although I couldn't find it on their site. 
+			I originally found the image on <a target="_blank" href="http://cassiopaea.org/forum/index.php?topic=37361.0">this forum thread</a> and the
+			watermark bears RadarTutorial's site address (it's not too visible on the white background of this page).
+		</p><p>
+			<img src="##IMG_DIR##/phasor_animation.gif" style="max-width:100%"/>
+		</p>
+
+    
+  </div> 
+</body>
+</html>
+

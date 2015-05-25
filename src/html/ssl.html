@@ -1,0 +1,682 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+	<title>SLL &amp; TLS notes</title> 
+	<!-- META_INSERT -->
+	<meta name="description" content="Notes on encryption, the secure sockets layer (SSL) and transport layer service (TLS), certificates and certificate generation using the OpenSSL command line utilities, certificate formats, ASN.1, DER, BER, PEM, PCKS">
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+	<script> 
+		$(function(){
+			$('.expander').click(function() {
+				var para = $(this).children('span');
+				if( para ) {
+					para = para.eq(0);
+					theText = para.text();
+					if( theText.indexOf("expand") > -1 ) {
+						para.text(theText.replace("expand", "collapse"));
+					}
+					else {
+						para.text(theText.replace("collapse", "expand"));
+					}
+				}
+				var img = $(this).children('img');
+				if( img ) {
+					if(img.attr("src") == "##IMG_DIR##/expand.png")
+						img.attr("src", "##IMG_DIR##/collapse.png");
+					else
+						img.attr("src", "##IMG_DIR##/expand.png");
+				}
+	
+				$(this).parent().children('div.detailed_content').toggle();
+			});
+		});
+	</script> 
+</head>
+
+<body>
+	<div id="header">
+		  -- This is JEHTech --
+	</div>
+
+	<div id="sidebar">
+		<h1 class="title">Links...</h1>
+		<div id="includedContent"></div>
+	</div>
+
+	<div id="content">
+		<h1 class="title">SSL &amp; TLS</h1>
+
+		<h2>Page Contents</h2>
+		<div id="page_contents">
+		</div>
+
+		<h2>References &amp; Resources</h2>
+		<div>
+			<p>There is a ton of resource available on this. Here are some of the most useful pages that
+			   I've found, the Zytrax pages being of particular note.
+			</p>
+	
+			<ul>
+				<li>[1] The book "Network Security with OpenSSL" by Pravir Chandraet al.</li>
+				<li>[2] <a href="http://www.zytrax.com/tech/survival/ssl.html" target="_blank"> 
+				    Zytrax's &quot;Survival Guide - TLS/SSL and SSL(X.509) Certificates&quot;</a>. 
+				    [Last accessed: 13-Jan-2015]
+				</li>
+				<li>[3] <a href="http://www.zytrax.com/tech/survival/encryption.html" target="_blank"> 
+				    Zytrax's &quot;Survival Guide - Encryption, Authentication&quot; </a>. 
+				    [Last accessed: 13-Jan-2015]
+				</li>
+				<li>[4] <a href="http://commandlinefanatic.com/cgi-bin/showarticle.cgi?article=art030" target="_blank">
+				    Command Line Fanatic's &quot;OpenSSL tips and tricks&quot;</a> [Last accessed: 13-Jan-2015]
+				</li>
+				<li>[5] <a href="http://ps-enable.com/articles/Certificate_file_types.html" target="_blank">
+				    PS | Enable's &quot;A Brief Primer on Diginal Certificates and File Types&quot;</a> 
+				   [Last accessed: 13-Jan-2015]
+				</li>
+				<li>[6] <a href="http://www.cryptopp.com/wiki/Keys_and_Formats" target="_blank">
+				    Crypto++'s Keys and Formats Guide</a>
+				   [Last accessed: 28-Apr-15]
+				</li>
+				<li>[7] <a href="http://luca.ntop.org/Teaching/Appunti/asn1.html" target="_blank">
+				    A Layman's Guide To A Subset Of ASN.1, BER, and DER</a>, by Luca Deri.
+				   [Last accessed: 28-Apr-15]
+				</li>
+			</ul>
+	
+			<p>Please note, I'm not an expert with SSL/TLS, just learning myself. A lot of the examples below are
+			   creating toy, or test, CAs, certificates, keys etc and would have to be considerably reviewed if you
+			   were going to actually run your own CA! The above links are the most informative I found whilst trying
+			   to learn about the subject...
+			</p>
+		</div> <!-- End H2 div -->
+
+
+
+		<h2><a id="WhatIsSSL"></a>What Is SSL/TLS and Why Use It?</h2>
+		<div>
+			<h3><a id="SimpleView"></a>The 30,000 Foot View</h3>
+			<p>SSL/TLS is a security protocol that allows two communicating parties to authenticate (verify) each other and then talk privately. 
+				This means that if Alice is talking with Bob, she can be sure that she is actually talking to Bob and not 
+				some imposter pretending to be him. Likewise Bob can be sure he is talking to the real Alice. As well as 
+				allowing them to verify each other it also allows them to talk without being &quot;overheard&quot; by any 
+				one else.
+			</p>
+			<p>When Alice talks to Bob, she will ask Bob for his certificate. She can then verify Bob's certificate by
+				checking if it has been signed by someone she already trusts (usually a &quot;Certificate Authority&quot;).
+				Bob can ask the same of Alice (refered to as &quot;Client Authentication&quot;).
+			</p>
+			<p>The reason to use SSL/TLS is therefore quite clear. For example, when I log onto my bank's server I
+				can be sure that I'm talking to my real bank, not some fraudster, and that the transactions and information
+				I send to and receive from the bank are private and viewable only by me.
+			</p>
+			<p>
+				So what would happen if Alice was just talking to Bob without any protection? Well, the standard view involved the
+				characters Alice and Bob, who we've met, but also involves a shady thrid party, Eve, who is going to try and listen
+				to their conversation...
+			<p>
+			<p>
+				<img src="##IMG_DIR##/crypto_plaintext_problem.png">
+			</p>
+			<p>
+				In the above diagram Alice sends a message plaintext to Bob. She's not done anything to it, it is in whatever
+				format the document natively exists in. For example if she's sending a Word document then this is
+				just a plain DOCX file that any one with Word can open. But because packets on the Ethernet are not
+				private, Eve an easily pick up the document too and read it.
+			</p>
+			<p>
+				What Alice needs to do is jumble up her document in such a way that Bob will know how to
+				un-jumble it and Eve will not. It is important that Eve cannot (easily) guess at how to un-jumble it
+				either. To do this Alice and Bob encrypt their messages.
+			</p>
+		</div> <!-- End H2 div -->
+		<h2>Self-Signed CA, Server &amp; Client Keys, Using Open SSL</h2>
+		<div>
+			<a id="CreateCA"></a><h3>Creating A Test Certificate Authority</h3>
+			<p>The online documentation is good but it still took me a little
+				while to put all the pieces together by reading around different sites and 
+				posts on StackOverflow etc, so below are the steps I've used to create my 
+				own CA with a self-signed certificate using openssl on Linux.
+			</p>
+			<p>The following is mostly based on the examples from "Network 
+				Security with OpenSSL" by Pravir Chandra et al...
+			</p>
+			<p> To begin with create the directory structure for the CA. The OpenSSL CA utility expects
+				the CA data to live in its own directory with certain subdirectories and files.
+			</p>
+	
+			<div class="detailed_content_expander_container">
+				<div class="expander">
+					<img src="##IMG_DIR##/expand.png" style=""/>
+					<span>Click to expand directory structure details...</span>
+				</div>
+				<div class="detailed_content">
+					<table>
+						<caption>OpenSSL CA Utility Directory Structure</caption>
+						<thead>
+							<tr><th>Filename</th><th>Reason</th></tr>
+						</thead>
+						<tbody>
+							<tr>	<td>private</td>
+									<td>A directory which should have permissions set such that only
+									    the CA and other privaledged users can access it. It will store the CAs private 
+									    key which must be kept secret.
+							</tr>
+							<tr>	<td>certs</td>
+									<td>Directory containing all certificates issued by the CA. The file 
+									    names will be in the format serial_number.pem</td>
+							</tr>
+							<tr>	<td>index.txt</td>
+									<td>This is a text file containing a &quot;database&quot; of the
+									    certficiates issued. It will map certificate serial number to certificate details.
+									    <pre>V    160105171237Z    01    unknown /CN=.../ST=.../C=.../emailAddress=.../O=.../OU=...
+^    ^                ^             ^ 
+^    ^                ^             Certificate details
+^    ^                Serial number of certificate
+^    Valid until date
+Certificate is valid. 
+(R if revolked, which will also create a revokation date field after the valid until field)</pre></td>
+							</tr>
+							<tr>	<td>serial</td>
+									<td>This file is used to keep track of the next certificate serial number
+									    to be issued. It is represented in ascii as a hex string which must be at
+									    least 2 digits long (hence the leading zero in the initialisation below). When a 
+									    new certificate is issued, as you will see later, the current index is saved as
+									    serial.old and is used to create the new certificate. serial is updated with the
+									    next sequential number.</td>
+							</tr> 
+						</tbody>
+					</table>
+				</div>
+			</div>
+				    
+			<p>Use the following bash commands to create the CA utility directory and required files. The 
+				environment variable YOUR_CA_DIR can be set to any directory of your choosing (which should
+				not exist yet or at least be empty).
+			</p>
+	
+			<pre class="prettyprint linenums">mkdir -p $YOUR_CA_DIR
+cd $YOUR_CA_DIR
+
+mkdir -p private              # private stores the CA's private key
+chmod g-rwx,o-rwx private     # make directory only accessable by owner
+mkdir -p certs                # certs stores all certificates PA issues
+touch index.txt               # "database" to keep track of issues certificates
+echo '01' &gt; serial            # serial file contains a hex index (of at least 2 digits) used by 
+                              # OpenSSL to generate unique certificate numbers</pre>
+			
+			<p>Now begin to write our the openssl.cnf file. This is the config file used 
+				by the CA. One thing I found was that the certificates generated were made
+				to be valid from tomorrow (based on system date) and I wanted them valid
+				from the day of creation. Hence, below I set a default start date (TODO:
+				re-check this!)
+			</p>
+			<pre class="prettyprint linenums:10">#
+# Start to write the configuration file that will be used by the OpenSLL command line
+# tool to obtain information about how to issue certificates.
+# Note: Set default start date so that self-signed certificate is valid from NOW!
+DEFAULT_STARTDATE=$(date +'%y%m01000000Z')
+cat &lt;&lt;EOF &gt;openssl.cnf
+[ ca ]
+default_ca = your_test_ca
+
+[ your_test_ca ]
+certificate       = $YOUR_CA_DIR/cacert.pem
+database          = $YOUR_CA_DIR/index.txt
+new_certs_dir     = $YOUR_CA_DIR/certs
+private_key       = $YOUR_CA_DIR/private/cakey.pem
+serial            = $YOUR_CA_DIR/serial
+
+default_crl_days  = 7
+default_days      = 356
+default_md        = sha256
+default_startdate = $DEFAULT_STARTDATE
+
+policy            = your_test_ca_policy
+x509_extensions   = certificate_extensions
+
+[ your_test_ca_policy ]
+commonName              = supplied
+stateOrProvinceName     = supplied
+countryName             = supplied
+emailAddress            = supplied
+organizationName        = supplied
+organizationalUnitName  = optional
+
+[ certificate_extensions ]
+basicConstraints  = CA:false
+
+EOF </pre>
+
+			<div class="detailed_content_expander_container">
+				<div class="expander">
+					<img src="##IMG_DIR##/expand.png" style=""/>
+					<span>Click to expand a more detailed commentry on the above...</span>
+				</div>
+				<div class="detailed_content">
+					  TODO
+				</div>
+			</div>
+	
+			<pre class="prettyprint linenums:46">#
+# Next add information to the configuration file that will allows us to create a self-signed
+# root certificate. NOTE: This is only for internal in-house use. We should use a real
+# CA-issued certificate for production!!
+cat &lt;&lt;EOF &gt;&gt;openssl.cnf
+[ req ]
+default_bits         = 2048
+default_keyfile      = $YOUR_CA_DIR/private/cakey.pem
+default_md           = sha256
+default_startdate    = $DEFAULT_STARTDATE
+default_days         = 356
+
+prompt               = no
+distinguished_name   = root_ca_distinguished_name
+x509_extensions      = root_ca_extensions
+
+[ root_ca_distinguished_name ]
+commonName           = Your Mini CA
+stateOrProvinceName  = Hampshire
+countryName          = UK
+emailAddress         = ca@yourdomainname.com
+organizationName     = Your Organisation Name Ltd
+
+[ root_ca_extensions ]
+basicConstraints = CA:true
+
+EOF </pre>    
+
+			<div class="detailed_content_expander_container">
+				<div class="expander">
+					<img src="##IMG_DIR##/expand.png" style=""/>
+					<span>Click to expand a more detailed commentry on the above...</span>
+				</div>
+				<div class="detailed_content">
+					TODO
+				</div>
+			</div>
+	
+			<p>The next thing to do is to tell the openssl tool where to find the config file that 
+				was just created. You can do this by exporting the environment variable OPENSSL_CONF.
+				Another option is to use the -config option to the <a href="https://www.openssl.org/docs/apps/req.html" target="_blank">openssl req command</a>,
+				which will override anything set in OPENSSL_CONF...
+			</p>
+
+			<pre class="prettyprint linenums:73">
+OPENSSL_CONF=$YOUR_CA_DIR/openssl.cnf
+export OPENSSL_CONF</pre>
+
+			<p>Now it is time to actually create the CA. In this one command we will create the
+				CA's private key and a certificate request which will be used to generate a 
+				certificate (which includes the public key) signed using the CA's private key...	
+			</p>
+			<p>NOTE: In the following example I use <a href="http://www.tcl.tk/man/expect5.31/expect.1.html" target="_blank">
+				expect</a> to automate the generation of the CA key set because for me this is just 
+				a little test CA which I won't be using to actually publish certificates... for that I'd 
+				get a certificate from a real CA! Embedding passwords in a script like this is very insecure, 
+				so unless your just playing around, don't do it.
+			</p>
+	
+			<pre class="prettyprint linenums:75">#
+# Now generate self-signed certificate and generate key pair to go with it...
+# This will place the file cakey.pem in the CA's "private" directory
+echo "Creating self-signed certificate with password \"3nigma\""
+<a href="http://www.tcl.tk/man/expect5.31/expect.1.html" target="_blank">expect</a> - &lt;&lt;EOF &gt;&gt; ca_debug.txt
+puts [concat "OPENSSL_CONF =" \$::env(OPENSSL_CONF)]
+spawn <a href="https://www.openssl.org/docs/apps/req.html" target="_blank">openssl req</a> -x509 -newkey rsa:2048 -out cacert.pem -outform PEM -verbose
+expect "PEM pass phrase:"
+send "your-password\r"
+expect "PEM pass phrase:"
+send "your-password\r"
+expect eof
+EOF
+    
+if [ ! -f $YOUR_CA_DIR/private/cakey.pem ] || [ ! -f $YOUR_CA_DIR/cacert.pem ]; then
+	echo "### ERROR: Failed to create certificate authority!"
+	exit 1
+fi </pre>
+
+			<p>At this point the CA is fully created and can be used to generate signed
+				certificates. The CA certificate is self-signed however so if you are going to
+				use it with an HTTPS server and want to connect to it with your browser, you will need 
+				to be able to tell your browser to accept certificates signed by this new CA. For this,
+				the cacert.pem must be converted into PKCS12 format so that it can be loaded into your
+				browsers trusted root CAs list.
+			</p>
+	
+			<pre class="prettyprint linenums:93">#
+# This is the certificate for use with web browser...
+echo "Now attempting to create cacert PFX P12 key for web browser"
+<a href="http://www.tcl.tk/man/expect5.31/expect.1.html" target="_blank">expect</a> - &lt;&lt;EOF &gt;&gt; ca_debug.txt
+spawn <a href="https://www.openssl.org/docs/apps/pkcs12.html" target="_blank">openssl pkcs12</a> -export -in cacert.pem -out cacert.p12 -name "MyLittleTestCACertificate" -cacerts -nokeys
+expect "Enter Export Password:"
+send "a-password-of-your-choosing\r"
+expect "Enter Export Password:"
+send "a-password-of-your-choosing\r"
+expect eof
+EOF
+
+if [ ! -f cacert.p12 ]; then
+   echo_error "### ERROR: Failed to export CA certificate to PKCS12 format"
+   exit 1
+fi </pre>
+
+			<h3><a id="Import2Chrome"></a>Importing The CA Certificate Into Chrome</h3>
+			<p>The browser I'm using is Chrome, so here is how to load this certificate into Chrome...
+			</p>
+			<ol>
+				<li>Browse to the location chrome://settings/</li>
+				<li>Expand the settings list to show advanced settings</li>
+				<li>Navigate down to the &quot;HTTPS/SSL&quot; section a click on &quot;Manage certificates&quot;
+					<img src="##IMG_DIR##/ManageCertificates.png" style="display: block"/>
+				</li>
+				<li>In the resulting pop-up, selected the &quot;Trusted Root Certification Authorities&quot; tab
+					and then click the &quot;Import...&quot; button. The certificate import wizard will pop up.
+					Click &quot;Next &gt;&quot;
+					<img src="##IMG_DIR##/TrustedRootCA_1.png" style="display: block"/>
+				</li>
+				<li>Follow through the rest of the dialog until your certificate has been imported. You will be
+					promted to enter the password you used for the export password. Once imported instead of getting
+					an unknown CA error when navigating to your HTTPS pages you will see the hallowed green padlock.
+				</li>
+			</ol>
+	
+			<h3><a id="GenerateSignedCerts"></a>Generating Private Keys And Signed Certificates From The Test CA</h3>
+			<p>I ended creating a script to automate this as well. It has quite a few shortcomings but remember, this
+				is just a test script... I'm playing around!
+			</p>
+			<p>The script defines one function called &quot;generate_certificate_and_keys&quot;. It's supposed to
+				automate as much of the certificate issuing as possible for me (I only want a client and server
+				certificate/private key in my little test scenario). Given this, the function only lets you set the
+				common name and password for the certificate. It could easily be extended to accept all the certificate
+				information as parameters rather than the hard coded details...
+			</p>
+			<p>Lets start with the function header with all the initialisation stuff.
+			</p>
+
+			<pre class="prettyprint linenums">function generate_certificate_and_keys {
+	if [ $# -ne 3 ]; then
+		echo_error "### ERROR: Must call with 3 parameters: target, passphrase, cn"
+		return 1
+	fi
+
+	: ${YOUR_CA_DIR:=~/my_ca}   # Default dir for CA 
+	TARGET=$1
+	PASSPHRASE=$2
+	CN=$3    
+	DEBUG_FILE=${TARGET}_debug.txt
+	PRV_KEY_FILE=${TARGET}_priv_key.pem
+	CERT_REQ_FILE=${TARGET}_key_request.pem
+
+	echo "\n\n######################################################"
+	echo " Generating a key set and certificate for $TARGET"
+	echo "    - Your_CA_DIR = $YOUR_CA_DIR"
+	echo "######################################################"
+
+	if [ ! -d $YORU_CA_DIR ]; then
+		echo "### ERROR: The directory $YOUR_CA_DIR does not exist. You must create the"
+		echo "           certificate authority first by running ./make_ca.sh"
+		return  1
+	fi</pre> 
+
+			<p>So, pretty simple so far. The function makes sure the CA exists and accepts 3 arguments,
+				the name of the target we're gerating for, the passphrase for the target's private key,
+				and the common name to input into the certificate.
+			</p>
+			<p>Because in the CA generation example we used the environment variable OPENSSL_CONF to
+				specify a config file for the certificate generation whilst creating the CA, we must be
+				sure to unset it so that the default OpenSSL configuration will be used.
+			</p>
+			<pre class="prettyprint linenums:25">	unset OPENSSL_CONF #&lt; Make sure we're using the default OpenSSL configuration</pre>
+
+			<p>Now we want to go ahead and create the private key for our target and a certificate request, 
+				which will be &quot;sent&quot; to our CA to be signed.
+			</p>
+			<pre class="prettyprint linenums:26">	#
+	# Generate two files
+	#   1. ${CERT_REQ_FILE} contains the certificate request
+	#   2. ${PRV_KEY_FILE} contains the private key associated with the public key
+	#      embedded in `${TARGET}_key_request.pem`
+	<a href="http://www.tcl.tk/man/expect5.31/expect.1.html" target="_blank">expect</a> - &lt;&lt;EOF &gt; $DEBUG_FILE
+		spawn <a href="https://www.openssl.org/docs/apps/req.html" target="_blank">openssl req</a> -newkey rsa:2048 -keyout $PRV_KEY_FILE -keyform PEM -out $CERT_REQ_FILE -outform PEM
+		expect "PEM pass phrase:"
+		send "$PASSPHRASE\r"
+		expect "PEM pass phrase:"
+		send "$PASSPHRASE\r"
+		expect "Country Name"
+		send "Your Country\r"
+		expect "State or Province Name"
+		send "Your State\r"
+		expect "Locality Name"
+		send "Your Locality\r"
+		expect "Organization Name"
+		send "Your Test $TARGET Request\r"
+		expect "Organizational Unit Name"
+		send "Your Unit Name\r"
+		expect "Common Name"
+		send "$CN\r"
+		expect "Email Address"
+		send "someone@your-company.com\r"
+		expect "A challenge password"
+		send "QWERTY\r"
+		expect "An optional company name"
+		send ".\r"
+		expect eof
+EOF
+
+	if [ ! -f $PRIV_KEY_FILE ] || [ ! -f $CERT_REQ_FILE ]; then
+		echo_error "### ERROR: Failed to generate the certificate request for $TARGET properly"
+		return 1
+	fi</pre>       
+
+			<p>Now that the target has it's own private key and a certificate request (which will contain
+				it's public key), get the CA to signed the certificate with it's private key. 
+			</p>
+			<p>Note that once
+				again, because we are using our own CA we must export OPENSSL_CONF (or use the -config option)
+				to ensure the OpenSSL tools use our CA's specific configuration.
+			</p>
+			<pre class="prettyprint linenums:61">	OPENSSL_CONF=${YOUR_CA_DIR}/openssl.cnf
+	export OPENSSL_CONF</pre>
+
+			<p>Our CA configuration now being in play we can run the certificate request processing. I found that it seemed to
+				generate certificates which were only valid from tomorrow (relative to current system time). I wanted to use them
+				straight away so I forced a specific start date...
+			</p>
+			<pre class="prettyprint linenums:63">	<a href="http://www.tcl.tk/man/expect5.31/expect.1.html" target="_blank">expect</a> - &lt;&lt;EOF &gt;&gt; $DEBUG_FILE
+		puts [concat "OPENSSL_CONF =" \$::env(OPENSSL_CONF)]
+		# Set certificate startdate to start of TODAY (otherwise they seem to be dated for tomorrow?)
+		set startdate [clock format [clock seconds] -format %y%m01000000Z]
+		puts [concat "START DATE IS " \$startdate]
+		spawn <a href="https://www.openssl.org/docs/apps/ca.html" target="_blank">openssl ca</a> -in ${TARGET}_key_request.pem -startdate "\$startdate"
+		# Pass phrase is for the CA's certficate
+		expect "Enter pass phrase"
+		send "CA-certificates-password (see section on <a href="#CreateCA">Creating The CA</a>)\r"
+		expect "Sign the certificate?"
+		send "y\r"
+		expect "1 out of 1 certificate requests certified, commit?"
+		send "y\r"
+		expect eof
+EOF</pre>
+
+			<p>At this point several things have happened: </p>
+			<ul>
+				<li>Whilst creating the certificate, in order to generate certificates with a unique serial number, the file
+					serial.txt was consulted. It is a requirement of X509 certificates that they contain a serial number unique to the CA. Therefore,
+					the CA common name and serial number provide a globaly unique identified for the certificate. The hexadecimal number in serial.txt is 
+					used as the new certificates serial number. The file is then saved as serial.txt.old and a new serial.txt is written with the next sequential
+					serial number to be used in the next certificate generation. So, assuming no simultaneous/concurrent use of the CA (which I'm not sure is
+					supported anyway), I think I'm safe to find the most recently generated certificate using the text in serial.txt.old - the CA stored the
+					certificate in certs/&lt;serial-number&gt;.pem.
+				</li>
+				<li>The CA utility has updated it's index.txt file, adding in information about the certificate that
+					has just been generated. 
+				</li>
+			</ul>
+	
+			<pre class="prettyprint linenums:78">	SERNO=$(cat ${YOUR_CA_DIR}/serial.old)
+	CA_SERNO_FILE=${YOUR_CA_DIR}/certs/${SERNO}.pem 
+	cp ${CA_SERNO_FILE} ${TARGET}_certificate.pem
+	if [ $? -ne 0 ]; then
+		echo_ERROR "### ERROR: Failed to access the ${TARGET} certificate"
+		return 1
+	fi
+	echo "The certificate is now available in ${YOUR_CA_DIR}/certs/${SERNO}.pem and will be copied to ${TARGET}_certificate.pem"</pre>
+
+			<p>The above snipped copies the newly created certificate from certs/&lt;serial-number&gt;.pem into a more readable directory name
+				and certificate file name.
+			</p> 
+			<p>The next thing I do is to do a quick sanity check to make sure that the target's private key and its
+				new certificate that I copied to ${TARGET}_certificate.pem do indeed belong together. To do this I
+				get the OpenSSL utilities to print out the moduli for the private key and the certificate. If these
+				match then all's good. This method was taken from an <a href="http://commandlinefanatic.com/cgi-bin/showarticle.cgi?article=art030" target="_blank">
+				article on command line fanataic</a>.
+			</p>
+
+			<pre class="prettyprint linenums:86"> 	PRIV_KEY_MODULUS=$(<a href="https://www.openssl.org/docs/apps/rsa.html" target="_blank">openssl rsa</a> -in ${PRV_KEY_FILE} -noout -modulus -passin pass:$PASSPHRASE)
+	CERT_MODULUS=$(openssl x509 -in ${TARGET}_certificate.pem -noout -modulus)
+	if [ "$PRIV_KEY_MODULUS" != "$CERT_MODULUS" ]; then
+		echo "### ERROR: The private key and certificate for ${TARGET} do not appear to be matched"
+		echo "           pkey modulus is $PRIV_KEY_MODULUS"
+		echo "           cert modulus is $CERT_MODULUS"
+		return 1
+	fi</pre>
+
+			<p>The next job is to convert the private key to an RSA private key. I'm doing this because TclHttpd requires
+				the server private key in this format...</p>
+			<pre class="prettyprint linenums:94">	<a href="http://www.tcl.tk/man/expect5.31/expect.1.html" target="_blank">expect</a> - &lt;&lt;EOF &gt;&gt; $DEBUG_FILE
+		spawn <a href="https://www.openssl.org/docs/apps/rsa.html" target="_blank">openssl rsa</a> -in ${PRV_KEY_FILE} -inform PEM -out ${TARGET}_priv_key.rsa
+		expect "Enter pass phrase for ${PRV_KEY_FILE}"
+		send "${PASSPHRASE}\r"
+	expect eof
+EOF
+
+	if [ ! -f ${TARGET}_priv_key.rsa ]; then
+		echo_error "### ERROR: Failed to generate ${TARGET}_priv_key.rsa"
+		return 1
+	fi</pre>
+
+			<p>And then finally create a PKCS12 certificate that includes both the public and private key for the target. I used
+				this when trying out client authentication. Could install this to Chrome (in the same way as previously described but
+				using the &quot;Personal&quot; tab in the Certificates dialog) and then have the client authenticate with the server
+			</p>
+
+			<pre class="prettyprint linenums:105">	<a href="http://www.tcl.tk/man/expect5.31/expect.1.html" target="_blank">expect</a> - &lt;&lt;EOF &gt;&gt; $DEBUG_FILE
+	spawn <a href="https://www.openssl.org/docs/apps/pkcs12.html" target="_blank">openssl pkcs12</a> -export -inkey ${PRV_KEY_FILE} -in ${TARGET}_certificate.pem -out ${TARGET}_certificate_with_priv_key.p12 -name "Test${TARGET}Key"
+		expect "Enter pass phrase"
+		send "${PASSPHRASE}\r"
+		expect "Enter Export Password:"
+		send "${PASSPHRASE}\r"
+		expect "Enter Export Password:"
+		send "${PASSPHRASE}\r"
+		expect eof
+EOF
+	if [ ! -f ${TARGET}_certificate_with_priv_key.p12 ]; then
+		echo_error "### ERROR: Failed to generate P12 certificate-with-private-key"
+		return 1
+	fi</pre>
+
+			<p>The last thing I did was to copy all of the generated certificates into a location under the CA-root-dir/certs directory...
+				CA-root-dir/certs/&lt;serno&gt;_&lt;target name&gt;/...
+			</p>
+			<pre class="prettyprint linenums:119">	# 
+	# Now move all these files back into the CA under a directory "full_certs" so that
+	# they can all live in one place that we can then keep track of in SVN (and not clutter
+	# up this directory)
+	CERTS_DEST_DIR=${YOUR_CA_DIR}/certs/${SERNO}_$(echo $TARGET | tr " " "_")
+	CERT_FILES="debug.txt 
+	            key_request.pem 
+	            priv_key.pem 
+	            certificate.pem 
+	            certificate_with_priv_key.p12 
+	            priv_key.rsa"
+	echo "Moving certificates to $CERTS_DEST_DIR"
+	mkdir -p $CERTS_DEST_DIR
+
+	for file in $CERT_FILES
+	do
+		file=${TARGET}_${file}
+		mv ${file} $CERTS_DEST_DIR
+		if [ $? -ne 0 ]; then 
+			echo_error "### ERROR: Failed to move ${file} to $CERTS_DEST_DIR"
+			exit 1
+		fi
+	done
+	echo_bold "\nAll $TARGET certificates now reside in $CERTS_DEST_DIR"
+	return 0
+}</pre>
+
+			<p>Now to generate my CA automatically and the client and server certificate and private keys that I want for my
+				little test, I just use the following.</p>
+			<pre class="prettyprint linenums">#!/bin/bash
+source gen_keys.sh
+: ${YOUR_CA_DIR:=../Some-Default-Dir}   # Default dir for CA
+
+# Create the Certificate Autority with self-signed certificate
+./gen_ca.sh
+if [ $? -ne 0 ]; then exit 1; fi
+
+# Generate certificates and private keys for a test server
+generate_certificate_and_keys "server" "password" "xx.xx.xx.xx"
+if [ $? -ne 0 ]; then exit 1; fi
+
+# Generate certificates and private keys for a test client
+generate_certificate_and_keys "client" "password" "www.my-new-test-client.com"
+if [ $? -ne 0 ]; then exit 1; fi</pre>
+			<p>Note that the common name (CN) used in the above examples, at least for the server, must match the
+				actual domain name of the server. So if your server just has some IP address replace the &quot;xx.xx.xx.xx&quot;
+				with its IP address. If it has a domain name replace with the root domain name.
+			</p>
+		</div> <!-- End H2 div -->
+
+		<h2>Keys And Formats</h2>
+		<div>
+			<h3>ASN.1, BER and DER</h3>
+			<p>
+				ASN.1 refers to the ITU's Abstract Syntax Notation One: specification available from the
+				<a target="_blank" href="https://www.itu.int/rec/dologin_pub.asp?lang=e&id=T-REC-X.208-198811-W!!PDF-E&type=items">ITU website</a>.
+			</p>
+			<p>
+				The idea of ASN.1 notation is to provide a mechanism to specify complex datatypes in a manner that is independent of how
+				the data is going to be transmitted/represented. In other words, using ASN.1 notation, complex datatypes can be
+				specified in a standard language. Then when we want to send the datatype it can be converted from this standard
+				language to any representation needed, like smoke signals, bytes on a wire, etc. The point is that the application
+				is decoupled from the transfer. The application knows what it wants to do with data and what sort of data it is but doesn't
+				need to concern itself with the inifinite different representations that might be needed when transferring this data
+				to other people on arbirary platforms over arbirary communications channels.
+			</p>
+			<p>
+				ASN.1 lets one build up complex datatypes from a set of simple types. The character set it uses is very limited and includes
+				only the characters &quot;A-Z&quot;, &quot;a-z&quot;. &quot;0-9&quot; and a set of punctutation characters such as 
+				&quot;;:=,{}&lt;.()[]-&quot;. As such it is very portable in the sense that everyone knows how to store and represent an ASCII character!
+				Related to cryptography, this is the format in which some keys are written. It must, for exampe, be used when writing keys using X.509 and PKCS #8 
+				<a href="http://www.cryptopp.com/wiki/Keys_and_Formats" target="_blank">[6]</a>.
+			</p>
+			<p>
+				So, ASN.1 is just an description of a dataset. The actual dataset itself constitues the private/public
+				key, maybe some information about it, possibly encrypted with a password. The dataset and its structure
+				depends on who produced the key set and whether they use their own proprietary format or a standard
+				open format.
+			</p>
+			<p>
+				BER referes to the Basic Encoding Rules for ASN.1 and gives one or more ways to represent any ASN.1 value as an octet string. 
+				<a href="http://luca.ntop.org/Teaching/Appunti/asn1.html" target="_blank">[7]</a>
+			</p>
+			<p>
+				DER refers to the Distinguished Encoding Rules for ASN.1. The rules are a subset of BER, and give exactly one way to represent any ASN.1 value as an octet string. DER is intended for applications in which a unique octet string encoding is needed, as is the case when a digital signature is computed on an ASN.1 value.
+				<a href="http://luca.ntop.org/Teaching/Appunti/asn1.html" target="_blank">[7]</a>
+			</p>
+
+			<h3>PEM Files</h3>
+			<p>
+				PEM stands for Privacy-enhanced Electronic Mail.
+			</p>
+			<h3>CER, CRT, DER Files</h3>
+			<h3>PKCS Files</h3>
+		</div> <!-- End H2 div -->
+	</div>  
+</body>
+
+</html>
+

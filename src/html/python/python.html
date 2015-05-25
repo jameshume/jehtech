@@ -1,0 +1,415 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+	<title>Python notes</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+	<script> 
+		$(function(){
+			/* Turn all tt elements with functon names in them into the text with a link to the manual */
+			$("tt").each(function() {
+					if( $(this).html() == "__getattr__()" ) {
+						$(this).html('<a href="https://docs.python.org/2/reference/datamodel.html#object.__getattr__" target="_blank">__getattr__()</a>')
+					} else if( $(this).html() == "__setattr__()") {
+						$(this).html('<a href="https://docs.python.org/2/reference/datamodel.html#object.__setattr__" target="_blank">__setattr__()</a>')
+					} else if( $(this).html() == "__setitem__()") {
+						$(this).html('<a href="https://docs.python.org/2/reference/datamodel.html#object.__setitem__" target="_blank">__setitem__()</a>')
+					}
+			});
+		});
+	</script> 
+</head>
+
+<body>
+	<div id="header">
+		-- This is JEHTech --
+	</div>
+
+	<div id="sidebar">
+		<h1 class="title">Links...</h1>
+		<div id="includedContent"></div>
+	</div>
+
+	<div id="content">
+		<h1 class="title">Python Notes...</h1>
+		<h2>Page Contents</h2>
+		<div id="page_contents">
+		</div>
+
+<h2>PyLint</h2>
+<div>
+		<h3>Message Format</h3>
+		<p>
+			The messages have the following format:
+		</p>
+<pre class="prettyprint">
+MESSAGE_TYPE: LINE_NUM:[OBJECT:] MESSAGE
+</pre>
+		<p>
+			The message type can be one of the following:
+			<table style="border: 0px">
+				<tr><td><tt>[R]</tt></td> <td>means refactoring is recommended,</td></tr>
+				<tr><td><tt>[C]</tt></td> <td> means there was a code style violation,</td></tr>
+				<tr><td><tt>[W]</tt></td> <td> for warning about a minor issue,</td></tr>
+				<tr><td><tt>[E]</tt></td> <td> for error or potential bug,</td></tr>
+				<tr><td><tt>[F]</tt></td> <td> indicates that a fatal error occurred, blocking further analysis.</td></tr>
+			</table>
+		</p>
+		<h3>Supress messages in code</h3>
+		<p>
+			Find all <a href="http://pylint-messages.wikidot.com/all-codes" target="_blank">PyLint codes here</a>. Or, you can use the command line
+			&quot;<b><tt>pylint --list-msgs</tt></b>&quot; to list error messages and their corresponding codes.
+		</p>
+		<p>
+			To supress an error message for a specifc line of code, or for a block of code (put comment on first line of block start),
+			use <tt>#pylint: disable=...</tt> 
+		</p>
+		<h3>Use PyLint to count LOC</h3>
+		<p>
+			Thanks to the author of, and comments made, for the following
+			<a href="http://stackoverflow.com/questions/9076672/how-to-count-lines-of-code-in-python-the-right-way#answer-15360716" target="_blank">
+				StackOverflow post</a>.
+		</p>
+		<p>
+			Although LOC is not a good metric in the sense that many lines of bad code is still bad, to get a reasonable 
+			count of the lines of code (LOC) for all Python files contained in the current folder and all subfolders, 
+			use the following command.
+		</p>
+		<pre class="prettyprint linenums">find . -name '*.py' | xargs pylint 2&gt;&amp;1 | grep 'Raw metrics' -A 14</pre>
+		<p>
+			<tt>xargs</tt> takes the output of <tt>find</tt> and uses it to construct a parameter list that is 
+			passed to <tt>pylint</tt>. I.e. we get <tt>pylint</tt> to parse all files under our source tree. This output is
+			passed to <tt>grep</tt> which searches for the &quot;Raw Metrics&quot; table heading and then outputs it along 
+			with the next 14 lines (due to the <tt>-A 14</tt> option).
+		</p>
+</div>
+
+<h2>Infinite recursion in <tt>__setattr__()</tt> &amp; <tt>__getattr__()</tt></h2>
+<div>
+		<h3>The recursion problem</h3>
+		<p>In most, if not all, of the little tutorials I used to learn about 
+			<tt>__setattr__()</tt> and <tt>__getattr__()</tt>
+			seemed either to treat them independently, in otherwords, the example classes had one or the other 
+			defined but not both, or used both but had very simple use cases. Then as I started to play with them, in 
+			my newbie-to-python state, I did the following (abstracted out into a test case).
+		</p>
+		<pre class="prettyprint linenums">class Test(object):
+	def __init__(self):
+		self._somePrivate = 1
+
+	def __getattr__(self, name):
+		print "# GETTING %s"  % (name)
+		if self._somePrivate == 2:
+			pass
+		return "Test attribute"
+	
+	def __setattr__(self, name, val):
+		print "# SETTING %s" % (name)
+		if self._somePrivate == 2:
+			pass
+		super(Test, self).__setattr__(name, val)
+
+t = Test()
+print t.someAttr</pre>
+		<p>Running this causes a the maximum recursion depth to be reached:</p>
+		<pre class="prettyprint linenums">$ python test1.py 
+# SETTING _somePrivate
+# GETTING _somePrivate
+...&lt;snip&gt;...
+# GETTING _somePrivate
+Traceback (most recent call last):
+  File "test1.py", line 17, in <module>
+    t = Test()
+  File "test1.py", line 3, in __init__
+    self._somePrivate = 1
+  File "test1.py", line 13, in __setattr__
+    if self._somePrivate == 2:
+  File "test1.py", line 7, in __getattr__
+    if self._somePrivate == 2:
+  ...&lt;snip&gt;...
+  File "test1.py", line 7, in __getattr__
+    if self._somePrivate == 2:
+RuntimeError: maximum recursion depth exceeded</pre>
+
+		<p>As I had read up on the subject it was clear that one can't set an attribute in 
+			<tt>__setattr__()</tt> because that would just cause <tt>__setattr__()</tt> to
+			be called again resulting in infinite recursion (until the stack blows up!). The solution (in &quot;new&quot;
+			style classes which derive from object) is to call the parent's <tt>__setattr__()</tt> method. As for <tt>__getattr__()</tt>, from the documentation it was also clear
+			that &quot;...if the attribute is found through the normal mechanism, <tt>__getattr__()</tt> is <em>not </em> called...&quot;.</p>
+		<p>So, I thought that was all my recursion problems sorted out. Also, if you delete either the <tt>__getattr__()</tt> or <tt>__setattr__()</tt>
+			from the above example, it works correctly. So for example...</p>
+		<pre class="prettyprint linenums">class Test2(object):
+	def __init__(self):
+		self._somePrivate = 1
+
+	def __getattr__(self, name):
+		print "# GETTING %s"  % (name)
+		if self._somePrivate == 2:
+			pass
+		return "Test attribute"
+	
+t = Test2()
+print t.someAttr</pre>
+		<p>... the above test program works as expected and outputs the following.</p>
+		<pre class="prettyprint linenums"># GETTING someAttr
+Test attribute</pre>
+
+		<p>So, what is it about the first example that causes the infinite recursion? The first problem is this little line in the constructor...</p>
+		<pre class="prettyprint linenums">self._somePrivate = 1</pre>
+		<p>At this point in the constructor, variable <tt>self._somePrivate</tt> does not yet exist. When <tt>__setattr__()</tt> is called
+		the first thing it will does is to query <tt>self._somePrivate</tt>... </p>
+		<pre class="prettyprint linenums">	def __setattr__(self, name, val):
+		<b>if self._somePrivate == 2: # -- Oops --</b></pre>
+		<p>This means that <tt>__getattr__()</tt> must be called to resolve <tt>self._somePrivate</tt>
+			because <em>the variable does not yet exist</em> and therefore cannot be &quot;...found through the normal mechanism...&quot;. 
+		   And here is the flaw... my initial assumpton was that this would work because <tt>__getattr__()</tt>
+			is only called if the attribute can't otherwise be found, and I thought it would be found.
+		</p>
+		<p>
+		   But of course, it cannot be found, so <tt>__getattr__()</tt> also has to be called. Then, <tt>__getattr__()</tt> tries to access the variable <tt>self._somePrivate</tt> and because it 
+			still does not exist, <tt>__getattr__()</tt> is called again, and again, and so on... resulting in the infinite recursion seen.
+		</p>
+		<p>And from this we can understand why the second example worked. Because there is no <tt>__setattr__()</tt> defined in the second test
+			class, the method does not try to read the variable first (as my little example did) and so <tt>__getattr__()</tt> need never be
+			called. Therefore the variable is created successfull upon class initialisation and any subsequent queries on the variable 
+			will be found using the normal mechanism. Even if the second example had defined <tt>__setattr__()</tt>, as long as it did not
+			try to read <tt>self._somePrivate</tt>, it would have been okay.
+		</p>
+		<p>So the moral of this little story was, if implementing either of these magic methods, be careful which
+			variables you access as part of the get/set logic!
+		</p>
+		<p>I needed to do this however, so what can be done to resolve this. The solution is to define the constructor 
+			as follows, using exactly the same type of set we used in <tt>__setattr__()</tt> to avoid the recursion problem:
+		</p>
+		<pre class="prettyprint linenums"> class Test(object):
+	def __init__(self):
+		super(Test, self).__setattr__('_somePrivate', 1)</pre>
+		<p>Now the example works again... yay!</p>
+		<h3>Setting the value of a class instance array</h3>
+		<p>Another thing I had been doing was to set an element of an array in the <tt>__setattr__()</tt> function and
+			a kind chappy on StackOverflow 
+			<a target="_blank" href="http://stackoverflow.com/questions/28189061/why-does-setattr-not-recurse-when-setting-member-array-variable-elements/28189312#28189312">
+			answered my question</a> which I'll duplicate below. In the example below the line <tt>self._someAttr = 1</tt>
+			behaves as I'd have expected by getting <tt>__setattr__()</tt> to recurse, only the once, back into itself. What
+			I didn't understand was why the line <tt>self._rowData[Test.tableInfo[self._tableName][name]] = val</tt> didn't
+			do the same. I was thinking that to set the array we'd call <tt>__setattr__()</tt> again, but it doesn't. The 
+			test example is shown below.
+		</p>
+		<pre class="prettyprint linenums">class Test(object):
+    tableInfo = { 'table1' : {'col1' : 0, 'col2':1} }
+
+    def __init__(self, tableName):
+        super(Test, self).__setattr__('_tableName', tableName) # Must be set this way to stop infinite recursion as attribute is accessed in bot set and get attr
+        self._rowData = [123, 456]
+
+    def __getattr__(self, name):
+        print "# GETTING %s"  % (name)
+        assert self._tableName in Test.tableInfo
+
+        if name in Test.tableInfo[self._tableName]:
+            return self._rowData[Test.tableInfo[self._tableName][name]]
+        else:
+            raise AttributeError()
+
+    def __setattr__(self, name, val):
+        print "# SETTING %s" % (name)
+        if name in Test.tableInfo[self._tableName]:
+            print "Table column name found"
+            self._rowData[Test.tableInfo[self._tableName][name]] = val
+            self._someAttr = 1
+        else:
+            super(Test, self).__setattr__(name, val)
+
+class Table1(Test):
+    def __init__(self, *args, **kwargs):
+        super(Table1, self).__init__("table1", *args, **kwargs)
+
+t = Table1()
+print t.col1
+print t.col2
+t.col1 = 999
+print t.col1</pre>
+		<p>It produces the following output...</p>
+		<pre class="prettyprint linenums">$ python test.py 
+# SETTING _rowData
+# GETTING col1
+123
+# GETTING col2
+456
+# SETTING col1
+Table column name found
+# SETTING _someAttr
+# GETTING col1
+999</pre>
+		<p>So, why didn't the recursion occur for <tt>self._rowData[Test.tableInfo[self._tableName][name]] = val</tt>? I had thought
+			we'd have to call <tt>__setattr__()</tt> again to set this. As the SO user <a href="http://stackoverflow.com/users/542190/filmor" target="_blank">
+			&quot;filmor&quot;</a> explained, the following happens:
+		</p>
+		<p><tt>self._rowData[bla] = val</tt> gets resolved to <tt>self.__getattr__("_rowData")[bla] = val</tt>. So we get the array (it already 
+			exists so is found by the normal mechanisms and not via another call to <tt>__getattr__()</tt>. But then
+			to set an array value <tt>__setitem__()</tt> is used an <em>not</em> <tt>__setattr__()</tt>. So, the expression resolves to
+			<tt>self.__getattribute__("_rowData").__setitem__(bla, val)</tt> and there is therefore no further <tt>__setattr__()</tt> 
+			called. Simples!
+		</p>
+</div>
+
+<h2>Concatenating immutable sequences more quickly</h2>
+<div>
+		<p>
+			<a href="https://docs.python.org/3/library/stdtypes.html#common-sequence-operations" target="_blank">
+			PyDoc for immutable sequences</a> says:
+		<p>
+		<blockquote>
+			<span>
+				Concatenating immutable sequences always results in a new object. This means that building up a 
+				sequence by repeated concatenation will have a quadratic runtime cost in the total sequence 
+				length. To get a linear runtime cost ... build a list and use .join()
+			</span>
+		</blockquote>
+		<p>
+			Interesting... I've been building up SQL strings using concatenation. Is using a 
+			join really better? Lets have a look... In my simple test below I create a large list of strings and
+			concatenate them using string concatenation in <tt>test1</tt> and list.join() in <tt>test2</tt>.
+		</p>
+		<pre class="prettyprint linenums">def test1(stringList):
+	s = ""
+	for i in stringList:
+		s += "{}, ".format(i)
+
+def test2(stringList):
+	s = ", ".join(stringList)
+
+if __name__ == '__main__':
+	import timeit
+	print(timeit.timeit("test1(map(lambda x: str(x), range(0,1000)))", 
+	                    setup="from __main__ import test1", number=10000))
+	print(timeit.timeit("test2(map(lambda x: str(x), range(0,1000)))", 
+	                    setup="from __main__ import test2", number=10000))</pre>
+		<p>
+			All the &quot;<tt>map(lambda x: str(x), range(0,1000)</tt>&quot; expression does is to create a list of 1000 
+			strings to concatenate so that each test function is concatentating a list of the same strings.
+		</p>
+		<p>
+			On my system (it will be different on yours) I get the following output from the test program.
+		</p>
+		<pre class="prettyprint linenums">5.61275982857
+2.88877487183</pre>
+		<p>So joining a list of strings is faster than concatenating strings by approximately 50%.</p>
+</div>
+
+<h2>Reading Excel Files</h2>
+<div>
+	<p>
+		Worth having a look at <a href="http://www.python-excel.org/" target="_blank">python-excel</a>...
+	</p>
+	<h3>Reads Excel Files Using XLRD</h2>
+	<div>
+		<p>
+			Apparently only good for reading data and formatting information from older Excel files (ie: .xls)
+			but I seem to be using it fine on xlsx files...
+		</p>
+		<p>
+			To load the module use the following.
+		</p>
+		<pre class="prettyprint linenums">import xlrd</pre>
+		<p>
+			Open workbooks and worksheets as follows.
+		</p>
+		<pre class="prettyprint linenums">workbook  = xlrd.open_workbook(xlsFile)
+worksheet = workbook.sheet_by_name('my-worksheet-name')</pre>
+		<p>
+			Iterate through rows and access columns:
+		</p>
+		<pre class="prettyprint linenums">for rowIdx in range(worksheet.nrows):
+   row = worksheet.row(rowIdx)
+   col1_value = row[1].value
+   ...</pre>
+		<p>
+			Deal with dates using <tt>xldate_as_tuple</tt>. It will convert an Excel date into
+			a tuple (year, month, day, hour, minute, nearest_second). When using this function 
+			remember to use the datemode <tt>workbook.datemode</tt>
+			to use the correct date/time zone settings used in the spreadsheet.
+		</p>
+		<pre class="prettyprint linenums">dateColIdx = 1
+rawdate = xlrd.xldate_as_tuple(row[dateColIdx].value, workbook.datemode)
+print time.strftime('%Y-%m-%d', rawdate + (0,0,0))</pre>
+	</div>
+
+	<h3>Read Excel Files Using Pandas</h3>
+	<p>
+		Note that Pandas is zero indexed, whereas excel is 1 indexed.
+	</p>
+	<pre class="prettyprint linenums">import pandas
+pandas.read_excel(xlsxFileName, worksheetName, header=excel_header_row_number)</pre>
+</div> <!-- End Reading Excel Files H2 Div -->
+
+<h2>Finding Index Of Closest Value To X In A List</h2>
+<div>
+	<p>
+		If a list is unsorted, to find the closest value one would iterate through the list.
+		At each index the distance from the value at that index to the target value is
+		measured and if it is less than the least distance seen so far that index is recorded.
+	</p>
+	<p>
+		That's basically one for loop with a few tracking variables... O(n) operation. But,
+		for loops aren't really very Pythonic in many ways and half to point of having a 
+		vectorized library like <a href="python/numpy.html">numpy</a> is that we avoid that
+		tedium.
+	</p>
+		This is why, when I saw this solution to the problem, I though &quot;ooh that's clever&quot;...
+	</p>
+	<pre class="prettyprint linenums">findClosestIndex = lambda vec, val: numpy.arange(0,len(vec))[abs(vec-val)==min(abs(vec-val))][0]
+closestIndex     = findClosestIndex(array_to_search, value_to_find_closest_to)</pre>
+	<p>
+		It's also a very terse read! So, let's break it down. The <tt>lambda</tt> expression is
+		equivalent to the following.
+	</p>
+	<pre class="prettyprint linenums">def findClosestIndex(vec, val):
+   # Pre: vec is a numpy.array, val is a numeric datatype 
+   vecIndicies = np.arange(len(vec)) 
+
+   # produces the distance of each array value from &quot;val&quot;.
+   distanceFromVal = abs(vec-val)
+
+   # the smallest distance found.
+   minDistance = min(distanceFromVal) 
+
+   # Produce a boolean index to the distance array selecting only those distances 
+   # that are equal to the minimum. 
+   vecIndiciesFilter = distanceFromVal == minDistance 
+
+   # vecIndicies[vecIndiciesFilter] is an array where each element is the index 
+   # of an element in vec which equals val.
+   return vecIndicies[vecIndiciesFilter][0]  </pre>
+
+	<p>
+		The line <tt>vecIndicies = np.arange(len(vec))</tt> produces an array that
+		is exactly the same size as the array <tt>vec</tt> where <tt>vecIndicies[i] 
+		== i</tt>.
+	</p>
+	<p>
+		The line <tt>distanceFromVal = abs(vec-val)</tt> produces an array where
+		<tt>distanceFromVal[i] == |vec[i] - val|</tt>. In otherwords each element in
+		<tt>distanceFromVal</tt> corresponds to the distance of the same element in
+		<tt>vec</tt> from the value we are searching for, <tt>val</tt>.
+	</p>
+	<p>
+		The next line...
+	</p>
+	<p>
+		The next line produces an array <tt>vecIndiciesFilter</tt> where each
+		element, <tt>vecIndiciesFilter[i]</tt>, is <tt>True</tt> if 
+		<tt>distanceFromVal[i] == minDistance</tt>
+	</p>
+	<p>
+		TODO... incomplete, needs finishing with SO better method and speed comparisons.
+	</p>
+</div> <!-- End "Finding Closest Value To X In A List Div" -->
+
+
+	</div>
+</body>
+</html>
+

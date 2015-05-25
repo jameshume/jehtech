@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+	<title>IPython Notebook Notes</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+	<div id="header">
+		-- This is JEHTech --
+	</div>
+
+	<div id="sidebar">
+		<h1 class="title">Links...</h1>
+		<div id="includedContent"></div>
+	</div>
+
+	<div id="content">
+		<h1 class="title">IPython Notebook Notes</h1>
+		<h2>Page Contents</h2>
+		<div id="page_contents">
+		</div>
+
+		<h2>Useful Links...</h2>
+		<ul>
+			<li>
+				<a href="http://nbviewer.ipython.org/github/ipython/ipython-in-depth/blob/master/examples/Notebook/Notebook%20Basics.ipynb"
+				target="_blank">Notebook Basics</a>. Real basics... good crib sheet for keyboard shortcuts...
+			</li>
+			<li>
+				<a href="https://github.com/ipython/ipython-in-depth"
+				target="_blank">IPython In Depth</a>. Pretty comprehensive... just have to
+				download it and start viewing the notebooks in your local IPython notebook viewer!
+			</li>
+		</ul>
+
+		<h2>Widgets, Interact And MPLD3</h2>
+		<div>
+			<p>
+				Wow, some of the Python stuff available is just immense. This is an example of using
+				the IPython HTML widgets, interact, and <a href="http://mpld3.github.io/" target="_blank">MPLD3</a>
+				to display on demand different a particular graph which can be panned and zoomed! The example code
+				might not be the best... I'm still learning this, but I'm just wowed at how easy Python and its
+				surrounding support libraries makes doing this sort if thing! 
+			</p>
+
+			<p>
+				It's worth noting that the Python distro I had, had a slightly out of date IPython so I needed to do
+				a <tt>pip install --upgrade ipython</tt> to update everything to take advantage of the latest widget
+				library.
+			</p>
+
+			<pre  class="prettyprint linenums lang-python">
+import numpy as np
+from IPython.html import widgets
+from IPython import display
+import matplotlib.pyplot as plt, mpld3
+%matplotlib inline # Make sure matplotlib graphs are displayed inline in cell HTML output
+
+graphChoice = widgets.Select(options=['a', 'b', 'c', 'd'])
+plotBtn     = widgets.Button(description="Plot")
+
+def PlotIt(btn):
+    display.clear_output()    
+    fig, ax = plt.subplots()
+    x = np.linspace(-10,10,25)
+    if graphChoice.value == 'a': y = np.power(x, 2)
+    if graphChoice.value == 'b': y = np.power(x, 3)
+    if graphChoice.value == 'c': y = -np.power(x, 2)
+    if graphChoice.value == 'd': y = -np.power(x, 3)
+    ax.plot(x,y, marker='x')
+    mpld3Fig = mpld3.display(fig) # Auto removes `fig` for us
+    display.display(mpld3Fig)
+
+plotBtn.on_click(PlotIt)
+display.display(graphChoice)
+display.display(plotBtn)
+			</pre>
+
+			<p>
+			You can <a target="_blank" href="http://nbviewer.ipython.org/url/www.jeh-tech.com/html/downloadables/notebooks/mpld3_example.ipynb">see this in action</a> 
+			using the online nbviewer... Hover over the graph with your mouse cursor. At the bottom left some grey icons will pop-up. Click on the pan icon and then
+			you can pan through the graph by draging it and zoom using the mouse scroll wheel... all real time and interactive in your browser window.
+			</p>
+			<p>
+			One slightly annoying thing is that the notebook viewer doesn't display the interactive widgets so although you can see the
+			mpld3 interactive graph in action, you can't see the widgets in action which would allow you to select what graph you want to see.
+			Download the notebook and run locally for that part of the demo.
+			</p>
+		</div>
+		
+		<h2>CSS For Notebook Output HTML</h2>
+		<div>
+			<p>
+				I wanted to format the output HTML style of HTML generated in NB cells but without effecting the formatting
+				of the NB itself... just the output of cells!
+			</p>
+			<p>
+				Credits to the following two SO threads...
+			</p>
+			<ul>
+				<li><a href="http://stackoverflow.com/questions/20124877/css-styling-of-html-in-ipython-notebook-output"
+					    target="_blank">CSS Styling Of HTML In Ipython Notebook Output</a>
+				</li>
+				<li><a href="http://stackoverflow.com/questions/18024769/adding-custom-styled-paragraphs-in-markdown-cells"
+					    target="_blank">Adding Custome Styled Paragraphs In Markdown Cells</a>
+				</li>
+			</ul>
+			<p>
+				The last thread discusses being able to put the CSS styling in a markdown cell as one of the
+				solutions. However, this didn't work for me. I found it worked by displaying the HTML element
+				that contained the <tt>style</tt> tag...
+			</p>
+			<p>
+				<a href="http://nbviewer.ipython.org/url/www.jeh-tech.com/html/downloadables/output_css_1.ipynb"
+					target="_blank">Ouput_css_1.ipynb</a> demonstrates the first situation where I have output a CSS
+				stylesheet for the output HTML from the NB cells, but although most of the new CSS properties I set
+				are obeyed, `vertical-align` for a table cell is not. That was annoying...
+			</p>
+			<p><a href="http://nbviewer.ipython.org/url/www.jeh-tech.com/html/downloadables/output_css_2.ipynb"
+					target="_blank">Ouput_css_2.ipynb</a> demonstrates a first attempt to fix the above problem.
+				By making the CSS properties that were previously not obeyed <tt>!important</tt> they are then
+				implemented. The disadvantage here is that I have to smatter my style sheet with <tt>!important</tt>
+				tags rather than using the cascading and inheritance properties of CSS. Seems cludgey to me...
+			</p>
+			<p><a href="http://nbviewer.ipython.org/url/www.jeh-tech.com/html/downloadables/output_css_3.ipynb"
+					target="_blank">Ouput_css_3.ipynb</a> tries a different approach. The output from the NB cells
+				are all placed in DIVs with a class <tt>.output_html</tt>. The NB style sheet includes CSS
+				definitions for children of nodes with the <tt>.output_html</tt> class and it is these that are
+				overriding the settings I want to make. The approach here is to define styles for elements that
+				are the children of <tt>.output_html</tt> nodes...
+			</p>
+		</div>
+	</div>
+</body>
+</html>
+
+

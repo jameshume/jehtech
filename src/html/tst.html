@@ -1,0 +1,300 @@
+<html>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script>
+		/// TODO line widths screw things up because they 1/2 lie outside the dimensions
+		/// of the rectangle lines. Also the 0.5 draw thing. See the awesome http://diveintohtml5.info/canvas.html
+
+		/////////////////////////////////////////////////////////////////////////
+		// ICanvasObject - interface definition
+		function ICanvasObject(canvas) { 
+			if(canvas.debug) { console.log("\ICanvasObject constructor"); }
+			this.canvas = canvas;
+			this.canvas.addObject(this, false);
+		}
+		ICanvasObject.prototype.containsPoint = function(x, y) { return false; };
+		ICanvasObject.prototype.inRegion      = function(x, y, width, height) { return false; };
+		ICanvasObject.prototype.render        = function(ctx) { };
+		/////////////////////////////////////////////////////////////////////////
+
+
+		/////////////////////////////////////////////////////////////////////////
+		// Box - a graphical box that can be added to a Canvas object
+		//       options is a dictionary. It is optional and has the following
+		//       optional keys
+		//          text       - if defined the box will have this text centered 
+		//                       inside it.
+		//          textColour - override the default text colour black.
+		//          textFont   - override default text font 10pt Arial.
+		//          lineColour - override default line colour black.
+		//          lineWidth  - override default line width of 1px. If line width 
+		//                       is set to 0 then the border is not drawn.
+		//          fillColour - default is not fill. setting this as string fills 
+		//                       rectangle with desired colour.
+		function Box(canvas, x, y, width, height, options) {
+			if(canvas.debug) { console.log("\nBox constructor"); }
+			ICanvasObject.call(this, canvas);
+			this.x          = x;
+			this.y          = y;
+			this.width      = width;
+			this.height     = height;
+			this._x2        = x + width;
+			this._y2        = y + height;
+
+			this.lineColour   = "#000000";
+			this.lineWidth    = 1;
+			this.doDrawBorder = true;
+			this.doFillBox    = false;
+			this.doDrawText   = false;
+
+			if( typeof options != 'undefined' ) {
+				this.text = "text" in options ? options.text : null;
+				if( "fillColour" in options ) this.fillColour = options.fillColour;
+				if( "lineWidth"  in options ) this.lineWidth  = options.lineWidth;
+				this.doDrawBorder = this.lineWidth > 0;
+				this.doFillBox    = typeof this.fillColour !== 'undefined';
+				this.doDrawText   = this.text !== null;
+				if( this.doDrawText ) {
+					this.textColour  = "textColour" in options ? options.textColour : "#000000";
+					this.textFont    = "textFont"   in options ? options.textFont   : "10pt Arial";
+					this.textMetrics = this.canvas.getTextDimensions(this.text, this.textFont);
+				}
+			}
+
+			if(this.canvas.debug) {
+				console.log("this.x            == " + this.x);
+				console.log("this.y            == " + this.y);
+				console.log("this.width        == " + this.width);
+				console.log("this.height       == " + this.height);
+				console.log("this._x2          == " + this._x2);
+				console.log("this._y2          == " + this._y2);
+				if( this.doDrawText ) {
+					console.log("this.text         == " + this.text);
+					console.log("this.textMetrics  == " + this.textMetrics.width + ", " + this.textMetrics.height);
+					console.log("this.textColour   == " + this.textColour);
+					console.log("this.textFont     == " + this.textFont);
+				}
+				console.log("this.fillColour   == " + this.fillColour);
+				console.log("this.lineColour   == " + this.lineColour);
+				console.log("this.lineWidth    == " + this.lineWidth);
+				console.log("this.doDrawBorder == " + this.doDrawBorder);
+				console.log("this.doFillBox    == " + this.doFillBox);
+				console.log("this.doDrawText   == " + this.doDrawText);
+			}
+		}
+
+		Box.prototype = Object.create(ICanvasObject.prototype);
+
+		Box.prototype.containsPoint = function(x,y) {
+			return (x >= this.x) && 
+			       (x <= this.x + this.width) &&
+			       (y >= this.y) && 
+			       (y <= this.y + this.height);
+		}
+
+		Box.prototype.inRegion = function(rx1, ry1, width, height) {
+			var rx2 = rx1 + width;
+			var xNotInRegion = (this.x < rx1 && this._x2 < rx1) || (this.x > rx2 && this._x2 > rx2);
+			if( xNotInRegion ) {
+				return false;
+			}
+
+			var ry2 = ry1 + height;
+			var yNotInRegion = (this.y < ry1 && this._y2 < ry1) || (this.y > ry2 && this._y2 > rx2);
+			return !yNotInRegion;
+		}
+
+		Box.prototype.render = function(ctx) {
+			if( this.canvas.debug ) { console.log("Box.prototype.render()"); }
+
+			if(this.doDrawBorder || this.doFillBox ) {
+				ctx.moveTo(this.x, this.y);
+				ctx.beginPath();
+				ctx.rect(this.x, this.y, this.width, this.height);
+				
+				if( this.doFillBox ) {
+					if( this.canvas.debug ) { console.log("\tFilling box"); }
+					ctx.fillStyle = this.fillColour;
+					ctx.fill();
+				}
+				if( this.doDrawBorder ) {
+					if( this.canvas.debug ) { console.log("\tDrawing border"); }
+					ctx.lineWidth   = this.lineWidth;
+					ctx.strokeStyle = this.lineColour;
+					ctx.stroke();
+				}
+			}
+			
+			if( this.doDrawText ) {
+				if( this.canvas.debug ) { console.log("\tDrawing text"); }
+				ctx.fillStyle = this.textColour;
+				ctx.font      = this.textFont;
+				ctx.textBaseline = 'top'; // important!
+				var textX = this.x + (this.width  - this.textMetrics.width) / 2;
+				var textY = this.y + (this.height - this.textMetrics.height) / 2;
+				ctx.fillText(this.text, textX, textY);
+
+				if( this.canvas.debug ) {
+					ctx.lineWidth   = 1;
+					ctx.strokeStyle = "black";
+					ctx.strokeRect(textX, textY, this.textMetrics.width, this.textMetrics.height);
+				}
+			}
+		}
+		/////////////////////////////////////////////////////////////////////////
+
+		/////////////////////////////////////////////////////////////////////////
+		//
+		function JEHCanvas(id, onClickCallback, debug) {
+			this.canvas = $(id);
+			this.ctx = this.canvas[0].getContext("2d");
+			this.objects = [];
+			this.debug = typeof debug !== 'undefined' ? debug : false;
+
+			if( (typeof onClickCallback !== 'undefined') && (typeof onClickCallback === 'function') ) {
+				this.onClickCallback = onClickCallback;
+				var callbackClosure = 
+					(function(thisJehCanvasObj) {
+						return function(e) {
+							thisJehCanvasObj._canvasClickHandler(e); // Means that we call object back with this bound to the object and not the canvas.
+						};
+					})(this);
+				this.canvas.click(callbackClosure); 
+			} 
+		}
+
+		JEHCanvas.prototype.getTextDimensions = function(text, font) {
+			// Slight modifications to answer from
+			// http://stackoverflow.com/questions/1134586/how-can-you-find-the-height-of-text-on-an-html-canvas
+			if(this.debug) { 
+					console.log("JEHCanvas.prototype.getTextDimensions:"); 
+					console.log("\ttext = " + text + ", font = " + font);
+			}
+
+			var textSpan = $('<span>' + text + '</span>').css({'font': font});
+			var block = $('<div style="display: inline-block; width: 1px; height: 0px;"></div>');
+			var div = $('<div></div>');
+			var body = $('body');
+			div.append(textSpan, block);
+			body.append(div);
+			
+			try {
+				var result = {};
+				block.css({ verticalAlign: 'baseline' });
+				result.ascent = block.offset().top - textSpan.offset().top;
+				block.css({ verticalAlign: 'bottom' });
+				result.height = block.offset().top - textSpan.offset().top;
+				result.descent = result.height - result.ascent;
+			} finally {
+				div.remove();
+			}
+			
+			this.ctx.font = font;
+			result.width = this.ctx.measureText(text).width;
+
+			if(this.debug) { console.log("\tW="+result.width+", H="+result.height); }
+			return result;
+		};
+
+		JEHCanvas.prototype.addObject = function(obj, doRender) {
+			if( obj instanceof ICanvasObject ) {
+				this.objects.push(obj);
+				if(typeof doRender !== 'undefined' && doRender) {
+					obj.render(this.ctx);
+				}
+			}
+			else {
+				throw Error('### ERROR: JEHCanvas.addObject: Object is not have correct ICanvasObject interface!');
+			}
+		}
+
+		JEHCanvas.prototype.fit = function(_internalPadding) {
+			var internalPadding = typeof _internalPadding !== 'undefined' ? _internalPadding : 0;
+			if(this.objects.length > 0) {
+				var min_x = Number.MAX_VALUE;
+				var max_x = Number.MIN_VALUE;
+				var min_y = Number.MAX_VALUE;
+				var max_y = Number.MIN_VALUE;
+
+				// Get the min and max x & y corrdinates used by objects
+				var numObjects = this.objects.length;
+				for (var objIdx = 0; objIdx < numObjects; ++objIdx) {
+					var obj = this.objects[objIdx];
+					if(obj.x < min_x) min_x = obj.x;
+					if(obj.x + obj.width > max_x) max_x = obj.x + obj.width;
+					if(obj.y < min_y) min_y = obj.y;
+					if(obj.y + obj.height > max_y) max_y = obj.y + obj.height;
+				}
+
+				// now resize the canvas to strictly fit the objects, with some potential
+				// padding.
+				var newWidth  = (max_x - min_x) + 2*internalPadding;
+				var newHeight = (max_y - min_y) + 2*internalPadding;
+
+				for (var objIdx = 0; objIdx < numObjects; ++objIdx) {
+					var obj = this.objects[objIdx];
+					obj.x -= min_x - internalPadding;
+					obj.y -= min_y - internalPadding;
+				}
+
+				this.canvas[0].width  = newWidth;
+				this.canvas[0].height = newHeight;
+				this.render();
+			}
+		}
+
+		JEHCanvas.prototype.render = function() {
+			var numObjects = this.objects.length;
+			if( this.debug ) {
+				console.log("\nJEHCavas.prototype.render: Rendering " + numObjects + " object(s)");
+			}
+
+			this.ctx.clearRect(0, 0, this.canvas.width(), this.canvas.height());
+			for (var objIdx = 0; objIdx < numObjects; ++objIdx) {
+				this.objects[objIdx].render(this.ctx);
+			}
+		}
+
+		JEHCanvas.prototype._canvasClickHandler = function (eventInfo) {
+			var posX = eventInfo.pageX - this.canvas.position().left;
+			var posY = eventInfo.pageY - this.canvas.position().top;
+			var numObjects = this.objects.length;
+
+			if( this.debug ) {
+				console.log("Cursor:");
+				console.log("\tpageX,Y: " + eventInfo.pageX + ", " + eventInfo.pageY);
+				console.log("\tthisX,Y: " +  this.canvas.position().left + ", " + this.canvas.position().top);
+				console.log("\tposX,Y: " + posX + ", " + posY);
+			}
+
+			for (var objIdx = 0; objIdx < numObjects; ++objIdx) {
+				var currentObj = this.objects[objIdx];
+				if( currentObj.containsPoint(posX, posY) ) {
+					this.onClickCallback(posX, posY, currentObj);
+				}
+			}
+		}
+		/////////////////////////////////////////////////////////////////////////
+
+		function GotClick(x, y, obj) {
+			console.log("YES GOT A CLICK AT (" + x + ", " + y + ")");
+		}
+
+		$(function() {
+			var myCanvas = new JEHCanvas('#myCanvas', GotClick, true);
+			var b1 = new Box(myCanvas, 10, 10, 100, 25);
+			var b2 = new Box(myCanvas, 120, 10, 100, 25, {text:"James", fillColour:"yellow", lineWidth:5});
+			myCanvas.render();
+			myCanvas.fit(10);
+
+
+		});
+	</script>
+
+</head>
+
+<body>
+	<canvas id="myCanvas" width="300" height="470" style="margin: px; border:1px solid #000000; float: left;">
+	</canvas>
+</body>
+</html>

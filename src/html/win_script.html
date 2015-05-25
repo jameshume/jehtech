@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+	<title>Windows command line notes</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+	<div id="header">
+		-- This is JEHTech --
+	</div>
+
+	<div id="sidebar">
+		<h1 class="title">Links...</h1>
+		<div id="includedContent"></div>
+	</div>
+
+	<div id="content">
+		<h1 class="title">Windows Command Line Notes</h1>
+
+		<h2>Page Contents</h2>
+		<div id="page_contents">
+		</div>
+
+		<h2>Configure Network Adapter Settings</h2>
+		<div>
+			<p>
+				I have a setup where normally my laptop should connect to the comany LAN but when
+				I'm testing on a local test-LAN I need to change the adaptor settings and then 
+				later revert them.
+			</p>
+			<p>
+				<a href="https://technet.microsoft.com/en-us/library/cc770948(v=ws.10).aspx" target="_blank">
+				Netsh Commands for Interface (IPv4 and IPv6)</a> commands to the rescue!. 
+				You run this command by typing <tt>netsh interface &lt;context&gt;</tt>. There are several contexts.
+				The onces of interest to me are <tt>ipv4</tt> and <tt>show</tt>
+			</p>
+			<p>
+				Note that the results in the following examples are specific to the PC I ran them on, yours will be different.
+			</p>
+			<h3>Viewing Network Interfaces</h3>
+			<p>To see information about the available interfaces use the following:
+			<pre><b>C:\&gt;netsh interface show interface</b>
+
+Admin State    State          Type             Interface Name
+-------------------------------------------------------------------------
+... &lt;snip&gt; ...
+Enabled        Connected      Dedicated        Local Area Connection 2
+Enabled        Connected      Dedicated        Local Area Connection</pre>
+			<p>
+				To get information on a specific interface use the following.
+			</p>
+			<pre><b>C:\&gt;netsh interface show interface name="Local Area Connection"</b>
+
+Local Area Connection
+   Type:                 Dedicated
+   Administrative state: Enabled
+	Connect state:        Connected</pre>
+
+			<h3>Setting IPv4 Interface Setup</h3>
+			<div>
+				<p>
+					Using the command <tt>netsh interface ipv4</tt> gives access to commands specific to the IPv4
+				configuration of your system. The following commands are supported by this subcontext...
+				</p>
+				<ul>
+					<li>add - Adds a configuration entry to a table.</li>
+					<li>delete - Deletes a configuration entry from a table.</li>
+					<li>dump - Displays a configuration script.</li>
+					<li>install - Install the IP protocol.</li>
+					<li>reset - Reset the IP configurations.</li>
+					<li>set - Sets configuration information.</li>
+					<li>show - Displays information.</li>
+					<li>uninstall - Uninstall the IP protocol.</li>
+				</ul>
+				<p>
+					The most useful in this case will be the &quot;<tt>show interface</tt>&quot;, &quot;<tt>set address</tt>&quot; and 
+					&quot;<tt>set dnsservers</tt>&quot; commands.
+				</p>
+				<h4>Viewing Available Interface Stats &amp; Info</h4>
+				<p>
+					So, for example, to see all the current interfaces on my system I would use the following.
+				</p>
+				<pre><b>C:\&gt;netsh interface ipv4 show interface</b>
+Idx     Met         MTU          State                Name
+---  ----------  ----------  ------------  ---------------------------
+... &lt;snip&gt; ...
+12          20        1500  connected     Local Area Connection
+28          20        1500  connected     Local Area Connection 2</pre>
+				</pre>
+				<p>
+					To get information on a specific interface use the following.
+				</p>
+				<pre><b>C:\&gt;netsh interface ipv4 show interface interface="Local Area Connection"</b>
+
+Interface Local Area Connection Parameters
+----------------------------------------------
+IfLuid                             : ethernet_6
+IfIndex                            : 12
+State                              : connected
+... &lt;snip&gt; ...
+Directed MAC Wake up patterns      : disabled</pre>
+
+				<h4>Set Interface Address And DHCP Usage</h4>
+				<pre><b>C:\&gt;netsh interface ipv4 set address ?</b>
+
+Usage: set address [name=]<string>
+             [[source=]dhcp|static]
+             [[address=]<IPv4 address>[/<integer>] [[mask=]<IPv4 mask>]
+             [[gateway=]<IPv4 address>|none [gwmetric=]<integer>]
+             [[type=]unicast|anycast]
+             [[subinterface=]<string>]
+             [[store=]active|persistent]</pre>
+				<p>
+					So, to setup my network adapter to a fixed IP address I would use the following command. Notice that I use
+					&quot;<tt>store=active</tt> so that this setting only applies until the next reboot. Note also that, because
+					this command must be run with administrator privalidge, to avoid more rubbish on the command line,
+					save it to a <tt>.bat</tt> and then run as admin using explorer... much easier!
+				</p>
+				<pre>netsh interface ipv4 set address name="Local Area Connection" source=static address=192.168.10.200 mask=255.255.255.0 store=active</pre>
+				<p>To go back to my previous DHCP setup...
+				</p>
+				<pre>netsh interface ipv4 set address name="Local Area Connection" source=dhcp</pre>
+			</div> <!-- End H3 Div -->
+		</div> <!-- End H2 Div -->
+	</div> <!-- End Content Div -->
+</body>
+</html>
+

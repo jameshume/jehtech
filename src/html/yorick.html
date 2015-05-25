@@ -1,0 +1,406 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+	<title>Yorick notes</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+	<div id="header">
+		-- This is JEHTech --
+	</div>
+
+	<div id="sidebar">
+		<h1 class="title">Links...</h1>
+		<div id="includedContent"></div>
+	</div>
+
+	<div id="content">
+		<h1 class="title">Yorick Notes</h1>
+		<p>
+		<a href="http://dhmunro.github.io/yorick-doc/" target="_blank">Yorick</a>, written by <a target="_blank" href="http://en.wikipedia.org/wiki/David_H._Munro">David Munro</a>, &quot;...is an interpreted 
+			programming language for scientific simulations or calculations, postprocessing or steering large 
+			simulation codes, interactive scientific graphics, and reading, writing, or translating large files of numbers...&quot; 
+		</p>
+
+		<h2>Page Contents</h2>
+		<div id="page_contents">
+		</div>
+
+		<h2>Easy Yorick Install On Ubuntu</h2>
+		<div>
+			<p>
+				Really very very easy. Just do <tt>sudo apt-get install yorick</tt>! If you want to develop
+				your own Yorick plugins then your will also need to do a <tt>sudo apt-get install yorick-dev</tt>.
+			</p>
+			<pre>apt-get install yorick yorick-dbg yorick-dev</pre>
+		</div>
+
+		<h2>Get Yorick Home Path, Y_HOME</h2>
+		<div>
+			<p>
+				For some of my little make jobs I want to be able to compile Yorick on two targets.
+				On one target it is built from scratch so Yorick lives in one directory but on my
+				Linux box it lives under <tt>/usr/bin</tt> and <tt>/usr/lib</tt>. Really the <tt>/usr/bin/yorick</tt>
+				binary just points to <tt>/usr/lib/yorick/bin/yorick</tt> as Yorick tends to live under the one
+				installation directory.
+			</p>
+			<p>
+				Usually to generate a plugin Makefile you'd just type...
+			<pre>yorick -batch make.i</pre>
+			<p>... and get an auto generated Makefile with variables pointing to your Yorick installation written into
+				the Makefile for you. For example, on my Ubuntu atp-getted installation I get the following.
+			</p>
+			<pre># these values filled in by &quot;yorick -batch make.i&quot;
+Y_MAKEDIR=/usr/lib/yorick
+Y_EXE=/usr/lib/yorick/bin/yorick
+Y_EXE_PKGS=
+Y_EXE_HOME=/usr/lib/yorick
+Y_EXE_SITE=/usr/lib/yorick
+Y_HOME_PKG=</pre>
+			<p>
+				One way to get the Yorick installation directory for a system that is
+				independent of the particular Yorick installation is as follows. 
+			</p>
+			<pre>YORICK_HOME="$(echo "print, Y_HOME" | yorick | grep '^".*yorick' | sed -e 's/"//g' | tr -d '\r' | sed -r 's/\/ *$//g')"
+echo $YORICK_HOME</pre>
+			<p>
+				You can then substitute <tt>YORICK_HOME</tt> into the auto-generated Makefile so that
+				it should work regardless who has the plugin and where their particular Yorick
+				is installed (it might not be <tt>/usr/lib/yorick</tt> if they have installed in manually,
+				for example).
+			</p>
+		</div>
+
+		<h2>Yorick Arrays</h2>
+		<div>
+			<h3>Versus C Arrays</h3>
+			<p>The major differences are</p>
+			<ol>
+				<li>Yorick arrays start at index <tt>1</tt> but C arrays start at index <tt>0</tt>.
+				<li>Yorick arrays are column-major whereas C arrays are row-major. This means that <tt>array[1][2]</tt> in C addresses row 1, 
+				column 2, but in Yorick (adjust syntax to <tt>array(1,2)</tt>) it addresses column 1, row 2 (in C column 0, row 1 taking 
+				into account the start index of <tt>1</tt> instead of <tt>0</tt>.</li>
+			</ol>
+			<h4>Row/Column Major</h4>
+			<p>
+				For all languages, arrays are are contigous blocks of items. Therefore, in memory we can 
+				store a 1D arrays as follows:
+			</p>
+			<pre>| ITEM[0] | ITEM[1] | ITEM[2] |  ...  | ITEM[N]
+|         |         |         |       |
+0 *sz     |         |         |       |
+          1 *sz     |         |       |
+                    2 *sz     |       |
+                              3 * sz  :
+                                      |
+                                      N * sz</pre>
+			<p>
+				Here we store the first array element at the lowest memory address and increment upwards. 
+				You can see that each element is contiguous in memory.
+			</p><p>
+				What happens when we try to store a 2D array? Consider the following array:
+			</p><pre>int someArray[2][3] = { { 1, 2, 3},
+                        { 4, 5, 6} }</pre>
+			<p>
+				This is something we're very used to in C. We read this as an array with 2 rows and 3 columns.
+				But how is this laid out in memory? It still has to be a contiguous chunk of memory but now there
+				are two layout options. The C way is to lay out the array as follows:
+			</p><pre>
+| ITEM[0][0] | ITEM[0][1] | ITEM[0][2] | ITEM[1][0] | ITEM[1][1] | ...
+|            |            |            |     ^^^    |          
+0 *sz        |            |            | Note: new  |
+             1 *sz        |            | row starts |
+                          2 *sz        |            |
+                                       3* sz        |
+                                                    |
+                                                    4 * sz</pre>
+			<p>
+				The array items are represented as a contiguous flow of values. The first row is laid out as it
+				was for the 1D array, then the second row is appended to this block as if it were a 1D array
+				and so on. Each row, therefore, starts at address <tt>row_index*3</tt>.
+			</p><p>
+				The C syntax specifies the fastest increasing index in memory from right to left. We can see 
+				this in the above definition, <tt>int [2][3]</tt>, where the left most dimension is <tt>3</tt> 
+				and represents the fastest increasing dimension in memory. The way to think about this is considering
+				an <tt>int p* = someArray</tt> pointer. As we increment this pointer by one (<tt>p++</tt>) it will traverse the columns in a row,
+				which is what Munro calls the fastest increasing dimension, and then once all the columns in one row
+				are iterated over it will move to the columns in the next row and so on.
+			</p><p>
+				The next dimension to the right in <tt>int [2][3]</tt>, <tt>2</tt> is the second most fast increasing because as
+				we increase our pointer <tt>p</tt> we will go through the rows.
+			</p><p>
+				This method of thinking about an array can be used for any number of dimensions. Consider <tt>int anotherArray[2][3][4][5]</tt>.
+				We know that the fasted increasing dimension is <tt>5</tt>, so if <tt>int *p = anotherArray</tt> then...
+			</p>
+			<ul><li><tt>*p &nbsp;&nbsp;&nbsp;&nbsp;== anotherArray[0][0][0][0]</tt></li>
+				 <li><tt>*(p+<b>1</b>) == anotherArray[0][0][0][<u>1</u>]</tt></li>
+				 <li><tt>...</tt></li>
+				 <li><tt>*(p+<b>4</b>) == anotherArray[0][0][0][<u>4</u>]</tt></li>
+			</ul>
+			</p><p>
+				We also know that:
+			</p>
+			<ul>
+				<li><tt>*(p+<b>a*5</b>)&nbsp;&nbsp;&nbsp;&nbsp; == anotherArray[0][0][<u>a</u>][0]</tt></li>
+				<li><tt>*(p+<b>b*4*5</b>) &nbsp; == anotherArray[0][<u>b</u>][0][0]</tt></li>
+				<li><tt>*(p+<b>c*3*4*5</b>) == anotherArray[<u>c</u>][0][0][0]</tt></li>
+			</ul>
+			<p>
+				So when we say <em>row-major</em>, we mean that, in terms of the syntax, the right most index is the
+				<em>fastest incrementing dimension</em> and going left the speed of increment decreases.
+			</p>
+			<p>
+				<em>Column-major</em> therefore means, that, again in terms of the syntax, the right most index is the
+				<em>slowest incrementing dimensions</em> and going left the speed of increment increases.
+			</p><p>
+				I keep saying &quot;in terms of syntax&quot; because as Yorick is implemented in C its physical array
+				storage is C-like. It is only in the scripting language itself that column-major notation is used.
+			</p>
+	
+			<h4>In C</h4>
+			<p>Consider the following C program:</p>
+			<pre>#include <stdio.h>
+int main(void) {           +-+-+-&gt; along the right most [] (depth)
+                           | | |
+   int b[2][2][3] = { +&gt;{ {1,2,3}, &lt;+| 
+                      |   {4,5,6}  &lt;+| second most [col]
+                      | },
+                      +&gt;{ {11,22,33},
+                      |   {44,55,66}  
+                      | } };
+                      +- outer most (row)
+
+	int i = 0, j = 0, k = 0;
+	for(i = 0; i &lt; 2; ++i ) 
+		for(j = 0; j &lt; 2; ++j) for(k = 0; k &lt; 3; ++k)
+			printf("b[%i][%i][%i] == %i\n", i, j, k, b[i][j][k]);</pre>
+			<p>
+				It outputs the following...
+			</p>
+			<pre>b[0][0][0] == 1	b[1][0][0] == 11
+b[0][0][1] == 2	b[1][0][1] == 22
+b[0][0][2] == 3	b[1][0][2] == 33
+b[0][1][0] == 4	b[1][1][0] == 44
+b[0][1][1] == 5	b[1][1][1] == 55
+b[0][1][2] == 6	b[1][1][2] == 66</pre>
+
+			<p>
+				Have to visualise the inner brace as being your <em>least</em> dimension. So 
+				in the 3D case the inner brace gives you the 3rd, axis, depth or really z. The next
+				outer brace gives you the next least axis, in this case column. So you are getting 
+				columns of the inner axis. Scale up then to rows. The cube therefore looks like:
+			</p>
+			<pre>
+           3------6
+          /      /| 
+         2------5 |
+        /  33--/--66           [r][c][d]
+       1------4  /             Its basically a matter of definition of
+ |     | 22---|-55   _ d       what row,col,depth means in terms of
+ |     |/     |/     /|        the C array layout. Must structure numbers
+ |     11     44    /          in array appropriately if we defined [r][c][d]
+ \/                /           as opposed to say, [d][r][c] or any
+ r -------------&gt; c            other combination
+		</pre>
+			<p>
+				Basically in C world we work from the outer brace inwards so the right-most index is 
+				our least significant dimension and the left-most index is our most significant dimension 
+				(in this case row)
+			</p>
+			<h4>In Yorick</h4>
+			
+	<pre>
+                   +-+-+-&gt; along the right most [] (depth)
+                   | | |
+&gt; b =     [ +&gt; [  [1,2,3], &lt;+| 
+            |     [4,5,6]  &lt;+|second most [col]
+            |  ],
+            +&gt; [  [11,22,33],
+            |     [44,55,66]  ]
+            |  ];
+            +- outer most (row)
+
+&gt; dimsof(b)
+[3,3,2,2]
+
+   h  c  r
+"b[1][1][1] == 1"            3------6
+"b[1][1][2] == 11"          /      /| 
+"b[1][2][1] == 4"          2------5 |
+"b[1][2][2] == 44"        /  33--/--66           [r][c][d]
+"b[2][1][1] == 2"        1------4  /             Its basically a matter of definition of
+"b[2][1][2] == 22" |     | 22---|-55   _ d       what row,col,depth means in terms of
+"b[2][2][1] == 5"  |     |/     |/     /|        the Yor array layout. Must struct nums
+"b[3][1][1] == 3"  |     11     44    /          in array appropriately if def (d,c,r)
+"b[3][1][2] == 33" \/                /           as opposed to say, (r,c,d) in C or any
+"b[3][2][1] == 6"  r -------------&gt; c            other combination
+"b[3][2][2] == 66"  
+</pre>
+			<p>
+				Basically in Yorick world we work from the inner brace outwards so the left-most 
+				index is our least significant dimension and the right-most index is our most significant 
+				dimension (in this case row)
+			</p>
+
+
+			<h3>Slices Are Not Like NumPy Slices</h3>
+			<div>
+				<p>
+					In NumPy slices are like views into the array, but this
+					is <em>not</em> the case in Yorick. If we transliterate the 
+					<a href="python/numpy.html#numpy_slice">NumPy example</a> into Yorick 
+					script, we will see a different result! See below:
+				</p>
+				<pre>&gt; a = [1,2,3,4,5,6]
+&gt; b = a(2:4)
+&gt; b
+[2,3,4]
+&gt; b(:) = 111
+&gt; b
+[111,111,111]
+&gt; a /*&lt;-- LOOK: Unlike the NumPy example, a has not been affected! */
+[1,2,3,4,5,6]</pre>
+			</div>
+
+			<h3>Arrays Passed To Functions By Reference</h3>
+			<p>
+				Arrays are passed to functions by reference in the sense that if you modify the array in
+				the function, the caller's array is modified...
+			</p>
+			<pre>&gt; y = [1,2,3,4]
+&gt; func cheeseit(x) {
+    x(1) = 9999 /*&lt;-- NOTE: Will change array in caller's scope */
+  }
+&gt; cheeseit(y)
+&gt; y /*&lt;-- NOTE: y has been changed by function */
+[9999,2,3,4]</pre>
+			<p>
+				For a pass-by-copy kind of semantic, do the following, but note copying an array will
+				be expensive if this is a large array!
+			</p>
+			<pre>&gt; y = [1,2,3,4]
+&gt; func cheeseit(x) {
+    x_local = x       /*&lt;-- x is <em>copied</em> to x_local, but copy is <em>EXPENSIVE</em>! */
+    x_local(1) = 9999 /*&lt;-- Changes to x_local will NOT affect array in caller's scope */
+&gt; cheeseit(y)
+&gt; y /*&lt;-- NOTE: y is NOT changed by the function */
+[1,2,3,4]</pre>
+
+
+			<h3>Rubber Indicies In Yorick</h3>
+			<pre>
+&gt; a = [ [    [1,2,3], 
+             [4,5,6]
+        ],[
+             [11, 22, 33], 
+             [44,55,66]
+      ] ]
+&gt; a
+[[[1,2,3],[4,5,6]],[[11,22,33],[44,55,66]]]
+&gt; a(1)
+1
+&gt; a(1,1,1)  ## Give me the first element in the inner array, from 1st array 
+1           ## in the middle array, from the first array (of arrays) from the 
+            ## outer array
+
+&gt; a(1,:)    ## Give me the first element in each inner array, contained in the
+[1,4]       ## same parent array. This is a little incorrect because we don’t
+            ## specify all array dimensions in the indecies
+
+&gt; a(1,:,:)      ## Give me the first element in each inner array, from each 
+[[1,4],[11,44]] ## outer array, contained in the overall array
+
+&gt; a(1,..)       ## The RUBBER INDEX says the same thing: Give me the first
+[[1,4],[11,44]] ## element from the innermost array and do the same recursing
+                ## outwards
+
+&gt; a(1,*)        ## Another RUBBER INDEX that collapses all arrays into one.
+[1,4,11,44]
+
+&gt; a(:,1,1)      ## Give me everything from the first array, i.e., the array
+[1,2,3]         ## itself, from the element in the middle array from the first
+                ## element in the outer array.
+
+&gt; a(:,1,..)           ## Give me everything from the first array, ie. the
+[[1,2,3],[11,22,33]]  ## array itself, from the first element in the middle
+                      ## array from all elements in the outermost array.</pre>
+			<img src="##IMG_DIR##/YorickRubberIndex.png"/>
+		</div> 
+
+	<h2>Oxy Objects</h2>
+	<h3>Copying Oxy Objects</h3>
+	<p>
+		When you assigned an OXY object from one variable to another is is <em>copied by reference</em>.
+		Thus changing an object member will be reflected in both variables as <em>assignment is not copy</em>
+		for OXY objects.
+	</p>
+
+	<div>
+		<pre>&gt; a = save(q = 123)
+&gt; a.q
+123
+&gt; b = a
+&gt; save, a, q=321 /*&lt;--  Changing a's member variable will change b's! */
+&gt; a.q 
+321
+&gt; b.q 
+321              /*&lt;-- LOOK, b has been affected by the change to a! */</pre>
+	</div>
+
+	<p>
+		Given the rational behind Yorick as a number cruncher, this makes a lot of sense. It's a little like passing an array into
+		a function. If we think as an OXY object as a potential &quot;bag&quot; of large data, copying it would be hugely expensive, so that is why an object
+		assignment is NOT a copy!
+	</p>
+	<p>
+		To actually make a realy copy of the object you have to manually copy each member of one object to the other.
+	</p>
+	<pre>&gt; a = save(q=101)
+&gt; b = save()     /*&lt;-- Must manually re-create a new... */
+&gt; save, b, q=a.q /*    ...object if we are to copy a */
+&gt; a
+object [1]: group
+&gt; a.q
+101
+&gt; b.q
+101
+&gt; save, a, q=999
+&gt; a.q
+999
+&gt; b.q
+101              /*&lt;-- Changing a.q has not affected b.q. We did a proper copy!</pre>
+	<p>
+		BUT, this is further complicated by arrays as member variables and OXY objects as
+		member variables. For example, examine the following.
+	</p>
+	<pre>&gt; a = save(q=[1,2,3])        
+&gt; b = save()
+&gt; save, b, q=a.q
+&gt; b.q
+[1,2,3]
+&gt; a.q
+[1,2,3]
+&gt; a.q(1) = 111
+&gt; a.q
+[111,2,3]
+&gt; b.q
+[111,2,3]</pre>
+	<p>
+		In the above example we used the same recipe as above, but because <tt>q</tt> is now an array
+		the reference to the array is copied and not the value. Again, make sense for Yorick as a
+		number cruncher of large data arrays, but if you wanted a copy, this could throw you. The same
+		copy-of-reference problem would occur if <tt>q</tt> has been another OXY object.
+	</p>
+	<p>
+		To fully, deep copy, an OXY object your therefore have to build a new object from scratch,
+		and copy in all primative types and then recursively copy in all member OXY objects and also
+		take care to copy the arrays correctly.
+	</p>
+		</div>
+</body>
+</html>
+
