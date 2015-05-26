@@ -33,16 +33,17 @@ img {
 }
 
 .info, .warning {
-	margin: 10px 0px;
+	margin: 0px;
 	padding:5px 10px 5px 65px;
 	background-repeat: no-repeat;
 	background-position: 10px center;
 	background-size: 40px 40px;
-	width: auto;
+	width: 100%;
 	display:inline-block;
 	text-align: left;
 	min-height: 40px;
 	border-radius: 5px;
+	box-sizing: border-box;
 }
 
 .info {

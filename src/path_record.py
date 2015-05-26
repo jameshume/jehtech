@@ -11,7 +11,8 @@ class PathRecord:
 	
 	def pathExplode(self, path):
 		""" Explode a path string into a list with each list element
-		    being a path component """
+		    being a path component. If the path is absolute make sure to record
+			 the first seperator. """
 		l = []
 		head, tail = os.path.split(os.path.normpath(path))
 		if (len(head) < 1) and (len(tail) < 1): # If path is empty, both head and tail are empty
@@ -23,7 +24,10 @@ class PathRecord:
 		while len(tail) > 0:
 			l.insert(0, tail)
 			head, tail = os.path.split(head)
-			
+		
+		if path[0] == '/' or path[0] =='\\':
+			l.insert(0, path[0])
+
 		return l
 
 	def havePath(self, path):
