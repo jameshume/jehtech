@@ -19,8 +19,9 @@
 </div>
 
 <div id="content">
-	<!-- TITLE ------------------------------------------------------------- -->
-	<h1 class="title">Yorick Notes</h1>
+<!-- TITLE ------------------------------------------------------------- -->
+<h1 class="title">Yorick Notes</h1>
+<div style="padding-right:10px;">
 	<p>
 		<a href="http://dhmunro.github.io/yorick-doc/" target="_blank">Yorick</a>, written by 
 		<a target="_blank" href="http://en.wikipedia.org/wiki/David_H._Munro">David Munro</a>, &quot;...is an interpreted 
@@ -40,7 +41,7 @@
 			Really very very easy. Just do <tt>sudo apt-get install yorick</tt>! If you want to develop
 			your own Yorick plugins then your will also need to do a <tt>sudo apt-get install yorick-dev</tt>.
 		</p>
-		<pre>apt-get install yorick yorick-dbg yorick-dev</pre>
+		<pre class="prettyprint linenums">apt-get install yorick yorick-dbg yorick-dev</pre>
 	</div>
 
 	<!-- GET Y_HOME -------------------------------------------------------- -->
@@ -55,11 +56,11 @@
 		</p>
 		<p>
 			Usually to generate a plugin Makefile you'd just type...
-		<pre>yorick -batch make.i</pre>
+		<pre class="prettyprint linenums">yorick -batch make.i</pre>
 		<p>... and get an auto generated Makefile with variables pointing to your Yorick installation written into
 			the Makefile for you. For example, on my Ubuntu atp-getted installation I get the following.
 		</p>
-		<pre># these values filled in by &quot;yorick -batch make.i&quot;
+		<pre class="prettyprint linenums"># these values filled in by &quot;yorick -batch make.i&quot;
 Y_MAKEDIR=/usr/lib/yorick
 Y_EXE=/usr/lib/yorick/bin/yorick
 Y_EXE_PKGS=
@@ -70,7 +71,7 @@ Y_HOME_PKG=</pre>
 			One way to get the Yorick installation directory for a system that is
 			independent of the particular Yorick installation is as follows. 
 		</p>
-			<pre>YORICK_HOME="$(echo "print, Y_HOME" | yorick | grep '^".*yorick' | sed -e 's/"//g' | tr -d '\r' | sed -r 's/\/ *$//g')"
+			<pre class="prettyprint linenums">YORICK_HOME="$(echo "print, Y_HOME" | yorick | grep '^".*yorick' | sed -e 's/"//g' | tr -d '\r' | sed -r 's/\/ *$//g')"
 echo $YORICK_HOME</pre>
 		<p>
 			You can then substitute <tt>YORICK_HOME</tt> into the auto-generated Makefile so that
@@ -263,7 +264,7 @@ b[0][1][2] == 6	b[1][1][2] == 66</pre>
 				<a href="python/numpy.html#numpy_slice">NumPy example</a> into Yorick 
 				script, we will see a different result! See below:
 			</p>
-			<pre>&gt; a = [1,2,3,4,5,6]
+			<pre class="prettyprint linenums">&gt; a = [1,2,3,4,5,6]
 &gt; b = a(2:4)
 &gt; b
 [2,3,4]
@@ -280,7 +281,7 @@ b[0][1][2] == 6	b[1][1][2] == 66</pre>
 				Arrays are passed to functions by reference in the sense that if you modify the array in
 				the function, the caller's array is modified...
 			</p>
-			<pre>&gt; y = [1,2,3,4]
+			<pre class="prettyprint linenums">&gt; y = [1,2,3,4]
 &gt; func cheeseit(x) {
     x(1) = 9999 /*&lt;-- NOTE: Will change array in caller's scope */
   }
@@ -291,7 +292,7 @@ b[0][1][2] == 6	b[1][1][2] == 66</pre>
 				For a pass-by-copy kind of semantic, do the following, but note copying an array will
 				be expensive if this is a large array!
 			</p>
-			<pre>&gt; y = [1,2,3,4]
+			<pre class="prettyprint linenums">&gt; y = [1,2,3,4]
 &gt; func cheeseit(x) {
     x_local = x       /*&lt;-- x is <em>copied</em> to x_local, but copy is <em>EXPENSIVE</em>! */
     x_local(1) = 9999 /*&lt;-- Changes to x_local will NOT affect array in caller's scope */
@@ -303,7 +304,7 @@ b[0][1][2] == 6	b[1][1][2] == 66</pre>
 
 		<h3>Rubber Indicies In Yorick</h3>
 		<div>
-			<pre>
+			<pre class="prettyprint linenums">
 &gt; a = [ [    [1,2,3], 
              [4,5,6]
         ],[
@@ -353,7 +354,7 @@ b[0][1][2] == 6	b[1][1][2] == 66</pre>
 			for OXY objects.
 		</p>
 	
-		<pre>&gt; a = save(q = 123)
+		<pre class="prettyprint linenums">&gt; a = save(q = 123)
 &gt; a.q
 123
 &gt; b = a
@@ -371,7 +372,7 @@ b[0][1][2] == 6	b[1][1][2] == 66</pre>
 		<p>
 			To actually make a realy copy of the object you have to manually copy each member of one object to the other.
 		</p>
-		<pre>&gt; a = save(q=101)
+		<pre class="prettyprint linenums">&gt; a = save(q=101)
 &gt; b = save()     /*&lt;-- Must manually re-create a new... */
 &gt; save, b, q=a.q /*    ...object if we are to copy a */
 &gt; a
@@ -389,7 +390,7 @@ object [1]: group
 			BUT, this is further complicated by arrays as member variables and OXY objects as
 			member variables. For example, examine the following.
 		</p>
-		<pre>&gt; a = save(q=[1,2,3])        
+		<pre class="prettyprint linenums">&gt; a = save(q=[1,2,3])        
 &gt; b = save()
 &gt; save, b, q=a.q
 &gt; b.q
@@ -439,7 +440,7 @@ object [1]: group
 				and &quot;<tt>jehtech.c</tt>&quot;.
 			</p>
 
-			<pre>/*
+			<pre class="prettyprint linenums">/*
  * FILE: jehtech.i
  */
 plug_in, "jehtech"
@@ -450,7 +451,7 @@ extern jehtech_Version;
  *    Return string describing version of the library
  */</pre>
 
-		<pre>/*
+		<pre class="prettyprint linenums">/*
  * FILE: jehtech.c
  */
 #include "yapi.h"
@@ -477,7 +478,7 @@ void Y_jehtech_Version(int argc)
 				Once these are created we can create the Makefile for this plugin. From the linux command line:
 			</p>
 
-			<pre><b>$ yorick -batch make.i</b>
+			<pre class="prettyprint linenums"><b>$ yorick -batch make.i</b>
 created Makefile
  automatically generated make macros and dependencies:
 PKG_NAME=jehtech
@@ -494,7 +495,7 @@ OBJS=jehtech.o
 			<p>
 				Now, from this directory, fire up Yorick to test our little plugin...
 			</p>
-			<pre><b>$ rlwrap yorick</b>
+			<pre class="prettyprint linenums"><b>$ rlwrap yorick</b>
  Copyright (c) 2005.  The Regents of the University of California.
  All rights reserved.  Yorick 2.2.01 ready.  For help type 'help'
 &gt; #include "jehtech.i"
@@ -532,8 +533,9 @@ OBJS=jehtech.o
 
 			<h4>Quick Debug Tip</h4>
 			<p>
-				If Yorick is complaining that it cannot find a library you can always try setting <tt>export LD_DEBUG=all</tt>
-				before running Yorick (or <tt>export LD_DEBUG=help</tt> to get help). You'll get a shed load of debug but at least
+				If Yorick is complaining that it cannot find a library you can always try setting <tt>export LD_DEBUG=libs</tt>
+				before running Yorick (or <tt>export LD_DEBUG=help</tt> to get help). You'll get a debug describing libraries being search for and
+				loaded. You can also set <tt>export LD_DEBUG=all</tt> for an absolute shed-load of debug info, which might be too much, but at least
 				you'll be able to see where the loader is searching for libraries and what, if anything, it finds. To clear the
 				loader debug output just set <tt>export LD_DEBUG=</tt>.
 			</p>
@@ -560,7 +562,7 @@ OBJS=jehtech.o
 				of one integer, usually called <tt>argc</tt>, which gives the number of parameters pushed onto the stack 
 				(note I mean the <em>Yorick stack</em> and *not* the C stack!).
 			</p>
-			<pre>void Y_functionName(int argc) {
+			<pre class="prettyprint linenums">void Y_functionName(int argc) {
    /* argc gives the number of elements pushed onto the **Yorick** stack. 
     * Note this has nothing to do with the C stack! */
    ... 
@@ -571,12 +573,12 @@ OBJS=jehtech.o
 				Lets see this in action by creating a new function <tt>jehtech_ParameterOrder(a,b,c)</tt> and the associated
 				interface function <tt>Y_jehtech_ParameterOrder()</tt>:
 			</p>
-			<pre>/*
+			<pre class="prettyprint linenums">/*
  * FILE: jehtech.i
  */
 ... snip ...
 extern jehtech_ParameterOrder;</pre>
-			<pre>/*
+			<pre class="prettyprint linenums">/*
  * FILE: jehtech.c
  */
 ... snip ...
@@ -592,7 +594,7 @@ void Y_jehtech_ParameterOrder(int argc)
 				With the above modifications added and the plugin recompiled (just use <tt>make all</tt>, no need to regenerate the Makefile!) 
 				we can run the Yorick interpretter and see the results.
 			</p>
-			<pre>$ rlwrap yorick
+			<pre class="prettyprint linenums">$ rlwrap yorick
  Copyright (c) 2005.  The Regents of the University of California.
  All rights reserved.  Yorick 2.2.01 ready.  For help type 'help'
 &gt; #include "jehtech.i"
@@ -679,34 +681,36 @@ void Y_jehtech_ParameterOrder(int argc)
 				The first thing to remember is that <em>Yorick arrays are column major</em>. Therefore a 2D array is 
 				described by the dimensions list <tt>[2, #columns, #rows]</tt>. Very easy to see this in action. We'll
 				make the following additions to our project (note: generally you should not use <tt>printf</tt> like
-				I'm doing here)
+				I'm doing here).
 			</p>
-			<pre>/*
+			<pre class="prettyprint linenums">/*
  * FILE: jehtech.i
  */
 ...
 extern jehtech_ArrayTest;</pre>
-			<pre>/*
+			<pre class="prettyprint linenums">/*
  * FILE: jehtech.c
  */
 ...
+#include &lt;stdio.h&gt;
+...
 void Y_jehtech_ArrayTest(int argc)
 {
-	long i;
-	long dimInf[Y_DIMSIZE];
-	long ntot;
-	long *ary = ygeta_l(0, &amp;ntot, dimInf);
-	printf("jehtech_2DArray: ntot == %ld\n", ntot);
-	printf("jehtech_2DArray: dimInf = [");
-	for(i = 0; i &lt;= dimInf[0]; ++i) {
-		printf(&quot;%ld%s&quot;, dimInf[i], i == dimInf[0] ? &quot;]&quot; : &quot;, &quot;);
-	}
-	printf(&quot;\n&quot;);
+   long i;
+   long dimInf[Y_DIMSIZE];
+   long ntot;
+   long *ary = ygeta_l(0, &amp;ntot, dimInf);
+   printf("jehtech_2DArray: ntot == %ld\n", ntot);
+   printf("jehtech_2DArray: dimInf = [");
+   for(i = 0; i &lt;= dimInf[0]; ++i) {
+      printf(&quot;%ld%s&quot;, dimInf[i], i == dimInf[0] ? &quot;]&quot; : &quot;, &quot;);
+   }
+   printf(&quot;\n&quot;);
 }</pre>
 			<p>
 				Recompile the plugin and running Yorick, we can get the following:
 			</p>
-			<pre>
+			<pre class="prettyprint linenums">
 $ make all
 ...
 $ rlwrap yorick
@@ -726,12 +730,51 @@ jehtech_2DArray: dimInf = [3, 4, 2, 2]</pre>
 			<p>
 				Great so we can, from our C code, get an array of <tt>long</tt>'s, or at least so far, it's dimensions
 				so that we can determine what shape the array is. But what about accessing the array values? Yorick
-				specifies everything <em>column major</em>...
+				specifies everything <em>column major</em>, so in the array <tt>[[1,2,3,4], [5,6,7,8]]</tt> to access
+				the third column, second row, we would write <tt>a(3,2)</tt>. However, under the hood Yorick stores
+				arrays C-style... i.e., from C, when passed an array, we would access it as <tt>a[2][3]</tt> or
+				<tt>a[2*num_cols + 3]</tt>. 
 			</p>
-
+			<p>
+				Lets see this in action to see that this is in fact the case. We'll make the following additions to
+				out project files...
+			</p>
+			<pre class="prettyprint linenums">/* 
+ * FILE: jehtech.i
+ */
+...
+extern jehtech_Dump2D;</pre>
+			<pre class="prettyprint linenums">/*
+ * FILE: jehtech.c
+ */
+...
+void Y_jehtech_Dump2D(int argc)
+{
+   /* PRE: array is 2D! */
+   long row, col;
+   long dimInf[Y_DIMSIZE];                       /* [rank, #cols, #rows] */
+   long *ary = ygeta_l(0, NULL, dimInf);
+   for(row = 0; row &lt; dimInf[2]; ++row) {        /* dimInf[2] is #rows   */
+      for(col = 0; col &lt; dimInf[1]; ++col) {     /* dimInf[1] is #cols   */
+         printf("%ld\t", ary[row*dimInf[1] + col]);
+      }
+      printf("\n");
+   }
+}</pre>
+			<p>
+				Recompiling and running Yorick we then see the following...
+			</p>
+			<pre class="prettyprint linenums">$ rlwrap yorick
+ Copyright (c) 2005.  The Regents of the University of California.
+ All rights reserved.  Yorick 2.2.01 ready.  For help type 'help'
+&gt; require, "jehtech.i"
+&gt; jehtech_Dump2D, [[1,2,3,4], [5,6,7,8]]
+1	2	3	4	
+5	6	7	8</pre>
 
 		</div> <!-- END H3 Div -->
 	</div> <!-- END H2 Div -->
+</div> <!-- END H1 Div -->
 </div> <!-- END "Contents" Div -->
 </body>
 </html>

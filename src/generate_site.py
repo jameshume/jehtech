@@ -222,7 +222,9 @@ def deploy_site():
 	nonHtmlFiles = [ 'reCaptchaSecret.txt',
 	                 'robots.txt',
 	                 'downloadables',
-	                 'images' ]
+	                 'images', 
+						  'fonts']
+
 	for filename in nonHtmlFiles:
 		if os.path.exists(filename):
 			target = os.path.join(DEPLOYED_DIR, filename)

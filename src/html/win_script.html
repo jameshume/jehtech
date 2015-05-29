@@ -25,6 +25,34 @@
 		<div id="page_contents">
 		</div>
 
+		<h2>Batch Parameters</h2>
+		<div>
+			<p>
+				Ref: <a href="https://www.microsoft.com/resources/documentation/windows/xp/all/proddocs/en-us/percent.mspx?mfr=true"
+				target="_blank">MS XP product docs</a>.
+			</p>
+			<p>
+				Cmd.exe provides the batch parameter expansion variables <tt>%0</tt> through 
+				<tt>%9</tt>. <tt>%0</tt> is the batch file name, and <tt>%1</tt> through 
+				<tt>%9</tt> are the corresponding arguments typed at the command line. 
+			</p>
+			<h3>Convert Relative Path To Absolute</h3>
+			<div>
+				<p>
+					In the generate script for this site I wanted to use a relative
+					directory from the CWD and convert this to an absolute path so
+					I could automatically fire up a browser to load the site.
+				</p>
+				<p>
+					To get the absolute path of the batch file use <tt>%~dp0</tt>. 
+					This expands <tt>%0</tt> to a drive letter and path. This can be 
+					used with any of the batch parameters <tt>%1</tt> through <tt>%9</tt> 
+					top the same effect.
+				</p>
+			</div> <!-- END H3 div -->
+
+		</div> <!-- End H2 Div -->
+
 		<h2>Configure Network Adapter Settings</h2>
 		<div>
 			<p>

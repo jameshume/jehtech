@@ -1,0 +1,448 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+	<title>JEH-Tech Home Page</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">Welcome</h1>
+<div style="padding-right:10px;">
+	<p>
+		Just notes from various books/websites on JavaScript. Have tried to 
+		reference as thoroughly as possible.
+	</p>
+
+	<h2>Page Contents</h2>
+	<div id="page_contents">
+	</div>
+
+	<h2>References</h2>
+	<div>
+		<ol>
+			<li>
+				<a name="ref_js_enlighten"></a>
+				<a href="http://shop.oreilly.com/product/0636920027713.do"
+					target="_blank">
+				JavaScript Enlightenment, Cody Lindley, O'Reilly Media Inc, 2013
+				</a>
+			</li>
+			<li>
+				<a name="ref_js_principles"></a>
+				<a href="http://www.nostarch.com/oojs" target="_blank">
+				The Principles Of Object-Oriented JavaScript, Nicholas C Zakas, William Pollock, 2014
+				</a>
+			</li>
+			<li>
+				<a name="js_closures"></a>
+				<a href="http://jibbering.com/faq/notes/closures/" target="_blank">
+					Javascript Closures, Richard Cornford, March 2004.
+				</a>
+			</li>
+		</ol>
+	</div> <!-- END H2 div -->
+
+	<h2>Scope In JavaScript</h2>
+	<div>
+		<p>Scope is the context in which code is executed, and there are three types in JavaScript.
+		</p>
+		<ol>
+			<li>global scope,</li>
+			<li>local scope (aka &quot;function scope&quot;),</li>
+			<li>eval scope.</li>
+		</ol>
+		<p>
+			If you come from a C-ish background you may notice a pretty big 
+			ommission in the above list... there is no block scope!
+
+			<div class="box_container"><div class="info">
+				<p>
+					JavaScript does not have block scope. Any variables declared in a
+					block, i.e, <tt>{ ... var xxx; ...}</tt> are local to the
+					function in which they are declared or, worse, the global scope.
+				</p>
+			</div></div>
+		</p>
+		<p>
+			One thing that really got me was the use of <tt>var</tt>, or more
+			precisely, what happens when you do not use <tt>var</tt> to declare
+			local variables. If you do not declare a variable using <tt>var</tt>
+			in a function it actually gets created in the global scope! One to 
+			watch out for.
+
+			<div class="box_container"><div class="warning">
+				<p>
+					Variables declared in a function that do NOT use <tt>var</tt> in
+					the declaration are created in the global scope and not the 
+					function/local scope as you might expect.
+				</p>
+			</div></div>
+		</p>
+		<p>
+			To resolve a symbol, JavaScript goes down the scope chain: first look
+			up symbol in the function/local scope, then in the parent scope, the
+			grandparent scope, and so on, until the global scope is reached. The
+			first symbol found is used. This is why closures work...
+		</p>
+	</div> <!-- END H2 div -->
+
+	<h2>Closures In JavaScript</h2>
+	<div>
+		<p>
+			Closures work due to the scope chain that was described above.
+			From parent function return a reference to the child function
+			contained within it. When this child function (nested function) is 
+			invoked, it still has access to the parent function's scope because of
+			the scope chain. See Richard Cornford's 
+			article  
+			<a href="http://jibbering.com/faq/notes/closures/" target="_blank">[3]</a> 
+			for further info.
+		</p>
+	</div> <!-- END H2 div -->
+
+
+	<h2>Objects In JavaScript</h2>
+	<div>
+		<pre>
+OBJECTS:
+--------
+
+Primatives are stored in the variable
+Reference types are just pointers to memory locations
+
+Eg primatives in variable
+	var c1 = "red";
+	var c2 = c1;
+	c1 = "orance";
+
+	// c1 is "orange"
+	// c2 is still "red"
+
+Eg Reference type is pointer
+	var o1 = new Object();
+	var o2 = o1
+	
+	o1.newAttr = "J" //&lt; Note: can add property at any time
+	// o2.newAttr == "J"
+
+
+Builtin Types
+Array
+Data
+Object
+Error
+Function
+RefExp
+
+Object literal --&gt; var o1 = { 'prop1': "something", "prop2" : 101 }
+                          = { prop1: "something",    prop2 : 101 } // Dont need quotes
+
+Equiv to
+var o1 = new Object;
+o1.prop1 = "something"
+o1.prop2 = 101
+
+
+
+Array literal --&gt; var a1 = [1,2]
+
+Equiv to var a1 = Array(1,2)
+
+function declarations vs expressions:
+	function add(n1, n2) { return n1 + n2} is a declaration
+	var add = function(n1,n2) { return n1 + n2} is an expression
+
+	declarations are HOISTED to the top of the context so it can be defined after its use!
+	this is NOT the case for expressions!
+
+function parameters:
+	can be any number passed in
+	funcion.length is #args func expects
+	access arbirary arguments using arguments[] array
+	functions can't be overloaded as lack of solid parameters list means lack of signature
+
+
+object methods
+	methods are just properties that reference functions
+
+	var cat = {
+		name: "kitty",
+		speak: function() { console.log(this.name + " says meow"); }
+	}
+
+	Every scope in JavaScript has a this object that represents the calling
+	object for the function. In the global scope, this represents the
+	global object (window in web browsers). When a function is called while
+	attached to an object, the value of this is equal to that object by default.
+
+	The value of this, is based on the context in which the function
+	is called at **RUN TIME**
+
+	function sayNameForAll() {
+		console.log(this.name);
+	}
+	
+	var person1 = {
+		name: "Nicholas",
+		sayName: sayNameForAll
+	};
+	var person2 = {
+		name: "Greg",
+		sayName: sayNameForAll
+	};
+	var name = "Michael";
+	person1.sayName(); // outputs "Nicholas"
+	person2.sayName(); // outputs "Greg"
+	sayNameForAll(); // outputs "Michael"
+
+
+	CHANGING THIS:
+		Call()
+		Call() function with parameters but bind this to some specific context rather than the auto-assigned one
+		function sayNameForAll(label) {
+			console.log(label + ":" + this.name);
+		}
+		var person1 = {
+			name: "Nicholas"
+		};
+		var person2 = {
+			name: "Greg"
+		};
+		var name = "Michael";
+		sayNameForAll.call(this, "global"); // outputs "global:Michael"
+		sayNameForAll.call(person1, "person1"); // outputs "person1:Nicholas"
+		sayNameForAll.call(person2, "person2"); // outputs "person2:Greg"
+
+		Apply()
+		apply() function. Like call except parameters are in array
+
+		Bind()
+		Creates a new function from the "template" with any parameters (minimum is this)
+		permanently bound.
+		var sayNameForPerson2 = sayNameForAll.bind(person2, "person2");
+		sayNameForPerson2(); // outputs "person2:Greg"
+
+Test For Object Properties
+	property_name in object_name
+		Does not evaluate the property just says if present
+		Checks for bowth own and prototype properties
+	obj.hasOwnProperty() to check for specifically own properties
+
+Remove property
+	delete obj.property_name
+	NOTE: This only works on own properties
+
+Enumerate properties:
+	for(property in object) {...} or
+	var props = Object.keys(object); for(var i=0; i &lt; props.length; ++i) { ... }
+	The for-in loop also enumerates prototype properties, while Object.keys() returns only own (instance) properties
+
+Constructor:
+	A constructor is simply a function that is used with new to create an object. 
+
+	Constructors allow you to initialize an instance of a type in a consistent
+	way, performing all of the property setup that is necessary before the object can be used.
+
+	Make sure to always call constructors with new; otherwise, you risk
+	changing the global object instead of the newly created object.
+
+	Function name with capital is convention to represent object
+
+	Eg
+
+		var cat = {
+			name: "kitty",
+			speak: function() { console.log(this.name + " says meow"); }
+		}
+
+	Translates into
+
+	function Cat(name) {
+		this.name = name;
+		this.speak = function() { 
+			console.log(this.name + " says meow"); 
+		};
+	}
+
+	
+Prototype:
+	A recipe for a object.
+	The shared nature of prototypes makes them ideal for defining methods
+	once for all objects of a given type. It’s much more efficient to put 
+	the methods on the prototype and then use this to access the current instance.
+
+	function Person(name) {
+		this.name = name;
+	}
+	Person.prototype.sayName = function() {
+		console.log(this.name);
+	};
+
+	Or on mass
+	
+	Person.prototype = {
+		constructor: NAME, // Using the object literal notation to overwrite the prototype changed
+					the constructor property so that it now points to Object u instead of Person.
+					This happened because the constructor property exists on the prototype,
+					not on the object instance. When a function is created, its prototype property
+					is created with a constructor
+					property equal to the function.
+		sayName: function() { ... },
+		...
+	}
+
+	Checking for properties in the prototype...
+
+	function hasPrototypeProperty(object, name) {
+		return name in object && !object.hasOwnProperty(name);
+	}
+
+	Each instance has pointer back to prototype through internal property [[Prototype]]
+	You can read the value of the [[Prototype]] property by using the Object.getPrototypeOf()
+	method on an object: 
+		var prototype = Object.getPrototypeOf(object);
+
+
+	You can also test to see if one object is a prototype for another by
+	using the isPrototypeOf()
+		var object = {};
+		console.log(Object.prototype.isPrototypeOf(object));
+
+
+
+	You can also store other types of data on the prototype, but be careful
+	when using reference values. Because these values are shared across
+	instances, you might not expect one instance to be able to change values
+	that another instance will access.
+
+
+	
+
+
+Inheritance - Prototype Chaining:
+
+	Prototype is also an object, it has its own prototype and inherits properties
+	from that. This is the prototype chain: An object inherits from its prototype,
+	while that prototype in turn inherits from its prototype, and so on.
+		
+	Methods inherited from Object:
+	valueOf() - lets you do +/-/&lt;gt; etc operations by returning value
+	toString() - Called if valueOf() returns reference instead of primative. Also when JS expects string.
+	propertyIsEnumerable()
+	hasOwnProperty()
+	ifPrototypeOf()
+
+	Object.prototype - DONT CHANGE: All objects inherit from Object.prototype by 
+	default, so changes to Object.prototype affect all objects.
+
+	Simple Inheritance
+		Explicitly specify [[Prototype]] with the Object.create(obj-for-proto, [prop-descr]) method:
+		
+		var book = {
+			title: "The Principles of Object-Oriented JavaScript"
+		};
+		// is the same as
+		var book = Object.create(Object.prototype, {
+			title: {
+				configurable: true,
+				enumerable: true,
+				value: "The Principles of Object-Oriented JavaScript",
+				writable: true
+			}
+		});
+
+		Or do MyObject.prototype = new OtherObject();
+		MyObject.prototype.constructor = MyObject;
+
+		Or MyObject.prototype = Object.create(OtherObject.prototype, {
+			constructor: {
+				value: MyObject;
+			}});
+	
+		Always make sure that you overwrite the prototype before adding properties to it,
+		or you will lose the added methods when the overwrite happens.
+
+
+
+	Calling SuperClass Constructor:
+		function Rectangle(length, width) {
+			this.length = length;
+			this.width = width;
+		}
+		Rectangle.prototype.getArea = function() {
+			return this.length * this.width;
+		};
+		Rectangle.prototype.toString = function() {
+			return "[Rectangle " + this.length + "x" + this.width + "]";
+		};
+		// inherits from Rectangle
+		function Square(size) {
+			Rectangle.call(this, size, size);
+			// optional: add new properties or override existing ones here
+		}
+		Square.prototype = Object.create(Rectangle.prototype, {
+			constructor: {
+				configurable: true,
+				enumerable: true,
+				value: Square,
+				writable: true
+			}
+		});
+
+
+	Call supertype method:
+		// call the supertype method
+		Square.prototype.toString = function() {
+			var text = Rectangle.prototype.toString.call(this);
+			return text.replace("Rectangle", "Square");
+		};
+
+Module Pattern:
+	The module pattern is an object-creation pattern designed to create singleton
+	objects with private data. The basic approach is to use an immediately
+	invoked function expression (IIFE) that returns an object. An IIFE is a function
+	expression that is defined and then called immediately to produce a
+	result. That function expression can contain any number of local variables
+	that aren’t accessible from outside that function. Because the returned
+	object is defined within that function, the object’s methods have access
+	to the data.
+
+	var yourObject = (function() {
+		// private data variables
+		return {
+			// public methods and properties
+		};
+	}());
+
+Scope safe constructors:
+	function Person(name) {
+		if (this instanceof Person) {
+			// called with "new"
+			this.name = name;
+		} else {
+			// called without "new"
+			return new Person(name);
+		}
+	}
+
+		</pre>
+	</div> <!-- END H2 div -->
+
+</div>
+</div>
+</body>
+</html>
+

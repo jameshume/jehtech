@@ -1,27 +1,62 @@
-/* latin-ext */
 @font-face {
-	font-family: 'Spinnaker';
+	font-family: 'Goudy';
 	font-style: normal;
 	font-weight: 400;
-	src: local('Spinnaker'), local('Spinnaker-Regular'), url(http://fonts.gstatic.com/s/spinnaker/v8/W7zI5bHqD9Cyn2evfF7QnxJtnKITppOI_IvcXXDNrsc.woff2) format('woff2');
-	unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF;
-}
-/* latin */
-@font-face {
-	font-family: 'Spinnaker';
-	font-style: normal;
-	font-weight: 400;
-	src: local('Spinnaker'), local('Spinnaker-Regular'), url(http://fonts.gstatic.com/s/spinnaker/v8/WxzDAY6mC9v3znSJEtCoW1tXRa8TVwTICgirnJhmVJw.woff2) format('woff2');
-	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+	src: url(fonts/GoudyStM-webfont.eot) format('eot');
+	src: url(fonts/GoudyStM-webfont.woff) format('woff'),
+	     url(fonts/GoudyStM-webfont.ttf) format('truetype');
+
 }
 
+@font-face {
+	font-family: 'League Spartan';
+	src: url('fonts/leaguespartan-bold.eot');
+	src: url('fonts/leaguespartan-bold.eot?#iefix') format('embedded-opentype'),
+	     url('fonts/leaguespartan-bold.woff2') format('woff2'),
+ 	     url('fonts/leaguespartan-bold.woff') format('woff'),
+	     url('fonts/leaguespartan-bold.ttf') format('truetype');
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Junction';
+	src: url('fonts/junction-bold.eot');
+	src: url('fonts/junction-bold.eot?#iefix') format('embedded-opentype'),
+	     url('fonts/junction-bold.woff') format('woff'),
+	     url('fonts/junction-bold.ttf') format('truetype');
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Junction';
+	src: url('fonts/junction-regular.eot');
+	src: url('fonts/junction-regular.eot?#iefix') format('embedded-opentype'),
+	     url('fonts/junction-regular.woff') format('woff'),
+	     url('fonts/junction-regular.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Spinnaker';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Spinnaker'), 
+	     local('Spinnaker-Regular'), 
+	     url(http://fonts.gstatic.com/s/spinnaker/v8/W7zI5bHqD9Cyn2evfF7Qnz8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+}
+
+
 body { 
-	font-family: Spinnaker,Arial,Helvetica,sans-serif;
+	font-family: 'Spinnaker', Arial, Helvetica, sans-serif;
 	font-size:   14px;
 	width:       100%;
 	padding:     0px;
 	margin:      0px;
 	border:      0px;
+	-webkit-font-smoothing: antialiased;
  }
 
 .box_container {
@@ -49,7 +84,7 @@ img {
 .info {
 	color: #30300A;
 	border: 1px solid #30300A;
-	background-color: #E1E3C3;
+	background-color: #FBFFB0;
 	background-image: url('images/jeh-tech/icons/notepad.png');
 }
 

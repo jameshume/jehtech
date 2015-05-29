@@ -23,7 +23,13 @@
 		function JEHCanvasElement() {
 		}
 
-		JEHCancasElement.prototype.containsPoint
+		JEHCanvasElement.prototype.containsPoint = function(x, y) {
+			throw "Interface function. Should not be used";
+		}
+
+		JEHCanvasElement.prototype.drawOnCanvas = function(jehCanvas) {
+			throw "Interface function. Should not be used";
+		}
 
 		function JEHCanvas(id, onClickCallback) {
 			self.canvas = $("#myCanvas");
@@ -68,7 +74,8 @@
 				}
 			}
 			else {
-				console.log('### WARNING: JEHCanvas.addObject: Object "' + obj + '" does not have correct interface methods');
+				console.log('### WARNING: JEHCanvas.addObject: Object "' + 
+				            obj + '" is not JEHCanvasElement');
 			}
 		}
 
