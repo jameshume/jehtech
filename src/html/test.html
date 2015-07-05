@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=UTF8" http-equiv="content-type">
+	<title>JEH-Tech: HTML Canvas</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+	<script>
+		jCanv = com_JEHTech_www_Canvas();
+
+		$(function(){
+			var jC = new jCanv.Canvas("#myCanvas", null);
+			jC.ctx.lineCap="square";
+
+			jC.ctx.lineWidth=1;
+			jC.drawLine(10, 10, 10, 30);
+			jC.drawLine(10.5, 30, 10.5, 50);
+
+			// A blurry rectangle 
+			jC.drawRect(40, 10, 50, 50, true);
+
+			// A crisp rectangle
+			jC.drawRect(100.5, 10.5, 50, 50, true);
+			
+			jC.ctx.lineWidth=5;
+			// A blurry rectangle with larger line width
+			jC.drawRect(40, 70, 50, 50, true);
+
+			// A cripst rectangle with larger line width
+			jC.drawRect(100.5, 70.5, 50, 50, true);
+
+			// A blurry rectangle with larger line width
+			jC.drawRect(40, 130, 50, 50, true);
+			jC.ctx.clearRect(40,130,50,50);
+
+			// A cripst rectangle with larger line width
+			jC.drawRect(100.5, 130.5, 50, 50, true);
+			jC.ctx.clearRect(100, 130, 50, 50);
+
+			// A cripst rectangle with larger line width
+			jC.drawRect(160.5, 130.5, 50, 50, true);
+			jC.ctx.clearRect(158, 128, 55, 55);
+
+			// A cripst rectangle with larger line width
+			jC.drawRect(220.5, 130.5, 50, 50, true);
+			jC.ctx.clearRect(217, 127, 57, 57);
+		});
+	</script>
+</head>
+
+<body>
+	<div id="header">
+		-- This is JEHTech --
+	</div>
+
+	<div id="sidebar">
+		<h1 class="title">Links...</h1>
+		<div id="includedContent"></div>
+	</div>
+
+	<div id="content">
+		<h1 class="title">HTML Canvas</h1>
+			<canvas id="myCanvas" width="500" height="500" style="border:1px solid black; margin: 50px; padding: 50px; float: left;">
+				Your browser does not support the HTML5 canvas tag.
+			</canvas>
+	</div>
+</body>
+</html>

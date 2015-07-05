@@ -1,0 +1,276 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+	<title>Linux (Scripting) notes</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+	<div id="header">
+		-- This is JEHTech --
+	</div>
+
+	<div id="sidebar">
+		<h1 class="title">Links...</h1>
+		<div id="includedContent"></div>
+	</div>
+
+	<div id="content">
+	
+		<h1 class="title">Linux (Scripting)</h1>
+		<div style="padding-right:10px;">
+
+		<h2>Page Contents</h2>
+		<div id="page_contents">
+		</div>
+
+		<h2>References</h2>
+		<div>
+			<ol>
+				<li><a href="http://www.cyberciti.biz/faq/bash-shell-change-the-color-of-my-shell-prompt-under-linux-or-unix/"
+					target="_blank">BASH Shell: Change The Color of My Shell Prompt, Vivek Gite, October 2006</a>
+				</li>
+				<li><a href="http://stackoverflow.com/questions/11065077/eval-command-in-bash-and-its-typical-uses"
+					target="_blank">Eval command in Bash and its typical uses</a>.
+				</li>
+			</ol>
+		</div> <!-- END H2: References -->
+
+		<h2>Linux Prompt With Colours</h2>
+		<div>
+			<p>
+				To set prompt to be yellow:
+			</p>
+			<pre>PS1='\[\e[0;33m\]\u@\h:\w\$ \[\e[0m\]'</pre>
+			<p>
+				Note that the &quot;<tt>\[</tt>&quot; and &quot;<tt>\]</tt>&quot; 
+				surrounding the &quot;<tt>\e...</tt>&quot; constructs
+				are very important as otherwise the size of the prompt is
+				miscalculated and when cycling through command history the display 
+				messes up 
+				<a href="http://www.cyberciti.biz/faq/bash-shell-change-the-color-of-my-shell-prompt-under-linux-or-unix/"
+				target="_blank">[1]</a>.
+			</p>
+			<p>
+				Add this to your <tt>~/.bashrc</tt> file to make it permanent.
+			</p>
+			<p>
+				I really dislike it when the cwd printed in the prompt begins
+				to get too long and take up most of the terminal line. What I
+				wanted was for the cwd to collapse a little when this happended. 
+				To do this I set my <tt>PS1</tt> environment variable as follows
+				and used the (hacky) Python script, also shown below.
+			</p>
+			<p>
+				Set <tt>PS1</tt> as follows:
+			</p>
+			<pre>PS1="\[\e[0;33m\]\$(python ~/ps1.py)\$ \[\e[m\]"</pre>
+			<p>
+				Then created the file <tt>ps1.py</tt> in my home directory:
+			</p>
+			<pre class="prettyprint linenums lang-python">import os
+
+pref = os.path.sep
+home = os.path.expanduser("~").split(os.sep)
+home.remove('')
+
+l = os.getcwd().split(os.sep)
+l.remove('')
+
+if l[0:len(home)] == home:
+	l = l[len(home):]
+	l.insert(0, "~")
+	pref = ""
+
+if len(l) &gt; 4:
+	ll = [l[0], l[1], l[2], "...", l[-1]]
+	print pref + os.path.join(*ll)
+else:
+	print pref + os.path.join(*l)</pre>
+		</div> <!-- END H2: Linux Prompt With Colours -->
+
+		<h2>Modify Any PATH-like Variable And Variable Dereferencing</h2>
+		<div>
+			<p>
+				Modifying a <tt>PATH</tt>-like variable (eg. <tt>PATH</tt>,
+				<tt>LD_LIBRARY_PATH</tt>, <tt>PYTHONPATH</tt> etc is obviously easy.
+				What I found was I often wanted to script it and only modify a path
+				if what I wanted to add wasn't already listed. Also, sometimes I
+				wanted to remove a path from a <tt>PATH</tt>-like variable.
+			</p>
+			<p>
+				Accomplishing this required the use of functions and the <tt>eval</tt>
+				statement to dereference a variable twice, i.e. to use one variable
+				as a &quot;reference&quot; to another. There are also the little
+				corner cases when adding to a path... if it's empty then don't
+				add a colon and when removing a path don't leave a trailing colon.
+			</p>
+
+			<h3>Dereference Variable Name</h3>
+			<p>
+				The first method I learnt to dereference a variable was this:
+			</p>
+			<pre class="prettyprint linenums lang-python">$ jtRef=JEH_TECH
+$ JEH_TECH="This is JEH-Tech.com"
+$ eval echo \$$jtRef
+This is JEH-Tech.com</pre>
+			<p>
+				Works quite well. <tt>eval</tt>'s parameters are evaluated by the
+				shell and passed to <tt>eval</tt>. Thus, <tt>echo \$$jtRef</tt> gets parsed
+				by the shell as <tt>echo $JEH_TECH</tt>, which is passed to <tt>eval</tt>.
+				Eval then re-evalulates this string which <tt>echo</tt>es the value
+				of the variable <tt>JEH_TECH</tt>. Thus we have essentially
+				dereferenced <tt>jtRef</tt>.
+			</p>
+			<p>
+				However, in Bash, there is a much easier syntax 
+				<a href="http://stackoverflow.com/questions/11065077/eval-command-in-bash-and-its-typical-uses"
+					target="_blank">[2]</a>. We could just write
+				the following.
+			</p>
+			<pre class="prettyprint linenums lang-python">$ echo ${!jtRef}
+This is JEH-Tech.com</pre>
+			<p>
+				In Bash, the variable expansion mechanism 
+				<tt>${!<em>varName</em>}</tt> does the dereferencing much more
+				elegantly for us...
+			</p>
+
+			<h3>Splitting up PATH-like Variable Using Sed and Tr</h3>
+			<div>
+				<p>
+					To split up the path variable, i.e, do the equivalent of a 
+					<tt>split()</tt> function in bash, I used a combination of 
+					<tt>tr</tt> and <tt>sed</tt>.
+				</p>
+				<p>
+					Why do the split? Two reasons. Firstly, grep would match
+					the first occurrence of a string. So if <tt>PATH=/aaa/bbb</tt>
+					and I wish to add <tt>/aaa</tt>, <tt>grep</tt>ing for it before 
+					adding it to the path (so I don't clutter it with duplicates) 
+					won't work: I can't use word boundaries in the regexp because the
+					<tt>/</tt> appears to count as a word boundary and grepping for
+					possible colons becomes tedious. Secondly, sed works on a line by 
+					line basis.
+				</p>
+				<p>
+					So, my solution is this... use <tt>tr</tt> to break the path 
+					string across many lines, one line per path element, and then
+					use <tt>sed</tt> to blank out the matching path, and then use 
+					<tt>tr</tt> to re-collapse it all back into one string (removing
+					the duplicate newline resulting from the blank line created by
+					<tt>sed</tt>
+				</p>
+				<p>
+					For example, removing a path element has the following script
+					snuippet
+				</p>
+				<pre>echo -e "${!varname}" | tr ":" "\n" | sed -e "s@^$path_2_del\$@@g" | tr -s "\n" ":" | sed -e 's/:$//'</pre>
+				<p>
+					The snipped works as follows...
+
+					<ol>
+						<li><tt>echo -e "${!varname}"</tt> echoes the value of the 
+						    variable referenced by <tt>varname</tt> to stdout, which 
+						    is piped into <tt>tr</tt>.
+						</li>
+						<li><tt>tr ":" "\n"</tt> replaces all colons in the path
+						    string with newlines so that sed can work line by line
+						</li>
+						<li><tt>sed -e "s@^$path_2_del\$@@g"</tt> blanks out the line
+						    (deletes the line but not the trailing newline) that 
+						    matches <em>the entire</em> path and no more. The use of
+						    the <tt>@</tt> is because if we used a forward slash we'd
+						    have to go to the trouble of escapre the path seperators.
+						</li>
+						<li><tt>tr -s "\n" ":" | sed -e 's/:$//'</tt> staples the
+						    lines back into one string and removes any trailing colon
+						    that may have been left.
+						</li>
+					</ol>
+			</div>
+
+			<h3>Resulting Script To Add/Remove Path Elements From PATH-like Variables</h3>
+			<div>
+				<p>
+					I made the following script to accomplish addition and removal of
+					elements from <tt>PATH</tt>-like variables. Quite possibly could be
+					more elegant so any suggestions welcome :) Above each use of the
+					<tt>${!<em>varName</em>}</tt> syntax is a commented-out equivalent
+					using <tt>eval</tt>.
+				</p>
+				<pre class="prettyprint linenums lang-python">#
+# Expects 2 arguments. The name of the variable to have a path element
+# added to it and the path element.
+# eg. add_to_path LD_LIBRARY_LATH /my/special/directory
+function add_to_path() {
+	if [ $# != 2 ]; then
+		&gt;&amp;2 echo "### ERROR: Bad number of params! Expected varname and path"
+		return 1
+	fi
+
+	varname=$1
+	path_2_add=$(readlink -f $2)
+	if [ -z "$path_2_add" ]; then
+		&gt;&amp;2 echo "### ERROR: Could find the directory!"
+		return 2
+	fi
+
+	if [ -d "$path_2_add" ]; then
+		#found=$(eval echo -e "\$$varname" | tr ":" "\n" | grep -c "^$path_2_add\$")
+		found=$(echo -e "${!varname}" | tr ":" "\n" | grep -c "^$path_2_add\$")
+		echo "FOUND=$found"
+		if [ "$found" == "0" ]; then
+			#if [ -z "$(eval echo \$$varname)" ]; then
+			if [ -z "${!varname}" ]; then
+				export $varname=$path_2_add
+			else
+				#export $varname=$(eval echo \$$varname:$path_2_add)
+				export $varname=${!varname}:$path_2_add
+			fi
+		fi
+	else
+		&gt;&amp;2 echo "### ERROR: The directory $path_2_add does not exist!"
+		return 3
+	fi
+
+	return 0
+}
+
+#
+# Expects 2 arguments. The name of the variable to have a path element
+# added to it and the path element.
+# eg. remove_from_path LD_LIBRARY_LATH /my/special/directory
+function remove_from_path() {
+	if [ $# != 2 ]; then
+		&gt;&amp;2 echo "### ERROR: Bad number of params! Expected varname and path"
+		return 1
+	fi
+
+	varname=$1
+	path_2_del=$2
+
+	#export $varname=$(eval echo -e "\$$varname" | tr ":" "\n" | sed -e "s@^$path_2_del\$@@g" | tr -s "\n" ":" | sed -e 's/:$//')
+	export $varname=$(echo -e "${!varname}" | tr ":" "\n" | sed -e "s@^$path_2_del\$@@g" | tr -s "\n" ":" | sed -e 's/:$//')</pre>
+			</div> <!-- END: H3 -->
+		</div> <!-- END: H2: Modify Any Path... -->
+
+		<h2>Debug .so Loading Using LD_DEBUG</h2>
+		<div>
+			<p>
+				If a program is complaining that it cannot find a library you can always try setting <tt>export LD_DEBUG=libs</tt>
+				before running that program (or <tt>export LD_DEBUG=help</tt> to get help). You'll get debug output describing libraries being searched for and
+				loaded. You can also set <tt>export LD_DEBUG=all</tt> for an absolute shed-load of debug info, which might be too much, but at least
+				you'll be able to see where the loader is searching for libraries and what, if anything, it finds. To clear the
+				loader debug output just set <tt>export LD_DEBUG=</tt>.
+			</p>
+		</div>  <!-- END: H2: Debug .so Loading Using LD_DEBUG -->
+	</div> <!-- END H1 padding div -->
+	</div>
+</body>
+</html>
+
+	
