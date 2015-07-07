@@ -116,50 +116,109 @@
 
 	<h2>Objects In JavaScript</h2>
 	<div>
+		<p>
+			I wanted to play with the HTML5 canvas to produce the little resitor
+			calculator on the electronics page. To do this I decided to learn a little
+			bit about JavaScript classes...
+		</p>
+		<p>
+			These notes are basically just notes made on the books referenced above
+			and applied to creating some objects to draw boxes etc on a canvas.
+		</p>
+
+		<h3>How Objects Are Stored (vs. Primatives)</h3>
+		<div>
+			<p>
+				Primatives (things like ints, floats etc) are stored directly in 
+				the variable.<br/>
+				Everything else is stored as a reference type which is just a 
+				pointer to a memory location.
+			</p>
+			<p>
+				This means that primatives are deep copies. Modifying a copy of a
+				primative will not affect the original primative:
+			</p>
+			<pre>var origVar = 999;
+var copyVar = origVar;
+
+copyVar = 123;
+console.log(copyVar); // prints 123
+console.log(origVar); // prints 999 - the original
+                      // has NOT been modified!</pre>
+			<p>
+				Objects are not primatives. They are stored as references. This
+				means that when a variable that points to an object is copied, all
+				that is really copied is the reference to that object. Thus if the
+				copied variable is modified, the original is modified because both 
+				variables refer to <em>the same</em> object:
+			</p>
+			<pre>var o1 = new Object();
+var o2 = o1
+o1.newAttr = "J" //&lt; Note: can add property at any time
+console.log(o1.newAttr); // o1.newAttr == "J"
+console.log(o2.newAttr): // o2.newAttr == o1.newAttr == "J"</pre>
+			<p> 
+				One thing to note in the above is the automatic way to add 
+				a property to an object. By assigning to a property that doesn't
+				exist, the property is created for the object <em>instance</em>
+				(note: <em>not</em> class, only this specific object instance).
+			</p>
+			<p>
+				The following are the main built-in objects (i.e., objects
+				that are automatically available to you).
+			</p>
+			<ul>
+				<li>Array</li>
+				<li>Data</li>
+				<li>Object</li>
+				<li>Error</li>
+				<li>Function</li>
+				<li>RegExp</li>
+			</ul>
+		</div> <!-- END: H3 -->
+
+		<h3>Declaring Objects</h3>
+		<div>
+			<p>
+			Use the <em>new operator</em>:
+			</p>
+			<pre>var o1 = <b>new</b> Object();
+o1.prop1 = "something";
+o1.prop2 = 101;</pre>
+			<p>
+				Using <em>object literals</em> we can create the exact equivalent
+				of the above:
+			</p>
+			<pre>var o1 = { prop1: "something", prop2 : 101 } </pre>
+			<p>
+				Note how we don't need quotes around the object properties.
+			</p>
+			<p>
+				This looks a little bit like a dictionary in some scripting
+				languages like python, and in fact we can use an object in that
+				manner most of the time.
+			</p>
+
+		</div> <!-- END: H3 -->
+
+		<h3>Declaring Arrays</h3>
+		<div>
+			<p>
+				Can declare using the <em>new operator</em> (<tt>var a1 = Array(1,2)</tt>)
+				or using <em>array literals</em> (<tt>var a1 = [1, 2]</tt> - identical to
+				the previous instantiation using <tt>new</tt>).
+			</p>
+		</div> <!-- END: H3 -->
+
+		<div>
+		</div> <!-- END: H3 -->
+	</div> <!-- END: H2: Objects In JavaScript -->
+
+
+	<div>
 		<pre>
 OBJECTS:
 --------
-
-Primatives are stored in the variable
-Reference types are just pointers to memory locations
-
-Eg primatives in variable
-	var c1 = "red";
-	var c2 = c1;
-	c1 = "orance";
-
-	// c1 is "orange"
-	// c2 is still "red"
-
-Eg Reference type is pointer
-	var o1 = new Object();
-	var o2 = o1
-	
-	o1.newAttr = "J" //&lt; Note: can add property at any time
-	// o2.newAttr == "J"
-
-
-Builtin Types
-Array
-Data
-Object
-Error
-Function
-RefExp
-
-Object literal --&gt; var o1 = { 'prop1': "something", "prop2" : 101 }
-                          = { prop1: "something",    prop2 : 101 } // Dont need quotes
-
-Equiv to
-var o1 = new Object;
-o1.prop1 = "something"
-o1.prop2 = 101
-
-
-
-Array literal --&gt; var a1 = [1,2]
-
-Equiv to var a1 = Array(1,2)
 
 function declarations vs expressions:
 	function add(n1, n2) { return n1 + n2} is a declaration
@@ -440,6 +499,121 @@ Scope safe constructors:
 
 		</pre>
 	</div> <!-- END H2 div -->
+
+	<h2>HTML 5 Cancas</h2>
+	<div>
+		<p>
+			<a href="http://dev.w3.org/2006/canvas-api/canvas-2d-api.html"
+			   target="_blank">W3C Reference</a>.
+		</p>
+		<p>
+			<a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API"
+			   target="_blank">MDN Canvas Tutorials</a>, which are rather good!
+		</p>
+		<p>
+		<img src="##IMG_DIR##/linewidth_html_canv.png" alt="Picture explainging rendering of HTML5 canvas lines with an odd lineWidth on integer coordinates"/>
+		<img src="##IMG_DIR##/linewidth_html_canv_centre_pixel.png" alt="Picture explainging rendering of HTML5 canvas lines with an odd lineWidth on half coordinates"/>
+		<img src="##IMG_DIR##/linewidth_html_canv_centre_pixel_thick_line.png" alt="Picture explainging rendering of HTML5 canvas lines with an odd lineWidth on half coordinates"/>
+		</p>
+		<pre>
+RECTANGLES
+----------
+
+filling, stroking and clearing
+
+fillRect(x,y,w,h)   - fills rect
+strokeRect(x,y,w,h) - draws outline. Uses current strokeStyle, lineWidth lineJoin and miterLimit setings.
+
+clearRect(x,y,w,h)
+
+fillStyle is the colour we'll fill with
+strokeStyle is the outline colour
+
+Current canvas state includes
+- Trsnformations
+- Clipping regtion
+- Attributes
+	 - globalAlpha
+	 - globalCompositeOperation
+	 - strokeStyle
+	 - textAlign
+	 - textBaseLine
+	 - lineCap, lineJoin, lineWidthm miterLmiit
+	 - fillStype
+	 - font
+	 - shardowBlur, shadowColor, shadowOffsetX, shadowOffsetY
+
+
+Not part of state - the current path/bitmap being manipulated.
+
+Save and restore canvas state using context.save() and context.restore()
+
+Paths
+-----
+
+Use to create arbirary shapes: a list of points and lines to be drawn between them.
+
+Only one current path per context state. Current path is not saved when context.save() is called.
+
+Current path concept to transform ONLY the current path on the canvas.
+
+ctx.beginPath(), ctx.closePath() - start and stop a path. Current transformation effects only things drawn in the current path.
+
+ctx.moveTo(x,y) - move pen without drawing
+ctx.lineTo(x,y) - draw line from current pen position to new position
+
+ctx.stroke()    - actually fillin the lines.
+
+
+ctx.lineWidth, lineJoin (miter, bebel, round), lineCap (butt, round, square)
+
+ctx.arc(x, y, radius, startAngle, endAngle, anticlockwise)
+
+ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y)
+ctx.quadraticCurveTo(cpx, cpy, x, y)
+
+Clipping
+--------
+Combining the save() and restore() functions with the Canvas clip region limits the
+drawing area for a path and its subpaths
+
+transforms
+-----------
+apply to shapes and paths drawn after the setTransform() or other
+transformation function call
+
+We must move the point of origin to the center of our shape to rotate it around its own
+center
+
+ctx.setTransform(1,0,0,1,0,0); // Identity
+// then set point of origin
+ctx.translate
+// then rotate
+ctx.rotate
+
+Gradients
+--------
+ctx.fillStyle = "black"
+ctx.fillStyle = "#rrggbb"
+ctx.fillStyle = rgba(r,b,g,alpha)
+ctx.fill()
+
+g = ctx.createLinearGradient(x1, y1, x2, y2);
+	- draws gradient along line defined by (x1,y1) to (x2,y2)
+
+Next add color stops
+g.addColorStop(where, 'rgb(r,g,b)');
+	where is a number between 0 and 1
+	the second parameter is evaled by the function
+
+then set fillStyle
+ctx.fillStyle = g
+
+This can also be applied to the strokeStyle
+ctx.strokeStyle = g
+
+		</pre>
+	</div> <!-- END H2 Div HTML 5 Canvas -->
 
 </div>
 </div>

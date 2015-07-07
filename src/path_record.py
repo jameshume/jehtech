@@ -13,6 +13,9 @@ class PathRecord:
 		""" Explode a path string into a list with each list element
 		    being a path component. If the path is absolute make sure to record
 			 the first seperator. """
+		if len(path) == 0:
+			return []
+
 		l = []
 		head, tail = os.path.split(os.path.normpath(path))
 		if (len(head) < 1) and (len(tail) < 1): # If path is empty, both head and tail are empty

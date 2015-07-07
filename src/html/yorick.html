@@ -3,6 +3,19 @@
 <head>
 	<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
 	<title>Yorick notes</title>
+	<script type="text/x-mathjax-config">
+		MathJax.Hub.Config({
+			tex2jax: {
+				inlineMath: [['$','$'], ['\\(','\\)']]
+			},
+			displayAlign: "left",
+			displayIndent: "2em"
+		});
+	</script>
+	<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+	<style>
+		ul li .MathJax {font-size: 3em;}
+	</style>
 	<!-- META_INSERT -->
 	<!-- CSS_INSERT -->
 	<!-- JAVASCRIPT_INSERT -->
@@ -114,7 +127,9 @@ echo $YORICK_HOME</pre>
                                       N * sz</pre>
 		<p>
 			Here we store the first array element at the lowest memory address and increment upwards. 
-			You can see that each element is contiguous in memory.
+			You can see that each element is contiguous in memory. It is worth noting that the
+			array is contiguous in terms of the language's model of the memory. For systems with
+			an MMU this means virtual memory (which if the array crosses a page boundary
 		</p><p>
 			What happens when we try to store a 2D array? Consider the following array:
 		</p><pre>int someArray[2][3] = { { 1, 2, 3},
@@ -136,18 +151,26 @@ echo $YORICK_HOME</pre>
 			was for the 1D array, then the second row is appended to this block as if it were a 1D array
 			and so on. Each row, therefore, starts at address <tt>row_index*3</tt>.
 		</p><p>
-			The C syntax specifies the fastest increasing index in memory from right to left. We can see 
-			this in the above definition, <tt>int [2][3]</tt>, where the left most dimension is <tt>3</tt> 
-			and represents the fastest increasing dimension in memory. The way to think about this is considering
+			The C syntax specifies the fastest increasing index in memory from right to left. What does
+			&quot;fastest&quot; mean? I'm using Munro speak here, and what he means is that, if we looked
+			at the above memory layout, as we move one position from left to right the first dimension
+			to increase is the &quot;fastest&quot;, so in the C sense this is column. 
+		</p>
+		<p>
+			Another way to think about this is considering
 			an <tt>int p* = someArray</tt> pointer. As we increment this pointer by one (<tt>p++</tt>) it will traverse the columns in a row,
 			which is what Munro calls the fastest increasing dimension, and then once all the columns in one row
-			are iterated over it will move to the columns in the next row and so on.
-		</p><p>
-			The next dimension to the right in <tt>int [2][3]</tt>, <tt>2</tt> is the second most fast increasing because as
-			we increase our pointer <tt>p</tt> we will go through the rows.
+			are iterated over it will move to the columns in the next row (so therefore the row is the second
+			fastest increasing dimension) and so on.
+		</p>
+		<p>
+			We can see 
+			this in the above definition, <tt>int [2][3]</tt>, where the right most dimension is <tt>[3]</tt> 
+			and represents the fastest increasing dimension in memory. The next dimension to the left is 
+			<tt>[2]</tt> and is the second fastest increasing dimension: rows.
 		</p><p>
 			This method of thinking about an array can be used for any number of dimensions. Consider <tt>int anotherArray[2][3][4][5]</tt>.
-			We know that the fasted increasing dimension is <tt>5</tt>, so if <tt>int *p = anotherArray</tt> then...
+			We know that the fastest increasing dimension is <tt>5</tt>, so if <tt>int *p = anotherArray</tt> then...
 		</p>
 		<ul><li><tt>*p &nbsp;&nbsp;&nbsp;&nbsp;== anotherArray[0][0][0][0]</tt></li>
 			 <li><tt>*(p+<b>1</b>) == anotherArray[0][0][0][<u>1</u>]</tt></li>
@@ -256,11 +279,11 @@ b[0][1][2] == 6	b[1][1][2] == 66</pre>
 			dimension (in this case row)
 		</p>
 
-		<h3>Slices Are Not Like NumPy Slices</h3>
+		<h3>Slices Are Views Onto Arrays But Beware Of Array Copy</h3>
 		<div>
 			<p>
-				In NumPy slices are like views into the array, but this
-				is <em>not</em> the case in Yorick. If we transliterate the 
+				In NumPy slices are like views into the array, and this
+				is also the case in Yorick. BUT... if we transliterate the 
 				<a href="python/numpy.html#numpy_slice">NumPy example</a> into Yorick 
 				script, we will see a different result! See below:
 			</p>
@@ -273,6 +296,46 @@ b[0][1][2] == 6	b[1][1][2] == 66</pre>
 [111,111,111]
 &gt; a /*&lt;-- LOOK: Unlike the NumPy example, a has not been affected! */
 [1,2,3,4,5,6]</pre>
+			<p>
+				In the NumPy example a would have been effected. Now, it's not quite
+				that the slice isn't a view. It still is. Observe the following.
+			</p>
+			<pre class="prettyprint linenums">&gt; a(2:4) = 111
+&gt; a
+[1,111,111,111,5,6] /*&lt; Aha! the slice is a view into the array */</pre>
+			<p>
+				So, the slice is in fact a view into the array. The caveat is that
+				in Yorick when we did <tt>b = a(...whatever...)</tt>, <tt>b</tt>
+				will be a <em>copy of</em> and not a reference to the array (slice).
+				This can be quite an expensive operation so beware!
+			</p>
+			<p>
+				<div class="box_container"><div class="info">
+					<p>
+						In NumPy assigning one array (or non primative) variable to 
+						another copies a <em>reference</em> and not the value. In
+						Yorick however, in the specific case of array = array, the
+						<em>entire array is copied</em>... Beware of this as for 
+						large arrays this can get expensive!
+					</p>
+				</div></div>
+			</p>
+			<p>
+				The Yorick manual entry for 
+				<a href="http://dhmunro.github.io/yorick-doc/stdlib/std-advanced.html#eq_nocopy" target="_blank">
+				eq_nocopy()</a> says that <q>having multiple variables
+				reference the same data can be confusing, which is why the default
+				&quot;<tt>=</tt>&quot; operation copies the array.</q>
+			</p>
+			<p>
+				To copy an an array <em>by reference</em> use 
+				<a href="http://dhmunro.github.io/yorick-doc/stdlib/std-advanced.html#eq_nocopy" target="_blank">
+				eq_nocopy()</a>. Note, however, that you can only do this for the 
+				entire array, not slices. Munro <a href="https://github.com/dhmunro/yorick/issues/16" target="_blank">
+				explains this here</a>: <q>...Unlike NumPy, Yorick does not have any way to refer to
+				a slice of an object. All slicing operations happen immediately and result in a 
+				temporary array...</q>.
+			</p>
 		</div> <!-- END H3: Slices Are Not Like NumPy Slices -->
 
 		<h3>Arrays Passed To Functions By Reference</h3>
@@ -294,15 +357,340 @@ b[0][1][2] == 6	b[1][1][2] == 66</pre>
 			</p>
 			<pre class="prettyprint linenums">&gt; y = [1,2,3,4]
 &gt; func cheeseit(x) {
-    x_local = x       /*&lt;-- x is <em>copied</em> to x_local, but copy is <em>EXPENSIVE</em>! */
-    x_local(1) = 9999 /*&lt;-- Changes to x_local will NOT affect array in caller's scope */
+    x_local = x;       /*&lt;-- x is <em>copied</em> to x_local, but copy is <em>EXPENSIVE</em>! */
+    x_local(1) = 9999; /*&lt;-- Changes to x_local will NOT affect array in caller's scope */
+}
 &gt; cheeseit(y)
 &gt; y /*&lt;-- NOTE: y is NOT changed by the function */
 [1,2,3,4]</pre>
 		</div> <!-- END H3: Arrays Passed To Functions By Reference -->
 
+		<a name="broadcasting"><h3>Broadcasting</h3></a>
+		<p>
+			Yorick, being a nicely vectorised language, lets you do mathematical 
+			operations between scalars and arrays, and arrays and arrays. The only
+			condition is that the arrays are what is called <em>&quot;conformable&quot;</em>.
+		</p>
+			Two operands are conformable if the dimensions which they share in 
+			common have the same length. This means that if we have two operands,
+			<tt>A</tt> and <tt>B</tt>, where <tt>A</tt> has the smaller rank,
+			that <tt>dimsof(A)(2:) == dimsof(B)(-dimsof(A)(1)+1:)</tt>. Eek! That's
+			a little horrid right?! It just expresses that the dimensions shared in
+			common have the same length.
+		</p>
+		<p>
+			Try thinking of it this way: if you can create the array <tt>B</tt> by
+			joining together a load of <tt>A</tt> arrays then they will be
+			conformable because the dimensions they share in common must be of
+			equal length as <tt>B</tt> is just made up of many <tt>A</tt>'s.
+			The image below is meant to make that a little more clear...
+		</p>
+		<p>
+			<img src="##IMG_DIR##/yorick_broadcast.png" alt="Image showing how arrays of shorter dimensions can broadcast to arrays of larger dimensions in Yorick"/>
+		</p>
+		<p>
+			The image is trying to show that, as the manual says, the shorter 
+			operand repeats its values for every dimension that is does not have.
+			This is what is called <em>broadcasting</em>.
+		</p>
+		<p>
+			As a little side note, it appears that Yorick actually created the 
+			term broadcasting, to the extent that it 
+			<a href="http://stackoverflow.com/questions/26948776/where-did-the-term-broadcasting-come-from/26950256#26950256" target="_blank">
+			inspired Python's NumPy broadcasting</a>... wowzers!
+		</p>
+		<p>
+			We can see that because, for example, the 2D array is made up of
+			two 1D arrays, the 1D array can be multiplied, added, etc with the
+			2D array by &quot;expanding&quot; into a 2D array by repeating 
+			itself in the second dimension so that it has the same shape. The
+			same goes for 1D <tt>op</tt> 3D or 2D <tt>op</tt> 3D in the above 
+			example. 
+		</p>
+		<p>
+			Let's see this in practice...
+		</p>
+		<pre class="prettyprint linenums"> Copyright (c) 2005.  The Regents of the University of California.
+ All rights reserved.  Yorick 2.2.01 ready.  For help type 'help'
+&gt; a = [1,2]
+&gt; b = [a,a]
+&gt; c = [b,b,b]
+&gt; a
+[1,2]
+&gt; b
+[[1,2],[1,2]]
+&gt; c
+[[[1,2],[1,2]],[[1,2],[1,2]],[[1,2],[1,2]]]
+&gt;
+&gt; a+b 
+[[2,4],[2,4]]
+&gt;
+&gt; a+c
+[[[2,4],[2,4]],[[2,4],[2,4]],[[2,4],[2,4]]]
+&gt; c+a
+[[[2,4],[2,4]],[[2,4],[2,4]],[[2,4],[2,4]]]
+&gt;
+&gt; b+c
+[[[2,4],[2,4]],[[2,4],[2,4]],[[2,4],[2,4]]]
+&gt; c+b
+[[[2,4],[2,4]],[[2,4],[2,4]],[[2,4],[2,4]]]</pre>
+		<p>
+			As per our little image above... the arrays are conformable and so
+			can be operands to the normal mathematical operations. BUT... the above 
+			does not give the whole story. &quot;In common&quot; can be more 
+			flexible. For example, we can do the following...
+		</p>
+		<pre class="prettyprint linenums">&gt; aa = [1]
+&gt;
+&gt; dimsof(aa)
+[1,1]
+&gt; dimsof(b)
+[2,2,2]
+&gt;
+&gt; aa + b
+[[2,3],[2,3]]
+&gt; aa + c
+[[[2,3],[2,3]],[[2,3],[2,3]],[[2,3],[2,3]]]
+&gt; bb = [[1], [1]]
+&gt; bb+c
+[[[2,3],[2,3]],[[2,3],[2,3]],[[2,3],[2,3]]]
+		</pre>
+		<p>
+			Now, given the above definition, one might thing that the common 
+			dimension between <tt>aa</tt> and <tt>b</tt> does not have the same
+			lenth, yet they are clearly conformable as far as the Yorick 
+			interpretter is concerned. What's going on?
+		</p>
+		<p>
+			The reason that this works is that <q>Yorick will broadcast any 
+			unit-length dimension in addition to a missing final dimension</q>.
+		</p>
+		<p>
+			Therefore, pictorially, we can see the following...
+		</p>
+		<p>
+			<img src="##IMG_DIR##/yorick_boardcast_unit_dim.png" alt="Image showing how Yorick can conform unit-length dimensions"/>
+		</p>
+		<p>
+			So far we seem to have the following definition... 
+			<div class="box_container"><div class="info">
+				<p>
+					Yorick operands are conformable if the dimensions they share in
+					common have exactly the same length or the shared dimensions in the &quot;smaller&quot;
+					operand that are not the same length as in the other are unit length.
+				</p>
+			</div></div>
+		</p>
+		<p>
+			One does have to take a little care in what is understood by 
+			&quot;dimensions in common&quot;, however. This might appear obvious
+			to you, but I had to do a double take...
+		</p>
+		<pre class="prettyprint linenums">&gt; a = [1,2]
+&gt; dimsof(a)
+[1,2]
+&gt; b = [[7,8,9,0],[6,5,4,3]]
+&gt; dimsof(b)
+[2,4,2]
+&gt; a+b
+ERROR (*main*) operands not conformable in binary +
+WARNING source code unavailable (try dbdis function)</pre>
+		<p> 
+			If we look at the dimensions with the following formatting we might
+			be fooled into thinking that <tt>a</tt> and <tt>b</tt> share a
+			common dimension of exactly the same length, and therefore should
+			be conformable.
+		</p>
+		<pre>
+/* Caution: This is an INcorrect grouping of the dimsof result */
+                +++
+dim_a =    [ 1, |2| ]
+dim_b = [ 2, 4, |2| ]
+                +++</pre>
+		<p>
+			Remember that because Yorick is column major the <tt>dimsof</tt>
+			array has the format <tt>[2, cols, rows]</tt>!
+			Writing out the dimensions as I have above is quite misleading, and 
+			the mistake I at first made, because <tt>a</tt> has
+			2 <em>columns</em> and <tt>b</tt> has 2 <em>rows</em> and 
+			<em>4 columns</em>. They are therefore <em>NOT</em> conformable.
+			Remember to group your dimensions correctly:
+		</p>
+		<pre>
+/* This is the right way! */
+             +++
+dim_a = [ 1, |2| ]
+dim_b = [ 2, |4|, 2 ]
+             +++</pre>
 
+		<h3>Pseudo Index</h3>
+		<p>
+			The Yorick manual example starts with the <a href="http://en.wikipedia.org/wiki/Outer_product"
+			target="_blank">outer product</a> of two vectors. The following is taken from the
+			linked-to Wikipedia article...
+		</p>
+		<p>
+			Assume that there are two column vectors $u$ and $v$.
+		</p>
+		<p>
+			$u = \begin{pmatrix}
+			u1 \\
+			u2 \\
+			u3 \\
+			u4
+			\end{pmatrix}$
+
+			and 
+
+			$v = \begin{pmatrix}
+			v1 \\ 
+			v2 \\ 
+			v3 
+			\end{pmatrix}$
+		</p>
+		<p>
+			The outer product of the two column vectors is defined as follows...
+		</p>
+		<p>
+			$u \otimes v = uv^T = $
+			$\begin{pmatrix}
+			u_1 \\
+			u_2 \\
+			u_3 \\
+			u_4 \\
+			\end{pmatrix}$
+			$\begin{pmatrix}
+			v_1 & v_2 & v_3 \\
+			\end{pmatrix} = $
+			$\begin{pmatrix}
+			u_1v_1 & u_1v_2 & u_1v_3 \\
+			u_2v_1 & u_2v_2 & u_2v_3 \\
+			u_3v_1 & u_3v_2 & u_3v_3 \\
+			u_4v_1 & u_4v_2 & u_4v_3 \\
+			\end{pmatrix}$
+		</p>
+		<p>
+			How do we do this using Yorick? All one dimension vectors in Yorick
+			are column vectors (even if they are displayed textually as-if they
+			are a row!). So can we just <tt>transpose()</tt> the $v$ vector?
+		</p>
+		<pre class="prettyprint linenums">&gt; a * transpose(b)
+ERROR (*main*) operands not conformable in binary *
+WARNING source code unavailable (try dbdis function)
+&gt; transpose(b)
+[100,200,300]
+&gt; dimsof(transpose(b))
+[1,3]</pre>
+		<p>
+			Apparently not! <tt>transpose(b)</tt> didn't do what it might have... I 
+			thought it would turn the column vector into a row vector, but it doesn't.
+			The reason for this is that a row vector is actually a 2D array, i.e.,
+			it has an <em>extra dimension</em>. So, to convert $v$ into a row vector 
+			we need to add an extra dimension!
+		</p>
+		<p>
+			To convert $v$ into a row vector we need to make each column element
+			it's own row in a 2D vector. If $v$ has 3 columns, $v^T$ has 3 rows,
+			where each row has only one element. To do this in Yorick, as said, 
+			we need an extra dimension... enter the <em>pseudo index</em>...
+		</p>
+		<pre class="prettyprint linenums">&gt; b
+[100,200,300]
+&gt; b(-,)
+[[100],[200],[300]]
+&gt; b(,-)
+[[100,200,300]]</pre>
+		<p>
+			The syntax <tt>(-,)</tt>, really the symbol &quot;<tt>-</tt>&quot;, is
+			the <b>pseudo index</b>. &quot;<tt>-</tt>&quot; means &quot;add an extra dimension
+			here&quot;. 
+		</p>
+		<p>
+			Munro calls <q>the - sign, when used as an index, a 
+			<b>pseudo-index because it actually inserts an additional dimension into 
+			the result[ing] array</b> which was not present in the array being indexed</q>.
+			And, as we noted above, to go from a column vector to a row vector (i.e, transpose
+			the column vector) we need to increase the dimensionality of our array.
+		</p>
+		<p>
+			So, based on this, we can say that <tt>b(-,)</tt> is saying add a row
+			dimension to the column vector, or more generally add another
+			most-slow increasing dimension to the existing vector. In
+			the example above we get a 2D vector with 3 rows and 1 column.
+		</p>
+		<p>
+			How the extra dimension is added is both interesting and important.
+			If <tt>b(-,)</tt> is saying add a row dimension, why does 
+			<tt>b(-,) == [[100],[200],[300]]</tt> and not 
+			<tt>[[100,200,300]]</tt>? They both have a row dimension added!
+		</p>
+		<p>
+			I think of it in the following way. Remembering that Yorick is column
+			major, anything to the left of the &quot;<tt>,</tt>&quot; in
+			<tt>(,)</tt> indicates a faster dimension and anything to the right a
+			slower dimension. Therefore, <tt>(-,)</tt> is saying add a faster
+			dimension and <tt>(,-)</tt> is saying add a slower dimension... and this kinda works...
+		</p>
+		<p>
+			This generalises... suppose we can <tt>c</tt> a two dimensional array 
+			and we write <tt>c(-,)</tt>.
+		</p>
+		<pre>
+&gt; c = [[1,2,3],[4,5,6]]
+&gt; c
+[[1,2,3],[4,5,6]]
+&gt; c(-,)
+[[[1],[2],[3]],[[4],[5],[6]]]
+
+/* 
+ * c hand-formatted is...
+ *    [
+ *       [ 1,  2,  3],
+ *       [ 4,  5,  6]
+ *    ]    |   |   |
+ *         |   |   |
+ * c(-,) hand-formatted is...
+ *    [    |   |   |
+ *       [[1],[2],[3]],
+ *       [[4],[5],[6]]
+ *    ]
+ */
+</pre>
+	<p>
+		To add the extra dimension, each column element becomes a row with one
+		column, and therefore the rows become depths. <b>More generally it is like
+			we shift the dimensions up one...</b> The fastest increasing dimension is changed
+		so that each individual element inside it is now the fastest increasing
+		dimension and all the containing dimensions become one slower! Ie., we've added
+		a new fastest dimension.
+	</p>
+	<p>
+		Now we can look at  <tt>b(,-)</tt> .
+		Given the discussion so far it looks like we are saying add a column 
+		dimension. We have
+		seen that <tt>b(,-) == [[100,200,300]]</tt>. And this also makes sense...
+		we've added a new slowest dimension.
+	</p>
+	<p>
+		<img src="##IMG_DIR##/yorick_pseudo_index.jpg"/>
+	</p>
+	<p>
+		So back to the original example of outer product. To accomplish this in
+		Yorick we need to do <tt>u*(v-,)</tt> I.e., the transpose of <tt>v</tt>
+		is <tt>v(-,)</tt>.
+	</p>
 		<h3>Rubber Indicies In Yorick</h3>
+		<p>
+			<q>Yorick has one other indexing syntax which has proven useful, which I
+				call <em>rubber indices</em>.  They address the problem of writing
+			interpreted code which extracts slices of arrays when you don't know
+			beforehand how many dimensions the array has.  An example is an
+			opacity array for which you know that the most slowly varying index
+			represents photon wavelength, but there might be zero, one, two, or
+			three faster varying dimensions representing position in space.</q> -- 
+			<a href="https://mail.python.org/pipermail/matrix-sig/1995-November/000142.html" target="_blank">
+			PYTHON MATRIX-SIG</a>
+		</p>
 		<div>
 			<pre class="prettyprint linenums">
 &gt; a = [ [    [1,2,3], 
@@ -534,7 +922,7 @@ OBJS=jehtech.o
 			<h4>Quick Debug Tip</h4>
 			<p>
 				If Yorick is complaining that it cannot find a library you can always try setting <tt>export LD_DEBUG=libs</tt>
-				before running Yorick (or <tt>export LD_DEBUG=help</tt> to get help). You'll get a debug describing libraries being search for and
+				before running Yorick (or <tt>export LD_DEBUG=help</tt> to get help). You'll get debug output describing libraries being searched for and
 				loaded. You can also set <tt>export LD_DEBUG=all</tt> for an absolute shed-load of debug info, which might be too much, but at least
 				you'll be able to see where the loader is searching for libraries and what, if anything, it finds. To clear the
 				loader debug output just set <tt>export LD_DEBUG=</tt>.

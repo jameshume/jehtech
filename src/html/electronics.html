@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-	<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+	<meta content="text/html; charset=UTF8" http-equiv="content-type">
 	<title>Electronics notes</title>
 	<!-- META_INSERT -->
 	<meta name="description" content="Electronics notes on resistors, with resistor colour code interactive javascript application, wheatstone bridges applied to sensing, amplifiers, capacitors, inductors and circuit analysis using things like Kirchoff's voltage and current laws">
@@ -20,321 +20,249 @@
 	<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
 
 	<script>
-		function JEHCanvasElement() {
+		jCanv = com_JEHTech_www_Canvas();
+
+		function JEHResistor(owner, x, y, width, height, numBands) {
+			jCanv.CanvasElement.call(this, owner, null);
+			this.x = x;
+			this.y = y;
+			this.width = width;
+			this.height = height;
+			console.log("CREATE WITH " + numBands + " BANDS");
+			this.numBands = numBands;
+			this.bandColours = new Array(numBands);
+			for( var i=0; i < numBands; ++i)
+				this.bandColours[i] = null;
+			this.r1  = 0;
+			this.r2  = 0;
+			this.tol = 0;
+			this.mul = 0;
 		}
 
-		JEHCanvasElement.prototype.containsPoint = function(x, y) {
-			throw "Interface function. Should not be used";
-		}
-
-		JEHCanvasElement.prototype.drawOnCanvas = function(jehCanvas) {
-			throw "Interface function. Should not be used";
-		}
-
-		function JEHCanvas(id, onClickCallback) {
-			self.canvas = $("#myCanvas");
-			self.ctx = self.canvas[0].getContext("2d");
-			self.ctx.textBaseline = 'top'; // important!
-			self.objects = [];
-			self.onClickCallback = onClickCallback;
-		}
-
-		JEHCanvas.prototype.getTextDimensions = function(text) {
-			// Slight modifications to answer from
-			// http://stackoverflow.com/questions/1134586/how-can-you-find-the-height-of-text-on-an-html-canvas
-			var text = $('<span>Hg</span>').css({ fontFamily: self.ctx.font });
-			var block = $('<div style="display: inline-block; width: 1px; height: 0px;"></div>');
-			var div = $('<div></div>');
-			var body = $('body');
-			
-			div.append(text, block);
-			body.append(div);
-			
-			try {
-				var result = {};
-				block.css({ verticalAlign: 'baseline' });
-				result.ascent = block.offset().top - text.offset().top;
-				block.css({ verticalAlign: 'bottom' });
-				result.height = block.offset().top - text.offset().top;
-				result.descent = result.height - result.ascent;
-			} finally {
-				div.remove();
-			}
-			
-			result.width = ctx.measureText(ext).width;
-			
-			return result;
-		};
-
-		JEHCanvas.prototype.addObject = function(obj, doRender) {
-			if( ('drawOnCanvas' in obj) && ('containsPoint' in obj) ) {
-				self.objects.push(obj);
-				if(typeof doRender !== 'undefined') {
-					obj.drawOnCanvas(this);
-				}
-			}
-			else {
-				console.log('### WARNING: JEHCanvas.addObject: Object "' + 
-				            obj + '" is not JEHCanvasElement');
-			}
-		}
-
-		function JEHBox(x, y, width, height, options) {
-			this.x          = x;
-			this.y          = y;
-			this.width      = width;
-			this.height     = height;
-			if( typeof options != 'undefined' ) {
-				this.text       = "text"       in options ? options.text       : null;
-				this.lineColour = "lineColour" in options ? options.lineColour : null;
-				this.lineWidth  = "lineWidth"  in options ? options.lineWidth  : "1px";
-				this.fillColour = "fillColour" in options ? options.fillColour : null;
-				this.textColour = "textColour" in options ? options.textColour : "#000000";
-				this.textFont   = "textFont"   in options ? options.textFont   : "10pt Arial";
-			}
-		}
-
-		JEHBox.prototype.containsPoint = function(x,y) {
-			return (x >= this.x) && 
-			       (x <= this.x + this.width) &&
-			       (y >= this.y) && 
-			       (y <= this.y + this.height);
-		}
-
-		JEHBox.prototype.drawOnCanvas = function(jehCanvas) {
-			var ctx = jehCanvas.ctx
-			if(this.fillColour !== null) {
-				ctx.fillStyle = this.fillColour;
-				ctx.fillRect(this.x, this.y, this.width, this.height);
-			}
-
-			if(this.lineColour !== null) {
-				ctx.beginPath();
-				ctx.strokeStyle = this.lineColour;
-				ctx.rect(this.x, this.y, this.width, this.height);
-				ctx.stroke();
-			}
-
-			if( this.text != null ) {
-				ctx.fillStyle = this.textColour;
-				ctx.font      = this.textFont;
-				var textProps = jehCanvas.getTextDimensions(this.text)
-				var textX = this.x + (this.width  - textProps.width) / 2;
-				var textY = this.y + (this.height - textProps.height) / 2;
-				ctx.fillText(this.text, textX, textY);
-			}
-		}
-
-		JEHBox.prototype.toString = function() {
-				return "[JEHBox: x=" + this.x + ", y=" + this.y + " w=" + this.width + ", h=" + this.height + "]"
-		}
-
-		JEHValueBox(x, y, value, bgColor) {
-			var values = {1e6:'M', 1e3:'k', 1:''};
-			var valueTxt = value.toString()
-			for (var multiplier in values) {
-				if (object.hasOwnProperty(multiplier)) {
-					if (value/multiplier >= 1) {
-						valueTxt = (value/multiplier).toString() + values[multiplier];
-					}
-				}
-			}
-			JEHBox.call(this, x, y, 200, 50, {fillColour:bgColour, text:valueTxt});
-			this.value = value;
-		}
-
-		JEHValueBox.prototype = Object.create(JEHBox.proptotype, {
-					constructor: {
-						value: JEHValueBox;
-					}
-				});
-
-
-
-
-		function jeh_DrawResistor(ctx, x, y, bodyColour, c1, c2, c3, c4, resistanceTxt) {
-			var width = 125;
-			var height = 25;
-			var barWidth = 10;
-			var middleY = y+height/2;
-
-			ctx.strokeStyle="#000000";
-
-			ctx.moveTo(x,middleY);
-			ctx.lineTo(x+10,middleY);
-			ctx.stroke();
-	
-			x += 10;
-			ctx.fillStyle = bodyColour;
-			ctx.fillRect(x, y, width, height);
-			ctx.beginPath();
-			ctx.rect(x, y, width, height);
-			ctx.stroke();
-
-			ctx.fillStyle = c1;
-			ctx.fillRect(x+20, y, barWidth, height);
-			ctx.fillStyle = c2;
-			ctx.fillRect(x+40, y, barWidth, height);
-			ctx.fillStyle = c3;
-			ctx.fillRect(x+60, y, barWidth, height);
-			ctx.fillStyle = c4;
-			ctx.fillRect(x+95, y, barWidth, height);
-
-			ctx.moveTo(x+width,middleY);
-			ctx.lineTo(x+width+10,middleY);
-			ctx.stroke();
-
-			ctx.fillStyle = "white";
-			ctx.fillRect(x, y + height + 15, 180, 20);
-			ctx.fillStyle = "black";
-			ctx.font      = "10pt Arial";
-			ctx.fillText(resistanceTxt, x, y + height + 30);
-
-		}
-
-		function jeh_DrawValueBox(ctx, x, y, width, height, text, boxValue, colour, withBox, colIndex, boxType) {
-			if( false ) {
-				if(withBox) {
-					ctx.fillStyle = colour;
-					ctx.fillRect(x, y, width, height);
-					ctx.beginPath();
-					ctx.strokeStyle="#000000";
-					ctx.rect(x, y, width, height);
-					ctx.stroke();
-				}
-	
-				if(colour == 'black' && withBox) {
-					ctx.fillStyle = "white";
-				} else {
-					ctx.fillStyle = "black";
-				}
-	
-				ctx.font      = "10pt Arial";
-				var metrics       = ctx.measureText(text);
-				var textX = x + (width - metrics.width) / 2;
-				var textY = y + 15; // Hacky... getting text height seems painful :(
-				ctx.fillText(text, textX, textY);
-			}
-			
-			var t = new Box(x, y, width, height, {"text" : text, "fillColour" : colour, "lineColour" : "#000000", "textColour": "#000000"} );
-			t.drawOnCanvas(ctx);
-	
-			return {'box': t, 'x1':x, 'y1':y, 'x2':x+width, 'y2':y+height, 'text':text, 'value':boxValue, 'colour':colour, 'colIndex':colIndex, 'type':boxType};
-		}
-
-		function jeh_DrawAllValueBoxes(ctx, startX, startY)  {
-			var boxColours     = ['silver', 'gold', 'black', 'brown', 'red', 'orange', 'yellow', 'green', 'blue', 'purple', 'gray', 'white'];
-			var multiplierTxt  = ['0.01' , '0.1', '1', '10', '100', '1K', '10K', '100K', '1M', '10M', null, null];
-			var multiplierVal  = [0.01 , 0.1, 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, null, null];
-			var tolerancesTxt  = ['10', '5', null, '1', '2', null, null, '0.5','0.25', '0.1', null, null];
-			var tolerancesVal  = [10, 5, null, 1, 2, null, null, 0.5, 0.25, 0.1, null, null];
-
-			var boxInfs = [];
-			for(var col = 0; col < 5; ++col) {
-				for(var i = 0; i < 12; ++i) {
-					if(col == 0) {
-						// Draw the text for each colour
-						offX = 0;
-						jeh_DrawValueBox(ctx, startX + offX,   startY + i*30, 50, 25, boxColours[i], 0, boxColours[i], false, col, 0);
-					} 
-					else if(col < 3) {
-						if(i > 1) {
-							// Draw in resistive values but not for silver or gold... these
-							// only apply to multipliers or tolerances
-							offX = col * 60;
-							r = jeh_DrawValueBox(ctx, startX + offX,  startY + i*30, 50, 25, i-2, (i-2)*(col == 1 ? 10 : 1), boxColours[i], true, col, 1);
-							boxInfs.push(r);
-						}
-					} 
-					else if( col == 3 ) {
-						// Draw in the multipliers
-						offX = 180;
-						if(multiplierTxt[i] != null) {
-							r = jeh_DrawValueBox(ctx, offX, startY + i*30, 50, 25, multiplierTxt[i], multiplierVal[i], boxColours[i], true, col, 2);
-							boxInfs.push(r);
-						}
-					}
-					else if( col == 4 ) {
-						// Draw in the tolerances
-						offX = 240;
-						if(tolerancesTxt[i] != null) {
-							r = jeh_DrawValueBox(ctx, offX, startY + i*30, 50, 25, tolerancesTxt[i], tolerancesVal[i], boxColours[i], true, col, 3);
-							boxInfs.push(r);
-						}
-					}
-				}
-			}
-
-			return boxInfs;
-		}
-
-		$(function(){
-			var myCanvas = $("#myCanvas");
-			var ctx = myCanvas[0].getContext("2d");
-			var boxInfs = jeh_DrawAllValueBoxes(ctx, 0, 100);
-			var selectedResistances = [null, null];
-			var selectedTolerance  = null;
-			var selectedMultiplier = null;
-			var resistorBkgdColour =  "#e6e8c5";
-			var resistorX = 60 + (180+50-145)/2;
-			var resistorY = 10;
-			jeh_DrawResistor(ctx, resistorX, resistorY, resistorBkgdColour, resistorBkgdColour, resistorBkgdColour, resistorBkgdColour, resistorBkgdColour, "Select colour bands");
-
-			myCanvas.click(function(e) {
-				var posX = e.pageX - $(this).position().left;
-				var posY = e.pageY - $(this).position().top;
-				//console.log("----------------------------------------\n");
-				//console.log("Cursor:");
-				//console.log("\tpageX,Y: " + e.pageX + ", " + e.pageY);
-				//console.log("\tthisX,Y: " +  $(this).position().left + ", " + $(this).position().top);
-				//console.log("\tposX,Y: " + posX + ", " + posY);
-				for( var i = 0; i < boxInfs.length; ++i ) {
-					bi = boxInfs[i];
-					if( bi.box.containsPoint(posX, posY) ) {
-						//console.log("Box:");
-						//console.log("\tx: [" + bi.x1 + ", " + bi.x2 + "],\ty: [" + bi.y1 + ", " + bi.y2 + "],\t" + bi.colour);
-						if(bi['type'] == 1) {
-							resColIndex = bi['colIndex'] - 1;
-							selectedResistances[resColIndex] = bi;
-						}
-						else if(bi['type'] == 2) {
-							selectedMultiplier = bi;
-						}
-						else if(bi['type'] == 3) {
-							selectedTolerance = bi;
-						}
-	
-						
-						var resistance = 0;
-						var msg = "Select colour bands";
-						var allColoursSelected = selectedResistances[0] != null && selectedResistances[1] != null && selectedMultiplier !=null && selectedTolerance!= null;
-	
-						if(allColoursSelected) {
-							var unitsMagnitude = "";
-							resistance = selectedResistances[0]['value'] + selectedResistances[1]['value'];
-							resistance = resistance * selectedMultiplier['value'];
-							if(resistance > 1e6) {
-								resistance /= 1e6;
-								unitsMagnitude = "M";
-							}
-							else if(resistance > 1e3) {
-								resistance /= 1e3;
-								unitsMagnitude = "k";
-							}
-							msg = "R: " + resistance + unitsMagnitude + "\u2126 \u00B1 " + selectedTolerance['text'] + "%";
-						}
-	
-						jeh_DrawResistor(ctx, resistorX, resistorY,  "#e6e8c5", 
-							selectedResistances[0] != null ? selectedResistances[0]['colour'] : "#e6e8c5", 
-							selectedResistances[1] != null ? selectedResistances[1]['colour'] : "#e6e8c5", 
-							selectedMultiplier != null ? selectedMultiplier['colour'] : "#e6e8c5", 
-							selectedTolerance != null ? selectedTolerance['colour'] : "#e6e8c5", 
-							msg );
-					}
+		JEHResistor.prototype = 
+			Object.create(jCanv.CanvasElement.prototype, {
+				constructor: {
+					value: JEHResistor
 				}
 			});
+
+		JEHResistor.prototype.getResistanceValue = function () {
+			if( this.r1 == 0 || this.r2 == 0 || this.mul == 0)
+				return 0;
+			else
+				return (this.r1 + this.r2) * this.mul;
+		}
+
+		JEHResistor.prototype.setBandColour = function(bandNum, bandColour, val, bartype) {
+			if (bandNum >= this.numBands)
+				throw "JEHResistor: Band index too large";
+			
+			this.bandColours[bandNum] = bandColour;
+			this.drawOnCanvas(this._jehCanvasOwner);
+
+			if( bartype == "resistance" ) {
+				console.log("SETTING RES");
+				if(bandNum == 0)      this.r1 = val;
+				else if(bandNum == 1) this.r2 = val;
+				else                  throw "ERROR: band is not a resistance";
+			} else if( bartype == "multiplier" ) {
+				console.log("SETTING MUL");
+				this.mul = val;
+			}
+		}
+
+		JEHResistor.prototype.drawOnCanvas = function(jehCanvas) {
+			var ctx = jehCanvas.ctx;
+			var midY = this.y + this.height/2;
+
+			ctx.clearRect(this.x, this.y, this.width, this.height);
+
+			// Draw the legs
+			console.log("Resistor: Drawing legs");
+			var legWidth = 10;
+			jehCanvas.drawLine(this.x, midY, this.x+legWidth, midY);
+			jehCanvas.drawLine(this.x+this.width-legWidth, midY, this.x+this.width, midY);
+
+			// Draw the main resistor body
+			console.log("Resistor: Drawing main body");
+			gr = ctx.createLinearGradient(0, 0, 0, this.height);
+			gr.addColorStop(0,   "#DCDCDC");
+			gr.addColorStop(0.5, "#FFFFFF");
+			gr.addColorStop(1,   "#DCDCDC");
+			ctx.fillStyle = gr;
+			ctx.fillRect(this.x+legWidth, this.y, this.width-2*legWidth, this.height);
+			ctx.beginPath();
+			ctx.strokeStyle = "black";
+			ctx.lineWidth = 1;
+			ctx.rect(this.x+legWidth, this.y, this.width-2*legWidth, this.height);
+			ctx.stroke();
+
+			// Draw the colour code bars
+			console.log("Drawing the " + this.numBands + " colour bars");
+			var bandWidth = 15;
+			var spacerWidth = ((this.width-2*legWidth) - this.numBands*bandWidth) / (this.numBands + 2);
+			for(var i = 0; i < this.numBands; ++i) {
+				extraSpace = (i == (this.numBands - 1)) ? spacerWidth : 0;
+				console.log(extraSpace);
+				if (this.bandColours[i] !== null) {
+					ctx.fillStyle = this.bandColours[i];
+					ctx.fillRect(this.x+legWidth+spacerWidth*(i+1)+bandWidth*i+extraSpace, this.y, bandWidth, this.height);
+				}
+				ctx.beginPath();
+				ctx.strokeStyle = "black";
+				ctx.lineWidth = 1;
+				ctx.rect(this.x+legWidth+spacerWidth*(i+1)+bandWidth*i+extraSpace, this.y, bandWidth, this.height);
+				ctx.stroke();
+				
+			}
+		}
+
+
+		$(function(){
+			var jCanvas = new jCanv.Canvas("#myCanvas", null);
+			console.log(jCanvas);
+			var bwidth = 60;
+			var bgap = 10;
+			var bheight = 25;
+			var colours = ['gold', 'silver', 'black', 'brown', 'red', 'orange', 'yellow', 'green', 'blue', 'violet', 'gray', 'white'];
+			var tolerances = [10, 5, 0, 1, 2, 0, 0, 0.5, 0.25, 0.1];
+			var numberOfResistanceBands = 2;
+
+			var totalNumberOfColumns = 3 + numberOfResistanceBands;
+			var totalGridWidth = totalNumberOfColumns * bwidth + totalNumberOfColumns * (bgap-1);
+
+			var resistorWidth = 200;
+			var resistorX = (totalGridWidth - resistorWidth)/2;
+			var resistorY = 5;
+			var resistor = new JEHResistor(jCanvas, resistorX, resistorY, resistorWidth, 40, 4);
+
+			var txtBoxY = resistorY + resistor.height + 20;
+			var txtBox = new jCanv.ValueBox(jCanvas, resistorX, txtBoxY, resistor.width, bheight, "Select all colour bands", "", "Ohms", {lineColour: null, text: "james"}); 
+
+			var gridYOffset = txtBoxY + bheight + 20;
+			console.log("########");
+			console.log(gridYOffset);
+			var gridXOffset = 0;
+			for (var rowIdx = 0; rowIdx < 12; ++rowIdx)
+			{
+				var box = null;
+				for (var colIdx = 0; colIdx < totalNumberOfColumns; ++colIdx) {
+					var bindToClickHandler = true;
+					if (colIdx == 0) {
+						bindToClickHandler = false;
+						box = new jCanv.Box(
+							jCanvas, 
+							(bwidth + bgap) * colIdx + gridXOffset, 
+							(bheight +bgap) * rowIdx + gridYOffset, 
+							bwidth, 
+							bheight, 
+							{
+								lineColour: null, 
+								fillColour: null, 
+								text: colours[rowIdx]
+							},
+							null
+						);
+					}
+					else if(colIdx <= numberOfResistanceBands) {
+						if( rowIdx > 1 ) {
+							var resistance =  (rowIdx-1) * Math.pow(10, numberOfResistanceBands - colIdx);
+							box = new jCanv.Box(
+								jCanvas, 
+								(bwidth + bgap) * colIdx + gridXOffset, 
+								(bheight +bgap) * rowIdx + gridYOffset, 
+								bwidth, 
+								bheight, 
+								{
+									lineColour: "black", 
+									fillColour: colours[rowIdx], 
+									text: resistance.toString(),
+									textColour: colours[rowIdx] !== "black" ? "black" : "white"
+								},
+								{
+									value:      resistance,
+									type:       "resistance",
+									bandIdx:    colIdx - 1,
+									bandColour: colours[rowIdx] 
+								}
+							);
+						}
+					}
+					else if(colIdx == numberOfResistanceBands + 1) {
+						if( rowIdx < 10 ) {
+							var multiplierValue = Math.pow(10, rowIdx -2);
+							box = new jCanv.ValueBox(
+								jCanvas, 
+								(bwidth + bgap) * colIdx + gridXOffset, 
+								(bheight +bgap) * rowIdx + gridYOffset, 
+								bwidth, 
+								bheight, 
+								multiplierValue,
+								"",
+								"",
+								{
+									lineColour: "black", 
+									fillColour: colours[rowIdx], 
+									textColour: colours[rowIdx] !== "black" ? "black" : "white"
+								},
+								{
+									value: multiplierValue,
+									type:  "multiplier",
+									bandIdx:    colIdx - 1,
+									bandColour: colours[rowIdx] 
+								}
+							);
+						}
+					}
+					else {
+						if(rowIdx in {0:0, 1:1, 3:3, 4:4, 7:7, 8:8, 9:9}) {
+							box = new jCanv.ValueBox(
+								jCanvas, 
+								(bwidth + bgap) * colIdx + gridXOffset, 
+								(bheight +bgap) * rowIdx + gridYOffset, 
+								bwidth, 
+								bheight, 
+								tolerances[rowIdx],
+								"±",
+								"%",
+								{
+									lineColour: "black", 
+									fillColour: colours[rowIdx], 
+									textColour: colours[rowIdx] !== "black" ? "black" : "white"
+								},
+								{
+									value: multiplierValue,
+									type:  "tolerance",
+									bandIdx:    colIdx - 1,
+									bandColour: colours[rowIdx] 
+								}
+							);
+						}
+					}
+
+					if(bindToClickHandler) {
+						box.bindToEvent(jCanv.Canvas.prototype.EVENT_TYPES.click, function() {
+								console.log("Button clicked...");
+								console.log(this);
+								if(this.opaqueUserData !== null) {
+									resistor.setBandColour(
+										this.opaqueUserData.bandIdx, 
+										this.opaqueUserData.bandColour, 
+										this.opaqueUserData.value, 
+										this.opaqueUserData.type);
+									var res = resistor.getResistanceValue();
+									if( res > 0 )
+										txtBox.setValue(res);
+								}
+							});
+					}
+				}
+			}
+			//jCanvas.fit(10);
+			jCanvas.render();
 		});
 	</script>
+
 </head>
 
 <body>
@@ -346,6 +274,7 @@
 		<h1 class="title">Links...</h1>
 		<div id="includedContent"></div>
 	</div>
+	  
 
 	<div id="content">
 		<h1 class="title">Electronics Notes...</h1>
@@ -396,7 +325,7 @@
 		<div>
 			<h3 style="clear:both;">Resistor Colour Codes</h3>
 			<div>
-				<canvas id="myCanvas" width="300" height="470" style="margin: px; border:1px solid #000000; float: left;">
+				<canvas id="myCanvas" width="360" height="540" style="margin: 10px; border:1px solid #000000; float: left;">
 				</canvas>
 				<p>
 					In the drawing to the left you can click on the value-boxes to change the colour bands on

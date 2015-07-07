@@ -94,12 +94,16 @@ dtype('int32')
 (4,)
 &gt;&gt;&gt; a.ndim
 1
+&gt;&gt;&gt;a.reshape((2,2))
+array([[1,2],
+       [3,4]])
 </pre>
 			<p>
 				Can also create arrays using functions such as <tt>zeros()</tt>, <tt>ones()</tt>, <tt>empty()</tt>, <tt>arange()</tt> and other
 				<a target="_blank" href="http://docs.scipy.org/doc/numpy/reference/routines.array-creation.html">array creation routines</a>.
 				Caution with <tt>empty()</tt>: it does <em>not</em> create a zeroed array... it could well be filled with junk!
-<F5>			<a name="numpy_slice"></a>
+			<a name="numpy_slice"></a>
+
 			<h3>Slices</h3>
 			<p>
 				Slicing <tt>ndarray</tt>s generally works like normal Python list slicing except for the rather important caveat
@@ -261,6 +265,79 @@ array([[ 0,  1,  2],
        [ 9, 16, 25]])
 </pre>
 
+			<h3>Broadcasting</h3>
+			<p>
+				Broadcasting in Python works pretty much the same way as
+				<a href="../yorick.html#broadcasting">broadcasting in Yorick</a>.
+			</p>
+			<pre class="prettyprint linenums lang-python">
+&gt;&gt;&gt; a = np.array([1,2])
+&gt;&gt;&gt; b = np.array([a,a])
+&gt;&gt;&gt; a
+array([1, 2])
+&gt;&gt;&gt; b
+array([[1, 2],
+       [1, 2]])
+&gt;&gt;&gt; a*b
+array([[1, 4],
+       [1, 4]])
+&gt;&gt;&gt; a+b
+array([[2, 4],
+       [2, 4]])</pre>
+			<p>
+				This is summaried very will in Python For Data Analysis as 
+				follows.
+			</p>
+			<p><div class="box_container"><div class="info">
+				<p>
+					Two arrays are compatible for broadcasting if for each trailing dimension (that is, starting
+					from the end), the axis lengths match or if either of the lengths is 1. Broadcasting
+					is then performed over the missing and / or length 1 dimensions 
+					<a href="http://shop.oreilly.com/product/0636920023784.do" target="_blank">[1]</a>.
+				</p>
+			</div></div></p>
+
+			<h3>Stacking, Concatenating</h3>
+			<p>
+				Remember that a 3D array is indexed as [depth][row][col] because 
+				Python is row-major (i.e. fastest increasing index on the right).
+			</p>
+			<pre>&gt;&gt;&gt; a = np.arange(8).reshape((2,2,2))
+&gt;&gt;&gt; a
+array([[[0, 1],
+        [2, 3]],
+
+       [[4, 5],
+        [6, 7]]])
+&gt;&gt;&gt; np.concatenate([a,a], axis=0)
+array([[[0, 1],
+        [2, 3]],
+
+       [[4, 5],
+        [6, 7]],
+
+       [[0, 1],
+        [2, 3]],
+
+       [[4, 5],
+        [6, 7]]])
+&gt;&gt;&gt; np.concatenate([a,a], axis=1)
+array([[[0, 1],
+        [2, 3],
+        [0, 1],
+        [2, 3]],
+
+       [[4, 5],
+        [6, 7],
+        [4, 5],
+        [6, 7]]])
+&gt;&gt;&gt; np.concatenate([a,a], axis=2)
+array([[[0, 1, 0, 1],
+        [2, 3, 2, 3]],
+
+       [[4, 5, 4, 5],
+        [6, 7, 6, 7]]])</pre>
+
 			<h3>Statistics (and how axis numbering works)</h3>
 			<p>
 			There are a few <a target="blank" href="http://docs.scipy.org/doc/numpy/reference/routines.statistics.html">statistical measures</a> 
@@ -313,7 +390,7 @@ array([[ 0.5,  2.5],
 				Note: The call <tt>b.mean(xxx)</tt> is the same as <tt>b.mean(axis=xxx)</tt>. 
 			</p>
 			<p>
-				The 3D array above is indexed as <tt>[depth][row][col]</tt> as python is row-major (i.e. 
+				The 3D array above is indexed as <tt>[depth][row][col]</tt> as Python is row-major (i.e. 
 				fastest increasing index on the right). 
 			<p> I had expected that the axes would numbered from zero, zero being the 
 				fastest increasing index (i.e., col). The next fastest increasing index (i.e, row) is numbered <tt>1</tt> and so on. Therefore,

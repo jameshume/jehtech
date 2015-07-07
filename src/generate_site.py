@@ -31,7 +31,7 @@ DEPLOYED_DIR = '../__deployed'
 def GenerateRunningCheckSum(data, value):
 	return zlib.adler32(data, value) & 0xffffffff
 
-def combine_files(base_dir, dest_file):
+def combine_files(base_dir, dest_file, is_debug=False):
 	print "COMBINING", base_dir, dest_file
 	un_minimised_temp_aggregate_file = os.path.join(base_dir, "un_minimised_temp_aggregate.file") 
 	minimised_aggregate_file = os.path.join(base_dir, "minimised_aggregate.file") 
@@ -52,7 +52,9 @@ def combine_files(base_dir, dest_file):
 		prevRunningCRC = pickle.load(open(indexInfoFilename, 'rb'))
 		foundPrevRunningCRC = True
 
-	if foundPrevRunningCRC and (prevRunningCRC == runningCRC):
+	# Only regenerate the unminimsed combination of all the JS files if need be
+	regenerated = False
+	if os.path.isfile(un_minimised_temp_aggregate_file) and foundPrevRunningCRC and (prevRunningCRC == runningCRC):
 		print 'The contents of "{}" has not changed. Skipping regeneration step.'.format(base_dir)
 	else:
 		print 'The contents of "{}" has changed. Regenerating...'.format(base_dir)
@@ -68,13 +70,16 @@ def combine_files(base_dir, dest_file):
 		fh_new.close()
 		fh.close()
 
+	if is_debug:
+		print "### NOTE: This is a debug run so minimised file is just a copy of unmin"
+		shutil.copyfile(un_minimised_temp_aggregate_file, minimised_aggregate_file)
+	elif regenerated or not os.path.isfile(minimised_aggregate_file):
 		fileType="js"
 		if dest_file[-3:] == "css": fileType="css"
 		args = ["java", "-jar",  "yuicompressor-2.4.8.jar",  "--type", fileType, "-o", minimised_aggregate_file, un_minimised_temp_aggregate_file]
 		print args
 		subprocess.call(args)
-		os.remove(un_minimised_temp_aggregate_file)
-
+	
 	print "Copying {} to {}".format(minimised_aggregate_file, dest_file)
 	shutil.copyfile(minimised_aggregate_file, dest_file)
 

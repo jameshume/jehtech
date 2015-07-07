@@ -25,13 +25,13 @@ function CreatePageContents() {
 					var subIndex = 0;
 					$.each(h2SectionDiv.children("h3"), function() {
 						var subNodeText = $(this).text();
-						var idString = 'contents_' + nextIdx.toString() + '_' + subIndex.toString()
+						var idString = 'contents_' + nextIdx.toString() + '_' + subIndex.toString();
 						$(this).html('<a id="' + idString + '">' + subNodeText + '</a>');
 						var newSubLiObj = liObj.clone();
 						var newSubAObj  = aObj.clone();
-						var newSubAObj.prop('href', '#' + idString);
-						var newSubAObj.text( subNodeText );
-						var newSubLiObj.append(newSubAObj);
+						newSubAObj.prop('href', '#' + idString);
+						newSubAObj.text( subNodeText );
+						newSubLiObj.append(newSubAObj);
 						olSubRoot.append(newSubLiObj);
 						++subIndex;
 					});
@@ -40,7 +40,7 @@ function CreatePageContents() {
 			}
 			++nextIdx;
 		});
-		pageContents.append(olRoot)
+		pageContents.append(olRoot);
 	}
 }
 

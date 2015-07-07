@@ -4,3 +4,4 @@ run_prettify.js
 d3.v3.min.js
 mpld3.v0.2.js
 jeh-tech.js
+jeh-tech-canvas.js
