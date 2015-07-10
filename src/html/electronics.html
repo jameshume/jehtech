@@ -134,10 +134,10 @@
 			var resistorWidth = 200;
 			var resistorX = (totalGridWidth - resistorWidth)/2;
 			var resistorY = 5;
-			var resistor = new JEHResistor(jCanvas, resistorX, resistorY, resistorWidth, 40, 4);
+			var resistor = jCanvas.addObject(new JEHResistor(jCanvas, resistorX, resistorY, resistorWidth, 40, 4));
 
 			var txtBoxY = resistorY + resistor.height + 20;
-			var txtBox = new jCanv.ValueBox(jCanvas, resistorX, txtBoxY, resistor.width, bheight, "Select all colour bands", "", "Ohms", {lineColour: null, text: "james"}); 
+			var txtBox = jCanvas.addObject(new jCanv.ValueBox(jCanvas, resistorX, txtBoxY, resistor.width, bheight, "Select all colour bands", "", "Ohms", {lineColour: null, text: "james"})); 
 
 			var gridYOffset = txtBoxY + bheight + 20;
 			console.log("########");
@@ -150,7 +150,7 @@
 					var bindToClickHandler = true;
 					if (colIdx == 0) {
 						bindToClickHandler = false;
-						box = new jCanv.Box(
+						box = jCanvas.addObject(new jCanv.Box(
 							jCanvas, 
 							(bwidth + bgap) * colIdx + gridXOffset, 
 							(bheight +bgap) * rowIdx + gridYOffset, 
@@ -162,12 +162,12 @@
 								text: colours[rowIdx]
 							},
 							null
-						);
+						));
 					}
 					else if(colIdx <= numberOfResistanceBands) {
 						if( rowIdx > 1 ) {
 							var resistance =  (rowIdx-1) * Math.pow(10, numberOfResistanceBands - colIdx);
-							box = new jCanv.Box(
+							box = jCanvas.addObject(new jCanv.Box(
 								jCanvas, 
 								(bwidth + bgap) * colIdx + gridXOffset, 
 								(bheight +bgap) * rowIdx + gridYOffset, 
@@ -185,13 +185,13 @@
 									bandIdx:    colIdx - 1,
 									bandColour: colours[rowIdx] 
 								}
-							);
+							));
 						}
 					}
 					else if(colIdx == numberOfResistanceBands + 1) {
 						if( rowIdx < 10 ) {
 							var multiplierValue = Math.pow(10, rowIdx -2);
-							box = new jCanv.ValueBox(
+							box = jCanvas.addObject(new jCanv.ValueBox(
 								jCanvas, 
 								(bwidth + bgap) * colIdx + gridXOffset, 
 								(bheight +bgap) * rowIdx + gridYOffset, 
@@ -211,12 +211,12 @@
 									bandIdx:    colIdx - 1,
 									bandColour: colours[rowIdx] 
 								}
-							);
+							));
 						}
 					}
 					else {
 						if(rowIdx in {0:0, 1:1, 3:3, 4:4, 7:7, 8:8, 9:9}) {
-							box = new jCanv.ValueBox(
+							box = jCanvas.addObject(new jCanv.ValueBox(
 								jCanvas, 
 								(bwidth + bgap) * colIdx + gridXOffset, 
 								(bheight +bgap) * rowIdx + gridYOffset, 
@@ -236,7 +236,7 @@
 									bandIdx:    colIdx - 1,
 									bandColour: colours[rowIdx] 
 								}
-							);
+							));
 						}
 					}
 

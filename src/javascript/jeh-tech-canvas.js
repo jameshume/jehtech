@@ -30,13 +30,12 @@ function com_JEHTech_www_Canvas() {
 	// JEHCanvasElement
 	/////////////////////////////////////////////////////////////////////////////
 	function JEHCanvasElement(jehCanvasOwner, opaqueUserData) {
-		if (!jehCanvasOwner instanceof JEHCanvas ) {
+		if ( !(jehCanvasOwner instanceof JEHCanvas) ) {
 			throw "JEHCanvasElement: canvas owner must be a JEHCanvas";
 		}
 		this._jehCanvasOwner = jehCanvasOwner;
 		this._eventHandlers  = {};
 		this.opaqueUserData  = opaqueUserData;
-		jehCanvasOwner.addObject(this);
 	}
 
 	// null for any parameter means leave as is
@@ -69,6 +68,25 @@ function com_JEHTech_www_Canvas() {
 	}
 
 	/////////////////////////////////////////////////////////////////////////////
+	// JEHDeltaQueue
+	/////////////////////////////////////////////////////////////////////////////
+	function JEHDeltaQueue() {
+		this.q = [];
+	}
+
+	JEHDeltaQueue.prototype.enqueue(obj, ttl) {
+		
+	}
+
+	JEHDeltaQueue.prototype.tick() {
+		if (this.q.length == 0) {
+			return;
+		}
+
+		
+	}
+
+	/////////////////////////////////////////////////////////////////////////////
 	// JEHCanvas
 	/////////////////////////////////////////////////////////////////////////////
 	function JEHCanvas(id) {
@@ -87,6 +105,12 @@ function com_JEHTech_www_Canvas() {
 	}
 
 	JEHCanvas.prototype.EVENT_TYPES = { click:'click' };
+
+	JEHCanvas.prototype.DEGREES_TO_RADS_CONST = Math.PI / 180;
+
+	JEHCanvas.prototype.frameRateInMilliSeconds = function() {
+		return 10;
+	}
 
 	JEHCanvas.prototype.getTextDimensions = function(text) {
 		// Slight modifications to answer from
@@ -128,6 +152,30 @@ function com_JEHTech_www_Canvas() {
 			throw 'JEHCanvas.addObject: Object "' + obj + 
 					'" is not JEHCanvasElement';
 		}
+
+		return obj;
+	}
+
+	JEHCanvas.prototype.animateObject = function(obj, objEnd, timeInMilliSeconds) {
+		var objInd = this.objects.indexOf(obj);
+		if (objInd === -1) {
+			throw "### ERROR: The object to be animated cannot be found!";
+		}
+		
+		var frameRate = this.frameRateInMilliSeconds();
+		var steps = timeInMilliSeconds / frameRate;
+		var thisStep = 0;
+		var animFunc = obj.getAnimateFunc(objEnd, steps);
+
+		setTimeout(
+				function() {
+					thisStep += 1;
+					animFunc(thisStep);
+					if( thisStep <= steps ) {
+						setTimeout(arguments.callee, frameRate);
+					}
+				},
+				frameRate);
 	}
 
 	JEHCanvas.prototype.drawLine = function(x1, y1, x2, y2) {
@@ -137,20 +185,70 @@ function com_JEHTech_www_Canvas() {
 		this.ctx.stroke();
 	}
 
-	JEHCanvas.prototype.drawLines = function(points) {
-		this.ctx.beginPath();
-		this.ctx.moveTo(x1, y1);
-		this.ctx.lineTo(x2, y2);
-		this.ctx.stroke();
+	JEHCanvas.prototype.deg2rad = function(deg) {
+		return deg * this.DEGREES_TO_RADS_CONST;
 	}
 
-	JEHCanvas.prototype.drawRect = function (x, y, width, height, stroke, fill) {
-		this.ctx.beginPath();
-		this.ctx.rect(x, y, width, height);
-		if(fill !== undefined)
-			this.ctx.fill();
-		if(stroke !== undefined)
-			this.ctx.stroke();
+	/*
+	 * Accepts a list if lists. Each inner list must have a length of two with
+	 * first member being x and second being y of next coordinate to plot to.
+	 *
+	 * First inner list is start point, second inner list is end point and 
+	 * start point of the next line and so on.
+	 */
+	JEHCanvas.prototype.drawLines = function(points, stroke, fill, rotDeg) {
+		if (points.length > 0) {
+			var thisPoint = points[0];
+
+			this.ctx.save();
+
+			if(rotDeg !== undefined) {
+				this.ctx.setTransform(1,0,0,1,0,0);
+				this.ctx.translate(thisPoint[0], thisPoint[1]);
+				this.ctx.rotate(this.deg2rad(rotDeg));
+			}
+
+			this.ctx.beginPath();
+			this.ctx.moveTo(thisPoint[0], thisPoint[1]);
+			
+			for(var idx=1; idx < points.length; ++idx) {
+				thisPoint = points[idx];
+				this.ctx.lineTo(thisPoint[0], thisPoint[1]);
+			}
+			if(fill !== undefined)   this.ctx.fill();
+			if(stroke !== undefined) this.ctx.stroke();
+
+			this.ctx.restore();
+		}
+	}
+
+	// So we could say if stroke and fill are bool then just use current settings
+	// but if something else they specify properties to use...
+	JEHCanvas.prototype.drawRect = function (x, y, width, height, stroke, fill, rotDeg) {
+		var doStroke = (typeof stroke !== undefined) && stroke;
+		var doFill  = (typeof fill !== undefined) && fill;
+
+		if (doStroke || doFill) {
+			this.ctx.save();
+
+			if(typeof rotDeg !== undefined) {
+				var halfWidth  = 0.5 * width;
+				var halfHeight = 0.5 * height;
+	
+				this.ctx.setTransform(1,0,0,1,0,0);
+				this.ctx.translate(x+halfWidth, y+halfHeight);
+				x = -halfWidth;
+				y = -halfHeight;
+				this.ctx.rotate(this.deg2rad(rotDeg));
+			}
+			
+			this.ctx.beginPath();
+			this.ctx.rect(x, y, width, height);
+			if(doFill)   this.ctx.fill();
+			if(doStroke) this.ctx.stroke();
+			
+			this.ctx.restore();
+		}
 	}
 
 	JEHCanvas.prototype.fit = function(_internalPadding) {
@@ -235,6 +333,7 @@ function com_JEHTech_www_Canvas() {
 			this.fillColour = "fillColour" in options ? options.fillColour : null;
 			this.textColour = "textColour" in options ? options.textColour : "#000000";
 			this.textFont   = "textFont"   in options ? options.textFont   : "10pt Arial";
+			this.rotate_deg = "rotateDeg"  in options ? options.rotateDeg  : 0;
 		}
 	}
 
@@ -245,6 +344,28 @@ function com_JEHTech_www_Canvas() {
 			}
 		});
 
+	JEHBox.prototype.getAnimateFunc = function(endBox, steps) {
+		var jC       = this._jehCanvasOwner;
+		var thisBox  = this;
+		var xStep    = (endBox.x - this.x) / steps;
+		var yStep    = (endBox.y - this.y) / steps;
+		var wStep    = (endBox.width - this.width) / steps;
+		var hStep    = (endBox.height - this.height) / steps;
+		var rStep    = (endBox.rotate_deg - this.rotate_deg) / steps;
+
+		var animFunc =
+			function(thisStep) {
+				thisBox.x += xStep;
+				thisBox.y += yStep;
+				thisBox.width += wStep;
+				thisBox.height += hStep;
+				thisBox.rotate_deg += rStep;
+				thisBox.drawOnCanvas(jC);
+			};
+
+		return animFunc;
+	}
+
 	JEHBox.prototype.containsPoint = function(x,y) {
 		return (x >= this.x) && 
 				 (x <= this.x + this.width) &&
@@ -252,24 +373,33 @@ function com_JEHTech_www_Canvas() {
 				 (y <= this.y + this.height);
 	}
 
-	JEHBox.prototype.drawOnCanvas = function(jehCanvas) {
+	JEHBox.prototype.drawOnCanvas = function(obsoletedVariableToBeDeleted_TODO) {
+		var jehCanvas = this._jehCanvasOwner;
 		var ctx = jehCanvas.ctx;
+		var doFill   = this.fillColour !== null;
+		var doStroke = this.lineColour !== null;
 
+		ctx.save();
 		ctx.lineWidth = this.lineWidth;
 		ctx.clearRect(this.x, this.y, this.width, this.height);
 
-		if(this.fillColour !== null) {
+		if(doFill) {
 			ctx.fillStyle = this.fillColour;
-			ctx.fillRect(this.x, this.y, this.width, this.height);
 		}
 
-		if(this.lineColour !== null) {
-			ctx.beginPath();
+		if(doStroke) {
 			ctx.strokeStyle = this.lineColour;
 			ctx.lineWidth = this.lineWidth;
-			ctx.rect(this.x, this.y, this.width, this.height);
-			ctx.stroke();
 		}
+
+		jehCanvas.drawRect(
+				this.x, 
+				this.y, 
+				this.width, 
+				this.height, 
+				doStroke, 
+				doFill, 
+				this.rotate_deg);
 
 		if( this.text != null ) {
 			ctx.fillStyle = this.textColour;
@@ -279,6 +409,7 @@ function com_JEHTech_www_Canvas() {
 			var textY = this.y + (this.height - textProps.height) / 2;
 			ctx.fillText(this.text, textX, textY);
 		}
+		ctx.restore();
 	}
 
 	JEHBox.prototype.toString = function() {
