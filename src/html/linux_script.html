@@ -36,6 +36,9 @@
 				<li><a href="http://stackoverflow.com/questions/11065077/eval-command-in-bash-and-its-typical-uses"
 					target="_blank">Eval command in Bash and its typical uses</a>.
 				</li>
+				<li><a href="http://stackoverflow.com/questions/918886/how-do-i-split-a-string-on-a-delimiter-in-bash"
+					target="_blank">How do I split a string on a delimiter in Bash?</a>
+				</li>
 			</ol>
 		</div> <!-- END H2: References -->
 
@@ -257,6 +260,25 @@ function remove_from_path() {
 	export $varname=$(echo -e "${!varname}" | tr ":" "\n" | sed -e "s@^$path_2_del\$@@g" | tr -s "\n" ":" | sed -e 's/:$//')</pre>
 			</div> <!-- END: H3 -->
 		</div> <!-- END: H2: Modify Any Path... -->
+
+		<h2>Parse Version Strings: Splitting Strings On A Delimeter</h2>
+		<p>
+			I wanted to be able to check the IPython version in a shell script to
+			let the user know if it needed upgrading and to offer to do the upgrade
+			automatically. I knew I could spit the string onto multiple lines 
+			using <tt>tr</tt> and then parse it in a <tt>for</tt> loop, but a quick
+			bit of googling and StackOverflow came to the rescue again 
+			<a href="http://stackoverflow.com/questions/918886/how-do-i-split-a-string-on-a-delimiter-in-bash"
+			   target="_blank">[3]</a>.
+		</p>
+		<pre class="prettyprint linenums lang-python">IFS="." read -a pyVerInfo &lt;&lt;&lt; "$pyVer"
+if [ ${pyVerInfo[0]} -ne 3 ]; then
+   #error
+fi</pre>
+		<p>
+			This cool little snippet splits the string up using a full-stop as the
+			delimeter and saves it as an array to the variable <tt>pyVerInfo</tt>.
+		</p>
 
 		<h2>Debug .so Loading Using LD_DEBUG</h2>
 		<div>

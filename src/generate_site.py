@@ -165,7 +165,7 @@ def deploy_site():
 	
 	# Combine javascript and CSS files into monoliths
 	monoJsFilename  = os.path.join(DEPLOYED_DIR, 'jeh-monolith.js')
-	combine_files("./javascript", monoJsFilename, True)
+	combine_files("./javascript", monoJsFilename)
 	
 	monoCssFilename = os.path.join(DEPLOYED_DIR, 'jeh-monolith.css')
 	combine_files("./css", monoCssFilename)

@@ -59,9 +59,14 @@
 			
 			var box1 = jC.addObject(new jCanv.Box(jC, 100.5, 250, 50, 50, {lineColour: "red", lineWidth:2}));
 			var box2 = new jCanv.Box(jC, 150.5, 250, 100, 50, {lineColour: "red", lineWidth:2, rotateDeg: 45});
+			
+			var box3 = jC.addObject(new jCanv.Box(jC, 100.5, 150, 50, 50, {lineColour: "blue", fillColour: "orange", lineWidth:2}));
+			var box4 = new jCanv.Box(jC, 150.5, 50, 100, 100, {lineColour: "blue", fillColour: "orange", lineWidth:2, rotateDeg: -45});
+			
 			jC.render();
 
-			jC.animateObject(box1, box2, 10000);
+			jC.animateObject(box1, box2, 10000, function() { console.log("Finished box 1"); });
+			jC.animateObject(box3, box4, 5000, function() { console.log("Finished box 2"); });
 		});
 	</script>
 </head>

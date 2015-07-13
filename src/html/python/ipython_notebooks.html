@@ -52,8 +52,20 @@
 				a <tt>pip install --upgrade ipython</tt> to update everything to take advantage of the latest widget
 				library.
 			</p>
+			<p>
+				On my Ubuntu machine, at the time of writing, I also had to upgrade various things, including matplotlib for MPLD3 from version 1.1.0 to 1.3.0:
+			</p>
+			<pre class="prettyprint linenums lang-bash">sudo pip install --upgrade ipython
+sudo pip install --upgrade pyzmq
+sudo pip install --upgrade tornado
+sudo pip install jsonschema
+sudo easy_install -U distribute
+sudo pip install --upgrade matplotlib</pre>
+			<p>
+				So... a quick example using MPLD3 and widgets...
+			</p>
 
-			<pre  class="prettyprint linenums lang-python">
+			<pre class="prettyprint linenums lang-python">
 import numpy as np
 from IPython.html import widgets
 from IPython import display
