@@ -58,6 +58,7 @@ def combine_files(base_dir, dest_file, is_debug=False):
 		print 'The contents of "{}" has not changed. Skipping regeneration step.'.format(base_dir)
 	else:
 		print 'The contents of "{}" has changed. Regenerating...'.format(base_dir)
+		regenerated = True
 		pickle.dump(runningCRC, open(indexInfoFilename, 'wb'))
 		fh     = open(indexFileName, 'r')
 		fh_new = open(un_minimised_temp_aggregate_file, 'w')
@@ -74,6 +75,7 @@ def combine_files(base_dir, dest_file, is_debug=False):
 		print "### NOTE: This is a debug run so minimised file is just a copy of unmin"
 		shutil.copyfile(un_minimised_temp_aggregate_file, minimised_aggregate_file)
 	elif regenerated or not os.path.isfile(minimised_aggregate_file):
+		print "Calling yuicompressor..."
 		fileType="js"
 		if dest_file[-3:] == "css": fileType="css"
 		args = ["java", "-jar",  "yuicompressor-2.4.8.jar",  "--type", fileType, "-o", minimised_aggregate_file, un_minimised_temp_aggregate_file]

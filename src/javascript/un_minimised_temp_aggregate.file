@@ -1804,7 +1804,6 @@ function com_JEHTech_www_Canvas() {
 	};
 
 	JEHCanvas.prototype.animateObject = function(obj, objEnd, timeInMilliSeconds, onFinishAnimFunc) {
-		
 		if ( !this.objectIsOnCanvas(obj) ) {
 			throw 'JEHCanvas.animateObject: Object "' + obj +
 			      '" not on canvas!';
@@ -1837,21 +1836,29 @@ function com_JEHTech_www_Canvas() {
 			var this2 = this;
 			setTimeout(
 				function() {
+					// Keep track of deleted items from the animation list. We wont
+					// call their finished() methods until the entire animation list
+					// has been processed so that if the finished() function 
+					// re-animates them they won't still be on the animated lisT
+					var deleted = [];
 					for (var idx = 0; idx < this2.animated.length; ++idx) {
 						var thisEl = this2.objects[this2.animated[idx]];
-						
 						thisEl.animInfo.animFunc(thisEl.ttl);
 						thisEl.animInfo.ttl++;
 						if (thisEl.animInfo.ttl > thisEl.animInfo.ttl_end) {
-							if (thisEl.animInfo.hasOwnProperty("onFinishAnimFunc")) {
-								thisEl.animInfo.onFinishAnimFunc(thisEl.element);
-							}
-							this2.animated.splice(idx, 1);
+							deleted.push(this2.animated.splice(idx, 1));
 							idx -= 1;
 						}
 					}
 					
 					this2.render();
+
+					for(var idx = 0; idx < deleted.length; ++idx) {
+						var thisEl = this2.objects[deleted[idx]];
+						if (thisEl.animInfo.hasOwnProperty("onFinishAnimFunc")) {
+								thisEl.animInfo.onFinishAnimFunc(thisEl.element);
+						}
+					}
 
 					if( this2.animated.length > 0 ) {
 						setTimeout(arguments.callee, frameRate);

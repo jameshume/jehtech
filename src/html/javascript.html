@@ -6,6 +6,41 @@
 	<!-- META_INSERT -->
 	<!-- CSS_INSERT -->
 	<!-- JAVASCRIPT_INSERT -->
+	<script>
+		$(function(){
+			jCanv = com_JEHTech_www_Canvas();
+			var jC = new jCanv.Canvas("#anim_canvas", null);
+
+			var box1 = jC.addObject(new jCanv.Box(jC, 10, 120, 50, 50, {lineColour: "red", lineWidth:2}));
+			var box1_end = new jCanv.Box(jC, 50, 170, 100, 50, {lineColour: "red", lineWidth:2, rotateDeg: 45});
+			var box1_end2 = new jCanv.Box(jC, 10, 120, 50, 50, {lineColour: "red", lineWidth:2});
+			var box2 = jC.addObject(new jCanv.Box(jC, 100, 30, 50, 50, {lineColour: "blue", fillColour: "orange", lineWidth:2}));
+			var box2_end = new jCanv.Box(jC, 30, 25, 100, 100, {lineColour: "blue", fillColour: "orange", lineWidth:2, rotateDeg: -45});
+			var box2_end2 = new jCanv.Box(jC, 100, 30, 50, 50, {lineColour: "blue", fillColour: "orange", lineWidth:2});
+			var anim_step = 0;
+			
+			jC.render();
+
+			// TODO: There is a bug in the canvas animation... it keeps getting
+			// faster lol
+			var anim_func = function() {
+				if (anim_step === 6) {
+					anim_step = 0;
+					$("#play_anim").removeAttr('disabled');
+				}
+				else {
+					jC.animateObject(box1, (anim_step % 2 == 0) ? box1_end : box1_end2, 10000, function() { anim_func(); });
+					jC.animateObject(box2, (anim_step % 2 == 0) ? box2_end : box2_end2, 5000);
+					anim_step += 1;
+				}
+			}
+			
+			$("#play_anim").click(function() {
+				$("#play_anim").attr('disabled','disabled');
+				anim_func();
+			});
+		});
+	</script>
 </head>
 
 <body>
@@ -527,6 +562,13 @@ Scope safe constructors:
 		<img src="##IMG_DIR##/linewidth_html_canv.png" alt="Picture explainging rendering of HTML5 canvas lines with an odd lineWidth on integer coordinates"/>
 		<img src="##IMG_DIR##/linewidth_html_canv_centre_pixel.png" alt="Picture explainging rendering of HTML5 canvas lines with an odd lineWidth on half coordinates"/>
 		<img src="##IMG_DIR##/linewidth_html_canv_centre_pixel_thick_line.png" alt="Picture explainging rendering of HTML5 canvas lines with an odd lineWidth on half coordinates"/>
+		</p>
+
+		<p>
+			<canvas id="anim_canvas" width="250" height="300" style="border:0px; margin: 50px; padding: 0px;">
+				Your browser does not support the HTML5 canvas tag.
+			</canvas>
+			<button id="play_anim">Play animation...</button>
 		</p>
 		<pre>
 RECTANGLES
