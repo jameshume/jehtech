@@ -87,6 +87,12 @@
 					Javascript Closures, Richard Cornford, March 2004.
 				</a>
 			</li>
+			<li>
+				<a name="js_ecma_script"</a>
+				<a href="http://www.ecma-international.org/ecma-262/6.0/index.html"
+					target="_blank">
+					ECMAScript 2015 Language Specification
+				</a>.
 		</ol>
 	</div> <!-- END H2 div -->
 
@@ -103,6 +109,7 @@
 		</p>
 	</div>
 
+	<a name="js_scope"></a>
 	<h2>Scope In JavaScript</h2>
 	<div>
 		<p>Scope is the context in which code is executed, and there are three types in JavaScript.
@@ -118,11 +125,19 @@
 
 			<div class="box_container"><div class="info">
 				<p>
-					JavaScript does not have block scope. Any variables declared in a
+					JavaScript does not have block scope (pre ECMAScript 2015). 
+					Any variables declared in a
 					block, i.e, <tt>{ ... var xxx; ...}</tt> are local to the
 					function in which they are declared or, worse, the global scope.
 				</p>
 			</div></div>
+		</p>
+		<p>
+			Note, however, that recently (at the time of writing) the ECMAScript 2015
+			has added something called the 
+			<a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Statements/let"
+				target="_blank"><tt>let</tt> statement</a> to declare block
+			scope local variables. May not be well supported for some time.
 		</p>
 		<p>
 			One thing that really got me was the use of <tt>var</tt>, or more
@@ -145,6 +160,46 @@
 			grandparent scope, and so on, until the global scope is reached. The
 			first symbol found is used. This is why closures work...
 		</p>
+		<p>
+			Every scope has a <tt><b>this</b></tt> object associated with it. In
+			the global scope, this will most likely be the web browser window. In
+			the function scope it will reference the object it is attached to 
+			(unless specifically modified - see later). The value of <tt>this</tt>
+			is determined entirely at <b>run time</b> which is very different from
+			languages like C++.
+
+			<div class="box_container"><div class="info">
+				<p>
+					Every scope has a <tt>this</tt> reference associated with it. It
+					is determined at <em>run time</em>. 
+				</p>
+			</div></div>
+		</p>
+		<p>
+			For, example, if you define a function in your web browser's console
+			so that it prints the contents of the <tt>this</tt> reference, you
+			will see it pointing to the global scope object, which for the browser is the
+			Window object:
+		</p>
+		<pre class="prettyprint linenums">function jehtech() { console.log(this); }
+jehtech()
+// Outputs:
+// &gt; Window {top: Window, location: Location, document: document, window: Window, ...}</pre>
+		<p>
+			If you do the same for a vanilla object you get the following:
+		</p>
+		<pre class="prettyprint linenums">jt = { objMethod : jehtech }
+jt.objMethod()
+// Outputs:
+// &gt; Object {}
+// &gt;&gt; objMethod: function jehtech()
+// &gt;&gt; __proto__: Object</pre>
+		<p>
+			So... you can see that when the <em>same</em> function is called in
+			different contexts, it's <tt>this</tt> reference &quot;points&quot; to
+			different objects: The value of <tt>this</tt> is based on the context 
+			in which the function is called and is determined at <em>run time</em>.
+		</p>
 	</div> <!-- END H2 div -->
 
 	<h2>Closures In JavaScript</h2>
@@ -161,6 +216,49 @@
 		</p>
 	</div> <!-- END H2 div -->
 
+	<h2>Arrays</h2>
+	<div>
+		<p>
+			See 
+			<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" 
+				target="_blank">array API</a> on MDN.
+		</p>
+		<ul>
+			<li><tt>new_array = array1.<b>concat</b>(array2, ..., arrayN)</tt><br/>
+				<tt>new_array</tt> is the concatenation of <tt>array1</tt> with
+				all the other arrays in the <tt>concat()</tt> argument list.
+			</li>
+			<li><tt>array.<b>indexOf</b>(x)</tt>, <tt>array.lastIndexOf(x)</tt><br/>
+				Returns index of first/last instance of <tt>x</tt> in <tt>array</tt>
+				or <tt>-1</tt> if <tt>x</tt> is not in the array.
+			</li>
+			<li><tt>string = array.<b>join</b>()</tt><br/>
+				Concatenates all elements of <tt>array</tt> into a string
+			</li>
+			<li><tt>new_length = array.<b>push</b>(x1, x2, ..., xN)</tt><br/>
+				Pushes elements, in order, onto end of array.
+			</li>
+			<li><tt>item = array.<b>pop</b>()</tt><br/>
+				Removes element off end of array.
+			</li>
+			<li><tt>array.<b>reverse</b>()</tt><br/>
+				Reverses array elements <em>in place</em>.
+			</li>
+			<li><tt>sub_array = array.<b>slice</b>(start, end)</tt><br/>
+				Takes slice [start, end). Note that range does <em>not</em> include 
+				end index. Returns slice as new array, original not effected.
+			</li>
+			<li><tt>array.<b>splice</b>(start, deleteCount [,i1, i2... iN])</tt><br/>
+				Removes items from array and potentially also adds new.
+			</li>
+			<li><tt>item = array.<b>shift</b>()</tt><br/>
+				Like <tt>pop()</tt> but removes from start of array.
+			</li>
+			<li><tt>array.<b>unshift</b>(x)</tt><br/>
+				Like <tt>push()</tt> but puts at start of array.
+			</li>
+		</ul>
+	</div>
 
 	<h2>Objects In JavaScript</h2>
 	<div>
@@ -186,7 +284,7 @@
 				This means that primatives are deep copies. Modifying a copy of a
 				primative will not affect the original primative:
 			</p>
-			<pre>var origVar = 999;
+			<pre class="prettyprint linenums">var origVar = 999;
 var copyVar = origVar;
 
 copyVar = 123;
@@ -200,7 +298,7 @@ console.log(origVar); // prints 999 - the original
 				copied variable is modified, the original is modified because both 
 				variables refer to <em>the same</em> object:
 			</p>
-			<pre>var o1 = new Object();
+			<pre class="prettyprint linenums">var o1 = new Object();
 var o2 = o1
 o1.newAttr = "J" //&lt; Note: can add property at any time
 console.log(o1.newAttr); // o1.newAttr == "J"
@@ -230,14 +328,14 @@ console.log(o2.newAttr): // o2.newAttr == o1.newAttr == "J"</pre>
 			<p>
 			Use the <em>new operator</em>:
 			</p>
-			<pre>var o1 = <b>new</b> Object();
+			<pre class="prettyprint linenums">var o1 = <b>new</b> Object();
 o1.prop1 = "something";
 o1.prop2 = 101;</pre>
 			<p>
 				Using <em>object literals</em> we can create the exact equivalent
 				of the above:
 			</p>
-			<pre>var o1 = { prop1: "something", prop2 : 101 } </pre>
+			<pre class="prettyprint linenums">var o1 = { prop1: "something", prop2 : 101 } </pre>
 			<p>
 				Note how we don't need quotes around the object properties.
 			</p>
@@ -258,7 +356,174 @@ o1.prop2 = 101;</pre>
 			</p>
 		</div> <!-- END: H3 -->
 
+		<h3>Declaring Functions And Function Expressions</h3>
 		<div>
+			<h4>Declarations</h4>
+			<p>
+				A function declaration is a lot like a function declaration in any
+				language and will look familiar:
+			</p>
+			<pre class="prettyprint linenums">my_new_func(123);
+
+function my_new_func(param)
+{
+   // Do something
+}</pre>
+			<p>
+				You might notice in the above example that the function is
+				actually called <em>before</em> it is declared. This would be
+				unexpected if you were thinking in C terms, where a function
+				must be declared before it can be used. So what's happening? The
+				reason the above works is that <em>declared functions are
+				hoisted to the top of the enclosing scope</em>. This is why, in the
+				example the function could be called before it was declared.
+			</p>
+			<p><div class="box_container"><div class="info">
+				<p>
+					Function declarations are hoisted to the top of the
+					enclosing scope.
+				</p>
+			</div></div></p>
+			<h4>Expressions</h4>
+			<p>
+				In JavaScript functions are first class objects and can be
+				created as such. The most common syntax for this is:
+			</p>
+			<pre class="prettyprint linenums">my_new_func(123); //< This is an <em>error</em>!
+
+var my_new_func = function(param) {
+   // Do something
+};
+
+my_new_func(123); // This is <em>OK</em>.</pre>
+			<p>Note the trailing semi-colon after the function definition.
+			It's important not to miss this. The function object is created
+			from the function literal and a reference to it stored in the
+			variable my_new_func.
+			</p>
+			<p>Note, however, that using the function before it is defined
+			using an expression will result in an error. Why is this? It is
+			because function expressions are <em>not hoisted</em> to the top
+			of the current scope!
+			</p>
+			<p><div class="box_container"><div class="info">
+				<p>
+					Function expressions are <b>NOT</b> hoisted to the top of the
+					enclosing scope. They can only be used after they are defined.
+				</p>
+			</div></div></p>
+			
+			<h4>Parameters</h4>
+			<p>
+				Functions can have any number of parameters and can be called
+				with fewer or more parameters than which they are defined!
+				When called with fewer the latter parameters are automatically
+				set to &quot;undefined&quot;. For example:
+			</p>
+			<pre class="prettyprint linenums">function dummy(a,b,c) {
+   console.log(a);
+   console.log(b);
+   console.log(c);
+}
+
+dummy(123, "jeh-tech");
+//Outputs:
+//   123
+//   jeh-tech
+//   undefined</pre>
+			<p>
+				Using this fact, default values for parameters can be created.
+				For example, let's say we want to give the parameter <tt>c</tt>
+				in the above example a value  of "tech-jeh". We can re-write
+				the function as follows:
+			</p>
+			<pre class="prettyprint linenums">function dummy(a,b,c) {
+   c = typeof options === 'undefined' ? "tech-jeh" : c;
+   console.log(a);
+   console.log(b);
+   console.log(c);
+}
+dummy(123, "jeh-tech");
+//Outputs:
+//   123
+//   jeh-tech
+//   tech-jeh</pre>
+			<p>
+				Because functions are first class objects they have
+				properties, which you can query from inside your function. One 
+				property bound to a function when it is called is the
+				<a href="http://www.ecma-international.org/ecma-262/5.1/#sec-10.6"
+					target="_blank">arguments object</a>.
+			</p>
+			<pre class="prettyprint linenums">function dummy(a,b,c) {
+   console.log(dummy.length);            // <em>Expected</em> #arguments
+   console.log(dummy.arguments.length);  // <em>Actual</em> #arguments
+   console.log(dummy.arguments.callee);  // Object reference this <em>this</em> function
+   for(var idx=0; idx < dummy.arguments.length; ++idx) {
+      console.log(dummy.arguments[idx]); // The nth function argument
+   }
+}
+
+dummy("param1", "param2", "param3", "param4")
+//Ouputs:
+//   3
+//   4
+//   function dummy(a, b, c)
+//   param1
+//   param2
+//   param3
+//   param4
+</pre>
+
+		<p>
+			One use for <tt>arguments.callee</tt> I've seen is in the use of
+			timer callback functions...
+		</p>
+		<pre class="prettyprint linenums">setTimeout( function() {
+...
+if (condition)
+   setTimeout(arguments.callee, timeInMilliseconds);
+...
+});</pre>
+		<p>
+			Other points to note include:
+		</p>
+		<ul>
+			<li>
+				Functions can have arbitrary number of parmeters
+			</li>
+			<li>
+				<tt>function_name.length</tt> gives number of arguments function
+				<em>expects</em>. I.e., number of arguments explicity listed in
+				signature. Function can have more or less.
+			</li>
+			<li>
+				You can access arbirary arguments using 
+				<tt>function_name.arguments[]</tt> array.
+			</li>
+			<li>
+				Functions can't be overloaded as lack of a solid parameters list 
+				means lack of real signature.
+			</li>
+		</ul>
+		</div> <!-- END: H3 -->
+
+		<h3>Object Methods: Properties That Reference Functions</h3>
+		<div>
+			<p>
+				Object methods are just properties that reference functions. When 
+				an object method is called it's <tt>this</tt> reference is set to
+				&quot;point&quot; to the associated object, as we saw briefly in
+				the <a href="#js_scope">section on scope</a>.
+			</p>
+			<p>
+				It is possible to change the object to which the <tt>this</tt>
+				reference is bound when calling a function using the function
+				method 
+				<a href="http://www.ecma-international.org/ecma-262/5.1/#sec-15.3.4.4"
+					target="_blank"><tt>call()</tt></a> (remember functions are first class objects
+				so have methods and properties associated with them).
+			</p>
 		</div> <!-- END: H3 -->
 	</div> <!-- END: H2: Objects In JavaScript -->
 
@@ -267,55 +532,6 @@ o1.prop2 = 101;</pre>
 		<pre>
 OBJECTS:
 --------
-
-function declarations vs expressions:
-	function add(n1, n2) { return n1 + n2} is a declaration
-	var add = function(n1,n2) { return n1 + n2} is an expression
-
-	declarations are HOISTED to the top of the context so it can be defined after its use!
-	this is NOT the case for expressions!
-
-function parameters:
-	can be any number passed in
-	funcion.length is #args func expects
-	access arbirary arguments using arguments[] array
-	functions can't be overloaded as lack of solid parameters list means lack of signature
-
-
-object methods
-	methods are just properties that reference functions
-
-	var cat = {
-		name: "kitty",
-		speak: function() { console.log(this.name + " says meow"); }
-	}
-
-	Every scope in JavaScript has a this object that represents the calling
-	object for the function. In the global scope, this represents the
-	global object (window in web browsers). When a function is called while
-	attached to an object, the value of this is equal to that object by default.
-
-	The value of this, is based on the context in which the function
-	is called at **RUN TIME**
-
-	function sayNameForAll() {
-		console.log(this.name);
-	}
-	
-	var person1 = {
-		name: "Nicholas",
-		sayName: sayNameForAll
-	};
-	var person2 = {
-		name: "Greg",
-		sayName: sayNameForAll
-	};
-	var name = "Michael";
-	person1.sayName(); // outputs "Nicholas"
-	person2.sayName(); // outputs "Greg"
-	sayNameForAll(); // outputs "Michael"
-
-
 	CHANGING THIS:
 		Call()
 		Call() function with parameters but bind this to some specific context rather than the auto-assigned one
@@ -548,7 +764,7 @@ Scope safe constructors:
 		</pre>
 	</div> <!-- END H2 div -->
 
-	<h2>HTML 5 Cancas</h2>
+	<h2>HTML 5 Canvas</h2>
 	<div>
 		<p>
 			<a href="http://dev.w3.org/2006/canvas-api/canvas-2d-api.html"

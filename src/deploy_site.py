@@ -224,7 +224,10 @@ try:
 		assert(not os.path.isfile(filename))
 		destFilename = ConvertPcLocalToHostLocal(filename)
 		print "deleting {}".format(destFilename)
-		ftp.delete(destFilename)
+		try:
+			ftp.delete(destFilename)
+		except:
+			print "### IFNORING DELETE ERROR"
 
 
 except Exception as e:

@@ -570,6 +570,34 @@ dim_b = [ 2, |4|, 2 ]
 			\end{pmatrix}$
 		</p>
 		<p>
+			The matrix multiplication of those two vectors puzzled me for a little
+			bit (I've only ever been used to multiplying matricies with dimension
+			sizes greater than 1). It may be easier to think of it as follows...
+		</p>
+		<p>
+			$\begin{pmatrix}
+			u_1 \\
+			u_2 \\
+			u_3 \\
+			u_4 \\
+			\end{pmatrix}$
+			$\begin{pmatrix}
+			v_1 & v_2 & v_3 \\
+			\end{pmatrix} \equiv $
+
+			$\begin{pmatrix}
+			u_1 & 0\\
+			u_2 & 0\\
+			u_3 & 0\\
+			u_4 & 0\\
+			\end{pmatrix}$
+
+			$\begin{pmatrix}
+			v_1 & v_2 & v_3 \\
+			0 & 0 & 0
+			\end{pmatrix}$
+		</p>
+		<p>
 			How do we do this using Yorick? All one dimension vectors in Yorick
 			are column vectors (even if they are displayed textually as-if they
 			are a row!). So can we just <tt>transpose()</tt> the $v$ vector?
@@ -679,6 +707,170 @@ WARNING source code unavailable (try dbdis function)
 		Yorick we need to do <tt>u*(v-,)</tt> I.e., the transpose of <tt>v</tt>
 		is <tt>v(-,)</tt>.
 	</p>
+
+		<h3>Matrix Multipication &amp; Inner Product</h3>
+		<p>
+			In Yorick the <a href="http://dhmunro.github.io/yorick-doc/manual/yorick_45.html#Matrix-Multiply"
+				target="_blank">'<tt>+</tt>' sign</a> labels an array index for use
+			in an <a href="https://en.wikipedia.org/wiki/Dot_product" target="_blank">inner product</a>
+			(a.k.a. dot product or scalar product) and can be used to calculate vector 
+			inner products or matrix multiplications.
+		</p>
+		<p>
+			For two 1D arrays, <tt>a</tt> and <tt>b</tt>, the operation is fairly 
+			straight forward. Writing <tt>a(+)</tt> and <tt>b(+)</tt> marks the only
+			dimension in each array as being used for the inner product. Therefore,
+			the calculation becomes $\Sigma a(i)b(i)$.
+		</p>
+		<p>
+			So, what happens when the arrays have more than 1D? Let's have a look
+			at some 2D arrays...
+		</p>
+		<p>
+			<img src="##IMG_DIR##/dot_product_yorick_1.png" style="margin:10px;"/>
+			<img src="##IMG_DIR##/dot_product_yorick_2.png" style="margin:10px;"/>
+			<br/>
+			<img src="##IMG_DIR##/dot_product_yorick_4.png" style="margin:10px;"/>
+			<img src="##IMG_DIR##/dot_product_yorick_3.png" style="margin:10px;"/>
+		</p>
+		<p>
+			We can see from the above that the index marked with the <tt>+</tt> 
+			sign is used for the inner product. Note that all these combinations 
+			are only possible because the matricies are square.
+		</p>
+		<p>
+			For example, in the pictures above, <tt>a(,+)</tt> marks the <em>row</em>
+			index as being used for the inner product. I.e by selecting all rows in 
+			each column we create the vectors being used on the LHS of the dot 
+			product. Therefore we select <tt>a(1,:)</tt>, <tt>a(2,:)</tt>
+			all the way through to <tt>a(n,:)</tt>.
+		</p>
+		<p>
+			Therefore, the indicies marked 
+			with the <tt>+</tt> sign <em>must have the same length</em>. 
+		</p>
+		<p>
+			<div class="box_container"><div class="info">
+				<p>
+					Indicies marked  with the <tt>+</tt> sign <em>must have the same 
+					length</em>.
+				</p>
+			</div></div>
+		</p>
+		<p>
+			Lets say <tt>dimsof(a) = (2, n, m)</tt> and <tt>dimsof(b) = (2, m, l)</tt>.
+			The process for <tt>c = a(,+)*b(+,)</tt> becomes:
+		</p>
+		<pre>for i 1..n 
+   v1 = a(i, :) // 1d vector, length m
+   for j in 1..l
+      v2 = b(:, j) // 1d vector, length m
+      r(i,j)  = v1(+) * v2(+)</pre> 
+
+		<p>
+			The only matrix multiplication I was ever taught was &quot;normal&quot;
+			matrix multiplication:
+		</p>
+		<p>
+			$$\begin{pmatrix}
+			a(1,1) & a(2,1)\\
+			a(1,2) & a(2,2)\\
+			\end{pmatrix}
+			\begin{pmatrix}
+			b(1,1) & b(2,1)\\
+			b(1,2) & b(2,2)\\
+			\end{pmatrix} = $$
+			$$\begin{pmatrix}
+			a(1,1)b(1,1) + a(2,1)b(1,2) & a(1,1)b(2,1) + a(2,1)b(2,2)\\
+			a(1,2)b(1,1) + a(2,2)b(1,2) & a(1,2)b(2,1) + a(2,2)b(2,2)\\
+			\end{pmatrix} = $$
+			$$\begin{pmatrix}
+			a(:,1)b(1,:) & a(:,1)b(2,:)\\
+			a(:,2)b(1,:) & a(:,2)b(2,:)\\
+			\end{pmatrix}$$
+		</p>
+
+		<p>
+			What you might notice is that the way the matrix multiplication works
+			in Yorick, as described above, the index of the RHS changes most
+			quickly. In &quot;normal&quot; matrix multiplication, it is the LHS
+			index that is changing most quickly. 
+			
+		</p>
+		<p>
+			The figure below compares the closest operation we've seen so far with
+			what I'd think of as a &quot;normal&quot; matrix multiplication...
+		</p>
+		<p>
+			<img src="##IMG_DIR##/dot_product_normal.png" style="margin:10px;"/>
+		</p>
+		<p>
+			Visually we can see that <tt>transpose(a(+,)*b(,+))</tt> is equivalent
+			to the &quot;normal&quot; matrix multiplication.
+		</p>
+		<p>
+			Another way to do this is to note that...
+			$$\begin{pmatrix}
+			a(:,1)b(1,:) & a(:,1)b(2,:)\\
+			a(:,2)b(1,:) & a(:,2)b(2,:)\\
+			\end{pmatrix} \equiv 
+			\begin{pmatrix}
+			b(1,:)a(:,1) & b(2,:)a(:,1)\\
+			b(1,:)a(:,2) & b(2,:)a(:,2)\\
+			\end{pmatrix}$$
+		</p>
+		<p>
+			Therefore, to accomplish this &quot;normal&quot; matrix multiplication
+			between <tt>a</tt> and <tt>b</tt>, in Yorick we would write
+			<tt>b(,+) * a(+,)</tt> to do the &quot;normal&quot; matrix 
+			multiplication <tt>AB</tt>.
+		</p>
+		<p>
+			As we've noted, all these combinations above are only possible because 
+			the matricies are square. Remember that the indicies marked for inner
+			product must share the same length. If, for example <tt>a</tt> has
+			3 rows and 2 columns and <tt>b</tt> had 8 rows and 2 columns, the 
+			only possible operation would be <tt>a(+,)*b(,+)</tt>.
+		</p>
+
+		<h4>An Example With SVsolve</h4>
+		<p>
+			The function <tt>SVsolve</tt> can be used to solve sets of simultaneous
+			linear equations. Let's say that we have two arrays. Array <tt>a</tt>
+			will represent the coefficients of the unknowns in our set of quations.
+			lets say that that we have <tt>n</tt> unknowns and <tt>m</tt> 
+			equations. The array <tt>a</tt> is an <tt>n x m</tt> matrix. Our linear
+			equations, as we would normally write them (i.e., as I was taught in
+			school) therefore look like this:
+		</p>
+		<p>
+			<img src="##IMG_DIR##/solve_linear_equations_norm.png" style="margin:10px;"/>
+		</p>
+		<p>
+			So if I were to pass the coefficient matrix (2D array) and the result
+			vector (1D array) to <tt>SVsolve</tt> everything will work fine right?
+			Err... no! Doh! Why not? It comes back to the issue
+			above... the matrix multiplication is (at least for me) slightly
+			unintuitive (probably just me!).
+		</p>
+		<p>
+			<tt>SVsolve()</tt> solves for <tt>A(,+)*x(+) = B</tt>. As we've seen,
+			<tt>A(,+)</tt> will multiply the <em>columns</em> of <tt>A</tt> with 
+			<tt>x(+)</tt>. Oops: <tt>SVsolve()</tt> is trying to do this:
+		</p>
+		<p>
+			<img src="##IMG_DIR##/solve_linear_equations_oops.png" style="margin:10px;"/>
+		</p>
+		<p>
+			So, the solution is to <tt>transpose()</tt> the array you are using
+			before passing it to <tt>SVsolve()</tt>!
+		</p>
+
+
+			
+
+			
+
 		<h3>Rubber Indicies In Yorick</h3>
 		<p>
 			<q>Yorick has one other indexing syntax which has proven useful, which I
@@ -796,6 +988,40 @@ object [1]: group
 			number cruncher of large data arrays, but if you wanted a copy, this could throw you. The same
 			copy-of-reference problem would occur if <tt>q</tt> has been another OXY object.
 		</p>
+		<p>
+			You make have done a double-take here because previosuly, when describing arrays,
+			we said array assignment copies the array <em>values</em>, i.e. a complete copy of the array
+			is made. This is clearly not the case when saving an OXY object member as an
+			array. OXY object members appear always to be references unless the member stores
+			a non-array primative.
+		</p>
+		<p>
+			<div class="box_container"><div class="info">
+				<p>
+					OXY object members appear always to be references unless the member stores
+					a non-array primative. Be cautious, when setting an OXY object 
+					member to equal an array: remember, unlike vanilla array to array copy, the OXY object member stores a 
+					<em>reference</em> to the asignee!
+				</p>
+			</div></div>
+		</p>
+		<p>
+			If you want to copy an array &quot;into&quot; an OXY object (actually create a nameless
+			array and assign the reference to the OXY object member), use <em>array slicing</em> and
+			take, if you want the entire array, a slice of the entire array:
+		</p>
+		<pre class="prettyprint linenums">
+&gt; a = [1,2,3]
+&gt; b = save(a=a(:)) # By taking a slice of the entire array we force a copy.
+&gt; b.a              # Slicing operations happen immediately and result in a 
+[1,2,3]            # temporary array, the reference to which is then stored
+&gt; a                # in the OXY object member.
+[1,2,3]
+&gt; a(1)=99
+&gt; a
+[99,2,3]
+&gt; b.a
+[1,2,3]</pre>
 		<p>
 			To fully, deep copy, an OXY object your therefore have to build a new object from scratch,
 			and copy in all primative types and then recursively copy in all member OXY objects and also
@@ -1162,6 +1388,18 @@ void Y_jehtech_Dump2D(int argc)
 
 		</div> <!-- END H3 Div -->
 	</div> <!-- END H2 Div -->
+
+
+	<h2>Run Yorick From Python</h2>
+	<div>
+		<p>
+			Cool... this looks promising as to test some Yorick I have been
+			using Robot Framework so being able to do this would make tests 
+			easier! Haven't done anything with it yet but Munro has written a
+			<a href="https://github.com/dhmunro/pyorick"
+				target="_blank">Python module interact with Yorick</a>.
+		</p>
+	</div> <!-- End H2: Run Yorick From Python -->
 </div> <!-- END H1 Div -->
 </div> <!-- END "Contents" Div -->
 </body>

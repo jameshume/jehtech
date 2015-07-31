@@ -65,6 +65,10 @@ $(function(){
 	title   = $('#content h1.title');
 	mainWin = $(window);
 
+	$('#small_text').click(function(){ $('body').css('font-size', '8pt');});
+	$('#medium_text').click(function(){ $('body').css('font-size', '10pt');});
+	$('#big_text').click(function(){ $('body').css('font-size', '12pt');});
+
 	headerHeight = $('#header').height();
 
 	sidebar.height(mainWin.height());

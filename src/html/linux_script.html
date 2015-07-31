@@ -39,8 +39,40 @@
 				<li><a href="http://stackoverflow.com/questions/918886/how-do-i-split-a-string-on-a-delimiter-in-bash"
 					target="_blank">How do I split a string on a delimiter in Bash?</a>
 				</li>
+				<li><a href="https://en.wikipedia.org/wiki/User_identifier"
+					target="_blank">Linux User Identifier, Wikipedia</a>.
+				</li>
 			</ol>
 		</div> <!-- END H2: References -->
+
+		<h2>Ensure Script Run As Root</h2>
+		<div>
+			<p>
+				If you know that your shell script will require root permissions
+				and must be run with <tt>sudo</tt>, you can cause the script to
+				output a useful error message and abort if it isn't run as such,
+				rather than a bunch of commands just failing. To do this you can 
+				check the user's effective user ID
+				<a href="https://en.wikipedia.org/wiki/User_identifier"
+					target="_blank">[4]</a>, which will be zero if s/he has
+				root privileges...
+			</p>
+			<pre class="prettyprint linenums lang-python">if [ "$(id -u)" -ne 0 ]
+then
+   echo "### ERROR: You must run this script as root"
+   exit 1
+fi</pre>
+			<p>
+				Instead of <tt>$(id -u)</tt> you could also use <tt>$EUID</tt> and
+				you can be more consise using:
+			</p>
+			<pre class="prettyprint linenums lang-python">[ "$(id -u)" -ne 0 ] &amp;&amp; { echo "### ERROR: You must run this script as root"; exit 1; }</pre>
+			<p>
+				Where the <tt>{...}</tt> braces group the commands but executes them
+				in the current shell context. If you used <tt>(...)</tt> braces then
+				the group commands would be executed in a sub-shell.
+			</p>
+		</div> <!-- END: H2 -->
 
 		<h2>Linux Prompt With Colours</h2>
 		<div>
