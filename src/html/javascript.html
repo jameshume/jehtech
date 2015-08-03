@@ -17,19 +17,18 @@
 			var box2 = jC.addObject(new jCanv.Box(jC, 100, 30, 50, 50, {lineColour: "blue", fillColour: "orange", lineWidth:2}));
 			var box2_end = new jCanv.Box(jC, 30, 25, 100, 100, {lineColour: "blue", fillColour: "orange", lineWidth:2, rotateDeg: -45});
 			var box2_end2 = new jCanv.Box(jC, 100, 30, 50, 50, {lineColour: "blue", fillColour: "orange", lineWidth:2});
+			
 			var anim_step = 0;
 			
 			jC.render();
 
-			// TODO: There is a bug in the canvas animation... it keeps getting
-			// faster lol
 			var anim_func = function() {
 				if (anim_step === 6) {
 					anim_step = 0;
 					$("#play_anim").removeAttr('disabled');
 				}
 				else {
-					jC.animateObject(box1, (anim_step % 2 == 0) ? box1_end : box1_end2, 10000, function() { anim_func(); });
+					jC.animateObject(box1, (anim_step % 2 == 0) ? box1_end : box1_end2, 1000, function() { anim_func(); });
 					jC.animateObject(box2, (anim_step % 2 == 0) ? box2_end : box2_end2, 5000);
 					anim_step += 1;
 				}
@@ -42,7 +41,7 @@
 		});
 	</script>
 </head>
-
+	
 <body>
 <div id="header">
 	-- This is JEHTech --
@@ -508,7 +507,7 @@ if (condition)
 		</ul>
 		</div> <!-- END: H3 -->
 
-		<h3>Object Methods: Properties That Reference Functions</h3>
+		<h3>Object Methods: Properties That Reference Functions &amp; Changing &quot;this&quot;</h3>
 		<div>
 			<p>
 				Object methods are just properties that reference functions. When 
@@ -524,6 +523,28 @@ if (condition)
 					target="_blank"><tt>call()</tt></a> (remember functions are first class objects
 				so have methods and properties associated with them).
 			</p>
+			<ul>
+				<li>
+					<tt>func_name.call(this_value, arg1, ..., argN)</tt><br/>
+					Calls the function but binds this to <tt>this_value</tt>,
+					overriding its default binding.
+				</li>
+				<li>
+					<tt>func_name.apply(this_value, [arg1, ..., argN])</tt><br/>
+					Like <tt>call()</tt> except function parameters specified in
+					array. Useful if you want to <em>dynamically</em> build
+					the argument list.
+				</li>
+				<li>
+					<tt>func_name.binc(this_value, param1, ..., paramN)</tt><br/>
+					Creates a new function object using <tt>func_name</tt> as the
+					template with the function#s <tt>this</tt> value bound
+					to <tt>this_value</tt>, overriding the default. It optionally 
+					also binds some of the parameters.
+				</li>
+			</ul>
+			
+
 		</div> <!-- END: H3 -->
 	</div> <!-- END: H2: Objects In JavaScript -->
 
@@ -532,32 +553,6 @@ if (condition)
 		<pre>
 OBJECTS:
 --------
-	CHANGING THIS:
-		Call()
-		Call() function with parameters but bind this to some specific context rather than the auto-assigned one
-		function sayNameForAll(label) {
-			console.log(label + ":" + this.name);
-		}
-		var person1 = {
-			name: "Nicholas"
-		};
-		var person2 = {
-			name: "Greg"
-		};
-		var name = "Michael";
-		sayNameForAll.call(this, "global"); // outputs "global:Michael"
-		sayNameForAll.call(person1, "person1"); // outputs "person1:Nicholas"
-		sayNameForAll.call(person2, "person2"); // outputs "person2:Greg"
-
-		Apply()
-		apply() function. Like call except parameters are in array
-
-		Bind()
-		Creates a new function from the "template" with any parameters (minimum is this)
-		permanently bound.
-		var sayNameForPerson2 = sayNameForAll.bind(person2, "person2");
-		sayNameForPerson2(); // outputs "person2:Greg"
-
 Test For Object Properties
 	property_name in object_name
 		Does not evaluate the property just says if present

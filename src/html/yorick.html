@@ -336,26 +336,39 @@ b[0][1][2] == 6	b[1][1][2] == 66</pre>
 				a slice of an object. All slicing operations happen immediately and result in a 
 				temporary array...</q>.
 			</p>
+			<p>
+				<div class="box_container"><div class="info">
+					<p>
+						All slicing operations happen immediately and result in a temporary
+						array (i.e., a <em>copy-by-value</em>).
+					</p>
+				</div></div>
+			</p>
+
 		</div> <!-- END H3: Slices Are Not Like NumPy Slices -->
 
-		<h3>Arrays Passed To Functions By Reference</h3>
+		<h3>When Arrays Are Not Copied By Value</h3>
 		<div>
-			<p>
-				Arrays are passed to functions by reference in the sense that if you modify the array in
-				the function, the caller's array is modified...
-			</p>
-			<pre class="prettyprint linenums">&gt; y = [1,2,3,4]
+
+	
+			<h4>Arrays Passed To Functions By Reference</h4>
+			<div>
+				<p>
+					Arrays are passed to functions by reference in the sense that if you modify the array in
+					the function, the caller's array is modified...
+				</p>
+				<pre class="prettyprint linenums">&gt; y = [1,2,3,4]
 &gt; func cheeseit(x) {
     x(1) = 9999 /*&lt;-- NOTE: Will change array in caller's scope */
   }
 &gt; cheeseit(y)
 &gt; y /*&lt;-- NOTE: y has been changed by function */
 [9999,2,3,4]</pre>
-			<p>
-				For a pass-by-copy kind of semantic, do the following, but note copying an array will
-				be expensive if this is a large array!
-			</p>
-			<pre class="prettyprint linenums">&gt; y = [1,2,3,4]
+				<p>
+					For a pass-by-copy kind of semantic, do the following, but note copying an array will
+					be expensive if this is a large array!
+				</p>
+				<pre class="prettyprint linenums">&gt; y = [1,2,3,4]
 &gt; func cheeseit(x) {
     x_local = x;       /*&lt;-- x is <em>copied</em> to x_local, but copy is <em>EXPENSIVE</em>! */
     x_local(1) = 9999; /*&lt;-- Changes to x_local will NOT affect array in caller's scope */
@@ -363,7 +376,36 @@ b[0][1][2] == 6	b[1][1][2] == 66</pre>
 &gt; cheeseit(y)
 &gt; y /*&lt;-- NOTE: y is NOT changed by the function */
 [1,2,3,4]</pre>
-		</div> <!-- END H3: Arrays Passed To Functions By Reference -->
+			</div> <!-- END H4: Arrays Passed To Functions By Reference -->
+
+			<h4>OXY Objects Store References</h4>
+			<div>
+				<p>
+					Above we just saw that when copying an entire array, or a slice
+					of an array, the copy is done by value and not by reference. There
+					is a caveat however... when assigning an array belonging to an OXY
+					object to another OXY object, a reference to the array is copied.
+					The array is <em>not</em> copied by value in this instance!
+				</p>
+				<pre class="prettyprint linenums">&gt; a = save(q=[1,2,3,4])
+&gt; b = save(q=a.q) /* b's copy of a.q is a reference to a.q. unlike bare
+&gt; a.q              * array-to-array copy, which is by value, this copy is
+[1,2,3,4]         * by reference! */
+&gt; b.q
+[1,2,3,4]
+&gt; a.q(1)=999
+&gt; a.q
+[999,2,3,4]
+&gt; b.q
+[999,2,3,4]          /* LOOK! b.q must be a <em>reference</em> to a.q! */</pre>
+				<p>
+					This is not just true of copying OXY members between objects.
+					If <tt>a.q</tt> is replaced by a vanilla array (just normal
+					variable and not an OXY object), the result is the same!
+				</p>
+			</div> <!-- H4: OY Objects -->
+		</div> <!-- END H3: When Arrays Are Not Copied By Value (OXY Objects) -->
+
 
 		<a name="broadcasting"><h3>Broadcasting</h3></a>
 		<p>
