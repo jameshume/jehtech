@@ -1,0 +1,237 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>Git notes</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>		
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">Git notes</h1>
+<div style="padding-right:10px;">
+	<p>
+	<a href="http://git-scm.com/doc" target="_blank">GIT SCM</a> <br/>
+	<a href="https://progit2.s3.amazonaws.com/en/2015-08-09-23511/progit-en.661.pdf"
+		target="_blank">Book</a>.
+	</p>
+	<pre>
+Git's basic structure
+   1. Workspace
+   2. Index
+      Add files from your workspace into the index so that git knows
+      what to track. (git add (-u))
+
+      `git add .` adds all new files in cwd
+      `git add -u" updates tracking for files changed (i.e., wont add new files)
+      `git add -A` does both of the above
+   3. Local repo
+      Commit files in the index to the local repo
+      `git commit -m "your descriptive message"`
+      Still a LOCAL actions
+   4. Remote repo
+      git push (origin master)
+
+Some git config...
+   Setup your user name and email...
+      git config --global user.name &quot;name&quot;
+      git config --global user.email &quot;email&quot;
+
+   Setup your editor and diff tool examples...
+      git config --global core.editor gvim
+      git config --global core --global merge.tool vimdiff
+
+   To see your config setup...
+      git config --list
+
+   To see a specific key’s config...
+      git config key-name	
+      For example...
+         git config user.name
+
+SSH
+   https://confluence.atlassian.com/display/BITBUCKET/Set+up+SSH+for+Git
+   https://help.github.com/articles/generating-ssh-keys
+
+   Check your home directory (if on a corporate network it might not be what you expect).
+      echo $HOME
+      echo ~
+
+   To create SSH key pair;
+      ssh-keygen
+
+   To see your public key type
+      cat ~/.ssh/id_rsa.pub
+
+   To check that SSH is working...
+      ssh -T git@bitbucket.org
+      or ssh -T git@github.org
+
+   To see if the key has been added to the client keyring...
+      ssh-list -l
+      or ssh -vT address-of-server
+
+
+Create a repo: git init - creates .git with repo files
+Clone a repo:  git clone https://repo_addr [dirname]
+               Pulls sown data for repo into dirname or automatically decided
+               dirname if not specified. Note you get ENTIRE REPO including
+               ALL HISTORY locally.
+
+               REMOTE AUTOMATICALLY ADDED CALLED "origin"
+
+Files: Tracked ---&gt; staged (git add)  ---&gt; comitted to local (git commit)  ---&gt; commited to remote (git push origin master)
+
+Short status: git status -s
+
+Ignoring files: File globs in .gitignore
+                Blank lines or lines starting with # are ignored.
+                Standard glob patterns work.
+                You can negate a pattern by starting it with an exclamation point (!)
+                Two asterisks to match nested directories; a/**/z
+                Rules accumulate. E.g:
+                   # no .a files
+                   *.a
+                   # but do track lib.a, even though you're ignoring .a files above
+                   !lib.a
+
+Diffing
+   git diff: What you have changed but NOT staged
+   git diff --staged: What will go into next commit
+   git diff --cached: synonym
+
+   NOTE: If you modify a file AFTER staging, the modifications after the stage 
+         willl not be committed in this commit unless added again.
+
+   git difftool to use external diff tool
+
+Committing
+   git commit -m "your msg here"
+   git commit -a -m "..." to SKIP staging (Git automatically
+       stage every file that is already tracked before doing the commit)
+   git commit --amend (modify the last commit, e.g change msg etc)
+                       takes your staging area and uses it for the commit
+                       EG
+                          git commit -m 'initial commit'
+                          git add forgotten_file
+                          git commit --amend
+
+View history
+   git log -n - n is integer limiting output to last n entries
+   git log -p shows differences introduced in each commit
+   git log --since=2.weeks
+   git log -Sstring_to_search  shows the commits that introduced a change
+                               to the code that added or removed string
+   git log --oneline --decorate --graph --all
+
+Branches
+   Branch is another version of the same directory. the default is master.
+   `git checkout -b branchname`
+   `git branch` to see what branch you're on
+   `git checkout master` to switch back to the master branch type
+
+
+Remotes
+   git remote : displays name of remote
+                -v shows URLS of each remote
+
+   git remote add [shortname] [url]
+
+   Fetch and pull
+      git fetch [remote-name]. Gets modifications from remote
+   
+      Cloned repos have been automatically saved as the remote "origin" by default.
+   
+      git pull = git fetch + merge
+   
+   Push to remotes
+      git push [remote-name] [branch-name]
+
+Branching
+   Each commit is poitner to snapshot plus author/committer details, msg etc and
+   pointer to prev commit (or commits if this is a result of merge).
+
+   Branch is lightweight moveable pointer to a commit.
+
+   Default branch name is "master"
+
+   git branch [branch-name] - create branch pointing to same commit you're currently on.
+                              but does NOT auto change to it.
+
+   git branch - NO arguments just lists the branches (current branch marked with *)
+      filter list with --merged and --no-merged to see branches that not merged back in etc.
+
+   HEAD points to current branch head, so changes when you change branch
+
+   To SWITCH BRANCH use 
+      git checkout branch-name
+   Now, HEAD will point to new branch and NOT prev branch
+
+   NOTE: SWITCHING BRANCHES CHANGES FILES IN YOUR WORKING DIRECTORY.
+         When you switch branches, Git resets your working directory to look 
+         like it did the last time you committed on that branch!
+
+   git checkout -b branch-name is shorthand for
+      git branch branch-name 
+      git checkout branch-name
+
+
+Integrate
+   Fast-forward:
+                                    new_fix
+                                    |
+                           master--&gt;|
+                           |        |
+      C0 -----&gt; C1 -----&gt; C2 -----&gt; C3
+
+      git checkout master
+      git checkout -b new_fix
+      // do some work
+      git commit -a -m "issue fixed and tested"
+      git checkout master
+      <b>git merge new_fix</b>
+
+      "Fast forward" because just move master pointer to new_fix.
+      Then you can DELETE the fix branch
+         git branch <b>-d</b> new_fix
+
+
+
+   Basic Merge (development distory diverged)
+                master             new master pointer
+                |                  |
+      C0 --+--&gt;C3-.-.-.-.-.-.-.-.-&gt;C5
+           |                      /
+           +--&gt;C2------&gt;C4 .-.-.-/
+                        | 
+                        some_branch
+
+      Do final commit in some_branch then check out the branch you wish to merge 
+      into (master above) and run git merge:
+         git checkout master
+         git merge some_branch
+      Git does 3-way merge using common ancestor. Then you can DELETE some_branch.
+
+   Merge conflict
+      New merge commit not performed until you resolve conflict. Conflict file
+      will have conflict markers added to it.
+
+     Use 
+        git mergetool
+</pre>
+</div>
+</div>
+</body>
+</html>

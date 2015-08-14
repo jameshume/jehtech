@@ -1,7 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-	<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
 	<title>IPython Notebook Notes</title>
 	<!-- META_INSERT -->
 	<!-- CSS_INSERT -->
@@ -93,6 +94,13 @@ def PlotIt(btn):
     if graphChoice.value == 'c': y = -np.power(x, 2)
     if graphChoice.value == 'd': y = -np.power(x, 3)
     ax.plot(x,y, marker='x')
+    
+    # This <b>plugin</b> will display graph coordinates of the mouse when it
+    # hovers over the graph in the bottom right! It must be linked to the
+    # matplotlib figure and <b>called before</b> mpld3.display().
+    mpld3.plugins.connect(fig, mpld3.plugins.MousePosition()) 
+
+    # Use this to display the mpld3 figure...
     mpld3Fig = mpld3.display(fig) # Auto removes `fig` for us
     display.display(mpld3Fig)
 
@@ -110,6 +118,9 @@ display.display(plotBtn)
 			One slightly annoying thing is that the notebook viewer doesn't display the interactive widgets so although you can see the
 			mpld3 interactive graph in action, you can't see the widgets in action which would allow you to select what graph you want to see.
 			Download the notebook and run locally for that part of the demo.
+			</p>
+			<p>
+			You can <a href="https://mpld3.github.io/notebooks/custom_plugins.html" target="_blank">read about mpld3 plugins here</a>.
 			</p>
 		</div>
 		

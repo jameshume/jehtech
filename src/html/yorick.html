@@ -1,7 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-	<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
 	<title>Yorick notes</title>
 	<script type="text/x-mathjax-config">
 		MathJax.Hub.Config({
@@ -401,7 +402,9 @@ b[0][1][2] == 6	b[1][1][2] == 66</pre>
 				<p>
 					This is not just true of copying OXY members between objects.
 					If <tt>a.q</tt> is replaced by a vanilla array (just normal
-					variable and not an OXY object), the result is the same!
+					variable and not an OXY object), the result is the same! Note, 
+					however, that assigning from an OXY object array member to a
+					normal variable is a copy-by-value.
 				</p>
 			</div> <!-- H4: OY Objects -->
 		</div> <!-- END H3: When Arrays Are Not Copied By Value (OXY Objects) -->

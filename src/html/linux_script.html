@@ -1,7 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-	<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
 	<title>Linux (Scripting) notes</title>
 	<!-- META_INSERT -->
 	<!-- CSS_INSERT -->
@@ -57,7 +58,7 @@
 					target="_blank">[4]</a>, which will be zero if s/he has
 				root privileges...
 			</p>
-			<pre class="prettyprint linenums lang-python">if [ "$(id -u)" -ne 0 ]
+			<pre class="prettyprint linenums">if [ "$(id -u)" -ne 0 ]
 then
    echo "### ERROR: You must run this script as root"
    exit 1
@@ -66,7 +67,7 @@ fi</pre>
 				Instead of <tt>$(id -u)</tt> you could also use <tt>$EUID</tt> and
 				you can be more consise using:
 			</p>
-			<pre class="prettyprint linenums lang-python">[ "$(id -u)" -ne 0 ] &amp;&amp; { echo "### ERROR: You must run this script as root"; exit 1; }</pre>
+			<pre class="prettyprint linenums">[ "$(id -u)" -ne 0 ] &amp;&amp; { echo "### ERROR: You must run this script as root"; exit 1; }</pre>
 			<p>
 				Where the <tt>{...}</tt> braces group the commands but executes them
 				in the current shell context. If you used <tt>(...)</tt> braces then
@@ -148,7 +149,7 @@ else:
 			<p>
 				The first method I learnt to dereference a variable was this:
 			</p>
-			<pre class="prettyprint linenums lang-python">$ jtRef=JEH_TECH
+			<pre class="prettyprint linenums">$ jtRef=JEH_TECH
 $ JEH_TECH="This is JEH-Tech.com"
 $ eval echo \$$jtRef
 This is JEH-Tech.com</pre>
@@ -166,7 +167,7 @@ This is JEH-Tech.com</pre>
 					target="_blank">[2]</a>. We could just write
 				the following.
 			</p>
-			<pre class="prettyprint linenums lang-python">$ echo ${!jtRef}
+			<pre class="prettyprint linenums">$ echo ${!jtRef}
 This is JEH-Tech.com</pre>
 			<p>
 				In Bash, the variable expansion mechanism 
@@ -237,7 +238,7 @@ This is JEH-Tech.com</pre>
 					<tt>${!<em>varName</em>}</tt> syntax is a commented-out equivalent
 					using <tt>eval</tt>.
 				</p>
-				<pre class="prettyprint linenums lang-python">#
+				<pre class="prettyprint linenums">#
 # Expects 2 arguments. The name of the variable to have a path element
 # added to it and the path element.
 # eg. add_to_path LD_LIBRARY_LATH /my/special/directory
@@ -293,24 +294,48 @@ function remove_from_path() {
 			</div> <!-- END: H3 -->
 		</div> <!-- END: H2: Modify Any Path... -->
 
-		<h2>Parse Version Strings: Splitting Strings On A Delimeter</h2>
-		<p>
-			I wanted to be able to check the IPython version in a shell script to
-			let the user know if it needed upgrading and to offer to do the upgrade
-			automatically. I knew I could spit the string onto multiple lines 
-			using <tt>tr</tt> and then parse it in a <tt>for</tt> loop, but a quick
-			bit of googling and StackOverflow came to the rescue again 
-			<a href="http://stackoverflow.com/questions/918886/how-do-i-split-a-string-on-a-delimiter-in-bash"
-			   target="_blank">[3]</a>.
-		</p>
-		<pre class="prettyprint linenums lang-python">IFS="." read -a pyVerInfo &lt;&lt;&lt; "$pyVer"
+		<h2>Misc Script Stuff</h2>
+		<div>
+			<h3>Halt script if variable NOT set</h3>
+			<pre class="prettyprint linenums"><a href="http://linuxcommand.org/lc3_man_pages/seth.html" target="_blank">set</a> -u</pre>
+
+			<h3>Parse Version Strings: Splitting Strings On A Delimeter</h3>
+			<p>
+				I wanted to be able to check the IPython version in a shell script to
+				let the user know if it needed upgrading and to offer to do the upgrade
+				automatically. I knew I could spit the string onto multiple lines 
+				using <tt>tr</tt> and then parse it in a <tt>for</tt> loop, but a quick
+				bit of googling and StackOverflow came to the rescue again 
+				<a href="http://stackoverflow.com/questions/918886/how-do-i-split-a-string-on-a-delimiter-in-bash"
+				   target="_blank">[3]</a>.
+			</p>
+			<pre class="prettyprint linenums">IFS="." read -a pyVerInfo &lt;&lt;&lt; "$pyVer"
 if [ ${pyVerInfo[0]} -ne 3 ]; then
    #error
 fi</pre>
-		<p>
-			This cool little snippet splits the string up using a full-stop as the
-			delimeter and saves it as an array to the variable <tt>pyVerInfo</tt>.
-		</p>
+			<p>
+				This cool little snippet splits the string up using a full-stop as the
+				delimeter and saves it as an array to the variable <tt>pyVerInfo</tt>.
+			</p>
+
+			<h3>Find --exec alternative when you want to exec a script function</h3>
+			<p>
+				For when you want to do an operation on a set of files but can't
+				use &quot;<tt>find ... -exec ...</tt>&quot; because you want to
+				call a script function, for example...
+			</p>
+			<pre class="prettyprint linenums">find path ..options.. -print |
+while read variable_name
+do
+   my_function "$variable_name"
+done</pre>
+
+			<h3>Useful builtins</h3>
+			<ul>
+				<li><tt><a href="http://linuxcommand.org/lc3_man_pages/readh.html" target="_blank">read</a></tt>. read input from stdin</li>
+				<li>readlink. options like --canonicalize (-f is synonym)</li>
+			</ul>
+		</div><!-- End H2: Misc Script Stuff -->
 
 		<h2>Debug .so Loading Using LD_DEBUG</h2>
 		<div>
