@@ -202,6 +202,16 @@ svn commit</pre>
 		several really good answers are found in <a href="http://stackoverflow.com/questions/1764521/recursive-svn-propset"
 			target="_blank">this SO thread</a>.
 	</p>
+
+	<h2>Misc</h2>
+	<h3>Add all untracked files</h3>
+	<pre>svn add $(svn status | grep ? | awk '{print $2}')</pre>
+	<h3>Diff all changes in changeset</h3>
+	<pre>svn diff -c &lt;changeset&gt; [filename]</pre>
+	<p>This is the same as running the following:</p>
+	<pre> svn diff -r rev-1:rev [filename]</pre>
+	<p>If <tt>filename</tt> is ommitted all changes in that changeset
+	are examined</p>
   </div>
 </body>
 </html>

@@ -1603,6 +1603,10 @@ $(function(){
 	title   = $('#content h1.title');
 	mainWin = $(window);
 
+	$('#small_text').click(function(){ $('body').css('font-size', '8pt');});
+	$('#medium_text').click(function(){ $('body').css('font-size', '10pt');});
+	$('#big_text').click(function(){ $('body').css('font-size', '12pt');});
+
 	headerHeight = $('#header').height();
 
 	sidebar.height(mainWin.height());
@@ -1804,12 +1808,16 @@ function com_JEHTech_www_Canvas() {
 	};
 
 	JEHCanvas.prototype.animateObject = function(obj, objEnd, timeInMilliSeconds, onFinishAnimFunc) {
+		console.log("ANIMATE OBJECT()");
+		console.log(this);
 		if ( !this.objectIsOnCanvas(obj) ) {
 			throw 'JEHCanvas.animateObject: Object "' + obj +
 			      '" not on canvas!';
 		}
 		
 		if ( this.objectIsBeingAnimated(obj) ) {
+			console.log(obj);
+			console.log(this.animated);
 			throw 'JEHCanvas.animateObject: Object "' + obj +
 			      '" is already being animated!';
 		}
@@ -1843,24 +1851,40 @@ function com_JEHTech_www_Canvas() {
 					var deleted = [];
 					for (var idx = 0; idx < this2.animated.length; ++idx) {
 						var thisEl = this2.objects[this2.animated[idx]];
-						thisEl.animInfo.animFunc(thisEl.ttl);
+						thisEl.animInfo.animFunc(thisEl.animInfo.ttl);
 						thisEl.animInfo.ttl++;
-						if (thisEl.animInfo.ttl > thisEl.animInfo.ttl_end) {
-							deleted.push(this2.animated.splice(idx, 1));
+						if (thisEl.animInfo.ttl >= thisEl.animInfo.ttl_end) {
+							console.log("BEFORE DELETE");
+							console.log(this2);
+							console.log(this2.animated);
+							var deletedEl = this2.animated.splice(idx, 1);
+							console.log(deletedEl);
+							deleted.push(deletedEl[0]);
+							console.log("AFTER DELETE");
+							console.log(this2);
+							console.log(this2.animated);
 							idx -= 1;
 						}
 					}
 					
 					this2.render();
 
+					var remainingAfterDelete = this2.animated.length - deleted.length
 					for(var idx = 0; idx < deleted.length; ++idx) {
+						console.log("LALALAL");
+						console.log(deleted);
+						console.log(this2.animated);
 						var thisEl = this2.objects[deleted[idx]];
 						if (thisEl.animInfo.hasOwnProperty("onFinishAnimFunc")) {
-								thisEl.animInfo.onFinishAnimFunc(thisEl.element);
+							// Note: The onFinish function might well start a new
+							// animation.
+		console.log(this2);
+		console.log("CALLING ON FINSIH");
+							thisEl.animInfo.onFinishAnimFunc(thisEl.element);
 						}
 					}
 
-					if( this2.animated.length > 0 ) {
+					if( remainingAfterDelete > 0 ) {
 						setTimeout(arguments.callee, frameRate);
 					}
 				},

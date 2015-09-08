@@ -43,14 +43,80 @@
 					<li><a href="http://pandas.pydata.org/pandas-docs/stable/api.html"
 						target="_blank">Pandas API</a>
 					</li>
+					<li><a href="http://pandas.pydata.org/pandas-docs/stable/cookbook.html"
+					       target="_blank">Pandas Cookbook</a>.
+					</li>
 				</ol>
 			</div>
 
 			<h2>Pandas</h2>
 			<div>
+				<p>
+					A funny little example to see how average house prices differ in the UK using Pandas. 
+					The example uses data from the UK government's open data website on the residential 
+					property sales in England and Wales that are lodged with Land Registry for registration in 2014,
+					to compute the 5 most expensive and least-expensive places to buy a home (on average)...
+				</p>
+				<h3>A small motivating example...</h3>
+<pre class="prettyprint linenums lang-python">
+import urllib2
+import os
+import pandas
+
+#
+# WARNING: File is about 150MB!!
+# See: <a href="http://data.gov.uk/dataset/land-registry-monthly-price-paid-data" target="_blank">http://data.gov.uk/dataset/land-registry-monthly-price-paid-data</a>
+DATA_FILE = r'land_reg_data_2015.csv'
+
+if not os.path.isfile(DATA_FILE):
+   print "Data file {} did not exist. Downloading, please wait...".format(DATA_FILE)
+   url = r'http://prod.publicdata.landregistry.gov.uk.s3-website-eu-west-1.amazonaws.com/price-paid-data/pp-2014.csv'
+   response = urllib2.urlopen(url)
+   csvfile = open(DATA_FILE,'w')
+   csvfile.write(response.read())
+   csvfile.close()
+
+print "Loading DataFrame from CSV"
+df = pandas.read_csv(
+        DATA_FILE, 
+        index_col=False, # Make sure first column is NOT treated as index!
+        names=[ "code", "price", "date", "postcode", "f1", "f2", "f3", 
+                "address1", "address2", "address3", "address4", "address5", 
+                "address6", "county", "f4"] )
+
+# Possibly don't really need to filter as price is the only numeric column
+# and pandas seems to ignore the non-numerics quite sensibly.
+df2            = df.ix[:,["county", "price"]]
+grouped        = df2.groupby("county", sort=True)
+mean_prices_df = grouped.mean().sort(columns=["price"])
+
+fig, ax = pl.subplots()
+
+print "\nThe 5 most expensive counties in the UK, 2014 are..."
+least = mean_prices_df.tail(5)
+print least
+
+print "\nThe 5 least expensive counties in the UK, 2014 are..."
+most = mean_prices_df.head(5)
+print most
+
+pandas.concat([least,most]).plot(ax = ax, kind='bar')
+pl.subplots_adjust(bottom=.5)
+ax.grid()
+fig.savefig(r'pandas_landreg.png')
+</pre>
+	<p> 
+	This will output the following:<br/>
+		<img src="##IMG_DIR##/python/pandas_landreg.png" alt="Pandas plot of UK langregistry prices">
+	</p>
+
+				<h3>Rough and ready notes</h3>
 				<p>All the following is just notes from ref 
 					<a href="http://shop.oreilly.com/product/0636920023784.do"
-					target="_blank">[1]</a>
+					target="_blank">[1]</a> augmented by
+					<a href="http://pandas.pydata.org/pandas-docs/stable/api.html"
+					target="_blank">[3]</a>
+				</p>
 <pre>
 Pandas workhouses: Series and DataFrame
 
@@ -191,12 +257,15 @@ DataFrame_obj.ix[row-range, col-range]
 The specifiers can be labels, indicies etc as per usual array selection/filter
 
 
-Indexing options with DataFrame
+Indexing options with DataFrame (most exist for Series too!)
 Type Notes
 obj[val]           Select single column or sequence of columns from the DataFrame.
                    Special case conveniences:
-                       boolean array (filter rows), slice (slice rows), or 
+                       boolean array sample length as index (filter rows), 
+                       slice (slice rows), or 
                        boolean DataFrame (set values based on some criterion).
+                   can use df.map() to generate more complex criteria0
+
 obj.ix[val]        Selects single row of subset of rows from the DataFrame.
 obj.ix[:, val]     Selects single column of subset of columns.
 obj.ix[val1, val2] Select both rows and columns.
@@ -204,6 +273,43 @@ reindex            method Conform one or more axes to new indexes.
 xs                 method Select single row or column as a Series by label.
 icol, irow         methods Select single column or row, respectively, as a Series by integer location.
 get_value, set_value methods Select single value by row and column label.
+loc  - used on index values - LABEL BASED indexing.
+       Start AND stop bound included in slices
+       Accepts single labels, lists of labels, ranges of labels
+       Use:
+          series.loc[lbl]
+          df.loc[row-lbl-spec, col-lbl-spec] where spec is single lbl, list 
+             of lbls, lbl range, or array of booleans.
+          df.loc[row-lbl] for cross section - row row-lbl for all columns.
+
+       TO BE PREFERED OVER CHAINED INDEXING.
+       ie, for MultiIndex use df.loc[:,(&quot;a&quot;,&quot;b&quot;)] not df[&quot;a&quot;][&quot;b&quot;]
+       ESPECIALLY for setting!
+
+iloc - integer positions (i.e. like array index, 0 based)
+       standard array indexing, i.e scalar, fancy, ranges, bools
+       can SET using iloc
+       Use:
+          df.iloc[idx] - gives rows for all cols
+          df.iloc[row-idx, col-idx]
+       Out-of-range slices handled gracefully.
+.at/iat - fast scalar value get/set
+sample() for random samples
+isin() - returns bool vect, true wherever the element is in passed list. With
+         df can also match vertain values with certain cols by passing in 
+         a dict.
+         Eg from Pandas docu:
+            values = { 'colA': [...], 'colB': [...], ... }
+            row_mask = df.isin(values).all(1)
+            df[row_mask]
+where() - return series with same shape as orig
+          is s[s&gt;0] v.s. s.where(s &gt; 0)
+          Same for df, also accepts value for where condition would be false
+          to fill in with. By default returns copy by has inplace arg.
+mask()  - inverse of where.
+
+<a href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.Index.get_loc.html"
+   target="_blank">get_loc</a> - gets integer positions
 
 
 Arithmetic
@@ -325,6 +431,11 @@ ser_obj['outer_label'] == returns all the inner labels and their data associated
                        with the outer label
 
 ser_obj[:'inner'] == returns all the inner labels matching 'inner' returning the values labeled by outer
+^^^^
+This doesn't seem to work
+Use <a href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.xs.html"
+       target="_blank">df.xs()</a>
+
 
 Can use ranges/slices etc as normal in this form of indexing like the normal array ops
 

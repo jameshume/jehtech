@@ -33,6 +33,14 @@
 <pre class="prettyprint linenums lang-python">
 import matplotlib.pyplot as pl
 </pre>
+		<h3>APIs</h3>
+		<p>
+		<a target="_blank" href="http://matplotlib.org/api/figure_api.html">Figure</a> | 
+		<a target="_blank" href="http://matplotlib.org/api/axes_api.html">Axis</a> | 
+		<a target="_blank" href="http://matplotlib.org/api/lines_api.html">Lines</a> | 
+		<a target="_blank" href="http://matplotlib.org/api/legend_api.html">Legend</a> | 
+		</p>
+
 		<h3>Creating Plots, Current Figure, Current Axis</h3>
 		<p>
 		Pyplot works on the current <a href="http://matplotlib.org/api/figure_api.html" target="_blank">figure</a> 
@@ -201,6 +209,14 @@ ax.grid(which='major', alpha=0.75)
 		to plot a vertical line across the axes. Use 
 		<tt><a href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.axhline" target="_blank">axhline(y=...)</a></tt> 
 		to plot a horizontal line across the axes.
+
+		<h3>Get All Axis Lines And Their Labels</h3>
+		<p>
+			If, for example, Pandas has plotted your graph and you want to get all the lines
+			and their labels use this...
+		</p>
+		<pre class="prettyprint linenums lang-python">lines = ax.get_lines()
+labels = [l.get_label() for l in lines]</pre>
 </div>
 
 <h2>Sub Plots</h2>
@@ -335,6 +351,22 @@ for bar in bars:
 		<p>
 			<img src="##IMG_DIR##/python/coloured_bar_graph.png">
 		</p>
+</div>
+
+<h2>Embedd In pyWidgets Apps</h2>
+<div>
+	<p>
+	<a href="http://wiki.scipy.org/Cookbook/Matplotlib/EmbeddingInWx"
+		target="_blank">http://wiki.scipy.org/Cookbook/Matplotlib/EmbeddingInWx</a>
+	</p>
+	<p>
+	<a href="http://matplotlib.org/api/backend_wxagg_api.html"
+		target="_blank">http://matplotlib.org/api/backend_wxagg_api.html</a>
+	</p>
+	<p>
+	<a href="http://matplotlib.org/examples/user_interfaces/index.html"
+		target="_blank">http://matplotlib.org/examples/user_interfaces/index.html</a>
+	</p>
 </div>
 	</div>
 </body>

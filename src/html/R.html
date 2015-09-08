@@ -1,0 +1,800 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>R Notes</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+	<div id="header">
+		-- This is JEHTech --
+	</div>
+
+	<div id="sidebar">
+		<h1 class="title">Links...</h1>
+		<div id="includedContent"></div>
+	</div>
+
+	<div id="content">
+		<h1 class="title">R Notes</h1>
+		<div>
+			<pre>
+Find some training data at
+<a href="http://archive.ics.uci.edu/ml/datasets.html" 
+   target="_blank">http://archive.ics.uci.edu/ml/datasets.html</a>.
+
+<a href="http://data.gov.uk/data/search" target="_blank">http://data.gov.uk/data/search</a>.
+
+command line R help
+	help for function: ?func-name
+	help.search("func name")
+	args("func name") gets args for a function
+
+func name without brackets gives code for the function
+
+getwd() - get working directory
+functions generally read or write to your working directory (unless you use abs path)
+change workding dir using file &gt; change workdir or use setwd()
+
+dir() - list directory
+
+
+To get R code into R-console
+	- Copy and past from editor to console
+	- use source("..filename..") function
+
+ls() - lists functions available
+
+head() - see the first few lines of a dataset
+
+
+------------
+
+## rconsole input and evaluation
+--------------------------------
+
+&lt;- is the assignment operator
+   x&lt;-1
+   print(x)
+
+## is a comment
+
+operator `:` creates integer sequences
+             e.g. x &lt;- 1:20 creates a vector of 1 to 20 inclusive incrementing in steps of 1
+
+
+
+atomic classes: character, numeric (reals), integer, complex, logical
+vector: array of SAME type objects. 
+        create empty using vector().
+
+list:   array of ARBITRARY type objects
+
+dy default reals (doubles)
+L suffix for integer
+Inf special number - infinity
+Nan special number - undefined value, or missing value
+
+attributes
+	use attributes() function
+	things like
+		class
+		shape
+		length
+		user defined metadata
+
+
+class() returns the class of an object as a string.
+
+## sequences
+---------------------
+x:y generates sequence of numbers from x to y inclusive with a step of 1
+seq(x,y) is the same
+seq(x,y,by=...) generates sequence of numbers from x to y inclusive with a step of ...
+seq(x,y,length=...) dont care about the increment but want x to y inclusive such that length is ...
+length(seq_obj) yields length of seq
+
+to generate a sequence of integers from 1 to N, where N represents the length of the seq_obj:
+   1:length(seq_obj) or
+   seq(along.with=seq_obj) or
+   seq_along(my_seq)
+
+rep(0, times = 40) -  vector that contains 40 zeros
+rep(c(0, 1, 2), times = 10) - 10 repetitions of the vector (0, 1, 2) - as one vector (0, 1, 2, 0, 1, 2....)
+rep(c(0, 1, 2), each = 10) - vector to contain 10 zeros, then 10 ones, then 10 twos
+
+
+## vectors and lists
+---------------------
+c() create lists (by concatentation.
+x &lt;- c(1,2,3)
+x &lt;- vector("numeric", 10)
+
+When mixing objects coercion occurs so all vector elements same type
+
+conversion of vectors/objects
+	as.numeric(x)
+	as.logical(x) etc
+	NA's for nonsensical conversion
+
+lists - vectors that can contain elements of different classes.
+	eg...
+	x &lt;- list(1, "a", TRUE, q + 4i)
+
+use paste(list, collapse="...") to join elements of list into a string
+can also paste multiple vectors...
+	paste("Hello", "world!", sep = " ") or
+	paste(1:3, c("X", "Y", "Z"), sep="")
+paste() will recycle vectors if one is shorter than the other.
+
+Vector indicies START FROM 1. If you go beyond vector bounds you get NA.
+
+Subset vector using square brackets [] eg x[1:10]
+Can use python-like boolean-array indexing
+	eg. y&lt;- x[!is.na(x)]
+
+Can also fancy-index vectors
+   eg. x[c(1,3,5)] gets first, thrid and fith element
+       x[-c(2,10)] gives us all elements of x EXCEPT for the 2nd and 10 elements!
+         ^
+         ^
+        Note the minus sign here!
+
+Create NAMED elements using `var &lt;- c(name1=..., name2=...)`
+get the names using `names(var)`
+can set names using `names(var) &lt;- c(name1=..., name2=...)`
+
+
+To compare 2 vects for identical-ness use `identical()`
+
+
+Use `length()` to get length of vector. A vector does not hame a `dim()`
+attribute.
+
+To see if a value is in a list use %in% or match()
+    v &lt;- c('a','b','c','e')
+
+    'b' %in% v
+    ## returns TRUE
+
+    match('b',v)
+    ## returns the first location of 'b', in this case: 2
+
+using %in% alows use of all(): 
+    all(candidates %in% container)
+
+MATRICIES
+---------
+
+Have attribute called dimensions (nrow, ncol)
+
+m &lt;- matrix(nrow = 2, ncol = 3)
+Creates matrix initialised with NA values.
+
+attributes(m) gives the
+$dim attribute
+
+Use dim() to get the dimensions of an object. Vectors do not have a dim
+attribute... only matricies and data frames. Use length() for a vector.
+dim() returns (rows, cols)...
+
+
+Construct a matrix
+------------------
+They are constructed column-wise. Fill first column, then second and so on
+E.g.
+m &lt;-matrix(1:6, nrow=2, ncol=3)
+m = 1   3   5
+    2   4   6
+
+or
+m &lt;- 1:10
+apply dim attribute to a vector to create a matrix
+dim(m) &lt;-c(2,5)
+
+or
+x &lt;- 1:3
+y &lt;- 10:12
+cbind(x, y) = 
+    x    y
+    1    10 
+    2    11
+    3    12
+
+rbind(x,y) =
+    x   1   2   3
+    y   10  11  12
+
+
+
+FACTORS
+-------
+
+Represent catagorical data. Integer vector where each integer has a lbel.
+They're liked named constants/#defines (more self-describing)
+
+Has levels - the unqiue set of names from the factors
+eg
+x &lt;- factor(c("yes", "yes", "no", "yes", "no"))
+x is yes yes no yes no
+Levels: no yes
+
+table(x) ==
+x
+no   yes
+2    3
+
+
+Can set the order of levels
+x &lt;- factor(c(....), levels = c("yes", "no"))
+x is yes yes no yes no
+Levels: yes no
+
+MISSING VALUES
+----------------
+NA or Nan
+is.na()   } yields array of booleans
+is.nan()  }
+NA values can have a class (int, char etc)
+NaN value is also NA but does not have a class
+
+is.na(NA) TRUE
+is.nan(NA) TRUE
+
+is.na(NaN) FALSE
+is.nan(NaN) TRUE
+
+Note: comparing against NA, like vector_var == NA will just give you a vector
+of NAs not booleans! This is because NA is not really a value, but just a 
+placeholder for a quantity that is not available
+
+You can sum() boolean arrays... TRUEs are counted as 1 and FALSEs as 0.
+
+NOTE:  x[!is.na(x) &amp; x &gt; 0] !=  x[x &gt; 0]
+       because if x contains NAs x[x &gt; 0] will return a list containing
+       the NAs coz NA is not a value, but rather a placeholder for an unknown 
+       quantity, the expression NA &gt; 0 evaluates to NA
+
+
+DATA FRAMES
+-----------
+Stores tabular data
+DFs can store different classes of objects in each colum.
+attribute row.names
+
+Created using read.table() or read.csv()
+   To skip first x lines of CSV use read.csv(..., skip=x)
+
+Convert to matrix using data.matrix() (but might have to coerce different typed columns)
+
+eg
+x &lt;- data.frame(foo = 1:4, bar = x(T,T,F,F))
+
+To label columns of a dataframe construct character vector for
+column names and then use the colnames() function.
+   eg.
+   colnames(x) &lt;- c("colname1", ....)
+
+class(x) == "data.frame". To find out the data type of the columns we need
+to do class(x$col-name).
+
+ncol(x) gives number of columns
+nrow(x) gives number of rows
+names(x) gives names of each column. alias for colnames()??
+
+as.list(x) will convert the datafame to a list of NAMED vectors. To get a
+list of column types use
+	coltypes &lt;- as.character(<b>l</b>apply(x, class))
+or equivalently
+	coltypes &lt;- <b>s</b>apply(x, class)
+
+
+THE NAMES ATTRIBUTE
+-------------------
+Vector values can have names
+x&lt;-1:3
+names(x) == NULL
+
+names(x) &lt;- c("james", "john", "mike")
+
+now
+names(x) == "james"   "john"   "mike"
+
+Lists can also have names
+Matricies can have names but you must use dimnames()....
+m &lt;-matrix(1:4, row=2, ncol=2)
+dimnames(m) &lt;- list(c("a", "b"), c("c", "d"))
+
+
+READING TABULAR DATA
+--------------------
+read.table(file, header, sep, colClasses, nrows, comment.char, skip, stringsAsFactors)
+	header - is the first line a header or just start of data
+	sep - column delimeter
+	colClasses - vector of classes to say what class of each col is (not required)
+
+data &lt;- read.table("filename.txt")
+	will auto figure out column classes, sep etc etc, auto skips
+   	lines with comment symbol etc etc.
+
+red.csv is identical to read.table except default seperator is comma (,)
+
+For large datasets estimate amount of RAM needed to store dataset. R will read your 
+
+entire
+dataset into the RAM of the computer.
+
+spec colClasses for speed
+
+8 bytes per numeric
+
+TEXTUAL FORMATS
+---------------
+dump() and dput()
+saves metadata like column class.
+still textual so readable but meta data included
+textual data works better in version control software
+but not space efficient
+
+y &lt;-data.frame(...)
+dput(y) prints to screen
+dput(y, "filename.R") saves to file
+y2 &lt;- dget("filename.R") loads DF back into Y2
+
+Looks like little bit like object pickling in Python
+
+dget() can only be used on a SINGLE R object.
+
+dump() can be used on multiple objects, which can then be read back using a single 
+source() command
+
+eg.
+x &lt;- ...
+y &lt;- ...
+dump(c("x", "y"), file="...") // pass NAMES of objects in
+rm(x, y)
+source("...")
+// restores x and y
+
+
+
+CONNECTIONS TO THE OUTSIDE WORLD
+--------------------------------
+file
+gzfile (gzip)
+bzfile (bzip2)
+url (webpage)
+
+above function open connectsion to a file or a web page
+
+con &lt;-file("foo.txt", "r")
+data &lt;- read.csv(con)
+close(con)
+
+same as data &lt;- read.csv("foo.txt")
+
+con &lt;- url("http://....")
+x &lt;- readLines(con)
+// x will be a character vector holding page source 
+
+
+SUBSETTING OBJECTS
+------------------
+
+[ returns obj of same class as orig. select more than one element
+  if you subset a list you get a list etc
+[[ extract SINGLE element of list or DF. can extract single elements
+   returned obj not necessarily same type. elements idx can be computed
+$ extract elements of list/DF by NAME. element idxs canNOT be computed
+
+x &lt;- c("a", "b", ...)
+x[1] = vector "a"
+x[1:2] vector "a"  "b"
+
+[ is subsetting using a numeric index. 
+Can use a logical index... x[x &gt; "a"] for example
+Same as
+   u &lt;- x &gt; "a"
+   x[u]
+
+To extract multiple elements must use single breakcet [ operators
+x[c(1,3)] extracts element 1 and 3 of list
+
+[[ can take integer sequences
+eg x[[c(1,3)]] gets the 3rd element from the element that is the first element of x!
+
+
+Matrix subsetting
+-----------------
+matrix[rowIdxs, colIdxs]
+if either index ommited (must still include the comma) then all of that index is 
+
+returned
+
+defualt for single matrix element is to return it as a vector. to stop this
+use drop = FALSE
+x &lt;- matrix...
+x[1,2] returns vector
+x[1,2, drop=FALSE] returns a 1x1 matrix
+
+Same issue for subsetting a single row or column
+ncol()
+nrow()
+
+REMOVING MISSING VALUES
+------------------------
+bad &lt;- is.na(x)
+x[!bad]
+
+Can do this with multiple vectors (presumably same length and with complete rows as NAs)
+good &lt;- complete.cases(x, y)
+x[good]   } both yield the set with NAs removed
+y[good]   }
+
+
+Can do the same for dataframes
+good &lt;- complete.cases(my_dataframe)
+my_dataframe[good,]
+
+
+
+VECTORIZED OPERATIONS
+---------------------
+if x, y matricies
+
+x * y is element-wise multiplication
+
+x %*% y is true matrix multiplication
+
+
+CONTROL STRUCTURES
+-------------------
+if(...) {
+} else if {
+} else {
+}
+
+You can assign from an if into a variable!
+Eg
+   y &lt;- if (...) { } else { }
+
+for(i in 1:10) {
+}
+
+if x is a vector
+
+for(i in seq_along(x)) {
+   ...x[i]...
+}
+
+for(item in x) {
+}
+
+count &lt;- 0
+while(count &lt; 10) {
+   count &lt;- count + 1
+}
+
+repeat {
+   // infinite loop
+}
+
+break - exit loop
+next - skip iteration
+return - return from function (with value)
+
+FUNCTIONS
+---------
+Functions are first class objects
+	- They can be passed as args to other functions
+Functions can be nested!
+
+Function returns whatever the last expression was!
+	add2 &lt;- function(x,y) {
+		x+y
+	}
+
+
+Default values:
+	above &lt;- function(x, n=10) {
+		x[x&gt;n]
+	}
+
+Another example:
+	colmean &lt;- function(y, removeNA = TRUE) {
+		nc &lt;- ncol(y)
+		means &lt;- numeric(nc)
+		for(i in 1:nc) {
+			means[i] &lt;- mean(y[,i], na.rm=removeNA)
+		}
+		means
+	}
+
+formals(function) returns a list of all formal args of function
+
+Arguments evaluated LAZILY (only evaluated as needed)
+
+The '...' argument indicates variable number of arguments
+Pass the list using '...' to other functions too.
+Arguments after '...' must be named explicitly and cannot be partially matched
+
+SCOPING
+--------
+See also: <a href="https://cran.r-project.org/doc/manuals/R-intro.html#Scope"
+target="_blank">https://cran.r-project.org/doc/manuals/R-intro.html#Scope</a>.
+
+To bind value to symbol, R searches though series of ENVIRONMENTS.
+
+From command line:
+   1. Search global environment (usres workspace) for symbol name
+   2. Search the namespsaces of each package on earch list (oerder matters!)
+      (print search list using search() function)
+R has seperate namespce for objects and functions so func and object can
+have same name without collision.
+
+
+Scoping rules
+--------------
+Determine how a value is associated wiht a *free* variable in funciton
+R uses lexical scoping (STATIC scoping)
+
+Free variables are not formal arguments and are not local variables
+defined inside the function body
+
+Environment is a collation of symbol value pairs
+Each environment has a parent and a number of children
+function + environment = CLOSURE
+
+Search for free vars in current env and then recursively up into
+environments parents until global environment. Then search the search() list.
+
+To find out what's in a function's environment using the ls() function
+   ls(environement(cube))
+      "n"  "pow"
+   get("n", environment(cube))
+      ..value..
+
+<b>Free variables become local variables if they are assigned to.</b> This is
+why the &lt;&lt;- operator is needed!...
+
+
+---- THE &lt;&lt;- OPERATOR
+The &lt;&lt;- operator which can be used to assign a value to an object in an 
+environment that is different from the current environment. This operator looks 
+back in enclosing environments for an environment that contains the symbol. If 
+the global or top-level environment is reached without finding the symbol total 
+then that variable is created and assigned to there. 
+<b>!!NOTE: Only when &lt;&lt;- has been used in a function that was returned as 
+the value of another function will this behaviour occur.</b>
+
+See <a href="http://stackoverflow.com/questions/2628621/how-do-you-use-scoping-assignment-in-r"
+       target="_blank">http://stackoverflow.com/questions/2628621/how-do-you-use-scoping-assignment-in-r</a>.
+
+Lexical vs Dynamic Scoping
+---------------------------
+	y &lt;- 10
+	f &lt;- function(x) {
+		y &lt;- 2
+		y^2 + g(x)
+	}
+
+	g &lt;- function(x) {
+		x*y
+	}
+
+
+In LEXICAL SCOPING the value of y in the function g IS LOOKED UP IN THE ENVIRONMENT
+IN WHICH THE FUNCTION WAS DEFINED, in this case the global env, so the value of y is 10
+
+With dynamic scoping, y IS LOOKED UP IN THE ENVIRONMENT FROM WHICH THE FUNCTION
+WAS CALLED (sometimes refered to as the CALLING ENVIRONMENT)
+	In R calling env known as the PARENT FRAME
+So value of y would be 2.
+
+parent.env is the environment in which a closure (e.g., function) is defined. parent.frame is the environment from which the closure was invoked.
+
+Consequences
+------------
+In R all objects must be stored in memoery
+All funcs must carry pointer to their respective defining evironements
+
+
+DATES &amp; TIMES
+--------------
+	Dates - Date class
+	        Stored internally as days since 1-1-1970
+	Times - POSIXct or POSIXlt class
+	        Stored internallay as seconds since 1-1-1970
+	        POSIXct just a large integer
+		POSIXlt is a list storing day, week, day of year, month, etc etc
+
+Convert strings to dates using as.Date()
+	x &lt;- as.Date("1970-01-02")
+	unclass(x) == 1 
+
+Generic functions:
+	weekdays() - Give day of the week
+	months()   - Gives month name
+	quarters() - Gives "Q1", "Q2" ...
+
+x &lt;- Sys.time()
+p &lt;- as.POSIXlt(x)
+p$sec == ..seconds..
+
+strptime() converts dates to an object
+eg
+	datestring &lt;- c("January 10, 2013, 10:30")
+	x &lt;- strptime(datestring, "%B %d, %Y %H:%M")
+	x will be a POSIXlt object
+
+	?strptime for help on function
+
+Normal +,-,&lt;,&gt; etc work on dates
+
+The operators keep track of leap years, leap seconds, daylight savings and timezones
+for us automatically :)
+
+LOOP FUNCTIONS
+--------------
+All implement the Split-Apply-Combine strategy: SPLIT into smaller pieces,
+APPLY a function to each piece, COMBINE the results.
+
+lapply() - loop over list and eval func for each element. looping done in C
+split() - splits objects into sub-pieces
+
+lappy(list, function_name, …) returns result for every object in the list as a list in the same order. `function_name` is applies to each element of the list and the return value used for that element in the new list. The … arguments will be passed to your function_name().
+
+lappply() generally uses ANONYMOUS FUNCTIONS.
+lapply(x, function(params){...}) 
+
+sapply() - simplifies result of lapply(). Each list might go to vector if every element has length one. If can’t figure out the simplification a list is returned.
+
+apply(X, margin, fun,...)
+	margin is an int vector indicating which margins should be “retained”
+	fun is func to be applied
+	… passed to `fun`
+
+	the margin refers to the DIMENSION number being used. For a matrix 
+1 is rows 2 is columns. 
+
+	So. apply(x,2,mean) would apply mean() to columns of matrix.
+	For row/col sums/means use more highly optimized functions for SPEED
+	rowSums = apply(x,1,sum)
+	colSums = apply(x,2,sum)
+
+	can keep two dims using appy(x, c(1,2,...), …) for multi dim arrays
+	or use rowMeans(..., dim=x)
+
+
+mapply(fun, …, MoreArge=NULL, SIMPLIFY=TRUE, USE.NAMES=TRUE)
+	Applies a func in parallel over a set of different arguments.
+
+	Eg two lists where element x in list_1 is param ` of `fun` and element x in list_2 is second param. this is what mapply helps you do.
+
+	Use to VECTORIZE FUNCTIONS that normally act on scalars.
+
+tapply(x, index, fun, ...) - apply a function over subsets of a vector.
+   index is a factor or a list of factors which identifies which group each 
+   element of the numeric vector is in.
+
+   e.g.
+   x &lt;- c(rnorm(10), runif(10), rnorm(10,1))
+   f &lt;- gl(3,10) // creates a factor variable, each one repeated 10 times
+     == 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3 3
+        levels: 1 2 3
+   tapply(x, f, mean)
+   1      2      3
+   0.114  0.516  1.246 
+
+   if you dont simply the result you get back a list
+
+   You can subset a matrix to do the equivalent of an SQL GROUP BY:
+      with(df, tapply(col1, col2, mean))
+   This will group by col1 and take the mean of col2 using that grouping.
+
+split(x, f, drop = false, …)
+like tapply() it splits x into groups where f identified which group each element of x is in.
+
+common to split() something then apply a function over the groups:
+	lapply(splot(x,f), mean) for example
+
+split() can be  used on complex data structures like dataframes.
+	e.g. s &lt;- split(dataframe, dataframe$col_name)
+	     lapply(s, function(x) …snip… )
+
+	tip: use sapply(... na.rm=TRUE) 
+
+To split on more than one level, combine factors using interaction():
+	x &lt;- rnorm(10)
+	f1 &lt;-gl(2,5) # 1 1 1 1 1 2 2 2 2 2, levels 1 2
+	f2 &lt;-gl(5,2) # 1 1 2 2 3 3 4 4 5 5, levels 1 2 3 4 5
+	interaction(f1,f2) 
+#10 levels 1.1 2.1 1.2 2.2 1.3 2.3 1.4 .. 2.5
+
+&gt; f1 &lt;-gl(2,5) # 1 1 1 1 1 2 2 2 2 2, levels 1 2
+&gt; f1
+ [1] 1 1 1 1 1 2 2 2 2 2
+Levels: 1 2
+&gt; f2 &lt;-gl(5,2)
+&gt; f2
+ [1] 1 1 2 2 3 3 4 4 5 5
+Levels: 1 2 3 4 5
+&gt; interaction(f1,f2) 
+
+1 1 1 1 1 2 2 2 2 2
+. . . . . . . . . .
+1 1 2 2 3 3 4 4 5 5
+  |
+  |
+       \/
+    [1] 1.1 1.1 1.2 1.2 1.3 2.3 2.4 2.4 2.5 2.5
+Levels: 1.1 2.1 1.2 2.2 1.3 2.3 1.4 2.4 1.5 2.5
+	
+NOTE: Although it says there are all those levels it appears it uses the returned array, not the levels themselves which is why it returns missing values for some levels… so it has all the levels but not all are used.
+
+split(x, list(f1,f2), drop=TRUE)
+$`1.1`
+[1] 2.0781323 0.7863726
+
+$`1.2`
+[1] -0.7285167  0.1410324
+
+$`1.3`
+[1] 0.643741
+
+$`2.3`
+[1] -0.7616546
+
+$`2.4`
+[1] -0.4612373 -0.6063274
+
+$`2.5`
+[1]  0.0106792 -0.5811911
+
+
+split(drop = TRUE) to drop empty levels
+
+
+Some useful functions
+----------------------
+range() returns the minimum an maximum of its argument
+unqiue() returns vector with all duplicates removed
+grep, grepl, regexpr, gregexpr and regexec search for matches to argument 
+pattern within each element of a character vector
+
+
+
+DEBUGGING
+---------
+Return something invisibly: return the value but dont print it use invisible(x).
+
+5 basic functions
+traceback()
+   prints function call stack
+debug()
+   flags function for debug mode which lets you step through
+      eg
+        debug(func)
+        func()
+        Then drops into browser
+        &quot;n&quot; to step through to next instruction
+browser()
+   suspends execution wherever it is called and puts func into debug mode
+trace()
+   allos insert debugging code into function at specific places
+recover()
+   allows modification of the error behabiour so you can browse the function 
+   call stack 
+      options(error = recover)
+
+</pre>
+		</div>
+	</div>
+</body>
+</html>
+
+

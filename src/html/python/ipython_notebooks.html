@@ -122,8 +122,59 @@ display.display(plotBtn)
 			<p>
 			You can <a href="https://mpld3.github.io/notebooks/custom_plugins.html" target="_blank">read about mpld3 plugins here</a>.
 			</p>
-		</div>
+
+			<h3>Displaying a JavaScript alert() on error</h3>
+			<div>
+				<pre class="prettyprint linenums">from IPython import display
+# ... snip ...
+if some_error_condition:
+   warnstr = "your message here"
+   display.display(display.Javascript('alert("{}")'.format(warnstr)))</pre>
+			</div>
+
+			<h3>Highlight MPLD3 Lines On Mouse Over</h3>
+			<div>
+				<p>
+					I found the example for 
+					<a href="https://mpld3.github.io/examples/random_walk.html"
+						target="_blank">visualising random walks</a> which used the
+					mouseover and mouseout D3 events (D3 is the JS library for SVG drawing
+					and graphs that MPLD3 uses) to highlight lines by changing
+					their opacity.I wanted to do this using line width.
+				</p>
+				<p>
+					The solution is an easy one. Just change the lines like the following:
+				</p>
+				<pre>d3.select(this).transition().duration(50)
+  .style("stroke-opacity", alpha_fg);</pre>
+				<p>
+					To the following:
+				</p>
+				<pre>d3.select(this).style("stroke-width", "5px");</pre>
+				<p>
+					I ran this with the <tt>LineLabelTooltip</tt> plugin as shown below.
+				</p>
+				<pre>for idx in range(len(lines)):
+   mpld3.plugins.connect(fig, mpld3.plugins.LineLabelTooltip(lines[idx], names[idx], location = "mouse"))
+mpld3.plugins.connect(fig, HighlightLines(lines, names))</pre>
+				<p>The problem was that <b><tt>HightLightLines</tt> was removing the event handler
+					for <tt>LineLabelToolTip</tt> and replacing it with its own</b>. The impact
+				being that the line highlighting worked but the tool tips did not. The solution
+				was found in the 
+				<a href="https://github.com/mbostock/d3/wiki/Selections#on"
+					target="_blank">D3 documentation for events</a>: 
+				<q>If an event listener was already registered for the same type on the selected element, the existing listener is removed before the new listener is added. To register multiple listeners for the same event type, the type may be followed by an optional namespace, such as "click.foo" and "click.bar".</q>
+				The solution therefore is to change the event registration to this as follows:
+				</p>
+				<pre>obj.elements().on("mouseover<b>.your-identifier-here</b>", ....)</pre>
+				<p>
+					With this addition the <tt>HightLightLines</tt> no longer clobbers 
+					events already registered for the D3 object (in this case a line).
+				</p>
+			</div> <!-- H3-->
 		
+		</div><!-- H2 -->
+
 		<h2>CSS For Notebook Output HTML</h2>
 		<div>
 			<p>
