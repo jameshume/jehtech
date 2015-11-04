@@ -10,287 +10,829 @@
 </head>
 
 <body>
-	<div id="header">
-		-- This is JEHTech --
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<!-- TITLE ------------------------------------------------------------- -->
+<div id="content">
+<h1 class="title">R Notes</h1>
+<div style="padding-right:10px;">
+
+	<!-- PAGE CONTENTS ----------------------------------------------------- -->
+	<h2>Page Contents</h2>
+	<div id="page_contents">
 	</div>
 
-	<div id="sidebar">
-		<h1 class="title">Links...</h1>
-		<div id="includedContent"></div>
+	<h2>References \ Reads</h2>
+	<div>
+		<ul>
+			<li><a href="https://cran.r-project.org/doc/manuals/R-lang.html"
+					target="_blank">R Language Definition</a>.
+			</li>
+			<li><a href="http://shop.oreilly.com/product/9781593273842.do"
+					target="_blank">The Art Of R Programming</a>.
+			</li>
+		</ul>
 	</div>
 
-	<div id="content">
-		<h1 class="title">R Notes</h1>
+	<h2>Some Basic Command Line Misc Stuff</h2>
+	<div>
+		<h3>Getting Help</h3>
+		<p>
+			To get help on a function you can use the following...
+		</p>
+		<pre class="prettyprint linenums">?func-name               ## Display help for function with this exact name
+help.search("func name") ## Search all help for function like this
+args("func name")        ## gets args for this exact function</pre>
+		<p>Typing a function name without the ending curley brackets displays the
+		code for the function.
+		</p>
+		<h3>Working Directory</h3>
+		<p>Functions will generally read or write to your working directory 
+		(unless you use absolute paths)</p>
+		<p>Use <tt>getwd()</tt> to display your current working directory and
+			<tt>setwd("...")</tt> to set your current working directory.
+			<tt>dir("...")</tt> will list a directory.
+		</p>
+
+		<h3>Source R code from console</h3>
+		<p>Use <tt>source("..filename..")</tt>.</p>
+	</div> <!-- End H2: Misc -->
+
+	<h2>Basic Flow Control</h2>
+	<div>
+		<h3>If-then-else</h3>
+		<p>If-the-else as standard...</p>
+		<pre class="prettyprint linenums">if(...) {
+} else if {
+} else {
+}</pre>
+		<p>You can also assign from an if into a variable...</p>
+		<pre class="prettyprint linenums">&gt; x &lt;- if(FALSE) { cos(22) } else { sin(22) }
+&gt; x
+[1] -0.008851309
+&gt; x &lt;- if(TRUE) { cos(22) } else { sin(22) }
+&gt; x
+[1] -0.9999608</pre>
+		
+
+		<h3>For loops</h3>
+		<p>For each value in a range...</p>
+		<pre class="prettyprint linenums">for(i in 1:10) { ... }</pre>
+		<p>To generate an index for each member of a vector...</p>
+		<pre class="prettyprint linenums">for(i in seq_along(x)) {
+   ...x[i]...
+}</pre>
+		<p>For each item in a list...</p>
+		<pre class="prettyprint linenums">for(item in x) { ... }</pre>
+
+		<h3>While loops</h3>
+		<pre class="prettyprint linenums">count &lt;- 0
+while(count &lt; 10) {
+   count &lt;- count + 1
+}</pre>
+
+		<h3>Infinite loops</h3>
+		<pre class="prettyprint linenums">repeat {
+   // infinite loop
+}</pre>
+
+		<h3>Skip loop iteration or exit loop</h3>
+		<p>The standard <tt>break</tt> statement, and to continue use <tt>next</tt></p>
+	</div><!-- END H2 Loops -->
+
+	<h2>Vectors, Sequences And Lists</h2>
+	<div>
+		<p>
+			Vectors can only contain elements of the same type.
+			When mixing objects <b>coercion</b> occurs so all vector elements are
+			of the same type.
+		</p>
+		<p>Sequences are just vectors of numerics with monotonically increasing
+		values.</p>
+		<p>Lists are vectors that can contain elements of different classes.
+		</p>
+		<p>
+			Indicies start from <tt>1</tt>. If you index beyond the limits of
+			a list or vector you will get <tt>NA</tt>s.
+		</p>
+		<h3>Creation</h3>
 		<div>
-			<pre>
+			<p>Some easy ways to create 'em...
+			</p>
+			<h4>Vectors</h4>
+			<p><b><tt>vector(type, value)</tt></b>
+				<div style="margin-left:15px;">
+					For example, &quot;<tt>vector("numeric", 10)</tt>&quot; creates a
+					vector of 10 numerics all initialised to zero.
+				</div>
+			</p>
+			<p><b><tt>as.vector(obj)</tt></b>
+				<div style="margin-left:15px;">
+					Coerces obj into a vector. This will remove the <tt>names</tt> 
+					attribute.
+				</div>
+			</p>
+			<p><b><tt>c(item1, item2, item3, ...)</tt></b>
+				<div style="margin-left:15px;">
+					The default form creates a vector by concatenating all the 
+					<tt>item</tt>s passed into <tt>c()</tt> together. All arguments  
+					are coerced to a common type.
+				</div>
+			</p>
+			<p><b><tt>rep(item, times = x)</tt></b>
+				<div style="margin-left:15px;">
+					This will create a vector consisting of the <tt>item</tt> repeated 
+					<tt>x</tt> times. For example...
+					<pre class="prettyprint linenums">&gt; rep(123, times=5)
+[1] 123 123 123 123 123</pre>
+				</div>
+			</p>
+			<p><b><tt>rep(list-of-items, times = x)</tt></b>
+				<div style="margin-left:15px;">
+					This will create a <i>flattened </i>list of <tt>list-of-items</tt> 
+					repeated <tt>x</tt> times. For example...
+					<pre class="prettyprint linenums">&gt; rep(c(1,2,3), times=5)
+[1] 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3</pre>
+					In other words it is as if we keep appending each list to a "mother" list like
+					this: <tt>[[1 2 3] ... [1 2 3]]</tt> and then flatten the list
+					so that it becomes <tt>[1 2 3 ... 1 2 3]</tt>. Note that this
+					flattening is <i>recursive</i> so that lists of lists are 
+					entirely flattened. For example...
+					<pre class="prettyprint linenums">&gt; rep(c(c(1,2), c(2,3)), times=5)
+[1] 1 2 2 3 1 2 2 3 1 2 2 3 1 2 2 3 1 2 2 3</pre>
+				</div>
+			</p>
+			<p><b><tt>rep(list-of-items, each = x)</tt></b>
+				<div style="margin-left:15px;">
+					Like the above except that instead of pasting many copies of
+					the lists together, we first recurively flatten the list and then
+					repeat the first value <tt>x</tt> times, then the second value
+					<tt>x</tt>, then the third and so on... 
+					<pre class="prettyprint linenums">&gt; rep(c(1,2,3), each=5)
+[1] 1 1 1 1 1 2 2 2 2 2 3 3 3 3 3</pre>
+				</div>
+			</p>
+			<h4>Sequences</h4>
+			<p>
+				<b><tt>x:y</tt></b>
+				<div style="margin-left:15px;">
+					This generates a sequence of numbers from x to y inclusive in 
+					increments of 1.
+				</div>
+			</p>
+			<p>
+				<b><tt>seq(x, y, by=[0-9]+)</tt></b>
+				<div style="margin-left:15px;">
+					This is a generalisation of the above. It generates a sequence 
+					of numbers from x to y inclusive with a step of [0-9]+. Note 
+					that the inclusivity of the final value depends on the step
+					value. For example...
+					<pre class="prettyprint linenums">&gt; seq(1,5,by=3)
+[1] 1 4</pre>
+				</div>
+			</p>
+			<p>
+				<b><tt>seq(x,y,length=[0-9]+)</tt></b>
+				<div style="margin-left:15px;">
+					As above but we don't care about the increment but want x to y 
+					inclusive such that length of the generated sequence is [0-9]+.
+					Note that x and y are always included. For example...
+					<pre class="prettyprint linenums">&gt; seq(1,5,length=9)
+[1] 1.0 1.5 2.0 2.5 3.0 3.5 4.0 4.5 5.0</pre>
+				</div>
+			</p>
+			<p>
+				<b><tt>seq(along.with=obj)</tt> or <tt>seq_along(obj)</tt></b>
+				<div style="margin-left:15px;">
+					The above are equivalent. I think you'd normally see <tt>seq_along()</tt>
+					rather than the longer form. This function enumerates the
+					object passed in. For example...
+					<pre class="prettyprint linenums">&gt; s &lt;- rnorm(10) ## Generate a vector of 10 random nums
+&gt; seq_along(s)
+ [1]  1  2  3  4  5  6  7  8  9 10 </pre>
+				</div>
+			</p>
+			<h4>Lists</h4>
+			<p><b><tt>list()</tt></b>
+				<div style="margin-left:15px;">
+					Use to create a list or even a list of lists.
+					For example, &quot;<tt>list(1, "string", TRUE)</tt>&quot; creates
+					a list of 3 lists, where each list has one member.
+				</div>
+			</p>
+		</div><!-- END H3: Creation -->
+
+		<h3>Subsetting \ Indexing</h3>
+		<div>
+			<p>
+				Always useful to read is the 
+				<a href="https://cran.r-project.org/doc/manuals/R-lang.html#Indexing"
+					target="_blank">R Language Definition for Indexing</a>.
+			</p>
+			<p>
+				A vector is subset using square brackets (like in most scripting
+				languages) and uses a very similar notation. Indicies start from 
+				<tt>1</tt>. If you index beyond the limits of a vector you will 
+				get <tt>NA</tt>s.
+			</p>
+			<h4>Slices</h4>
+			<p>
+				One thing to note is that unlike in Python's NumPy, slices are not
+				views into an array. In the following example, taking a slice of
+				vector <tt>a</tt> and modifying it does effect the original <tt>a</tt>.
+			</p>
+			<pre class="prettyprint linenums">&gt; x = vector("numeric", 5)
+&gt; x[1:4] = 33
+&gt; x
+ [1] 33 33 33 33  0  
+&gt; a = x[1:4]
+&gt; a
+[1] 33 33 33 33
+&gt; a[1] = 22
+&gt; a
+[1] 22 33 33 33
+&gt; x
+ [1] 33 33 33 33  0</pre>
+			<h4>Boolean Indexing</h4>
+			<p>eg. <tt>y&lt;- x[!is.na(x)]</tt>
+			</p>
+
+			<h4>Fancy Indexing</h4>
+			<p>Can also fancy-index vectors:</p>
+			<pre class="prettyprint linenums">x[c(1,3,5)] ## gets first, thrid and fith element
+x[<b>-</b>c(2,10)] ## gives us all elements of x EXCEPT for the 2nd and 10 elements!
+# ^
+# Note the minus sign here!</pre>
+
+			<h4>Named Indexing</h4>
+			<p>You can assign names to each index of a vector (or list) and then
+				index it using that name instead of position. For example:
+			</p>
+			<pre class="prettyprint linenums">&gt; x = vector("numeric", 2)
+&gt; x
+[1] 0 0
+
+&gt; ## By default vector has no names
+&gt; names(x)  
+NULL
+
+&gt; ## Note how the vector is now displayed in a tabular fashion
+&gt; names(x) = c("john", "jack")
+&gt; x
+john jack 
+   0    0 
+
+&gt; ## You can get the first member using its name
+&gt; x["john"]
+john 
+   0 
+
+&gt; ## Or can get the first member using its position
+&gt; x[1]
+john 
+0</pre>
+			<p>
+				With lists things get a little more interesting. You can give the
+				elements of a list names, just as we did above for vectors, but when
+				we do we can use the <b><tt>$</tt></b> operator to access named
+				members: <tt>list$member.name</tt>.
+			</p>
+			<pre class="prettyprint linenums">&gt; q = list(1, 1.2, "james", TRUE)
+&gt; names(q) = c("a", "b", "c", "d")
+&gt; q$a ## Now we can refer to the member using its name
+[1] 1
+&gt; q$b ## Now we can refer to the member using its name
+[1] 1.2</pre>
+		</div><!-- END H3: Subsetting -->
+
+		<h3>Test For Membership</h3>
+		<div>
+			To see if a value is in a list or vector use <tt>%in%</tt> or <tt>match()</tt>.
+			<pre class="prettyprint linenums">&gt; v &lt;- c('a','b','c','e')
+
+## %in% returns a boolean
+&gt; 'b' %in% v
+[1] TRUE
+
+## match() returns the first location of 'b', in this case: 2
+&gt; match('b',v)
+[1] 2</pre>
+			One advantage that <tt>%in%</tt> has over <tt>match()</tt> is that,
+			because it returns a list of booleans, it can be used with functions
+			such as <tt>all()</tt> or <tt>any()</tt>. For example... 
+			<pre class="prettyprint linenums">&gt; all(c('b', 'e') %in% v)
+[1] TRUE</pre>
+		</div><!-- END H3: Subsetting -->
+
+		<h3>Other Common Operations</h3>
+		<div>
+			<p><b><tt>length(seq_obj)</tt></b> 
+				<div style="margin-left:15px;">
+					Yields the length of the sequence. A vector does not hame a 
+					<tt>dim()</tt> attribute.
+				</div>
+			</p>
+			<p><b><tt>identical()</tt></b> 
+				<div style="margin-left:15px;">
+					To compare 2 vects for identical-ness use this function.
+				</div>
+			</p>
+			<p><b><tt>paste(list, collapse=str)</tt></b>
+				<div style="margin-left:15px;">
+					Collapses the list into a single string in which the elements
+					are separated by the string specified by <tt>str</tt>. The
+					elements in the list will be coerced into a string using
+					<tt>as.string()</tt> if required. For example...
+					<pre class="prettyprint linenums">&gt; paste(c(1,2,3,4,5), collapse = "")
+[1] "12345"</pre>
+					You can, in fact, paste multiple lists into a string, the
+					first element from each list first, then the second and so on.
+					For example...
+					<pre class="prettyprint linenums">&gt;paste(1:3, c("X", "Y", "Z"), 4:7, collapse="")
+[1] "1 X 42 Y 53 Z 61 X 7"</pre>
+				</div>
+			</p>
+		</div>
+	</div> <!-- END H2: Vectors And Lists -->
+
+	<h2>Matricies</h2>
+	<div>
+		<h3>Intro</h3>
+		<p>Matricies are like 2D vectors. All elements must be of the same type. 
+		   They have an extra dimensions attribute called <tt>dim</tt> which
+		   gives the matrix shape as a tuple <tt>(num rows, num cols)</tt>.
+		</p>
+		<p> For example... </p>
+		<pre class="prettyprint linenums">&gt; # Creates a matrix initialised with NA values.
+&gt; m &lt;- matrix(nrow = 2, ncol = 3)
+&gt; attributes(m) 
+$dim
+[1] 2 3</pre>
+		<p>Use <tt>dim()</tt> to get the dimensions of a matrix. Vectors do not 
+		   have a <tt>dim</tt> attribute... only matricies and data frames. 
+		   Use <tt>length()</tt> for a vector.
+		</p>
+
+
+		<h3>Constructing</h3>
+		<p>There are several ways to construct a matrix...</p>
+		<p>By default hey are constructed column-wise: Fill the first column, 
+		   then second, and so on. 
+		</p>
+		<p>This can be useful when your data is presented
+		   as a flat vector where every group of n items is a list of observations
+		   for one single variable. 
+		</p>
+		<p>For example, lets say that we have a vector that records the test scores
+		   for 2 students across 4 exams. The vector could be a
+		   flattened version of <tt>[[80, 81, 82, 83], [50, 51, 52, 53]]</tt>,
+		   where each inner vector is the test scores for a student in 4 seperate
+		   exams.
+		</p>
+		<p>The flattened version we have would be 
+		   <tt>[80, 81, 82, 83, 50, 51, 52, 53]</tt>. The first
+		   student has done very well, scoring in the 80's. The second student
+		   has only scored in the 50s (just for the sake of making distinguishing 
+		   students easy). We want a matrix where columns represent a student
+		   and each row the score for a particular test. I.e, we want
+		   a matrix where the first colum had the values <tt>80, 81, 82, 83</tt>
+		   and the second column had the values <tt>50, 51, 52, 53</tt>. To read
+		   the vector into a matrix, column-wise, we would do the following.
+		</p>
+		<pre class="prettyprint linenums">
+&gt; data = c(80, 81, 82, 83, 50, 51, 52, 53)
+&gt; data
+[1] 80 81 82 83 50 51 52 53
+&gt; matrix(data, nrow=4, ncol=2)
+     [,1] [,2]
+[1,]   80   50
+[2,]   81   51
+[3,]   82   52
+[4,]   83   53</pre>
+		<p>The above shows how we have given a shape to our flat vector of data.
+		   Now we have students in the matrix columns and tests as the rows.
+		</p>
+		<p>It is also possible to fill the matrix row-wise: Fill the first row,
+		   then the second, and so on.
+		</p>
+		<p>Imagine our flat vector from above was actually presented in a different
+		   way. The consecutive values are now organised per test so that the
+		   vector, unflattened, would look like this: <tt>[[80, 50], [81, 51],
+		   [82, 52], [83, 53]]</tt>. We still want our matrix layout to be 
+		   a column for each student and the rows to be the tests. What we need
+		   to do is fill by row, as follows:
+		</p>
+		<pre class="prettyprint linenums">&gt; data = c(80, 50, 81, 51, 82, 52, 83, 53)
+&gt; m &lt;- matrix(data, nrow=4, ncol=2, <b>byrow=TRUE</b>)
+&gt; m
+     [,1] [,2]
+[1,]   80   50
+[2,]   81   51
+[3,]   82   52
+[4,]   83   53</pre>
+
+		<p>Another way to accomplish exactly the same thing as we have done above
+		   is to simply apply the <tt>dim</tt> attribute to our vector. Note 
+		   however that doing it this we way are restricted to fill-by-column!
+		</p>
+
+		<pre class="prettyprint linenums">&gt; data &lt;- c(80, 81, 82, 83, 50, 51, 52, 53)
+&gt; data
+[1] 80 81 82 83 50 51 52 53
+&gt; dim(data) = c(4, 2)
+&gt; data
+     [,1] [,2]
+[1,]   80   50
+[2,]   81   51
+[3,]   82   52
+[4,]   83   53</pre>
+
+		<h3>Matrix Subsetting</h3>
+		<p>
+			Use <tt>matrix[rowIdxs, colIdxs]</tt>. If either index ommited 
+			(must still include the comma) then all of that index is returned.
+		</p>
+		<p>
+			The defualt for single matrix element is to return it as a vector. To 
+			stop this use <tt>drop=FALSE</tt>. Same issue for subsetting a single 
+			row or column.
+		</p>
+		<pre class="prettyprint linenums">x &lt;- matrix...
+x[1,2] ##&lt; returns vector
+x[1,2, ##&lt; drop=FALSE] returns a 1x1 matrix</pre>
+
+		<h3>Getting Matrix Info</h3>
+		<p>To get the shape of a matrix, as we have seen, we can use 
+		   <tt>dims()</tt> which returns a tuple <tt>(num rows, num cols)</tt>.
+		</p>
+		<p>To get just the number of rows use <tt>nrow()</tt>.
+		</p>
+		<p>To get just the number of columns use <tt>ncol</tt>.
+		</p>
+
+		<h3>Combining Matricies</h3>
+		<p>Use <tt>cbind()</tt> or <tt>rbind()</tt>.
+		</p>
+
+		<h3>Maths With Matricies</h3>
+		<h4>&quot;Normal &quot; Uses Broadcasting: It's Not Matrix Multiplication!</h4>
+		<p>Much like most other vectorised languages like <a href="yorick.html">Yorick</a> 
+		   or Python's <a href="python/numpy.html">NumPy</a>, R supports broadcasting.
+		   This means we can do things like multiply a matrix (or indeed a vector)
+		   by a scalar and the result is the multiplication applied element-wise:
+		</p>
+		<pre class="prettyprint linenums">&gt; data &lt;- c(80, 81, 82, 83, 50, 51, 52, 53)
+
+&gt; data * 10
+     [,1] [,2]
+[1,]  800  500
+[2,]  810  510
+[3,]  820  520
+[4,]  830  530</pre>
+		<p>You can also multiply a matrix by a vector and the broadcasting will
+		   will work in the same element-wise fashion down the columns of the
+		   vector. The vector you are multiplying doesn't even have to have the
+		   same length as the column. As long as the column length is a multiple
+		   of the vectgor, R will continually "reuse" the vector:
+		</p>
+		<pre class="prettyprint linenums"># Here the vector has the same length as the matrix column.
+&gt; data * c(10,1,100,1000)
+      [,1]  [,2]
+[1,]   800   500
+[2,]    81    51
+[3,]  8200  5200
+[4,] 83000 53000
+
+# The vector is shorer than the column length, so R reuses the vector 
+# essentally multiplying by c(10, 1, 10, 1)...
+&gt; data * c(10,1)
+     [,1] [,2]
+[1,]  800  500
+[2,]   81   51
+[3,]  820  520
+[4,]   83   53</pre>
+
+		<p>We can also multiply a matrix by another matrix. But beware, the
+		   <b>standard multiply symbol, *, does NOT do matrix multiplication</b>
+		   as we see here:
+		</p>
+		<pre class="prettyprint linenums">
+&gt; m &lt; rep(10, 8)
+&gt; dim(m) = c(4,2)
+&gt; m
+     [,1] [,2]
+[1,]   10   10
+[2,]   10   10
+[3,]   10   10
+[4,]   10   10
+
+&gt; data * m
+     [,1] [,2]
+[1,]  800  500
+[2,]  810  510
+[3,]  820  520
+[4,]  830  530</pre>
+	
+		<h4>Propper Matrix Multiplication!</h4>
+		To do an actual matrix multiplication in R you must use the <b><tt>%*%</tt></b>
+		operator.
+
+	</div> <!-- END H2: Matricies -->
+
+	<h2>Factors</h2>
+	<div>
+	<p>
+		Factors represent 
+		<a href="https://en.wikipedia.org/wiki/Categorical_variable" 
+			target="_blank">catagorical data</a>. This is data that can only
+		be one of a set of values. For, example, the sex of a test subject can
+		only be male or female. 
+	</p>
+	<p>
+		They're kinda like a C <tt>enum</tt> type where each category has an
+		associated integer value that is unique to that category's label.
+	</p>
+	<p>
+		A factor has &quot;<em>levels</em>&quot;. Each level is just one of the
+		<tt>enum</tt> labels. So, for example, if we had a list of participant
+		genders and converted it to a factor variable we would see the following:
+	</p>
+	<pre class="prettyprint linenums">&gt; x &lt;- factor(c("male", "male", "female", "male", "female", "female"))
+&gt; x
+[1] male   male   female male   female female
+Levels: female male</pre>
+	<p>
+		We see that x is a list of gender labels, but has only 2 &quot;levels&quot;,
+		namely &quot;male&quot; and &quot;female&quot;.
+	</p>
+	<p>
+		We can count the number of occurences of each level using the <tt>table()</tt>
+		function as follows:
+	</p>
+	<pre class="prettyprint linenums">&gt; table(x)
+x
+female   male 
+  3      3 </pre>
+	
+	<p>
+		You can set the order of levels in a factor as well. Sometimes this is
+		useful when plotting. You can also 
+		<a href="http://www.r-bloggers.com/reorder-factor-levels/"
+			target="_blank">reorder factors</a> if you need to.
+	</p>
+	<pre class="prettyprint linenums">&gt; x &lt;- factor(c("male", "male", "female", "male", "female", "female"), levels=c("male", "female"))
+&gt; x
+[1] male   male   female male   female female
+Levels: male female
+##      ^^
+##      Note, how compared to prev example, the order of the levels is changed</pre>
+
+	</div> <!-- END H2: Factors -->
+
+
+	<h2>Missing Values</h2>
+	<div>
+		<p>Sadly most data sets contain a lot of missing data. In R missing values
+			are generally represented by <tt>NA</tt> or <tt>NaN</tt>. Whilst both
+			can represent missing data there are some subtle differences:
+		</p>
+		<p>
+			<tt>NA</tt> is a constant which is a missing value indicator. NA values
+			can have a class (i.e., be integer, char etc). NA is <em>not</em> the
+			same as NaN.
+			</p>
+		<pre class="prettyprint linenums"> &gt; is.na(NA)
+[1] TRUE
+&gt; is.nan(NA)
+[1] FALSE</pre>
+		<h3>NA</h3>
+		<p>Note that comparing against NA, e.g, <tt>vector_var == NA</tt> will 
+			just give you a vector of NAs not booleans! This is because NA is not 
+			really a value, but just a placeholder for a quantity that is not available.
+		</p>
+		<p>This also means that something like <tt>x[!is.na(x) &amp; x &gt; 0] !=  x[x &gt; 0]</tt>
+			because if x contains NAs x[x &gt; 0] will return a list containing
+			the NAs as well as those values greater than zero. This is because NA 
+			is not a value, but rather a placeholder for an unknown 
+			quantity and the expression NA &gt; 0 evaluates to NA.
+		</p>
+		<h3>NaN</h3>
+		<p>
+			<tt>NaN</tt> means &quot;Not a Number&quot; NaN are also NA but do not
+			have a class:
+		</p>
+		<pre class="prettyprint linenums">&gt; is.na(NA)
+&gt; is.na(NaN)
+[1] TRUE
+&gt; is.nan(NaN)
+[1] TRUE</pre>
+	</div> <!-- END H2: Missing Values -->
+
+	<h2>Tabular Data: Data Frames</h2>
+	<div>
+		<p>
+			The trouble with a matrix is that all the data must be of the same
+			type and most of the time one will be dealing with tables of results
+			where the columns have very different types.
+		</p>
+		<p>
+			Data frames to the rescue. The are like tables where each column
+			can have its own type. <b><q>On a technical level, a data frame is a list, with the components of
+					that list being equal-length vectors</q></b> [2].
+		</p>
+		<h3>Create A Data Frame</h3>
+		<p>
+			A Dataframe can be created manually using the <tt>data.frame</tt>
+			constructor although normally they are created by reading in data from
+			a data source such as a file (for instance, <tt>read.table()</tt> or 
+			<tt>read.csv()</tt>).
+		</p>
+		<h4>Manual Creation</h4>
+		<p>
+			To create a dataframe manually use the <tt>data.frame</tt> constructor.
+			Pass in many lists, all of the same length but possibly different types,
+			each of which will become a column in the table with the given name. 
+			The table columns will be created in the order specified in the constructor
+			arguments...
+		</p>
+		<pre class="prettyprint linenums">&gt; x &lt;- data.frame(jeh = c("j", "e", "h"), tech = c(1,2,3))
+&gt; x
+  jeh tech
+1   j    1
+2   e    2
+3   h    3</pre>
+		<p>
+			One thing that is interesting to note is that the values in column
+			&quot;jeh&quot; have been cooerced into <em>factors</em>, which is
+			apparent if you use <tt>str(x)</tt> as shown in the next section. To
+			override this default behaviour you can set <tt>stringsAsFactors = FALSE</tt>
+			int he constructor.
+		</p>
+		<p>
+			As mentioned, a data fram is a list of lists-of-equal-length. You can 
+			revert from a dataframe back to a list of lists using <tt>as.list(df)</tt>.
+			It will convert the datafame to a list of <em>named</em> vectors...
+		</p>
+		<pre class="prettyprint linenums">&gt; as.list(x)
+$jeh
+[1] j e h
+Levels: e h j
+
+$tech
+[1] 1 2 3</pre>
+
+		<h4>Reading In Tabular Data</h4>
+read.table(file, header, sep, colClasses, nrows, comment.char, skip, stringsAsFactors)
+	header - is the first line a header or just start of data
+	sep - column delimeter
+	colClasses - vector of classes to say what class of each col is (not required)
+
+data &lt;- read.table("filename.txt")
+	will auto figure out column classes, sep etc etc, auto skips
+   	lines with comment symbol etc etc.
+
+red.csv is identical to read.table except default seperator is comma (,)
+
+For large datasets estimate amount of RAM needed to store dataset. R will read your 
+
+entire
+dataset into the RAM of the computer.
+
+spec colClasses for speed
+		<h3>Information Above Your Data Frame</h3>
+		<p>
+			<tt>ncol(df)</tt> gives number of columns.
+		</p><p>
+			<tt>nrow(df)</tt> gives number of rows.
+		</p><p>
+			<tt>names(df)</tt> gives names of each column.
+		</p><p>
+			<tt>colnames(df)</tt> to retrieve or set column names.
+		</p><p>
+			<tt>rownames(df)</tt> to retrieve or set row names.
+		</p><p>
+			<tt>head(df, n=...)</tt>
+		</p><p>
+			<tt>tail(df, n=...)</tt>
+		</p><p>
+			<tt>summary(df)</tt> gives some info for every variable. For example,
+			looking at the dummy table created above gives:
+		</p>
+		<pre class="prettyprint linenums">&gt; summary(x)
+ jeh        tech    
+ e:1   Min.   :1.0  
+ h:1   1st Qu.:1.5  
+ j:1   Median :2.0  
+       Mean   :2.0  
+       3rd Qu.:2.5  
+		 Max.   :3.0</pre>
+		<p>
+			<tt>str(df)</tt> compactly displays the internal structure of an R object.
+		</p>
+		<pre class="prettyprint linenums">&gt; str(x) 
+'data.frame':   3 obs. of  2 variables:
+ $ jeh : Factor w/ 3 levels "e","h","j": 3 1 2
+ $ tech: num  1 2 3</pre>
+		
+		<p>
+			<tt>quantile(df$col, na.rm=T/F)</tt> looks at quantiles. Can pass 
+			<tt>probs=c(1,2,3)</tt> for different percentiles.
+		</p><p>
+			<tt>table(df$col)</tt> to make a table summarising the column by grouping 
+			occurences. Can pass two variables to make it 2D table.
+		</p><p>
+			<tt>as.list(df)</tt> will convert the datafame to a list of <em>named</em>
+			vectors.
+		</p><p>
+			To get a <em>list of column types</em> use the following:
+		</p>
+		<pre class="prettyprint linenums">&gt; coltypes &lt;- as.character(<b>l</b>apply(x, class))
+&gt; coltypes
+[1] "factor"  "numeric"</pre>
+		<p>... or equivalently ...</p>
+		<pre class="prettyprint linenums">coltypes &lt;- <b>s</b>apply(x, class)</pre>
+
+
+		<h3>Indexing Your Data Frame</h3>
+	</div>
+	
+
+<h2>The rest of the notes</h2>
+<div>
+	<pre>
 Find some training data at
 <a href="http://archive.ics.uci.edu/ml/datasets.html" 
    target="_blank">http://archive.ics.uci.edu/ml/datasets.html</a>.
 
 <a href="http://data.gov.uk/data/search" target="_blank">http://data.gov.uk/data/search</a>.
-
-command line R help
-	help for function: ?func-name
-	help.search("func name")
-	args("func name") gets args for a function
-
-func name without brackets gives code for the function
-
-getwd() - get working directory
-functions generally read or write to your working directory (unless you use abs path)
-change workding dir using file &gt; change workdir or use setwd()
-
-dir() - list directory
-
-
-To get R code into R-console
-	- Copy and past from editor to console
-	- use source("..filename..") function
-
-ls() - lists functions available
-
-head() - see the first few lines of a dataset
-
-
-------------
-
-## rconsole input and evaluation
---------------------------------
-
-&lt;- is the assignment operator
-   x&lt;-1
-   print(x)
-
-## is a comment
-
-operator `:` creates integer sequences
-             e.g. x &lt;- 1:20 creates a vector of 1 to 20 inclusive incrementing in steps of 1
-
-
-
-atomic classes: character, numeric (reals), integer, complex, logical
-vector: array of SAME type objects. 
-        create empty using vector().
-
-list:   array of ARBITRARY type objects
-
-dy default reals (doubles)
-L suffix for integer
-Inf special number - infinity
-Nan special number - undefined value, or missing value
-
-attributes
-	use attributes() function
-	things like
-		class
-		shape
-		length
-		user defined metadata
-
-
-class() returns the class of an object as a string.
-
-## sequences
----------------------
-x:y generates sequence of numbers from x to y inclusive with a step of 1
-seq(x,y) is the same
-seq(x,y,by=...) generates sequence of numbers from x to y inclusive with a step of ...
-seq(x,y,length=...) dont care about the increment but want x to y inclusive such that length is ...
-length(seq_obj) yields length of seq
-
-to generate a sequence of integers from 1 to N, where N represents the length of the seq_obj:
-   1:length(seq_obj) or
-   seq(along.with=seq_obj) or
-   seq_along(my_seq)
-
-rep(0, times = 40) -  vector that contains 40 zeros
-rep(c(0, 1, 2), times = 10) - 10 repetitions of the vector (0, 1, 2) - as one vector (0, 1, 2, 0, 1, 2....)
-rep(c(0, 1, 2), each = 10) - vector to contain 10 zeros, then 10 ones, then 10 twos
-
-
-## vectors and lists
----------------------
-c() create lists (by concatentation.
-x &lt;- c(1,2,3)
-x &lt;- vector("numeric", 10)
-
-When mixing objects coercion occurs so all vector elements same type
-
-conversion of vectors/objects
-	as.numeric(x)
-	as.logical(x) etc
-	NA's for nonsensical conversion
-
-lists - vectors that can contain elements of different classes.
-	eg...
-	x &lt;- list(1, "a", TRUE, q + 4i)
-
-use paste(list, collapse="...") to join elements of list into a string
-can also paste multiple vectors...
-	paste("Hello", "world!", sep = " ") or
-	paste(1:3, c("X", "Y", "Z"), sep="")
-paste() will recycle vectors if one is shorter than the other.
-
-Vector indicies START FROM 1. If you go beyond vector bounds you get NA.
-
-Subset vector using square brackets [] eg x[1:10]
-Can use python-like boolean-array indexing
-	eg. y&lt;- x[!is.na(x)]
-
-Can also fancy-index vectors
-   eg. x[c(1,3,5)] gets first, thrid and fith element
-       x[-c(2,10)] gives us all elements of x EXCEPT for the 2nd and 10 elements!
-         ^
-         ^
-        Note the minus sign here!
-
-Create NAMED elements using `var &lt;- c(name1=..., name2=...)`
-get the names using `names(var)`
-can set names using `names(var) &lt;- c(name1=..., name2=...)`
-
-
-To compare 2 vects for identical-ness use `identical()`
-
-
-Use `length()` to get length of vector. A vector does not hame a `dim()`
-attribute.
-
-To see if a value is in a list use %in% or match()
-    v &lt;- c('a','b','c','e')
-
-    'b' %in% v
-    ## returns TRUE
-
-    match('b',v)
-    ## returns the first location of 'b', in this case: 2
-
-using %in% alows use of all(): 
-    all(candidates %in% container)
-
-MATRICIES
----------
-
-Have attribute called dimensions (nrow, ncol)
-
-m &lt;- matrix(nrow = 2, ncol = 3)
-Creates matrix initialised with NA values.
-
-attributes(m) gives the
-$dim attribute
-
-Use dim() to get the dimensions of an object. Vectors do not have a dim
-attribute... only matricies and data frames. Use length() for a vector.
-dim() returns (rows, cols)...
-
-
-Construct a matrix
-------------------
-They are constructed column-wise. Fill first column, then second and so on
-E.g.
-m &lt;-matrix(1:6, nrow=2, ncol=3)
-m = 1   3   5
-    2   4   6
-
-or
-m &lt;- 1:10
-apply dim attribute to a vector to create a matrix
-dim(m) &lt;-c(2,5)
-
-or
-x &lt;- 1:3
-y &lt;- 10:12
-cbind(x, y) = 
-    x    y
-    1    10 
-    2    11
-    3    12
-
-rbind(x,y) =
-    x   1   2   3
-    y   10  11  12
-
-
-
-FACTORS
--------
-
-Represent catagorical data. Integer vector where each integer has a lbel.
-They're liked named constants/#defines (more self-describing)
-
-Has levels - the unqiue set of names from the factors
-eg
-x &lt;- factor(c("yes", "yes", "no", "yes", "no"))
-x is yes yes no yes no
-Levels: no yes
-
-table(x) ==
-x
-no   yes
-2    3
-
-
-Can set the order of levels
-x &lt;- factor(c(....), levels = c("yes", "no"))
-x is yes yes no yes no
-Levels: yes no
-
-MISSING VALUES
-----------------
-NA or Nan
-is.na()   } yields array of booleans
-is.nan()  }
-NA values can have a class (int, char etc)
-NaN value is also NA but does not have a class
-
-is.na(NA) TRUE
-is.nan(NA) TRUE
-
-is.na(NaN) FALSE
-is.nan(NaN) TRUE
-
-Note: comparing against NA, like vector_var == NA will just give you a vector
-of NAs not booleans! This is because NA is not really a value, but just a 
-placeholder for a quantity that is not available
-
-You can sum() boolean arrays... TRUEs are counted as 1 and FALSEs as 0.
-
-NOTE:  x[!is.na(x) &amp; x &gt; 0] !=  x[x &gt; 0]
-       because if x contains NAs x[x &gt; 0] will return a list containing
-       the NAs coz NA is not a value, but rather a placeholder for an unknown 
-       quantity, the expression NA &gt; 0 evaluates to NA
-
-
 DATA FRAMES
 -----------
-Stores tabular data
-DFs can store different classes of objects in each colum.
-attribute row.names
 
-Created using read.table() or read.csv()
-   To skip first x lines of CSV use read.csv(..., skip=x)
+x[row, col] with indiciest or actual names or slices or boolean conditions
+  eg x[condition1 &amp; condition2,] -- select only certain rows
+  which() returns indicies and doesnt return the NAs
 
-Convert to matrix using data.matrix() (but might have to coerce different typed columns)
+sort(x$colname, decreasing=TRUE/FALSE, na.last=TRUE)
 
-eg
-x &lt;- data.frame(foo = 1:4, bar = x(T,T,F,F))
+x[order(x$colname1, x$colname2, ...),] - order rows so column(s) in order
 
-To label columns of a dataframe construct character vector for
-column names and then use the colnames() function.
-   eg.
-   colnames(x) &lt;- c("colname1", ....)
+plyr package for ordering
+arrange(dataframe, colname) -asc order
+arrange(dataframe, desc(colname)) - same with decreasing order
 
-class(x) == "data.frame". To find out the data type of the columns we need
-to do class(x$col-name).
+add row/col
+-----------
+df$new_col &lt;- ... vector
 
-ncol(x) gives number of columns
-nrow(x) gives number of rows
-names(x) gives names of each column. alias for colnames()??
+or use cbind() command - column bind
+or
+library(plyr)
+mutate(df, newvar=...) - adds new col and returns new datafame copy.
 
-as.list(x) will convert the datafame to a list of NAMED vectors. To get a
-list of column types use
-	coltypes &lt;- as.character(<b>l</b>apply(x, class))
-or equivalently
-	coltypes &lt;- <b>s</b>apply(x, class)
+To summarise a df:
+-------------------
+   head(df, n=...)
+   tail(df, n=...)
+   summary(df) - for every variable gives some info
+   str(df)
+   quantile(df$col, na.rm=T/F) - looks at quantiles. can pass probs=c(1,2,3) for different percentiles
+   table(df$col) to make a table summarising the column by grouping occurences
+                 can pass two variables to make it 2D table
+
+Check for missing vals
+----------------------
+   sum(is.na(df$col)) == 0 when no NAs
+   or any(is.na(df$col)) == FALSE when no NAs
+   or all(colSums(is.na(df)) ==0) for entire df 
+
+
+Size in memory
+---------------
+object.size(df) to get size of df
+   pring(object.size(df), units="Mb") for human readable form
+
+
+splitting a df
+--------------
+split(df$c1, df$c2) - returns a list of lists. Each inner list
+ is labeled by an item in c2 and contains all the items in c1
+ which correspond row-wise to the item in c2
+
+using with() to decrease typing and increase readability
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+for example, when splitting a dataframe's column using another column from that df.
+   split(myDataFrame$col1, myDataFrame$col2)
+it is more reaable and easier to write the following:
+   with(myDataFrame, split(col1, col2))
+
+TODO: Cross tabs (xtabs)
 
 
 THE NAMES ATTRIBUTE
@@ -310,25 +852,7 @@ m &lt;-matrix(1:4, row=2, ncol=2)
 dimnames(m) &lt;- list(c("a", "b"), c("c", "d"))
 
 
-READING TABULAR DATA
---------------------
-read.table(file, header, sep, colClasses, nrows, comment.char, skip, stringsAsFactors)
-	header - is the first line a header or just start of data
-	sep - column delimeter
-	colClasses - vector of classes to say what class of each col is (not required)
 
-data &lt;- read.table("filename.txt")
-	will auto figure out column classes, sep etc etc, auto skips
-   	lines with comment symbol etc etc.
-
-red.csv is identical to read.table except default seperator is comma (,)
-
-For large datasets estimate amount of RAM needed to store dataset. R will read your 
-
-entire
-dataset into the RAM of the computer.
-
-spec colClasses for speed
 
 8 bytes per numeric
 
@@ -408,22 +932,7 @@ x[c(1,3)] extracts element 1 and 3 of list
 eg x[[c(1,3)]] gets the 3rd element from the element that is the first element of x!
 
 
-Matrix subsetting
------------------
-matrix[rowIdxs, colIdxs]
-if either index ommited (must still include the comma) then all of that index is 
 
-returned
-
-defualt for single matrix element is to return it as a vector. to stop this
-use drop = FALSE
-x &lt;- matrix...
-x[1,2] returns vector
-x[1,2, drop=FALSE] returns a 1x1 matrix
-
-Same issue for subsetting a single row or column
-ncol()
-nrow()
 
 REMOVING MISSING VALUES
 ------------------------
@@ -441,57 +950,31 @@ good &lt;- complete.cases(my_dataframe)
 my_dataframe[good,]
 
 
-
-VECTORIZED OPERATIONS
----------------------
-if x, y matricies
-
-x * y is element-wise multiplication
-
-x %*% y is true matrix multiplication
-
-
-CONTROL STRUCTURES
--------------------
-if(...) {
-} else if {
-} else {
-}
-
-You can assign from an if into a variable!
-Eg
-   y &lt;- if (...) { } else { }
-
-for(i in 1:10) {
-}
-
-if x is a vector
-
-for(i in seq_along(x)) {
-   ...x[i]...
-}
-
-for(item in x) {
-}
-
-count &lt;- 0
-while(count &lt; 10) {
-   count &lt;- count + 1
-}
-
-repeat {
-   // infinite loop
-}
-
-break - exit loop
-next - skip iteration
-return - return from function (with value)
-
 FUNCTIONS
 ---------
 Functions are first class objects
 	- They can be passed as args to other functions
 Functions can be nested!
+
+http://www.r-bloggers.com/r-three-dots-ellipsis/
+test &lt;- function(...) {
+    arguments &lt;- list(...)
+    arguments
+}
+
+&gt; test(1,2, a=3)
+[[1]]
+[1] 1
+
+[[2]]
+[1] 2
+
+$a
+[1] 3
+
+&gt; q = test(1,2, a=3)
+&gt; names(q)
+[1] ""  ""  "a"
 
 Function returns whatever the last expression was!
 	add2 &lt;- function(x,y) {
@@ -791,7 +1274,635 @@ recover()
    call stack 
       options(error = recover)
 
+R Profiling
+-----------
+
+Figure out why things are taking time and suggest strategies for fixing.
+Systematic way to examine how much time is being spent in various parts
+of your program.
+
+system.time()
+-------------
+Takes R expression (can be in curley braces) an returns time taken to
+do the expression in seconds.
+
+Returns proc_time
+   user time    - CPU time 
+   elapsed time - "wall clock" time
+
+There are multi-threaded BLAS libaries (ATLAS, ACML, MKL)
+Parallel package for parallel processing
+
+http://stackoverflow.com/questions/5688949/what-are-user-and-system-times-measuring
+
+<q>The "user time" is the CPU time charged for the execution of user
+instructions of the calling process. The "system time" is the CPU
+time charged for execution by the system on behalf of the calling
+process.</q>
+
+Rprof()
+--------
+R must be compiled with profiler support.
+
+Rprof() starts the profiler
+DO NOT USE system.time() with Rprof()
+
+summaryRprof() to summarise Rprof() output
+   by.total - divide time spent in each function by total time
+   by.self  - divide time spend in each function minus time 
+              spent in functions above by total time.
+
+Rprof() tacks FUNCTION CALL STACK at regularly sampled intervals
+
+Generate (pseudo) random numbers
+---------------------------------
+   - rnorn() random normal with mean and stddev
+   - dnorm() evaluates standard normal prob density funct at point or 
+             vector of points
+   - pnorm() eval cumulative distribution function for normal distribution
+   - rpois() generate random Poisson with a given rate
+   - rbinom() uses binomial distribution
+
+   d for density
+   r for random number gen
+   p for cummulative distribution
+   q for quantile function
+
+Important: use set.seed(<seed>)
+           this resets the sequence that will occur.
+
+
+Random sampling
+----------------
+THe sample() function draws randomly from a specified set of (scalar)
+objects allowing you to sample from arbitrary distributions.
+
+set.seed(...)
+sample(1:10, 4)               # without sample replacement
+sample(1:10, 4, replace=TRUE) # with sample replacement 
+                              # (so can get repeats)
+
+READ DATA FROM WEB (HTTPS)
+-------------------------
+library(RCurl)
+url &lt;- "https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Fss06hid.csv"
+data &lt;- getURL(url, ssl.verifypeer=0L, followlocation=1L)
+writeLines(data,'temp.csv')
+
+get binary data using getBinaryURL(...) and the following:
+   tf &lt;- tempfile()
+   writeBin(con=tf, content)
+
+READ DATA FROM EXCEL
+--------------------
+library("xlsx")
+dat &lt;- read.xlsx(fname, startRow=18, endRow=23, colIndex=7:15)
+
+
+XML into R
+---------------
+library(XML)
+doc &lt;- xmlTreeParse(url, useInternal=TRUE)
+   there is also htmlTreeParse for HTML files!
+rootNode &lt;- xmlRoot(doc)
+xmlName(rootNode)
+
+xmlName() - element name (w/w.o. namespace prefix)
+xmlNamespace()
+xmlAttrs() - all attributes
+xmlGetAttr() - particular value
+xmlValue() - get text content.
+xmlChildren(), node[[ i ]], node [[ "el-name" ]]
+xmlSApply()
+xmlNamespaceDefinitions()
+
+xmlSApply(node, function-to-apply) - recursive by default
+or xpathSApply(node, xpath-expression, function-to-apply)
+
+
+XPath language
+/node - top-level node
+//node - node at any level
+node[@attr-name] - node that has an attribute
+named "attr-name"
+node[@attr-name='xxx'] - node that has attribute named attr-name with value 'xxx'
+node/@x - value of attribute x in node with such attr.
+
+
+FAST TABLES IN R
+-----------------
+data.table
+
+Is a child of data.frame but is much FASTER.
+Has a different syntax
+
+Create in exactly same way is data.frame
+
+
+tables() - all data.tables in memory
+
+Subsetting with only one index subsets with ROWS
+
+Subsetting columns very different.
+   EXPRESSIONS
+   Uses expressions: satements between curley brackets {}
+      e.g. dt[, new_col := {some expressions...}
+
+   LISTS
+   Or use a list of functions to apply to columns:
+      e.g. dt[, list(mean(x), sum(z))]
+
+   ADD NEW COL (very efficiently) with := syntax
+      dt[,w:=col-name]
+      Adds inplace
+      Data tables copied BY REFERENCE so be careful of aliases!
+      Create copied explicitly using copy() function
+
+Grouping using `by=` syntax.
+   Special variable .N to count group
+      eg. dt[, .N, by=...]
+
+Keys for fast indexing. joins, merges, subsetting, grouping
+   e.g. setkey(dt, col-name)
+
+Apparently even faster is
+http://www.inside-r.org/packages/cran/data.table/docs/fread
+
+
+MYSQL
+-----
+dbCon &lt;- dbConnect(MYSQL(), user="...", host="...", db="...")
+allTabls &lt;- dbListTables(dbCon)
+result &lt;- dbGetQuery(dbCon, "SQL QUERY STRING")
+
+dbListFields(dbCon, "TABLE NAME") - lists field names in table
+dbReadTable(dbCon, "TABLE NAME") - reads the ENTIRE table (caution - size!!)
+
+To select a subset:
+   query &lt;- dbSendQuery(dbCon, "SQL STR") - doesn't get the data
+   x &lt;- fetch(query, n=number-of-rows) - this gets the data
+   dbClearResult(query) - must be done after a query!
+
+dbDisconnect(dbCon) - must be closed!!!! see on.exit() function for safety
+
+http://www.r-bloggers.com/mysql-and-r/
+
+
+HDF5
+----
+source("http://bioconductor.org/bioLite.R")
+biocLite("rhdf5")
+
+library(hdf5)
+f = h5createFile("...")
+g = h5createGroup("file-name", "group-name")
+h5ls("file-name") - dump out file info
+
+Write data:
+   A = matrix(1:10, nr=5, nc=2)
+   h5write(A, "filename", "group/path/to/var/spec")
+
+   will automatically write meta data for you too
+   attr(A, "somejunk") &lt;- "a value"
+
+See bioconductor notes
+
+
+FROM WEB
+--------
+
+con = url("...")
+htmlCode = readLines(con)
+close(con) 
+
+htmlCode is just the raw code as one blob.
+Alternative use htmlTreeParse() and xpathSApply() etc
+
+
+creating new variables
+=======================
+
+create sequence
+----------------
+s1 &lt;- seq(min-val, max-val, by=incr-value)
+s1 &lt;- seq(min-val, max-val, length=) - has length values
+s1 &lt;- seq(along = x) vector of indicies for x
+
+create binary vars
+--------------------
+x &lt;- ifelse(df$col <op> cond, TRUE, FALSE)
+
+create factor vars
+------------------
+factor(1 * (var <op> cond), labels=c("label1", "label2"))
+
+create categories
+-----------------
+apply to quantative variables
+x &lt;- cut(df$col, breaks=....) The breaks specifies the boundaries for the groups
+   eg cut(df$col1, breaks=quantile(df$col2))
+
+or use library(Hmisc)
+   cut2(df$col, g=4) - shortcut for quantiles
+
+
+reshape data
+==============
+USE THE reshape2 library
+   library(reshape2)
+
+tidy data
+   1. every variable its own col
+   2. every observation its own row
+   3. each table/file to store data about only one kind of observation
+
+
+melt a dataframe
+-----------------
+melt(df, id=c(...), measure.vars=c(...))
+   create a new df. variables in id list are repeated for each variable in measure.vars
+   so that rather than being wide the df becomes thin with a row for each variable with
+   ids acting like the index or identifier. Thus is there are 2 items in measure.vars
+   there will be 2 occurances of the identifiers in id list.
+
+cast data frame
+----------------
+
+using dcast() to summarise a dataset
+- - - - - - - - - - - - - - - - - - -
+   dcast(df, col-to-group-by ~ col-to-summarise)
+      will take col-to-group-by and produce a row for each unique value in that set.
+      then it groups by those values and applies, by default, a count to see how many
+      instance of col-to-summarise belong to that group.
+
+   if you dont want to count, you can apply any aggregation operation
+      dcast(df, col-to-group-by ~ col-to-summarise, mean)
+
+
+split-apply-combine problems
+------------------------------
+Notes on this article:
+<a href="http://www.r-bloggers.com/a-quick-primer-on-split-apply-combine-problems/"
+   target="_blank">www.r-bloggers.com/a-quick-primer-on-split-apply-combine-problems</a>
+
+<a href="https://www.google.co.uk/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=The+Split-Apply-
+Combine+Strategy+for+Data+Analysis%2C+in+the+Journal+of+Statistical+Software%2C"
+target="_blank">Further note by Hadley Wickham</a>
+
+list_by_group &lt;- with(df, split(col-to-count, col-to-group-by))
+aggr_by_group  &lt;- sapply(list_by_group, aggregation-function)
+   e.g. aggregation-function could be mean()
+
+This can be summarised in one command in these different ways:
+   1. with(df, tapply(col-to-count, col-to-group, agrregate-function))
+        The tapply() function does an inherent group by operation for you
+   2. with(df, by(col-to-count, col-to-group, agrregate-function))
+   3. aggregate(col-to-count ~ col-to-group, df, agrregate-function)
+  
+
+
+dplyr package
+===============
+library(dplyr)
+
+Basic verbs used by package:
+   select    - returns a subset of columns of df
+   filter    - extract subset of rows
+   arrange   - reorder rows
+   rename    - rename a column
+   mutate    - add new variables or columns. transform existing
+   group_by  -
+   pipeline  - use %&gt;% to pipe output to next func.
+               then funcs won't need the df argument, they get it from the pipeline
+   join      - faster but less fully featured than merge(). this can only merge
+               on common names, you can spec the cols!
+   join_all  - join multple df's. Takes list as argument
+   summarise -
+ 
+
+Format generally:
+   new_df&lt;- dplyr-func(df, what-to-do-with-df)
+
+
+select
+------
+Can use column names in ranges rather than just indicies
+  select(df, col-name1:col-name2) - select all columns in this range
+  select(df, (-col-name1:col-name2)) - select all columns EXCEPT those in this range
+
+
+filter
+-------
+filter(df, col &lt;op&gt; cond)
+
+
+arrange
+-------
+   df &lt;- arrange(df, col-name) - order dataset by this column, asc order
+   df &lt;- arrange(df, desc(col-name)) - order dataset by this column, desc order
+
+
+rename
+------
+   df &lt;- rename(df, col-name-new=col-name-old, ...)  - renames those cols, leaves others as is
+
+
+mutate
+------
+transform existing vars or create new ones
+   df &lt;- mutate(df, new.col=....) - adds a new column
+eg
+   df &lt;- mutate(df, new.col=old.col - mean(old.col)) - adds a new column
+
+
+group_by
+---------
+   grouped_df &lt;- group_by(df, colname)
+   summarise(grouped_df, label1=func(col-name), ....)
+
+
+
+merging data
+=============
+By default merges by columns with common name. Use by.x, by.y to tell it which cols
+  by.x is the first df
+  by.y is the secon df
+
+  use "all=TRUE" for an outer join
+
+
+merge(df_x, df_y, by.x=, by.y=, all=)
+
+can also use join in plyr package
+
+
+Misc
+----
+remove the original data frame from your workspace with rm("variable-name")
+packageVersion("package name") to get the package version
+
+
+Manipulating Data with dplyr
+----------------------------
+FIRST, you must load the data into a 'data frame table' 
+   data_df_tbl &lt; tbl_df(data_df)
+
+dplyr supplies five 'verbs' that cover most fundamental data manipulation tasks: select(), filter(), arrange(), mutate(), 
+and summarize().
+
+dplyr also doesn't print all teh data. to see it all use View() (best done in R Studio)
+
+select(data_df_tbl, colname1, colname2,...) 
+   works on COLUMNS
+   returns a new df_tbl with only the cols named in the order specified
+   given this ordering, select can then allow us to use the range operator ":"
+      with column names rather than indicies.
+      e.g. select(data_df_tbl, colname4:colname6) 
+         the order can be reversed as in colname6:colname4 too.
+
+   to specify column to dump rather than keep use a minus "-".
+   eg. select(data_df_tbl, -colname1) gives all columns except colname1
+   eg. select(data_df_tbl, -(colname1:cn3)) gives all columns except those in the range specified
+                                            note the range must be enclosed in brackets to negate 
+                                            the entire range (rather than just the start element)
+   
+   Special select functions (from helpfile):
+      - starts_with(x, ignore.case = TRUE): names starts with x
+      - ends_with(x, ignore.case = TRUE): names ends in x
+      - contains(x, ignore.case = TRUE): selects all variables whose name contains x
+      - matches(x, ignore.case = TRUE): selects all variables whose name matches the regular expression x
+      - num_range("x", 1:5, width = 2): selects all variables (numerically) from x01 to x05.
+      - one_of("x", "y", "z"): selects variables provided in a character vector.
+      - everything(): selects all variables.
+
+
+filter(data_df_tbl, boolean-vector-selecting-rows, boolean-vector... )
+   works on ROWS (the bool vectors are ANDed. To OR use "|" not "," )
+   eg. to select rows where a column value is not NA use:
+      filter(data_df_tbl, !is.na(col-name))
+
+
+arrange()
+   orders the ROWS of a dataset according to a particular variable.
+   eg to order ascending
+      arrange(data_df_tbl, colname)
+   eg to order descending
+      arrange(data_df_tbl, desc(colname))
+
+   Can arrange based on multiple variables, sort my left most first, then next continuing right.
+
+mutate()
+   Creates a new variable based on the value of one or more variables already in a dataset. 
+   eg.  mutate(data_df_tbl, col_new = someFunc(col_existing))
+
+   Can also use values created in col_new's to the left, in col_new's to the right
+   eg.  mutate(data_df_tbl, col_new = someFunc(col_existing), col_new2 = col_new * 0.25)
+
+summarize() 
+   collapses the dataset to a single row, especially when data is grouped
+   eg summarise(data_df_tbl, some-summary=func(col-name))
+   most useful with the group_by() verb
+
+group_by()
+   When using summarize() on a table that has been group_by()'ed it will
+   return the summary functions for EACH group rather than just one value :)
+
+merge()
+   By default merges by columns with common name. Use by.x, by.y to tell it which cols
+     by.x is the first df
+     by.y is the secon df
+   
+     use "all=TRUE" for an outer join
+   
+   
+   merge(df_x, df_y, by.x="col1", by.y="col2", all=)
+                          ^
+                          Note col names are in quotes
+                          otherwise you get
+                          Error in fix.by(by.x, x) : object 'col1' not found
+
+
+Some special functions:
+   - n()
+     The number of observations in the current group. (ie. num rows)
+     This function is implemented special for each data source and can only 
+     be used from within summarise, mutate and filter.
+
+   - n_distinct()
+     Efficiently count the number of unique values in a vector
+     Faster and more concise equivalent of length(unique(x))
+
+
+quantiles
+----------
+| We need to know the value of 'count' that splits the data into the top 1% and bottom 99% of packages based on total 
+downloads. In statistics, this is called the
+| 0.99, or 99%, sample quantile. Use quantile(pack_sum$count, probs = 0.99) to determine this number.
+
+&gt; quantile(pack_sum$count, probs = 0.99)
+
+
+
+tidying data with tydr
+-----------------------
+library(tidyr)
+http://vita.had.co.nz/papers/tidy-data.pdf
+
+gather()
+   Use gather() when you notice that you have columns that are not variables
+   Looking at the example from the help file
+
+   &gt; # From http://stackoverflow.com/questions/1181060
+   &gt; stocks &lt; data.frame(
+   +   time = as.Date('2009-01-01') + 0:9,
+   +   X = rnorm(10, 0, 1),
+   +   Y = rnorm(10, 0, 2),
+   +   Z = rnorm(10, 0, 4)
+   + )
+   &gt; head(stocks)
+           time          X          Y         Z
+   1 2009-01-01  0.3269115  0.7445885  6.257515
+   2 2009-01-02 -1.5729436 -3.3722382  2.050222
+   3 2009-01-03 -0.5257739 -1.2664309 -5.498621
+   4 2009-01-04 -1.4181633 -0.2352554  2.338179
+   5 2009-01-05 -0.6081603 -2.1707088  2.099759
+   6 2009-01-06  0.8347829  2.5455941  9.737100
+
+   &gt; x = gather(stocks, stock, price, -time)
+   &gt; head(x)
+           time stock      price
+   1 2009-01-01     X  0.3269115
+   2 2009-01-02     X -1.5729436
+   3 2009-01-03     X -0.5257739
+   4 2009-01-04     X -1.4181633
+   5 2009-01-05     X -0.6081603
+   6 2009-01-06     X  0.8347829
+
+   
+   What have we done here? In our original data set we had 3 columns. Each represented
+   the price of a stock. We want to have one column for the stock type and one column
+   for the price of that stock.
+
+   Why do we want this? This is one of the principles of "tidy data". (see
+   http://vita.had.co.nz/papers/tidy-data.pdf). Really what we are discussing
+   is type-of-stock and price-of-stock at a time. Therefore there are 3 variables
+   and each column should be a variable. As it stands the dataset columns
+   represent the type-of-stock variable split over many columns. This isn't always
+   a bad thing, as the article discusses, but it can be tidied to just have the
+   variables as columns: time, stock and price. This is called "melting" the dataset.
+
+
+   So... gather(stocks, stock, price, -time)
+   The data argument, stocks, is the name of the original dataset.
+   The key/value arguments, stock and price, give the column names for our new tidy
+      dataset. Stock is the key, because it specifies all the column names, X, Y, and 
+      Z are to be collected under this new variable... they become like keys in a
+      DB table. The value argument is the values of these columns that will be matched
+      to the key.
+   -time excludes time from the melt, because it is already a variable 
+
+separate() 
+   separate one column into multiple columns
+
+spread()
+   Spread a key-value pair across multiple columns.
+
+extract_numeric()
+   Easy way to just get the numbers out of a string. eg if you have
+   a numerical identified with a common textual prefix.
+
+
+
+STANDARD FILE DOWNLOAD STUFF
+----------------------------
+
+if(!file.exists(your-dir-name)) { dir.create(your-dir-name) }
+url &lt; "https://....."
+download.file(url, destfile=your-file-name, method="curl")
+data &lt; read.csv(your-file-name)
+
+On windows, however, I seem to need to do this
+   library(Rcurl)
+   if(!file.exists(your-dir-name)) { dir.create(your-dir-name) }
+   url &lt; "https://....."
+   writeLines(getURL(url, ssl.verifypeer=0L, followlocation=1L), your-file-name)
+   data &lt; read.csv(your-file-name)
+
+
+EDITING TEXT VARIABLES
+----------------------
+tolower() - returns all lowercase
+toupper() - returns all uppercase
+strsplit(string, seperator). Remember to escape a character you need double backslash. eg. "\\."
+sub(str-to-search-for, replacement-str, string) - replace first instance only
+gsub() - replace all instances
+grep(regexp, str, value=T/F) - returns indicies
+grepl() - returns boolean mask vector
+
+library(stringr)
+   nchar(str) - number of chacacters
+   substr(str, start-index, end-index). Indicies from 1 and are inclusive
+   paste(str1, str2, sep=" ")
+   str_trim() - trim off spaces at start or end.
+
+Names of variables
+   * All lower case when possible
+   * Descriptive as possible
+   * Not duplicated
+   * Not have underscores, dots or whitespace
+
+
+Working with dates
+-------------------
+date() - returns string od date and time
+Sys.Date() - returns a Date object. Can reformat using format()
+             Date objects can be subtracted, added etc
+format(Sys.Date(), "format-string")
+    where format-string is like a prinf expression with these special placeholders
+       %d = day as number (0-31)
+       %a = abbreviated week day name
+       %A = full week day name
+       %m = month number (two digits)
+       %b = abbreviated month
+       %B = unabbreviated month
+       %y = 2 digit year
+       %Y = 4 digit year
+
+as.Date(char-vector, format-string) turns character vectors into dates
+weekdays(date-obj) returns the week day as a string
+months(date-obj) returns the logn month name as a string
+julian(date-obj) returns number of days since epoch (1st Jan 1970)
+
+library(lubridate)
+   Easy date manipulation
+   Instead of as.Date(..., "format") you can use...
+      ymd(...) which will search for year, month, day in *all* feasible formats
+      mdy(...) will search for month, day, year in *all* feasible formats
+      ymd_hms(...) date and time
+      and so on...
+   The functions also accept the timezone using the tz argument to the functions.
+   wday(..., label=TRUE) == weekdays() in lubridate
+
+
+
+data resources
+---------------
+http://data.un.org     - united nations
+http://www.ons.gov.uk/ons/index.html- uk office for national statistics
+http://www.data.gov    - usa gov
+http://www.data.gov/opendatasites &lt;--- look here
+http://www.data.gov.uk - uk data site
+http://www.gapminder.org
+http://www.asdfree.com - help on usa surverys
+http://www.infochimps.com/marketplace
+http://www.kaggle.com
+http://data.worldbank.org
+
+
+
+
 </pre>
+</div>
 		</div>
 	</div>
 </body>

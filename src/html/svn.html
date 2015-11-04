@@ -10,26 +10,32 @@
 </head>
 
 <body>
-  <div id="header">
-	  -- This is JEHTech --
-  </div>
+<div id="header">
+	-- This is JEHTech --
+</div>
 
-   <div id="sidebar">
-    <h1 class="title">Links...</h1>
-    <div id="includedContent"></div>
-  </div>
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
 
-  <div id="content">
-    <h1 class="title">Subversion notes</h1>
-	 <p>
-		 Just a collection of SVN stuff that I've found useful... I've tried to make all the links relative to v1.8. <a href="http://svnbook.red-bean.com/" target="_blank">Manual here</a>. Basic work cycle described 
-		 <a href="http://svnbook.red-bean.com/en/1.8/svn.tour.cycle.html" target="_blank">here</a>.
-	</p>
-    <h2>Make SVN use P4Merge For Diff</h2>
-    <p>I really like the <a href="http://www.perforce.com/product/components/perforce-visual-merge-and-diff-tools" target="_blank">
-       Perforce merge and diff tools</a> so after a bit of searching 
-       around now use the following script on my Linux box</p>    
-    <pre class="prettyprint lang-sh linenums">#!/bin/sh
+<div id="content">
+	<h1 class="title">Subversion notes</h1>
+	<div style="padding-right:10px;">
+		<p>
+			Just a collection of SVN stuff that I've found useful... I've tried to make all the links relative to v1.8. <a href="http://svnbook.red-bean.com/" target="_blank">Manual here</a>. Basic work cycle described 
+			<a href="http://svnbook.red-bean.com/en/1.8/svn.tour.cycle.html" target="_blank">here</a>.
+		</p>
+
+		<h2>Page Contents</h2>
+		<div id="page_contents">
+		</div>
+
+		<h2>Make SVN use P4Merge For Diff</h2>
+		<p>I really like the <a href="http://www.perforce.com/product/components/perforce-visual-merge-and-diff-tools" target="_blank">
+		   Perforce merge and diff tools</a> so after a bit of searching 
+		   around now use the following script on my Linux box</p>    
+		<pre class="prettyprint lang-sh linenums">#!/bin/sh
 
 LEFT_FILE_DESCR=$3
 RIGHT_FILE_DESCR=$5
@@ -48,15 +54,15 @@ p4merge -nl "$LEFT_FILE_DESCR" -nr "$RIGHT_FILE_DESCR" "$LEFT" "$RIGHT"</pre>
 ###  diff-cmd = kdiff3
 diff-cmd = p4_diff_helper.sh</pre>
 
-	 <p>
-		This took me quite a while the first time round, reading on various threads, then I found out that the 
-		&quot;<a target="_blank" href="http://svnbook.red-bean.com/en/1.8/svn.advanced.externaldifftools.html">Using External Differencing and Merge Tools</a>&quot;
-		section of the Red Book had the answer all along, so use that link for more information :)
-	 </p>
+		<p>
+			This took me quite a while the first time round, reading on various threads, then I found out that the 
+			&quot;<a target="_blank" href="http://svnbook.red-bean.com/en/1.8/svn.advanced.externaldifftools.html">Using External Differencing and Merge Tools</a>&quot;
+			section of the Red Book had the answer all along, so use that link for more information :)
+		</p>
 
-	 <p>Doing the same for a merge is even easier:
-	 </p>
-<pre class="prettyprint lang-sh linenums">#!/bin/sh
+		<p>Doing the same for a merge is even easier:
+		</p>
+		<pre class="prettyprint lang-sh linenums">#!/bin/sh
 BASE=$1 
 THEIRS=$2
 MINE=$3
@@ -64,155 +70,212 @@ MERGED=$4
 WCPATH=$5
 p4merge "$BASE" "$MINE" "$THEIRS" "$MERGED"</pre>
 
-<p>Again, assuming you save the above on the <tt>PATH</tt> as <tt>p4_merge_helper.sh</tt>, modify the subversion config file (~/.subversion/config) add in the merge command under the [helpers] section.
-	</p>
- <pre class="prettyprint linenums">[helpers]
+		<p>
+			Again, assuming you save the above on the <tt>PATH</tt> as 
+			<tt>p4_merge_helper.sh</tt>, modify the subversion config file 
+			(~/.subversion/config) add in the merge command under the [helpers] 
+			section.
+		</p>
+
+		<pre class="prettyprint linenums">[helpers]
 &lt;snip&gt;
 merge-tool-cmd = p4_merge_helper.sh</pre>
 
 
-    <h2>Nice Diff Syntax For Same-File-Different-Branch</h2>
-    <p>Useful command example is:</p>
-	 <pre class="prettyprint linenums">svn diff ^/branches/{PATH_1,PATH_2}/some/repo/path</pre>
-    <p>Where:</p> 
-	 <ul><li><tt>^/</tt> is a shortcut for the root of the current repository, and</li>
-		 <li><tt>xx{A,B}yy</tt> expands to xxAyy &lt;space&gt; xxByy</li>
-	 </ul>
-    <p>Therefore the whole line expands to the following.</p>
-    <pre>svn diff &lt;root&gt;/branches/PATH_1/some/repo/path &lt;root&gt;/branches/PATH_2/some/repo/path</pre>
+		
+		<h2>SVN Log - Only Report Changes After Branch</h2>
+		<pre class="prettyprint linenums">snv log --stop-on-copy </pre>
 
-    <h2>SVN Log - Only Report Changes After Branch</h2>
-    <pre class="prettyprint linenums">snv log --stop-on-copy </pre>
+		<h2>SVN Ignore Files</h2>
+		<p>The following will ignore all *.orig files from the current directory and all subdirectories</p>
+		<pre class="prettyprint linenums">svn propset svn:ignore '*.orig' . --recursive</pre>
 
-    <h2>SVN Ignore Files</h2>
-    <p>The following will ignore all *.orig files from the current directory and all subdirectories</p>
-    <pre class="prettyprint linenums">svn propset svn:ignore '*.orig' . --recursive</pre>
-
-	 <h2>Branch, Checkout, Merge and Reintegrate</h2>
-	 <h3>Branching &amp; Checkout</h3>
-	 <p>
-	 From SVN manual: <q>Subversion has no internal concept of a branch - it knows only how to make copies ... that happens to carry 
-	 some extra historical information.</q>
-	</p>
-	 <p>
-	 	To branch off, for example trunk, to new workshpace:
-	</p>
-<pre>svn cp svn+ssh://myserver.com/trunk/src svn+ssh://myserver.com/0_developers/my_name/branch_name -m "a description"
+		<h2>Branch, Checkout, Merge and Reintegrate</h2>
+		<div>
+			<h3>Branching &amp; Checkout</h3>
+			<p>
+				From SVN manual: <q>Subversion has no internal concept of a branch 
+				- it knows only how to make copies ... that happens to carry 
+				some extra historical information.</q>
+			</p>
+			<p>
+				To branch off, for example trunk, to new workshpace:
+			</p>
+			<pre>svn cp svn+ssh://myserver.com/trunk/src svn+ssh://myserver.com/0_developers/my_name/branch_name -m "a description"
 cd /where/you/want/to/checkout/to
-svn co svn+ssh://myserver.com/0_developers/my_name/branch_name
-</pre>
-	<h3>Merging</h3>
-	<p>
-		To update my local branch with changes from trunk make sure branch is cleann no local modifications and up to date.
-	</p>
-	<pre>cd /where/you/want/to/checkout/to
+svn co svn+ssh://myserver.com/0_developers/my_name/branch_name</pre>
+	
+			<h3>Merging</h3>
+			<p>
+				To update my local branch with changes from trunk make sure branch is cleann no local modifications and up to date.
+			</p>
+			<pre>cd /where/you/want/to/checkout/to
 svn merge ^/trunk/src</pre>
-	<p>
-		<em>Note that this has only affected your working copy!</em> The changes have <em>not</em> been submitted to 
-		the repository yet. For that you must do an <tt>svn commit</tt>. This is also known as a <em>sync merge</em>.
-	</p>
-	<p>
-		Useful tips from the Red Book... 
-	</p>
-	<pre>svn mergeinfo --show-revs merged ^/trunk ^/branches/0_developers/my_name/branch_name
+			<p>
+				<em>Note that this has only affected your working copy!</em> The changes have <em>not</em> been submitted to 
+				the repository yet. For that you must do an <tt>svn commit</tt>. This is also known as a <em>sync merge</em>.
+			</p>
+			<p>
+				Useful tips from the Red Book... 
+			</p>
+			<pre>svn mergeinfo --show-revs merged ^/trunk ^/branches/0_developers/my_name/branch_name
 svn mergeinfo --show-revs eligible ^/trunk ^/branches/0_developers/my_name/branch_name</pre>
-	<p>
-		The first line reports a summary of changelists where trunk was merged to branch. The
-		second line reports a summary of changelists where trunk has not yet been merged to branch
-	</p>
+			<p>
+				The first line reports a summary of changelists where trunk was merged to branch. The
+				second line reports a summary of changelists where trunk has not yet been merged to branch
+			</p>
 
-	<h3>Reintegrating</h3>
-	<p>
-		To re-integrate to trunk, first make sure dev-line is up to date by merging in from trunk again and
-		<em>committing</em> any changes resulting from the merge back to the repo. Now...
-	</p>
-	<h4>Pre v1.8</h4>
-	<pre>cd /where/truck/is/checked/out
+			<h3>Reintegrating</h3>
+			<p>
+				To re-integrate to trunk, first make sure dev-line is up to date by merging in from trunk again and
+				<em>committing</em> any changes resulting from the merge back to the repo. Now...
+			</p>
+
+			<h4>Pre v1.8</h4>
+			<pre>cd /where/truck/is/checked/out
 svn up
 svn merge <b>--reintegrate</b> ^/0_developers/my_name/branch_name
 ... test ...
 svn commit -m "message"</pre>
-	<p>
-		For subversion &lt; v1.8, the <tt>--reintegrate</tt> option is critical for reintegrating changes from a branch back into 
-		its original line of development so that only changes unique to your branch are copied back!
-	</p>
-	<p>
-		<div class="box_container">
-			<div class="warning">
-				<p>
-					Once you have reintegrated a branch into trunk, it is no longer &quot;alive&quot;. It
-					is generally unfit for futher use after it has been reintegrated!
-				<br/>
-				See 
-				&quot;<a href="http://svnbook.red-bean.com/en/1.8/svn-book.html#svn.branchmerge.advanced.reintegratetwice" 
-					target="_blank">Keeping a Reintegrated Branch Alive</a>&quot;
-				for further information.
-				</p>
-			</div>
-		</div>
-	</p>
-	<h4>SVN 1.8 onwards</h4>
-	<p>
-		<div class="box_container">
-			<div class="info">
-				<p>
-					Joy! None of the above problems occur in v1.8... it is is smarter! Merging
-					back into trunk lines is now called an &quot;<em>automatic reintegrate</em>&quot;.
-					<br/>
-					You do <em>not</em> need to use <tt>--reintegrate</tt> and the branch
-					remains useable after the merge...
-				</p>
-			</div>
-		</div>
-	</p>
-	<p>
-		Your trunk working copy cannot have any local edits, switched paths, or contain a mixture of revisions so 
-		commit any pending edits and then <tt>svn update</tt> the branch.
-	</p>
-	<pre>cd /where/truck/is/checked/out
+			<p>
+				For subversion &lt; v1.8, the <tt>--reintegrate</tt> option is critical for reintegrating changes from a branch back into 
+				its original line of development so that only changes unique to your branch are copied back!
+			</p>
+			<p>
+				<div class="box_container">
+					<div class="warning">
+						<p>
+							Once you have reintegrated a branch into trunk, it is no longer &quot;alive&quot;. It
+							is generally unfit for futher use after it has been reintegrated!
+						<br/>
+						See 
+						&quot;<a href="http://svnbook.red-bean.com/en/1.8/svn-book.html#svn.branchmerge.advanced.reintegratetwice" 
+							target="_blank">Keeping a Reintegrated Branch Alive</a>&quot;
+						for further information.
+						</p>
+					</div>
+				</div> <!-- END box_container DIV -->
+			</p>
+
+			<h4>SVN 1.8 onwards</h4>
+			<p>
+				<div class="box_container">
+					<div class="info">
+						<p>
+							Joy! None of the above problems occur in v1.8... it is is smarter! Merging
+							back into trunk lines is now called an &quot;<em>automatic reintegrate</em>&quot;.
+							<br/>
+							You do <em>not</em> need to use <tt>--reintegrate</tt> and the branch
+							remains useable after the merge...
+						</p>
+					</div>
+				</div>
+			</p>
+
+			<p>
+				Your trunk working copy cannot have any local edits, switched paths, or contain a mixture of revisions so 
+				commit any pending edits and then <tt>svn update</tt> the branch.
+			</p>
+			<pre>cd /where/truck/is/checked/out
 svn up
 svn merge ^/0_developers/my_name/branch_name
 ... test ...
 svn commit -m "message"</pre>
-	<p>
+		
 
-	<h3>Resolving Conflicts</h3>
-	<p>
-		<a href="http://svnbook.red-bean.com/en/1.8/svn.tour.cycle.html#svn.tour.cycle.resolve" target="_blank">This section</a> of the Red Book covers this.
-	</p>
+			<h3>Resolving Conflicts</h3>
+			<p>
+				<a href="http://svnbook.red-bean.com/en/1.8/svn.tour.cycle.html#svn.tour.cycle.resolve" target="_blank">This section</a> of the Red Book covers this.
+			</p>
 
-	<h2>Rollback To A Previous Revision</h2>
+			<h3>Evil Twins</h3>
+			<p>
+				Evil twins are two files with the same name and location in two different
+				branches that do not have a common ancestor. For example, if <tt>B</tt> was a branch
+				of <tt>A</tt> and in <tt>A</tt> I create the file <tt>dummy.txt</tt>, then file-copy (<em>not</em>
+				<tt>svn cp</tt>) that file into <tt>B</tt> and then try to reintegrate <tt>B</tt> to <tt>A</tt>, SVN will
+				throw a wobbly.
+			</p>
+			<p>
+				Why is this? It is basically because SVN has absolutely no way to know
+				how to merge these files. Who's correct? <tt>A</tt> or <tt>B</tt>? The 
+				files might look similar, but may not be even related! Had there been
+				a common ancestor at least SVN would know they're related and could have
+				a stab at a merge.
+			</p>
+			<p>
+				Then this is the case it is best to pospone resolution of the conflict
+				and compare the two files. Your only option will probably to be to
+				accept the working copy as the file to keep. Then you will have to manually
+				edit that working copy file to reflect the changes that you want to keep
+				between the evil twins.
+			</p>
+			<p>
+				To do this you use...
+			</p>
+			<pre>svn resolve --accept='working' file-name</pre>
+			<p>
+				This removes the conflict marker and says that the working copy contains
+				the resolved file. (At this point, note however that it does NOT!).
+			</p>
+			<p>
+				Now you need to manually resolve the changes. Edit the working copy or
+				overwrite it. Then when you commit the working copy will become the
+				updated file in <tt>A</tt>. Note, that if you use <tt>B</tt> further
+				you still face the same problem on the next merge. The best thing to do
+				would be to remove the bopy in <tt>B</tt> and replace it with a <em>
+				branch</em> from <tt>A</tt>.
+			</p>
+		</div> <!-- END H2: Branch, Checkout, Merge and Reintegrate -->
 
-	<p>
-	From your repo directory use the following, which is described in the svb redbook 
-	<a href="http://svnbook.red-bean.com/en/1.8/svn.branchmerge.basicmerging.html#svn.branchmerge.basicmerging.undo" target="_blank">here</a>.
-	</p>
+		<h2>Rollback To A Previous Revision</h2>
+		<p>
+			From your repo directory use the following, which is described in the svb redbook 
+			<a href="http://svnbook.red-bean.com/en/1.8/svn.branchmerge.basicmerging.html#svn.branchmerge.basicmerging.undo" target="_blank">here</a>.
+		</p>
 	
-	<pre>svn update
+		<pre>svn update
 svn merge -r &lt;newer-rev&gt;:&lt;older-rev&gt; <i>&lt;filename or . for current dir&gt;</i>
 svn commit</pre>
 
-	<p>As the manual says....
-	<q>You can use svn merge to &quot;undo&quot; the change in your working copy, and then commit the local modification to the repository. All you need to do is to specify a reverse difference. (You can do this by specifying <tt>--revision 392:391</tt>, or by an equivalent <tt>--change -392</tt>.)</q>
-	</p>
+		<p>
+			As the manual says....
+			<q>You can use svn merge to &quot;undo&quot; the change in your working copy, and then commit the local modification to the repository. All you need to do is to specify a reverse difference. (You can do this by specifying <tt>--revision 392:391</tt>, or by an equivalent <tt>--change -392</tt>.)</q>
+		</p>
 
-	<h2>SVN Properties - Recursive</h2>
-	<p>
-		Arg! Setting the ignore property recursively is deceptive. The problem and
-		several really good answers are found in <a href="http://stackoverflow.com/questions/1764521/recursive-svn-propset"
-			target="_blank">this SO thread</a>.
-	</p>
+		<h2>SVN Properties - Recursive</h2>
+		<p>
+			Arg! Setting the ignore property recursively is deceptive. The problem and
+			several really good answers are found in <a href="http://stackoverflow.com/questions/1764521/recursive-svn-propset"
+				target="_blank">this SO thread</a>.
+		</p>
 
-	<h2>Misc</h2>
-	<h3>Add all untracked files</h3>
-	<pre>svn add $(svn status | grep ? | awk '{print $2}')</pre>
-	<h3>Diff all changes in changeset</h3>
-	<pre>svn diff -c &lt;changeset&gt; [filename]</pre>
-	<p>This is the same as running the following:</p>
-	<pre> svn diff -r rev-1:rev [filename]</pre>
-	<p>If <tt>filename</tt> is ommitted all changes in that changeset
-	are examined</p>
-  </div>
+		<h2>Misc</h2>
+		<div>
+			<h3>Add all untracked files</h3>
+			<pre>svn add $(svn status | grep ? | awk '{print $2}')</pre>
+		
+			<h3>Diff all changes in changeset</h3>
+			<pre>svn diff -c &lt;changeset&gt; [filename]</pre>
+			<p>This is the same as running the following:</p>
+			<pre> svn diff -r rev-1:rev [filename]</pre>
+			<p>If <tt>filename</tt> is ommitted all changes in that changeset
+			are examined</p>
+
+			<h3>Nice Diff Syntax For Same-File-Different-Branch</h2>
+			<p>Useful command example is:</p>
+			<pre class="prettyprint linenums">svn diff ^/branches/{PATH_1,PATH_2}/some/repo/path</pre>
+			<p>Where:</p> 
+			<ul><li><tt>^/</tt> is a shortcut for the root of the current repository, and</li>
+				<li><tt>xx{A,B}yy</tt> expands to xxAyy &lt;space&gt; xxByy</li>
+			</ul>
+
+			<p>Therefore the whole line expands to the following.</p>
+			<pre>svn diff &lt;root&gt;/branches/PATH_1/some/repo/path &lt;root&gt;/branches/PATH_2/some/repo/path</pre>
+		</div> <!-- End H2 -->
+
+	</div>
+	</div> <!-- End content -->
 </body>
 </html>
 

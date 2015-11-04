@@ -132,6 +132,20 @@ if some_error_condition:
    display.display(display.Javascript('alert("{}")'.format(warnstr)))</pre>
 			</div>
 
+			<h3>Widening A Widget</h3>
+			<div>
+				<p>
+					The standard width of the select widgets can be a little small...
+					Tell them to be as wide as possible like this:
+				</p>
+				<pre class="prettyprint linenums">my_widget = widgets.SelectMultiple(options=...)
+my_widget.width = "100%"</pre>
+			</div>
+			<p>
+				Or in the constructor....
+			</p>
+			<pre class="prettyprint linenums">my_widget = widgets.SelectMultiple(options=..., width="100%")</pre>
+
 			<h3>Highlight MPLD3 Lines On Mouse Over</h3>
 			<div>
 				<p>

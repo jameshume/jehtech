@@ -43,10 +43,14 @@
 				<li><a href="https://en.wikipedia.org/wiki/User_identifier"
 					target="_blank">Linux User Identifier, Wikipedia</a>.
 				</li>
+				<li><a href="http://stackoverflow.com/questions/1891797/capturing-groups-from-a-grep-regex"
+					    target="_blank">StackOverflow: Capturing Groups From a Grep RegEx</a>.
+				<li><a href="https://tiswww.case.edu/php/chet/bash/bash.html" 
+					    target="_blank">Bash Manual Page</a>.</li>
 			</ol>
 		</div> <!-- END H2: References -->
 
-		<h2>Ensure Script Run As Root</h2>
+		<h2>Ensure A Script Runs As Root</h2>
 		<div>
 			<p>
 				If you know that your shell script will require root permissions
@@ -294,8 +298,73 @@ function remove_from_path() {
 			</div> <!-- END: H3 -->
 		</div> <!-- END: H2: Modify Any Path... -->
 
+		<h2>New Bash Test [[...]] &amp; Regular Expressions</h2>
+		<div>
+			<p>
+				Recently I had a problem where I wanted to recurse through a set
+				of files, get their names to pass to a program but also parse the
+				file name to get another bit of information which had to be used
+				to construct another parameter that was to be passed to the same
+				program.
+			</p>
+			<p>
+				Regular expressions and group captures spring to mind and as it turns out
+				that Bash (and some other more modern shells) can so this using the
+				new test built-in: <tt>[[...]]</tt>.
+			</p>
+			<p>
+				Thanks to the following references:
+				<ul>
+					<li><a href="http://stackoverflow.com/questions/1891797/capturing-groups-from-a-grep-regex"
+						    target="_blank">StackOverflow: Capturing Groups From a Grep RegEx</a>.
+					<li><a href="https://tiswww.case.edu/php/chet/bash/bash.html" 
+						    target="_blank">Bash Manual Page</a>.</li>
+				</ul>
+			</p>
+			<p>
+				Combining this with the info from section &quot;<a href="#ExecAlternative">Find --exec alternative when you want to exec a script function</a>&quot; 
+				the following worked quite well. This would work for files of the format
+				&quot;part1_part2.txt&quot;
+			</p>
+			<pre class="prettyprint linenums">dir="/A/path/to/the/root/folder"
+regex="^([^_]*)_([^_]*)\.txt"
+find $dir -name '*.txt' -print |
+while read fname
+do
+	[[ $fname =~ $regex ]]
+	group1="${BASH_REMATCH[1]}"
+	group2="${BASH_REMATCH[2]}"
+	echo "First group is $group1 and second is $group2"
+done</pre>
+
+			<p>From the Bash manual: <q>... parenthesized subexpressions ... are 
+				saved in the array variable <tt><b>BASH_REMATCH</b></tt> ...  index 0 is 
+				[the match of] the entire regular expression ... index n is the 
+				[match of] the nth parenthesized subexpression.</q>
+			</p>
+		</div> <!-- End H2: New bash Test -->
+
+
 		<h2>Misc Script Stuff</h2>
 		<div>
+			<h3>Rename A Set Of Files</h3>
+			<p>
+				I had a set of files where part of the filename identified a test
+				sample. The samples had been labelled wrongly, but consistently so,
+				so all that was needed was exhanging one sample name for another...
+			</p>
+			<pre class="prettyprint linenums">N=new_samp &amp;&amp;
+O=old_samp &amp;&amp; 
+find -name "*$O*" |  
+  while read oldf
+  do 
+    newf=$(echo $oldf | sed "s/$O/${N}_corrected/")
+    cp o=$oldf n=$newf
+done</pre>
+			<p>The &quot;_corrected&quot; suffix was added to stop the situation
+				where sample A is renamed to B, but there are existing B's that
+				must also be renamed.</p>
+
 			<h3>Halt script if variable NOT set</h3>
 			<pre class="prettyprint linenums"><a href="http://linuxcommand.org/lc3_man_pages/seth.html" target="_blank">set</a> -u</pre>
 
@@ -318,7 +387,8 @@ fi</pre>
 				delimeter and saves it as an array to the variable <tt>pyVerInfo</tt>.
 			</p>
 
-			<h3>Find --exec alternative when you want to exec a script function</h3>
+			
+			<a name="ExecAlternative"><h3>Find --exec alternative when you want to exec a script function</h3></a>
 			<p>
 				For when you want to do an operation on a set of files but can't
 				use &quot;<tt>find ... -exec ...</tt>&quot; because you want to
@@ -332,8 +402,19 @@ done</pre>
 
 			<h3>Useful builtins</h3>
 			<ul>
-				<li><tt><a href="http://linuxcommand.org/lc3_man_pages/readh.html" target="_blank">read</a></tt>. read input from stdin</li>
+				<li><tt><a href="http://linuxcommand.org/lc3_man_pages/readh.html" target="_blank">read</a></tt>. 
+					read input from stdin
+					Here is a really good 
+					<a href="http://stackoverflow.com/questions/226703/how-do-i-prompt-for-input-in-a-linux-shell-script/27875395#27875395"
+						target="_clank">SO thread on getting user input</a>.
+				</li>
 				<li>readlink. options like --canonicalize (-f is synonym)</li>
+				<li><a href="http://www.tldp.org/LDP/abs/html/parameter-substitution.html"
+					target="_blank">Variable substitution</a>.
+				</li>
+				<li><a href="http://mywiki.wooledge.org/BashFAQ/035#getopts"
+					target="_blank">getopts</a>.
+				</li>
 			</ul>
 		</div><!-- End H2: Misc Script Stuff -->
 

@@ -66,17 +66,10 @@ import pandas
 #
 # WARNING: File is about 150MB!!
 # See: <a href="http://data.gov.uk/dataset/land-registry-monthly-price-paid-data" target="_blank">http://data.gov.uk/dataset/land-registry-monthly-price-paid-data</a>
-DATA_FILE = r'land_reg_data_2015.csv'
-
-if not os.path.isfile(DATA_FILE):
-   print "Data file {} did not exist. Downloading, please wait...".format(DATA_FILE)
-   url = r'http://prod.publicdata.landregistry.gov.uk.s3-website-eu-west-1.amazonaws.com/price-paid-data/pp-2014.csv'
-   response = urllib2.urlopen(url)
-   csvfile = open(DATA_FILE,'w')
-   csvfile.write(response.read())
-   csvfile.close()
-
-print "Loading DataFrame from CSV"
+print "Downloading data from WWW. Reading into Dataframe..."
+DATA_FILE = ('http://'
+             'prod.publicdata.landregistry.gov.uk.s3-website-eu-west-1.amazonaws.com/'
+             'price-paid-data/pp-2014.csv')
 df = pandas.read_csv(
         DATA_FILE, 
         index_col=False, # Make sure first column is NOT treated as index!
@@ -521,6 +514,13 @@ import pandas.io.sql as sql
 sql.read_frame('select * from test', con)
 
 Where `con` is the Python DB connection object.
+
+
+R style pipes in Python
+=========================
+<a href="http://stackoverflow.com/questions/28252585/functional-pipes-in-python-like-from-dplyr"
+   target="_blank">http://stackoverflow.com/questions/28252585/functional-pipes-in-python-like-from-dplyr</a>
+
 </pre>
 			</div>
 		</div>
