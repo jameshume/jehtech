@@ -110,7 +110,7 @@ display.display(plotBtn)
 			</pre>
 
 			<p>
-			You can <a target="_blank" href="http://nbviewer.ipython.org/url/www.jeh-tech.com/html/downloadables/notebooks/mpld3_example.ipynb">see this in action</a> 
+			You can <a target="_blank" href="http://nbviewer.ipython.org/url/www.jeh-tech.com/downloadables/notebooks/mpld3_example.ipynb">see this in action</a> 
 			using the online nbviewer... Hover over the graph with your mouse cursor. At the bottom left some grey icons will pop-up. Click on the pan icon and then
 			you can pan through the graph by draging it and zoom using the mouse scroll wheel... all real time and interactive in your browser window.
 			</p>
@@ -212,18 +212,18 @@ mpld3.plugins.connect(fig, HighlightLines(lines, names))</pre>
 				that contained the <tt>style</tt> tag...
 			</p>
 			<p>
-				<a href="http://nbviewer.ipython.org/url/www.jeh-tech.com/html/downloadables/output_css_1.ipynb"
+				<a href="http://nbviewer.ipython.org/url/www.jeh-tech.com/downloadables/notebooks/output_css_1.ipynb"
 					target="_blank">Ouput_css_1.ipynb</a> demonstrates the first situation where I have output a CSS
 				stylesheet for the output HTML from the NB cells, but although most of the new CSS properties I set
 				are obeyed, `vertical-align` for a table cell is not. That was annoying...
 			</p>
-			<p><a href="http://nbviewer.ipython.org/url/www.jeh-tech.com/html/downloadables/output_css_2.ipynb"
+			<p><a href="http://nbviewer.ipython.org/url/www.jeh-tech.com/downloadables/notebooks/output_css_2.ipynb"
 					target="_blank">Ouput_css_2.ipynb</a> demonstrates a first attempt to fix the above problem.
 				By making the CSS properties that were previously not obeyed <tt>!important</tt> they are then
 				implemented. The disadvantage here is that I have to smatter my style sheet with <tt>!important</tt>
 				tags rather than using the cascading and inheritance properties of CSS. Seems cludgey to me...
 			</p>
-			<p><a href="http://nbviewer.ipython.org/url/www.jeh-tech.com/html/downloadables/output_css_3.ipynb"
+			<p><a href="http://nbviewer.ipython.org/url/www.jeh-tech.com/downloadables/notebooks/output_css_3.ipynb"
 					target="_blank">Ouput_css_3.ipynb</a> tries a different approach. The output from the NB cells
 				are all placed in DIVs with a class <tt>.output_html</tt>. The NB style sheet includes CSS
 				definitions for children of nodes with the <tt>.output_html</tt> class and it is these that are

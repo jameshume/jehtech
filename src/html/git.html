@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE HTML>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
@@ -27,6 +27,42 @@
 	<a href="https://progit2.s3.amazonaws.com/en/2015-08-09-23511/progit-en.661.pdf"
 		target="_blank">Book</a>.
 	</p>
+	<h2>Where Git Finds Your SSH File</h2>
+	<p>
+		I had a little problem on Windows. When I connected from my office location
+		Git would fail to SSH into GitHub. When I connected from home Git would
+		connect to GitHub with no problem whatsoever.
+	</p>
+	<p>
+		The reason for this is that when connecting from the office my HOME DIRECTORY
+		changed and git was looking for my key files relative to the home
+		directory!
+	</p>
+	<p>
+		The solution was found in this 
+		<a href="https://superuser.com/questions/232373/how-to-tell-git-which-private-key-to-use/920849#920849"
+			target="_blank">SO thread answer</a>. The solution is to create a
+		shell script that will involke the ssh client with the a parameter to tell
+		it where to look for key files: give this parameter an obsolute path that
+		is not relative to HOME.
+	</p>
+	<pre>#!/bin/sh
+ssh -i /absolute/path/to/key/folder/id_rsa $*</pre>
+	<p>
+		In the above script <tt>id_rsa</tt> is the key filename. You might have
+		saved your private key with a different file name. Save the script somewhere
+		and give it executable permissions (<tt>chmod +x <i>filename</i></tt>).
+	</p>
+	<p>
+		Then set the environment variable <tt>GIT_SSH</tt> to the absolute path
+		to the script you just created.
+	</p>
+	<pre>export GIT_SSH=/path/to/your/script.sh</pre>
+	<p>
+		Now your <tt>git push</tt> operations etc should work just fine.
+	</p>
+
+	<h2>Basic Git Notes</h2>
 	<pre>
 Git's basic structure
    1. Workspace

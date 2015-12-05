@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>TCL (Tool Command Language)</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">TCL (Tool Command Language)</h1>
+<div style="padding-right:10px;">
+
+	<h2>Trace</h2>
+	<div>
+		<p>
+			See the <a href="https://www.tcl.tk/man/tcl8.4/TclCmd/trace.htm" 
+			   target="_blank">trace man page</a>.
+		</p>
+		<p>
+			The following is a rather basic little example of putting 
+			a &quot;trace&quot; on a variable that will be executed everytime
+			a variable is accessed. It doesn't do much other than print to stdout
+			but could be augmented to write to a file or do something more 
+			complicated if required. It also only supports reading and writing to
+			a simple variable: arrays are not supported and unsetting the variable
+			is not supported.
+		</p>
+		<pre>% proc jeh_trace {n1 n2 op} {
+   upvar $n1 n1ref
+   if {"$op" == "read"} {
+      set var_exists [uplevel 1 "info exists $n1"]
+      if {$var_exists} {
+         puts "Reading $n1 as $n1ref"
+      } else {
+         puts "Trying to read $n1 but it does not exist"
+      }
+   } else {
+      puts "Setting $n1 to $n1ref"
+   }
+}
+
+% trace add variable jehtech {read write} jeh_trace
+
+% set jehtech
+Trying to read jehtech but it does not exist
+can't read "jehtech": no such variable
+
+% set jehtech "jehtech"
+Setting jehtech to jehtech
+jehtech
+
+% set jehtech
+Reading jehtech as jehtech
+jehtech</pre>
+
+
+
+	</div> <!-- END H2: GCC Canaries -->
+
+
+</div> <!-- END H1 padding div -->
+</div>
+</body>
+</html>
+
+

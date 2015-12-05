@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE HTML>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
@@ -676,7 +676,28 @@ if [ $? -ne 0 ]; then exit 1; fi</pre>
 			<h3>CER, CRT, DER Files</h3>
 			<h3>PKCS Files</h3>
 		</div> <!-- End H2 div -->
-	</div>  
+
+		<h2>OpenSSH</h2>
+		<div>
+			<p>
+				For information, at your command prompt, type
+				<tt>man ssh_config</tt>. You will probably find your OpenSSH
+				configuration file at </tt>~/.ssh/config</tt>. 
+			</p>
+			<p>
+				Partly, the configuration file maps host to private-key file used.
+				The format you will see is something like:
+			</p>
+			<pre>Host 192.168.1.* alias_to_this_address
+    IdentityFile ~/.ssh/your_key_file_name
+    User your-user-name</pre>
+			<p>
+				This is how OpenSSH knows to use the key <tt> ~/.ssh/your_key_file_name</tt>
+				when you SSH to a host at say <tt>192.168.1.2</tt> as the user 
+				&quot;<tt>your-user-name</tt>&quot;.
+		</div> <!-- End H2 div -->
+	</div>
+
 </body>
 
 </html>

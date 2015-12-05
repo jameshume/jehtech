@@ -156,7 +156,7 @@ def get_links_insert(currentDirName):
 			if (el.tag == 'a') and (at == 'href'):
 				el.set(at, newLink + '/' + el.get(at))
 
-	linksHtml = lxml.etree.tostring(doc.getroot(), pretty_print=True)
+	linksHtml = lxml.etree.tostring(doc.getroot().get_element_by_id("jehtech_contents_div"), pretty_print=True, method='html')
 	return linksHtml
 
 def deploy_site():

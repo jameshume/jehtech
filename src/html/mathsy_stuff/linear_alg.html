@@ -1,0 +1,242 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>Linear Algebra</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->	
+	<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>  
+	<script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+          tex2jax: {
+              inlineMath: [['$','$'], ['\\(','\\)']]
+          },
+          displayAlign: "left",
+          displayIndent: "2em"
+      });
+	</script>
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">Linear Algebra Notes</h1>
+<div style="padding-right:10px;">
+<p>
+	Notes on some linear algebra topics. Sometimes I find things are just stated
+	as being obvious, for example, <q>the dot product of two orthogonal vectors
+	is zero</q>. Well... why is this? The result was a pretty simple but 
+	nonetheless it took a little while to think it through properly.
+	Hence, these notes... they're my musings on the &quot;why&quot;, even if the 
+	&quot;why&quot; might be obvious to the rest of the world!
+</p>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h2>Page Contents</h2>
+<div id="page_contents">
+</div>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h2>Orthogonal Vectors and Linear Independence</h2>
+<div>
+	<div style="float:right; border: 1px solid gray; padding: 10px; margin:10px;">
+		<img src="##IMG_DIR##/3d_vectors_at_right_angles.png" alt="Image showing 3 perpendicular vectors" />
+		<br>
+		<i>Figure 1</i>
+	</div>
+	<p>
+		<b>Orthogonal vectors</b> are vectors that are perpendicular to each other.
+		In a standard 2D or 3D graph, this means that 
+		they are at right angles to each other and we can visualise them
+		as seen in Figure 1: $\vec x$ is at 90 degrees to both $\vec y$ and $\vec z$. 
+		$\vec y$ is at 90 degrees to $\vec x$ and $\vec z$, and $\vec z$ is at 
+		90 degrees to $\vec y$ and $\vec z$.
+	</p>
+	<p>
+		In any set of any vectors, $[\vec{a_1}, ..., \vec{a_n}]$, the vectors are
+		said to be linearly <b>linearly independent</b> if every vector in the set 
+		is orthogonal to every other vector in the set. 
+	</p>
+	<p>
+		So, how do we tell if one vector is orthogonal to another? The answer is
+		the <b>dot product</b> which is defined as follows.
+
+		$$x \cdot y = \sum_1^n {x_i y_i}$$
+	</p>
+	<p>
+		We know when two <b>vectors are orthogonal when their dot product is
+		zero: $x \cdot y = 0 \implies$ x and y are orthogonal</b>. 
+	</p>
+	<p>But why is this the case? Lets imagine any two aribtrary vectors, each
+		on the circumference of a unit circle (so we know that they have the
+		same length and are therefore a proper rotation of a vector around the
+		centre of the circle). This is shown in figure 2. From the figure, we
+		know the following:
+	</p>
+
+	<div style="float:right; border:1px solid gray; margin:10px; padding:10px;">
+		<img src="##IMG_DIR##/rotate_vector.png" alt="Picture showing a vector being rotated"/>
+		<br/>
+		Figure 2
+	</div>
+	
+	<p>
+		$$
+		\begin{align}
+		x_1 &= r \cos{\theta_1}& y_1 &= r \sin{\theta_1} \\
+		x_2 &= r \cos{\theta_1 + \theta_n} & y_2 &= r \sin{\theta_1 + \theta_n}
+		\end{align}
+		$$
+
+		The vector $x_2$ is the vector $x_1$ rotated by $\theta_n$ degrees.
+		We can use the following
+		<a href="math_revision.html#sum_and_product_trig_formulas" target="_blank"> trig identities</a>:
+
+		$$
+		\begin{align}
+		\sin(a \pm b)& = \sin(a)\cos(b) \pm \cos(a)\sin(b) \\
+		\cos(a \pm b)& = \cos(a)\cos(b) \mp \sin(a)\sin(b)
+		\end{align}
+		$$
+
+		Substitute these into the formauls above, we get the following.
+
+		$$
+		\begin{align}
+		x_2 &= r\cos\theta_1\cos\theta_n - r\sin\theta_1\sin\theta_n \\
+		y_2 &= r\sin\theta_1\cos\theta_n + r\cos\theta_1\sin\theta_n \\
+		\end{align}
+		$$
+
+		Which means that...
+
+		$$
+		\begin{align}
+		x_2 &= x_1\cos\theta_n - y_1\sin\theta_n \\
+		y_2 &= y_1\cos\theta_n + x_1\sin\theta_n
+		\end{align}
+		$$
+
+		For a 90 degree rotation $\theta_n = 90^\circ$ we know that $\cos\theta_n = 0$
+		and $\sin\theta_n = 1$. Substiuting these values into the above equations
+		we can clearly see that...
+
+		$$
+		\begin{align}
+		x_2 &= -y_1 \\
+		y_2 &= x_1
+		\end{align}
+		$$
+
+		Therefore, any vector in 2D space that is $[a, b]$ will become
+		$[-b, a]$ and therefore the dot product becomes $-ab + ab = 0$. And 
+		voilà, we know know <b>why</b> the dot product of two orthogonal 2D vectors is
+		zero. I'm happy to take it on faith that this extrapolates into n dimensions :)
+	</p>
+</div>
+
+<h2>Orthogonal Matrices</h2>
+<div>
+	<p>
+		So, onto orthogonal matrices. A <b>matrix is orthogonal if $AA^T = A^TA = I$</b>.
+		Again, something that is often stated without a lot of justification. Lets
+		go back into 2D space...
+	</p>
+
+	$$
+		AA^T = 
+		\begin{pmatrix}
+		a & c \\
+		b & d \\
+		\end{pmatrix}
+		\begin{pmatrix}
+		a & b \\
+		c & d \\
+		\end{pmatrix}
+		= 
+		\begin{pmatrix}
+		aa + cc & ab + cd \\
+		ab + cd & bb + dd \\
+		\end{pmatrix}
+		= \begin{pmatrix}
+		1 & 0 \\
+		0 & 1 \\
+		\end{pmatrix}
+	$$
+
+	<p>
+		The pattern $ab + cd$ looks pretty familiar right?! It looks a lot like
+		$x_1x_2 + y_1y_2$, our formula for the dot product of two vectors. So,
+		if $a=x_1$, $b=x_2$, $c=y_1$ and $d=y_2$, then we can say that the rows
+		of the matrix are vectors. Further, if these vectors are orthogonal, 
+		then the components $ab + cd$ must be zero. This would give us the first 
+		part of the identify matrix pattern we're looking for.
+	</p>
+	<p>
+		The other part of the identity matrix would imply that we would have
+		to have $x_1x_1 + y_1y_1 = 1$ and $x_2x_2 + y_2y_2 = 1$.  I.e.,
+		$x_1^2 + y_1^2 = 1$ and $x_2^2 + y_2^2 = 1$... which are just the
+		formulas for the length of a vector.
+		Therefore, if our two vectors are normal (i.e, have a length of 1) we 
+		have our identity matrix.
+	</p>
+	<p>
+		Does the same hold true for $A^TA$? Lets find out...
+
+	$$
+		AA^T = 
+		\begin{pmatrix}
+		a & b \\
+		c & d \\
+		\end{pmatrix}
+		\begin{pmatrix}
+		a & c \\
+		b & d \\
+		\end{pmatrix}
+		= 
+		\begin{pmatrix}
+		aa + bb & ac + bd \\
+		ac + bd & cc + dd \\
+		\end{pmatrix}
+	$$
+
+		Here the 1's in the resulting identity matrix are the same as before
+		but the term $ac + bd$ becomes $x_1y_1 + x_2y_2$ if we consider the matrix
+		as being made up of row vectors. TODO...
+	</p>
+	
+	<p>
+		Thus if we compose a <b>matrix of orthogonal row vectors then we have
+		an orthogonal matrix</b>!
+	</p>
+</div>
+
+<h2>Determinents</h2>
+<div>
+	<p>
+	</p>
+</div>
+
+<h2>Eigenvectors and Eigenvalues</h2>
+<div>
+	<p>
+	http://math.stackexchange.com/questions/23312/what-is-the-importance-of-eigenvalues-eigenvectors
+	</p>
+</div>
+
+</div> <!-- END: H1 padding div -->
+</div> <!-- END: H1 div -->
+
+</body>
+</html>
+
+

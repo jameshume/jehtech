@@ -9,20 +9,20 @@
  *     * Redistributions in binary form must reproduce the above copyright
  *       notice, this list of conditions and the following disclaimer in the
  *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of the <organization> nor the
+ *     * Neither the name "James Edward Hume" or "jeh-tech.com" nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * and ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * ARE DISCLAIMED. IN NO EVENT SHALL JAMES EDWARD HUME (jeh-tech.com) BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 function com_JEHTech_www_Canvas() {
@@ -31,7 +31,7 @@ function com_JEHTech_www_Canvas() {
 	/////////////////////////////////////////////////////////////////////////////
 	/* Want to be able to use objects as keys in a hash but since this is not
 	 * possible in JS (an object cannot be a key in an object :-\) I will give
-	 * each canvas element a unique identified that can be used as an object
+	 * each canvas element a unique identifier that can be used as an object
 	 * key */
 	var gblCanvasElementNextId  = 1;
 	var gblDegrees2RadiansRatio = Math.PI / 180;
@@ -214,7 +214,7 @@ function com_JEHTech_www_Canvas() {
 			var this2 = this;
 			setTimeout(
 				function() {
-					// Keep track of deleted items from the animation list. We wont
+					// Keep track of deleted items from the animation list. We won't
 					// call their finished() methods until the entire animation list
 					// has been processed so that if the finished() function 
 					// re-animates them they won't still be on the animated lisT
@@ -334,43 +334,6 @@ function com_JEHTech_www_Canvas() {
 			this.ctx.restore();
 		}
 	};
-
-	//JEHCanvas.prototype.fit = function(_internalPadding) {
-	//	var internalPadding =
-	//		typeof _internalPadding !== 'undefined' ? _internalPadding : 0;
-	//	
-	//	if(this.objects.length > 0) {
-	//		var min_x = Number.MAX_VALUE;
-	//		var max_x = Number.MIN_VALUE;
-	//		var min_y = Number.MAX_VALUE;
-	//		var max_y = Number.MIN_VALUE;
-	//
-	//		// Get the min and max x & y corrdinates used by objects
-	//		var numObjects = this.objects.length;
-	//		for (var objIdx = 0; objIdx < numObjects; ++objIdx) {
-	//			var obj = this.objects[objIdx];
-	//			if(obj.x < min_x) min_x = obj.x;
-	//			if(obj.x + obj.width > max_x) max_x = obj.x + obj.width;
-	//			if(obj.y < min_y) min_y = obj.y;
-	//			if(obj.y + obj.height > max_y) max_y = obj.y + obj.height;
-	//		}
-	//
-	//		// now resize the canvas to strictly fit the objects, with some
-	//		// potential padding.
-	//		var newWidth  = (max_x - min_x) + 2*internalPadding;
-	//		var newHeight = (max_y - min_y) + 2*internalPadding;
-	//
-	//		for (var objIdx = 0; objIdx < numObjects; ++objIdx) {
-	//			var obj = this.objects[objIdx];
-	//			obj.x -= min_x - internalPadding;
-	//			obj.y -= min_y - internalPadding;
-	//		}
-	//
-	//		this.canvas[0].width  = newWidth;
-	//		this.canvas[0].height = newHeight;
-	//		this.render();
-	//	}
-	//};
 
 	JEHCanvas.prototype.render = function() {
 		this.ctx.clearRect(0, 0, this.canvas.width(), this.canvas.height());
@@ -568,3 +531,42 @@ function com_JEHTech_www_Canvas() {
 		ValueBox:      JEHValueBox
 	};
 }
+
+
+
+	//JEHCanvas.prototype.fit = function(_internalPadding) {
+	//	var internalPadding =
+	//		typeof _internalPadding !== 'undefined' ? _internalPadding : 0;
+	//	
+	//	if(this.objects.length > 0) {
+	//		var min_x = Number.MAX_VALUE;
+	//		var max_x = Number.MIN_VALUE;
+	//		var min_y = Number.MAX_VALUE;
+	//		var max_y = Number.MIN_VALUE;
+	//
+	//		// Get the min and max x & y corrdinates used by objects
+	//		var numObjects = this.objects.length;
+	//		for (var objIdx = 0; objIdx < numObjects; ++objIdx) {
+	//			var obj = this.objects[objIdx];
+	//			if(obj.x < min_x) min_x = obj.x;
+	//			if(obj.x + obj.width > max_x) max_x = obj.x + obj.width;
+	//			if(obj.y < min_y) min_y = obj.y;
+	//			if(obj.y + obj.height > max_y) max_y = obj.y + obj.height;
+	//		}
+	//
+	//		// now resize the canvas to strictly fit the objects, with some
+	//		// potential padding.
+	//		var newWidth  = (max_x - min_x) + 2*internalPadding;
+	//		var newHeight = (max_y - min_y) + 2*internalPadding;
+	//
+	//		for (var objIdx = 0; objIdx < numObjects; ++objIdx) {
+	//			var obj = this.objects[objIdx];
+	//			obj.x -= min_x - internalPadding;
+	//			obj.y -= min_y - internalPadding;
+	//		}
+	//
+	//		this.canvas[0].width  = newWidth;
+	//		this.canvas[0].height = newHeight;
+	//		this.render();
+	//	}
+	//};

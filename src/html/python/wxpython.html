@@ -1,0 +1,279 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>wxPython Notes</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+	<script> 
+		$(function(){
+			AddLinkToTeleTypeText({
+			});
+		});
+	</script>
+</head>
+
+<body>
+	<div id="header">
+		-- This is JEHTech --
+	</div>
+
+	<div id="sidebar">
+		<h1 class="title">Links...</h1>
+		<div id="includedContent"></div>
+	</div>
+
+	<div id="content">
+		<h1 class="title">wxPython Notes</h1>
+		<div style="padding-right:10px;">
+			<h2>Page Contents</h2>
+			<div id="page_contents">
+			</div>
+			
+			<h2>References</h2>
+			<div>
+				<ol>
+					<li>
+						<a href="http://wiki.wxpython.org/AnotherTutorial"
+						   target="_blank">The wxPython Linux Tutorial</a> by Jan Bodnar
+					</li>
+					<li><a href="http://wxpython.org/Phoenix/docs/html/events_overview.html"
+						   target="_blank">Events and Event Handling</a> in wxPython docs.
+					</li>
+					<li><a href="http://www.blog.pythonlibrary.org/2011/09/20/wxpython-binding-multiple-widgets-to-the-same-handler/"
+						   target="_blank">Binding Multiple Widgets to the Same Handler</a> from the Python Library Blog.
+					<li>The article &quot;<a href="http://wiki.wxpython.org/self.Bind%20vs.%20self.button.Bind"
+						target="_blank">self.Bind vs. self.button.Bind</a>&quot; from wxPyWiki.
+					</li>
+					<li><a href="https://wiki.wxwidgets.org/WxListCtrl" target="_blank">wxListCtrl</a> on wxWiki.
+					</li>
+					<li><a href="http://stackoverflow.com/questions/5495053/use-arbitrary-wx-objects-as-a-column-in-a-wx-listctrl"
+						target="_blank">Use Arbitrary WX Objects As A Column In A wx.ListCtrl</a> on StackOverflow.
+					</li>
+					<li><a href="http://stackoverflow.com/questions/10403205/wxpython-error-in-openning-files-in-ubuntu"
+						target="_blank">wx.FileDialog And &quot;Recently Opened Files&quot; On Ubuntu</a> on StackOverflow.
+					</li>
+				</ol>
+			</div>
+
+			<h2>The Basic App</h2>
+			<div>
+				<h3>The Start</h3>
+				<pre>import wx 
+
+class MyDummyWindow(wx.Frame):
+   def __init__(self, parent, title):
+      wx.Frame.__init__(self, parent, title=title)
+      ...
+     self.Show()
+
+app = wx.App(False)
+frame = MyDummyWindow(None, "A Stupid Example")
+app.MainLoop()
+</pre>
+				<p>
+					Inherit from <tt>wx.Frame</tt>. In the frame constructor you
+					create all the components that are going to go onto the window.
+					Give it a <tt>NULL</tt> parent to make it the main window.
+				</p>
+
+
+				<h3>Add Buttons</h3>
+				<p>
+					Add a button by adding the following into your <tt>Frame</tt>/
+					<tt>Panel</tt>.
+				</p>
+				<pre>import wx 
+
+class MyDummyWindow(wx.Frame):
+   def __init__(self, parent, title):
+      wx.Frame.__init__(self, parent, title=title)<b>
+      self._btn1 = wx.Button(self, wx.ID_ANY, "Click me")
+      self._btn2 = wx.Button(self, wx.ID_ANY, "Click you")</b>
+      self.Show()
+
+app = wx.App(False)
+frame = MyDummyWindow(None, "A Stupid Example")
+app.MainLoop()
+</pre>
+
+				<p>
+					The <tt>wx.ID_ANY (-1)</tt> is the component ID... this is a special ID that
+					means wxWidgets assigns a unique ID to it... saves us the effort, otherwise
+					we have to supply a <em>unique</em> ID ourselves :)
+				</p>
+				
+				<p>
+					<b>Eek!</b> There is a problem... the buttons are rendered on
+					top of eachother. We could place them using absolute coordinates
+					manually, but it is much easier to get wxWidgets to organise
+					them for us. 
+				</p>
+
+				<h3>Basic Sizers</h3>
+				<p>
+					To get wxWidgets to automatically position and size our components
+					we use sizers. These come in many flavours, the simplest of which
+					is the <tt>BoxSizer</tt>:
+				</p>
+
+				<pre>class MyDummyWindow(wx.Frame):
+   def __init__(self, parent, title):
+      wx.Frame.__init__(self, parent, title=title)
+      self._btn1 = wx.Button(self, wx.ID_ANY, "Click me")
+      self._btn2 = wx.Button(self, wx.ID_ANY, "Click you")
+<b>
+      sizer = wx.BoxSizer(wx.HORIZONTAL)
+      sizer.Add(self._btn1, 0, wx.TOP | wx.ALIGN_CENTER, 10)
+      sizer.Add(self._btn2, 1, wx.BOTTOM | wx.EXPAND, 10)
+      self.SetSizerAndFit(sizer)</b>
+
+      self.Show()</pre>
+
+				<p>
+					Now you will notice that the buttons are properly rendered and
+					have a reasonable size. As each button is <tt>Add()</tt>'ed to 
+					the sizer it is placed horizontally to the right of the last
+					added component. This is because we specified <tt>wx.HORIZONTAL</tt>.
+					The other layout option is <tt>wx.VERTICAL</tt>.
+				</p>
+				<p>
+					You will note that as you resize the window you will note that the 
+					first button stays vertically in the centre of the window and the
+					other button expands both vertically and horizontally.
+				</p>
+				<p>
+					<img src="##IMG_DIR##/python/btn_sizer_basic2.png">
+				</p>
+				<p>
+					The parameters we used can be more explicitly stated:
+				</p>
+				<pre><a href="http://www.wxpython.org/docs/api/wx.Sizer-class.html#Add" target="_blank">sizer.Add</a>(self._btn1, proportion=, flag=, border=, ...)</pre>
+				<p>
+					The proportion is an integer number. 0 means don't resize and
+					any other number is the proportion as a fraction of the total
+					proportions of all elements in the sizer, that the element size
+					will be. That's why the first button stays the same size and the
+					second button expands to fill the space available.
+				</p>
+				<p>
+					Border is the border of padding that is to be applied to the
+					component. Which of the top, botton, left and right borders are
+					used, or padded, is dictated by the <tt>flag</tt> option.
+				</p>
+				<p>
+					Flag is used, as said, partly to specify which borders will have
+					the padding added to them and which will be left alone. This
+					is done using the following flags: <tt>wx.TOP</tt>, <tt>wx.BOTTOM</tt>, 
+					<tt>wx.LEFT</tt>, <tt>wx.RIGHT</tt>, <tt>wx.ALL</tt>.
+				</p>
+				<p>
+					Flag also is used to dicate how the element is aligned in 
+					it's box: <tt>wx.ALIGN_CENTER</tt>, 
+					<tt>wx.ALIGN_LEFT</tt>, <tt>wx.ALIGN_RIGHT</tt>, 
+					<tt>wx.ALIGN_TOP</tt>, <tt>wx.ALIGN_BOTTOM</tt>.
+				</p>
+
+				<h3>Basic Event Handling</h3>
+				<p>We've got a few buttons, now we need to do something when the
+					user clicks 'em... enter events...
+				</p>
+				<pre>class MyDummyWindow(wx.Frame):
+   def __init__(self, parent, title):
+      wx.Frame.__init__(self, parent, title=title)
+      self._btn1 = wx.Button(self, wx.ID_ANY, "Click me")
+      self._btn2 = wx.Button(self, wx.ID_ANY, "Click you")
+
+<b>
+      self.Bind(wx.EVT_BUTTON, self.OnBtnClick2)
+      self.Bind(wx.EVT_BUTTON, self.OnBtnClick2)
+</b>
+      ...&lt;snip&gt;...
+<b>
+   def OnBtnClick(self, event):
+      ctrl = event.GetEventObject()
+      ctrl_id = ctrl.GetId()
+
+      if ctrl_id == self._btn1.GetId():
+         wx.MessageBox("You pressed the first button")
+      else:
+         wx.MessageBox("You pressed the second button")</b></pre>
+				<p>
+					The function <tt>OnBtnClick()</tt> has been created to handle
+					button clicks. It receives two objects. The first is the
+					standard <tt>self</tt> reference to this class instance. The
+					second is the <tt>event</tt> object which describes the event.
+				</p>
+				<p>
+					The <tt>event</tt> object can be used to get the control that
+					fired the event using <tt><b>GetEventObject()</b></tt>. Once 
+					you have the wxWidget that fired the event, you can call it's
+					function <tt><b>GetId()</b></tt> to get the control's ID. This
+					can then be used to compare the event-source ID against all 
+					the possible widget IDs you are handling.
+				</p>
+				<p>
+					To tell handle the click event you must register either the button
+					or one of its parent windows as a handler for the <tt>EVT_BUTTON</tt>
+					type of event. The line <tt><b>self.Bind(...)</b></tt> in the above
+					example registers the <tt>MyDummyWindow</tt> frame as listening
+					for this event. When the event fires, the frame's <tt>OnBtnClick</tt>
+					will be called as shown above.
+				</p>
+				<h4>Event Bubbling</h4>
+				<p>
+					When an object generates an event, the object or the closest 
+					containing window to the event source handles the event first. By 
+					default this would be it... the event ends here. However, the
+					event can be &quot;bubbled&quot; upwards so that the next closest
+					containing window moving up from parent to parent can also get
+					a shot at responding to the event:
+				</p>
+				<pre>class MyDummyWindow(wx.Frame):
+   def __init__(self, parent, title):
+      wx.Frame.__init__(self, parent, title=title)
+      self._btn1 = wx.Button(self, wx.ID_ANY, "Click me")
+      self._btn2 = wx.Button(self, wx.ID_ANY, "Click you")
+<b>
+      self._btn1.Bind(wx.EVT_BUTTON, self.OnBtnClick)
+      self._btn2.Bind(wx.EVT_BUTTON, self.OnBtnClick)
+</b>
+      self.Bind(wx.EVT_BUTTON, self.OnBtnClick2)
+      self.Bind(wx.EVT_BUTTON, self.OnBtnClick2)
+
+      sizer = wx.BoxSizer(wx.HORIZONTAL)
+      sizer.Add(self._btn1, 0, wx.TOP | wx.ALIGN_CENTER, 10)
+      sizer.Add(self._btn2, 1, wx.BOTTOM | wx.EXPAND, 10)
+      self.SetSizerAndFit(sizer)
+
+      self.Show()
+<b>
+   def OnBtnClick(self, event):
+      wx.MessageBox("Button intercepted")
+      # If you uncomment the line below, first the btn handler and then the
+      # frame handler respond to this event, otherwise only the btn handler will
+      #event.Skip()
+</b>
+   def OnBtnClick2(self, event):
+      ...&lt;snip&gt;...</pre>
+				<p>
+					In the above example an event handler is registered for the
+					button and for the frame (the button's parent container).
+				</p>
+				<p>
+					If the <tt><b>event.Skip()</b></tt> function is left commented
+					out, when you click the button, only the message box reading
+					&quot;Button intercepted&quot; will display. If you uncomment
+					the command you will see first the &quot;Button intercepted&quot;
+					message box and then the &quot;You pressed...&quot; message box.
+				</p>
+			</div>
+
+		</div>
+	</div>
+</body>
+</html>
+
+
