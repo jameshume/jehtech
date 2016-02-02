@@ -1539,7 +1539,7 @@ return i.size=function(n){return arguments.length?(l=n,i):l},i.padding=function(
 }(d3);/*! JEH-Tech v1.0.0 | (c) 2015 */
 function CreatePageContents() {
 	var pageContents = $('#page_contents');
-	if( pageContents ) {
+	if( pageContents.length !== 0 ) {
 		var liObj = $('<li></li>');
 		var olObj = $('<ol></ol>');
 		var aObj  = $('<a href=""></a>'); 
@@ -1579,6 +1579,37 @@ function CreatePageContents() {
 			++nextIdx;
 		});
 		pageContents.append(olRoot);
+
+		title = $("h1.title");
+		if( title.length == 2 ) {
+			title = title[1];
+			contentsPopup = pageContents.clone();
+			contentsPopup.find("a").each(function() {
+				$(this).on("click", function(e) {
+					contentsPopup.dialog("close");
+				});
+			});
+
+			contentsPopup.attr("title", "Contents");
+			contentsPopup.dialog({
+				autoOpen: false,
+				resizable: false,
+				height: 350,
+				show: {
+					effect: "blind",
+					duration: 1000
+				},
+				hide: {
+					effect: "explode",
+					duration: 1000
+				}
+			});
+			newButton = $("<button>Contents</button>");
+			newButton.click(function() {
+				contentsPopup.dialog("open");
+			});
+			$(title).append(newButton);
+		}
 	}
 }
 
@@ -1598,7 +1629,6 @@ function AddLinkToTeleTypeText(textToReplaceDict) {
 $(function(){
 	CreatePageContents();
 
-	
 	sidebar = $('#sidebar');
 	title   = $('#content h1.title');
 	mainWin = $(window);

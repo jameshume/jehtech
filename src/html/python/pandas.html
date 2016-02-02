@@ -36,15 +36,19 @@
 			<div>
 				<ol>
 					<li><a href="http://shop.oreilly.com/product/0636920023784.do"
-					       target="_blank">Python For Data Analysis, Wes McKinney, 
-						 O'Reilly</a></li>
+					       target="_blank">Python For Data Analysis, Wes McKinney, O'Reilly</a>
+					</li>
 					<li><a href="https://www.youtube.com/watch?v=0CFFTJUZ2dc&list=PLYx7XA2nY5Gcpabmu61kKcToLz0FapmHu&index=25"
-					       target="_blank">SciPy 2015: Data Analysis With Pandas</a>.</li>
+					       target="_blank">SciPy 2015: Data Analysis With Pandas</a>.
+					</li>
 					<li><a href="http://pandas.pydata.org/pandas-docs/stable/api.html"
 						target="_blank">Pandas API</a>
 					</li>
 					<li><a href="http://pandas.pydata.org/pandas-docs/stable/cookbook.html"
 					       target="_blank">Pandas Cookbook</a>.
+					</li>
+					<li><a href="http://www.datacarpentry.org/python-ecology/04-merging-data"
+					       target="_blank">Combining DataFrames</a> by Data Carpentry.
 					</li>
 				</ol>
 			</div>
@@ -187,6 +191,12 @@ Innder dict values become data (missing labels become NaNs)
 **DataFram From Dict of Series **
 Outder dict keys become columns
 Series become the column values
+
+
+Iterate over rows:
+for row_idx, row in df.iterrows():
+   print row_idx, type(row)
+
 
 Index Objects
 -------------

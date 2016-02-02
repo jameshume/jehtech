@@ -30,11 +30,13 @@
 
 <h2>Basics</h2>
 <div>
-		<p>Import the library!</p>
+		<p>Import the library into your Python script:</p>
 <pre class="prettyprint linenums lang-python">
 import matplotlib.pyplot as pl
 </pre>
-		<h3>APIs</h3>
+<p>Some people like to import it as <code>plt</code>... I prefer <code>pl</code>.
+		</p>
+		<h3>Python's Matplotlib APIs</h3>
 		<p>
 		<a target="_blank" href="http://matplotlib.org/api/figure_api.html">Figure</a> | 
 		<a target="_blank" href="http://matplotlib.org/api/axes_api.html">Axis</a> | 
@@ -42,9 +44,9 @@ import matplotlib.pyplot as pl
 		<a target="_blank" href="http://matplotlib.org/api/legend_api.html">Legend</a> | 
 		</p>
 
-		<h3>Creating Plots, Current Figure, Current Axis</h3>
+		<h3>Creating Plots, Current Figure, Current Axis in Python</h3>
 		<p>
-		Pyplot works on the current <a href="http://matplotlib.org/api/figure_api.html" target="_blank">figure</a> 
+		Python's PyPlot works on the current <a href="http://matplotlib.org/api/figure_api.html" target="_blank">figure</a> 
 		and <a href="http://matplotlib.org/api/axes_api.html" target="_blank">axis</a>. 
 		All commands work to add plot elements to the current figure and axis.
 			The function <tt>
@@ -352,6 +354,25 @@ for bar in bars:
 		<p>
 			<img src="##IMG_DIR##/python/coloured_bar_graph.png">
 		</p>
+</div>
+
+<h2>Save Figure To File-Like Object Buffer</h2>
+<div>
+	<p>
+		Sometimes, rather than saving a figure to a file, it is useful to save
+		it to an in-memory file like object. The reason for this is that you might want to
+		pass the image to some API without having to save it to a file.
+	</p>
+	<p>For example you might be using <tt>docx</tt> to save the image as part
+		of a MS Word document. The docx function <tt>add_picture()</tt> accepts
+		either a file name or file-like object. So, to avoid creating the temporary
+		image file you would do the following:
+	</p>
+	<pre class="prettyprint linenums lang-python"><b>import io</b>
+# ... snip ... 
+<b>buf = io.BytesIO()
+fig.savefig(buf, format='png')</b>
+xdoc.add_picture(buf, width=Inches(6.0))</pre>
 </div>
 
 <h2>Embedd In pyWidgets Apps</h2>

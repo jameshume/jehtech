@@ -252,6 +252,19 @@ svn commit</pre>
 
 		<h2>Misc</h2>
 		<div>
+			<h3>Check Your SSH Connection</h3>
+			<p>
+				If your are having trouble with your SSH connection, you can check 
+				that your keys are correctly loaded using the following command (on
+				Linux with OpenSSH) to list your loaded keys...
+			</p>
+			<pre>ssh-add -L</pre>
+			<p>
+				If you're still having problems look in <tt>~/.subversion/config</tt> and
+				go to the <tt>[tunnels]</tt> section. In the SSH command take out the
+				<tt>-q</tt> option to get better debug messages to the console.
+			</p>
+
 			<h3>Add all untracked files</h3>
 			<pre>svn add $(svn status | grep ? | awk '{print $2}')</pre>
 		

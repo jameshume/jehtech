@@ -148,8 +148,7 @@
 <div>
 	<p>
 		So, onto orthogonal matrices. A <b>matrix is orthogonal if $AA^T = A^TA = I$</b>.
-		Again, something that is often stated without a lot of justification. Lets
-		go back into 2D space...
+		If we take a general matrix and multiply it by it's transpose we get...
 	</p>
 
 	$$
@@ -176,48 +175,109 @@
 	<p>
 		The pattern $ab + cd$ looks pretty familiar right?! It looks a lot like
 		$x_1x_2 + y_1y_2$, our formula for the dot product of two vectors. So,
-		if $a=x_1$, $b=x_2$, $c=y_1$ and $d=y_2$, then we can say that the rows
-		of the matrix are vectors. Further, if these vectors are orthogonal, 
-		then the components $ab + cd$ must be zero. This would give us the first 
+		when we say $a=x_1$, $b=x_2$, $c=y_1$ and $d=y_2$, we will get the following:
+		a matrix of two <em>row vectors</em> $\vec v_1 = [x_1, y_1]$, $\vec v_2 = [x_2, y_2]$.
+
+		$$
+			A = 
+			\begin{pmatrix}
+			\vec v_1 \\
+			\vec v_2 \\
+			\end{pmatrix} =
+			\begin{pmatrix}
+			x_1 & y_1 \\
+			x_2 & y_2 \\
+			\end{pmatrix}
+		$$
+
+		$$
+		\therefore AA^T = 
+		\begin{pmatrix}
+		x_1 & y_1 \\
+		x_2 & y_2 \\
+		\end{pmatrix}
+		\begin{pmatrix}
+		x_1 & x_2 \\
+		y_1 & y_2 \\
+		\end{pmatrix}
+		= 
+		\begin{pmatrix}
+		x_1^2 + y_1^2 & x_1x_2 + y_1y_2 \\
+		x_1x_2 + y_1y_2 & x_2^2 + y_2^2 \\
+		\end{pmatrix}
+		$$
+
+		If our vectors $\vec v_1$ and $\vec v_2$ are orthogonal, 
+		then the component $x_1x_2 + y_1y_2$ must be zero. This would give us the first 
 		part of the identify matrix pattern we're looking for.
 	</p>
 	<p>
 		The other part of the identity matrix would imply that we would have
-		to have $x_1x_1 + y_1y_1 = 1$ and $x_2x_2 + y_2y_2 = 1$.  I.e.,
-		$x_1^2 + y_1^2 = 1$ and $x_2^2 + y_2^2 = 1$... which are just the
-		formulas for the length of a vector.
-		Therefore, if our two vectors are normal (i.e, have a length of 1) we 
+		to have $x_1^2 + y_1^2 = 1$ and $x_2^2 + y_2^2 = 1$... which are just the
+		formulas for the square of the length of a vector.
+		Therefore, if our two vectors are normal (i.e, have a length of 1), we 
 		have our identity matrix.
 	</p>
 	<p>
-		Does the same hold true for $A^TA$? Lets find out...
+		Does the same hold true for $A^TA$? It doesn't if we use our original
+		matrix A!...
 
 	$$
-		AA^T = 
+		A^TA = 
 		\begin{pmatrix}
-		a & b \\
-		c & d \\
+		x_1 & x_2 \\
+		y_1 & y_2 \\
 		\end{pmatrix}
 		\begin{pmatrix}
-		a & c \\
-		b & d \\
+		x_1 & y_1 \\
+		x_2 & y_2 \\
 		\end{pmatrix}
 		= 
 		\begin{pmatrix}
-		aa + bb & ac + bd \\
-		ac + bd & cc + dd \\
+		x_1^2 + x_2^2 & x_1y_1 + x_2y_2 \\
+		x_1y_1 + x_2y_2 & y_1^2 + y_2^2 \\
 		\end{pmatrix}
 	$$
 
-		Here the 1's in the resulting identity matrix are the same as before
-		but the term $ac + bd$ becomes $x_1y_1 + x_2y_2$ if we consider the matrix
-		as being made up of row vectors. TODO...
+		Oops, we can see that we didn't get the identity matrix!! But, perhaps we
+		can see why. If $A$ was a matrix of row vectors then $A^T$ is a matrix
+		of column vectors. So for $AA^T$ we were multiplying a matrix of row vectors 
+		with a matrix of column vectors, which would, in part, give us the dot 
+		products as we saw. So if we want to do $A^TA$ it would follow that for
+		this to work $A$ now was to be a matrix of column vectors because
+		we get back to our original ($A^T$ would become a mtrix of row vectors):
+	
+	$$
+		A^TA = 
+		\begin{pmatrix}
+		x_1 & y_1 \\
+		x_2 & y_2 \\
+		\end{pmatrix}
+		\begin{pmatrix}
+		x_1 & x_2 \\
+		y_1 & y_2 \\
+		\end{pmatrix}
+		= 
+		\begin{pmatrix}
+		x_1^2 + y_1^2 & x_1x_2 + y_1y_2 \\
+		x_1x_2 + y_1y_2 & x_2^2 + y_2^2 \\
+		\end{pmatrix}
+	$$
+
 	</p>
 	
 	<p>
-		Thus if we compose a <b>matrix of orthogonal row vectors then we have
+		So we can say that if we have <b>matrix who's rows are orthogonal vectors 
+			and who's columns are also orthogonal vectors, then we have
 		an orthogonal matrix</b>!
 	</p>
+	<p>
+		Okay, thats great n' all, but <b>why should we care? Why Are orthogonal
+		matricies useful?</b>. It turns our that orthogonal matricies 
+		<a href="https://www.khanacademy.org/math/linear-algebra/alternate_bases/orthonormal_basis/v/lin-alg-orthogonal-matrices-preserve-angles-and-lengths" target="_blank">preserve
+		angles and lengths</a> of vectors. This can be useful in graphics to rotate
+		vectors but keep the shape they construct, or in numerical analysis
+		because <a href="http://www.math.utah.edu/~pa/6610/20130916.pdf" target="_blank">they do not amplify errors</a>.
 </div>
 
 <h2>Determinents</h2>
@@ -229,7 +289,7 @@
 <h2>Eigenvectors and Eigenvalues</h2>
 <div>
 	<p>
-	http://math.stackexchange.com/questions/23312/what-is-the-importance-of-eigenvalues-eigenvectors
+		<a href="http://math.stackexchange.com/questions/23312/what-is-the-importance-of-eigenvalues-eigenvectors" target="_blank">Stackoverflow thread: What is the importance of eigenvalues and eigenvectors</a>.
 	</p>
 </div>
 

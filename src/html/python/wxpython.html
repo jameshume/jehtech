@@ -61,13 +61,20 @@
 			<h2>The Basic App</h2>
 			<div>
 				<h3>The Start</h3>
-				<pre>import wx 
+				<p>
+					wxPython is the Python binding to the C++ multi-platform GUI
+					library wxWidgets.
+				</p>
+				<p>
+					The most basic Python app looks like this:
+				</p>
+				<pre class="prettyprint linenums">import wx 
 
 class MyDummyWindow(wx.Frame):
    def __init__(self, parent, title):
       wx.Frame.__init__(self, parent, title=title)
-      ...
-     self.Show()
+      #...
+      self.Show()
 
 app = wx.App(False)
 frame = MyDummyWindow(None, "A Stupid Example")
@@ -85,7 +92,7 @@ app.MainLoop()
 					Add a button by adding the following into your <tt>Frame</tt>/
 					<tt>Panel</tt>.
 				</p>
-				<pre>import wx 
+				<pre class="prettyprint linenums">import wx 
 
 class MyDummyWindow(wx.Frame):
    def __init__(self, parent, title):
@@ -106,58 +113,181 @@ app.MainLoop()
 				</p>
 				
 				<p>
-					<b>Eek!</b> There is a problem... the buttons are rendered on
+					<b>Eek!</b> There is a problem... the Python script has rendered 
+					all the buttons on
 					top of eachother. We could place them using absolute coordinates
 					manually, but it is much easier to get wxWidgets to organise
 					them for us. 
 				</p>
 
 				<h3>Basic Sizers</h3>
+				<h4>Layout Elements Statically</h4>
 				<p>
-					To get wxWidgets to automatically position and size our components
+					To get Python's wxWidgets to automatically position and size our components
 					we use sizers. These come in many flavours, the simplest of which
 					is the <tt>BoxSizer</tt>:
 				</p>
 
-				<pre>class MyDummyWindow(wx.Frame):
+				<pre class="prettyprint linenums">class MyDummyWindow(wx.Frame):
    def __init__(self, parent, title):
       wx.Frame.__init__(self, parent, title=title)
       self._btn1 = wx.Button(self, wx.ID_ANY, "Click me")
       self._btn2 = wx.Button(self, wx.ID_ANY, "Click you")
 <b>
       sizer = wx.BoxSizer(wx.HORIZONTAL)
-      sizer.Add(self._btn1, 0, wx.TOP | wx.ALIGN_CENTER, 10)
-      sizer.Add(self._btn2, 1, wx.BOTTOM | wx.EXPAND, 10)
+      sizer.Add(self._btn1)
+      sizer.Add(self._btn2)
       self.SetSizerAndFit(sizer)</b>
 
       self.Show()</pre>
 
 				<p>
-					Now you will notice that the buttons are properly rendered and
-					have a reasonable size. As each button is <tt>Add()</tt>'ed to 
+					Now, at least, our buttons are not on top of each other: they
+					are properly rendered and
+					have a reasonable size. As each button is <tt><b>Add()</b></tt>'ed to 
 					the sizer it is placed horizontally to the right of the last
-					added component. This is because we specified <tt>wx.HORIZONTAL</tt>.
-					The other layout option is <tt>wx.VERTICAL</tt>.
+					added component. This is because we specified <tt><b>wx.HORIZONTAL</b></tt>.
+					The other layout option is <tt><b>wx.VERTICAL</b></tt>.
 				</p>
 				<p>
-					You will note that as you resize the window you will note that the 
-					first button stays vertically in the centre of the window and the
-					other button expands both vertically and horizontally.
+					<img src="##IMG_DIR##/python/wxBoxSizerBasic.PNG" alt="Image of wxPython window using a basic wx.BoxSizer to align two wx.Button objects">
 				</p>
 				<p>
-					<img src="##IMG_DIR##/python/btn_sizer_basic2.png">
+					The image above shows a Python wxWidgets (pyWidgets) window that 
+					has been expanded a little.
+					What we see is that the buttons stay in the same location and
+					do not scale with our window, which may be exactly what we want.
+					But what if we'd like then to fill the window?
 				</p>
+				<h4>Grow Elements With Their Container</h4>
+				<p>
+					When we <tt>Add()</tt> an element to a sizer we can tell the 
+					sizer to automatically size the element to fill up the space
+					available using the <b><tt>wx.EXPAND</tt></b> flag.
+				</p>
+				<p>
+					In the case of a <tt>wx.BoxSizer</tt>, the sizer will expand as
+					far as possible in all directions. It will then give you the
+					option as to which directions the contained elements are 
+					expanded.
+				</p>
+				<p>
+					The next parameter to <tt>Add()</tt> is the proportion of the
+					space in the <tt>wx.HORIZONTAL</tt> or <tt>wx.VERTICAL</tt>
+					direction you wish the element to expand. 
+					The proportion is an integer number. Zero means don't resize and
+					any other number is the proportion as a fraction of the total
+					proportions of all elements in the sizer, that the element size
+					will be.
+				</p>
+				<p>
+					For example, if you add two
+					components, A and B, with proportions 1 and 2 respectively,
+					element A will take up 1/3 of the space and element B will take
+					up 2/3 of the space in the sizer's direction.
+				</p>
+				<p>
+					So, let's start with a simple example by changing our
+					<tt>Add()</tt> calls from the previous example to the following:
+				</p>
+				<pre class="prettyprint linenums">sizer = wx.BoxSizer(wx.HORIZONTAL)
+sizer.Add(self._btn1<b>, 1</b>) #&lt;&lt; Note the extra parameter
+sizer.Add(self._btn2<b>, 2</b>) #&lt;&lt; Note the extra parameter</pre>
+				<p>
+					Now when the window is expanded we will see the following. As
+					you would expect, the buttons expand horizontally to fill the
+					space available and the first button takes up 1/3 of the space 
+					and the second button 2/3.
+				<p>
+					<img src="##IMG_DIR##/python/wxBoxSizerProportionsWithoutExpandFlag.PNG" alt="Image of wxPython window using a basic wx.BoxSizer to align two wx.Button objects and expand them horizontally into the available space in the wx.Frame">
+				</p>
+				<p>
+					If we changed our example to use a <tt>wx.BoxSizer(wx.VERTICAL)</tt> 
+					we would see the opposite. The elements will fill the vertical
+					direction and keep a constant size in the horizontal direction?
+				</p>
+				<p>
+					<img src="##IMG_DIR##/python/wxBoxSizerProportionsVerticallyWithoutExpandFlag.PNG" alt="Image of wxPython window using a basic wx.BoxSizer to align two wx.Button objects and expand them vertically into the available space in the wx.Frame">
+				</p>
+				<p>
+					So, that's great, but what if I want the buttons to take up the
+					space in the other direction to the box sizer? I.e, if we 
+					take the vertical box sizer example, how do I get the buttons
+					not only to expand in the vertical direction but also take up
+					the available horizontal space? The answer is a third parameter
+					to the <tt>Add()</tt> function... namely <tt><b>wx.EXPAND</b></tt>.
+					This flag tells the sizer to take up all the available space and
+					size elements to take up all the available space. Again, lets
+					modify our code a little bit:
+				</p>
+				<pre class="prettyprint linenums">sizer = wx.BoxSizer(wx.HORIZONTAL)
+sizer.Add(self._btn1, 1<b>, wx.EXPAND</b>) #&lt;&lt; Note the extra parameter
+sizer.Add(self._btn2, 1<b>, wx.EXPAND</b>) #&lt;&lt; Note the extra parameter</pre>
+				<p>
+					Using the above, as we expand the window, we will now see that
+					the buttons expand in both the horizontal and vertical directions.
+				</p>
+				<p>
+					<img src="##IMG_DIR##/python/wxBoxSizerProportionsWithExpandFlag.PNG" alt="Image of wxPython window using a basic wx.BoxSizer to align two wx.Button objects and expand them both horizontally and vertically into the available space in the wx.Frame">
+				</p>
+				<p>
+					So, the <tt>wx.EXPAND</tt> tag tells a sizer to expand its 
+					components in all directions. To size with a horizontal box sizer
+					we get automatic horizontal expansion. To fill the remaining space
+					we then need to use the <tt>wx.EXPAND</tt> flag. The same applies for a
+					vertical box sizer. We get the vertical expansion &quot;for
+					free&quot; and use the expand flag for the rest of the space.
+				</p>
+				<h4>Space Out</h4>
+				<p>
+					So, we've seen statically placed buttons that don't move when
+					the window expands and buttons that expand with the window. But
+					what if we want a bit of padding between the buttons. There are
+					two things we can do.
+				</p>
+				<ol>
+					<li>Add in a static amount of space around the object. This 
+						space is static because it will not change with the window
+						size.
+					</li>
+					<li>Add in a spacing element that will resize in the same way
+						that an object would and therefore is proportional to
+						window size.
+						</li>
+				</ol>
+				<p>
+					We'll start with the latter. Let's say I want to keep the
+					buttons in the center of the window and at a constant size.
+					The solution is to add two spaces on the left and right of the
+					buttons which will expand to fill the space available. We do 
+					this by modifying our last example with the additions in bold:
+				</p>
+				<pre class="prettyprint linenums"><b>sizer.AddStretchSpacer(1)</b>
+sizer.Add(self._btn1, 0)
+sizer.Add(self._btn2, 0)
+<b>sizer.AddStretchSpacer(1)</b></pre>
+				<p>
+					What this has done is to add what acts like an invisible element
+					each side of the two buttons. The buttons will not grow as the
+					window expands because they have a zero proportion. The invisible
+					elements each have an equal proportion so once the space for
+					the buttons has been accounted for the spacers will take up
+					the remaining window space, which effectively centres the buttons:
+				</p>
+				<p>
+					<img src="##IMG_DIR##/python/boxsizerspacers.png" alt="Image of wxPython window using a basic wx.BoxSizer to align two wx.Button objects in the centre of the window using two stretch spacers - AddStretchSpacer()">
+				</p>
+				<p>
+					If you wanted a spacer of a fixed width or height in pixels
+					you could also investigate <tt><b>sizer.AddSpacer(size)</b></tt>.
+					This spacer will not expand relative to window size: it will keep
+					a constant size.
+				</p>
+				<h4>More</h4>
 				<p>
 					The parameters we used can be more explicitly stated:
 				</p>
-				<pre><a href="http://www.wxpython.org/docs/api/wx.Sizer-class.html#Add" target="_blank">sizer.Add</a>(self._btn1, proportion=, flag=, border=, ...)</pre>
-				<p>
-					The proportion is an integer number. 0 means don't resize and
-					any other number is the proportion as a fraction of the total
-					proportions of all elements in the sizer, that the element size
-					will be. That's why the first button stays the same size and the
-					second button expands to fill the space available.
-				</p>
+				<pre class="prettyprint linenums"><a href="http://www.wxpython.org/docs/api/wx.Sizer-class.html#Add" target="_blank">sizer.Add</a>(self._btn1, proportion=, flag=, border=, ...)</pre>
 				<p>
 					Border is the border of padding that is to be applied to the
 					component. Which of the top, botton, left and right borders are
@@ -180,26 +310,29 @@ app.MainLoop()
 				<p>We've got a few buttons, now we need to do something when the
 					user clicks 'em... enter events...
 				</p>
-				<pre>class MyDummyWindow(wx.Frame):
+				<pre class="prettyprint linenums">class MyDummyWindow(wx.Frame):
    def __init__(self, parent, title):
       wx.Frame.__init__(self, parent, title=title)
       self._btn1 = wx.Button(self, wx.ID_ANY, "Click me")
       self._btn2 = wx.Button(self, wx.ID_ANY, "Click you")
-
 <b>
-      self.Bind(wx.EVT_BUTTON, self.OnBtnClick2)
-      self.Bind(wx.EVT_BUTTON, self.OnBtnClick2)
+      self._btn1.Bind(wx.EVT_BUTTON, self.OnBtnClick)
+      self._btn2.Bind(wx.EVT_BUTTON, self.OnBtnClick)
 </b>
-      ...&lt;snip&gt;...
+      sizer = wx.BoxSizer(wx.HORIZONTAL)
+      sizer.Add(self._btn1, 1, wx.EXPAND)
+      sizer.Add(self._btn2, 2, wx.EXPAND)
+      self.SetSizerAndFit(sizer)
+
+      self.Show()
 <b>
    def OnBtnClick(self, event):
-      ctrl = event.GetEventObject()
-      ctrl_id = ctrl.GetId()
-
+      ctrl_id = event.GetEventObject().GetId()
       if ctrl_id == self._btn1.GetId():
          wx.MessageBox("You pressed the first button")
       else:
          wx.MessageBox("You pressed the second button")</b></pre>
+
 				<p>
 					The function <tt>OnBtnClick()</tt> has been created to handle
 					button clicks. It receives two objects. The first is the
@@ -215,49 +348,55 @@ app.MainLoop()
 					the possible widget IDs you are handling.
 				</p>
 				<p>
-					To tell handle the click event you must register either the button
+					To handle the click event you must register either the button
 					or one of its parent windows as a handler for the <tt>EVT_BUTTON</tt>
-					type of event. The line <tt><b>self.Bind(...)</b></tt> in the above
-					example registers the <tt>MyDummyWindow</tt> frame as listening
-					for this event. When the event fires, the frame's <tt>OnBtnClick</tt>
-					will be called as shown above.
+					type of event. The line <tt><b>self._btn1.Bind(...)</b></tt> in the above
+					example registers the button &quot;window&quot; as handling
+					this event. When the event fires, the <tt>OnBtnClick()</tt> function
+					will be called.
 				</p>
 				<h4>Event Bubbling</h4>
 				<p>
-					When an object generates an event, the object or the closest 
+				See the <a href="http://wiki.wxpython.org/self.Bind%20vs.%20self.button.Bind" target="_blank">referenced article [4]</a> for a deeper look at this...
+				<p>
+				When an object generates a <em>command</em> event, the object or the closest 
 					containing window to the event source handles the event first. By 
 					default this would be it... the event ends here. However, the
 					event can be &quot;bubbled&quot; upwards so that the next closest
 					containing window moving up from parent to parent can also get
 					a shot at responding to the event:
 				</p>
-				<pre>class MyDummyWindow(wx.Frame):
+				<pre class="prettyprint linenums">class MyDummyWindow(wx.Frame):
    def __init__(self, parent, title):
       wx.Frame.__init__(self, parent, title=title)
       self._btn1 = wx.Button(self, wx.ID_ANY, "Click me")
       self._btn2 = wx.Button(self, wx.ID_ANY, "Click you")
-<b>
+
       self._btn1.Bind(wx.EVT_BUTTON, self.OnBtnClick)
       self._btn2.Bind(wx.EVT_BUTTON, self.OnBtnClick)
+<b>
+      self.Bind(wx.EVT_BUTTON, self.OnBtnClick2)
+      self.Bind(wx.EVT_BUTTON, self.OnBtnClick2)
 </b>
-      self.Bind(wx.EVT_BUTTON, self.OnBtnClick2)
-      self.Bind(wx.EVT_BUTTON, self.OnBtnClick2)
-
       sizer = wx.BoxSizer(wx.HORIZONTAL)
-      sizer.Add(self._btn1, 0, wx.TOP | wx.ALIGN_CENTER, 10)
-      sizer.Add(self._btn2, 1, wx.BOTTOM | wx.EXPAND, 10)
+      sizer.Add(self._btn1, 1, wx.EXPAND)
+      sizer.Add(self._btn2, 2, wx.EXPAND)
       self.SetSizerAndFit(sizer)
 
       self.Show()
 <b>
-   def OnBtnClick(self, event):
+   def OnBtnClick2(self, event):
       wx.MessageBox("Button intercepted")
       # If you uncomment the line below, first the btn handler and then the
       # frame handler respond to this event, otherwise only the btn handler will
       #event.Skip()
 </b>
-   def OnBtnClick2(self, event):
-      ...&lt;snip&gt;...</pre>
+   def OnBtnClick(self, event):
+      ctrl_id = event.GetEventObject().GetId()
+      if ctrl_id == self._btn1.GetId():
+         wx.MessageBox("You pressed the first button")
+      else:
+         wx.MessageBox("You pressed the second button")</pre>
 				<p>
 					In the above example an event handler is registered for the
 					button and for the frame (the button's parent container).
@@ -269,8 +408,18 @@ app.MainLoop()
 					the command you will see first the &quot;Button intercepted&quot;
 					message box and then the &quot;You pressed...&quot; message box.
 				</p>
-			</div>
+			</div> <!-- END H2 DIV -->
 
+			<h2>The More Common Controls</h2>
+			<div>
+				<h3>A Text Entry Box</h3>
+				<p>
+					For text entry you can use a <tt><b>wx.TextCtrl</b></tt> widget.
+					A very simple example combining two buttons to get and set the
+					value in the text control is shown below:
+				</p>
+
+			</div> <!-- END H2 DIV -->
 		</div>
 	</div>
 </body>

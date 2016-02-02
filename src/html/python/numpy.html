@@ -80,7 +80,7 @@ import numpy as np
 		<div>
 			<h3>Intro</h3>
 			<p>
-			The Numpy array object is <tt>ndarray</tt>. 
+			The Python NumPy array object is <tt>ndarray</tt>. 
 			Create it using any iterable via, typically, the function <tt>np.array()</tt>. 
 			The most basic properties are <tt>dtype</tt> giving the underlying machine datatype, <tt>shape</tt>giving the length of each dimension and 
 			<tt>ndim</tt> giving the number of dimensions...
@@ -100,7 +100,7 @@ array([[1,2],
        [3,4]])
 </pre>
 			<p>
-				Can also create arrays using functions such as <tt>zeros()</tt>, <tt>ones()</tt>, <tt>empty()</tt>, <tt>arange()</tt> and other
+				Can also create Python NumPy arrays using functions such as <tt>zeros()</tt>, <tt>ones()</tt>, <tt>empty()</tt>, <tt>arange()</tt> and other
 				<a target="_blank" href="http://docs.scipy.org/doc/numpy/reference/routines.array-creation.html">array creation routines</a>.
 				Caution with <tt>empty()</tt>: it does <em>not</em> create a zeroed array... it could well be filled with junk!
 			<a name="numpy_slice"></a>
@@ -108,7 +108,7 @@ array([[1,2],
 			<h3>Slices</h3>
 			<p>
 				Slicing <tt>ndarray</tt>s generally works like normal Python list slicing except for the rather important caveat
-				that NumPy arrays slices are not, unlike lists, copies of the array data. <em>NumPy slices are like views into an array</em>.
+				that NumPy arrays slices are not, unlike Python lists, copies of the data. <em>NumPy slices are like views into an array</em>.
 			</p>
 				In the following code snippet a slice from array <tt>a</tt> is stored in <tt>b</tt>. If <tt>a</tt> were a list then
 				<tt>b</tt> would contain an independent copy of the slice data. But in the example below we see that modifying <tt>b</tt>
@@ -175,14 +175,14 @@ array([999, 999, 111, 111,   5,   6])
 				The Python keywords &quot;<tt>and</tt>&quot; and &quot;<tt>or</tt>&quot; do not work with boolean arrays, use &quot;<tt>&amp;</tt>&quot; and &quot;<tt>|</tt>&quot;,
 				</li>
 				<li>
-					Selecting data from an array by boolean indexing always creates a copy of the data,
+				Selecting data from an array by boolean indexing <em>always creates a copy of the data</em>,
 					even if the returned array is unchanged.
 				</li>
 			</ol>
 
 			<p>
 				For example, an array of student names and an array of their test scores. To select just the students with a
-				score above, say, 70 percent, we would do the following:
+				score above, say, 70 percent, we would write the following Python code:
 			</p>
 <pre class="prettyprint linenums lang-python">
 &gt;&gt;&gt; import numpy as np
@@ -198,7 +198,7 @@ array(['James', 'Mike', 'Mark', 'Peter'], dtype='|S6')
 
 			<p>
 				This concept extends to multi-dimensional arrays. Lets say each student has sat 4 exams and we want to
-				to see exam scores for certain students...
+				to see exam scores for certain students. The Python code becomes...
 			</p>
 <pre class="prettyprint linenums lang-python">
 &gt;&gt;&gt; import numpy as np
@@ -252,7 +252,7 @@ array([ 10, 5])
 </pre>
 			<h3>Condition Logic</h3>
 			<p>
-				<tt>np.where()</tt> is the vectorized verions of the ternary &quot;<tt>x if cond else y</tt>&quot; 
+				The NumPy <tt>np.where()</tt> is the vectorized verions of the ternary &quot;<tt>x if cond else y</tt>&quot; 
 				operator.
 			</p>
 			<p>
@@ -286,12 +286,12 @@ array([[1, 4],
 array([[2, 4],
        [2, 4]])</pre>
 			<p>
-				This is summaried very will in Python For Data Analysis as 
+				This is summarised very will in &quot;Python For Data Analysis&quot; as 
 				follows.
 			</p>
 			<p><div class="box_container"><div class="info">
 				<p>
-					Two arrays are compatible for broadcasting if for each trailing dimension (that is, starting
+					Two [Python NumPy] arrays are compatible for broadcasting if for each trailing dimension (that is, starting
 					from the end), the axis lengths match or if either of the lengths is 1. Broadcasting
 					is then performed over the missing and / or length 1 dimensions 
 					<a href="http://shop.oreilly.com/product/0636920023784.do" target="_blank">[1]</a>.
@@ -346,7 +346,7 @@ array([[[0, 1, 0, 1],
 			and their not-a-number-ignoring equivalents <tt>nanmean()</tt>, <tt>nanstd()</tt>, <tt>nanvar()</tt>. 
 			These can be computed along any array &quot;axis&quot; or for the entire array...
 			</p>
-			<p>I was a little surprised with how numpy labeled the axes... for 2D arrays here's how it works:
+			<p>I was a little surprised with how Python's NumPy labeled the axes... for 2D arrays here's how it works:
 			</p>
 <pre class="prettyprint linenums lang-python" style="float:left; clear:both;">
 &gt;&gt;&gt; a = np.arange(4).reshape(2,2)

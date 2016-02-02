@@ -350,6 +350,12 @@ done</pre>
 			<h3>Get My Ubuntu Version</h3>
 			<pre class="prettyprint linenums">lsb_release -a</pre>
 
+			<h3>Ping A Range Of Addresses</h3>
+			<pre>nmap -sP 192.168.0.0-255</pre>
+			<p>Use the timeout option <code>-T</code> to make the scan quicker
+				if you wish...
+			</p>
+
 			<h3>Rename A Set Of Files</h3>
 			<p>
 				I had a set of files where part of the filename identified a test
@@ -403,14 +409,35 @@ do
    my_function "$variable_name"
 done</pre>
 
+			<h3>Read</h3>
+			<p>
+				The builtin 
+				<tt><a href="http://linuxcommand.org/lc3_man_pages/readh.html" target="_blank">read</a></tt> 
+				is very useful for 
+				<a href="http://stackoverflow.com/questions/226703/how-do-i-prompt-for-input-in-a-linux-shell-script/27875395#2787539" 
+				   target="_blank">reading in user input</a>, 
+				or for reading and processing the output of a command like <tt>find</tt> line by line. For example:
+			</p>
+			<pre class="prettyprint linenums">for dir in "list of dirs ":
+do
+	echo "LOOKING IN DIR '$dir'"
+	find "$dir" -name '*.csv' -print |
+	while read fname
+	do
+		echo "$fname"
+	done
+done</pre>
+			<p>
+				One thing that might catch you out is that variables inside the
+				<tt>while</tt> loop 
+				<a href="http://mywiki.wooledge.org/BashFAQ/024"
+				   target="_blank">disappear after the loop terminates</a>. The
+				summary is that the <tt>while</tt> loop is executed in a 
+				sub shell, so will have a new variable and context. 
+			</p>
+
 			<h3>Useful builtins</h3>
 			<ul>
-				<li><tt><a href="http://linuxcommand.org/lc3_man_pages/readh.html" target="_blank">read</a></tt>. 
-					read input from stdin
-					Here is a really good 
-					<a href="http://stackoverflow.com/questions/226703/how-do-i-prompt-for-input-in-a-linux-shell-script/27875395#27875395"
-						target="_clank">SO thread on getting user input</a>.
-				</li>
 				<li>readlink. options like --canonicalize (-f is synonym)</li>
 				<li><a href="http://www.tldp.org/LDP/abs/html/parameter-substitution.html"
 					target="_blank">Variable substitution</a>.

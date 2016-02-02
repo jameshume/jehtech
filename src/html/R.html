@@ -364,6 +364,19 @@ target="_blank">R manual scope section</a>.
 					increments of 1.
 				</p>
 			<p>
+				<b><code>seq_len(len)</code></b>
+			</p>
+				<p style="margin-left:15px;">
+					Generates a sequence from 1 to <code>len</code>. Useful in
+					<code>for</code> loops...
+				</p>
+				<pre style="margin-left:15px;" class="prettyprint linenums">&gt; seq_len(10)
+ [1]  1  2  3  4  5  6  7  8  9 10
+
+&gt; for (i in seq_len(10)) {
++ # Is a loop of 10 iterations, with i values as above
++ }</pre>
+			<p>
 				<b><code>seq(x, y, by=[0-9]+)</code></b>
 			</p>
 				<p style="margin-left:15px;">
@@ -396,6 +409,9 @@ target="_blank">R manual scope section</a>.
 &gt; seq_along(s)
  [1]  1  2  3  4  5  6  7  8  9 10 </pre>
 			<h4>Lists</h4>
+			<p>Remember that lists are like vectors that can contain elements of 
+				<em>different</em> classes.
+			</p>
 			<p><b><code>list()</code></b>
 			</p>
 				<p style="margin-left:15px;">
@@ -405,12 +421,15 @@ target="_blank">R manual scope section</a>.
 				</p>
 		</div><!-- END H3: Creation -->
 
+		<a name="ListAccessingOperators"></a>
 		<h3>Subsetting \ Indexing</h3>
 		<div>
 			<p>
 				Always useful to read is the 
 				<a href="https://cran.r-project.org/doc/manuals/R-lang.html#Indexing"
-					target="_blank">R Language Definition for Indexing</a>.
+					target="_blank">R Language Definition for Indexing</a>. This
+				is especiall useful to understand the difference between the
+				<code>[[]]</code> and <code>[]</code> indexing operations.
 			</p>
 			<p>
 				A vector is subset using square brackets (like in most scripting
@@ -420,7 +439,7 @@ target="_blank">R manual scope section</a>.
 			</p>
 			<h4>Slices</h4>
 			<p>
-				One thing to note is that unlike in Python's NumPy, slices are not
+			One thing to note is that unlike in Python's NumPy, slices are <em>not</em>
 				views into an array. In the following example, taking a slice of
 				vector <code>a</code> and modifying it does effect the original <code>a</code>.
 			</p>
@@ -486,7 +505,7 @@ john
 [1] 1
 &gt; q$b ## Now we can refer to the member using its name
 [1] 1.2</pre>
-			<h3>Single Item Or List</h3>
+			<h3>Single Item Or List: [[ vs [, or double brackets vs single brackets...</h3>
 			<p>
 				For lists, use <code>[[</code> to select any single element. <code>[</code> 
 				returns a list of the selected elements:
@@ -511,6 +530,34 @@ john
 &gt; class(x[[1]])
 [1] "numeric"
 </pre>
+			<p>
+				The other significant difference is that double brackets only
+				let you select a <em>single</em> item, whereas, as you have seen,
+				the single bracket lets you select <em>multiple</em> items.
+			</p>
+
+			<p>
+				Note that with vectors there is only a very subtle difference using
+				the indexing operations <code>[[]]</code> and <code>[]</code>. If we
+				use a single index then in both cases an atomic type will be returned.
+				However, using <code>[[]]</code> will strip the names.
+			</p>
+			<pre class="prettyprint linenums"> &gt; # Use the single braces [...]
+&gt; x["james"]
+james 
+    0 
+&gt; class(x["james"])
+[1] "numeric"
+&gt; x["james"] + 1 # NOTE: The names() have been preserved
+james 
+    1 
+&gt;
+&gt; Use the double braces [[...]]
+&gt; class(x[["james"]])
+[1] "numeric"
+&gt; x[["james"]] + 1 # NOTE: The names() have been DROPPED
+[1] 1</pre>
+
 		</div><!-- END H3: Subsetting -->
 
 		<h3>Test For Membership</h3>
@@ -813,8 +860,49 @@ Levels: female male
 <b>## Assign levels to lists</b>
 &gt; factor(c(TRUE, FALSE, TRUE), labels=c("label1", "label2"))
 [1] label2 label1 label2
-Levels: label1 label2</pre>
+Levels: label1 label2
 
+
+<b>## Generate Factor Levels Using gl(num-levels, num-reps, ...)</b>
+&gt; gl(2, 5)
+ [1] 1 1 1 1 1 2 2 2 2 2
+Levels: 1 2
+
+&gt; gl(2, 5, labels=c("jeh", "tech"))
+ [1] jeh  jeh  jeh  jeh  jeh  tech tech tech tech tech
+Levels: jeh tech</pre>
+
+	<h3>Ordered factors</h3>
+	<p>
+		<a href="http://www.dummies.com/how-to/content/how-to-work-with-ordered-factors-in-r.html"
+			target="_blank">Ordered factors</a> are factors but with an inherent
+		ordering or rank: used for 
+		<a href="https://en.wikipedia.org/wiki/Ordinal_data"
+			target="_blank">ordinal data</a>.
+	</p>
+	<p>
+		From the R help files:
+		<q>Ordered factors differ from factors only in their class, but methods and the model-fitting functions treat the two classes quite differently</q>.
+		What it is saying is that these functions will operate on and present the 
+		data in the order that is specified by the ordered factor.
+	</p>
+	<p>
+		For example, let's create a dummy little factor set:
+	</p>
+	<pre  class="prettyprint linenums">&gt; ordered(1:5)
+[1] 1 2 3 4 5
+Levels: 1 &lt; 2 &lt; 3 &lt; 4 &lt; 5 # NOTICE THE &quot;&lt;&quot; characters:
+                          # These show the ordering of the factor.</pre>
+	<p>
+		The same effect can be produced using <code>factor(1:5, ordered=TRUE)</code>.
+	</p>
+
+	<h3>Interactions</h3>
+	<p>
+		The &quot;interaction&quot; of two or more factors is basically their
+		<em>cartesian product</em>. Use the <code>interaction()</code> function
+		to create these interations.
+	</p>
 	</div> <!-- END H2: Factors -->
 
 
@@ -995,7 +1083,8 @@ read.csv is identical to read.table except default seperator is comma (,)</pre>
 		<p>
 			As previosly said, <b><q>... a data frame is a list, with the components of
 			that list being equal-length vectors</q></b> [2]. I.e., each
-			column is a list. Therefore the list-accessing operators will work
+			column is a list. Therefore the 
+			<a href="#ListAccessingOperators">list-accessing operators</a> will work
 			here:
 		</p>
 		<h4>Subsetting Columns</h4>
@@ -1082,7 +1171,7 @@ Levels: e h j</pre>
 1   j
 2   e</pre>
 
-		<h3>Check/filter for missing values</h3>
+		<h3>Check for and filter out missing values</h3>
 		<p>
 			You can find missing values using the following methods...</p>
 		<pre class="prettyprint linenums">&gt; <b>### Using is.na()</b>
@@ -1113,6 +1202,123 @@ y[good,]
 1   j    1
 2   e    2
 3   h    3 </pre>
+
+		<h3>Splitting a data frame</h3>
+		<p>
+			The function <tt><b>split()</b></tt> divides the data in a list or vector into 
+			groups identified by a factor. Given that a Data Frame is just a list
+			of lists, we can use <tt>split()</tt> to divide up the table into many
+			sub-tables (like &quot;groups&quot;). Often this is the first stage in a 
+			split-apply-combine problem.
+		</p>
+		<p>
+			A really noddy example...
+		</p>
+		<pre class="prettyprint linenums" style="float:left; width:47%;">f = factor(rep(c("A", "B", "C"), each=3))
+&gt; f
+[1] A A A B B B C C C
+Levels: A B C
+
+&gt; x = data.frame(a = 1:9, b = f)
+&gt; x
+  a b
+1 1 A
+2 2 A
+3 3 A
+4 4 B
+5 5 B
+6 6 B
+7 7 C
+8 8 C
+9 9 C
+
+</pre>
+
+<pre class="prettyprint linenums:19" style="float:left; margin-left:10px; width:47%;"><b>&gt; split(x, <u>x$c</u>)</b>
+$A
+  a b
+1 1 A
+2 2 A
+3 3 A
+
+$B
+  a b
+4 4 B
+5 5 B
+6 6 B
+
+$C
+  a b
+7 7 C
+8 8 C
+9 9 C</pre>
+	<p style="clear:both;">
+		The rather crummy example above shows how <tt>split()</tt> has essentially divided
+		up the data frame into groups defined by the column 'b'. 
+	</p>
+	<p>
+		To reduce typing a little and increase the readability, when the data frame and
+		column names are long you can use <b><tt>with()</tt></b> to replace
+		&quot;<tt>split(df, df$col)</tt>&quot; with &quot;<tt>with(df, split(col))</tt>&quot;.
+	<p>
+		Be careful when thinking of <tt>split()</tt> as doing a group-by, however,
+		because it is not doing this... it is doing a more naive split of the data
+		as we can observe if we modify the call to <tt>split()</tt> in the above
+		example:
+	</p>
+	<pre class="prettyprint linenums"> &gt; split(x, factor(c("X", "Y", "Z")))
+$X
+  a b
+1 1 A
+4 4 B
+7 7 C
+
+$Y
+  a b
+2 2 A
+5 5 B
+8 8 C
+
+$Z
+  a b
+3 3 A
+6 6 B
+9 9 C</pre>
+		<p>
+			We can see this visually in the following diagram which demonstrates
+			how split is working and also how it will <em>recycle</em> the factor
+			by which it is using to split on...
+		</p>
+		
+		<img src="##IMG_DIR##/r_split_1.png" alt="Diagram demonstrating how split() breaks up a data frame">
+
+		<p>
+			So, as you can see, it is not really a grouping operating. It is really
+			just flinging each ith row into a bucket with the name of the corresponding
+			ith factor variable, and if there are not enough factor variables then they
+			are recycled. That is why it is only acting like a group-by when we pass
+			in a data frame and a row of the data frame as the factor to split on.
+		</p>
+
+		<p>
+			Okay, great, but what's the use in this. Well usually we would,
+			instead of splitting a data frame in its entirity, we would split
+			a column we are interesting in calculating some statistics over based
+			on a grouping re another column. In the above example, we might
+			want to find the mean of the column &quot;a&quot; for each of the 
+			groups &quot;A&quot;, &quot;B&quot; and &quot;C&quot;. We would use
+			the following:
+		</p>
+		<pre class="prettyprint linenums">&gt; with(x, lapply(split(a, c), mean))
+$A
+[1] 2
+
+$B
+[1] 5
+
+$C
+[1] 8</pre>
+
 	</div>
 	
 
@@ -1155,18 +1361,6 @@ mutate(df, newvar=...) - adds new col and returns new datafame copy.
 
 
 
-splitting a df
---------------
-split(df$c1, df$c2) - returns a list of lists. Each inner list
- is labeled by an item in c2 and contains all the items in c1
- which correspond row-wise to the item in c2
-
-using with() to decrease typing and increase readability
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-for example, when splitting a dataframe's column using another column from that df.
-   split(myDataFrame$col1, myDataFrame$col2)
-it is more reaable and easier to write the following:
-   with(myDataFrame, split(col1, col2))
 
 TODO: Cross tabs (xtabs)
 
@@ -2026,6 +2220,7 @@ data resources
 ---------------
 http://data.un.org     - united nations
 http://www.ons.gov.uk/ons/index.html- uk office for national statistics
+https://open-data.europa.eu - european data on EU
 http://www.data.gov    - usa gov
 http://www.data.gov/opendatasites &lt;--- look here
 http://www.data.gov.uk - uk data site
@@ -2035,8 +2230,328 @@ http://www.infochimps.com/marketplace
 http://www.kaggle.com
 http://data.worldbank.org
 
+Plotting in R
+====================================================================
+
+boxplot(df$col, col="blue", breaks=100)
+	breaks is the number of bars (or buckets)
+hist(df$col, col="green")
+rug(df$col) - puts a "rug" under the histogram
 
 
+abline(h=num) - draw a horizontal line
+abline(v=num, col="red", lwd=2) - draw a vertical line
+	lwd is line width
+
+barplot()
+
+
+base plotting system
+	- the oldest
+	start with blank canvas and add things to it one by one
+
+
+
+
+plot(x,y) or hist(x) launches the graphics device
+plot() is generic... it can behave diff depending on the data passed to it.
+?par for base graphipcs system parameters
+
+eg with(df, plot(col1, col2))
+
+key plotting parms
+	pch  - the polotting symbol
+	       a number representing a symbol types.
+	       try example(points) on the command line
+	lty  - the line type
+	lwd  - line width as integer multuple
+	col  - colour
+	xlab - the label for x axis
+	ylab - the label for y axis
+	legend
+
+par() used for GLOBAL graphics parameters:
+	las - orientation of axis labels on plot
+	bg - background coloour
+	mar - margine size
+	      margine 1 is the bottom, then rotate CW for 2, 3, 4
+	oma - outer margin size
+	mfrow - # plots per row, col (filled row wise)
+	mfcol - # plots per row, col (filled col wise)
+
+base plotting functions
+	plot() - scatter plot
+	lines() - adds lines to a plot
+	points() adds points to a plot
+	text() add text labels to plot at specific x,y corrds
+	title - add annotations to x, y axis labels, title, subtitle etc
+	mtext - add arbirary text to margins
+	axis - add axis ticks/labels
+
+multiple base plots:
+	par(mfrow = c(rows, vols))
+	with(your-dataframe, {
+		plot(some data in first plot)
+		plot(plot some data in second plot)
+	})
+
+
+To setup plot without plotting anothing
+plot(x,y type="n")
+             ^^^^ make a plot except for the data
+Then you can plot the data sets one by one.
+
+Launch screen device
+	quartz() on mac
+	windows() on windows
+	x11() on linux
+
+?Devices for list of devices available
+
+eg for pdf
+	pdf(file = "...")
+	...plotting....
+	dev.off() ## Close the graphics device!
+
+Vector formats:
+	pdf
+	svg
+	wim.metafile
+	postscript
+
+Not so great with many individual points (file size)
+Resize well.
+
+http://research.stowers-institute.org/mcm/plotlayout.pdf
+
+Bitmaps:
+	png. 
+	jpeg. lossy compression
+	tiff. lossless compression
+Generally dont resize well
+good for many many points.
+
+
+Many devices
+--------------
+Can only plot to the *active* device
+dev.cur() 0 returns graphics device num &gt;=2
+dev.set(&lt;int&gt;) change the active device
+
+dev.copy
+dev.copy2pdf - copy active plot to new plot
+E.g:
+	...plot...
+	dev.copy(png, file = "filename.png")
+	dev.off()
+
+hierachical clustering
+=======================
+- what is close/
+- how do we group things
+- How do we visualise the grouping
+- How do we interpret the grouping
+
+Agglomerative approach:
+- Find closest two things - requires knowing what "closest" means
+   - continuous - euclidean sqrt( (x1-x2)^2 + (y1-y2)^2) - extends to hi D probs
+   - Continuous - correlation similarity
+   - Manhatten - total(x) + total(y)
+- Put them together - a "merge"
+   - How do we merge?
+   - What represents the new location - "average linkage"  - ave of x and y coords - center of grav.
+                                      - "complete linkage" - take furtherst two points of clusters as dist.
+- Repeat
+- A tree results shoing the ordering of how things were grouped.
+
+To simulate a simple 2D dataset:
+   set.seed(1234)
+   par(mar = c(0, 0, 0, 0))
+   x &lt;- rnorm(12, mean = rep(1:3, each=4), sd=0.2)
+   y&lt;- rnorm(12, mean = rep(c(1, 2, 1), each = 4), sd = 0.2)
+   plot(x,y, col = "blue", pch=19, cex=2)
+   text(x+0.1, y+0.1, labels=as.character(1:12))
+
+   df &lt;- data.frame(x = x, y = y)
+   distxy &lt;- dist(df) # cacls dist between all different rows/cols combos in df.
+   hCllust &lt;- hclust(distxy)
+   plot(hCllust)
+
+
+heatmap() for looking at matrix data - does a hierachical cluster of rows and cols of the matrix
+   rows are like observations
+   cols are like sets of observations
+
+   organises the rows and columns of the table to visualise groups or blocks within the table
+
+
+
+
+k-means clustering
+===================
+K-means is NOT deterministic. If you run multiple times but resulst vary to much the alg might
+not be stable w.r.t to your data!
+
+It is a partitioning approach
+   - Define #groups you would
+   - Get "centroids" for each cluster
+   - Assigned to closests centroid
+   - Recalc centroids and iterate
+
+   set.seed(1234)
+   par(mar = c(0, 0, 0, 0))
+   x &lt;- rnorm(12, mean = rep(1:3, each=4), sd=0.2)
+   y &lt;- rnorm(12, mean = rep(c(1, 2, 1), each = 4), sd = 0.2)
+   plot(x,y, col = "blue", pch=19, cex=2)
+   text(x+0.1, y+0.1, labels=as.character(1:12))
+
+   df &lt;- data.frame(x = x, y = y)
+   kmeansObj &lt;- kmeans(df, centers = 3)
+   par(mar = rep(0.2, 4))
+   plot(x, y, col = kmeansObj$cluster, pch=19, cex=2)
+   points(kmeansObj$centers, col = 1:3, pch=3, cex=3, lwd=3)
+
+Lattice plotting system
+=========================
+
+- Good for high density plots
+- package(lattice)
+   - xyplot     - scatter plots
+   - bwplot     - box plots
+   - histogram
+   - stripplot
+   - dotplot
+   - splom      - scatter plot matrix. like pairs() in base plot
+   - levelplot  - image data
+- Everything (i.e. entire plot) is done in a single function call
+- lattice functions return calls called "trellis". this must
+  be printed to the device to dislplay it on. Auto-prints for
+  desktop display
+
+xyplot
+xplot(y ~ x | <condition vars>, data)
+   y is the y data
+   x is the x data
+   condition vars (optional). they are factor variables
+      and conditioning on them creates n graphs for each
+      level of the condition var
+   data is the dataframe
+
+   eg 
+      library(datasets)
+      library(lattice)
+      airqual <- transform(airquality, Month=factor(Month))
+      xyplot(Ozone ~ Wind | Month, data = airqual, layoutc=c(5,1))
+
+
+
+panel functions
+   Each panel represents a subset of the data defined by the
+   conditioning variable supplied
+
+   xyplot(y ~ x | f, panel = function(x,y, ...) {
+      panel.xyplot(x, y, ...)
+      panel.abline(h=median(y), lty=2)
+   })
+
+   By giving the panel function we specify how each 
+   panel is to be drawn. Each panel in this case does
+   an xyplot, but also does a horizonal line at the data
+   median. Note: data for each panel is different we're just
+   saying what is to be done with the data on each panel.
+
+   panel.lmline() for least regression line
+
+
+
+
+
+ggplot plotting system
+=======================
+
+Grammar of Graphics by Leland Wilkinson
+Built on the grid graphics system. 
+
+qplot()
+--------
+Works like the plot() function of the base system
+data must always come from a dataframe
+factors are used to indicate *subsets* of the data
+
+eg qplot(x, y, data=dataframe) where x and y are column 
+names in dataframe
+
+to highlight subgroups use qplot(x,y,data=df, color=z) where
+z is another column inthe dataframe
+
+to add smoother do
+   qplot(x,y,data=df, geom=c("point", "smooth"))
+
+to do histogram
+   qplot(x, data=df, fill=z) here fill is like color
+   qplot(x, data=df, geom="density") for a desity smooth of hist
+
+to do panels you use facets
+   qplot(x,y, data=df, facets=.~z) or
+   qplot(x,y, data=df, facets=z~.) 
+   it is rows~cols and the "dot" means wildcard
+
+ggplot() 
+---------
+
+Plots built up in layers
+   - plot data
+   - overlay summary
+   - add regressions etc
+
+Basic ggplot:
+   g <- ggplot(dataframe, aes(x, y[, color=z]))
+                          ^^^
+                          the aesthetics (cols to be plotted)
+
+   So far there are no layers on the plot - nothing to specify
+   how to draw the plot
+
+   So we need to add this to the plot...
+
+   p <- g + geom_point() ## adds "how to draw" information
+   print(p) ## display (or use autoprinting)
+
+   or use geom_line()
+
+   Add a smoother
+   g + geom_point() + geom_smooth(method="...")
+ 
+   Add a facet grid
+   g + geom_point + facet_grid(. ~ z) + ....
+                               ^^^^^^
+                               works the same as qplot
+
+   To annotate the plots use
+   xlab(), ylab(), labs(), ggtitle()
+      eg labs(title="...", x="...", y="...")
+   theme()
+      theme_gray(), theme_bw() some standard appearances
+
+Aesthetics options
+   - color=...
+   - size=...
+   - alpha=..
+
+The smoother.
+   - size=
+   - linetype=
+   - method=..
+   - se=...
+
+
+Note: ylim() will FILTER the data to filter out things outside
+      limits. To keep outliers use coord_cartesian(ylim=())
+
+Categorise on continuos ver:
+   To categorize continuous variables use CUT() function!
+   Can use quantile() function to get some reasonable
+      cut points
 
 </pre>
 </div>

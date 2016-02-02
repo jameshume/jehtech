@@ -98,13 +98,21 @@ echo $YORICK_HOME</pre>
 	<!-- YORICK ARRAYS ----------------------------------------------------- -->
 	<h2>Yorick Arrays</h2>
 	<div>
-		<h3>Versus C Arrays</h3>
-		<p>The major differences are</p>
+		<h3>Major Differences VS C Arrays</h3>
 		<ol>
-			<li>Yorick arrays start at index <tt>1</tt> but C arrays start at index <tt>0</tt>.
-			<li>Yorick arrays are column-major whereas C arrays are row-major. This means that <tt>array[1][2]</tt> in C addresses row 1, 
-			column 2, but in Yorick (adjust syntax to <tt>array(1,2)</tt>) it addresses column 1, row 2 (in C column 0, row 1 taking 
-			into account the start index of <tt>1</tt> instead of <tt>0</tt>.</li>
+			<li><b>Yorick arrays start at index <tt>1</tt></b> but C arrays start at index <tt>0</tt>.
+			<li><b>Yorick arrays are column</e>-major</b> whereas C arrays are row-major. 
+				<ul>
+					<li>This means that <tt>array[1][2]</tt> in C addresses row 1, 
+						column 2 (remember because C indicies start at 0 this means the second row, third column).
+						<b>I.e., the C-syntax is <code>array[ROW][COL]</code></b>
+					</li>
+					<li>But in Yorick, <tt>array(1,2)</tt>, addresses column 1, row 2 (in C column 0, row 1 taking 
+					into account the start index of <tt>1</tt> instead of <tt>0</tt>. 
+					<b>I.e, the Yorick-syntax is <code>array(COL, ROW)</code>.</b>
+					</li>
+				</ul>
+			</li>
 		</ol>
 		<p>
 			<div class="box_container"><div class="info">
@@ -113,7 +121,7 @@ echo $YORICK_HOME</pre>
 				</p>
 			</div></div>
 		</p>
-		<h4>Row/Column Major</h4>
+		<h3>What Is Row/Column Major?</h3>
 		<p>
 			For all languages, arrays are are contigous blocks of items. Therefore, in memory we can 
 			store a 1D arrays as follows:
@@ -130,7 +138,8 @@ echo $YORICK_HOME</pre>
 			Here we store the first array element at the lowest memory address and increment upwards. 
 			You can see that each element is contiguous in memory. It is worth noting that the
 			array is contiguous in terms of the language's model of the memory. For systems with
-			an MMU this means virtual memory (which if the array crosses a page boundary
+			an MMU this means virtual memory (which if the array crosses a page boundary it is 
+			only contiguous in virtual memory, not necessarily physical memory)
 		</p><p>
 			What happens when we try to store a 2D array? Consider the following array:
 		</p><pre>int someArray[2][3] = { { 1, 2, 3},
@@ -197,93 +206,114 @@ echo $YORICK_HOME</pre>
 			I keep saying &quot;in terms of syntax&quot; because as Yorick is implemented in C its physical array
 			storage is C-like. It is only in the scripting language itself that column-major notation is used.
 		</p>
-	
-		<h4>In C</h4>
-		<p>Consider the following C program:</p>
-		<pre>#include <stdio.h>
-int main(void) {           +-+-+-&gt; along the right most [] (depth)
-                           | | |
-   int b[2][2][3] = { +&gt;{ {1,2,3}, &lt;+| 
-                      |   {4,5,6}  &lt;+| second most [col]
-                      | },
-                      +&gt;{ {11,22,33},
-                      |   {44,55,66}  
-                      | } };
-                      +- outer most (row)
+			<div class="box_container"><div class="info">
+				<p>
+					<b>Row-major</b> means that, syntactically, the right most index is the
+					<em>fastest incrementing dimension</em> and going left the speed of increment decreases.
+					<br/>
+					<b>Column-major</b> means that, syntactically, the right most index is the
+					<em>slowest incrementing dimensions</em> and going left the speed of increment increases.
+				</p>
+			</div></div>
 
-	int i = 0, j = 0, k = 0;
-	for(i = 0; i &lt; 2; ++i ) 
-		for(j = 0; j &lt; 2; ++j) for(k = 0; k &lt; 3; ++k)
-			printf("b[%i][%i][%i] == %i\n", i, j, k, b[i][j][k]);</pre>
+		<h3>Adding More Dimensions: Row/Column Major Syntax in C VS Yorick</h3>
+		<img style="float:right; margin-right:10px;" src="##IMG_DIR##/C_3D_Array.png" alt="3D array visualisation">
+		<p>
+		So, now moving onto ad 3D example... I'd normally visualise a 2x2x2 array
+		as is shown to the right.
+		</p>
+		</p>
+			The 2x2x2 array is an array of two 2x2 arrays. Each 2x2 array is what
+			one would normally expect: a set of rows and a set of columns. So,
+			the front 2x2 block has 2 rows and 2 columns, as does the back 2x2 block.
+			The new dimension is the depth (or what I call &quot;depth&quot; anyway),
+			the third dimension.
+		</p>
+		<p>
+			Given the description so far I would intuitively expect C to access 
+			the array using this syntax: <code>array[DEPTH][ROW][COL]</code>. I would
+			expect Yorick to access the array using this sytax: <code>array(COL, ROW, DEPTH)</code>.
+		</p>
+
+		<h4>In C: <code>array[DEPTH][ROW][COL]</code></h4>
+		<p>To be double sure, look at the noddy little program below:
+		</p>
+		<pre>#include <stdio.h>
+
+int main(int argc, char *argv[])
+{
+   int array[2][2][2] = {
+                           {
+                              { 1, 2}, /* Depth, 0, row 0 */
+                              { 3, 4}  /* Depth, 0, row 1 */
+                           },
+                           { 
+                              { 5, 6}, /* Depth, 1, row 0 */
+                              { 7, 8}  /* Depth, 0, row 1 */
+                           }
+                        };
+
+   int r,c,d;
+   for(d = 0; d < 2; ++d)
+      for(r = 0; r < 2; ++r)
+         for(c = 0; c < 2; ++c)
+            printf("[d%i][r%i][c%i] == %i\n", d, r, c, array[d][r][c]);
+
+   return 0;
+}</pre>
 		<p>
 			It outputs the following...
 		</p>
-		<pre>b[0][0][0] == 1	b[1][0][0] == 11
-b[0][0][1] == 2	b[1][0][1] == 22
-b[0][0][2] == 3	b[1][0][2] == 33
-b[0][1][0] == 4	b[1][1][0] == 44
-b[0][1][1] == 5	b[1][1][1] == 55
-b[0][1][2] == 6	b[1][1][2] == 66</pre>
+		<pre>[d0][r0][c0] == 1
+[d0][r0][c1] == 2
+[d0][r1][c0] == 3
+[d0][r1][c1] == 4
+[d1][r0][c0] == 5
+[d1][r0][c1] == 6
+[d1][r1][c0] == 7
+[d1][r1][c1] == 8</pre>
 		<p>
-			Have to visualise the inner brace as being your <em>least</em> dimension. So 
-			in the 3D case the inner brace gives you the 3rd, axis, depth or really z. The next
-			outer brace gives you the next least axis, in this case column. So you are getting 
-			columns of the inner axis. Scale up then to rows. The cube therefore looks like:
+			So, in C, one have to visualise the inner most brace as being your 
+			<em>slowest-incrementing</em> dimension. 
 		</p>
-		<pre>
-           3------6
-          /      /| 
-         2------5 |
-        /  33--/--66           [r][c][d]
-       1------4  /             Its basically a matter of definition of
- |     | 22---|-55   _ d       what row,col,depth means in terms of
- |     |/     |/     /|        the C array layout. Must structure numbers
- |     11     44    /          in array appropriately if we defined [r][c][d]
- \/                /           as opposed to say, [d][r][c] or any
- r -------------&gt; c            other combination
+
+		<h4>In Yorick: <code>array(COL, ROW, DEPTH)</code></h4>
+		<p>
+			So, we can test how Yorick dimensions work. I would assume, given the
+			Yorick syntax, Yorick would represent the array above using the
+			syntax <code>array(COL, ROW, DEPTH)</code>.
+		</p>
+		<p>
+			And again, to be sure, we make a little noddy program:
+		</p>
+		<pre>myarray = [
+             [
+                [ 1, 2], /* Depth, 0, row 0 */
+                [ 3, 4]  /* Depth, 0, row 1 */
+             ],
+             [ 
+                [ 5, 6], /* Depth, 1, row 0 */
+                [ 7, 8]  /* Depth, 0, row 1 */
+             ]
+          ];
+
+for (d=1; d<3; ++d)
+   for (r=1; r<3; ++r)
+      for (c=1; c<3; ++c)
+         print, swrite(format="[d%i][r%i][c%i] == %i", d-1, r-1, c-1, myarray(c, r, d))
 		</pre>
 		<p>
-			Basically in C world we work from the outer brace inwards so the right-most index is 
-			our least significant dimension and the left-most index is our most significant dimension 
-			(in this case row)
-		</p>
-		<h4>In Yorick</h4>
-		<pre>
-                   +-+-+-&gt; along the right most [] (depth)
-                   | | |
-&gt; b =     [ +&gt; [  [1,2,3], &lt;+| 
-            |     [4,5,6]  &lt;+|second most [col]
-            |  ],
-            +&gt; [  [11,22,33],
-            |     [44,55,66]  ]
-            |  ];
-            +- outer most (row)
-
-&gt; dimsof(b)
-[3,3,2,2]
-
-   h  c  r
-"b[1][1][1] == 1"            3------6
-"b[1][1][2] == 11"          /      /| 
-"b[1][2][1] == 4"          2------5 |
-"b[1][2][2] == 44"        /  33--/--66           [r][c][d]
-"b[2][1][1] == 2"        1------4  /             Its basically a matter of definition of
-"b[2][1][2] == 22" |     | 22---|-55   _ d       what row,col,depth means in terms of
-"b[2][2][1] == 5"  |     |/     |/     /|        the Yor array layout. Must struct nums
-"b[3][1][1] == 3"  |     11     44    /          in array appropriately if def (d,c,r)
-"b[3][1][2] == 33" \/                /           as opposed to say, (r,c,d) in C or any
-"b[3][2][1] == 6"  r -------------&gt; c            other combination
-"b[3][2][2] == 66"  </pre>
-		<p>
-			Basically in Yorick world we work from the inner brace outwards so the left-most 
-			index is our least significant dimension and the right-most index is our most significant 
-			dimension (in this case row)
+		And, this outputs exactly the same as our little C program (the 
+		<code>d/r/c-1</code> in the <code>swrite()</code> function is so that 
+		we print out the indexing from zero, as the C program would have done).
+		This shows that our intuitive understanding of the syntax works for
+		adding extra dimensions to arrays in Yorick is correct...
 		</p>
 
 		<h3>Slices Are Views Onto Arrays But Beware Of Array Copy</h3>
 		<div>
 			<p>
-				In NumPy slices are like views into the array, and this
+				In <a href="python/numpy.html">Python's NumPy</a>, slices are like views into the array, and this
 				is also the case in Yorick. BUT... if we transliterate the 
 				<a href="python/numpy.html#numpy_slice">NumPy example</a> into Yorick 
 				script, we will see a different result! See below:
@@ -298,7 +328,7 @@ b[0][1][2] == 6	b[1][1][2] == 66</pre>
 &gt; a /*&lt;-- LOOK: Unlike the NumPy example, a has not been affected! */
 [1,2,3,4,5,6]</pre>
 			<p>
-				In the NumPy example a would have been effected. Now, it's not quite
+			In the  <a href="python/numpy.html">Python NumPy</a> example a would have been effected. Now, it's not quite
 				that the slice isn't a view. It still is. Observe the following.
 			</p>
 			<pre class="prettyprint linenums">&gt; a(2:4) = 111
@@ -313,7 +343,7 @@ b[0][1][2] == 6	b[1][1][2] == 66</pre>
 			<p>
 				<div class="box_container"><div class="info">
 					<p>
-						In NumPy assigning one array (or non primative) variable to 
+						In Python's NumPy assigning one array (or non primative) variable to 
 						another copies a <em>reference</em> and not the value. In
 						Yorick however, in the specific case of array = array, the
 						<em>entire array is copied</em>... Beware of this as for 
@@ -643,8 +673,8 @@ dim_b = [ 2, |4|, 2 ]
 			\end{pmatrix}$
 		</p>
 		<p>
-			How do we do this using Yorick? All one dimension vectors in Yorick
-			are column vectors (even if they are displayed textually as-if they
+		How do we do this using Yorick? <b>All one dimension vectors in Yorick
+			are column vectors</b> (even if they are displayed textually as-if they
 			are a row!). So can we just <tt>transpose()</tt> the $v$ vector?
 		</p>
 		<pre class="prettyprint linenums">&gt; a * transpose(b)
@@ -658,8 +688,18 @@ WARNING source code unavailable (try dbdis function)
 			Apparently not! <tt>transpose(b)</tt> didn't do what it might have... I 
 			thought it would turn the column vector into a row vector, but it doesn't.
 			The reason for this is that a row vector is actually a 2D array, i.e.,
-			it has an <em>extra dimension</em>. So, to convert $v$ into a row vector 
-			we need to add an extra dimension!
+			it has an <em>extra dimension</em>. 
+		</p>
+		<p>
+			And this makes sense... as we saw in our section on adding extra
+			dimensions to arrays and how to syntactically express this:
+			we know a 1D vector is <code>array(col)</code> and a 2D vector is 
+			<code>array(col, row)</code>. Thus, is makes sense that a <b>row vector
+				is a 2D array with one column!</b>
+		</p>
+		<p>
+			So, to convert $v$ into a row vector 
+			we need to <b>add an extra dimension</b>...
 		</p>
 		<p>
 			To convert $v$ into a row vector we need to make each column element
@@ -688,13 +728,13 @@ WARNING source code unavailable (try dbdis function)
 		<p>
 			So, based on this, we can say that <tt>b(-,)</tt> is saying add a row
 			dimension to the column vector, or more generally add another
-			most-slow increasing dimension to the existing vector. In
+			most-slowly-increasing dimension to the existing vector. In
 			the example above we get a 2D vector with 3 rows and 1 column.
 		</p>
 		<p>
 			How the extra dimension is added is both interesting and important.
 			If <tt>b(-,)</tt> is saying add a row dimension, why does 
-			<tt>b(-,) == [[100],[200],[300]]</tt> and not 
+			<tt>b(,-) == [[100],[200],[300]]</tt> and not 
 			<tt>[[100,200,300]]</tt>? They both have a row dimension added!
 		</p>
 		<p>
@@ -749,9 +789,26 @@ WARNING source code unavailable (try dbdis function)
 	</p>
 	<p>
 		So back to the original example of outer product. To accomplish this in
-		Yorick we need to do <tt>u*(v-,)</tt> I.e., the transpose of <tt>v</tt>
-		is <tt>v(-,)</tt>.
+		Yorick we need to do <tt><b>transpose(</b>u*v(-,)<b>)</b></tt> I.e., the transpose of <tt>v</tt>
+		is <tt>v(-,)</tt>:
 	</p>
+	<pre>&gt; u = [1,2,3,4]
+&gt; v = [1, 10, 100]
+
+&gt; v(-,)
+[[1],[10],[100]]
+
+&gt; u * v(-,) /* This won't be quite right! */
+[ [  1,   2,   3,   4],
+  [ 10,  20,  30,  40],
+  [100, 200, 300, 400] ]
+
+<b>&gt; transpose(u*v(-,)) /* YAY, now we're good! */</b>
+[ [1, 10, 100],
+  [2, 20, 200],
+  [3, 30, 300],
+  [4, 40, 400] ]
+</pre>
 
 		<h3>Matrix Multipication &amp; Inner Product</h3>
 		<p>
@@ -765,23 +822,69 @@ WARNING source code unavailable (try dbdis function)
 			For two 1D arrays, <tt>a</tt> and <tt>b</tt>, the operation is fairly 
 			straight forward. Writing <tt>a(+)</tt> and <tt>b(+)</tt> marks the only
 			dimension in each array as being used for the inner product. Therefore,
-			the calculation becomes $\Sigma a(i)b(i)$.
+			the calculation becomes $\Sigma a(i)b(i)$. Let's take a look at this
+			pictorially, otherwise the 2D example melts my brain a little...
+		</p>
+		<p>
+			<img src="##IMG_DIR##/single_dim_inner_prod.png" style="margin:10px;"/>
 		</p>
 		<p>
 			So, what happens when the arrays have more than 1D? Let's have a look
-			at some 2D arrays...
+			at some 2D arrays... its still a little brain melty!
 		</p>
 		<p>
 			<img src="##IMG_DIR##/dot_product_yorick_1.png" style="margin:10px;"/>
+		</p>
+		<p>
+			I feel like the above needs a little explanation before continuing with
+			the others. 
+
+			Munro describes the plus sybol as &quot;marking an index for use in an inner product&quot;. 
+			But what exactly do we mean? It worked for the 1D vector example because we selected
+			the columns for the inner product. But above we used <code>a(,+)</code> which would seem
+			to suggest that
+			we would select the rows from <code>a</code>, i.e., in the dot product
+			we would use the vectors <code>[1, 2]</code> and <code>[1, 3]</code>.
+			But as you can see this is NOT the case.
+		</p>
+		<p>
+			Instead it seems that we picked the columns of <code>a</code>. To understand
+			what the + sign means we should think of it as meaning &quot;selecting 
+			the dimension to be iterated over in the summation of the inner product&quot;,
+			because what the above does is to select all dimensions not marked by a + sign, and then iterate over the
+			marked dimension marked for the inner product. 
+		</p>
+		<p>
+			So, if the + sign marks rows, we are NOT selecting row vectors and then using the row vector for the inner product. We ARE selecting column
+			vectors and using the rows from each column vector in the inner product. aaaaaaah, brain melting! The same is also happening with respect
+			to <code>b(+,)</code>: we are selecting rows and iterating over the columns. 
+		</p>
+		<p>
+			<b>I.e., for the + sign we select the vectors in the other dimensions and iterate over the marked dimension in those selected vectors.</b>
+		</p>
+		<div class="box_container"><div class="info">
+				<p>
+					Munro describes the plus sybol as &quot;marking an index for use in an inner product&quot;. I prefer 
+					to think of it as  &quot;selecting the dimension to be iterated over in the summation of the inner product&quot;.
+					<br>
+					<b>I.e., for the + sign we select the vectors in the other dimensions and 
+						iterate over the marked dimension in those selected vectors.</b>
+				</p>
+		</div></div>
+		<p>
+			So, now we can continue looking at the other possible ways to multiply out
+			these square matricies...
+		</p>
+		<p>
 			<img src="##IMG_DIR##/dot_product_yorick_2.png" style="margin:10px;"/>
-			<br/>
 			<img src="##IMG_DIR##/dot_product_yorick_4.png" style="margin:10px;"/>
 			<img src="##IMG_DIR##/dot_product_yorick_3.png" style="margin:10px;"/>
 		</p>
 		<p>
 			We can see from the above that the index marked with the <tt>+</tt> 
 			sign is used for the inner product. Note that all these combinations 
-			are only possible because the matricies are square.
+			are only possible because the matricies are square (for rectangular 
+			matricies, normal matrix multiplication shapes apply).
 		</p>
 		<p>
 			For example, in the pictures above, <tt>a(,+)</tt> marks the <em>row</em>
@@ -806,7 +909,7 @@ WARNING source code unavailable (try dbdis function)
 			Lets say <tt>dimsof(a) = (2, n, m)</tt> and <tt>dimsof(b) = (2, m, l)</tt>.
 			The process for <tt>c = a(,+)*b(+,)</tt> becomes:
 		</p>
-		<pre>for i 1..n 
+		<pre>for i in 1..n 
    v1 = a(i, :) // 1d vector, length m
    for j in 1..l
       v2 = b(:, j) // 1d vector, length m
@@ -850,8 +953,8 @@ WARNING source code unavailable (try dbdis function)
 			<img src="##IMG_DIR##/dot_product_normal.png" style="margin:10px;"/>
 		</p>
 		<p>
-			Visually we can see that <tt>transpose(a(+,)*b(,+))</tt> is equivalent
-			to the &quot;normal&quot; matrix multiplication.
+		Visually we can see that <b><tt>transpose(a(+,)*b(,+))</tt> is equivalent
+			to the &quot;normal&quot; matrix multiplication</b>.
 		</p>
 		<p>
 			Another way to do this is to note that...
@@ -869,6 +972,14 @@ WARNING source code unavailable (try dbdis function)
 			between <tt>a</tt> and <tt>b</tt>, in Yorick we would write
 			<tt>b(,+) * a(+,)</tt> to do the &quot;normal&quot; matrix 
 			multiplication <tt>AB</tt>.
+		</p>
+		<p>
+			<div class="box_container"><div class="info">
+				<p>
+					<tt>transpose(a(+,)*b(,+))</tt> is equivalent
+				to the &quot;normal&quot; matrix multiplication.
+				</p>
+			</div></div>
 		</p>
 		<p>
 			As we've noted, all these combinations above are only possible because 

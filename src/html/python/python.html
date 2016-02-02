@@ -39,7 +39,16 @@
 		<div id="page_contents">
 		</div>
 
-<h2>PyLint</h2>
+<h2>Python Debugger: Winpdb</h2>
+<div>
+	<p>A really quite cute Python debugger, easy to use and GUI driver, is <a href="http://winpdb.org/download/" target="_blank">Winpdb</a>:
+	</p>
+	<p>
+	<q>Winpdb is a platform independent GPL Python debugger with support for multiple threads, namespace modification, embedded debugging, encrypted communication and is up to 20 times faster than pdb. Winpdb is being developed by Nir Aides since 2005.</q>
+	</p>
+</div>
+
+<h2>PyLint: Linting Python Code</h2>
 <div>
 		<h3>Message Format</h3>
 		<p>
@@ -87,14 +96,15 @@ MESSAGE_TYPE: LINE_NUM:[OBJECT:] MESSAGE
 		</p>
 </div>
 
-<h2>Infinite recursion in <tt>__setattr__()</tt> &amp; <tt>__getattr__()</tt></h2>
+<h2>Infinite recursion in <tt>__setattr__()</tt> &amp; <tt>__getattr__()</tt> in Python</h2>
 <div>
 		<h3>The recursion problem</h3>
 		<p>In most, if not all, of the little tutorials I used to learn about 
 			<tt>__setattr__()</tt> and <tt>__getattr__()</tt>
 			seemed either to treat them independently, in otherwords, the example classes had one or the other 
 			defined but not both, or used both but had very simple use cases. Then as I started to play with them, in 
-			my newbie-to-python state, I did the following (abstracted out into a test case).
+			my newbie-to-python state, I did the following (abstracted out into a test case). This also 
+			serves as a little Python <tt>__setattr__</tt> example and a Python <tt>__getattr__</tt> example...
 		</p>
 		<pre class="prettyprint linenums">class Test(object):
 	def __init__(self):
@@ -256,7 +266,7 @@ Table column name found
 		</p>
 </div>
 
-<h2>Concatenating immutable sequences more quickly</h2>
+<h2>Concatenating immutable sequences more quickly in Python</h2>
 <div>
 		<p>
 			<a href="https://docs.python.org/3/library/stdtypes.html#common-sequence-operations" target="_blank">
@@ -300,7 +310,7 @@ if __name__ == '__main__':
 		<p>So joining a list of strings is faster than concatenating strings by approximately 50%.</p>
 </div>
 
-<h2>Reading Excel Files</h2>
+<h2>Reading Excel Files in Python</h2>
 <div>
 	<p>
 		Worth having a look at <a href="http://www.python-excel.org/" target="_blank">python-excel</a>...
@@ -346,7 +356,7 @@ print time.strftime('%Y-%m-%d', rawdate + (0,0,0))</pre>
 pandas.read_excel(xlsxFileName, worksheetName, header=excel_header_row_number)</pre>
 </div> <!-- End Reading Excel Files H2 Div -->
 
-<h2>Finding Index Of Closest Value To X In A List</h2>
+<h2>Finding Index Of Closest Value To X In A List In Python</h2>
 <div>
 	<p>
 		If a list is unsorted, to find the closest value one would iterate through the list.
@@ -409,12 +419,134 @@ closestIndex     = findClosestIndex(array_to_search, value_to_find_closest_to)</
 	</p>
 </div> <!-- End "Finding Closest Value To X In A List Div" -->
 
-<h2>Drop Into The Interpretter</h2>
+<h2>Drop Into The Python Interpretter</h2>
 <div>
 	<pre class="prettyprint linenums">import code
 code.interact(local=locals())</pre>
 </div>
 
+<h2>Working With Files In Python</h2>
+<div>
+	<h3>Check If a File Or Directory Exists</h3>
+	<pre class="prettyprint linenums">import os.path
+if os.path.isfile(fname):
+   print "Found the file"
+
+if os.path.isdir(dirname):
+   print "Found the directory"</pre>
+
+
+	<h3>Traversing Through Directories For Files</h3>
+	<p>To find all files matching a certain pattern in a selected directory
+		and all of its subdirectories, using something like the following can work
+		quite well...
+	</p>
+	<pre class="prettyprint linenums">def YieldFiles(dirToScan, mask):
+   for rootDir, subDirs, files in os.walk(dirToScan):
+      for fname in files:
+         if fnmatch.fnmatch(fname, mask):
+            yield (rootDir, fname)
+
+# Find all .txt files under /some/dir
+for dir, file in YieldFiles("/some/dir", "*.txt")
+   print file</pre>
+	<p>
+		The above searches from parent directory to children in a recursive descent,
+		i.e, top-down fashion. If you want to search bottom-up then add the
+		flag <code>topdown=True</code> to the <code>os.walk()</code> function.
+	</p>
+
+	<h3>Deleting Files and Directories (Recursively)</h3>
+	<p>
+		The Python library <code>shutils</code> has plenty of functions for doing this.
+		For example, if you want to remove a temporary directory and all files
+		and subdirectories within...
+	</p>
+	<pre class="prettyprint linenums">if os.path.exists(cacheDir):
+   shutil.rmtree(cacheDir) # Recursively delete dir and contents
+   os.makedirs(cacheDir)   # Recreate dir (recursively if 
+                           # intermediete dirs dont exist)</pre>
+	<p>
+		However, you may sometimes 
+		<a href="http://stackoverflow.com/questions/1213706/what-user-do-python-scripts-run-as-in-windows"
+		   target="_blank">run into problems on windows</a> when deleting files
+		or directories. This is normally a <em>permissions</em> issue. Also,
+		although this seems silly, you won't be able to delete a directory
+		if your <em>current working directory </em> is set to that directory or 
+		one of its children.
+</div>
+
+<h2>Paramiko: SSH and SCP in Python</h2>
+<div>
+	<p>
+		Paramiko is a cute Python library that gives you cross platform SSH and
+		SCP capabilities. On Linux it relies on OpenSSH and on Windows it uses
+		Pageant (I assume it could be configured to use something else... didn't 
+		need to consider that).
+	</p>
+	<h3>Problems on Windows</h3>
+	<p>
+		At the time of writing this I was trying to use the Paramiko library
+		on a Windows XP machine using Paramiki version 1.16.0. It wouldn't work
+		giving the following error:
+	</p>
+	<pre>File "C:\...\paramiko\_winapi.py", line 162, in write
+ctypes.windll.kernel32.RtlMoveMemory(dest, msg, length)
+ValueError: Procedure probably called with too many arguments (4 bytes in excess)</pre>
+	<p>After a bit of googling I found out that 
+		it has been fixed on the Paramiki mainline but hadn't made it into 
+		an available pip-installable distribution yet. 
+	</p>
+	<p>
+		The fix is really easy. Find the file <tt>_winapi.py</tt> in your
+		Python distro and 
+		<a href="https://github.com/paramiko/paramiko/pull/619/files" target="_blank">
+		make the changes described here</a>. In summary, wherever you see a line
+		reading &quot;<tt>length = ctypes.wintypes.SIZE(n)</tt>&quot;, change it
+		to &quot;<tt>length = ctypes.c_size_t(n)</tt>&quot;.
+	</p>
+</div>
+<hr>
+<pre>
+TODO
+Stat and os.walk in opposite direction
+  https://docs.python.org/2/library/os.html
+  https://docs.python.org/2/library/stat.html
+  http://stackoverflow.com/questions/2656322/python-shutil-rmtree-fails-on-windows-with-access-is-denied
+---
+  import fnmatch
+  import os
+  for root, dirs, files in os.walk("/some/dir"):
+     for fname in files:
+        if fnmatch.fnmatch(file, '*.txt'):
+           pass
+---
+
+Script dir
+  http://stackoverflow.com/questions/4934806/how-can-i-find-scripts-directory-with-python
+
+Print literal {}
+  https://docs.python.org/2/library/stat.html
+  also formatting from my little debug output class
+
+Get Hostname
+   https://wiki.python.org/moin/Powerful%20Python%20One-Liners/Hostname
+
+python get environment variable
+import os
+os.environ['A_VARIABLE'] = '1' 
+print os.environ['A_VARIABLE']   ## Key must exist!
+
+To not care if key exists use
+print os.environ.get('A_VAR') # Returns None of key doesn't exist
+
+platform.system()
+   https://docs.python.org/2/library/platform.html
+
+flush stdout
+   import sys
+   sys.stdout.flush()
+</pre>
 	</div>
 </body>
 </html>
