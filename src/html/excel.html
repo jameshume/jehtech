@@ -1,0 +1,253 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>Microsoft Excel  notes</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+	<div id="header">
+		-- This is JEHTech --
+	</div>
+
+	<div id="sidebar">
+		<h1 class="title">Links...</h1>
+		<div id="includedContent"></div>
+	</div>
+
+	<div id="content">
+	<h1 class="title">Microsoft Excel Notes</h1>
+	<div style="padding-right:10px;">
+		<h2>Page Contents</h2>
+		<div id="page_contents">
+		</div>
+
+		<h2>References</h2>
+		<div>
+			<ol>
+				<li><a href="https://support.office.com/en-us/article/VLOOKUP-function-0bbc8083-26fe-4963-8ab8-93a18ad188a1"
+					target="_blank">Excel's <tt>VLOOKUP()</tt> function</a>.
+				</li>
+				<li><a href="https://support.office.com/en-us/article/MATCH-function-e8dffd45-c762-47d6-bf89-533f4a37673a"
+				       target="_blank">Excel's <tt>MATCH()</tt> function</a>.
+				</li>
+			</ol>
+		</div> <!-- END H2: References -->
+
+		<h2>Creating Drop Down Lists and Looking Up A Matrix Using Column And Row Names</h2>
+		<div>
+			<h3>The Goal Of Table Lookup</h3>
+			<p>
+				<a href="../downloadables/LookUpAMatrix.xlsx" target="_blank">Download the Excel example here</a>.
+			</p>
+			<p>
+				Had wanted to index a matrix, or table, but not using the row and
+				column numerical indicies but using row and column labels. Lets take 
+				a look at a little toy example. I have a matrix of students names and
+				their score for a set of subjects in the following excel spreadhseet:
+			</p>
+			<img src="##IMG_DIR##/excel_table_row_col_labeled.PNG" 
+			     alt="Screenshot of Excel spreadsheet with a table with row names and column headers"/>
+			<p>
+				So why index the table using names? Because I want the user to
+				select a row and column entry from a list and be returned the result from the
+				table... I want the user to say &quot;give me Jim's score for Maths&quot; 
+				and not have to know that Jim is column 1 of the table and that maths
+				is row 1 of the table:
+			</p>
+			<h3>Creating Drop Down Lists In Cells</h3>
+			<p>
+				So... 
+				In another sheet I will have two drop down lists to select
+				a row and select a column:
+			</p>
+			<img src="##IMG_DIR##/excel_table_test_score_want_list.PNG" 
+			     alt="Screenshot of Excel spreadsheet"/>
+			<p>
+				So we need <tt>B1</tt> to be a drop down list with the student names
+				from our table and <tt>B2</tt> to be a drop down list with the 
+				subject titles from our table. To accomplish this we do the following (also shown in the image below)...
+			</p>
+			<ol>
+				<li>Select the <tt>B1</tt> cell and then</li>
+				<li>Select the &quot;Data&quot; tab in the ribbon and</li>
+				<li>Drop down the &quot;Data Validation&quot; menu and click on &quot;Data Validation&quot;.</li>
+			</ol>
+			<img src="##IMG_DIR##/excel_add_data_validation_steps.PNG"
+			     alt="Screenshot of Excel spreadsheet showing how to add Data Validation">
+			<p>
+				Having done this, the Data Validation dialog will show.  This will
+				allow us to restrict the data that can be entered into this cell.
+				We want to 
+			</p>
+			<ol>
+				<li>Restrict the user input to values in a drop down list so
+				    we must select &quot;List&quot; in the &quot;Allow:&quot; field, 
+				</li>
+				<li>Select which values appear in our drop down. For that you
+				    click on the little icon to the right of the &quot;Source:&quot;
+					 input box (<img src="##IMG_DIR##/excel_data_select_icon.PNG" style="vertical-align: -3px;"/>).
+				</li>
+			</ol>
+			<p>
+				This is shown in the image below:
+			</p>
+			<img src="##IMG_DIR##/excel_data_validation_dialog.PNG" 
+			     alt="Screenshot of Excel spreadsheet Data Validation Dialog Window"/>
+			<p>
+				Having clicked the data select box (<img src="##IMG_DIR##/excel_data_select_icon.PNG" style="vertical-align: -3px;"/>) 
+				you must then select, from the table in your excel worksheet,
+				the row containing the student nammes. This is shown below (selected cells highlighted in yellow):
+			</p>
+			<img src="##IMG_DIR##/excel_select_table_row_headers.PNG"/>
+			<p>
+				Once you have selected the student names click the &quot;finish&quot; button
+				(<img src="##IMG_DIR##/excel_data_select_finish_icon.PNG" style="vertical-align: -3px;"/>) to go back 
+				to the Data Validation dialog, as shown below.
+			</p>
+			<img src="##IMG_DIR##/excel_data_validation_dialog_completed.PNG" 
+			     alt="Screenshot of Excel spreadsheet Data Validation Dialog Window"/>
+			<ol><li>You will notice that the range you selected is now in the &quot;Source:&quot; field.</li>
+				<li>Lastly click OK.</li>
+			</ol>
+			<p>
+				Now you will see in your spreadsheet that cell <tt>B1</tt>, where we
+				want the user to enter the student name is a drop down list containing
+				all the student names from our matrix. Now the user is constrained to
+				entering only the available names, which is what we wanted.
+			</p>
+			<img src="##IMG_DIR##/excel_cell_now_student_dtopdown.PNG" 
+			     alt="Screenshot of Excel spreadsheet with dropdown list in cell"/>
+			<p>
+				Exactly the same process needs to be repeated for the test names to
+				create a dropdown in the cell <tt>B2</tt>. This time when you select
+				the list contents you will select the row labels of the matrix. This
+				is summarised in the image below:
+			</p>
+			<img src="##IMG_DIR##/excel_summarise_for_subject_list.PNG" 
+			     alt="Screenshot of Excel spreadsheet summarising creating dropdown list"/>
+			<ol>
+				<li>Select the cell <tt>B2</tt>,</li>
+				<li>Select the &quot;Data&quot; tab on the ribbon and select &quot;Data Validation..&quot; 
+				    from the &quot;Data Validation&quot; drop down icon so that the data validation dialog displays,</li>
+				<li>Select &quot;List&quot; from the &quot;Allow:&quot; field,</li>
+				<li>Click the data select box (<img src="##IMG_DIR##/excel_data_select_icon.PNG" style="vertical-align: -3px;"/>),</li>
+				<li>Navigate to the worksheet containing the table and select the row labels
+				    for the subject names,</li>
+				<li>Select the finish button (<img src="##IMG_DIR##/excel_data_select_finish_icon.PNG" style="vertical-align: -3px;"/>),</li>
+				<li>The range selected appears back in the data validation dialog,</li>
+				<li>Click OK,</li>
+				<li>Done: the result is that cell <tt>B2</tt> is now a drop down list containing the test names from the table.</li>
+			</ol>
+			<h3>Looking Up A Table</h3>
+			<p>
+				The user is now able to tell us what student and what subject she
+				wants the test score for. Now we need to lookup the table using this
+				information.
+			</p>
+			<p>
+				As far as I know, Excel doesn't have a function that will directly
+				do this for us, but it does have a table lookup function called 
+				<a href="https://support.office.com/en-us/article/VLOOKUP-function-0bbc8083-26fe-4963-8ab8-93a18ad188a1"
+					target="_blank"><tt>VLOOKUP()</tt></a> 
+				that will look up values in a table based on a
+				value found in the index <em>row</em>. This function falls short
+				in that to select the column an integer column number must be used.
+				In order to go from column heading to column number we will use
+				another function, 
+				<a href="https://support.office.com/en-us/article/MATCH-function-e8dffd45-c762-47d6-bf89-533f4a37673a"
+				   target="_blank"><tt>MATCH()</tt></a>.
+			</p>
+			<h4>Looking Up A Table By Row</h4>
+			<p>
+				<a href="https://support.office.com/en-us/article/VLOOKUP-function-0bbc8083-26fe-4963-8ab8-93a18ad188a1"
+					target="_blank"><tt>VLOOKUP()</tt></a> will look for a value in the <em>first</em>
+				column of a table. Thus the &quot;key&quot; that you are using 
+				<em>has to be in the left most column of your table</em>. Given how we've laid
+				out the table, we're ok.
+			</p>
+			<p>
+				<tt>VLOOKUP()</tt> works as follows:<br/> 
+				<tt>VLOOKUP(<i>value</i>, <i>table</i>, <i>column</i>, <i>search type</i>)</tt>
+			</p>
+			<ol>
+				<li><tt><i>value</i></tt> is the value, in the left most column of the table, that you
+				    want to find, i.e., index your table rows by,</li>
+				<li><tt><i>table</i></tt> is the rectangular block of cells that consitute your table,</li>
+				<li><tt><i>column</i></tt> is the column that you want to look up. The cokumn in the row that contained
+				    <tt><i>value</i></tt> is the value that the function will return.</li>
+				<li><tt><i>search type</i></tt> specificies whether your do an exact search (TRUE),
+				    where the function will search all cells in the first column for an <em>exact</em>
+				    value, or non-exact (FALSE)
+				    where the data in the first column of your table <em>must</em> be sorted and
+				    the function will return the closest match.</li>
+			</ol>
+			<p>
+				This is shown pictorially in the image below...
+			</p>
+			<img src="##IMG_DIR##/excel_vlookup.PNG" alt="Picture describing VLOOKUP() functionality"/>
+			<p>
+				In the above example we are looking for &quot;Economics&quot; in the table (red border).
+				<tt>VLOOKUP</tt> finds economics in row 3. It then goes along row 3, to column 4 (which 
+				we also specified in the function call - the orange highlight) in 
+				the table and returns the value in that cell.
+			</p>
+			<p>
+				Okay, so now we can look up our table by row. We would simply place the string
+				&quot;Economics&quot; in our function call with the cell reference of the
+				cell that contains the user entered value... in the case of this example,
+				cell <tt>B2</tt>. Thus, the function now becomes <tt>VLOOKUP(B2, A1:D4, 4, FALSE)</tt>.
+			</p>
+			<p>
+				This is great but we still cannot find the score for any student. Currently
+				we hav a fixed column index of 4, which will look up scores for Amy only...
+			</p>
+			<h4>Finding Column Index From Heading</h4>
+			<p>
+				Cell <tt>B1</tt> lets the user pick a student. The question is, how do
+				we go from the students name to the column number in our table for that
+				student? Enter the <tt>MATCH()</tt> function.
+			</p>
+			<p>
+				The <tt>MATCH()</tt> function will search for an item in a list
+				and return the <em>position</em> of the item in the list as a number.
+				The numbering start from 1.
+			</p>
+			<img src="##IMG_DIR##/excel_match_example.PNG" alt="Example of Excel's MATCH() function working"/>
+			<p>
+				The image above shows an example of how <tt>MATCH()</tt> works. The yellow highlight
+				shows the row of cells we have used as our array. The blue boxed numbers indicate
+				the numerical positions of each of the values in the array: each cell acts
+				as an element of the array. We have told <tt>MATCH()</tt> to find
+				the value &quot;C&quot; in our array and return its position, which
+				you can see it does: 3 is returned.
+			</p>
+			<h4>Bringing It Together!</h4>
+			<p>
+				So, we're getting there! Now, to tie this to our example in stead of
+				seatching for &quot;C&quot; we would search for the value contained
+				in cell <tt>B1</tt>. Thus to get from student name to column number
+				we want to use <tt>MATCH(B1, A1:D1, 0)</tt>.
+			</p>
+			<p>
+				But wait?! Why is <tt>A1</tt> in our array?! Cell <tt>A1</tt> is
+				empty, but we want this so that the first student name has an
+				index of 2 in our array, as this is the column number for the first
+				student as far as our <tt>VLOOKUP()</tt> is concerned.
+			</p>
+			<p>
+				Thus, pluggin this into our <tt>VLOOKUP()</tt>, the equation for
+				the result cell becomes <tt><b>=VLOOKUP(B2,'Data Matrix'!A1:D4,MATCH(B1,'Data Matrix'!A1:D1,0), FALSE)</b></tt>.
+				<a href="../downloadables/LookUpAMatrix.xlsx" target="_blank">Download the completed Excel example here</a>.
+			</p>
+		</div> <!-- END: H2 -->
+	</div> <!-- END H1 padding div -->
+	</div>
+</body>
+</html>
+
+	

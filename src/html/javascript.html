@@ -449,6 +449,13 @@ dummy(123, "jeh-tech");
 //   jeh-tech
 //   tech-jeh</pre>
 			<p>
+				However, this can be written much more neatly as follows:
+			</p>
+			<pre class="prettyprint linenums">function dummy(a,b,c) {
+	<b>c = c || "tech-jeh";</b> // Looks better!
+   ... &lt;snip&gt; ...
+}</pre>
+			<p>
 				Because functions are first class objects they have
 				properties, which you can query from inside your function. One 
 				property bound to a function when it is called is the

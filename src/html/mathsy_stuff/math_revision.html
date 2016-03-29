@@ -249,6 +249,7 @@
        </p>
 </div> 
 
+<a name="combinations_permutations"></a>
 <h2>Combinations &amp; Permutations</h2>
 	 <p>
 	 	Selecting $r$ samples from a set of $n$ samples at random. If the order of the elements matters then it is
@@ -268,11 +269,16 @@
 	<p>
 		With combinations the order is not important. This time take $r = 3$... for every choice I make there will be
 		$3 \times 2$ permutations with the same elements, which is one combination (as order is now not important). This
-		is the case because the 3 elements can be ordered any how and count as the same object. $(a,b,c)$ and $(b,a,b)$
-		are no different. Out of all sets containing only these elements there must be $3!$ permutations. Therefore need
+		is the case because the 3 elements can be ordered any how and count as the same object. $(a,b,c)$ and $(b,a,c)$
+		are, for example, no different. Out of all sets containing only these elements there must be $3!$ permutations. Therefore need
 		to get rid of this count from ${_{n}P_r}$ by divifing by $r!$ in the general case...
 
 		$$Combinations = {_{n}C_r} = \frac{{_{n}P_r}}{r!} = \frac{n!}{r!(n-r)!}$$
+	</p>
+	<p>
+		For a fairly explicit example of combinations v.s. permutations and their
+		application in statistics see 
+		<a href="stats.html#stats_eg_of_perms_and_combs">this little example</a>.
 	</p>
 
 <h2>Limits</h2>

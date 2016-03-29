@@ -83,8 +83,16 @@ merge-tool-cmd = p4_merge_helper.sh</pre>
 
 
 		
-		<h2>SVN Log - Only Report Changes After Branch</h2>
+		<h2>SVN Log</h2>
+		<h3>Only Report Changes After Branch</h3>
 		<pre class="prettyprint linenums">snv log --stop-on-copy </pre>
+		<h3>Get More Merge Information</h3>
+		<p>
+			Use the <tt><b>-g</b></tt> flag (and also useful is the verbosity flag <tt><b>-v</b></tt>) 
+			to get more information in the log dump. The <tt>-g</tt> flag adds extra
+			information into the trace for instances where merges where made back into
+			the line, or where the line was copied out to another branch.
+		</p>
 
 		<h2>SVN Ignore Files</h2>
 		<p>The following will ignore all *.orig files from the current directory and all subdirectories</p>
@@ -116,10 +124,10 @@ svn merge ^/trunk/src</pre>
 				the repository yet. For that you must do an <tt>svn commit</tt>. This is also known as a <em>sync merge</em>.
 			</p>
 			<p>
-				Useful tips from the Red Book... 
+			<a name="mergeinfo_tips1">Useful tips from the Red Book...</a>
 			</p>
-			<pre>svn mergeinfo --show-revs merged ^/trunk ^/branches/0_developers/my_name/branch_name
-svn mergeinfo --show-revs eligible ^/trunk ^/branches/0_developers/my_name/branch_name</pre>
+			<pre>svn mergeinfo --show-revs=merged ^/trunk ^/branches/0_developers/my_name/branch_name
+svn mergeinfo --show-revs=eligible ^/trunk ^/branches/0_developers/my_name/branch_name</pre>
 			<p>
 				The first line reports a summary of changelists where trunk was merged to branch. The
 				second line reports a summary of changelists where trunk has not yet been merged to branch
@@ -128,7 +136,12 @@ svn mergeinfo --show-revs eligible ^/trunk ^/branches/0_developers/my_name/branc
 			<h3>Reintegrating</h3>
 			<p>
 				To re-integrate to trunk, first make sure dev-line is up to date by merging in from trunk again and
-				<em>committing</em> any changes resulting from the merge back to the repo. Now...
+				<em>committing</em> any changes resulting from the merge back to the repo. 
+			</p>
+			<p>
+				Don't forget the <b><tt>--dry-run</tt></b> flag... tries the operation, 
+				shows you the output, but make no actual changes. It's a nice way to
+				see what your merge will do before you actually do it!
 			</p>
 
 			<h4>Pre v1.8</h4>
@@ -226,6 +239,16 @@ svn commit -m "message"</pre>
 				would be to remove the bopy in <tt>B</tt> and replace it with a <em>
 				branch</em> from <tt>A</tt>.
 			</p>
+
+			<h3>See Merge History</h3>
+			<p>
+				Use the command <tt><b>svn mergeinfo <i>src_branch targ_branch</i></b></tt>.
+				It will print an ascii-art graph of the merge history between 
+				the two branches.
+			</p>
+			<p>
+				See also these <a href="#mergeinfo_tips1">tips in merge section</a>.
+			</p>
 		</div> <!-- END H2: Branch, Checkout, Merge and Reintegrate -->
 
 		<h2>Rollback To A Previous Revision</h2>
@@ -248,6 +271,10 @@ svn commit</pre>
 			Arg! Setting the ignore property recursively is deceptive. The problem and
 			several really good answers are found in <a href="http://stackoverflow.com/questions/1764521/recursive-svn-propset"
 				target="_blank">this SO thread</a>.
+		</p>
+		<p>
+		Another useful command is <b><tt>svn plist -v <i>branch</i></tt></b> to see
+			all the properties set on a directory or file.
 		</p>
 
 		<h2>Misc</h2>
@@ -285,6 +312,66 @@ svn commit</pre>
 
 			<p>Therefore the whole line expands to the following.</p>
 			<pre>svn diff &lt;root&gt;/branches/PATH_1/some/repo/path &lt;root&gt;/branches/PATH_2/some/repo/path</pre>
+
+			<a name="Diff2Paths"><h3>Diff Two Paths But Select Exactly What To Diff</h3></a>
+			
+			<p>
+				I found it really useful to take a summary of SVN diffs, delete 
+				the stuff I wasn't interested in and then only diff the remaining
+				when considering two paths, one being a branch of the other...
+			</p>
+			<p>
+				Lets say that branch 1 was at this location: 
+				<tt>svn+ssh://your.server.xxx/subversion/branches/branch_A"</tt>
+			</p>
+			<p>
+				And lets say that branch 2 was at this location: 
+				<tt>svn+ssh://your.server.xxx/subversion/branches/branch_B/some/other/path"</tt>
+			</p>
+			<p>
+				Then I could use the following script. It would summarise the
+				differences to a file. I could then cull any files I didn't want
+				to diff for whatever reason, save the file, exit the editor and
+				then diff what I'd left in the file...
+			</p>
+			<pre class="prettyprint lang-sh linenums">#!/bin/bash
+svnroot="svn+ssh://your.server.xxx/subversion/branches/"
+b1="branch_A"
+b2="branch_B/some/other/path"
+
+diffFile=$(mktemp)
+echo "Diffing to $diffFile"
+echo svn diff --summarize $svnroot{$b1,$b2}
+svn diff --summarize $svnroot{$b1,$b2} | tee $diffFile
+
+echo "Firing up you editor"
+gvim -f $diffFile
+
+while IFS='' read -r line || [[ -n "$line" ]] 
+do 
+   line=$(echo $line | awk '{print $2}')
+   line=${line:${#svnroot}}
+   echo $line
+   if [ "${line::${#b1}}" == "$b1" ]
+   then
+     base=${line:${#b1}}
+     echo -e "\n\n"
+     echo "DIFFING $svnroot{$b1,$b2}$base"
+     svn diff $svnroot{$b1,$b2}$base
+   elif [ "${line::${#b2}}" == "$b2" ]
+   then
+     base=${line:${#b2}}
+     echo -e "\n\n"
+     echo "DIFFING $svnroot{$b1,$b2}$base"
+     svn diff $svnroot{$b1,$b2}$base
+   else 
+     echo "WARNING Skipping line '$line'"
+   fi
+done &lt; $diffFile
+
+echo "The diff file is $diffFile. Delete it if you wish or copy it to save"
+echo "it somewhere safe..."</pre>
+
 		</div> <!-- End H2 -->
 
 	</div>

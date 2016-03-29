@@ -347,6 +347,26 @@ done</pre>
 
 		<h2>Misc Script Stuff</h2>
 		<div>
+			<h3>Rediection Tutorials</h3>
+			<p>
+				<a href="http://wiki.bash-hackers.org/howto/redirection_tutorial"
+					target="_blank">Illustrated Redirection Tutorial</a>.
+			</p>
+			<p>
+				<a href="http://tldp.org/LDP/abs/html/ioredirintro.html"
+					target="_blank">A Detailed Introduction to I/O and I/O Redirection</a>.
+			</p>
+
+			<h3>Pretty Print Script Status Output</h3>
+			<p>
+				<a href="http://stackoverflow.com/questions/5506176/bash-echo-something-to-right-end-of-window-right-aligned"
+					target="_blank">SO thread: Bash, echo something to right end of window (right aligned)</a>
+			</p>
+			<p>
+				<a href="http://stackoverflow.com/questions/2494902/how-to-write-a-bash-script-like-the-ones-used-in-init-d"
+					target="_blank">SO thread: How to write a bash script like the ones used in init.d?</a>
+			</p>
+
 			<h3>Get My Ubuntu Version</h3>
 			<pre class="prettyprint linenums">lsb_release -a</pre>
 
@@ -410,6 +430,7 @@ do
 done</pre>
 
 			<h3>Read</h3>
+			<h4>Piping Output To Read</h4>
 			<p>
 				The builtin 
 				<tt><a href="http://linuxcommand.org/lc3_man_pages/readh.html" target="_blank">read</a></tt> 
@@ -420,12 +441,12 @@ done</pre>
 			</p>
 			<pre class="prettyprint linenums">for dir in "list of dirs ":
 do
-	echo "LOOKING IN DIR '$dir'"
-	find "$dir" -name '*.csv' -print |
-	while read fname
-	do
-		echo "$fname"
-	done
+   echo "LOOKING IN DIR '$dir'"
+   find "$dir" -name '*.csv' -print |
+   while read fname
+   do
+      echo "$fname"
+   done
 done</pre>
 			<p>
 				One thing that might catch you out is that variables inside the
@@ -434,6 +455,18 @@ done</pre>
 				   target="_blank">disappear after the loop terminates</a>. The
 				summary is that the <tt>while</tt> loop is executed in a 
 				sub shell, so will have a new variable and context. 
+			</p>
+			<h4>Reading Files Line By Line</h4>
+			<p>
+				Another useful example is when you want to read a file line by
+				line in your bash script. This was answered perfectly in 
+				<a href="http://stackoverflow.com/questions/10929453/bash-scripting-read-file-line-by-line this"
+					target="_blank">SO thread</a>.
+			</p>
+			<p>
+				I found it really useful to take a summary of SVN diffs, delete the
+				stuff I wasn't interested in and then only diff the remaining.
+				The script is on the <a href="svn.html#Diff2Paths">SVN page</a>.
 			</p>
 
 			<h3>Useful builtins</h3>
@@ -456,6 +489,11 @@ done</pre>
 				loaded. You can also set <tt>export LD_DEBUG=all</tt> for an absolute shed-load of debug info, which might be too much, but at least
 				you'll be able to see where the loader is searching for libraries and what, if anything, it finds. To clear the
 				loader debug output just set <tt>export LD_DEBUG=</tt>.
+			</p>
+			<p>
+				Annoyingly on QNX (I know it's POSIX-like and not Linux) it appears 
+				you need to set <tt>DL_DEBUG</tt> (Note &quot;DL&quot;, 
+				not &quot;LD&quot;)...
 			</p>
 		</div>  <!-- END: H2: Debug .so Loading Using LD_DEBUG -->
 	</div> <!-- END H1 padding div -->

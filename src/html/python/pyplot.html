@@ -375,6 +375,65 @@ fig.savefig(buf, format='png')</b>
 xdoc.add_picture(buf, width=Inches(6.0))</pre>
 </div>
 
+<h2>Scatter Plots</h2>
+<div>
+	<p>
+		Create the graph as you normally would with <tt>fig, ax = pl.subplots()</tt>.
+		Then plot the scatter point using <tt>ax.scatter([x], [y], color=colour, alpha=alpha, scale=scale, label=label)</tt>.
+	</p>
+	<p>
+		If you plot all the points in one go per label, then the legend works
+		as you expect... there is one entry for each colour with the colour's
+		label displayed.
+	</p>
+	<p>
+		However, if you've added the scatter data point by point (which maybe
+		isn't the thing to do?!), the legend will not group by colour but
+		will display a seperate entry for each scatter point. To fix the legend
+		in this case you need to see the section on &quot;Arbitrary Legends&quot;.
+	</p>
+</div>
+
+<h2>Arbitrary Legends</h2>
+<div>
+	<p>
+		Made a scatter plot with coloured groups, but unfortunately plotted it point
+		by point rather than passing arrays of points to <tt>scatterplot()</tt>, which
+		may have been the wrong thing to do, butit was easier. Say there were 3 groups, one
+		for a positive test, one for a negative and one for an equivocal result.
+		How do I create an arbitrary legend with entries that are not related to
+		a specific object in my graph?
+	</p>
+	<p>
+		The SO user &quot;hooy&quot; answered it perflectly 
+		<a href="http://stackoverflow.com/questions/16614558/legend-using-pathcollections-in-matplotlib"
+			target+"_blank">here</a>.
+	</p>
+	<p>
+		It is also very woth while reading the <a href="http://matplotlib.org/users/legend_guide.html"
+			target="_blank">MatplotLib Legend Guide</a>.
+	</p>
+	<p>
+		In summary it appears, whilst you can draw arbitary objects like a <tt>Circle</tt> onto
+		a graph, you cannot draw arbitary objects onto the legend. An artist has to be
+		created as he describes in his thread. Based on his example I had the following.
+	</p>
+	<pre class="prettyprint linenums lang-python">import matplotlib.pyplot as pl
+import matplotlib.lines as mlines
+
+... snip ...
+
+pos_patch    = mlines.Line2D([0], [0], markerfacecolor='green', marker='o', color="white", label='Resistant')
+neg_patch    = mlines.Line2D([0], [0], markerfacecolor='blue', marker='o', color="white", label='Sensitive')
+fail_patch   = mlines.Line2D([0], [0], markerfacecolor='red', marker='o', color="white", label='No signal')
+unsure_patch = mlines.Line2D([0], [0], markerfacecolor='purple', marker='o', color="white", label='Equivocal')
+ax.legend(handles=[pos_patch, neg_patch, unsure_patch], <b>numpoints=1</b>)</pre>
+</div>
+	<p>
+		The interesting thing, that other posts seemed to miss out was passing <b><tt>numpoints=1</tt></b> to <tt>legend()</tt>. If you
+		don't pass this is you get an annoying double circle.
+	</p>
+
 <h2>Embedd In pyWidgets Apps</h2>
 <div>
 	<p>
