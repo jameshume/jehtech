@@ -1177,7 +1177,12 @@
          and since the first and second draws are independent, this is 
 
          $$
-         P(B_1\cap R_2)+P(B_2\cap R_1)=P(B_1)P(R_2)+P(B_2)P(R_1)=2\cdot\frac35\cdot\frac25\;.
+         \begin{align}
+         P(B_1\cap R_2)+P(B_2\cap R_1) &= P(B_1)P(R_2)+P(B_2)P(R_1) \\
+         &= 2\cdot\frac35\cdot\frac25 \\
+         &= 2\cdot P(B)P(R) \\
+         &= 2\cdot p^1\cdot (1-p)^1 
+         \end{align}
          $$
       </p>
    </div>
@@ -1199,14 +1204,93 @@
 
       $$
       \begin{align}
-      P(m\ successes\ in\ n\ independent\ trials) &= {_{n}C_r} \cdot p^m \cdot (1-p)^{(n-m)}\\
-      &= \frac{n!}{r!(n-r)!} \cdot p^m \cdot (1-p)^{(n-m)}
+      P(m\ successes\ in\ n\ independent\ trials) &= P(m) \\
+      &={_{n}C_m} \cdot p^m \cdot (1-p)^{(n-m)}\\
+      &= \frac{n!}{m!(n-m)!} \cdot p^m \cdot (1-p)^{(n-m)}
+      \end{align}
+      $$
+
+      For $m = 0, 1, \dots, n$.
+   </p>
+   <p>
+      This, incidentally is the same as asking for $P((n-m)\ failures\ in\ n\ independent\ trials)$ because
+
+      $$
+      \begin{align}
+      {_{n}C_{(n-m)}} &= \frac{n!}{(n-(n-m))!(n-m)!}\\
+      &= \frac{n!}{m!(n-m)!}\\
+      &= {_{n}C_m}
       \end{align}
       $$
    </p>
    <p>
-      From here we get the population <b>mean</b> and <b>variance</b> as follows.
+      Let's do this to exhaustion... let's imagine another bag. It doesn't 
+      matter how many blue and red balls are in there, just so long as I can
+      select 3 blue balls and 1 red. $P(blue) = p$ and $P(red) = (1-p)$.
+      Once we've made this selection of 3 blues, 1 red, the question is,
+      how many ways were there of getting to this outcome. Now let's check 
+      our understanding of using combinations (esp. vs. permutations) to get this...
+   </p>
+   <p>
+      We can draw a little outcome tree as follows:
+   </p>
+   <p>
+   <img src="##IMG_DIR##/bayes_bbbr_decision_tree.png"/>
+   </p>
+   <p>
+      Clearly there are 4 ways to arrive at the selection of 3 blues and 1 red,
+      once we have made that particular selection. Remember we're not asking
+      for a blue/red on a specific turn... we just care about the final
+      outcome, irrespective of the order in which the balls were picked.
+      And we can see...
 
+      $$
+      \begin{align}
+      {_4C_3} &= \frac{4!}{3!(4-3)!}
+      &= 4
+      \end{align}
+      $$
+   </p>
+   <p>
+      Why don't we use permutations? The answer is that we don't care if we got
+      $B_aB_bB_cR_a$ or $B_bB_aB_cR_a$ or $B_cR_aB_aB_b$ etc etc, where, as before,
+      the alphabetical substrcipts distinguish the ball, not the turn on which
+      it is drawn as that is given by order of writing.
+   </p>
+   <p>
+      Having gone through this we can then use the formulas for expected value,
+      or mean, and variance. To make the notation similar to previous examples
+      where we used $P(x)$, in the above formula I just change $m$ for $x$ so
+      that we get
+
+      $$
+      P(x)= \frac{n!}{x!(n-x)!} \cdot p^x \cdot (1-p)^{(n-x)}
+      $$
+
+      Where $x = 0, 1, \dots, n$, meanding that this is the probability of 
+      $x$ successes out of $n$ trials.
+   </p>
+   <p>
+      Recalling that 
+      $$
+      E(X) = \mu = \sum_x xP(x)
+      $$
+
+      We can say that the population mean for the Bernoulli distribution
+      is
+
+      $$
+      \begin{align}
+      E(X) = \mu &= \sum_{x=0}^{x\le n} x \cdot \left(\frac{n!}{x!(n-x)!} \cdot p^x \cdot (1-p)^{(n-x)}\right) 
+      \end{align}
+      $$
+      
+      And... the rest of the proof gets a little complicated... 
+      <a href="http://www.math.ubc.ca/~feldman/m302/binomial.pdf"
+         target="_blank">this PDF by some giy called Joel Feldman gives the derivation</a>.
+   </p>
+   <p>
+      The population <b>mean</b> and <b>variance</b> are summarised as follows.
       $$
          \begin{align}
             \mu &= E[X] \\
@@ -1218,9 +1302,143 @@
       $$
    </p>
    <p>
-      We can then plot the distribution... lets do this using Python and R.
+      Often when talking about a binomial distribution you will see something like
+
+      $$
+      P(X | n = ?, p = ?)
+      $$
+
+      This is the binomial distribution for $X$ successes out of $n$ trials
+      with the probability of success given by $p$.
+
    </p>
+   <p>
+      We can plot some example distributions... lets do this using Python.
+   </p>
+   <pre  class="prettyprint linenums">import matplotlib.pyplot as pl
+import numpy as np
+from matplotlib.font_manager import FontProperties
+from scipy.stats import binom
+
+fontP = FontProperties()
+fontP.set_size('small')
+
+n=50
+pLst=[0.1, 0.25, 0.5, 0.75, 0.9]
+x = np.arange(-1, n+2)
+fig, ax = pl.subplots()
+
+for p in pLst:
+   dist = binom(n, p)
+   ax.plot(x, dist.pmf(x),linestyle='steps-mid')
+
+ax.legend(['$p={}$'.format(p) for p in pLst], 
+          ncol = 3, 
+          prop=fontP, 
+          bbox_to_anchor=[0.5, 1.0], 
+          loc='upper center')
+fig.show()
+fig.savefig('binomial_distrib.png', format='png')</pre>
+   <p>
+      <img src="##IMG_DIR##/binomial_distrib_example.png"/>
+   </p>
+
+
+   <h3>Poisson Distribution</h3>
+   <p>
+      Didn't like the starting explanation in [1] so had a look on Wikipedia and
+      found a link to the 
+      <a href="http://www.umass.edu/wsp/resources/poisson/index.html"
+         target="_blank">UMass Amherst Uni's stats page on the Poisson distribution</a>
+      which I though was really well written. That is the main reference here.
+   </p>
+   <p>
+      Poisson distribution gives the probability of an event occuring some
+      number of times in a <em>specific interval</em>. This could be time, distance, 
+      whatever. What matters is that the <em>interval is specific and fixed</em>. 
+     <p>
+   <p>The example used 
+      on the UMass Amherst is letters received in a day. The interval here is
+      one day. The poisson distribution will then tell you the probability of
+      getting a certain number of letters in one day, the <em>interval</em>. Other
+      examples could include the number of planes landing at an airport in a day
+      or the number of linux server crashes in a year etc...
+   </p>
+   <p>
+      The interval is one component. The other is an already observed average
+      rate per interval, or expected number of successes in an interval, $\lambda$. 
+      For example, we might have observed we get on average 5 
+      letters per day ($\lambda=5$), or that 1003 planes land at our airport 
+      ($\lambda=1003$) per day or that there are 4 linux server crashes per year 
+      ($\lambda=4$) etc...
+   </p>
+   <p>
+      So, poisson has an <em>interval</em> and an observed <em>average count</em>
+      for that interval. The following assumptions are made:
+   </p>
+   <ul>
+      <li>The #occurrences can be counted as an integer</li>
+      <li>The average #occurrences is known</li>
+      <li>The probability of the occurence of an event is constant for all 
+          subintervals. E.g., if we divided the day into minutes, the probability
+          of receiving a letter in any minute of the day is the same as for any
+          other minute.</li>
+      <li>There can be no more than one occurrence in the subinterval</li>
+      <li>Occurrences are independent</li>
+   </ul>
+   <p>
+      The distribution is defined as follows, where $\lambda$ is the expected 
+      number of events per interval.
+
+      $$
+      P(X = x) = \frac{e^{-\lambda}\lambda^x}{x!},\ \ x \ge 0
+      $$
+   </p>
+   <p>
+      Eek... didn't like the look of trying to derive the mean and variance.
+      The population <b>mean</b> and <b>variance</b> are as follows.
+
+      $$
+      \begin{align}
+      \mu_x &= E(X) = \lambda\\
+      \\
+      \sigma^2_x &= E[(X-\mu_x)^2] = \lambda
+      \end{align}
+      $$
+   </p>
+   <p>
+      We can plot some example distributions... lets do this using Python.
+   </p>
+
+   <pre  class="prettyprint linenums">import matplotlib.pyplot as pl
+import numpy as np
+from matplotlib.font_manager import FontProperties
+from scipy.stats import poisson
+
+fontP = FontProperties()
+fontP.set_size('small')
+
+expectedNumberOfSuccessesLst = [1, 5, 10, 15]
+x = np.arange(-1, 31)
+fig, ax = pl.subplots()
+
+for numSuccesses in expectedNumberOfSuccessesLst:
+   ax.plot(x, poisson.pmf(x, numSuccesses),linestyle='steps-mid')
+
+ax.legend(['$\lambda={}$'.format(n) for n in expectedNumberOfSuccessesLst], 
+          ncol = 3, 
+          prop=fontP, 
+          bbox_to_anchor=[0.5, 1.0], 
+          loc='upper center')
+fig.show()
+pl.show()
+fig.savefig('poisson_distrib.png', format='png')</pre>
+   <p>
+      <img src="##IMG_DIR##/poisson_distrib.png"/>
+   </p>
+
 </div>
+
    
 </div>
 

@@ -224,6 +224,8 @@ labels = [l.get_label() for l in lines]</pre>
 
 <h2>Sub Plots</h2>
 <div>
+	<h3>Intro To Sub Plots</h3>
+	<div>
 		<p>
 			You can split up the figure into many different sub-graphs and these graphs can also
 			share an axis and be laid out in all sorts of manners
@@ -276,6 +278,11 @@ ax[1].set_ylabel("y-axis")
 			Very useful is the <a href="http://matplotlib.org/faq/howto_faq.html#howto-subplots-adjust" target="_blank"><tt>subplots_adjust()</tt></a> 
 			function as I found sometimes the plots were bunched too close. This allows one to set the padding between plots and more...
 		</p>
+	</div>
+	<h3>Adjusting Subplot Positioning</h3>
+	<div>
+		<tt>fig.subplots_adjust(top=0.9)</tt>
+	</div>
 </div>
 
 <h2 style="clear:both;">Bar Graphs</h2>
@@ -393,32 +400,33 @@ xdoc.add_picture(buf, width=Inches(6.0))</pre>
 		in this case you need to see the section on &quot;Arbitrary Legends&quot;.
 	</p>
 </div>
-
-<h2>Arbitrary Legends</h2>
+<h2>Legends</h2>
 <div>
-	<p>
-		Made a scatter plot with coloured groups, but unfortunately plotted it point
-		by point rather than passing arrays of points to <tt>scatterplot()</tt>, which
-		may have been the wrong thing to do, butit was easier. Say there were 3 groups, one
-		for a positive test, one for a negative and one for an equivocal result.
-		How do I create an arbitrary legend with entries that are not related to
-		a specific object in my graph?
-	</p>
-	<p>
-		The SO user &quot;hooy&quot; answered it perflectly 
-		<a href="http://stackoverflow.com/questions/16614558/legend-using-pathcollections-in-matplotlib"
-			target+"_blank">here</a>.
-	</p>
-	<p>
-		It is also very woth while reading the <a href="http://matplotlib.org/users/legend_guide.html"
-			target="_blank">MatplotLib Legend Guide</a>.
-	</p>
-	<p>
-		In summary it appears, whilst you can draw arbitary objects like a <tt>Circle</tt> onto
-		a graph, you cannot draw arbitary objects onto the legend. An artist has to be
-		created as he describes in his thread. Based on his example I had the following.
-	</p>
-	<pre class="prettyprint linenums lang-python">import matplotlib.pyplot as pl
+	<h3>Arbitrary Legends</h3>
+	<div>
+		<p>
+			Made a scatter plot with coloured groups, but unfortunately plotted it point
+			by point rather than passing arrays of points to <tt>scatterplot()</tt>, which
+			may have been the wrong thing to do, butit was easier. Say there were 3 groups, one
+			for a positive test, one for a negative and one for an equivocal result.
+			How do I create an arbitrary legend with entries that are not related to
+			a specific object in my graph?
+		</p>
+		<p>
+			The SO user &quot;hooy&quot; answered it perflectly 
+			<a href="http://stackoverflow.com/questions/16614558/legend-using-pathcollections-in-matplotlib"
+				target+"_blank">here</a>.
+		</p>
+		<p>
+			It is also very woth while reading the <a href="http://matplotlib.org/users/legend_guide.html"
+				target="_blank">MatplotLib Legend Guide</a>.
+		</p>
+		<p>
+			In summary it appears, whilst you can draw arbitary objects like a <tt>Circle</tt> onto
+			a graph, you cannot draw arbitary objects onto the legend. An artist has to be
+			created as he describes in his thread. Based on his example I had the following.
+		</p>
+		<pre class="prettyprint linenums lang-python">import matplotlib.pyplot as pl
 import matplotlib.lines as mlines
 
 ... snip ...
@@ -428,11 +436,52 @@ neg_patch    = mlines.Line2D([0], [0], markerfacecolor='blue', marker='o', color
 fail_patch   = mlines.Line2D([0], [0], markerfacecolor='red', marker='o', color="white", label='No signal')
 unsure_patch = mlines.Line2D([0], [0], markerfacecolor='purple', marker='o', color="white", label='Equivocal')
 ax.legend(handles=[pos_patch, neg_patch, unsure_patch], <b>numpoints=1</b>)</pre>
-</div>
 	<p>
 		The interesting thing, that other posts seemed to miss out was passing <b><tt>numpoints=1</tt></b> to <tt>legend()</tt>. If you
 		don't pass this is you get an annoying double circle.
 	</p>
+	</div>
+
+	<h3>Modifying The Legend Font</h3>
+	<div>
+		<p>
+			Often I want the legend to take up less space. To do this, make the
+			font smaller as follows:
+		</p>
+		<pre class="prettyprint linenums lang-python">from matplotlib.font_manager import FontProperties
+# ... snip ...
+fontP = FontProperties()
+fontP.set_size('small')
+# ... do some plotting ...
+ax.legend(..., <b>prop=fontP</b>)</pre>
+	</div>
+
+	<h3>Layout And Position</h3>
+	<div>
+		<p>
+			You can specify the number of columns for the legend layout
+			using <tt><b>ncol=</b></tt>. You can specify where in the graph
+			the legend is plotted using <tt><b>bbox_to_anchor=</b></tt> and
+			<tt><b>loc=</b></tt>.
+		</p>
+		<p>
+			<tt>bbox_to_anchor</tt> describes where in the plot the edge specified
+			by <tt>loc</tt> will be placed. The coordinate system is [0, 1], i.e.,
+			the coordinates are normalised across the extent of the graph and so
+			are independent of the x/y coordinate system used for the plot itself.
+		</p>
+		<p>
+			For example,
+		</p>
+		<pre class="prettyprint linenums lang-python">bbox_to_anchor=[0.5, 1.0], 
+loc='upper center'</pre>
+		<p>
+			Tells pyplot to put the center of the upper edge of the legend box
+			exactly half way along the graph horizontally and right at the top
+			vertically.
+		</p>
+	</div>
+</div>
 
 <h2>Embedd In pyWidgets Apps</h2>
 <div>
