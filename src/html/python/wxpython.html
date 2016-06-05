@@ -58,7 +58,7 @@
 				</ol>
 			</div>
 
-			<h2>The Basic App</h2>
+			<h2>The Basic wxPython App</h2>
 			<div>
 				<h3>The Start</h3>
 				<p>
@@ -90,7 +90,9 @@ app.MainLoop()
 				<h3>Add Buttons</h3>
 				<p>
 					Add a button by adding the following into your <tt>Frame</tt>/
-					<tt>Panel</tt>.
+					<tt>Panel</tt> (Note: really you should add everything to a panel
+					or some other contained and not directly to the Frame... but for
+					the sake of brevity in the examples I do).
 				</p>
 				<pre class="prettyprint linenums">import wx 
 
@@ -410,7 +412,7 @@ sizer.Add(self._btn2, 0)
 				</p>
 			</div> <!-- END H2 DIV -->
 
-			<h2>The More Common Controls</h2>
+			<h2>The More Common wxPython Controls</h2>
 			<div>
 				<h3>A Text Entry Box</h3>
 				<p>
@@ -418,8 +420,298 @@ sizer.Add(self._btn2, 0)
 					A very simple example combining two buttons to get and set the
 					value in the text control is shown below:
 				</p>
-
 			</div> <!-- END H2 DIV -->
+
+			<h2>wxPython Dialogs</h2>
+			<div>
+				<h3>Message Boxes</h3>
+				<p>
+					Easy to show and can be yes/no, ok/cancel kinds. 
+				</p>
+				<pre class="prettyprint linenums">result = wx.MessageBox( "Do you want to do something?", 
+                         "Hello", 
+                         style=wx.YES_NO)
+if result != wx.YES:
+   ## Do something ##</pre>
+				<p>
+					Unlike the other dialogs below where you check the result
+					against <tt>wx.ID_xxx</tt> for the <tt>MessageBox</tt> you
+					check agsint <tt>wx.xxx</tt> where xxx is the button name.
+					For example, to check <tt>result</tt> for the <tt>wx.OK</tt> button
+					you check against <tt>wx.OK</tt> and not <tt>wx.ID_OK</tt>
+				</p>
+
+				<p>
+					The following styles determine what buttons you get:
+				</p>
+				<div style="float:left; width:350px;">
+					<tt>wx.MessageBox("Example", "Example", wx.YES_NO)</tt><br/>
+					<img src="##IMG_DIR##/msgbox_yesno.png" alt="Screenshot of wxPython MessageBox with wx.YES_NO styles"/>
+				</div>
+
+				<div style="float:left; width:350px;">
+					<tt>wx.MessageBox("Example", "Example", wx.YES_NO | wx.CANCEL)</tt><br/>
+					<img src="##IMG_DIR##/msgbox_yesno_cancel.png" alt="Screenshot of wxPython MessageBox with wx.YES_NO and wx.CANCEL styles"/>
+				</div>
+
+				<div style="float:left; width:350px;">
+					<tt>wx.MessageBox("Example", "Example", wx.OK)</tt><br/>
+					<img src="##IMG_DIR##/msgbox_ok.png" alt="Screenshot of wxPython MessageBox with wx.OK styles"/>
+				</div>
+
+				<div style="float:left; width:350px;">
+					<tt>wx.MessageBox("Example", "Example", wx.OK | wx.CANCEL)</tt><br/>
+					<img src="##IMG_DIR##/msgbox_ok_cancel.png" alt="Screenshot of wxPython MessageBox with wx.OK and wx.CANCEL styles"/>
+				</div>
+
+				<p style="clear:both;">
+					You can determine which button has the initial, default, focus
+					by or'ing the the styles <tt>wx.OK_DEFAULT</tt>, <tt>wx.CANCEL_DEFAULT</tt>, 
+					<tt>wx.NO_DEFAULT</tt> or <tt>wx.YES_DEFAULT</tt>.
+				</p>
+				<p>
+					You can change the icon displayed in the message box using the following
+					styles: <tt>wx.ICON_EXCLAMATION</tt>, 
+					<tt>wx.ICON_ERROR</tt>, <tt>wx.ICON_HAND</tt>, <tt>wx.ICON_QUESTION</tt>, or
+					<tt>wx.ICON_INFORMATION</tt> (or <tt>wx.ICON_AUTH_NEEDED</tt> (on later versions of wxPython)).
+				</p>
+
+				<h3>Open/Load/Save File Dialog</h3>
+				<p>
+					Very easy to create:
+				</p>
+					<pre class="prettyprint linenums">dlg = wx.FileDialog(self, 
+                    "Open a file", 
+                    default_directory, 
+                    default_file, 
+                    semi_colon_seperated_wildcard_string, 
+                    wx.FD_OPEN)
+if dlg.ShowModal() == <b>wx.ID_OK</b>:
+   <b>selectedFile = dlg.GetPath() # Do not use GetFilename()/GetDirectory()</b>
+   # do stuff...</pre>
+				<p>
+					One thing I often want to do is make the dialog remember where
+					you last were if you re-open it. It is important do use the 
+					dialog method <b><tt>GetPath()</tt></b>, which returns the full
+					path to the selected file, and not a combination of 
+					<tt>GetFilename()</tt> and <tt>GetDirectory()</tt>. 
+					<a href="http://stackoverflow.com/questions/10403205/wxpython-error-in-openning-files-in-ubuntu" 
+					   target="_blank">These no longer work, especially on Ubuntu!</a>
+				</p>
+				<p>
+					In the window that is opening the dialog, I usually have a
+					&quot;protected&quot; instance variable <tt>_dirNameChache</tt>,
+					initialised to the empty string, that is updated everytime the 
+					dialog selects a new file. 
+				</p>
+				<pre class="prettyprint linenums">dlg = wx.FileDialog(self, 
+                    "Open file", 
+                    self._dirnameCache, 
+                    "", 
+                    "My files (*.my)|*.my",
+                    wx.FD_OPEN)
+
+if dlg.ShowModal() == wx.ID_OK:
+   path = dlg.GetPath() 
+   <b>self._dirnameCache = os.path.split(path)[0]</b>
+   # do more stuff...</pre>
+				<p>
+					There are more window styles other than <tt>wx.FD_OPEN</tt>. The
+					ones I most commonly use are <tt>wx.FD_SAVE</tt>, which will make
+					it a save not a load dialog. <tt>wx.FD_OVERWRITE_PROMPT</tt> for 
+					save dialog only. It will make the dialog prompt for a confirmation 
+					if a file will be overwritten. <tt>FD_FILE_MUST_EXIST</tt> to make
+					the load dialog ensure the file exists when it is selected by the user.
+				</p>
+
+				<h3>Directory Dialog</h3>
+				<pre class="prettyprint linenums">dlg = wx.DirDialog(self, 
+                   "Choose directory", 
+                   "", 
+                   wx.DD_DEFAULT_STYLE | wx.DD_DIR_MUST_EXIST)
+if dlg.ShowModal() == wx.ID_OK:
+    print dlg.GetPath()</pre>
+
+			</div> <!-- END H2 dialogs -->
+
+			<h2>Publish/Subscribe with wxPython</h2>
+			<div>
+				<p>
+					See the 
+					<a href="http://wiki.wxpython.org/WxLibPubSub" 
+					   target="_blank">wxPython Pub Sub wiki entry</a>.
+				</p>
+				<p>
+					Import the <tt>pubsub</tt> libraries as follows. The first import
+					puts the module API into the &quot;newer&quot; mode.
+				</p>
+				<pre class="prettyprint linenums">from wx.lib.pubsub import setupkwargs #&lt; Put pubsub into "newer" mode
+from wx.lib.pubsub import pub</pre>
+				<p>
+					<b>Note:</b> If you are receiving pub/sub events from another thread and
+					want to update widgets remember to use the <a href="http://wiki.wxpython.org/CallAfter" target="_blank"><tt>wx.CallAfter(<i>func</i>, <i>*args</i>)</tt></a>
+					function: <q>...wx.CallAfter takes a function and its arguments, and calls the function when the current event handler has exited. It is a safe way of requesting action of a Window from another thread...</q>.
+				</p>
+				<p>
+					To <b>publish</b> a message do the following:
+				</p>
+				<pre class="prettyprint linenums">pub.sendMessage(<i>&quot;unique string identifying event&quot;</i>, key1=value1, key2=value2, ...)</pre>
+				<p>
+					The key/value pairs are passed to any subscriber-functions as named parameters.
+				</p>
+				<p>
+					To <b>subscribe</b> to a message do the following:
+				</p>
+				<pre class="prettyprint linenums">pub.subscribe(<i>function</i>, <i>&quot;unique string identifying event&quot;</i>)
+... &lt;snip&gt; ...
+def SubscriberFunction(key1, key2, ...):
+   ... &lt;snip&gt; ...</pre>
+			</div>
+			<p>
+				The following is an example using Pub/Sub to create a progress
+				dialog that listens for &quot;progress events&quot; and updates
+				its progress bar and status message when the event is received.
+			</p>
+			<pre class="prettyprint linenums">WORKER_PROGRESS="some string identifier you like"
+
+class MyProgressDialog(wx.Dialog):
+    def __init__(self, parent):
+        wx.Dialog.__init__(self, parent)
+
+        self._progress = wx.Gauge(self, range=100)
+        pub.subscribe(self._MyThreadProgress, WORKER_PROGRESS)
+
+        self._msg = wx.TextCtrl(self, style=wx.TE_READONLY)
+        self._msg.SetValue("Waiting to start...")
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(wx.StaticText(self, label="This is my demo progress:"), 0, wx.EXPAND | wx.ALL, 5)
+        sizer.Add(self._progress, 0, wx.EXPAND | wx.ALL, 5)
+        sizer.Add(self._msg, 0, wx.EXPAND | wx.ALL, 5)
+        self.SetSizerAndFit(sizer)
+
+        self.SetSize((550,-1)) 
+        self.SetMinSize((550,-1)) 
+
+    def _MyThreadProgress(self, percent, msg):
+       def inner():
+          if msg is not None: self._msg.SetValue(msg)
+          self._progress.SetValue(percent if percent &lt;= 100 else 100)
+       wx.CallAfter(inner)</pre>
+			<p>
+				Whilst the dialog is being shown you could for example start a
+				worker thread that periodically published progress events. For
+				example...
+			</p>
+			<pre class="prettyprint linenums">pub.sendMessage(WORKER_PROGRESS, percent=int(amountDone*100/totalAmount), msg="Some descriptive message")</pre>
+
+			<h2>Making wxPython Widgets Drop Targets</h2>
+			<div>
+				<p>
+					Want the ability to drop a file or directory on a control and
+					receive the path to that file or directory? This is how. Based
+					entirely on 
+					<a href="http://wiki.wxpython.org/DragAndDrop" 
+					   target="_blank">this wxPython wiki entry</a>, 
+					which does into far more detail.
+				</p>
+				<p>
+					The snippet was made to allow a <tt>wx.TextCtrl</tt> to receive
+					a single file/directory and have the path to it entered in as its
+					text value...
+				</p>
+				<pre class="prettyprint linenums">class FileDropTarget(wx.FileDropTarget):
+   def __init__(self, obj):
+      wx.FileDropTarget.__init__(self)
+      self._obj = obj
+
+   def OnDropFiles(self, x, y, filenames):
+      self._obj.SetInsertionPointEnd()
+      if len(filenames) &gt; 0:
+         self._obj.Clear()
+         self._obj.WriteText(filenames[0])
+
+... &lt;snip&gt; ...
+
+class MyPanel(wx.Panel):
+   def __init__(self, *args, **kwargs):
+      super(MyPanel, self).__init__(*args, **kwargs)
+
+      ... &lt;snip&gt; ...
+
+      self._myTxtCtrl = wx.TextCtrl(self, wx.ID_ANY)
+      self._myTxtDT = FileDropTarget(self._myTxtCtrl)
+      self._myTxtCtrl.SetDropTarget(self._myTxtDT)
+
+      ... &lt;snip&gt; ...</pre>
+			</div> <!-- End H2: Making drop targets -->
+
+			<h2>Draw To A Device Context And Scrollable Windows In wxPython</h2>
+			<div>
+				<p>
+					Based on 
+					<a href="https://www.daniweb.com/programming/software-development/threads/73283/scrolles-canvas-in-wxpython" 
+					   target="_blank">this example</a>.
+				</p>
+				<p>
+					It appears that to reset the scrollable region you should use
+					<tt>SetVirtualSize()</tt> instead of <tt>SetScrollBars()</tt> as the latter will always
+					reset the window location, so at very least, couldn't be called
+					on a repaint anyway. The former worked for me. <tt>SetScrollBars()</tt> creates them
+					but then to resize the what the window thinks is the scrollable region you 	<tt>SetVirtualSize()</tt>.
+				</p>
+				<pre class="prettyprint linenums">import wx 
+ 
+class MyCanvas(wx.ScrolledWindow):
+    def __init__(self, *args, **kwargs):
+        super(MyCanvas, self).__init__(*args, **kwargs)
+        self.EnableScrolling(True, True)
+        self.SetScrollbars(20, 20, 20, 20)
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+        
+    def my_draw(self,dc):
+        dc.BeginDrawing()
+        lines=[(50,50,507,507)]
+        dc.DrawLineList(lines)
+        print dc.CanGetTextExtent()
+        txtSize = dc.GetFullTextExtent("JEHTech")
+        # text, x, y
+        print txtSize
+        for i in range(200):
+           dc.DrawRectangle(10*i,10*i, txtSize[0], txtSize[1])
+           dc.DrawRotatedText("JEHTech", 10*i, 10*i, 0)
+
+        dc.EndDrawing()
+        return 200*10+txtSize[0]+ txtSize[1]
+        
+    def OnPaint(self, evt):
+        dc = wx.PaintDC(self)
+        self.PrepareDC(dc)   
+        n = self.my_draw(dc) 
+        self.SetVirtualSize((n,n))
+
+class MyDummyWindow(wx.Frame):
+   def __init__(self, parent, title):
+      wx.Frame.__init__(self, parent, title=title)
+      mainSzr = wx.BoxSizer(wx.VERTICAL)
+      p = MyCanvas(self, -1)
+      mainSzr.Add(p, 1, wx.EXPAND)
+      self.SetSizerAndFit(mainSzr)
+      self.Show()
+ 
+app = wx.App(False)
+frame = MyDummyWindow(None, "A Stupid Example")
+app.MainLoop()</pre>
+				<p>
+					TODO wxPython and 
+					<a href="https://www.cairographics.org"
+						target="_blank">Cairo</a> with <a href="https://www.cairographics.org/pycairo/tutorial/" target="_blank">PyCairo</a>... look 
+					<a href="http://wiki.wxpython.org/UsingCairoWithWxPython"
+					 target="_blank">at this Wiki guide</a>.
+				 </p>
+				 <p>
+				 <a href="http://www.programcreek.com/python/example/14733/wx.GraphicsContext" target="_blank">Also this on wx.GraphicsContext</a>.
+				 </p>
+			</div>
 		</div>
 	</div>
 </body>

@@ -103,17 +103,30 @@
               or bad, for example.
           </td>
       </tr>
+      <tr><td>Consistent estimator</td>
+          <td>A consistent estimator is one that converges to the value being
+              estimated.
+          </td>
+      </tr>
       <tr><td>Numerical Variable</td>
           <td>Has a value from a set of numbers. That set can be continuous,
               like the set of real numbers, or discrete like the set of
               integers.
           </td>
       <tr>
-         <tr><td>Random Variable</td>
-            <td>The numerical outcome of a random experiment. <em>Discrete</em> if it 
+          <td>Random Variable</td>
+          <td>The numerical outcome of a random experiment. <em>Discrete</em> if it 
                can take on more than a countable number of values. <em>Continuous </em>
-                 if it can take any value over an uncountable range.
-             </td>
+               if it can take any value over an uncountable range.
+           </td>
+      </tr>
+      <tr>
+          <td>I.D.D.</td>
+          <td>A sequence or other collection of random variables is independent 
+             and <b>identically distributed (i.i.d.)</b> if each random variable 
+             has the same probability distribution as the others and all are 
+             mutually independent.
+          </td>
       </tr>
       <tr><td>Qualitative Data</td>
           <td>Data where there is no measurable difference (in a quantitative 
@@ -266,7 +279,7 @@
       the items in the population are grouped per event. 
    </p>
 
-   <a name="classicprob"><h3>Classic Probability</h3></a>
+   <h3><a name="classicprob">Classic Probability</a></h3>
    <p>
    In classic probability we assume <em>all the basic outcomes are equally likely</em>
       and therefore the probability of an event, A, is the number of basic
@@ -274,7 +287,7 @@
 
       $$
       \begin{align}
-         P(A) &= \frac{number\ of\ outcomes\ relevant\ to\ event\ A}{total\ number\ of\ outcomes} \\
+      P(A) &= \frac{\text{number of outcomes relevant to event A}}{\text{total number of outcomes}} \\
               &= \frac{N_A}{N}
       \end{align}
       $$
@@ -632,7 +645,7 @@
       $P(A | B)$ and is defined as follows:
 
       $$
-         P(A | B) = \frac{P(A \cap B)}{P(B)}, when\ P(B) \ne 0
+      P(A | B) = \frac{P(A \cap B)}{P(B)}, \text{when}\ P(B) \ne 0
       $$
    </p>
    <p>
@@ -922,11 +935,13 @@
    </p>
    <h3>Expected Value and Variance</h3>
    <p>
+      <a name="def_expected_value">
       <b>Expected value</b> defined as:
-
+      
       $$
       E(X) = \mu = \sum_x xP(x)
       $$
+      </a>
 
       Where $\mu$ is called the <b>mean</b> and is the mean of the <b>population</b>.
    </p>
@@ -945,6 +960,51 @@
 
       <b>Standard Deviation</b>, $\sigma$, is the positive square root of
       the variance.
+   </p>
+   <p>
+      Why does $E[(X - \mu)^2]$ equal $E(X^2) - \mu^2$?
+
+      $$
+      \begin{align}
+          E[(X - \mu)^2] &= \Sigma_i p(x_i)[x_i - \mu]^2\\
+          &= \Sigma_i p(x_i)[x_i^2 - 2x_i\mu +\mu^2]\\
+          &= \Sigma_i p(x_i)x_i^2 - 2\mu\Sigma_i p(x_i)x_i + \mu^2 \Sigma_i p(x_i)
+      \end{align}
+      $$
+
+      From our definition of $E(X)$ we know that ...
+
+      $$
+          \Sigma_i p(x_i)x_i^2 = E(X^2)
+      $$
+
+      And...
+
+      $$
+      \begin{align}
+         2\mu\Sigma_i p(x_i)x_i &= 2\mu E(X)\\
+         &= 2E(X)E(X) \\
+         &= 2E(X)^2
+      \end{align}
+      $$
+
+      We also know that the sum of all the probabilities in the distribution
+      must sum to 1, so therefore...
+
+      $$
+      \mu^2 \Sigma_i p(x_i) = \mu^2
+      $$
+
+      Thus we can say this...
+
+      $$
+      \begin{align}
+          E[(X - \mu)^2] &= E(X^2) - 2E(X)^2 + E(X)^2 \\
+          &= E(X^2) - E(X)^2
+      \end{align}
+      $$
+
+      Yay!
    </p>
    <p>
       For example, lets say that we have weighted dice so that the
@@ -968,9 +1028,13 @@
       Of course, the dice does not have a face value of 4.75, but over many many rolls this would be the average score.
       The variance and standard deviation are calculated in the same way using the above formulas.
    </p>
-   <h4>Linear Functions Of X</h4>
+   
+   <h4><a name="linear_functions_of_x">Linear Functions Of X</a></h4>
+   
    <p>
-      The expected value and variance of a linear function of $X$ is another farily useful result.
+      The expected value and variance of a linear function of $X$ is another fairly useful result and
+      we will use it to get some very important results in <a href="#SamplingDistributions">the section
+      on sampling distributions</a>.
       For example, we could arbitrarily define a function over dice rolls. Not sure why we'd do this,
       but say we said the experiement result was $g(X) = 2X + 5$ where $X$ is the random variable which gives
       the dice face rolled. Now we have:
@@ -1078,7 +1142,7 @@
       or vice versa.
    </p>
    <p>
-      So... selecting a blue and a red ball. Sounds like $P(blue \cap red)$ right?
+   So... selecting a blue and a red ball. Sounds like $P(\text{blue}\ \cap\ \text{red})$ right?
       Well, almost, but <em>not quite</em>. Take a look at the sample space below, 
       out of which, the events of interested are highlighted in a light blue colour.
    </p>
@@ -1134,12 +1198,12 @@
 
       $$
       \begin{align}
-         P(drawing\ a\ blue\ and\ a\ red) &= \frac{6}{25} + \frac{6}{25} \\
+         P(\text{drawing a blue and a red}) &= \frac{6}{25} + \frac{6}{25} \\
          &= 2 \times \frac{6}{25}
       \end{align}
       $$
 
-      But, hang on  minute! Isn't $P(drawing\ a\ blue\ and\ a\ red)$ the same
+      But, hang on  minute! Isn't $P(\text{drawing a blue and a red})$ the same
       as $P(B \cap R)$?! Well, no, as we can see below...
 
       $$
@@ -1204,7 +1268,7 @@
 
       $$
       \begin{align}
-      P(m\ successes\ in\ n\ independent\ trials) &= P(m) \\
+      P(m\ \text{successes in $n$ independent trials}) &= P(m) \\
       &={_{n}C_m} \cdot p^m \cdot (1-p)^{(n-m)}\\
       &= \frac{n!}{m!(n-m)!} \cdot p^m \cdot (1-p)^{(n-m)}
       \end{align}
@@ -1213,7 +1277,7 @@
       For $m = 0, 1, \dots, n$.
    </p>
    <p>
-      This, incidentally is the same as asking for $P((n-m)\ failures\ in\ n\ independent\ trials)$ because
+   This, incidentally is the same as asking for $P((n-m)\ \text{failures in $n$ independent trials})$ because
 
       $$
       \begin{align}
@@ -1226,7 +1290,7 @@
    <p>
       Let's do this to exhaustion... let's imagine another bag. It doesn't 
       matter how many blue and red balls are in there, just so long as I can
-      select 3 blue balls and 1 red. $P(blue) = p$ and $P(red) = (1-p)$.
+      select 3 blue balls and 1 red. $P(\text{blue}) = p$ and $P(\text{red}) = (1-p)$.
       Once we've made this selection of 3 blues, 1 red, the question is,
       how many ways were there of getting to this outcome. Now let's check 
       our understanding of using combinations (esp. vs. permutations) to get this...
@@ -1287,7 +1351,8 @@
       
       And... the rest of the proof gets a little complicated... 
       <a href="http://www.math.ubc.ca/~feldman/m302/binomial.pdf"
-         target="_blank">this PDF by some giy called Joel Feldman gives the derivation</a>.
+         target="_blank">this PDF by Joel Feldman gives the derivation</a>, which
+      I found by doing a quick google. Liked the explanation.
    </p>
    <p>
       The population <b>mean</b> and <b>variance</b> are summarised as follows.
@@ -1436,9 +1501,716 @@ fig.savefig('poisson_distrib.png', format='png')</pre>
    <p>
       <img src="##IMG_DIR##/poisson_distrib.png"/>
    </p>
+   <p>
+      Lets take a little example. Looking at the 
+      <a href="https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/463045/rrcgb2014-01.pdf" 
+         target="_blank">UK government report on road casualties in 2014</a>, 
+      there were a reported 194,477 casualties in 2014. This gives us an
+      average of 532.8137 (4dp) casualties per day! 
+      So, we could ask some questions...
+   </p>
+   <p>
+      What is the probability that <em>no</em> accidents occur on any given 
+      day? Recalling that...
 
+      $$
+         P(X = x) = \frac{e^{-\lambda}\lambda^x}{x!}
+      $$
+
+      We will set $\lambda = \frac{194,477}{365}$ and $x = 0$ and plug these
+      into the above forumla...
+      $$
+      \begin{align}
+      P\left(X = 0 | \lambda = \frac{194,477}{365}\right) &= \frac{e^{\left(-194,477/365\right)}{\left(\frac{194,477}{365}\right)}^0}{0!}\\
+         &= \frac{e^{\left(-194,477/365\right)}\times 1}{1}\\
+         &= 3.998994e-232
+      \end{align}
+      $$
+
+      Okay... so the probability that on any given day in the UK that there are
+      no road casualties is pretty (very scarily) small!
+   </p>
+   <p>
+      Of course, we could critisize this analysis as not taking into account
+      seaons, or weather conditions etc etc. In winter, for example, when the 
+      roads are icy one might expect the probability of an accident to be 
+      greater, but for the purposes of a little example, I've kept it simple.
+   </p>
+   <p>
+      We might also ask, what is the probability that the number of casualties
+      is less than, say, 300? 
+      $$
+      P(X \lt 300) = \sum_{x=0}^{299} P(X = x)
+      $$
+
+      Eek! Don't really want to be calculating this by hand so let's use 
+      Python's SciPi package:
+   </p>
+   <pre class="prettyprint linenums">from scipy.stats import poisson
+print poisson.cdf(299, 194477.0/365)</pre>
+   <p>This outputs $2.24102710469e-28$ which is still pretty unlikely!. 
+      For $X \lt 400$ we get $9.60741455596e-10$, for $X \lt 500$
+      we get $0.0783182362497$. So we can imagine that the distribution is 
+      really quite steep:
+   </p>
+   <pre class="prettyprint linenums">import matplotlib.pyplot as pl
+import numpy as np
+from scipy.stats import poisson
+
+x = np.arange(200, 800)
+fig, ax = pl.subplots()
+ax.plot(x, poisson.pmf(x, 194477/365), linestyle='steps-mid')
+ax.set_title('Probability of #road casualties per day in UK')
+fig.show()
+fig.savefig('poisson_road_fatilities_distrib.png', format='png')</pre>
+   <p>
+   <img src="##IMG_DIR##/poisson_road_fatilities_distrib.png">
+   </p>
+
+   <h3>Joint Distributions</h3>
+   <p>
+      When one thing is likely to vary in dependence on another thing. For 
+      example, the likely longevity of my milk will correspond to some extent
+      to the temperature of my fridge: there is a <em>relationship between
+      these two variables so it is important that any model produced includes
+      the effect of this relationship</em>. We need to define our 
+      probabilities that random variables <em>simultaneously</em> take some
+      values.
+   </p>
+   <p>
+      Enter the <b>join probability function</b>. It expresses the probability
+      that each random variable takes on a value as a function of those
+      variables.
+   </p>
+   <p>
+      A two variable joint probability distribution is defined as:
+
+      $$
+         P(x, y) = P(X = x \cap Y = y)
+      $$
+
+      This is a subtle difference in the notation of $P(x,y)$ from our
+      previous examples in the starting sections where we wrote things like
+      $P(A \cap B)$. The former is a distribution where the random variables
+      simultaneously take on the values $x$ and $y$ respectively and the latter
+      is just the probability of two individual events happening simultaneously.
+   </p>
+   <p>
+      The <b>marginal probabilities</b> are the probabilities that one random
+      variable takes on a value regardless of what the other(s) are doing. In
+      our two variable distribution we have:
+
+      $$
+      \begin{align}
+      P(x) &= \sum_y P(x,y) \\
+      \\
+      P(y) &= \sum_x P(x,y)
+      \end{align}
+      $$
+   </p>
+   <p>
+      Joint probability functions have these <b>properties</b>:
+   </p>
+   <ol>
+      <li>$0 \le P(x,y) \le 1$ for any pair of values $x$ and $y$,</li>
+      <li>The sum of the join probabilities is 1.</li>
+   </ol>
+   <p>
+      The <b>conditional probability function</b> looks like this...
+      $$
+      \begin{align}
+         P(y | x) = \frac{P(x, y)}{P(x)}\\
+         \\
+         P(x | y) = \frac{P(x, y)}{P(y)}
+      \end{align}
+      $$
+   </p>
+   <p>
+      The random variables are <b>independent</b> if their joint
+      probability function is the product of their marginal probability
+      functions:
+
+      $$
+      P(x,y) = P(x)P(y) \implies \text{independence}
+      $$
+
+      When they are independent we also have
+
+      $$
+      \begin{align}
+      \text{independence} &\implies P(y | x) = P(y)\ \text{and}\\
+                      &\implies P(x | y) = P(x)
+      \end{align}
+      $$
+   </p>
+   <p>
+      The <b>conditional mean and variance</b> are:
+
+      $$
+         \mu_{Y|X} = E[Y|X] = \sum_Y y P(y|x)\ \text{and}\\
+         \\
+         \mu_{X|Y} = E[X|Y] = \sum_X x P(x|y)
+      $$
+   </p>
+
+   <h3>Covariance and Correllation</h3>
+   <p>
+      Measure of joint variablility: the nature and strength of a relationship
+      between two variables.
+   </p>
+   <p>
+      <b>Covariance</b> between two random variables $X$ and $Y$ is $Cov(X,Y)$,
+      given by:
+
+      $$
+         \begin{align}
+         Cov(X,Y) &= E[(X-\mu_x)(Y-\mu_y)] \\
+                  &= \sum_x\sum_y(x - \mu_x)(y-\mu_y)P(x,y)
+         \end{align}
+      $$
+
+      This is equivalent to the following:
+
+      $$
+         \begin{align}
+         Cov(X,Y) &= E[XY] - \mu_x-\mu_y \\
+                  &= \sum_x\sum_y xyP(x,y) - \mu_x\mu_y
+         \end{align}
+      $$
+
+      A covariance that is strongly negative indicates a good inverse <em>linear</em> relationship.
+      Strongly positive indicates a good <em>linear</em> relationship and near zero indicates no
+      relationship. Note that if two random variables are <b>statistically
+      independent</b>, the covariance between them is (near) zero. But, if
+      the covariance is (near) zero it does not necessarily mean there is 
+      no relationship, it might just not be <em>linear</em>.
+   </p>
+   <p>
+      <b>Correlation</b> is just a <em>&quot;normalisation&quot;</em> of the
+      covariance such that the measure is limited to being in the range [-1, 1].
+
+      $$
+      Corr(X,Y) = \frac{Cov(X,Y)}{\sigma_x\sigma_y}
+      $$
+   </p>
 </div>
 
+<h2>Continuous Distributions</h2>
+<div>
+   <h3>Cumulative Distribution Function (CDF)</h3>
+   <p>
+      CDF gives probability that continuous random variable $X$ does not
+      exceed a particular value, $x$:
+
+      $$
+         CDF(x) = P(X \lt x)
+      $$
+
+      The probability that $X$ takes on a signular value is zero. I.e.,
+      $P(X == x) = 0$. Therefore, it doesn't matter if we write $\lt$ or
+      $\le$...
+   </p>
+   <p>
+      To get the probability that $X$ lies within a range use:
+
+      $$
+      \begin{align}
+         P(x_1 \lt X \lt x_2) &= CDF(x_2) - CDF(x_1)\\
+         &= P(X \lt x_2) - P(X \lt x_1)
+      \end{align}
+      $$
+   </p>
+   <h3>Probability Density Function (PDF)</h3>
+   <p>
+      Call our PDF $f(x)$... Then the total area under the curve $f(x)$ is 1.
+      I.e.,
+      $$
+         \int_{-\infty}^{\infty} f(x) \mathrm dx = 1.0 
+      $$
+      
+      The probability that $X$ takes a value between two limits is...
+      $$
+         P(x_1 \lt X \lt x_2) = \int_{x_1}^{x_2} f(x) \mathrm dx
+      $$
+
+      And the CDF is also defined by....
+      $$
+         CDF(x_0) = \int_{min(X)}^{x_0} f(x) \mathrm dx
+      $$
+
+      We can judge whether a distribution is a valid PDF using the above 
+      definitions.
+   </p>
+   <h3>Uniform Distribution</h3>
+   <p>
+      The uniform distribution is one where the probability that $X$ takes
+      a value in a fixed size interval is the same regardless of where the 
+      interval &quot;starts&quot; (as long as the interval is contained 
+      entirely within the range for which $X$ is non-zero). I.e,
+
+      $$
+      f(x) = 
+      \begin{cases}
+         \frac{1}{x_u - x_l}, &x_l \le X \le x_u\\[2ex]
+         0, &\text{otherwise}
+      \end{cases}
+      $$
+   </p>
+   <h3>Normal Distribution</h3>
+   <p>
+      This distribution is defined by a <a href="gaussians.html">gaussian</a> bell-shaped curve.
+      The probability distribution function for a normally distributed random vairable, $X$, is given
+      by this equation:
+
+      $$
+         f(X = x) = \frac{1}{\sqrt{2\pi\sigma^2}} \cdot e^{-{(x-\mu)^2}/{2\sigma^2}}
+      $$
+
+      For any normal distribution the following applies:
+   </p>
+   <ol><li>About 68% of the data will fall within one standard deviation, $\sigma$, of the mean, $\mu$,</li>
+       <li>About 95% of the data will fall within two standard deviations, $2\sigma$, of the mean, $\mu$,</li>
+       <li>Over 99% of the data will fall within three standard deviations, $3\sigma$, of the mean, $\mu$,</li>
+       <li><b>Mean</b> is $E[X] = \mu$,</li>
+       <li><b>Variance</b> is $Var(X) = E[(X - \mu)^2] = \sigma^2$,</li>
+   </ol>
+   <p>
+      The normal distribution is defined with the following <b>notaton</b>:
+      $$
+         X \sim N(\mu, \sigma^2)
+      $$
+      There is no simple algebraic expression for the cummulative distribution 
+      function. Can't really say I fancy the idea of integrating the above
+      function! There are 
+      <a href="https://en.wikipedia.org/wiki/Normal_distribution#Numerical_approximations_for_the_normal_CDF" 
+         target="_blank">many numerical approximations</a>.
+      Computer could do it for us, but another way is to <em>convert 
+      every normal distribution to the standard normal distribution</em>.
+   </p>
+   <p>
+      The <b>standard normal distribution</b> is a normal distribution where
+      the the mean is 0 and the variance is 1:
+
+      $$
+         Z \sim N(0, 1)
+      $$
+
+      And 
+
+      $$
+         Z = \frac{X - \mu}{\sigma}
+      $$
+
+      So to solve $P(a \lt X \lt b)$ we solve the following:
+
+      $$
+         P\left( \frac{a - \mu}{\sigma} \lt Z \lt \frac{b - \mu}{\sigma}\right)
+      $$
+
+      For which we can consult a 
+      <a href="https://en.wikipedia.org/wiki/Standard_normal_table"
+         target="_blank">standard normal table</a>.
+   </p>
+</div>
+
+<h2>Sampling Distributions</h2>
+<div>
+   <h3>A Little Intro...</h3>
+   <p>
+      So far we have been talking about <b>population</b> statistics. The
+      values $\mu$ and $\sigma$ have been the mean and standard deviation of the
+      <b>population</b>. However, generally it is pretty impossible to gather
+      information about an entire population: this can be due to the cost that
+      would be involved, or perhaps that time that such an endevour would take, 
+      for example. It might also be undesirable to analyse an entire population 
+      if, for example, analysis involved destruction of the samples taken!
+   </p>
+   <p>
+      So, what is normally done is to take
+      a <b>sample</b> from the population and then <b>use the sample statistics
+         to make <em>inferences</em> about the population statistics</b>. The image below
+      shows three samples that have been taken from a population. Each sample
+      set can, and will most probably, have a different shape, mean, and 
+      variance!
+   </p>
+   <p>
+      <img src="##IMG_DIR##/sampling_from_a_population.png" alt="Picture of taking different samples from a population and the sample distributions"/>
+   </p>
+   <p>
+      We can demonstrate this concept using a quick little Python program
+      to take 4 samples from the normal distribution where each sample
+      has 10 members:
+   </p>
+
+   <pre class="prettyprint linenums">import numpy as np
+import matplotlib.pyplot as pl
+
+numSampleSets = 4
+numSamplesPerSet = 10
+
+# Limit individual plots, otherwise the first plot takes forever and is rubbish
+doShowIndividualSamples = (numSampleSets &lt;= 8) and (numSamplesPerSet &lt;= 50) 
+
+# Create a numSampleSets (rows) x numSamplesPerSet (cols) array where we use 
+# each row as a sample.
+randomSamples = np.random.randn(numSampleSets, numSamplesPerSet) 
+
+# Take the mean of the rows, i.e. the mean of each sample set
+means = randomSamples.mean(axis=1)
+
+if doShowIndividualSamples:
+   fig, axs = pl.subplots(nrows=int(numSampleSets/2.0+0.5), ncols=2)
+   xticks = np.arange(numSamplesPerSet, dtype='float64')
+   for idx in range(numSampleSets):
+         ax_col = idx % 2
+         ax_row = int(idx/2.0)
+         thisAx = axs[ax_row][ax_col]
+         thisAx.bar(xticks, randomSamples[idx][:], width=1)
+         thisAx.set_xticks(xticks + 0.5)
+         thisAx.set_xticklabels(xticks, fontsize=8)
+         thisAx.axhline(y=means[idx], color="red", linewidth=2)
+         thisAx.set_title("Sample set #{}".format(idx))
+         thisAx.grid()
+ 
+xticks = np.arange(numSampleSets, dtype='float64')
+fig2, ax2 = pl.subplots(nrows=2)
+ax2[0].bar(xticks, means)
+ax2[0].grid()
+ax2[0].set_title("Distribution of {} sample means (n={})".format(numSampleSets, numSamplesPerSet))
+ax2[0].set_ylabel("Mean value")
+ax2[0].set_xlabel("Sample set #")
+ 
+ax2[1].hist(means, 50)
+ax2[1].grid()
+ax2[1].set_title("Histogram of {} sample means (n={})".format(numSampleSets, numSamplesPerSet))
+ax2[1].set_ylabel("# sample mean's")
+ax2[1].set_xlabel("Sample mean bin")
+
+pl.tight_layout()
+pl.show()</pre>
+   <p>
+      The script above produces the following graphs. The x-axis
+      is just the sequence number of the sample member and the y-axis the
+      value of the sample member. The horizontal line is the sample mean.
+   </p>
+   <p>
+      <img src="##IMG_DIR##/sampling_from_normal_demo_python.png" alt="Graphs of seperate samples from normal distribution showing how sample mean varies between samples"/>
+   </p>
+   <p>
+      We can see from this little example that the samples in each of the 4
+      instances are different and that the <b>mean is different for each sample</b>.
+      Keep in mind that the graph shown when you run the above script will
+      be different as it is a random sample :)
+   </p>
+   <p>
+      So we can see that although the <b>population mean is fixed</b> the <b>sample
+         mean can vary from sample to sample</b>. Therefore, <b>the mean of a sample is
+         itself a random variable</b> and as a random variable it will have it's own
+         distribution (same applies for variance).
+   </p>
+   <p>
+      But, we want to use the sample statistics to infer the population statistics. 
+      How can we do this if the sample mean (and variance) can vary from sample to 
+      sample? There are a few key statistical theories that will help us out...
+   </p>
+
+   
+   <h3><a name="iid">Independent and Identically Distributed (I.I.D.) Random Variables</a></h3>
+   
+   <p>
+      <a href="https://en.wikipedia.org/wiki/Independent_and_identically_distributed_random_variables"
+         target="_blank">Wikipedia</a> defines IID random variables as <q>...a sequence or other collection of random variables is independent and identically distributed (i.i.d.) if <b>each random variable has the same probability distribution as the others</b> and all are <b>mutually independent</b>...</q>
+   </p>
+   <p>
+      It is often the case that if the population is large enough and a sample
+      from the population only represents a &quot;small&quot; fraction of the
+      population that a set of simple random samples without replacement still
+      qualifies I.I.D. selections. If you sample from a population and the sample
+      size represents a significant fraction of the population then you
+      cannot assume this to be true.
+   </p>
+   <p>
+      We're going to need to know this a little later on when we talk about
+      conistentent estimators and the law of large numbers...
+   </p>
+
+   
+   <h3><a name="law_of_large_numbers">The Law of Large Numbers</a></h3>
+   <p>
+      The law of large numbers states that the average of a very large number
+      (note we haven't quite defined what &quot;very large&quot; is) of items
+      will tend towards the average of the popultion from which the items are
+      drawn.  I.e., <b>the sample mean tends towards the population mean as the
+         number of items in the sample tends to infinity</b>.
+   </p>
+   <p>
+      This is shown empirically in the example below:
+   </p>
+   <pre class="prettyprint linenums">import numpy as np
+import matplotlib.pyplot as pl
+
+maxSampleSizes = [100, 1000, 100000]
+fig, axs = pl.subplots(nrows = 3)
+for idx, ssize in enumerate(maxSampleSizes):
+   sample_sizes = np.arange(1,ssize+1)
+   sample_means = np.random.randn(ssize).cumsum() / sample_sizes
+   axs[idx].plot(sample_sizes, sample_means)
+   axs[idx].set_xlabel("Sample size, max is {}".format(ssize));
+   axs[idx].set_ylabel("Average")
+   axs[idx].axhline(y=0, color="red")
+
+fig.show(); pl.show()</pre>
+   <p>
+   Explain the code a little... <tt>np.random.randn(ssize)</tt> generates a 
+   numpy array with <tt>ssize</tt> elements. Each element is a &quot;draw&quot; from
+   the standard normal distribution. The function <tt>cumsum()</tt> then
+   produces an array of <tt>ssize</tt> elements where the second element is
+   the sum of the first 2 elements, the third element is the sum of the first 3 elements
+   and so on. Thus we have an array where the i<sup>th</sup> element is the
+   sum of <tt>i</tt> samples. Dividing this by the array <tt>sample_sizes</tt>
+   gives us an array of means where the i<sup>th</sup> element is the mean of
+   a sample with <tt>i</tt> items.
+   </p>
+   <p>
+      Running the code produced the figure below...
+   </p>
+   <p>
+      <img src="##IMG_DIR##/stats_law_of_large_numbers.png"/>
+   </p>
+   <p>
+      To summarise, the law of large numbers states that the sample mean of
+      I.I.D. samples is consistent with the population mean. The same is
+      true for sample variance. I.e., as the number of items in the sample increases
+      indefinitely, the sample mean will become a better and better estimate of the
+      population mean.
+   </p>
+
+<!--
+
+-->
+   
+   <h3><a name="SamplingDistributions">Sampling Distribution Of The Sample Mean</a></h3>
+   <p>
+      We've established that between samples, the mean and variance of the 
+      samples, well... varies! This implies that we can make a <b>distribution
+      of sample means</b>.
+   </p>
+   <p>
+      The <b>&quot;sampling distribution of the sample mean&quot;</b> (a bit of a mouthful!) 
+      is the probability
+      distribution of the sample means obtained from all possible samples
+      of the same number of observations. That's a bit of a mounthful! All it
+      means is that the sampling distibution of the sample mean is the probability
+      distribution of the mean of any sample of a fixed size you draw from the
+      population.
+   </p>
+   <p>
+      For example if I am a factory owner and I produce machines that accurately
+      measure distance, I could have a population of millions. I clearly do not
+      want to test each and every device coming off my production line, especially
+      if the time that testing requires is anything approaching the time taken to
+      produce the item: I'd be halving (or more) my production throughput!
+   </p>
+   <p>
+      So what do I do? I can take a sample of say 100 devices each day. I can
+      test these to see if they accurately measure distance, and if they do I can
+      assume the production process is still running correctly.
+   </p>
+   <p>
+      But as we have seem if I test 100 devices each day for 10 days, each of my
+      10 sample sets will have a different mean accuracy. On the first day, the
+      mean accuracy of 100 devices might be 95%, on the second day, the mean of
+      the next 100 devices might be 96.53% and so on. 
+   </p>
+   <p>
+      The sample mean has a distribution. As we can take many samples from
+      a population we have sampled the sample mean, so to speak, hence the
+      rather verbose title &quot;sampling distribution of the sample mean&quot;.
+   </p>
+   <p>
+      Now, I can ask, on any given day, &quot;what is the probability that the
+      mean accuracy of my 100 devices is, say 95%?&quot;. This is the sampling distribution 
+      of the sample mean: the probability
+      distribution of the sample means (mean accuracy of a sample of devices) obtained 
+      from all possible samples (theoretical: we can't actually measure all possible samples!) 
+      of the same number of observations (100 in this case).
+   </p>
+   <p>
+      The law of large numbers gives us a little clue as to how variable the 
+      sample means will be... we know that if the sample size is large then
+      the sample mean tends towards the population mean as has a much narrower
+      variance about the population mean. So, 100 samples is better than 10.
+      But 10,000 samples would be even better. The question is how many samples
+      do we need. Will try to answer that (much) later on...
+   </p>
+
+   <h4>Sample Mean And It's Expected Value (The Mean Of Sample Means)</h4>
+   <p>
+      Continuing with the example of distance measurement devices. We could
+      say each device in our sample set is represented by random variables
+      $A_1, A_2, ..., A_{100}$ (we samples 100 devices each day). 
+      We can generalise this to $m$ devices in the
+      sample set. 
+      
+      Using our definition of <a href="#def_expected_value">expected value</a> 
+      we can define the <b>sample mean</b> as $\overline X_i$, for the 
+      i<sup>th</sup> sample set of, and is defined as
+      follows.
+
+      $$
+      \overline X_i = \frac{1}{m}\sum_{i=1}^m A_i
+      $$
+
+    </p>
+    <p>
+      Now we can calculate the expected value <em>of the sample mean</em>, $\overline X$ 
+      (the mean of the sample means).
+    </p>
+    <p>
+      Imagine that
+      we take $n$ samples, where each sample is a set of $m$ devices from our
+      population. If we represent the mean of each sample as the random variables
+      $\overline X_1, \overline X_2, \cdots, \overline X_n$, then the expected 
+      value of the distribution of sample means
+      is the mean expected value of the samples...
+
+      $$
+      E(\overline X) = E\left(\frac{1}{n}(\overline X_1 + \overline X_2 + \cdots + \overline X_n)\right)
+      $$
+
+      We saw that <a href="#linear_functions_of_x">expected value of a linear combination
+         of random variables</a> is the linear combination of each random variable's
+      expected value. This means that we can write the following.
+
+      $$
+      E(\overline X) = \frac{1}{n}\left[E(\overline X_1) + E(\overline X_2) + \cdots + E(\overline X_n)\right]
+      $$
+
+      The <a href="#law_of_large_numbers">law of large numbers</a> also tells us 
+      that if the size of each sample
+      is sufficiently large, it's sample mean, $\overline{X_i}$ will tend 
+      towards the population mean, $\mu$. So, if $m$ is large enough we can say...
+
+      $$
+      \begin{align}
+      E(\overline X) &= \frac{1}{n}\left[\mu + \mu + \cdots + \mu\right]\\
+      &= \frac{n\mu}{n}\\
+      &= \mu
+      \end{align}
+      $$
+
+      This means that the <b>mean of &quot;the sample distribution of sample means&quot;
+      is the population mean</b> when the size of each sample ($m$) is sufficiently
+   large. Put another way, <b> the distribution of samples means in centred 
+      around the population mean</b>.
+   </p>
+   <p>
+      A single sample mean can therefore be larger or smaller than the population
+      mean, but on average, there isn't any reason to expect that it is either. As
+      the sample size increases we also know that the likelihood of the sample
+      mean being higher or lower than the population mean decreases (law
+      of large numbers).
+   </p>
+   <h4>The Variance Of The Sample Mean w.r.t. Sample Size And Standard Error</h4>
+   <p>
+      Getting impatient with how long notes taking... just stating it. Sample
+      variance can be written as $\sigma_{\overlineX}^2$ or $S^2$.
+
+      $$
+      \text{Var}(\overline X) = \sigma_{\overline X}^2 = S^2 = \frac{\sigma^2}{n}
+      $$
+
+      We can see that <b>variance of the sampling distribution decreases as sample size 
+         increases.</b> Therefore the larger the sample the more accurately we can
+      infer population statistics.
+   </p>
+   <p>
+      The sample standard deviation is often refered to as the <b>standard error</b>.
+
+      $$
+      \text{Standard error} = \sigma_{\overline X} = \frac{\sigma}{\sqrt n}
+      $$
+
+      If sample size not super small compared to population use <b>finite population correction factor</b>
+      $\frac{N-n}{N-1}$ to get
+
+      $$
+      \text{Var}(\overline X) = \frac{\sigma^2}{n} \cdot \frac{N-n}{N-1}
+      $$
+   </p>
+
+   <!--
+   <hr/>
+      <p>
+      A histogram of the sample means gives a better picture of the 
+      distribution of sample means from the 4 sample sets...
+   </p>
+   <p>
+      <img src="##IMG_DIR##/sampling_from_normal_demo_python_dist.png" alt="Graphs of seperate samples from normal distribution showing how sample mean varies between samples"/>
+   </p>
+   <p>
+      Now observe what happens when we increase the number of sample sets taken to 50.
+      The distribution of sample means is still pretty distributed without much definition of the shape of the distribution...
+   </p>
+   <p>
+      <img src="##IMG_DIR##/sampling_from_normal_demo_python_dist_50.png" alt="Graphs of seperate samples from normal distribution showing how sample mean varies between samples"/>
+   </p>
+   <p>
+      Now observe what happens when we increase the number of sample sets taken to 1000.
+      The distribution of sample means begins to take shape...
+   </p>
+   <p>
+      <img src="##IMG_DIR##/sampling_from_normal_demo_python_dist_1000.png" alt="Graphs of seperate samples from normal distribution showing how sample mean varies between samples"/>
+   </p>
+   <p>
+      Now observe what happens when we increase the number of sample sets taken to 1000.
+      The distribution of sample means now really looks very much like a gaussian distribution... interesting!
+   </p>
+   <p>
+      <img src="##IMG_DIR##/sampling_from_normal_demo_python_dist_10000.png" alt="Graphs of seperate samples from normal distribution showing how sample mean varies between samples"/>
+   </p>
+   <p>
+      Clearly when we sample from the population the sample can be, to varying
+      degrees, either a good or bad representation of the population. To help
+      ensure that that sample represents the population (i.e., no &quot;section&quot;
+      of the population is over or under represented) a <b>simple random sample</b>
+      is usually taken.
+   </p>
+   <p>
+      Also of great interest in the above is that as the number of samples
+      taken increases the distribution of sample means appears to become more
+      and more gaussian in shape!. What is always true, and even more important is that <b>the
+      sampling distribution becomes concentrated closer to the population mean 
+      as the sample size increases</b>, as the example above also shows (it doesn't
+      proove it... its just anecdotal evidence). We could also notice that
+      <b>as #samples increases the variance of the sample mean decreases</b>.
+   </p>
+   <p>
+      Take care to differentiate between the <b>sample mean, $\overline x$</b>,
+      sometimes witten as $\mu_{\overline X}$,
+      and the <b>population mean, $\mu$</b>. We do not know the population
+      mean. We know the sample mean. The population mean is fixed. The sample mean,
+      as seen, will vary between samples.
+   </p>
+   <p>
+      We have seen that every random sample from the population has a different
+      number for $\overline x$. This means that <b>$\overline x$ is itself a
+      random variable</b>.
+   </p>
+   <p>
+      We must also differentiate between the <b>sample variance, $\sigma_{\overline X}^2$</b>
+      and the <b>population variance, $\sigma^2$</b>. 
+      We do not know the population variance. We know the sample mean. 
+      The population variance is fixed. The sample variance,
+      as seen, will vary between samples.
+   </p>
+   <p>
+      In the same way that the sample mean is randome variable, so is the
+      sample variance...
+   </p>
+   -->
+</div>
+   
    
 </div>
 

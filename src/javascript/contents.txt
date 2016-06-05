@@ -1,7 +1,7 @@
 jquery-1.11.2.min.js
 jquery-ui.min.js
-run_prettify.js
 d3.v3.min.js
 mpld3.v0.2.js
+run_prettify.js
 jeh-tech.js
 jeh-tech-canvas.js

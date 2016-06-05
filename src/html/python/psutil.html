@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>PsUtil Notes</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+	<script> 
+		$(function(){
+			AddLinkToTeleTypeText({
+			});
+		});
+	</script>
+</head>
+
+<body>
+	<div id="header">
+		-- This is JEHTech --
+	</div>
+
+	<div id="sidebar">
+		<h1 class="title">Links...</h1>
+		<div id="includedContent"></div>
+	</div>
+
+	<div id="content">
+		<h1 class="title">PsUtil Notes</h1>
+		<h2>Page Contents</h2>
+		<div id="page_contents">
+		</div>
+
+<h2>Find Out Which Process Has Locked A File</h2>
+<div>
+	<p>
+		<a href="https://github.com/giampaolo/psutil" target="_blank">PsUtil</a> is
+		<q>...a cross-platform library for retrieving information on running processes 
+			and system utilization...</q>.
+	</p>
+	<p>
+		I wanted to know how to find out if a file was alread open in Excel as
+		I thought it would be nice to give an informative error message to my
+		application's user if the file was locked whilst the app was trying to
+		write it. 
+	</p>
+	<p>
+		Found the answer in <a href="http://stackoverflow.com/questions/11114492/check-if-a-file-is-not-open-not-used-by-other-process-in-python"
+			target="_blank">this SO thread</a> and the code below is basically
+		just a copy of the answer with a couple of adjustments. I found to 
+		compare the file names correctly I had to use <tt>os.path.normcase()</tt>
+		(on Windows at least) and I had to change <tt>get_open_files()</tt> to 
+		<tt>open_files()</tt>. Also added an extra exception handler to handle
+		access-denied issues.
+	</p>
+	<pre class="prettyprint linenums lang-python">def IsFileAvailableToWrite(filename):
+   filename = os.path.normcase(os.path.abspath(filename))
+   for proc in psutil.process_iter():
+      try:
+         for nt in proc.open_files():
+            if os.path.normcase(os.path.abspath(nt.path)) == filename:
+               return (proc.pid, proc.name())
+      except psutil.NoSuchProcess as e:
+         # Catches race condition where a proc ends b4 we can examine its files
+         pass
+      except psutil.AccessDenied as e:
+         # If we're not root/admin sometimes we can't query processes
+         pass
+   return (None, None)</pre>
+	<p>
+		The to figure out if the write failed I catch the <tt>IOError</tt> 
+		exception as follows:
+	</p>
+	<pre class="prettyprint linenums lang-python">retry = True
+while retry:
+   try:
+      ## YOUR FILE WRITE HERE ##
+      pandas_dataframe_obj.to_csv(myFile, ...)
+      retry = False
+   except IOError as e:
+      if e.errno != errno.EACCES: # Only catch access denied errors
+         raise
+      else:
+         pid, pname = IsMapAvailableToWrite(myFile)
+         if pid is not None:
+            ## Found the process that has this file open ##
+            print "The file is already in use. Owned by '{}'".format(pname)
+            result = GetUserInput("Have you closed the program?", "yn")
+            if result != UserInput.YES:
+               raise
+         else:
+            raise</pre>
+</div>
+
+	</div> <!-- End content div -->
+</body>
+</html>
+
+

@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>790</x>
+      <y>180</y>
+      <w>120</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>Revision
+--
+date
+kind : enum
+number : int</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>380</x>
+      <y>30</y>
+      <w>300</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;dict&gt;&gt;
+PysvnLog
+--
+*Keys:*
+  changed_paths : list(PysvnLogChangedPath)
+  author : string
+  date : float
+  has_children : bool
+  revprops : dict
+  message : string
+  revision : Revision</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>790</x>
+      <y>30</y>
+      <w>260</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;dict&gt;&gt;
+PysvnLogChangedPaths
+--
+*Keys:*
+  action : string
+  path : string (relative to repo root)
+  copyfrom_path : string
+  copyfrom_revision : string</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>670</x>
+      <y>40</y>
+      <w>140</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;120.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>670</x>
+      <y>180</y>
+      <w>140</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>120.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>380</x>
+      <y>290</y>
+      <w>300</w>
+      <h>560</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;dict&gt;&gt;
+PysvnEntry
+--
+*Keys:*
+  repos : string (base repo url)
+  url : string (full path to item)
+  name : string (name of node)
+  
+  commit_author : string  
+  commit_time : float
+  /* last revision of explicit commit */
+  commit_revision : Revision 
+  /* current implicit rev */
+  revision : Revision
+  
+  is_copied : bool
+  copy_from_url
+  copy_from_revision
+  
+  schedule : wc_schedule  
+  is_absent
+  properties_time
+  conflict_old
+  lock_owner
+  property_reject_file
+  lock_creation_date
+  conflict_work
+  kind : node_kind
+  lock_token
+  text_time
+  lock_comment
+  is_deleted : bool
+  uuid  
+  checksum
+  conflict_new</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>670</x>
+      <y>250</y>
+      <w>200</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>180.0;10.0;180.0;60.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLInterface</id>
+    <coordinates>
+      <x>170</x>
+      <y>30</y>
+      <w>140</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>*PySvn.Client().log()*
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>240</x>
+      <y>40</y>
+      <w>160</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;140.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLInterface</id>
+    <coordinates>
+      <x>160</x>
+      <y>280</y>
+      <w>160</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>*PySvn.Client().info()*
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>240</x>
+      <y>290</y>
+      <w>160</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;140.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLInterface</id>
+    <coordinates>
+      <x>1150</x>
+      <y>370</y>
+      <w>160</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>*PySvn.Client().info2()*
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>790</x>
+      <y>370</y>
+      <w>300</w>
+      <h>280</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;dict&gt;&gt;
+PysvnInfo
+--
+*Keys:*
+  URL
+  repos_root_URL
+  
+  last_changed_date 
+  last_changed_rev : Revision
+  last_changed_author : string
+
+  rev : Revision
+  
+  kind
+  lock 
+  wc_info
+  repos_UUID</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1080</x>
+      <y>380</y>
+      <w>160</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>140.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>840</x>
+      <y>250</y>
+      <w>30</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;120.0</additional_attributes>
+  </element>
+</diagram>

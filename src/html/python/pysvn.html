@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>PySvn Notes</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+	<script> 
+		$(function(){
+			AddLinkToTeleTypeText({
+			});
+		});
+	</script>
+</head>
+
+<body>
+	<div id="header">
+		-- This is JEHTech --
+	</div>
+
+	<div id="sidebar">
+		<h1 class="title">Links...</h1>
+		<div id="includedContent"></div>
+	</div>
+
+	<div id="content">
+		<h1 class="title">PySvn Notes</h1>
+		<h2>Page Contents</h2>
+		<div id="page_contents">
+		</div>
+
+<h2>Preamble...</h2>
+<div>
+	<p>
+		<a href="http://pysvn.tigris.org/" target="_blank">PySvn</a> is a neat
+		Python module who's <q>goal is to enable tools to be written in Python 
+		that use Subversion.</q>
+	</p>
+	<p>
+		I'm using PySvn version 1.7.5.0. You can find out your version by doing the
+		following as unfortunately <code>pysvn.__version__</code> isn't defined :(
+	</p>
+	<pre>&gt;&gt;&gt; import pysvn
+&gt;&gt;&gt; pysvn.version
+(1, 7, 5, 0)</pre>
+</div> <!-- END H2 preamble -->
+
+<h2>A Little (Scrappy) Example</h2>
+<div>
+	<p>
+		A silly little script that does a slightly more pretty log print
+		than the standard SVN log. It colours headings and organises the
+		file lists by action. Based on examples found on the 
+		<a href="http://pysvn.tigris.org/" target="_blank">PySvn</a> 
+		developers guide.
+	</p>
+	<pre class="prettyprint linenums lang-python">import pysvn
+import colorama
+from collections import defaultdict 
+
+colorama.init()
+
+TITLE_COLOR = colorama.Fore.GREEN + colorama.Style.BRIGHT
+START_BOLD  = colorama.Style.BRIGHT
+END_COLOR   = colorama.Style.RESET_ALL
+
+client = pysvn.Client()
+
+svn_log_entries = client.log(".", discover_changed_paths=True)
+
+action_dict = {"M" : "Modified", "A": "Added", "U": "Updated", "G" :"Changes merged", "D" : "Deleted", "R" : "Replaced", "B" : "Branched"}
+
+for svn_log_entry in svn_log_entries:
+   by_action = defaultdict(list)
+   for path in svn_log_entry.changed_paths:
+      if (path.action == "A") and (path.copyfrom_path is not None):
+         by_action["B"].append(path)
+      else:
+         by_action[path.action].append(path)
+
+   if "B" in by_action:
+      print START_BOLD + "&gt;" * 40 + END_COLOR
+      print TITLE_COLOR + "Revision: " + END_COLOR + str(svn_log_entry.revision.number)
+      print TITLE_COLOR + "Author: " + END_COLOR + svn_log_entry.author
+      print TITLE_COLOR + "Message: " + END_COLOR
+      print svn_log_entry.message if hasattr(svn_log_entry, "message") else "-- No message --"
+   
+      print TITLE_COLOR + "Files:" + END_COLOR
+      for key in by_action:
+         if key != "B": continue
+         print "   " + START_BOLD + action_dict[key] + ":"
+         print "   " + "-" * (len(action_dict[key]) + 1) + END_COLOR
+         paths_for_action =  by_action[key]
+         for path in paths_for_action:
+            print "      " + path.path
+            if path.copyfrom_path is not None:
+               print "        From: " + path.copyfrom_path + " @" + str(path.copyfrom_revision.number) + " (" + str(path.copyfrom_revision.kind) + ")"
+      print START_BOLD + "&lt;" * 40 + END_COLOR
+      print "\n"</pre>
+</div> <!-- End H2 Scrappy example -->
+
+<h2>Getting file/repo logs and info</h2>
+<div>
+	<p>
+		<img src="##IMG_DIR##/python/pysvn.png">
+	</p>
+	<pre>currPropList = client.proplist(curr_path, recurse=False)
+      if len(currPropList) > 0:
+         currPropList = currPropList[0][1].keys()</pre>
+
+</div>  <!-- End H2 Getting file/repo logs and info -->
+
+	</div> <!-- End content div -->
+</body>
+</html>
+
+

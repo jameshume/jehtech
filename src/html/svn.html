@@ -31,6 +31,9 @@
 		<div id="page_contents">
 		</div>
 
+		<h2>Install On Ubuntu Or Upgrade</h2>
+		<pre>sudo apt-get install subversion --upgrade</pre>
+
 		<h2>Make SVN use P4Merge For Diff</h2>
 		<p>I really like the <a href="http://www.perforce.com/product/components/perforce-visual-merge-and-diff-tools" target="_blank">
 		   Perforce merge and diff tools</a> so after a bit of searching 
@@ -277,6 +280,49 @@ svn commit</pre>
 			all the properties set on a directory or file.
 		</p>
 
+		<h2>Externals</h2>
+		<div>
+			<p>
+				Can kinda emulate Perforce client specs, but either way are pretty useful
+				if you want your development line to include other bits of code from
+				different development lines. I.e. <q>...contruct a working copy that
+				is made out of a number of different checkouts</q>. When a branch
+				has externals, after the branch is checked out or updated, subversion
+				will also automatically chekout/update the external items into the
+				working copy.
+			</p>
+			<p>
+				To set up externals use the svn property <b><tt>svn:externals</tt></b>.
+				As the manual points out, it is a <b>multiline property</b> so best use
+				<tt>svn prop<b>edit</b></tt> as oppsed to <tt>svn propset</tt>.
+			</p>
+			<p>
+				The manual also recommends using <em>explicit revisions</em> in 
+				your external definitions so that the snapshot of the external soruce
+				is <em>well controlled</em> and you don't get unexpected updates
+				to external code that you may not control. Note that this does mean,
+				however, that you will <em>not</em> be able to modify the external.
+			</p>
+			<p>
+				If you do modify an external, you must explicity commit the external.
+				<b>Doing a commit on the &quot;mother&quot; checkout will <em>not</em>
+				recurse into the externals</b>.
+			</p>
+			<p>
+				If the external definition references something in the same repository
+				it is also good practice to use paths relative to the root of the
+				repository. I.e. paths prefixed with &quot;<tt>^/</tt>&quot;.
+			</p>
+			<p>
+				The format for the <tt>svn:externals</tt> property is this:
+			</p>
+			<pre>^/path/to/external[@<i>revision</i>] local/path</pre>
+			<p>
+				Or...
+			</p>
+			<pre>[-r <i>revision</i>] ^/path/to/external local/path</pre>
+		</div> <!-- END: H2 Externals -->
+
 		<h2>Misc</h2>
 		<div>
 			<h3>Check Your SSH Connection</h3>
@@ -291,6 +337,15 @@ svn commit</pre>
 				go to the <tt>[tunnels]</tt> section. In the SSH command take out the
 				<tt>-q</tt> option to get better debug messages to the console.
 			</p>
+			<p>
+				<b>OR...</b> even better just type...
+			</p>
+			<pre>export SVN_SSH=&quot;ssh -v &quot;</pre>
+			<p>
+				...either on the same line as your svn command to just apply it
+				to that command, or on a line by its own to make the setting
+				apply to all svn commands. (Note the trailing space after the -v).
+			</p>
 
 			<h3>Add all untracked files</h3>
 			<pre>svn add $(svn status | grep ? | awk '{print $2}')</pre>
@@ -302,7 +357,7 @@ svn commit</pre>
 			<p>If <tt>filename</tt> is ommitted all changes in that changeset
 			are examined</p>
 
-			<h3>Nice Diff Syntax For Same-File-Different-Branch</h2>
+			<h3>Nice Diff Syntax For Same-File-Different-Branch</h3>
 			<p>Useful command example is:</p>
 			<pre class="prettyprint linenums">svn diff ^/branches/{PATH_1,PATH_2}/some/repo/path</pre>
 			<p>Where:</p> 
@@ -313,7 +368,14 @@ svn commit</pre>
 			<p>Therefore the whole line expands to the following.</p>
 			<pre>svn diff &lt;root&gt;/branches/PATH_1/some/repo/path &lt;root&gt;/branches/PATH_2/some/repo/path</pre>
 
-			<a name="Diff2Paths"><h3>Diff Two Paths But Select Exactly What To Diff</h3></a>
+			<p>
+				This is really a linux variable expansion, it's not something
+				SVN actually offers.
+			</p>
+
+			<a name="Diff2Paths">
+			<h3>Diff Two Paths But Select Exactly What To Diff</h3>
+			</a>
 			
 			<p>
 				I found it really useful to take a summary of SVN diffs, delete 

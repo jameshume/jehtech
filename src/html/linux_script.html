@@ -50,6 +50,61 @@
 			</ol>
 		</div> <!-- END H2: References -->
 
+		<h2>Running Ubuntu On VirtualBox</h2>
+		<div>
+			<h3>Installing Ubuntu Guest Additions</h3>
+			<p>
+				The <a href="https://www.virtualbox.org/manual/ch04.html"
+				       target="_blank">guest additions</a> are needed because
+				<q>they consist of device drivers and system applications that optimize 
+				the guest operating system for better performance and usability</q>.
+				They allow the system to do things like get the screen to scale 
+				correctly in full screen mode, enable mouse pointer integration, 
+				share clipboard and folders between host and guest and so on. See
+				the link for full details.
+			</p>
+			<p>
+				You can normally just install them from the VirtualBox menu as 
+				shown below:
+			</p>
+			<p>
+				<img src="##IMG_DIR##/install_guest_additions_from_menu.png" alt="Image showing how to install guest additions on VirtualBox from VirtualBox menu"/>
+			</p>
+			<p>If that fails for whatever reason you can install and download the 
+			   latest guest additions ISO from the VirtualBox webstite. You can then
+			   add the CD to the VM's media as shown below (whilst the VM is powered
+			   off).
+			</p>
+			<p>
+				<img src="##IMG_DIR##/add_vbox_additions_iso.png" alt="Image showing how to add a CD ISO to VM on VirtualBox"/>
+			</p>
+			<p>Now power up the VM. It will be 
+			   mounted on <tt>/media/&lt;user name&gt;/VBOXADDITIONS_x.x.x_xxxxx</tt>. 
+			   Change dir into that folder and <tt>sudo run VBoxLinuxAdditions.run</tt>. 
+			   Reboot.
+			</p>
+			<h3>Adding A Shared Directory Between Host and Guest</h3>
+			<p>
+				Whilst the VM is powered off, do the following to share a directory
+				from the host (in my case Windows 7) and the guest (in my case Ubuntu 16).
+			</p>
+			<p>
+				<img src="##IMG_DIR##/virtual_box_add_shared_dir.png" alt="Visual instruction on how to add shared folder in VirtualBox"/>
+			</p>
+			<p>Once you have created this share and select the auto-mount option,
+			   you may still not be able to access it. If you get a <em>permission denied</em>
+			   error then it is probably because your user account is not part
+			   of the <tt>vboxsf</tt> group and does not have permissions to access
+			   shared folders.
+			</p>
+			<p>
+				To fix, open a terminal window and type &quot;<tt>sudo usermod -G vboxsf -a &lt;user name&gt;</tt>&quot;.
+			   Then log off, log on again. Now you should be able to acccess the 
+			   shared directory, found under <tt>/media/sf_&lt;share dir name&gt;</tt>,
+			   which from the above example would be <tt>/media/s_virtual_transfer</tt>.
+			</p>
+		</div> <!-- END H2: Run ubuntu on vb -->
+
 		<h2>Ensure A Script Runs As Root</h2>
 		<div>
 			<p>

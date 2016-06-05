@@ -222,6 +222,67 @@ ax.grid(which='major', alpha=0.75)
 labels = [l.get_label() for l in lines]</pre>
 </div>
 
+<h2>Watch Out For Figure Persistence: Garbage Collection Of Figures!</h2>
+<div>
+	<p>
+		The PyPlot interface to Matplotlib is stateful: it keeps track of
+		<em>every</em> figure that you create so that you can always &quot;get them back&quot;
+		in the Matplotlib style of things. Thus, <em>to allow the garbage collector
+		to free figure objects <b>you must explicitly pyplot.close() them</b>!</em>
+	</p>
+	<p>
+		The following is a little example that shows this behaviour. Note, you might have
+		been fooled into thinking that when the class was deleted, the figure and
+		axis it owned would also be deleted, but as you can see they are not freed,
+		even when garbage collection is forced. This is because PyPlot has its
+		own references to these objects: it keeps track of every figure you create.
+	</p>
+	<pre class="prettyprint linenums lang-python">import matplotlib.pyplot as pl
+import weakref
+import gc
+ 
+class A(object):
+   def __init__(self):
+      self.fig, self.ax = pl.subplots()
+ 
+a = A()
+aref = weakref.ref(a.fig)
+
+print "There are {} figs".format(len(pl.get_fignums()))
+del a
+a = None
+print "There are {} figs after del".format(len(pl.get_fignums()))
+
+result = gc.collect()
+print "GC collected {}".format(result)
+print "Weak ref is... {}".format(aref())
+print "There are {} figs after del &amp; GC".format(len(pl.get_fignums()))
+
+pl.close(aref())
+print "There are {} figs after close".format(len(pl.get_fignums()))
+
+result = gc.collect()
+print "GC collected {}".format(result)
+print "Weak ref is... {}".format(aref())</pre>
+	<p>
+		If, like me, you thought that the figure would be garbage collected
+		after the <tt>del a; gc.collect()</tt> statements, you'd be wrong. You
+		have to call <tt>pl.close()</tt>. Only after that can the figure be
+		garbage collected successfully.
+	</p>
+	<p>
+		The programs output shows this:
+	</p>
+	<pre>There are 1 figs
+There are 1 figs after del
+GC collected 0
+Weak ref is... Figure(640x480) # &lt;&lt; The GC has NOT reclaimed the fig
+There are 1 figs after del &amp; GC
+There are 0 figs after close
+GC collected 2965
+Weak ref is... None   # &lt;&lt; The GC has reclaimed the fig</pre>
+</div> <!-- Garbage collection of figures -->
+
 <h2>Sub Plots</h2>
 <div>
 	<h3>Intro To Sub Plots</h3>
@@ -504,6 +565,10 @@ loc='upper center'</pre>
 	<p>
 		<a href="http://matplotlib.org/users/event_handling.html"
 		target="_blank">http://matplotlib.org/users/event_handling.html</a>
+	</p>
+	<p>
+		<a href="http://scipy-cookbook.readthedocs.org/items/Matplotlib_Animations.html"
+			target="_blank">http://scipy-cookbook.readthedocs.org/items/Matplotlib_Animations.html</a>
 	</p>
 </div>
 	</div>

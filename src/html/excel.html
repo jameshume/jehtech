@@ -245,6 +245,104 @@
 				<a href="../downloadables/LookUpAMatrix.xlsx" target="_blank">Download the completed Excel example here</a>.
 			</p>
 		</div> <!-- END: H2 -->
+
+		<h2>Comparing Dates</h2>
+		<div>
+			<p>Wanted to count number of tests that occurred on a specific date.
+			   Ans: Create a column with formula as follows.
+			</p>
+			<pre>=IF(F2=<b>DATEVALUE</b>("16/5/2016"),1,0)</pre>
+			<p>
+			Note the use of the <tt>DATEVALUE</tt> function. Then just sum the column.
+			</p>
+		</div>
+
+		<h2>Firing Events When A Cell Is Clicked</h2>
+		<div>
+			<p>
+				I had a spreadsheet with a set of results. Column A has a filename,
+				column B has a path to a file as named in column A, and column C has 
+				a different path to a file as named in column A. I want to click the
+				file name and then open two images: <tt>pathInColumn(B) + a</tt> and
+				<tt>pathInColumn(C) + a</tt>. The image below demostrates this a 
+				little more clearly...
+			</p>
+			<p>
+				<img src="##IMG_DIR##/excel_click_cell_load_img.png" alt="Microsoft Excel spreadsheet showing that I want to click a cell and catch cell click event"/>
+			<p>
+				To accomplish this I had a bit of a google and the following is 
+				based on these two links.
+			</p>
+			<ul>
+				<li><a href="http://www.vbaexpress.com/forum/showthread.php?32461-how-to-open-a-file-with-Win-Photo-Viewer"
+					target="_blank">VBAExpress: How to open a file with Windows Photo Viewer</a>, answer by user &quot;mdmackillop&quot;.
+				</li>
+				<li><a href="http://smallbusiness.chron.com/run-event-ms-excel-cell-selected-40335.html" 
+					target="_blank">How to Run an Event in MS Excel If a Cell Is Selected</a>.
+				</li>
+				<li><a href="https://msdn.microsoft.com/en-us/library/office/ff838238.aspx"
+					target="_blank">MS Excel Range Object</a>.
+				</li>
+			</ul>
+			<p>
+				To do this, first save your spreadsheet as a macro-enabled spreadsheet.
+				It will have a <tt>.xlsm</tt> extension. Load the VBA console from
+				the developer tab.
+			</p>
+			<p>
+			<img src="##IMG_DIR##/excel_load_vba_window.png" alt="Loading the VBA developer window from Excel"/>
+			</p>
+			<p>
+				In the VBA editor, in the Project explorer view on the left hand side of the window, 
+				select the VBA project for you workbook and drill down to select the worksheet
+				you wish to catch cell selection events for. Double click the work sheet and
+				an editor window is display. In the editor window, select from the top left
+				drop down box "Worksheet". This is shown in the image below...
+			</p>
+			<p>
+			<img src="##IMG_DIR##/excel_load_vba_worksheet_events.png" alt="Load VBA for worksheet in Excel"/>
+			</p>
+			<p>
+				Once you have selected &quot;Worksheet&quot; the editor will
+				automatically fill in a template for the <tt>Worksheet_SelectionChange</tt>
+				event. This function is called every time a new cell receives focus.
+				The parameter <tt>Target</tt> is an MS Excel <tt>range</tt> object that
+				can be used to find out which cell(s) have been selected by the user.
+			</p>
+			<p>
+			<img src="##IMG_DIR##/excel_selection_change.png" alt="Excel Worksheet_SelectionChange function"/>
+			</p>
+			<p>
+				Now that we have the shell of the function, we need to fill it in. Use
+				the code below:
+			</p>
+			<pre class="prettyprint linenums">Private Sub Worksheet_SelectionChange(ByVal Target As Range)
+    Dim fname1 As String
+    Dim fname2 As String
+    If Intersect(Range("A1:A1"), Target) Is Nothing Then
+        If Not Intersect(Range("A:A"), Target) Is Nothing Then
+            If Target.Count = 1 And Not IsEmpty(Target.Value) Then
+                fname1 = Target.Cells(1, 2) + "\" + Target.Value + ".png"
+                fname2 = Target.Cells(1, 2) + "\" + Target.Value + ".png"
+
+                ActiveWorkbook.FollowHyperlink "file://" + fname1
+                ActiveWorkbook.FollowHyperlink "file://" + fname2
+            End If
+        End If
+    End If
+End Sub</pre>
+		<p>
+			The first <tt>If</tt> statement makes sure that the selection is not
+			in the first row of column A as this is our table header. The function
+			<tt>Intersect()</tt> checks if the range <tt>A1:A1</tt> which is our
+			header row is part of the range defined by <tt>Target</tt> which is 
+			the cells that the user has selected.
+		</p>
+		<p>
+			And so on...
+		</p>
+		</div>
+
 	</div> <!-- END H1 padding div -->
 	</div>
 </body>

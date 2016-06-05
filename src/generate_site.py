@@ -119,6 +119,8 @@ def find_html_files(base_dir):
 
 		for filename in fnmatch.filter(filenames, '*.html'):
 			yield (dirname, filename)
+		for filename in fnmatch.filter(filenames, '*.php'):
+			yield (dirname, filename)
 
 def path_explode(path):
 	""" Explode a path string into a list with each list element
@@ -226,11 +228,11 @@ def deploy_site():
 
 	#
 	# Now copy across all other important files
-	nonHtmlFiles = [ 'reCaptchaSecret.txt',
+	nonHtmlFiles = [ #'reCaptchaSecret.txt',
 	                 'robots.txt',
 	                 'downloadables',
 	                 'images', 
-						  'fonts']
+	                 'fonts']
 
 	for filename in nonHtmlFiles:
 		if os.path.exists(filename):
