@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>Paramiko SSH Notes</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+	<script> 
+		$(function(){
+			AddLinkToTeleTypeText({
+			});
+		});
+	</script>
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">Paramiko: SSH and SCP in Python</h1>
+<p>
+	<a href="http://docs.paramiko.org/en/1.17/" target="_blank">Paramiko</a> 
+	is a cute Python library that gives you cross platform SSH and 
+	SCP capabilities. On Linux it relies on OpenSSH and on Windows it uses 
+	Pageant (I assume it could be configured to use something else... didn't 
+	need to consider that).
+</p>
+
+<h2>Page Contents</h2>
+<div id="page_contents">
+</div>
+
+<h2>Problems on Windows</h2>
+<div>
+	<p>
+		At the time of writing this I was trying to use the Paramiko library
+		on a Windows XP machine using Paramiki version 1.16.0. It wouldn't work
+		giving the following error:
+	</p>
+	<pre>File "C:\...\paramiko\_winapi.py", line 162, in write
+ctypes.windll.kernel32.RtlMoveMemory(dest, msg, length)
+ValueError: Procedure probably called with too many arguments (4 bytes in excess)</pre>
+	<p>After a bit of googling I found out that 
+		it has been fixed on the Paramiko mainline but hadn't made it into 
+		an available pip-installable distribution yet. 
+	</p>
+	<p>
+		The fix is really easy. Find the file <tt>_winapi.py</tt> in your
+		Python distro and 
+		<a href="https://github.com/paramiko/paramiko/pull/619/files" target="_blank">
+		make the changes described here</a>. In summary, wherever you see a line
+		reading &quot;<tt>length = ctypes.wintypes.SIZE(n)</tt>&quot;, change it
+		to &quot;<tt>length = ctypes.c_size_t(n)</tt>&quot;.
+	</p>
+</div>
+
+	</div> <!-- End content div -->
+</body>
+</html>
+
+
