@@ -29,6 +29,16 @@
 	$(function(){
 		$("#dialog").dialog({ autoOpen: false, resizable: false });
 		$('#dialog').parent().css({position:"fixed"}).end().dialog('open');
+
+      $("#confidence_interval_illustration_code_p").hide();
+      $("#z_confidence_interval_illustration_code_p").hide();
+
+      $("#confidence_interval_illustration_code_link").click(function () {
+         $("#confidence_interval_illustration_code_p").toggle();
+      });
+      $("#z_confidence_interval_illustration_code_link").click(function () {
+         $("#z_confidence_interval_illustration_code_p").toggle();
+      });
 	});
   </script>
 
@@ -90,6 +100,26 @@
    <h2>Page Contents</h2>
    <div id="page_contents">
    </div>
+
+<h2>References and Resources</h2>
+<div>
+   <p>
+      The text book I borrowed off a friend...
+   </p>
+   <ol>
+      <li>&quot;Introduction To Statistics&quot;, Thanos Margoupis, University of Bath, Peason Custom Publishing.</li>
+   </ol>
+   <p>
+      The following are absolutely amazing, completely free, well taught resources
+      that just put things in plain English and make concepts that much easier
+      to understand! Definitely worth a look!
+   </p>
+   <ol>
+      <li>The amazing <a href="https://www.khanacademy.org/math" target="_blank">Khan Achademy</a>.</li>
+      <li>The amazing <a href="https://www.ck12.org" target="_blank">CK12 Foundation</a>.</li>
+   </ol>
+</div>
+
 
 <h2>The Basics of Discrete Probability Distributions</h2>
 <div>
@@ -946,6 +976,13 @@
       Where $\mu$ is called the <b>mean</b> and is the mean of the <b>population</b>.
    </p>
    <p>
+      The calculation of measurements like $E(X^2)$ becomes...
+
+      $$
+         E(X^2) = \sum_x x^2P(x)
+      $$
+   </p>
+   <p>
       <b>Variance</b>, $\sigma^2$ is the average squared distance from the mean and is 
       defined as follows. The square is taken so that distances don't cancel 
       eachother out (i.e, a negative distance and positive distance could 
@@ -953,36 +990,71 @@
 
       $$
       \begin{align}
-         \sigma^2 &= \sum_x (x - \mu)^2P(x) &= E[(X - \mu)^2] \\
-                  &= \sum_x x^2P(x) - \mu^2 &= E(X^2) - \mu^2
+         \text{Var}(X) = \sigma^2 &= \sum_x (x - \mu)^2P(x) \\
+         &= E[(X - \mu)^2] \\
       \end{align}
       $$
 
+      We can re-write this as follows:
+
+      $$
+      \begin{align}
+         \text{Var}(X) = \sigma^2 &= \sum_x (x - \mu)^2P(x) \\
+         &= \sum_x (x^2 - 2x\mu + \mu^2)P(x) \\
+         &= \sum_x x^2P(x) - 2\mu\sum xP(x) + \mu^2\sum P(x) \\
+         &= E[X^2] - 2\mu E[X] + E[X]^2 \\
+         &= E[X^2] - 2E[X]^2 + E[X]^2 \text{  , (because } \mu == E[X]\text{ and } \therefore \mu E[X] == E[X]^2 \text{)}\\
+         &= E[X^2] - E[X]^2 
+      \end{align}
+      $$
+
+
+      In summary,
+
+      $$
+       \text{Var}(X) = E[(X - \mu)^2] = E(X^2) - \mu^2 = E(X^2) - E(X)^2
+      $$
+   </p>
+   <p>
       <b>Standard Deviation</b>, $\sigma$, is the positive square root of
       the variance.
+   </p>
+   <p>
+      The calculation of measurements like $\text{Var}(aX)$ becomes...
+
+      $$
+      \begin{align}
+         \text{Var}(aX) &= E[(aX)^2] - E[aX]^2 \\
+         &= E[a^2X^2] - (aE[X])^2 \\
+         &= a^2E[X^2] - a^2E[X]^2 \\
+         &= a^2(E[X^2] - E[X]^2) \\
+         &= a^2\text{Var}(X)
+      \end{align}\\
+      $$
+
    </p>
    <p>
       Why does $E[(X - \mu)^2]$ equal $E(X^2) - \mu^2$?
 
       $$
       \begin{align}
-          E[(X - \mu)^2] &= \Sigma_i p(x_i)[x_i - \mu]^2\\
-          &= \Sigma_i p(x_i)[x_i^2 - 2x_i\mu +\mu^2]\\
-          &= \Sigma_i p(x_i)x_i^2 - 2\mu\Sigma_i p(x_i)x_i + \mu^2 \Sigma_i p(x_i)
+          E[(X - \mu)^2] &= \Sigma_i P()[x_i - \mu]^2\\
+          &= \Sigma_i P(x_i)[x_i^2 - 2x_i\mu +\mu^2]\\
+          &= \Sigma_i P(x_i)x_i^2 - 2\mu\Sigma_i P(x_i)x_i + \mu^2 \Sigma_i P(x_i)
       \end{align}
       $$
 
       From our definition of $E(X)$ we know that ...
 
       $$
-          \Sigma_i p(x_i)x_i^2 = E(X^2)
+          \Sigma_i P(x_i)x_i^2 = E(X^2)
       $$
 
       And...
 
       $$
       \begin{align}
-         2\mu\Sigma_i p(x_i)x_i &= 2\mu E(X)\\
+         2\mu\Sigma_i P(x_i)x_i &= 2\mu E(X)\\
          &= 2E(X)E(X) \\
          &= 2E(X)^2
       \end{align}
@@ -992,7 +1064,7 @@
       must sum to 1, so therefore...
 
       $$
-      \mu^2 \Sigma_i p(x_i) = \mu^2
+      \mu^2 \Sigma_i P(x_i) = \mu^2
       $$
 
       Thus we can say this...
@@ -1067,6 +1139,23 @@
                       &= b^2\sigma_X^2
       \end{align}
       $$
+   </p>
+   <p>
+      We can derive the first equation as follows, using our first definition
+      of the expected value of a random variable.
+
+      $$
+      \begin{align}
+      E[a + bX] &= \sum (a + bx_i)P(x_i) \\
+      &= \sum aP(x_i) + \sum bx_iP(x_i) \\
+      &= a + b \sum x_iP(x_i) \\
+      &= a + bE[X] \\
+      &= a + b\mu_X
+      \end{align}
+      $$
+
+      The same can be done for the variance can also be done in a similar manner.
+      TODO: add this here.
    </p>
 
    <h3>Binomial Distribution</h3>
@@ -1578,7 +1667,7 @@ fig.savefig('poisson_road_fatilities_distrib.png', format='png')</pre>
       values.
    </p>
    <p>
-      Enter the <b>join probability function</b>. It expresses the probability
+      Enter the <b>joint probability function</b>. It expresses the probability
       that each random variable takes on a value as a function of those
       variables.
    </p>
@@ -1775,7 +1864,7 @@ fig.savefig('poisson_road_fatilities_distrib.png', format='png')</pre>
        <li><b>Variance</b> is $Var(X) = E[(X - \mu)^2] = \sigma^2$,</li>
    </ol>
    <p>
-      The normal distribution is defined with the following <b>notaton</b>:
+      The normal distribution is defined with the following <b>notation</b>:
       $$
          X \sim N(\mu, \sigma^2)
       $$
@@ -1800,8 +1889,12 @@ fig.savefig('poisson_road_fatilities_distrib.png', format='png')</pre>
       $$
          Z = \frac{X - \mu}{\sigma}
       $$
-
-      So to solve $P(a \lt X \lt b)$ we solve the following:
+  
+      In English we can say that the <b>z-score/value is the number of standard deviations
+      $X$ is away from the (population) mean $\mu$</b>.
+    </p>
+    <p>
+      To solve $P(a \lt X \lt b)$ we solve the following:
 
       $$
          P\left( \frac{a - \mu}{\sigma} \lt Z \lt \frac{b - \mu}{\sigma}\right)
@@ -1811,9 +1904,40 @@ fig.savefig('poisson_road_fatilities_distrib.png', format='png')</pre>
       <a href="https://en.wikipedia.org/wiki/Standard_normal_table"
          target="_blank">standard normal table</a>.
    </p>
+   <p>
+      We can also get the probability of a Z score and vice versa in Python
+      by using <tt>scipy.stats.norm.cdf()</tt> and <tt>scipy.stats.norm.ppf()</tt>
+      respectively as <a href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.norm.html"
+         target="_blank">documented here</a>.
+   </p>
+
+   <h4>Percentiles</h4>
+   <p>
+      <a href="https://en.wikipedia.org/wiki/Percentile"
+         target="_blank">Wikipedia defines a percentile</a> as a measure 
+      giving the value below which a given percentage of obersvations fall. If
+      an observation is AT the x<sup>th</sup> percentile then it has the value, V,
+      at which x% of the scores can be found. If it is IN this percentile then
+      its value is in the range 0 to V.
+   </p>
+   <p>
+      Percentiles aren't really specific to normal distributions but you often
+      get asked questions like &quot;what is the 95<sup>th</sup> percentile of
+      this distribution?&quot;
+   </p>
+   <p>
+      In the standard normal distribution...
+   </p>
+   <ol>
+      <li>90<sup>th</sup> percentile is at z=1.28. (This is because 
+          $P(z &lt; 1.28) = 90%$).</li>
+      <li>95<sup>th</sup> percentile is at z=1.645. (This is because
+          $P(z &lt; 1.645) = 95%$).</li>
+      <li>And so on...</li>
+   </ol>
 </div>
 
-<h2>Sampling Distributions</h2>
+<h2><a name="sampling_distributions">Sampling Distributions</a></h2>
 <div>
    <h3>A Little Intro...</h3>
    <p>
@@ -1842,6 +1966,7 @@ fig.savefig('poisson_road_fatilities_distrib.png', format='png')</pre>
       has 10 members:
    </p>
 
+   <a name="SamplingDistributionPythonExample"></a>
    <pre class="prettyprint linenums">import numpy as np
 import matplotlib.pyplot as pl
 
@@ -1919,7 +2044,7 @@ pl.show()</pre>
    
    <p>
       <a href="https://en.wikipedia.org/wiki/Independent_and_identically_distributed_random_variables"
-         target="_blank">Wikipedia</a> defines IID random variables as <q>...a sequence or other collection of random variables is independent and identically distributed (i.i.d.) if <b>each random variable has the same probability distribution as the others</b> and all are <b>mutually independent</b>...</q>
+			target="_blank">Wikipedia</a> says that <q>...a sequence or other collection of random variables is <b>independent and identically distributed (I.I.D.)</b> if <b>each random variable has the same probability distribution as the others</b> and all are <b>mutually independent</b>...</q>
    </p>
    <p>
       It is often the case that if the population is large enough and a sample
@@ -1934,13 +2059,12 @@ pl.show()</pre>
       conistentent estimators and the law of large numbers...
    </p>
 
-   
    <h3><a name="law_of_large_numbers">The Law of Large Numbers</a></h3>
    <p>
       The law of large numbers states that the average of a very large number
       (note we haven't quite defined what &quot;very large&quot; is) of items
       will tend towards the average of the popultion from which the items are
-      drawn.  I.e., <b>the sample mean tends towards the population mean as the
+      drawn.  I.e., <b>the sample mean (or any other parameter) tends towards the population mean (or parameter, in general) as the
          number of items in the sample tends to infinity</b>.
    </p>
    <p>
@@ -1985,9 +2109,6 @@ fig.show(); pl.show()</pre>
       population mean.
    </p>
 
-<!--
-
--->
    
    <h3><a name="SamplingDistributions">Sampling Distribution Of The Sample Mean</a></h3>
    <p>
@@ -1999,10 +2120,16 @@ fig.show(); pl.show()</pre>
       The <b>&quot;sampling distribution of the sample mean&quot;</b> (a bit of a mouthful!) 
       is the probability
       distribution of the sample means obtained from all possible samples
-      of the same number of observations. That's a bit of a mounthful! All it
-      means is that the sampling distibution of the sample mean is the probability
-      distribution of the mean of any sample of a fixed size you draw from the
-      population.
+      of the same number of observations. 
+    </p>
+    <p>That's a bit of a mounthful! What it
+      means is that if we took, from the population, the exhaustive set of all
+      distinct samples of size $n$, and then took the mean of each sample, we could
+      figure out what the propability is that any sample of size $n$ has a
+      specific mean. Thus we build up the probability distribution of sample
+      means, where the sample size is $n$. We will see that this probability distribution 
+      is centered around the mean of all the sample means and that
+      it also has a normal distribution (see LLN and CLT).
    </p>
    <p>
       For example if I am a factory owner and I produce machines that accurately
@@ -2012,15 +2139,15 @@ fig.show(); pl.show()</pre>
       produce the item: I'd be halving (or more) my production throughput!
    </p>
    <p>
-      So what do I do? I can take a sample of say 100 devices each day. I can
+      So what do I do? I can take a sample of say 50 devices each day. I can
       test these to see if they accurately measure distance, and if they do I can
       assume the production process is still running correctly.
    </p>
    <p>
-      But as we have seem if I test 100 devices each day for 10 days, each of my
+      But as we have seem if I test 50 devices each day for 10 days, each of my
       10 sample sets will have a different mean accuracy. On the first day, the
-      mean accuracy of 100 devices might be 95%, on the second day, the mean of
-      the next 100 devices might be 96.53% and so on. 
+      mean accuracy of 50 devices might be 95%, on the second day, the mean of
+      the next 50 devices might be 96.53% and so on. 
    </p>
    <p>
       The sample mean has a distribution. As we can take many samples from
@@ -2029,17 +2156,17 @@ fig.show(); pl.show()</pre>
    </p>
    <p>
       Now, I can ask, on any given day, &quot;what is the probability that the
-      mean accuracy of my 100 devices is, say 95%?&quot;. This is the sampling distribution 
+      mean accuracy of my 50 devices is, say 95%?&quot;. This is the sampling distribution 
       of the sample mean: the probability
       distribution of the sample means (mean accuracy of a sample of devices) obtained 
       from all possible samples (theoretical: we can't actually measure all possible samples!) 
-      of the same number of observations (100 in this case).
+      of the same number of observations (50 in this case).
    </p>
    <p>
       The law of large numbers gives us a little clue as to how variable the 
       sample means will be... we know that if the sample size is large then
       the sample mean tends towards the population mean as has a much narrower
-      variance about the population mean. So, 100 samples is better than 10.
+      variance about the population mean. So, 50 samples is better than 10.
       But 10,000 samples would be even better. The question is how many samples
       do we need. Will try to answer that (much) later on...
    </p>
@@ -2048,14 +2175,13 @@ fig.show(); pl.show()</pre>
    <p>
       Continuing with the example of distance measurement devices. We could
       say each device in our sample set is represented by random variables
-      $A_1, A_2, ..., A_{100}$ (we samples 100 devices each day). 
+      $A_1, A_2, ..., A_{50}$ (we samples 50 devices each day). 
       We can generalise this to $m$ devices in the
       sample set. 
       
       Using our definition of <a href="#def_expected_value">expected value</a> 
-      we can define the <b>sample mean</b> as $\overline X_i$, for the 
-      i<sup>th</sup> sample set of, and is defined as
-      follows.
+      we can define the <b>sample mean</b> as the random variable $\overline A_i$, 
+      for the  i<sup>th</sup> sample set of, and is defined as follows.
 
       $$
       \overline X_i = \frac{1}{m}\sum_{i=1}^m A_i
@@ -2063,7 +2189,7 @@ fig.show(); pl.show()</pre>
 
     </p>
     <p>
-      Now we can calculate the expected value <em>of the sample mean</em>, $\overline X$ 
+      Now we can calculate the <em>expected value of the sample mean</em>, $E(\overline X)$ 
       (the mean of the sample means).
     </p>
     <p>
@@ -2097,7 +2223,7 @@ fig.show(); pl.show()</pre>
       &= \frac{n\mu}{n}\\
       &= \mu
       \end{align}
-      $$
+      $$for the 
 
       This means that the <b>mean of &quot;the sample distribution of sample means&quot;
       is the population mean</b> when the size of each sample ($m$) is sufficiently
@@ -2113,8 +2239,8 @@ fig.show(); pl.show()</pre>
    </p>
    <h4>The Variance Of The Sample Mean w.r.t. Sample Size And Standard Error</h4>
    <p>
-      Getting impatient with how long notes taking... just stating it. Sample
-      variance can be written as $\sigma_{\overlineX}^2$ or $S^2$.
+      Sample
+      variance can be written as $\sigma_{\overline X}^2$ or $S^2$.
 
       $$
       \text{Var}(\overline X) = \sigma_{\overline X}^2 = S^2 = \frac{\sigma^2}{n}
@@ -2123,6 +2249,17 @@ fig.show(); pl.show()</pre>
       We can see that <b>variance of the sampling distribution decreases as sample size 
          increases.</b> Therefore the larger the sample the more accurately we can
       infer population statistics.
+   </p>
+   <p>
+      How did we get the above results? Well, it all is a bit brain melting, but
+      here goes. The variance of the mean of sample means is written as $\text{Var}(\overline X)$.
+      Because it is the variance of the mean of sample means, we can write this:
+
+      $$
+         \text{Var}(\overline X) = \text{Var}\left(\frac{1}{n} \sum_{i=1}^{i \le n} \overline X_i\right)
+      $$
+
+      The constant $n$ can be taken out of the variance. TODO - finish this off.
    </p>
    <p>
       The sample standard deviation is often refered to as the <b>standard error</b>.
@@ -2138,12 +2275,16 @@ fig.show(); pl.show()</pre>
       \text{Var}(\overline X) = \frac{\sigma^2}{n} \cdot \frac{N-n}{N-1}
       $$
    </p>
-
-   <!--
-   <hr/>
-      <p>
+   <h4>The Shape Of The Samplign Distribution Of Sample Means</h4>
+   <p>
+      When samples are selected from a population that has a normal distribution
+      we will see (anecdotally) that the sampling distribution of sample means
+      is also normally distributed.
+   </p>
+   <p>
       A histogram of the sample means gives a better picture of the 
-      distribution of sample means from the 4 sample sets...
+      distribution of sample means from the 4 sample sets. Diagrams have been
+      drawn using the <a href="#SamplingDistributionPythonExample">previous python example</a>.
    </p>
    <p>
       <img src="##IMG_DIR##/sampling_from_normal_demo_python_dist.png" alt="Graphs of seperate samples from normal distribution showing how sample mean varies between samples"/>
@@ -2181,35 +2322,442 @@ fig.show(); pl.show()</pre>
       taken increases the distribution of sample means appears to become more
       and more gaussian in shape!. What is always true, and even more important is that <b>the
       sampling distribution becomes concentrated closer to the population mean 
-      as the sample size increases</b>, as the example above also shows (it doesn't
-      proove it... its just anecdotal evidence). We could also notice that
-      <b>as #samples increases the variance of the sample mean decreases</b>.
+      as the sample size increases</b>, as we have seen in the maths earlier. 
+      The example above also doesn't
+      proove it... its just anecdotal evidence. We could also notice that
+      <b>as #samples increases the variance of the sample mean decreases</b>,
+      again as we saw in the maths earlier.
    </p>
    <p>
-      Take care to differentiate between the <b>sample mean, $\overline x$</b>,
+      Remember: take care to differentiate between the <b>sample mean, $\overline x$</b>,
       sometimes witten as $\mu_{\overline X}$,
       and the <b>population mean, $\mu$</b>. We do not know the population
       mean. We know the sample mean. The population mean is fixed. The sample mean,
       as seen, will vary between samples.
    </p>
    <p>
-      We have seen that every random sample from the population has a different
-      number for $\overline x$. This means that <b>$\overline x$ is itself a
-      random variable</b>.
-   </p>
-   <p>
-      We must also differentiate between the <b>sample variance, $\sigma_{\overline X}^2$</b>
+      We must also remember to differentiate between the <b>sample variance, $\sigma_{\overline X}^2$</b>
       and the <b>population variance, $\sigma^2$</b>. 
       We do not know the population variance. We know the sample mean. 
       The population variance is fixed. The sample variance,
       as seen, will vary between samples.
+   </p> 
+   <p>
+      Also remember that the samples were drawn from a population that is
+      normally distributed. So the sampling distribution was also normally
+      distributed, as we have anacdotally seen. The central limit theory (CLT)
+      will show us that is doesn't matter what the population distriution is.
+      Enough samples and the sampling distribution of the sample mean will always
+      tend towards normal distribution.
    </p>
    <p>
-      In the same way that the sample mean is randome variable, so is the
-      sample variance...
+      Because the sampling distribution of sample means is normally distributed,
+      it means that we can also form a <b>standard normal distribution for the
+         sample means</b>, which we do as follows:
+
+      $$
+      \begin{align}
+         Z &= \frac{\overline X - \mu}{\sigma_{\overline X}} \\
+         &= \frac{\overline X - \mu}{\frac{\sigma}{\sqrt n}}
+      \end{align}
+      $$
    </p>
-   -->
-</div>
+
+   <h3><a name="CentralLimit">Central Limit</a></h3>
+   <p>
+      We saw that the mean of the sampling distribution of sample means is
+      $E(\overline X) = \mu$ and that the variance of the sample mean is
+      $\text{Var}(\overline X) = \frac{\sigma^2}{n}$. We also know (although
+      I haven't shown this... I haven't bothered looking up the proof either!)
+      that the sampling distribution of sample means is also normal.
+   </p>
+   <p>
+      The central limit theorem removes the restriction that the population we
+      draw from need be normally distributed in order for the sampling distribution
+      of the sample mean to be normally distributed. The central limit theoem
+      states that <b>the mean of a random sample drawn from a population with
+         <em>any</em> distribution will be approx. normally distributed as the
+      number of samples, $n$, becomes large</b>.
+   </p>
+   <p>
+      We could test this for, say, samples drawn from the binomial
+      distribution. We have to modify our python code a little though (and
+      also slim line some of the bits out)...
+   </p>
+   <pre class="prettyprint linenums">import numpy as np
+import matplotlib.pyplot as pl
+
+numSampleSets = 4000
+numSamplesPerSet = 10
+p = 0.5
+
+# Make an array of numSampleSets means of samples of size numSamplesPerSet
+# drawn from the binomial distirbution with prob of success `p`
+means = np.random.binomial(numSamplesPerSet, p, numSampleSets)
+means = means.astype("float64") / numSamplesPerSet
+
+xticks = np.arange(numSampleSets, dtype='float64')
+fig2, ax2 = pl.subplots()
+ax2.hist(means, 50)
+ax2.grid()
+ax2.set_title("Histogram of {} sample means (n={})\nSamples draw from binomian p={}".format(numSampleSets, numSamplesPerSet, p))
+ax2.set_ylabel("# sample mean's")
+ax2.set_xlabel("Sample mean bin")
+
+pl.tight_layout()
+pl.show()</pre>
+   <p>
+      When we set the number of sample sets taken to be small, at 10,
+      we get this:
+   </p>
+   <p>
+   <img src="##IMG_DIR##/dist_sample_means_from_binom_10_demo_python.png"/>
+   </p>
+   <p>
+      When we set the number of sample sets taken to be very large, at 4000,
+      we get this:
+   </p>
+   <p>
+   <img src="##IMG_DIR##/dist_sample_means_from_binom_4000_demo_python.png"/>
+   </p>
+   <p>
+      Hmmm... anacdotally satisfying at least.
+   </p>
+</div> <!-- END sampling distributions -->
+
+
+<h2>Confidence Intervals</h2>
+<div>
+   <p>The following is mostly based
+      on <a href="https://www.khanacademy.org/math/probability/statistics-inferential/confidence-intervals/v/confidence-interval-1"
+         target="_blank">this Khan Achademy tutorial</a> with some additions
+      from my reference textbook.
+   </p>
+
+   <p>
+      A confidence interval is a range of values which we are X% certain contain
+      an unknown population parameter (e.g. the population mean), based
+      on information we obtain from a sample. In other words, we can <em>infer 
+      from our sample something about an <b>unknown</b> population parameter</em>.
+   </p>
+
+   <p>
+      Let's go back to our distance measurement devices. I have a test
+      fixture that is exactly 100cm wide. Therefore a device should, when placed
+      in this fixture, report/measure a distance of 100cm +/- some tolerance.
+   </p>
+
+   <p>
+      Remember that I don't want to test all of the sensors I've produced
+      because this will kill the manufacturing time and significantly raise 
+      the cost per unit. So I've decide to test, let's say, 50 sensors. 
+   </p>
+
+   <p>
+      As I test each device in my sample of 50 I will get back a set of
+      test readings, one for each device. 100.1cm, 99cm, 99.24cm, ... etc. From
+      the sample I can calculate sample mean and sample variance. But this is
+      about all I know: I do not know my population mean or population variance!
+   </p>
+
+   <p>
+      But I have learn't something about the sampling distribution of sample means.
+      To recap, we have seen that:
+
+      $$
+         E(\overline X) = \mu
+      $$
+
+      The expected value of the sample mean (i.e.,
+      the mean of all possible sample means) is the same as the population mean
+      for large enough samples.
+
+      $$
+         \text{Var}(\overline X) = \frac{\sigma^2}{n}
+      $$
+
+      The variance of the sample mean is related to the poulation variance by
+      sample size.
+   </p>
+
+   <p>
+      So, I also know that my specific sample mean must lie somewhere in the
+      sampling distribution of sample means...
+   </p>
+
+   <p>
+      Continuing with the example then... let's say I have taken my sample
+      of 50 devices. I have a sample mean of $\overline x = 105\text{cm}$. This
+      is shown in the graph of the sampling distribution of sampling means below.
+      In this distribution my specific sample has a mean that lies somewhere in this
+      distribution.
+   </p>
+
+   <p>
+      <img src="##IMG_DIR##/confidence_interval_illustration.png"/><br/>
+      <span id="confidence_interval_illustration_code_link" style="font-size:10pt;" href="">&lt;Click me to toggle code view for graph creation&gt;</span>
+   </p>
+
+   <pre class="prettyprint linenums" id="confidence_interval_illustration_code_p">import matplotlib.pyplot as pl
+import numpy as np
+import scipy.stats
+
+sample_mean = 105
+population_mean = 99
+expected_sample_mean = 102
+var_of_expected_sample_mean = 4
+std_of_expected_sample_mean = np.sqrt(var_of_expected_sample_mean)
+
+x = np.linspace( expected_sample_mean - 4 * var_of_expected_sample_mean
+               , expected_sample_mean + 4 * var_of_expected_sample_mean
+               , 500)
+y = scipy.stats.norm.pdf( x
+                        , loc   = expected_sample_mean
+                        , scale = var_of_expected_sample_mean)
+
+max_y = scipy.stats.norm.pdf( expected_sample_mean
+                            , loc   = expected_sample_mean
+                            , scale = var_of_expected_sample_mean)
+
+fig, ax = pl.subplots()
+ax.plot(x,y)
+fill_mask = (x &gt;= expected_sample_mean) &amp; (x &lt;= expected_sample_mean + std_of_expected_sample_mean)
+ax.fill_between(x, 0, y
+               , where       = fill_mask
+               , interpolate = True
+               , facecolor   = 'lightblue')
+
+ax.annotate(r'$E(\overline{X}) = \mu$', 
+            xy=(expected_sample_mean, 0), 
+            xytext=(expected_sample_mean-2*var_of_expected_sample_mean, 0.02),
+            bbox=dict(fc="w"),
+            fontsize='large',
+            arrowprops=dict(facecolor='black', shrink=0.05, connectionstyle="arc3,rad=0.2", fc="w"))
+
+
+ax.annotate(''
+      , xy=(expected_sample_mean, max_y/2)
+      , xytext = (expected_sample_mean + std_of_expected_sample_mean, max_y/2)
+      , arrowprops=dict(arrowstyle="&lt;-&gt;"
+                       , connectionstyle="arc3"
+                       )
+      )
+
+ax.annotate(r'$\sigma_{\overline{X}} = \frac{\sigma}{\sqrt{n}}$', 
+            xy=(expected_sample_mean + std_of_expected_sample_mean/2, max_y/2), 
+            xytext=(expected_sample_mean + 2*std_of_expected_sample_mean, 3*max_y/4),
+            fontsize='large',
+            bbox=dict(fc="w"),
+            arrowprops=dict(facecolor='black', shrink=0.05, connectionstyle="arc3,rad=0.2", fc="w"))
+
+
+ax.axvline(x=population_mean, color='black', lw=2)
+ax.annotate('Population mean, $\\mu$,\nis unknown!', 
+            xy=(population_mean, max_y/2), 
+            xytext=(x[0], 3*max_y/4),
+            bbox=dict(fc="w"),
+            arrowprops=dict(facecolor='black', shrink=0.05, connectionstyle="arc3,rad=0.2", fc="w"))
+
+ax.axvline(x=sample_mean, color='black', lw=2)
+ax.annotate('Sample mean, $\\overline{{x}}$,\nis {}'.format(sample_mean), 
+            xy=(sample_mean, max_y/2), 
+            xytext=(sample_mean + 2*std_of_expected_sample_mean, max_y/4),
+            bbox=dict(fc="w"),
+            arrowprops=dict(facecolor='black', shrink=0.05, connectionstyle="arc3,rad=0.2", fc="w"))
+
+ax.set_title("An example sampling distribution of sample means\nfor the distance measurement devices")
+ax.grid()
+pl.show()</pre>
+
+   <p>
+      The graph above also shows the population mean. This also lies somewhere in
+      this distribution of sample means, but we don't know where. <em>This is
+         the parameter that we want to infer!</em>
+      The single sample's mean and variance are all we have at the moment so
+      somehow we need to move from these statistics to an assertion about 
+      the population mean.
+   </p>
+   <p>
+      Now I'm going to stop talking about $\overline x$, our specific sample
+      mean. This is because we are taking about <em>any</em> sample, so we want
+      to use a random variable that represents the mean of a random sample,
+      $\overline X$.
+   </p>
+   <p>
+      We know $\overline X$ is somwhere near $E(\overline X)$ and will lie in
+      an interval that spans the distance $E(\overline X) \pm \text{interval}$.
+      But how big is this interval? To be certain that it contains our sample
+      mean it would have to be infinitely wide! So we can't be certain. But, we 
+      could be pretty certain. We could, for example, say we'd be satisfied if
+      we were 95% certain that $\overline X \in E(\overline X) \pm \text{interval}$...
+      In other words we are asking the following question, what is...
+
+      $$
+         P(E(\overline X) - \text{interval/2} \lt \overline X \lt  E(\overline X) + \text{interval/2}) = 0.95\ ??
+      $$
+
+      This interval that gives us a 95% probability that the mean of a random
+      sample (of size 50 in this case) will lie within $\text{interval}$ of
+      the expected sample mean. (It doesn't have to be 95%, you choose how
+      confident you want to be!).
+   </p>
+
+   <p>
+      Hang on! We know from the CLT that the sampling distribution should be
+      normal. So we can figure this out using the normal distribution. Further
+      more we know that we can normalise the distribution to arrive at the
+      standard normal distribution. Therefore, what we are looking for in the
+      standard normal is the following:
+   </p>
+   <p>
+      <img src="##IMG_DIR##/conf_z_95p.png"/><br/>
+      <span id="z_confidence_interval_illustration_code_link" style="font-size:10pt;" href="">&lt;Click me to toggle code view for graph creation&gt;</span>
+   </p>
+
+   <pre class="prettyprint linenums" id="z_confidence_interval_illustration_code_p">import matplotlib.pyplot as pl
+import numpy as np
+import scipy.stats
+
+
+z = np.linspace(-4, 4, 500)
+y = scipy.stats.norm.pdf(z)
+x_95p = scipy.stats.norm.ppf(0.975) #.025 in each tail gives 0.05 for 95% conf 
+x95_mid = scipy.stats.norm.ppf(0.9875)
+
+fig, ax = pl.subplots()
+ax.plot(z,y)
+ax.fill_between(z, 0, y
+               , where       = z &lt; -x_95p
+               , interpolate = True
+               , facecolor   = 'lightblue')
+ax.text(-x_95p, -0.02, "$-{0:.3f}z$".format(x_95p), ha="center", fontsize='large')
+
+ax.fill_between(z, 0, y
+               , where       = z &gt; x_95p
+               , interpolate = True
+               , facecolor   = 'lightblue')
+ax.text(x_95p, -0.02, "${0:.3f}z$".format(x_95p), ha="center", fontsize='large')
+
+ax.plot( [0, 0], [0, max(y)], color='b')
+ax.text(0, -0.02, "$0$", ha="center", fontsize='large')
+
+ax.annotate( "0.025"
+           , xy=(x95_mid, scipy.stats.norm.pdf(x95_mid)/2)
+           , xytext=(40, 40)
+           , textcoords='offset points'
+           , bbox=dict(fc="lightblue")
+           , fontsize='large'
+           , arrowprops=dict(facecolor='black', shrink=0.05, connectionstyle="arc3,rad=0.2", fc="w"))
+
+ax.annotate( "0.025"
+           , xy=(-x95_mid, scipy.stats.norm.pdf(-x95_mid)/2)
+           , xytext=(40, 40)
+           , textcoords='offset points'
+           , bbox=dict(fc="lightblue")
+           , fontsize='large'
+           , arrowprops=dict(facecolor='black', shrink=0.05, connectionstyle="arc3,rad=0.2", fc="w"))
+
+ax.annotate( "0.95"
+           , xy=(0, max(y)/2.0)
+           , xytext=(40, 40)
+           , textcoords='offset points'
+           , bbox=dict(fc="w")
+           , fontsize='large'
+           , arrowprops=dict(facecolor='black', shrink=0.05, connectionstyle="arc3,rad=0.2", fc="w"))
+
+ax.set_xticks([])
+ax.set_yticks([])
+ax.set_title("95% confidence interval ~ N(0,1)")
+pl.show() </pre>
+   
+
+   <p>
+      And we previously saw how to do this:
+
+      $$
+         Z = \frac{\overline X - \mu}{\frac{\sigma}{\sqrt n}}
+      $$
+
+      Apply this to the interval 
+
+      $$
+         P(E(\overline X) - \text{interval/2} \lt \overline X \lt  E(\overline X) + \text{interval/2}) = 0.95
+      $$
+
+      Will give us
+
+      $$
+      \begin{align}
+         0.95 &= P(-\text{normalised interval/2} \lt Z \lt \text{normalised interval/2}) \\
+         &= P(-\text{normalised interval/2} \lt \frac{\overline X - \mu}{\frac{\sigma}{\sqrt n}} \lt \text{normalised interval/2}) 
+      \end{align}
+      $$
+
+      And we know how to calculate this &quot;normalised interval&quot; It is
+      the Z value that will give us the 95% condifence interval we see above,
+      and this Z value is, by consulting tables, 1.96.
+
+      $$
+      \begin{align}
+      0.95 &= P(-1.96 \lt \frac{\overline X - \mu}{\frac{\sigma}{\sqrt n}} \lt 1.96) 
+      \end{align}
+      $$
+
+      Re-arange this a little...
+
+      $$
+      \begin{align}
+      0.95 &= P(-1.96 \lt \frac{\overline X - \mu}{\frac{\sigma}{\sqrt n}} \lt 1.96) \\
+           &= P(-1.96\cdot \frac{\sigma}{\sqrt n} \lt \overline X - \mu \lt 1.96\cdot \frac{\sigma}{\sqrt n})  \\
+           &= P(-1.96\cdot \frac{\sigma}{\sqrt n} - \overline X \lt - \mu \lt 1.96\cdot \frac{\sigma}{\sqrt n} - \overline X) \\
+           &= P(\overline X + 1.96\cdot \frac{\sigma}{\sqrt n} \gt \mu \gt \overline X - 1.96\cdot \frac{\sigma}{\sqrt n} ) \text{  (multiply by -1 reverses inequalities)}\\
+           &= P(\overline X - 1.96\cdot \frac{\sigma}{\sqrt n} \lt \mu \lt \overline X + 1.96\cdot \frac{\sigma}{\sqrt n} ) \\
+      \end{align}
+      $$
+
+      And... oh! I know my sample mean. Lets say it was 99.5cm... then I have
+      $$
+      \begin{align}
+      0.95 &= P(99.5 - 1.96\cdot \frac{\sigma}{\sqrt n} \lt \mu \lt 99.5 + 1.96\cdot \frac{\sigma}{\sqrt n} ) 
+      \end{align}
+      $$
+
+      Ah crap, I don't know the population standard deviation. But I do know my
+      sample standard deviation. If my sample size is large enough the LLN says
+      it will be a consistent estimator of the population standard deviation. So
+      we'll approximate and say...
+
+      $$
+      \begin{align}
+      0.95 &= P(99.5 - 1.96\cdot \frac{s}{\sqrt n} \lt \mu \lt 99.5 + 1.96\cdot \frac{s}{\sqrt n} )
+      \end{align}
+      $$
+
+      Okay, lets say my sample had a standard deviation of 0.5cm. Then we get...
+
+      $$
+      \begin{align}
+      0.95 &= P(99.5 - 1.96\cdot \frac{0.5}{\sqrt{50}} \lt \mu \lt 99.5 + 1.96\cdot \frac{0.5}{\sqrt{50}} )
+      \end{align}
+      $$
+
+      Well this is great, we now know that the population mean is somewhere
+      in the interval $99.5 \pm 1.96\cdot \frac{0.5}{\sqrt{50}}$ with a 
+      95% confidence! I.e. we are 95% confident that the population
+      mean lies somewhere between 99.35cm and 99.64cm. So we can conclude that
+      our production process is producing instruments that slightly underestimate
+      distance.
+   </p>
+   <p>
+      Quite a few assumptions and estimates have been made here. I assumed that
+      I could estimate the population standard deviation with my sample's 
+      standard deviation. This could be okay for large sample sizes from an
+      even larger population, but when this is not the case, this assumption
+      breaks down. Something called the &quot;Student-t&quot; distribution will
+      cope with this and we'll come to that later.
+   </p>
+
+</div> <!-- END Confidence intervals -->
    
    
 </div>

@@ -39,6 +39,15 @@
 		<div id="page_contents">
 		</div>
 
+<h2>Useful Links</h2>
+<div>
+	<ol>
+		<li><a href="https://www.dabapps.com/blog/introduction-to-pip-and-virtualenv-python/"
+			target="_blank">A non-magical introduction to Pip and Virtualenv for Python beginners</a> by Jamie Matthews.
+		</li>
+</div>
+
+
 <h2>Python Debugger: Winpdb</h2>
 <div>
 	<p>A really quite cute Python debugger, easy to use and GUI driver, is <a href="http://winpdb.org/download/" target="_blank">Winpdb</a>:
@@ -67,6 +76,8 @@ MESSAGE_TYPE: LINE_NUM:[OBJECT:] MESSAGE
 				<tr><td><tt>[F]</tt></td> <td> indicates that a fatal error occurred, blocking further analysis.</td></tr>
 			</table>
 		</p>
+		<h3>Run PyLint</h3>
+		<pre>find . -name '*.py' | xargs pylint --rcfile=pylint_config_filename</pre>
 		<h3>Supress messages in code</h3>
 		<p>
 			Find all <a href="http://pylint-messages.wikidot.com/all-codes" target="_blank">PyLint codes here</a>. Or, you can use the command line
@@ -476,36 +487,6 @@ for dir, file in YieldFiles("/some/dir", "*.txt")
 		one of its children.
 </div>
 
-<h2>Paramiko: SSH and SCP in Python</h2>
-<div>
-	<p>
-		Paramiko is a cute Python library that gives you cross platform SSH and
-		SCP capabilities. On Linux it relies on OpenSSH and on Windows it uses
-		Pageant (I assume it could be configured to use something else... didn't 
-		need to consider that).
-	</p>
-	<h3>Problems on Windows</h3>
-	<p>
-		At the time of writing this I was trying to use the Paramiko library
-		on a Windows XP machine using Paramiki version 1.16.0. It wouldn't work
-		giving the following error:
-	</p>
-	<pre>File "C:\...\paramiko\_winapi.py", line 162, in write
-ctypes.windll.kernel32.RtlMoveMemory(dest, msg, length)
-ValueError: Procedure probably called with too many arguments (4 bytes in excess)</pre>
-	<p>After a bit of googling I found out that 
-		it has been fixed on the Paramiki mainline but hadn't made it into 
-		an available pip-installable distribution yet. 
-	</p>
-	<p>
-		The fix is really easy. Find the file <tt>_winapi.py</tt> in your
-		Python distro and 
-		<a href="https://github.com/paramiko/paramiko/pull/619/files" target="_blank">
-		make the changes described here</a>. In summary, wherever you see a line
-		reading &quot;<tt>length = ctypes.wintypes.SIZE(n)</tt>&quot;, change it
-		to &quot;<tt>length = ctypes.c_size_t(n)</tt>&quot;.
-	</p>
-</div>
 <hr>
 <pre>
 TODO

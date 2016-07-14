@@ -45,15 +45,13 @@
 	<p>
 		The size of the Yorick 2.2.03 binaries and supporting files, i.e., the 
 		relocate directory with <tt>doc</tt> and <tt>g</tt> removed for my ARM9 
-		cross compilation was 5MB. The interpretter binary was ~1.19K
-		with ~2K for the yorick include files.  Things like the C include 
-		files could be removed (you only need these if you're writing your own 
-		Yorick extensions). The <tt>lib</tt> could probably also be trimmed if
+		cross compilation was ~5MB. The interpretter binary was ~1.2K
+		with ~1.5MB for the Yorick include files (demo and test files deleted) 
+		but you can trim this further depending on what you use. Things like the C include 
+		files can be removed (you only need these if you're writing your own 
+		Yorick extensions). The <tt>lib</tt> can also be trimmed if
 		you were not using the <tt>hex</tt> or <tt>drat</tt> libraries and didn't
-		ever need to run <tt>codger</tt> on target. It will rely on some system 
-		libraries  like  <tt>libc</tt> and  <tt>libm</tt> etc, but on it's own I 
-		suspect you  might be able to run binary and <tt>.i</tt> include files at 
-		a minimum of ~3K...
+		ever need to run <tt>codger</tt> on target. 
 	</p>
 
 	<!-- PAGE CONTENTS ----------------------------------------------------- -->
