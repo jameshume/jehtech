@@ -116,6 +116,24 @@
 			</p>
 		</div> <!-- END H2: Run ubuntu on vb -->
 
+		<h2>Static Shell Script Analysis With ShellCheck</h2>
+		<p>
+			Visit the <a href="http://www.shellcheck.net" target="_blank">ShellCheck website</a> 
+			and paste in your script to get a detailed analysis. You can learn a
+			ton of reaslly useful bash information using this really quickly. For example,
+			two common errors I used to make were:
+		</p>
+		<ul>
+			<li><a href="https://github.com/koalaman/shellcheck/wiki/SC2086#double-quote-to-prevent-globbing-and-word-splitting"
+				    target="_blank">Double quote to prevent globbing and word splitting</a>.
+			</li>
+			<li><a href="https://github.com/koalaman/shellcheck/wiki/SC2045"
+				    target="_blank">Iterating over ls output is fragile. Use globs</a>.
+			</li>
+			<li><a href="https://github.com/koalaman/shellcheck/wiki/SC2015"
+				    target="_blank">A && B || C is not if-then-else</a>.
+		</ul>
+
 		<h2>Ensure A Script Runs As Root</h2>
 		<div>
 			<p>

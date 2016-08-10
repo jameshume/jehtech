@@ -490,7 +490,7 @@ if result != wx.YES:
                     "Open a file", 
                     default_directory, 
                     default_file, 
-                    semi_colon_seperated_wildcard_string, 
+                    semi_colon_separated_wildcard_string, 
                     wx.FD_OPEN)
 if dlg.ShowModal() == <b>wx.ID_OK</b>:
    <b>selectedFile = dlg.GetPath() # Do not use GetFilename()/GetDirectory()</b>

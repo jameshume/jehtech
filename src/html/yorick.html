@@ -45,18 +45,36 @@
 	<p>
 		The size of the Yorick 2.2.03 binaries and supporting files, i.e., the 
 		relocate directory with <tt>doc</tt> and <tt>g</tt> removed for my ARM9 
-		cross compilation was ~5MB. The interpretter binary was ~1.2K
+		cross compilation was ~5MB. The interpreter binary was ~1.2MB
 		with ~1.5MB for the Yorick include files (demo and test files deleted) 
 		but you can trim this further depending on what you use. Things like the C include 
 		files can be removed (you only need these if you're writing your own 
 		Yorick extensions). The <tt>lib</tt> can also be trimmed if
-		you were not using the <tt>hex</tt> or <tt>drat</tt> libraries and didn't
-		ever need to run <tt>codger</tt> on target. 
+		you were not using the 
+		<tt><a href="https://github.com/dhmunro/yorick/tree/master/hex" 
+				target="_blank">hex</a></tt> or 
+		<tt><a href="https://github.com/dhmunro/yorick/tree/master/drat" 
+				target="_blank">drat</a></tt> libraries and didn't
+		ever need to run <tt>codger</tt> on target. You could also trim out 
+		<a href="https://github.com/dhmunro/yorick/tree/master/gist" 
+			target="_blank">Gist</a>,
+		which is a 
+		<a href="https://en.wikipedia.org/wiki/Computer_Graphics_Metafile" 
+			target="_blank">Computer Graphics Metafile (CGM)</a> file viewer.
 	</p>
 
 	<!-- PAGE CONTENTS ----------------------------------------------------- -->
 	<h2>Page Contents</h2>
 	<div id="page_contents">
+	</div>
+
+	<h2>Useful Links</h2>
+	<div>
+		<ul>
+			<li><a href="http://dhmunro.github.io/yorick-doc/" target="_blank">Yorick Documentation On GitHub</a>.</li>
+			<li><a href="http://yorick.sourceforge.net/yorick.pdf" target="_blank">Yorick Manual as a PDF</a>.</li>
+			<li><a href="http://yorick.sourceforge.net/yorickfaq.php" target="_blank">Yorick FAQ on Source Forge</a>.</li>
+		</ul>
 	</div>
 
 	<!-- INSTALL YORICK ON UBUNTU ------------------------------------------ -->
@@ -83,7 +101,7 @@
 			Usually to generate a plugin Makefile you'd just type...
 		<pre class="prettyprint linenums">yorick -batch make.i</pre>
 		<p>... and get an auto generated Makefile with variables pointing to your Yorick installation written into
-			the Makefile for you. For example, on my Ubuntu atp-getted installation I get the following.
+			the Makefile for you. For example, on my Ubuntu atp-gett'ed installation I get the following.
 		</p>
 		<pre class="prettyprint linenums"># these values filled in by &quot;yorick -batch make.i&quot;
 Y_MAKEDIR=/usr/lib/yorick
@@ -115,7 +133,7 @@ echo $YORICK_HOME</pre>
 			<li><b>Yorick arrays are column</e>-major</b> whereas C arrays are row-major. 
 				<ul>
 					<li>This means that <tt>array[1][2]</tt> in C addresses row 1, 
-						column 2 (remember because C indicies start at 0 this means the second row, third column).
+						column 2 (remember because C indices start at 0 this means the second row, third column).
 						<b>I.e., the C-syntax is <code>array[ROW][COL]</code></b>
 					</li>
 					<li>But in Yorick, <tt>array(1,2)</tt>, addresses column 1, row 2 (in C column 0, row 1 taking 
@@ -128,13 +146,13 @@ echo $YORICK_HOME</pre>
 		<p>
 			<div class="box_container"><div class="info">
 				<p>
-					Yorick arrays are column major and indicies start at 1.
+					Yorick arrays are column major and indices start at 1.
 				</p>
 			</div></div>
 		</p>
 		<h3>What Is Row/Column Major?</h3>
 		<p>
-			For all languages, arrays are are contigous blocks of items. Therefore, in memory we can 
+			For all languages, arrays are are contiguous blocks of items. Therefore, in memory we can 
 			store a 1D arrays as follows:
 		</p>
 		<pre>| ITEM[0] | ITEM[1] | ITEM[2] |  ...  | ITEM[N]
@@ -321,6 +339,74 @@ for (d=1; d<3; ++d)
 		adding extra dimensions to arrays in Yorick is correct...
 		</p>
 
+		<h3>Array Indexing</h3>
+		<div>
+			<p>
+				The <a href="http://dhmunro.github.io/yorick-doc/manual/yorick_37.html#Indexing"
+					target="_blank">Yorick docs on this pretty much explain everything</a> but the
+				Yorick equivalent of &quot;fancy&quot; indexing on arrays with 2 
+				or more dimensions puzzled me for a second... had to think it through
+				so here's a graphic :)
+			</p>
+			<p>
+				Lets say we define the following array
+			</p>
+			<pre class="prettyprint linenums">a = [ [1,2,3], [4,5,6] ]</pre>
+			<p>
+				This is an array with 3 columns and 2 rows, which we can see
+				by using <tt>dimsof()</tt>:
+			</p>
+			<pre class="prettyprint linenums">&gt; dimsof(a)
+[2,3,2]
+ ^ ^ ^
+ ^ ^ # rows
+ ^ ^
+ ^ # columns
+ ^
+ # dimensions</pre>
+			<p>
+				The array can be indexed as if it were a flat object:
+			</p>
+			<pre class="prettyprint linenums">&gt; a(1)
+1
+&gt; a(2)
+2
+&gt; a(3)
+3
+&gt; a(4)
+4
+&gt; a(5)
+5
+&gt; a(6)
+6</pre>
+			<p>
+				And you can slice it as you might expect:
+			</p>
+			<pre class="prettyprint linenums">&gt; a(2:3, 1:2)
+[[2,3],[5,6]]</pre>
+
+			<p>
+				The <a href="http://dhmunro.github.io/yorick-doc/manual/yorick_41.html#Index-List"
+					target="_blank">&quot;fancy&quot; indexing</a> took me a second though:
+			</p>
+			<pre class="prettyprint linenums">&gt; a([2,1],[1,2])
+[[2,1],[5,4]]</pre>
+			<p>
+				The Yorick docs says <q>dimensions from the dimensions of the index list; values from the array
+being indexed</q>... which is very true, but I still needed a pretty picture :)
+			</p>
+			<p>
+				The dimensions used in the fancy index will be the dimensions of the
+				resulting array. So in the above example the array in the column index
+				has 2 elements to the resulting array will have 2 columns. The array
+				in the row index as 2 elements so the resulting array will have 2 rows.
+				Therefore we know the result is a 2-by-2 array.
+			</p>
+			<p>
+				Now for the values. TODO
+			</p>
+		</div>
+
 		<h3>Slices Are Views Onto Arrays But Beware Of Array Copy</h3>
 		<div>
 			<p>
@@ -376,7 +462,8 @@ for (d=1; d<3; ++d)
 				entire array, not slices. Munro <a href="https://github.com/dhmunro/yorick/issues/16" target="_blank">
 				explains this here</a>: <q>...Unlike NumPy, Yorick does not have any way to refer to
 				a slice of an object. All slicing operations happen immediately and result in a 
-				temporary array...</q>.
+				temporary array...</q>. Munro discusses it further in the 
+			<a href="http://yorick.sourceforge.net/yorickfaq.php#Q43" target="_blank">FAQ</a>.
 			</p>
 			<p>
 				<div class="box_container"><div class="info">
@@ -391,8 +478,6 @@ for (d=1; d<3; ++d)
 
 		<h3>When Arrays Are Not Copied By Value</h3>
 		<div>
-
-	
 			<h4>Arrays Passed To Functions By Reference</h4>
 			<div>
 				<p>
@@ -544,8 +629,8 @@ for (d=1; d<3; ++d)
 		<p>
 			Now, given the above definition, one might thing that the common 
 			dimension between <tt>aa</tt> and <tt>b</tt> does not have the same
-			lenth, yet they are clearly conformable as far as the Yorick 
-			interpretter is concerned. What's going on?
+			length, yet they are clearly conformable as far as the Yorick 
+			interpreter is concerned. What's going on?
 		</p>
 		<p>
 			The reason that this works is that <q>Yorick will broadcast any 
@@ -657,7 +742,7 @@ dim_b = [ 2, |4|, 2 ]
 		</p>
 		<p>
 			The matrix multiplication of those two vectors puzzled me for a little
-			bit (I've only ever been used to multiplying matricies with dimension
+			bit (I've only ever been used to multiplying matrices with dimension
 			sizes greater than 1). It may be easier to think of it as follows...
 		</p>
 		<p>
@@ -759,7 +844,7 @@ WARNING source code unavailable (try dbdis function)
 			This generalises... suppose we can <tt>c</tt> a two dimensional array 
 			and we write <tt>c(-,)</tt>.
 		</p>
-		<pre>
+		<pre class="prettyprint linenums">
 &gt; c = [[1,2,3],[4,5,6]]
 &gt; c
 [[1,2,3],[4,5,6]]
@@ -803,7 +888,7 @@ WARNING source code unavailable (try dbdis function)
 		Yorick we need to do <tt><b>transpose(</b>u*v(-,)<b>)</b></tt> I.e., the transpose of <tt>v</tt>
 		is <tt>v(-,)</tt>:
 	</p>
-	<pre>&gt; u = [1,2,3,4]
+	<pre class="prettyprint linenums">&gt; u = [1,2,3,4]
 &gt; v = [1, 10, 100]
 
 &gt; v(-,)
@@ -821,14 +906,30 @@ WARNING source code unavailable (try dbdis function)
   [4, 40, 400] ]
 </pre>
 
-		<h3>Matrix Multipication &amp; Inner Product</h3>
+		<h3>Matrix Multiplication &amp; Inner Product</h3>
+		<p>
+			Remember to keep in mind that
+			Yorick is column-major so the indices are <tt>a(col, row)</tt>!
+		</p>
+		<p>
+			The concept of matrix multiplication, the type we learnt in school, is
+			shown in the little animation below. For each <i>row</i> vector of the LHS matrix
+			we take the <a href="https://en.wikipedia.org/wiki/Dot_product" target="_blank">dot product</a> 
+			of that vector with each <i>column</i> vector from the RHS matrix to produce the result:
+		</p>
+
+		<iframe src="yorick_matrix_anim.html" style="width:660px; height:270px; border:0px;">
+		</iframe>
+
 		<p>
 			In Yorick the <a href="http://dhmunro.github.io/yorick-doc/manual/yorick_45.html#Matrix-Multiply"
 				target="_blank">'<tt>+</tt>' sign</a> labels an array index for use
-			in an <a href="https://en.wikipedia.org/wiki/Dot_product" target="_blank">inner product</a>
-			(a.k.a. dot product or scalar product) and can be used to calculate vector 
-			inner products or matrix multiplications.
+			in the <a href="https://en.wikipedia.org/wiki/Dot_product" target="_blank">dot product</a>
+			(a.k.a. inner product or scalar product) and can be used to calculate vector 
+			inner products or matrix multiplications. Munro has generalised the &quot;school-learnt&quot; matrix multiplication concept
+			so that we are not constrained as to the choice of row/column vectors we take from the LHS and RHS. For example, we might want to take the dot product of column vectors from the LHS and column vectors from the RHS.
 		</p>
+
 		<p>
 			For two 1D arrays, <tt>a</tt> and <tt>b</tt>, the operation is fairly 
 			straight forward. Writing <tt>a(+)</tt> and <tt>b(+)</tt> marks the only
@@ -836,38 +937,44 @@ WARNING source code unavailable (try dbdis function)
 			the calculation becomes $\Sigma a(i)b(i)$. Let's take a look at this
 			pictorially, otherwise the 2D example melts my brain a little...
 		</p>
+
 		<p>
 			<img src="##IMG_DIR##/single_dim_inner_prod.png" style="margin:10px;"/>
 		</p>
+
 		<p>
-			So, what happens when the arrays have more than 1D? Let's have a look
-			at some 2D arrays... its still a little brain melty!
+			Now we move on to the more complex examples... as always, remember to
+			keep in mind that Yorick is column-major, so the indices are 
+			<tt>M(row, col)</tt>.
 		</p>
+
+		<h4>LHS column vectors and RHS row vectors</h4>
 		<p>
 			<img src="##IMG_DIR##/dot_product_yorick_1.png" style="margin:10px;"/>
 		</p>
+
 		<p>
 			I feel like the above needs a little explanation before continuing with
 			the others. 
-
-			Munro describes the plus sybol as &quot;marking an index for use in an inner product&quot;. 
-			But what exactly do we mean? It worked for the 1D vector example because we selected
-			the columns for the inner product. But above we used <code>a(,+)</code> which would seem
-			to suggest that
-			we would select the rows from <code>a</code>, i.e., in the dot product
-			we would use the vectors <code>[1, 2]</code> and <code>[1, 3]</code>.
-			But as you can see this is NOT the case.
 		</p>
 		<p>
-			Instead it seems that we picked the columns of <code>a</code>. To understand
-			what the + sign means we should think of it as meaning &quot;selecting 
+			Munro describes the plus sybol as &quot;marking an index for use in an inner product&quot;. 
+			But what exactly do we mean? It means that the index used is the one that we iterate over by
+			summing the multiplication of each element with it's respective &quot;partner&quot; in the
+			dot product. Thus <tt>a(, +)</tt> means iterate over the row indices in the dot product
+			summation. If we are iterating over the row index, then the column index must remain
+			constant, so we will be taking column vectors.
+		</p>
+		<p>
+			To understand
+			what the + sign means we could think of it as meaning &quot;selecting 
 			the dimension to be iterated over in the summation of the inner product&quot;,
 			because what the above does is to select all dimensions not marked by a + sign, and then iterate over the
 			marked dimension marked for the inner product. 
 		</p>
 		<p>
 			So, if the + sign marks rows, we are NOT selecting row vectors and then using the row vector for the inner product. We ARE selecting column
-			vectors and using the rows from each column vector in the inner product. aaaaaaah, brain melting! The same is also happening with respect
+			vectors and using the rows from each column vector in the inner product. The same is also happening with respect
 			to <code>b(+,)</code>: we are selecting rows and iterating over the columns. 
 		</p>
 		<p>
@@ -884,18 +991,23 @@ WARNING source code unavailable (try dbdis function)
 		</div></div>
 		<p>
 			So, now we can continue looking at the other possible ways to multiply out
-			these square matricies...
+			these square matrices...
 		</p>
-		<p>
-			<img src="##IMG_DIR##/dot_product_yorick_2.png" style="margin:10px;"/>
-			<img src="##IMG_DIR##/dot_product_yorick_4.png" style="margin:10px;"/>
-			<img src="##IMG_DIR##/dot_product_yorick_3.png" style="margin:10px;"/>
-		</p>
+
+		<h4>LHS column vectors and RHS column vectors</h4>
+		<p><img src="##IMG_DIR##/dot_product_yorick_2.png" style="margin:10px;"/></p>
+
+		<h4>LHS row vectors and RHS row vectors</h4>
+		<p><img src="##IMG_DIR##/dot_product_yorick_4.png" style="margin:10px;"/></p>
+
+		<h4>LHS row vectors and RHS column vectors</h4>
+		<p><img src="##IMG_DIR##/dot_product_yorick_3.png" style="margin:10px;"/></p>
+
 		<p>
 			We can see from the above that the index marked with the <tt>+</tt> 
 			sign is used for the inner product. Note that all these combinations 
-			are only possible because the matricies are square (for rectangular 
-			matricies, normal matrix multiplication shapes apply).
+			are only possible because the matrices are square (for rectangular 
+			matrices, normal matrix multiplication shapes apply).
 		</p>
 		<p>
 			For example, in the pictures above, <tt>a(,+)</tt> marks the <em>row</em>
@@ -905,7 +1017,7 @@ WARNING source code unavailable (try dbdis function)
 			all the way through to <tt>a(n,:)</tt>.
 		</p>
 		<p>
-			Therefore, the indicies marked 
+			Therefore, the indices marked 
 			with the <tt>+</tt> sign <em>must have the same length</em>. 
 		</p>
 		<p>
@@ -926,6 +1038,7 @@ WARNING source code unavailable (try dbdis function)
       v2 = b(:, j) // 1d vector, length m
       r(i,j)  = v1(+) * v2(+)</pre> 
 
+		<h4>Normal or &quot;School-Learnt&quot; Matrix Multiplication vs Yorick</h4>
 		<p>
 			The only matrix multiplication I was ever taught was &quot;normal&quot;
 			matrix multiplication:
@@ -967,6 +1080,10 @@ WARNING source code unavailable (try dbdis function)
 		Visually we can see that <b><tt>transpose(a(+,)*b(,+))</tt> is equivalent
 			to the &quot;normal&quot; matrix multiplication</b>.
 		</p>
+
+		<iframe src="yorick_matrix_anim_2.html" style="width:660px; height:270px; border:0px;">
+		</iframe>
+
 		<p>
 			Another way to do this is to note that...
 			$$\begin{pmatrix}
@@ -994,7 +1111,7 @@ WARNING source code unavailable (try dbdis function)
 		</p>
 		<p>
 			As we've noted, all these combinations above are only possible because 
-			the matricies are square. Remember that the indicies marked for inner
+			the matrices are square. Remember that the indices marked for inner
 			product must share the same length. If, for example <tt>a</tt> has
 			3 rows and 2 columns and <tt>b</tt> had 8 rows and 2 columns, the 
 			only possible operation would be <tt>a(+,)*b(,+)</tt>.
@@ -1004,8 +1121,8 @@ WARNING source code unavailable (try dbdis function)
 		<p>
 			The function <tt>SVsolve</tt> can be used to solve sets of simultaneous
 			linear equations. Let's say that we have two arrays. Array <tt>a</tt>
-			will represent the coefficients of the unknowns in our set of quations.
-			lets say that that we have <tt>n</tt> unknowns and <tt>m</tt> 
+			will represent the coefficients of the unknowns in our set of equations.
+			Lets say that that we have <tt>n</tt> unknowns and <tt>m</tt> 
 			equations. The array <tt>a</tt> is an <tt>n x m</tt> matrix. Our linear
 			equations, as we would normally write them (i.e., as I was taught in
 			school) therefore look like this:
@@ -1068,7 +1185,7 @@ WARNING source code unavailable (try dbdis function)
 
 &gt; a(1,:)    ## Give me the first element in each inner array, contained in the
 [1,4]       ## same parent array. This is a little incorrect because we don’t
-            ## specify all array dimensions in the indecies
+            ## specify all array dimensions in the indices
 
 &gt; a(1,:,:)      ## Give me the first element in each inner array, from each 
 [[1,4],[11,44]] ## outer array, contained in the overall array
@@ -1117,7 +1234,7 @@ WARNING source code unavailable (try dbdis function)
 			assignment is NOT a copy!
 		</p>
 		<p>
-			To actually make a realy copy of the object you have to manually copy each member of one object to the other.
+			To actually make a real copy of the object you have to manually copy each member of one object to the other.
 		</p>
 		<pre class="prettyprint linenums">&gt; a = save(q=101)
 &gt; b = save()     /*&lt;-- Must manually re-create a new... */
@@ -1156,7 +1273,7 @@ object [1]: group
 			copy-of-reference problem would occur if <tt>q</tt> has been another OXY object.
 		</p>
 		<p>
-			You make have done a double-take here because previosuly, when describing arrays,
+			You make have done a double-take here because previosly, when describing arrays,
 			we said array assignment copies the array <em>values</em>, i.e. a complete copy of the array
 			is made. This is clearly not the case when saving an OXY object member as an
 			array. OXY object members appear always to be references unless the member stores
@@ -1196,6 +1313,123 @@ object [1]: group
 		</p>
 	</div>  <!-- END "Oxy Objects" H2 Div -->
 
+	<!-- YORICK NAMESPACES ------------------------------------------------- -->
+	<h2>Yorick &quot;Namespaces&quot;</h2>
+	<div>
+		<p>
+			If you are writing a lot of Yorick scripts that get included in 
+			other scripts etc etc, you can end up with a lot of variable and
+			function names in the global scope... this can lead to global namespace
+			pollution.
+		</p>
+		<p>
+			You can create a kind-of namespace in Yorick. There is no &quot;namespace&quot;
+			command but you do have access to <tt>save()</tt> and <tt>restore()</tt> which
+			can be used to save a set of variables in an object and restore those variables
+			from that object respectively. The general idea is this:
+		</p>
+		<pre class="prettyprint linenums">/* a and blah are already in the global namespace */
+a = 1
+func blah(void) { ... }
+
+/* Our script starts here...
+ * Now we defined our own namespace that will be accessed through the
+ * object my_new_namespace. The save() function saves the variable a and
+ * function blah in this object. */
+my_new_namespace = save(a, blah)
+//{
+   /* Here we overwrite the variable a and function blah in the global namespace
+    * with these new values */
+   a = 101
+   func blah(does_something_else) { ... }
+//}
+
+/* We restore() the original namespace that existed before we modified it by 
+ * swapping the data from my_new_namespace.a and my_new_namespace.blah with
+ * their the current values in the global namespace - the ones we just defined.
+ * Thus the global namespace appears untouched by our script, and the variables
+ * and functions in our script can be accessed using my_new_namespace.xxx.
+ */
+my_new_namespace = restore(my_new_namespace)</pre>
+
+	<p>
+		The are a couple of subtleties to watch out for here and they have to do
+		with when statements are evaluated. For example, if you assign from
+		one variable in your module's &quot;namespace&quot; to another variable in your
+		module's &quot;namespace&quot;, you would <em>not</em> use the namespace prefix
+		<tt>my_new_namespace.xxx</tt>. For example:
+	</p>
+
+	<pre class="prettyprint linenums">//------------
+// my_module.i
+//------------
+my_new_namespace = save(a, b, blah, blah_oops)
+   a = 222
+   b = a
+   func blah(void) { print, my_new_namespace.a; }
+   func blah_oops(void) { print, a; }
+my_new_namespace = restore(my_new_namespace)
+
+//------------
+// main_program.i
+//------------
+a = 111
+b = 999
+func blah(void) { print, a; }
+
+require, "my_module.i"
+
+print, "global a", a
+print, "global blah"
+blah, []
+
+print, "my_module a", my_new_namespace.a
+print, "my_module blah"
+my_new_namespace, blah, []
+print, "my_module blah_oops"
+my_new_namespace, blah_oops, []</pre>
+
+	</div> <!-- END H2:  "Yorick Name Spaces" -->
+
+	<p>
+		The program will output the following:
+	</p>
+
+<pre>"global a"  111
+"global blah"
+111
+"my_module a"  222
+"my_module blah"
+222
+"my_module blah_oops"
+111</pre>
+
+	<p>
+		We can see that although <tt>my_module.i</tt> has it's own &quot;global&quot;
+		symbols <tt>a</tt>, <tt>b</tt>, <tt>blah</tt> and <tt>blah_oops</tt>, when it is included from
+		the main module, it does not effect that module's global scope. Instead
+		to access these symbols from <tt>my_module.i</tt> the prefix <tt>my_new_namespace.xxx</tt>
+		has to be used.
+	</p>
+	<p>
+		Note the difference between <tt>blah()</tt> and <tt>blah_oops()</tt> in
+		<tt>my_module.i</tt>: when the function is called, it is evaluated after
+		the <tt>save()</tt>/<tt>restore()</tt> commands, so to access the
+		module's &quot;globals&quot; it now has to used the prefix <tt>my_new_namespace.xxx</tt>.
+		The function <tt>blah_oops()</tt> represents an error! It does not access the
+		module's variable, it accesses the variable from the global scope (if it
+		exists - otherwise Yorick will <tt>error</tt> out!).
+	</p>
+	<p>
+		Also note the that <tt>my_module.i</tt> asigns <tt>a</tt> to <tt>b</tt> but
+		in this case it is accessing <tt>my_module.i</tt>'s symbol <tt>a</tt>. This
+		is because the evaluation of this bit of code is immediate and occurs before
+		the <tt>restore()</tt>.
+	</p>
+	<p>
+		Watch out for these subtle little caveats!!
+	</p>
+
 	<!-- YORICK WRITING PLUGINS -------------------------------------------- -->
 	<h2>Writing Yorick Plug-Ins</h2>
 	<div>
@@ -1209,7 +1443,7 @@ object [1]: group
 		<p>
 			One point to note about terminology. Whenever I talk about &quot;stack&quot; I will,
 			unless made explicitly clear, be talking about the Yorick stack. This is a stack maintained
-			by the Yorick interpretter and has nothing to do with your process/thread stack!
+			by the Yorick interpreter and has nothing to do with your process/thread stack!
 		</p>
 		<h3>An Intro: Create The Plugin Shell And The Basics</h3>
 		<div>
@@ -1270,7 +1504,7 @@ OBJS=jehtech.o
 				In your working directory you will now have a ready made <tt>Makefile</tt>. Run it by typeing <tt>make all</tt>.
 			</p>
 			<p>
-				In the directory of complilation you will now have the object and library files <tt>jehtech.o</tt> and <tt>jehtech.so</tt>. There
+				In the directory of compilation you will now have the object and library files <tt>jehtech.o</tt> and <tt>jehtech.so</tt>. There
 				will also be two new files <tt>ywrap.c</tt> and <tt>ywrap.o</tt>, the object file having been added into the library.
 			</p>
 			<p>
@@ -1305,7 +1539,7 @@ OBJS=jehtech.o
 				</li>
 				<li>
 					<tt>extern jehtech_Version;</tt></br/>
-					Declares a symbol that will be added to the Yorick interpretters list of recognised symbols.
+					Declares a symbol that will be added to the Yorick interpreters list of recognised symbols.
 					The magic Yorick binding will associate this symbol with the C function <tt>Y_jehtech_version</tt>.
 					Whenever a Yorick script calls the function <tt>jehtech_Version()</tt>, under the hood
 					<tt>Y_jehtech_version()</tt> will be called.
@@ -1336,7 +1570,7 @@ OBJS=jehtech.o
 				So, if we have a Yorick function with parameters a, b, c, they will be passed to the C interface function 
 				on the Yorick stack. At stack position 0 will be c, at position 1, b, and at position 2, a. If the function
 				wanted to return the multiple a*b*c it would put the result on the top of the stack, at position 0, to return
-				this value to the Yorick interpretter.
+				this value to the Yorick interpreter.
 			</p>
 			<p>
 				All interface functions will have the same return value, <tt>void</tt>, and the same parameter list, consisting
@@ -1373,7 +1607,7 @@ void Y_jehtech_ParameterOrder(int argc)
 }</pre>
 			<p>
 				With the above modifications added and the plugin recompiled (just use <tt>make all</tt>, no need to regenerate the Makefile!) 
-				we can run the Yorick interpretter and see the results.
+				we can run the Yorick interpreter and see the results.
 			</p>
 			<pre class="prettyprint linenums">$ rlwrap yorick
  Copyright (c) 2005.  The Regents of the University of California.
