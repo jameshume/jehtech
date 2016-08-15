@@ -31,32 +31,57 @@
 		<h2>References</h2>
 		<div>
 			<ol>
+				<!-- 1 -->
 				<li><a href="http://www.cyberciti.biz/faq/bash-shell-change-the-color-of-my-shell-prompt-under-linux-or-unix/"
 					target="_blank">BASH Shell: Change The Color of My Shell Prompt, Vivek Gite, October 2006</a>
 				</li>
+				<!-- 2 -->
 				<li><a href="http://stackoverflow.com/questions/11065077/eval-command-in-bash-and-its-typical-uses"
 					target="_blank">Eval command in Bash and its typical uses</a>.
 				</li>
+				<!-- 3 -->
 				<li><a href="http://stackoverflow.com/questions/918886/how-do-i-split-a-string-on-a-delimiter-in-bash"
 					target="_blank">How do I split a string on a delimiter in Bash?</a>
 				</li>
+				<!-- 4 -->
 				<li><a href="https://en.wikipedia.org/wiki/User_identifier"
 					target="_blank">Linux User Identifier, Wikipedia</a>.
 				</li>
+				<!-- 5 -->
 				<li><a href="http://stackoverflow.com/questions/1891797/capturing-groups-from-a-grep-regex"
 					    target="_blank">StackOverflow: Capturing Groups From a Grep RegEx</a>.
 				</li>
+				<!-- 6 -->
 				<li><a href="https://tiswww.case.edu/php/chet/bash/bash.html" 
 					    target="_blank">Bash Manual Page</a>.
 				</li>
+				<!-- 7 -->
 				<li><a href="http://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash"
 					    target="_blank">Parse script parameters</a>. 
 				</li>
+				<!-- 8 -->
 				<li><a href="http://www.tldp.org/LDP/abs/html/parameter-substitution.html"
 					target="_blank">Parameter Substitution</a> - The Linux Docimentation Project.
 				</li>
+				<!-- 9 -->
 				<li><a href="http://www.tldp.org/LDP/abs/html/string-manipulation.html"
 					target="_blank">Manipulating Strings</a> - The Linux Docimentation Project.
+				</li>
+				<!-- 10 -->
+				<li><a name="ref10"></a><a href="http://tldp.org/LDP/abs/html/internalvariables.html"
+					target="_blank">Bash Internal Variables</a>.
+				</li>
+				<!-- 11 -->
+				<li><a name="ref11"></a><a href="http://unix.stackexchange.com/questions/126938/why-is-setting-a-variable-before-a-command-legal-in-bash"
+					target="_blank">Why Setting A Variable Before A Command Is Legal In Bash</a>, StackOverflow Q&amp;A,
+				</li>
+				<!-- 12 -->
+				<li><a name="ref12"></a><a href="http://unix.stackexchange.com/questions/264635/when-can-i-use-a-temporary-ifs-for-field-splitting"
+					target="_blank">When A Temporary IFS Can Be Used For Field Splitting</a>, StackOverflow Q&amp;A,
+				</li>
+				<!-- 13 -->
+				<li><a name="ref13"></a><a href="http://stackoverflow.com/questions/918886/how-do-i-split-a-string-on-a-delimiter-in-bash"
+					target="_blank">How To Split A String On Any Delimiter In Bash</a>, StackOverflow Q&amp;A.
 				</li>
 			</ol>
 		</div> <!-- END H2: References -->
@@ -116,23 +141,259 @@
 			</p>
 		</div> <!-- END H2: Run ubuntu on vb -->
 
+		<h2>GRUB - A Bootloader</h2>
+		<div>
+			<h3>Access From Bootup</h3>
+			<p>
+				Hold down shift on bootup.
+			</p>
+			<h3>Access from Linux</h3>
+			<p>
+				Config file is <tt>/boot/GRUB/GRUB.cfg</tt> - do <b>not</b> edit this directly. It is
+				a generated file.
+			</p>
+			<p>
+				Instead edit <tt>/etc/default/GRUB</tt> and regenerate the above CFG using <tt>sudo update-GRUB</tt>.
+			</p>
+		</div>
+
 		<h2>Static Shell Script Analysis With ShellCheck</h2>
-		<p>
-			Visit the <a href="http://www.shellcheck.net" target="_blank">ShellCheck website</a> 
-			and paste in your script to get a detailed analysis. You can learn a
-			ton of reaslly useful bash information using this really quickly. For example,
-			two common errors I used to make were:
-		</p>
-		<ul>
-			<li><a href="https://github.com/koalaman/shellcheck/wiki/SC2086#double-quote-to-prevent-globbing-and-word-splitting"
-				    target="_blank">Double quote to prevent globbing and word splitting</a>.
-			</li>
-			<li><a href="https://github.com/koalaman/shellcheck/wiki/SC2045"
-				    target="_blank">Iterating over ls output is fragile. Use globs</a>.
-			</li>
-			<li><a href="https://github.com/koalaman/shellcheck/wiki/SC2015"
-				    target="_blank">A && B || C is not if-then-else</a>.
-		</ul>
+		<div>
+			<p>
+				Visit the <a href="http://www.shellcheck.net" target="_blank">ShellCheck website</a> 
+				and paste in your script to get a detailed analysis. You can learn a
+				ton of reaslly useful bash information using this really quickly. For example,
+				two common errors I used to make were:
+			</p>
+			<ul>
+				<li><a href="https://github.com/koalaman/shellcheck/wiki/SC2086#double-quote-to-prevent-globbing-and-word-splitting"
+					    target="_blank">Double quote to prevent globbing and word splitting</a>.
+				</li>
+				<li><a href="https://github.com/koalaman/shellcheck/wiki/SC2045"
+					    target="_blank">Iterating over ls output is fragile. Use globs</a>.
+				</li>
+				<li><a href="https://github.com/koalaman/shellcheck/wiki/SC2015"
+					    target="_blank">A && B || C is not if-then-else</a>.
+			</ul>
+		</div>
+
+		<h2>Simple Commands and Their Execution</h2>
+		<div>
+			<p>
+				Often in bash scripts you see variable assignments on the same line
+				as a command that is being executed, for example:
+			</p>
+			<pre>JEHTECH=1234 some-command</pre>
+			<p>
+				What is this doing and why is it possible? References <a href="#ref10">10</a> 
+				through <a href="#ref13">13</a> are really good starters, but in the end, however, it is all 
+				available in the bash man page :) It says:
+			</p>
+			<blockquote>
+				<p>
+					...A  simple command is a sequence of optional variable assignments 
+					followed by blank-separated words and redirections, 
+					and terminated by a control operator... 
+				</p>
+				<footer>-- Bash man page</footer>
+			</blockquote>
+			<p>
+				Ignoring redirections and the control character 
+				(&quot;||&quot;, &quot;&amp;&quot;, &quot;&amp;&amp;&quot;, 
+				&quot;;&quot;, &quot;;;&quot;, &quot;(&quot;, &quot;)&quot;, 
+				&quot;|&quot;, &quot;|&amp;&quot;, &quot;&lt;newline&gt;&quot;),
+				this means that a simple command is:
+			</p>
+			<pre  class="prettyprint linenums">[VAR1=value VAR2=value ...] COMMAND PARAM1 PARM2 ...</pre>
+			<p>
+				The command can result from the expansion of a variable, or be a
+				literal. It also does not have to be present (ie., you just have a 
+				variable assignment on its own).  The bash man page proceeds to say 
+				later on...
+			</p>
+			<blockquote>
+				<p>
+					...When a simple command is executed, the shell performs the 
+					following expansions, assignments, and redirections, from left 
+					to right.
+				</p>
+				<ol>
+					<li>
+						The words that the parser has marked as variable assignments 
+						(those preceding the command name) and redirections are saved 
+						for later processing.
+					</li>
+					<li>
+						The words that are not variable assignments or redirections are 
+						expanded.  If any words remain after expansion, the first word 
+						is taken to be the name of the command and the  remaining  words
+						are the arguments.
+					</li>
+					<li>Redirections are performed ...</li>
+					<li>
+						The  text  after  the  = in each variable assignment undergoes 
+						tilde expansion, parameter expansion, command substitution, 
+						arithmetic expansion, and quote removal before being assigned to the
+						variable.
+					</li>
+				</ol>
+				<p>
+					If no command name results, the variable assignments affect the 
+					current shell environment.  <b>Otherwise, the variables are added 
+					to the environment of the executed command and do not affect 
+					the current shell environment</b>...
+				</p>
+				<footer>
+					-- Bash man page.
+				</footer>
+		 	</blockquote>
+			<p>
+				Therefore when you write commands such as &quot;<tt>JEHTECH=1234 some-command</tt>&quot; the
+				enironment variable &quot;<tt>JEHTECH</tt>&quot; would be set only in the sub-shell that
+				the command is executed in and won't affect the existing shell (unless
+				the command is a built-in or function, then it will!).
+			</p>
+			<p>
+			You'll also notice from the above that <q>...words that are not variable assignments or redirections are expanded...</q> <b>before</b> the command is executed.
+			This means that in the following section of code &quot;HELLO&quot; is printed out instead of &quot;BYE BYE&quot;...
+			</p>
+			<pre  class="prettyprint linenums">$ JAMES="HELLO"
+~$ JAMES="BYE BYE" echo "$JAMES"
+HELLO</pre>
+			<p>
+				This puzzled me for a bit, but because <q>...words that are not variable assignments or redirections are expanded...</q> 
+				<b>before</b> the command is executed, the following is happening.
+			</p>
+			<ol>
+				<li>The variable assignment <tt>JAMES="BYE BYE"</tt> is saved. So the line being processed is now just <tt>echo "$JAMES"</tt>
+				</li>
+				<li>Now variable expansion occurs. The value of <tt>$JAMES</tt> is still &quot;HELLO&quot; because that is the value 
+				    of the variable in the current shell. The new assignment that happens as part of our simple command has not
+					 taken effect yet! The command to be executed is therefore now <tt>echo HELLO</tt>.
+				</li>
+				<li>To execute this command a new subshell is created in which it. As part of that new subshell, the
+				variable assignment <tt>JAMES="BYE BYE"</tt> is added to the new sub shell. But the command being
+				executed in the subshell is <tt>echo HELLO</tt>, and that's why we see the output we do.
+				</li>
+			</ol>
+		</div>
+
+		<h2>Word Splitting</h2>
+		<div>
+			<p>
+				The bash shell variable <tt>$IFS</tt> is a list of delimeters that
+				the shell will use to split words on. I like to think of it as 
+				the delimeter list I'd supply to the C function <tt>strtok()</tt>.
+				Once a word has been tokenized the shell does not see it as one &quot;block&quot;
+				but as many seperate tokens/parameters.
+			</p>
+			<p>
+			The shell will word split in 3 instances <a href="http://tldp.org/LDP/Bash-Beginners-Guide/html/sect_03_04.html" target="_blank">[ref]</a>:
+			</p>
+			<ol>
+				<li>Parameter expansion,</li>
+				<li>Command substitution,</li>
+				<li>Arithmetic expansion.</li>
+			</ol>
+			<p>
+				References <a href="#ref10">10</a> through <a href="#ref13">13</a> are really good starters
+				that I have used to help myself understand what is going on. The bash
+				man page is also increadibly useful and arguably the most authorative.
+			</p>
+			<p>
+				Lets look at some examples... to begin with we'll export one
+				variable for us to play with:
+			</p>
+			<pre class="prettyprint linenums">~$ export JEHTECH="a b c d     e#f"</pre>
+			<p>
+				We can immediately see word splitting occuring if we do the following:
+			</p>
+			<pre class="prettyprint linenums">~$ echo $JEHTECH
+a b c d e#f</pre>
+			<p>
+				Our original string had many spaces between the &quot;d&quot; and &quot;e&quot; but
+				the <tt>echo</tt> output does not. What has happened here is that parmeter expansion
+				occured (this occurs <b>before</b> the entire command line is evaluated). 
+			</p>
+			<p>
+				The bash shell had to substitute the value of <tt>$JEHTECH</tt> and when
+				it does this is splits or tokenises the resulting expansion based on the
+				delimeters in <tt>$IFS</tt>. The default value for <tt>$IFS</tt> is <tt>&lt;space&gt;&lt;tab&gt;&lt;newline&gt;</tt>,
+				so any of the characters in any consecutive order are &quot;deleted&quot; and used as a
+				seperator between words. The result is that bash finds the tokens 
+				&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, and &quot;e#f&quot;.
+			</p>
+			<p>
+				Notice the difference when we enclose the variable <tt>$JEHTECH</tt> in
+				quotes:
+			</p>
+			<pre class="prettyprint linenums">~$ echo "$JEHTECH"
+a b c d     e#f
+			</pre>
+			<p>
+				In the above example, although parameter expansion has taken place,
+				no word splitting has been performed. The reason is, is that bash
+				will not perform word splitting when the expansion (be it parmeter, 
+				arithemetic or command substitution) occurs in quotes.
+			</p>
+			<div class="box_container"><div class="info">
+				<p>
+					 Bash will not perform word splitting when the expansion (be it parmeter, 
+					arithemetic or command substitution) occurs in quotes.
+				</p>
+			</div></div>
+			<p>
+				It is for this reason that tools like <a href="http://www.shellcheck.net" target="_blank">ShellCheck</a>
+				will always recommend that double quotes should be used to avoid word splitting.
+				This is because the effects of word splitting are often not wanted. For example, if
+				you received a variable from the user in one of your scripts, and lets say it is 
+				a directory from which you need to work from. If you do the following, and the 
+				directory name contains a space, the parameter substitution will create two tokens
+				when only one was meant - the directory name that unluckily contained a space. Try
+				the following:
+			</p>
+			<pre class="prettyprint linenums">~$ mkdir "jeh tech"
+~$ ll -d jeh\ tech/
+drwxr-xr-x 2 jehtech jehtech 4096 Aug 12 10:36 jeh tech//
+
+~$ export MYDIR="jeh tech"
+~$ ll -d $MYDIR
+ls: cannot access jeh: No such file or directory
+ls: cannot access tech: No such file or directory
+
+~$ ll -d "$MYDIR"
+drwxr-xr-x 2 jehtech jehtech 4096 Aug 12 10:36 jeh tech/
+
+~$ rmdir jeh\ tech/</pre>
+			<p>
+				Note how the command <tt>ll -d $MYDIR</tt> fails, but 
+				<tt>ll -d &quot;$MYDIR&quot;</tt> does what is expected!
+			</p>
+			<p>
+				We can play with the value of <tt>$IFS</tt> to further split the
+				characters in our example variable <tt>$JEHTECH</tt> on the &quot;#&quot;
+				character too:
+			</p>
+
+			<h3>Parse Version Strings: Splitting Strings On A Delimeter</h3>
+			<p>
+				I wanted to be able to check the IPython version in a shell script to
+				let the user know if it needed upgrading and to offer to do the upgrade
+				automatically. I knew I could spit the string onto multiple lines 
+				using <tt>tr</tt> and then parse it in a <tt>for</tt> loop, but a quick
+				bit of googling and StackOverflow came to the rescue again 
+				<a href="http://stackoverflow.com/questions/918886/how-do-i-split-a-string-on-a-delimiter-in-bash"
+				   target="_blank">[3]</a>.
+			</p>
+			<pre class="prettyprint linenums">IFS="." read -a pyVerInfo &lt;&lt;&lt; "$pyVer"
+if [ ${pyVerInfo[0]} -ne 3 ]; then
+   #error
+fi</pre>
+			<p>
+				This cool little snippet splits the string up using a full-stop as the
+				delimeter and saves it as an array to the variable <tt>pyVerInfo</tt>.
+			</p>
+		</div>
 
 		<h2>Ensure A Script Runs As Root</h2>
 		<div>
@@ -480,25 +741,6 @@ done</pre>
 
 			<h3>Halt script if variable NOT set</h3>
 			<pre class="prettyprint linenums"><a href="http://linuxcommand.org/lc3_man_pages/seth.html" target="_blank">set</a> -u</pre>
-
-			<h3>Parse Version Strings: Splitting Strings On A Delimeter</h3>
-			<p>
-				I wanted to be able to check the IPython version in a shell script to
-				let the user know if it needed upgrading and to offer to do the upgrade
-				automatically. I knew I could spit the string onto multiple lines 
-				using <tt>tr</tt> and then parse it in a <tt>for</tt> loop, but a quick
-				bit of googling and StackOverflow came to the rescue again 
-				<a href="http://stackoverflow.com/questions/918886/how-do-i-split-a-string-on-a-delimiter-in-bash"
-				   target="_blank">[3]</a>.
-			</p>
-			<pre class="prettyprint linenums">IFS="." read -a pyVerInfo &lt;&lt;&lt; "$pyVer"
-if [ ${pyVerInfo[0]} -ne 3 ]; then
-   #error
-fi</pre>
-			<p>
-				This cool little snippet splits the string up using a full-stop as the
-				delimeter and saves it as an array to the variable <tt>pyVerInfo</tt>.
-			</p>
 
 			
 			<a name="ExecAlternative"><h3>Find --exec alternative when you want to exec a script function</h3></a>
