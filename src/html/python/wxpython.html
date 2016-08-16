@@ -1000,6 +1000,15 @@ class MyDummyWindow(wx.Frame):
 app = wx.App(False)
 frame = MyDummyWindow(None, "A Stupid Example")
 app.MainLoop()</pre>
+			
+				 <p>
+				 <a href="http://www.programcreek.com/python/example/14733/wx.GraphicsContext" target="_blank">Also this on wx.GraphicsContext</a>.
+				 </p>
+			</div>
+
+
+			<h2>PyCairo And wxPython</h2>
+			<div>
 				<p>
 					TODO wxPython and 
 					<a href="https://www.cairographics.org"
@@ -1008,9 +1017,29 @@ app.MainLoop()</pre>
 					 target="_blank">at this Wiki guide</a>.
 				 </p>
 				 <p>
-				 <a href="http://www.programcreek.com/python/example/14733/wx.GraphicsContext" target="_blank">Also this on wx.GraphicsContext</a>.
-				 </p>
-			</div>
+				 	From
+				</p>
+				<blockquote>
+					<p>
+						On Windows you can get a Cairo DLL from here:
+					</p><p style="margin-left:12pt;">
+						<a href="http://www.gtk.org/download-windows.html" target="_blank">http://www.gtk.org/download-windows.html</a>
+					</p><p>
+						You'll also want to get the zlib and libpng binaries from the same
+						page.  Once you get those files extract the DLLs from each of the zip
+						files and copy them to some place on your PATH.  Finally, there is an
+						installer for the pycairo pacakge here:
+					</p><p style="margin-left:12pt;">
+						<a href="http://wxpython.org/cairo/" target="_blank">http://wxpython.org/cairo/</a>
+					</p>
+					<footer>--<a href="https://stuff.mit.edu/afs/athena/system/amd64_deb50/os/usr/share/pyshared/wx-2.8-gtk2-unicode/wx/lib/wxcairo.py" target="_blank">wx.lib.wxcairo</a></footer>
+				</blockquote>
+				<p>
+					Need to try this out as the wxPython 3.x.x demo has a pyCairo
+					section to it!
+				</p>
+
+			</div> <!-- END H2 PyCairo -->
 		</div>
 	</div>
 </body>
