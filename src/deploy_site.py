@@ -9,7 +9,7 @@ import traceback
 import sys
 
 DB_FILENAME = 'deployment_db.bin'
-DEPLOYED_DIR = '..\__deployed'
+DEPLOYED_DIR = os.path.join('..','__deployed')
 
 def GenerateCheckSum(data):
 	return zlib.adler32(data) & 0xffffffff
@@ -31,11 +31,13 @@ commonFiles  = []
 # Get the CRC of every file under the __deployed directory so we can figure out which
 # files have changed... Save the CRC in a dictionary with a key that is the full path to the file relative to
 # the CWD
+print "Building CRC map of {}... ".format(DEPLOYED_DIR)
 for dirpath, dirnames, filenames in os.walk(DEPLOYED_DIR):
 	for filename in filenames:
 		fullPath = os.path.join(dirpath, filename)
 		with open(fullPath, 'rb') as fh:
 			fileCRC[fullPath] = GenerateCheckSum(fh.read())
+print "Done\n"
 
 if os.path.isfile(DB_FILENAME):
 	# use the existing database to find out which files are new since the last upload, which
@@ -60,7 +62,10 @@ if os.path.isfile(DB_FILENAME):
 else:
 	# There is no existing database. Assume that the HTML folder is empty so therefore
 	# all files are new..
+	print "The database file {} does not exist\n".format(DB_FILENAME)
 	newFiles = fileCRC.keys()
+	print fileCRC
+
 
 print "\nThe following files have changed"
 print commonFiles
