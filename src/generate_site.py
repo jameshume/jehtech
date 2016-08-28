@@ -121,6 +121,8 @@ def find_html_files(base_dir):
 			yield (dirname, filename)
 		for filename in fnmatch.filter(filenames, '*.php'):
 			yield (dirname, filename)
+		for filename in fnmatch.filter(filenames, '*.js'):
+			yield (dirname, filename)
 
 def path_explode(path):
 	""" Explode a path string into a list with each list element

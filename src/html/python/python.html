@@ -284,11 +284,14 @@ Table column name found
 			PyDoc for immutable sequences</a> says:
 		<p>
 		<blockquote>
-			<span>
+			<p>
 				Concatenating immutable sequences always results in a new object. This means that building up a 
 				sequence by repeated concatenation will have a quadratic runtime cost in the total sequence 
 				length. To get a linear runtime cost ... build a list and use .join()
-			</span>
+			</p>
+			<footer>
+				-- <a href="https://docs.python.org/3/library/stdtypes.html" target="_blank">Python documumentation: Built-in types</a> section 4.6.1 - Common Sequence Operations
+			</footer>
 		</blockquote>
 		<p>
 			Interesting... I've been building up SQL strings using concatenation. Is using a 

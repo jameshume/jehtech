@@ -9,37 +9,6 @@
 }
 
 @font-face {
-	font-family: 'League Spartan';
-	src: url('fonts/leaguespartan-bold.eot');
-	src: url('fonts/leaguespartan-bold.eot?#iefix') format('embedded-opentype'),
-	     url('fonts/leaguespartan-bold.woff2') format('woff2'),
- 	     url('fonts/leaguespartan-bold.woff') format('woff'),
-	     url('fonts/leaguespartan-bold.ttf') format('truetype');
-	font-weight: bold;
-	font-style: normal;
-}
-
-@font-face {
-	font-family: 'Junction';
-	src: url('fonts/junction-bold.eot');
-	src: url('fonts/junction-bold.eot?#iefix') format('embedded-opentype'),
-	     url('fonts/junction-bold.woff') format('woff'),
-	     url('fonts/junction-bold.ttf') format('truetype');
-	font-weight: bold;
-	font-style: normal;
-}
-
-@font-face {
-	font-family: 'Junction';
-	src: url('fonts/junction-regular.eot');
-	src: url('fonts/junction-regular.eot?#iefix') format('embedded-opentype'),
-	     url('fonts/junction-regular.woff') format('woff'),
-	     url('fonts/junction-regular.ttf') format('truetype');
-	font-weight: normal;
-	font-style: normal;
-}
-
-@font-face {
 	font-family: 'Spinnaker';
 	font-style: normal;
 	font-weight: 400;
@@ -47,7 +16,6 @@
 	     local('Spinnaker-Regular'), 
 	     url(http://fonts.gstatic.com/s/spinnaker/v8/W7zI5bHqD9Cyn2evfF7Qnz8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
 }
-
 
 body { 
 	font-family: 'Spinnaker', Arial, Helvetica, sans-serif;
@@ -67,6 +35,14 @@ img {
 	max-width: 100%;
 }
 
+.info, .warning, blockquote {
+	border-radius: 5px;
+	box-sizing: border-box;
+	box-shadow: 0 0 7px rgba(0,0,0,0.5);
+	-webkit-box-shadow: 0 0 7px 
+	-moz-box-shadow: 0 0 7px rgba(0,0,0,0.5);
+}
+
 .info, .warning {
 	margin: 0px 0px 10px 0px;
 	padding:5px 10px 5px 65px;
@@ -77,8 +53,6 @@ img {
 	display:inline-block;
 	text-align: left;
 	min-height: 40px;
-	border-radius: 5px;
-	box-sizing: border-box;
 }
 
 .info {
@@ -93,6 +67,25 @@ img {
 	border: 1px solid #662B2B;
 	background-color: #F7D0D0;
 	background-image: url('images/jeh-tech/icons/alert.png');
+}
+
+blockquote {
+	font-family: 'Goudy', Times, serif;
+	font-size:   16px;
+	padding: 15px 5px 5px 15px;
+	background-color: #E4EBF2;
+	border-top: 1px solid #7999b9;
+	border-bottom: 1px solid #7999b9;
+	border-left: 0.6em solid #7999b9;
+	margin: 0px;
+	background-image: url(images/jeh-tech/quotes.png);
+	background-position: top left;
+	background-repeat: no-repeat;
+}
+
+blockquote footer {
+	font-family: 'Spinnaker', Arial, Helvetica, sans-serif;
+	font-size:   14px;
 }
 
 ol.linenums li 	{ border-left:1px solid grey; padding-left:5px;
@@ -167,28 +160,6 @@ table th	{ font-weight:bold;
 
 table caption   { background-color: #CAD7E3;
 		}
-
-blockquote {
-	font: 14px/20px italic Times, serif;
-	padding: 8px;
-	background-color: #faebbc;
-	border-top: 1px solid #e1cc89;
-	border-bottom: 1px solid #e1cc89;
-	margin: 5px;
-	background-image: url(images/jeh-tech/openquote1.gif);
-	background-position: top left;
-	background-repeat: no-repeat;
-	text-indent: 23px;
-	}
-	
-blockquote span {
-	display: block;
-	background-image: url(images/jeh-tech/closequote1.gif);
-	background-repeat: no-repeat;
-	background-position: bottom right;
-	text-align: left;
-	padding-right: 23px;
-}
 
 #content {
 	margin: 0px;

@@ -96,8 +96,9 @@ app.MainLoop()
 				<h3>Add Buttons</h3>
 				<p>
 					Add a button by adding the following into your <tt>Frame</tt>/
-					<tt>Panel</tt> (Note: really you should add everything to a panel
-					or some other contained and not directly to the Frame... but for
+					<tt>Panel</tt> (<b>Note: really you should add everything to a panel
+					or some other container and not directly to the Frame to render 
+					correctly on all platforms...</b> but for
 					the sake of brevity in the examples I do).
 				</p>
 				<pre class="prettyprint linenums">import wx 
@@ -420,13 +421,298 @@ sizer.Add(self._btn2, 0)
 
 			<h2>The More Common wxPython Controls</h2>
 			<div>
+				<h3>Plain Buttons</h3>
+				<p>
+					Pretty simple control. You can get or set the label, specify the label alignment, decide which
+					button in the containing window has focus by default (<code>wx.Button.SetDefault()</code>),
+					and enable and disable them:
+				</p>
+				<pre class="prettyprint linenums">import wx 
+
+class MyDummyWindow(wx.Frame):
+   _DISABLE_STR = "Disable"
+   _ENABLE_STR  = "Enable"
+   def __init__(self, parent, title):
+      wx.Frame.__init__(self, parent, title=title)
+
+      self.mainPanelSzr  = wx.BoxSizer(wx.VERTICAL)
+      self.mainPanel     = wx.Panel(self)
+
+      self.toggleBtn     = wx.Button( self.mainPanel
+                                    , wx.ID_ANY, self._DISABLE_STR)
+      self.defaultBtn    = wx.Button( self.mainPanel
+                                    , wx.ID_ANY, "Does nothing")
+      self.leftAlignBtn  = wx.Button( self.mainPanel
+                                    , wx.ID_ANY, "Left", style=wx.BU_LEFT)
+      self.rightAlignBtn = wx.Button( self.mainPanel
+                                    , wx.ID_ANY, "Right", style=wx.BU_RIGHT)
+
+      self.mainPanelSzr.Add(self.toggleBtn, 1, wx.EXPAND)
+      self.mainPanelSzr.Add(self.defaultBtn, 1, wx.EXPAND)
+      self.mainPanelSzr.Add(self.leftAlignBtn, 1, wx.EXPAND)
+      self.mainPanelSzr.Add(self.rightAlignBtn, 1, wx.EXPAND)
+
+      self.defaultBtn.SetDefault()
+      self.toggleBtn.Bind(wx.EVT_BUTTON, self._OnToggleClick)
+
+      self.mainPanel.SetSizerAndFit(self.mainPanelSzr)
+      self.winSizer = wx.BoxSizer(wx.HORIZONTAL)
+      self.winSizer.Add(self.mainPanel, 1, flag=wx.ALL | wx.EXPAND)
+      self.SetSizerAndFit(self.winSizer)
+      self.Show()
+
+   def _OnToggleClick(self, event):
+      if self.toggleBtn.GetLabel() == self._DISABLE_STR:
+         self.toggleBtn.SetLabel(self._ENABLE_STR)
+         self.defaultBtn.Enable(False)
+      else:
+         self.toggleBtn.SetLabel(self._DISABLE_STR)
+         self.defaultBtn.Enable(True)
+
+app = wx.App(False)
+frame = MyDummyWindow(None, "Static GridBagSizer Example")
+app.MainLoop()</pre>
+
+				<h3 class="prettyprint linenums">Image Buttons</h3>
+				<p>
+					Can have image or image and text.
+				</p>
+				<pre class="prettyprint linenums">wx.BitmapButton(&lt;owner&gt;, wx.ID_ANY, wx.Bitmap(&lt;path to image&gt;))</pre>
+
 				<h3>A Text Entry Box</h3>
 				<p>
 					For text entry you can use a <tt><b>wx.TextCtrl</b></tt> widget.
-					A very simple example combining two buttons to get and set the
-					value in the text control is shown below:
 				</p>
+				<ul>
+					<li><code>GetValue()/SetValue()</code>.
+					</li>
+					<li><code>SetEditable(&lt;bool&gt;)</code>.
+					</li>
+				</ul>
+
+			<h3>Build Your Own Progress Dialog</h3>
+			<p>
+				The standard <code>wx.ProgressDialog</code> is really good and I 
+				only learnt about it after building my own. I wanted to present
+				messages in my progress dialog so this was my own little effort at constructing
+				one. It is a pubsub aware dialog that receives progress and
+				termination messages (the thread <em>must</em> send at least
+				the latter).
+			</p>
+			<pre class="prettyprint linenums">import sys
+import os
+import threading
+import time
+import wx
+from wx.lib.pubsub import setupkwargs #&lt; Put pubsub into "newer" mode
+from wx.lib.pubsub import pub
+
+class MyLongRunningThread(threading.Thread):
+   def __init__(self, pubNameProgress, pubNameFinished, simulateErrorAtStep=-1):
+      super(MyLongRunningThread, self).__init__()
+      self._numSteps = 15
+      self._pubNameProgress = pubNameProgress
+      self._pubNameFinished = pubNameFinished
+      self._simulateErrorAtStep = simulateErrorAtStep
+      self._errMsg = None
+      self._isCanceled = threading.Event()
+      self.start()
+
+   def Cancel(self):
+      self._isCanceled.set()
+
+   def GetErrorMessage(self):
+      return self._errMsg
+
+   def run(self):
+      msg = "Error"
+      try:
+         pub.sendMessage(self._pubNameProgress, percent=0.0, msg="Calculating time...")
+         time.sleep(1) # Emulate some pause before progress starts
+
+         for step in range(self._numSteps):
+            if self._isCanceled.is_set():
+               msg = "Canceled"; break
+            time.sleep(1) # Emulate some processes, may raise exception
+            pub.sendMessage(self._pubNameProgress, percent=float(step)/self._numSteps*100.0, msg="Something {}".format(step))
+
+            if self._simulateErrorAtStep &gt;= 0 and self._simulateErrorAtStep == step:
+               raise Exception("Oops a simulated error occurred")
+
+         if step == self._numSteps - 1:
+            msg = "Completed"
+      except Exception as e:
+         self._errMsg = str(e)
+      except:
+         self._errMsg = "Unknown error"
+      finally:
+         pub.sendMessage(self._pubNameFinished, msg=msg)
+
+class MyProgressDialog(wx.Dialog):
+   def __init__(self, parent, pubNameProgress, pubNameFinished, workerThread):
+       wx.Dialog.__init__(self, parent)
+
+       self._workerThread    = workerThread
+       self._pubNameProgress = pubNameProgress
+       self._pubNameFinished = pubNameFinished
+
+       self._progress = wx.Gauge(self, range=100)
+       pub.subscribe(self._MyThreadProgress, self._pubNameProgress)
+       pub.subscribe(self._MyThreadFinished, self._pubNameFinished)
+
+       self.Bind(wx.EVT_CLOSE, self._OnClose)
+
+       self._msg = wx.TextCtrl(self, style=wx.TE_READONLY)
+       self._msg.SetValue("Waiting to start...")
+       sizer = wx.BoxSizer(wx.VERTICAL)
+       sizer.Add(
+             wx.StaticText(
+                 self, 
+                 label="Performing results extraction summarisation:"), 
+                 0, 
+                 wx.EXPAND | wx.ALL, 5)
+       sizer.Add(self._progress, 0, wx.EXPAND | wx.ALL, 5)
+       sizer.Add(self._msg, 0, wx.EXPAND | wx.ALL, 5)
+       self.SetSizerAndFit(sizer)
+
+       self.SetSize((550,-1)) 
+       self.SetMinSize((550,-1)) 
+
+   def _OnClose(self, event):
+      event.Veto(True)
+      self._msg.SetValue("Please wait whilst operation is canceled...")
+      self._workerThread.Cancel()
+
+   def _MyThreadProgress(self, percent, msg):
+      def inner():
+         if msg is not None: 
+            self._msg.SetValue(msg)
+         self._progress.SetValue(percent if percent &lt;= 100 else 100)
+      wx.CallAfter(inner)
+
+   def _MyThreadFinished(self, msg):
+      def inner():
+         code = wx.ID_ABORT
+         if msg == "Completed":  code = wx.ID_OK
+         elif msg == "Canceled": code = wx.ID_CANCEL
+         self.EndModal(code)
+      wx.CallAfter(inner)
+
+class MyDummyWindow(wx.Frame):
+   GO_STR = "Go!"
+   UPDATE_STR = "MyDummy.Update"
+   FINISH_STR = "MyDummy.Finish"
+
+   def __init__(self, parent, title):
+      wx.Frame.__init__(self, parent, title=title)
+
+      self.workingThread = None
+      self.workingDlg    = None
+      self.mainPanelSzr  = wx.BoxSizer(wx.VERTICAL)
+      self.mainPanel     = wx.Panel(self)
+      self.errorChk      = wx.CheckBox(self.mainPanel, wx.ID_ANY, "Sim error?")
+      self.goBtn         = wx.Button( self.mainPanel, wx.ID_ANY, self.GO_STR)
+      self.goBtn.Bind(wx.EVT_BUTTON, self._OnToggleClick)
+
+      self.mainPanelSzr.Add(self.goBtn, 1, wx.EXPAND)
+      self.mainPanelSzr.Add(self.errorChk, 0, wx.EXPAND)
+      self.mainPanel.SetSizerAndFit(self.mainPanelSzr)
+
+      self.winSizer = wx.BoxSizer(wx.HORIZONTAL)
+      self.winSizer.Add(self.mainPanel, 1, flag=wx.ALL | wx.EXPAND)
+      self.SetSizerAndFit(self.winSizer)
+      self.Show()
+
+   def _OnToggleClick(self, event):
+      if self.goBtn.GetLabel() == self.GO_STR:
+         assert(self.workingThread is None)
+         self.goBtn.SetLabel("Wait...")
+         self.goBtn.Enable(False)
+
+         stepErr = 3  if self.errorChk.IsChecked() else -1
+         self.workingThread = MyLongRunningThread( self.UPDATE_STR
+                                                 , self.FINISH_STR
+                                                 , simulateErrorAtStep = stepErr)
+         self.workingDlg = MyProgressDialog( self
+                                           , self.UPDATE_STR
+                                           , self.FINISH_STR
+                                           , self.workingThread)
+
+         result = self.workingDlg.ShowModal()
+         if result == wx.ID_ABORT:
+            wx.MessageBox(self.workingThread.GetErrorMessage())
+         elif result == wx.ID_CANCEL:
+            wx.MessageBox("User cancelled")
+         else:
+            wx.MessageBox("All OKAY!")
+
+         self.goBtn.SetLabel(self.GO_STR)
+         self.goBtn.Enable(True)
+         self.workingThread = None
+
+app = wx.App(False)
+frame = MyDummyWindow(None, "Static GridBagSizer Example")
+app.MainLoop()</pre>
 			</div> <!-- END H2 DIV -->
+
+
+			<h2>More wxPython Sizers</h2>
+			<div>
+				<h3>GridBagSizer</h3>
+				<ul>
+					<li>Allows you to layout elements in a grid or table-like fashion,</li>
+					<li>Each column sized to the largest element in that column (can be modified re &quot;merged&quot; cells which span more than one column),</li>
+					<li>Each row sized to the largest element in that row (can be modified re &quot;merged&quot; cells which span more than one row),</li>
+					<li>Any set of columns can be made &quot;growable&quot; in seperate proportions: <code>AddGrowableRow(&lt;row-num&gt;, proportion=&lt;number&gt;)</code>. By default columns will not resize,</li>
+					<li>Any set of rows can be made &quot;growable&quot; in seperate proportions: <code>AddGrowableCol(&lt;col-num&gt;, proportion=&lt;number&gt;)</code>. By default rows will not resize,</li>
+					<li>Cells can be seperated with margins (<code>wx.GridBagSizer(hgap=5, vgap=5)</code>) and can have padding (<code>GridBagSizer.Add(..., border=&lt;number&gt;)</code>).</li>
+				</ul>
+				<pre class="prettyprint linenums">import wx 
+
+class MyDummyWindow(wx.Frame):
+   def __init__(self, parent, title):
+      wx.Frame.__init__(self, parent, title=title)
+
+      self.mainPanelSzr = wx.GridBagSizer(hgap=5, vgap=5)
+      self.mainPanel    = wx.Panel(self)
+      for idx in range(2):
+         self.mainPanelSzr.AddGrowableRow(idx, proportion=idx+1)
+         self.mainPanelSzr.AddGrowableCol(idx, proportion=idx+1)
+
+         self.mainPanelSzr.Add( wx.Button( self.mainPanel
+                                         , wx.ID_ANY, "B {}".format(idx)
+                                         )
+                              , pos=(idx,idx) # Cell: row,col
+                              , span=(1, 1)   # Cell spans rows,cols
+                              , flag=wx.ALL | wx.EXPAND
+                              , border=2
+                              )
+      self.mainPanelSzr.Add( wx.Button( self.mainPanel
+                                      , wx.ID_ANY, "A".format(idx)
+                                      )
+                           , pos=(2,0)   # Cell: row,col
+                           , span=(1, 2) # Cell spans rows,cols
+                           , flag=wx.ALL | wx.EXPAND
+                           , border=2
+                           )
+
+      self.mainPanel.SetSizerAndFit(self.mainPanelSzr)
+
+      self.winSizer = wx.BoxSizer(wx.VERTICAL)
+      self.winSizer.Add(self.mainPanel, 1, flag=wx.ALL | wx.EXPAND)
+      self.SetSizerAndFit(self.winSizer)
+      self.Show()
+
+app = wx.App(False)
+frame = MyDummyWindow(None, "Static GridBagSizer Example")
+app.MainLoop()</pre>
+				<p>
+					The above example produces the following (annotation in green added):
+				</p>
+				<p>
+				<img src="##IMG_DIR##/python/gridbagsizer.png" alt="Example of wxPython GridBagSizer"/>
+				</p>
+			</div>
 
 			<h2>wxPython Dialogs</h2>
 			<div>
@@ -490,7 +776,7 @@ if result != wx.YES:
                     "Open a file", 
                     default_directory, 
                     default_file, 
-                    semi_colon_seperated_wildcard_string, 
+                    semi_colon_separated_wildcard_string, 
                     wx.FD_OPEN)
 if dlg.ShowModal() == <b>wx.ID_OK</b>:
    <b>selectedFile = dlg.GetPath() # Do not use GetFilename()/GetDirectory()</b>
@@ -537,6 +823,13 @@ if dlg.ShowModal() == wx.ID_OK:
                    wx.DD_DEFAULT_STYLE | wx.DD_DIR_MUST_EXIST)
 if dlg.ShowModal() == wx.ID_OK:
     print dlg.GetPath()</pre>
+
+				<h3>DIY Dialogs</h3>
+				<p>
+					When trying to force a close of your DIY dialog use the
+					<code>EndModal(&lt;exit code&gt;)</code> function. Don't destroy
+					the dialog.
+				</p>
 
 			</div> <!-- END H2 dialogs -->
 
@@ -707,6 +1000,15 @@ class MyDummyWindow(wx.Frame):
 app = wx.App(False)
 frame = MyDummyWindow(None, "A Stupid Example")
 app.MainLoop()</pre>
+			
+				 <p>
+				 <a href="http://www.programcreek.com/python/example/14733/wx.GraphicsContext" target="_blank">Also this on wx.GraphicsContext</a>.
+				 </p>
+			</div>
+
+
+			<h2>PyCairo And wxPython</h2>
+			<div>
 				<p>
 					TODO wxPython and 
 					<a href="https://www.cairographics.org"
@@ -715,9 +1017,29 @@ app.MainLoop()</pre>
 					 target="_blank">at this Wiki guide</a>.
 				 </p>
 				 <p>
-				 <a href="http://www.programcreek.com/python/example/14733/wx.GraphicsContext" target="_blank">Also this on wx.GraphicsContext</a>.
-				 </p>
-			</div>
+				 	From
+				</p>
+				<blockquote>
+					<p>
+						On Windows you can get a Cairo DLL from here:
+					</p><p style="margin-left:12pt;">
+						<a href="http://www.gtk.org/download-windows.html" target="_blank">http://www.gtk.org/download-windows.html</a>
+					</p><p>
+						You'll also want to get the zlib and libpng binaries from the same
+						page.  Once you get those files extract the DLLs from each of the zip
+						files and copy them to some place on your PATH.  Finally, there is an
+						installer for the pycairo pacakge here:
+					</p><p style="margin-left:12pt;">
+						<a href="http://wxpython.org/cairo/" target="_blank">http://wxpython.org/cairo/</a>
+					</p>
+					<footer>--<a href="https://stuff.mit.edu/afs/athena/system/amd64_deb50/os/usr/share/pyshared/wx-2.8-gtk2-unicode/wx/lib/wxcairo.py" target="_blank">wx.lib.wxcairo</a></footer>
+				</blockquote>
+				<p>
+					Need to try this out as the wxPython 3.x.x demo has a pyCairo
+					section to it!
+				</p>
+
+			</div> <!-- END H2 PyCairo -->
 		</div>
 	</div>
 </body>

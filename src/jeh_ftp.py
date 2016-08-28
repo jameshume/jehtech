@@ -1,4 +1,4 @@
-import ftplib
+import ftplib_mod as ftplib
 import path_record
 
 class JehFTP(object):

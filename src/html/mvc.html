@@ -191,7 +191,7 @@ c = CreateController(Test, m, v)</pre>
 		<h3>Summary</h3>
 		<p>
 			The general strategy of MVC is to split up the responsibility for storing the data (the model), displaying the data 
-			(the view), and managing the user interaction between the two (the controller) into seperate modules. A programmer can then modify one
+			(the view), and managing the user interaction between the two (the controller) into separate modules. A programmer can then modify one
 			component without needing to know <em>everything</em>, or indeed <em>(almost) anything</em> about the other components.
 		</p><p>
 			For example, if the view
@@ -201,7 +201,7 @@ c = CreateController(Test, m, v)</pre>
 		</p><p>
 			Or as another example, a view on an address book retrieves a list of all names beginning with 'L' through the model. The model
 			stores the addresses in a raw binary file. Now the software is to be ugraded to store the address book in XML. Because the view is
-			seperate from the model the storage can easily be changed without having to touch a single line of code in the view.
+			separate from the model the storage can easily be changed without having to touch a single line of code in the view.
 		</p><p>
 			The split of responsibilities is easy enough to understand, but it was the description of the controller that ellucidated things
 			for me. In my development so far the controller seemed to be waifer thin and wasn't really doing a lot other than forwarding

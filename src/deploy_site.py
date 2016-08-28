@@ -2,7 +2,7 @@ from __future__ import division
 import os
 import zlib
 import pickle
-import ftplib 
+import ftplib_mod as ftplib
 import string 
 import path_record
 import traceback
