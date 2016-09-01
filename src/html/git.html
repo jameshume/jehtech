@@ -27,7 +27,10 @@
 	<a href="https://progit2.s3.amazonaws.com/en/2015-08-09-23511/progit-en.661.pdf"
 		target="_blank">Book</a>.
 	</p>
-	<h2>Where Git Finds Your SSH File</h2>
+
+
+<h2>Where Git Finds Your SSH File</h2>
+<div>
 	<p>
 		I had a little problem on Windows. When I connected from my office location
 		Git would fail to SSH into GitHub. When I connected from home Git would
@@ -61,8 +64,29 @@ ssh -i /absolute/path/to/key/folder/id_rsa $*</pre>
 	<p>
 		Now your <tt>git push</tt> operations etc should work just fine.
 	</p>
+</div> <!-- END H2: Where Git Finds Your SSH File -->
 
-	<h2>Basic Git Notes</h2>
+<h2>Create A Public/Private Keypair And Add To Your Keyring</h2>
+<div>
+	<p>
+		Followed the GitHub instructions to create the private/public RSA key pair. Having obtained
+		this key it can be added to the keyring using the following, but this addition is <em>not</em>
+		permanent.
+	</p>
+	<pre>ssh-add ~/.ssh/some_key_name</pre>
+	<p>
+		So to make the addition permanent I consulted 
+		<a href="http://stackoverflow.com/questions/3466626/add-private-key-permanently-with-ssh-add-on-ubuntu" target="_blank">this SO thread</a>.
+		When you created the OpenSSH key pair you probably stored it as <tt>~/.ssh/some_key_name</tt> 
+		(the private key) and <tt>~/.ssh/some_key_name.pub</tt> (the public key). To add these permanently to your
+		keyring edit the file <tt>~/.ssh/config</tt> (and if it is empty just create it). Add the 
+		following line (replicate once for each key you wish to permenantly add):
+	</p>
+	<pre>IdentityFile ~/.ssh/some_key_name</pre>
+</div> <!-- END: Create A Public/Private Keypair -->
+
+<h2>Basic Git Notes</h2>
+<div>
 	<pre>
 Git's basic structure
    1. Workspace
@@ -267,7 +291,8 @@ Integrate
      Use 
         git mergetool
 </pre>
-</div>
+</div> <!-- END H2 Git Notes -->
+
 </div>
 </body>
 </html>

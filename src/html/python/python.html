@@ -107,6 +107,27 @@ MESSAGE_TYPE: LINE_NUM:[OBJECT:] MESSAGE
 		</p>
 </div>
 
+<h2>Installing Python Libraries From Wheel Files</h2>
+<div>
+	<p>
+		<a href="http://pythonwheels.com/" target="_blank">Python wheels</a> 
+		<q>are the new standard of python distribution</q>. First make sure you have wheels
+		installed:
+	</p>
+	<pre>pip install wheel</pre>
+	<p>
+		Once you have installed wheels you can download wheel files (*.whl) to anywhere on your
+		computer and run the following:
+	</p>
+	<pre>pip install /path/to/your/wheel/file.whl</pre>
+	<p>
+		So, for example, when I wanted to install lxml on my Windows box, I went to Christoph Gohlke's
+		<a href="http://www.lfd.uci.edu/~gohlke/pythonlibs/" target="_blank">Unofficial Windows Binaries for Python Extension Packages</a>
+		and downloaded the file <tt>lxml-3.6.4-cp27-cp27m-win_amd64.whl</tt> and typed the following:
+	</p>
+	<pre>pip install C:\Users\my_user_name\Downloads\lxml-3.6.4-cp27-cp27m-win_amd64.whl</pre>
+</div> <!-- END H2 Install Python Libraries From Wheel Files -->
+
 <h2>Infinite recursion in <tt>__setattr__()</tt> &amp; <tt>__getattr__()</tt> in Python</h2>
 <div>
 		<h3>The recursion problem</h3>
