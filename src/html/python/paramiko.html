@@ -43,7 +43,7 @@
 <div>
 	<p>
 		At the time of writing this I was trying to use the Paramiko library
-		on a Windows XP machine using Paramiki version 1.16.0. It wouldn't work
+		on a Windows XP machine using Paramiko version 1.16.0. It wouldn't work
 		giving the following error:
 	</p>
 	<pre>File "C:\...\paramiko\_winapi.py", line 162, in write
@@ -60,6 +60,10 @@ ValueError: Procedure probably called with too many arguments (4 bytes in excess
 		make the changes described here</a>. In summary, wherever you see a line
 		reading &quot;<tt>length = ctypes.wintypes.SIZE(n)</tt>&quot;, change it
 		to &quot;<tt>length = ctypes.c_size_t(n)</tt>&quot;.
+	</p>
+	<p>
+		NOTE: This now appears to have been fixed. On a newer system where the pip install
+		downloaded v2.0.2 it has been fixed. 
 	</p>
 </div>
 
