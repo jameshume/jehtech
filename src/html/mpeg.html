@@ -98,13 +98,33 @@
 			digitised, <em>compressed</em> data.
 		</p>
 		<p>
-			The frame rate and resolution required generally means that the data rate coming out of
+			You'll note that at the encoder end the audio and video data is encoded seperately. The
+			encoders run off the same clock so that the audio and video encoding remains in sync.
+			The challenge is at the receiver end: the received streams must also be played back in
+			sync (e.g., get the lipsync right or display the correct captions at the right time etc.).
+			Because there is nothing necessarily tying the transmitter and receiver clocks together,
+			and because the transmission media may not result in a constant delay applied to each packet,
+			MPEG defines a way to transmit the clock in the <b>transport stream</b> (TS).
+		</p>
+		<p>
+			As said, it is the encoder's job to convert this into
+			digitised, <em>compressed</em> data. The reason for this is that the frame rate and resolution 
+			required generally means that the data rate coming out of
 			the video equipment, even after digitising, would be far to great to transmit. The bandwidth
 			of most transmission media (e.g., satellite, over the internet etc.) would not be able to
 			support these data rates.
 		</p>
 		<p>
-			Enter MPEG(-2). It is the job of the encoder to compress the video and audio data.
+			Enter MPEG(-2). It is the job of the encoder to compress the video and audio data and produce
+			an <b>elementary stream</b> which is just a byte stream containing the encoded data. MPEG doesn't
+			actually specifiy what the bytes in this stream mean.... that's completely up to the encoder, which
+			is why you will have noticed if that different MPEG files can require difference codecs (codec stands 
+			for COder/DECoder). This stream may be emitted at a constant or variable bit rate (CBR, VBR respectively).
+		</p>
+		<p>
+			Once the <b>elemtary stream</b> (ES) is created the packetiser will chunk it up into packets of either constant
+			or variable size. Each packet has a header and payload. The packetised streams are them multiplexed into
+			a <b>transport stream</b> (TS) which consists of smaller 188-byte packets which can then be tansmitted.
 		</p>
 
 		<h3>A PES Packet</h3>
