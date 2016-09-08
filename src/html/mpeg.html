@@ -33,6 +33,9 @@
 		<ol>
 			<li>&quot;Digital Video: An Introduction to MPEG-2&quot;, B. G. Haskell et al.
 			</li>
+			<li><a href="http://downloads.bbc.co.uk/rd/pubs/reports/1996-02.pdf"
+				target="_blank">&quot;Research and Development Report. MPEG-2: Overview of the ystems layer&quot;, BBC</a>.
+			</li>
 		</ol>
 	</div> <!-- END H2: References -->
 
@@ -43,8 +46,73 @@
 			<a href="https://github.com/jameshume/py_mpeg_1" target="_blank">PCRs etc in Python simulation</a>.
 		</p>
 		<p>
+			Some terms:
+
+			<table>
+				<tr><td>STC</td>
+					<td>System Time Clock</td>
+					<td>Time that PU should be decoded and presented to output device. 33-bit. Units of 90kHz.</td>
+				</tr> 
+				<tr><td>SCR</td>
+					 <td>System Clock Reference</td>
+					 <td>Clock Reference at the PES level. 42-bit. Tells demux what STC should be when each clock reference is received. Units of 27MHz.</td>
+				</tr> 
+				<tr><td>DTS</td>
+					 <td>Decoding Time Stamp</td>
+					 <td>Type of STC.</td>
+				</tr>
+				<tr><td>PTS</td>
+					 <td>Presentation Time Stamp</td>
+					 <td>Type of STC.</td>
+				</tr>
+				<tr><td>PU</td>
+					 <td>Presentation Unit</td>
+					 <td></td>
+				</tr>
+				<tr><td>ES</td>
+					 <td>Elementary Stream</td>
+					 <td>Compressed data from a single source (e.g., video, audio) plus data for sync, id etc.</td>
+				</tr>
+				<tr><td>PES</td>
+					 <td>Packetised Elementary Stream</td>
+					 <td>An ES that has been split up into packets of either variable or constant length.</td>
+				</tr>
+				<tr><td>PSI</td>
+					 <td>Program Specific Information</td>
+					 <td></td>
+				</tr>
+			</table>
+		</p>
+		<ul>
+			<li>All streams are <em>byte</em> streams</li>
+			<li>Uses packet multiplexing</li>
+		</ul>
+		<h3>A 30,000 Foot View</h3>
+		<p>
+			<img src="##IMG_DIR##/mpeg/enc_dec_highlevel.jpg"/>
+		</p>
+		<p>
+			In the above diagram video and audio are recorded. The equipment outputs raw, uncompressed
+			data. The video data will be a series of frames and the audio some kind of stream. Whatever
+			the format that the equipment outputs in, it is the encoder's job to convert this into
+			digitised, <em>compressed</em> data.
+		</p>
+		<p>
+			The frame rate and resolution required generally means that the data rate coming out of
+			the video equipment, even after digitising, would be far to great to transmit. The bandwidth
+			of most transmission media (e.g., satellite, over the internet etc.) would not be able to
+			support these data rates.
+		</p>
+		<p>
+			Enter MPEG(-2). It is the job of the encoder to compress the video and audio data.
+		</p>
+
+		<h3>A PES Packet</h3>
+		<p>
 			<img src="##IMG_DIR##/mpeg/PES_Packet_Header.jpg"/>
 		</p>
+
+		<h3>A Transport Stream Packet</h3>
 		<p>
 			<img src="##IMG_DIR##/mpeg/TS_188_Byte_packet.jpg"/>
 		</p>
