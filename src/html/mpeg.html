@@ -33,8 +33,19 @@
 		<ol>
 			<li>&quot;Digital Video: An Introduction to MPEG-2&quot;, B. G. Haskell et al.
 			</li>
+			<li>&quot;Telecomminications Handbook&quot; K. Terplan, P. Morreale.
+			</li>
 			<li><a href="http://downloads.bbc.co.uk/rd/pubs/reports/1996-02.pdf"
 				target="_blank">&quot;Research and Development Report. MPEG-2: Overview of the ystems layer&quot;, BBC</a>.
+			</li>
+			<li><a href="https://www.youtube.com/watch?v=sojvaEauAVo"
+				target+"_blank">Transport Stream Overview, Ensemble Designs</a>.
+			</li>
+			<li><a href="https://www.youtube.com/watch?v=t22HpVwybso"
+				target="_blank">Packet Timing, Enseble Design</a>.
+			</li>
+			<li><a href="http://www.tvtechnology.com/expertise/0003/asynchronous-interfaces-for-video-servers/183969" 
+				target="_blank">&quot;Asynchronous Interfaces For Video Servers&quot;, TVTechnology article</a>.
 			</li>
 		</ol>
 	</div> <!-- END H2: References -->
@@ -124,8 +135,190 @@
 		<p>
 			Once the <b>elemtary stream</b> (ES) is created the packetiser will chunk it up into packets of either constant
 			or variable size. Each packet has a header and payload. The packetised streams are them multiplexed into
-			a <b>transport stream</b> (TS) which consists of smaller 188-byte packets which can then be tansmitted.
+			either a <b>program stream</b> (PS) or a <b>transport stream</b> (TS). <em>I am generally ignoring the
+			program stream in favour of the transport streams in this discussion</em>.
 		</p>
+		<p>
+			The PS is used in environments that are not noisy. The PS can only support one program. It generally
+			consists of long, variable-length packets. Each packet has a header and a corrupt header can mean
+			and entire packet loss.
+		</p>
+		<p>
+			The TS, which consists of smaller 188-byte packets, is used in noisy environments as the
+			smaller packet size is more ameanable to error recovery and if one packet is corrupted
+			it is not a great a loss as for a larger PS packet. Note that MPEG does not specify any error
+			recovery mechanism: this must be added by the encapsulating protocol if desired. The TS can
+			contain many programs.
+		</p>
+		<p>
+			A summary of the flow from ES to PES to TS is shown below. 
+		</p>
+		<p>
+			<img src="##IMG_DIR##/mpeg/flow_of_stream_packet_types.jpg"/>
+		</p>
+		<p>
+			Note how the diagram shows that
+			a TS packet can only contain data from one PES packet, hence the use of some padding at
+			the end of the PES packet didn't fit into an integral number of TS packets - shown by hatched area.
+		</p>
+
+		<h3>A Receiver At 30,000 Feet</h3>
+		<h4>Intro</h4>
+		<p>
+			As was mentioned, the receiver must play back all the streams synchronously to ensure that things
+			like lipsync are correct. How can it do this? 
+		</p>
+		<p>
+			The answer lies in the <b>Program Clock Reference</b> (PCR), the <b>Decoding Time Stamp</b> (DTS) 
+			and <b>Presentation Time Stamp</b> (PTS) data that is transmitted with the presentation 
+			data (video, audio, subtitles etc). The PCR allows the receiver to estimate the frequency of
+			the encoder clock. The DTS tells the receiver when a <b>Presentation Unit</b> (PU) should be
+			decoded and the PTS tells the receiver when a decoded PU should be presented to the display
+			device. 
+		</p>
+		<p>
+			Shown below, we see that the PTS/DTS are used by the decoders and the PCR is used by
+			the system to control the clock that is driving the decoders so that the system runs at the
+			same frequency and time as the encoder that transmitted this information.
+		</p>
+		<p>
+			<img src="##IMG_DIR##/mpeg/receiver_more_detail_1.jpg"/>
+		</p>
+
+		<h4>Time Sync</h4>
+		<p>
+			Using the PCR timestamps, the receiver can discipline its local oscillator so that the local
+			clock should be, within some tolerance, synchonisation (i.e., frequency and phase)
+			with the encoder's clock. Then once the receiver's clock is correct, the decoder blocks can
+			use the PTS and DTS timestamps correctly to play out video/audio/etc synchronously.
+		</p>
+
+		<p>
+			Okay, so how do we use these PCR timestamps to acheive at least synchonisation? 
+		</p>
+		<p>
+			If we had a perfect system the clocks at both ends would have zero
+			drift and zero jitter. The communication channel would have a constant, zero delay and never
+			drops or corrupts TS packets. 
+			In this case all we are doing is making sure the receiver's clock is running at the same
+			speed as the encoder's clock. It is easy to do. Could we now just take the difference between
+			consequtive PCR timestamps? That would certainly give us the frequency of the encoder's clock
+			as we can assume the gap between each PCR at the encoder was constant. However, this tells us
+			nothing about the receiver clock w.r.t to the encoder clock. The receiver clock could still
+			have a frequency offset. Thus, we need to know when, from the receiver's point of view, each PCR
+			timestamp arrives:
+		</p>
+		<p>
+			<img src="##IMG_DIR##/mpeg/PCR_clock_timestamping_for_frequency_estimation.jpg"/>
+		</p>
+		<p>
+			To continue with the example let's imaging that the decoder clock is running about 1.5 times
+			fater than the encoder clock. Thus we might, from the decoder's point of view, receive the
+			following information if we knew that both clocks had a nominal frequency of 10Hz and a PCR
+			is transmitted every second:
+		</p>
+		<table>
+			<tr>
+				<td>Decoder counts when PCR arrived</td> <td>PCR count received</td> <td>Difference</td>
+			</tr><tr>
+				<td>0</td> <td>0</td> <td>0</td>
+			</tr><tr>
+				<td>15</td> <td>10</td> <td>5</td>
+			</tr><tr>
+				<td>30</td> <td>20</td> <td>10</td>
+			</tr><tr>
+				<td>45</td> <td>30</td> <td>15</td>
+			</tr>
+		</table>
+		<p>
+			The gradient of the time stamp differences is the frequency offset.  Each difference should
+			occur once every 10 counts, by the assumptions we've made, so we know that the gradient
+			difference is 0.5. Therefore the decoder can figure out it is 1.5 times faster that the
+			encoder and correct for this. To begin with, if the frequency offset was very large the decoder
+			might &quot;jump&quot; it's clock frequency to be in the same &quot;ball park&quot; as the
+			encoder, and from there start to align, probably using some kind of control loop, usually
+			PI (Proportional Integral) control.
+		</p>
+		<p>
+			That didn't seem so bad, but unfortunately we don't live in a perfect world. In reality
+			both the encoder and decoder clocks will have a certain frequency drift from their nominal
+			frequencies and will also suffer from jitter. When the encoder clock wanders, the decoder should
+			follow, but in the reverse situation, where the decoder wanders but the encoder does not, the
+			decoder should detect this and correct it's wandering quickly. For both, the jitter should be
+			filtered out and ignored as much as possible. The third variable is the transmission media. It
+			may have a delay, and most probably this delay is not constant - another source of jitter! It may
+			also drop or corrupt packets so we might not receive all of the timestamps and some may be received
+			out of order and the decoder unit as a whole has to be able to cope with this.
+		</p>
+		<p>
+			Let's not get so complicated so quickly. Now lets imagine a slightly less perfect system.
+			The encoder and decoder clocks are still perfect, but the transmission media has a constant
+			delay. Let's imagine it is 2 clock ticks.
+		</p>
+		<table>
+			<tr>
+				<td>Decoder counts when PCR arrived</td> <td>PCR count received</td> <td>Difference</td>
+			</tr><tr>
+				<td>0 + 2 = 2</td> <td>0</td> <td>2</td>
+			</tr><tr>
+				<td>15 + 2 = 17</td> <td>10</td> <td>7</td>
+			</tr><tr>
+				<td>30 + 2 = 32</td> <td>20</td> <td>12</td>
+			</tr><tr>
+				<td>45 + 2 = 47</td> <td>30</td> <td>17</td>
+			</tr>
+		</table>
+		<p>
+			As we can see the rate of change in the differences is still the same. Thus we'll get the
+			frequency right. Once we have the frequency right, we will also be able to pull in the 
+			phase as well.
+		</p>
+		<p>
+			Now lets make the communications channel zero delay again, but this time with jitter. Lets give it a 4 count jitter. A possible
+			scenario is now shown in the table below. The added values now come from jitter and not delay!
+		</p>
+		<table>
+			<tr>
+				<td>Decoder counts when PCR arrived</td> <td>PCR count received</td> <td>Difference</td>
+			</tr><tr>
+				<td>0 + 1 = 1</td> <td>0</td> <td>1</td>
+			</tr><tr>
+				<td>15 + 4 = 19</td> <td>10</td> <td>9</td>
+			</tr><tr>
+				<td>30 - 2 = 28</td> <td>20</td> <td>8</td>
+			</tr><tr>
+				<td>45 + 2 = 47</td> <td>30</td> <td>17</td>
+			</tr>
+		</table>
+		<p>
+			Now clearly we could not just look at each difference and use it to adjust the decoder clock! We
+			need to take this noise out of our system! Look at the effect this has:
+		</p>
+		<p>
+			<img src="##IMG_DIR##/mpeg/Effect_of_jitter.jpg"/>
+		</p>
+		<p>
+			So how do we remove this jitter? (And note this jitter could not only just be from the channel but also either clock). Well,
+			we basically have to guess in an informed way! A basic low pass filter might do the trick but presumably the real mechanisms
+			implemented by manufacturers are far more complex. At least, for now, we have seen what the challenge of the clock recovery
+			is and how MPEG tries to help solve it by providing the PCR timestamps and the D/PTS timestamps.
+		</p>
+
+		<h3>ASI / SDI</h3>
+		<p>
+
+		</p>		
+		<blockquote>
+			<p>
+				ASI is a unidirectional tranmission link to transmit data between digital video equipment ... a streaming
+				data format which often carries an MPEG TS ... typically over 75-ohm coax terminated with BNCs ...
+				It is strictly just an interface ... the format for how data is carried ... DVB-ASI is carried at a 270 Mbps line rate ...
+				derived from a 27 MHz byte clock multiplied by 10 bits.
+			</p><p>
+				-- <a href="http://www.tvtechnology.com/expertise/0003/asynchronous-interfaces-for-video-servers/183969" target="_blank">TVTechnology article</a>.
+			</p>
+		</blockquote>
+		<p></p>
 
 		<h3>A PES Packet</h3>
 		<p>
