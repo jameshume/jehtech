@@ -330,6 +330,27 @@
 			<img src="##IMG_DIR##/mpeg/TS_188_Byte_packet.jpg"/>
 		</p>
 		<p>
+			So, for example, one common operation might be to check whether the TS 
+			packet contains a PCR. The following test would do it (if you wrote it for real
+			you'd just make it a one-liner!):
+		</p>
+
+		<pre class="prettyprint linenums">bool adaption_field_length_valid = false;
+bool adaption_field_contains_pcr = false;
+bool adaption_field_present = (raw_ts_packet[3] &amp; 0x20) 
+
+if (adaption_field_present) {
+   adaption_field_length_valid = (raw_ts_packet[4] > 0);
+   if(adaption_field_length_valid)
+      adaption_field_contains_pcr = raw_ts_packet[5] &amp; 0x10;
+}
+
+if (adaption_field_contains_pcr) {
+   // raw_ts_packet[6] to raw_ts_packet[10] and 
+   // raw_ts_packet[11] &amp; 0xC0 &gt;&gt; 6
+}</pre>
+
+		<p>
 			PIDs are unique identifies. Some PIDs are reserved:
 		</p>
 		<table>
@@ -348,6 +369,7 @@
 		<p>
 			<img src="##IMG_DIR##/mpeg/PMT_PAT.jpg"/>
 		</p>		
+}
 	</div> <!-- END: H2 -->
 </div> <!-- END H1 padding div -->
 
