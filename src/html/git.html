@@ -196,6 +196,12 @@ View history
                                to the code that added or removed string
    git log --oneline --decorate --graph --all
 
+Undoing things
+   To revert the file in the SVN sense:
+      git checkout -- filename
+   To unstage a file:
+      git reset HEAD filename
+
 Branches
    Branch is another version of the same directory. the default is master.
    `git checkout -b branchname`
