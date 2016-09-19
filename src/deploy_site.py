@@ -2,7 +2,8 @@ from __future__ import division
 import os
 import zlib
 import pickle
-import ftplib_mod as ftplib
+#import ftplib_mod as ftplib
+import ftplib
 import string 
 import path_record
 import traceback
@@ -16,11 +17,11 @@ def GenerateCheckSum(data):
 
 def istext(filename):
 	base = os.path.basename(filename)
-	print "BASE='{}'".format(base)
+	print("BASE='{}'".format(base))
 	dotIdx = base.rfind(".")
 	ext = base[dotIdx+1:].strip().lower()
-	print "EXT='{}'".format(ext)
-	print "TEXT? = {}".format(ext in ['html', 'htm', 'txt', 'ipynb', 'js', 'css'])
+	print("EXT='{}'".format(ext))
+	print("TEXT? = {}".format(ext in ['html', 'htm', 'txt', 'ipynb', 'js', 'css']))
 	return ext in ['html', 'htm', 'txt', 'ipynb']
 
 fileCRC = {}
@@ -31,13 +32,13 @@ commonFiles  = []
 # Get the CRC of every file under the __deployed directory so we can figure out which
 # files have changed... Save the CRC in a dictionary with a key that is the full path to the file relative to
 # the CWD
-print "Building CRC map of {}... ".format(DEPLOYED_DIR)
+print("Building CRC map of {}... ".format(DEPLOYED_DIR))
 for dirpath, dirnames, filenames in os.walk(DEPLOYED_DIR):
 	for filename in filenames:
 		fullPath = os.path.join(dirpath, filename)
 		with open(fullPath, 'rb') as fh:
 			fileCRC[fullPath] = GenerateCheckSum(fh.read())
-print "Done\n"
+print("Done\n")
 
 if os.path.isfile(DB_FILENAME):
 	# use the existing database to find out which files are new since the last upload, which
@@ -62,21 +63,21 @@ if os.path.isfile(DB_FILENAME):
 else:
 	# There is no existing database. Assume that the HTML folder is empty so therefore
 	# all files are new..
-	print "The database file {} does not exist\n".format(DB_FILENAME)
+	print("The database file {} does not exist\n".format(DB_FILENAME))
 	newFiles = fileCRC.keys()
-	print fileCRC
+	print(fileCRC)
 
 
-print "\nThe following files have changed"
-print commonFiles
+print("\nThe following files have changed")
+print(commonFiles)
 
-print "\nThe following files have been removed"
-print removedFiles
+print("\nThe following files have been removed")
+print(removedFiles)
 
-print "\nThe following files have been added"
-print newFiles
+print("\nThe following files have been added")
+print(newFiles)
 
-print "\nAttempting to FTP into server"
+print("\nAttempting to FTP into server")
 
 def ConvertPcLocalToHostLocal(filename):
 	# drop the __depolyed front. then need to figure out whether the directory tree exists. if it does copy, otherwise create directory tree and then copy!
@@ -127,62 +128,62 @@ class MyFTP(object):
 		# directories necessary
 		dirChanged = False
 		saveDir = self._ftp.pwd()
-		print "PUTTING file {}".format(localFilename)
-		print "   Current FTP dir = {}".format(saveDir)
-		print "   Searching for common prefix between"
-		print "      - {}".format(DEPLOYED_DIR)
-		print "      - {}".format(localFilename)
+		print("PUTTING file {}".format(localFilename))
+		print("   Current FTP dir = {}".format(saveDir))
+		print("   Searching for common prefix between")
+		print("      - {}".format(DEPLOYED_DIR))
+		print("      - {}".format(localFilename))
 
 		commonPrefix = self._pr.pathExplode(os.path.commonprefix([DEPLOYED_DIR, localFilename]))
 		pathElements = self._pr.pathExplode(localFilename)[len(commonPrefix):] # drop the DEPOLYED DIR path prefix
 		dirElements  = pathElements[:-1]
 
-		print "   commonPrefix = {}".format(commonPrefix)
-		print "   pathElements = {}".format(pathElements)
-		print "   dirElements  = {}".format(dirElements)
+		print("   commonPrefix = {}".format(commonPrefix))
+		print("   pathElements = {}".format(pathElements))
+		print("   dirElements  = {}".format(dirElements))
 		if len(dirElements) > 0:
-			print "   Saved dir is {}".format(saveDir)
+			print("   Saved dir is {}".format(saveDir))
 			found, partial = self._pr.havePath(dirElements)
-			print "   found = {}".format(found)
-			print "   partial = {}".format(partial)
+			print("   found = {}".format(found))
+			print("   partial = {}".format(partial))
 			partial = self._pr.pathExplode(partial)
-			print "   Found in cache = {}".format(found)
-			print "   Partial found '{}'".format(partial)
+			print("   Found in cache = {}".format(found))
+			print("   Partial found '{}'".format(partial))
 			if not found:
-				print "   Directory '{}' not found in cache".format(dirElements)
-				print "   The partial '{}' was found in cache".format(partial)
+				print("   Directory '{}' not found in cache".format(dirElements))
+				print("   The partial '{}' was found in cache".format(partial))
 				partialLen = len(partial)
 				pathDiverged = False
 				for idx, pathEl in enumerate(dirElements):
 					pathDiverged = pathDiverged or ((idx >= partialLen) or (pathEl != partial[idx]))
 					if pathDiverged:
-						print "   Current pathEl is {}, past partial at idx {}".format(pathEl, idx)
-						print "   Joining list {}".format(dirElements[0:idx])
+						print("   Current pathEl is {}, past partial at idx {}".format(pathEl, idx))
+						print("   Joining list {}".format(dirElements[0:idx]))
 						dirToList = '/'.join(dirElements[0:idx])
-						print "   Getting listing of {}".format(dirToList)
-						print "   CWD is {}".format(self._ftp.pwd())
+						print("   Getting listing of {}".format(dirToList))
+						print("   CWD is {}".format(self._ftp.pwd()))
 						dirList = self._ftp.nlst(dirToList)
 						lastDirInList = [x.split("/")[-1] for x in dirList]
-						print "   DirList IS {}".format(dirList)
-						print "   LastDirInList is {}".format(lastDirInList)
-						print "   Searching for {} in dirlist".format(dirElements[idx])
+						print("   DirList IS {}".format(dirList))
+						print("   LastDirInList is {}".format(lastDirInList))
+						print("   Searching for {} in dirlist".format(dirElements[idx]))
 						if dirElements[idx] not in lastDirInList:
 							# The mkd() function can not create directories
-							print "      Creating {}".format(os.path.join(*dirElements[0:idx+1]))
+							print("      Creating {}".format(os.path.join(*dirElements[0:idx+1])))
 							if idx > 0:
-								print "      CWD is {}".format(self._ftp.pwd())
-								print "      Changing to {}".format(os.path.join(*dirElements[0:idx]))
+								print("      CWD is {}".format(self._ftp.pwd()))
+								print("      Changing to {}".format(os.path.join(*dirElements[0:idx])))
 								self._ftp.cwd("/".join(dirElements[0:idx]))
 								dirChanged = True
-								print "      CWD is {}".format(self._ftp.pwd())
-							print "      Making {}".format(dirElements[idx])
+								print("      CWD is {}".format(self._ftp.pwd()))
+							print("      Making {}".format(dirElements[idx]))
 							self._ftp.mkd(dirElements[idx])
 						else:
-							print "      Directory {} already exists on server".format(dirElements[idx])
-				print "   Storing path to cache"
+							print("      Directory {} already exists on server".format(dirElements[idx]))
+				print("   Storing path to cache")
 				self._pr.addPath(dirElements)
 			if dirChanged:
-				print "Restoring saved dir {}".format(saveDir)
+				print("Restoring saved dir {}".format(saveDir))
 				self._ftp.cwd(saveDir)
 	
 		saveDir = None
@@ -194,10 +195,14 @@ class MyFTP(object):
 			targetDir = "."
 	
 		if istext(localFilename):
-			print '   STOR {} to dir {} from {} as {}'.format(pathElements[-1], targetDir, localFilename, 'ascii')
-			self._ftp.storlines('STOR {}'.format(pathElements[-1]), open(localFilename, 'r'))
+			print('   STOR TEXT {} to dir {} from {} as {}'.format(pathElements[-1], targetDir, localFilename, 'ascii'))
+			print('   - STOR {}'.format(pathElements[-1]))
+			# For some reason in Python 3 the FTP library needs to read back bytes
+			# not str but doesn't seem to be for all files... didnt bother to get
+			# to the bottom of this! 
+			self._ftp.storlines('STOR {}'.format(pathElements[-1]), open(localFilename, 'rb'))
 		else:
-			print '   STOR {} to dir {} from {} as {}'.format(pathElements[-1], targetDir, localFilename, 'binary')
+			print('   STOR BIN {} to dir {} from {} as {}'.format(pathElements[-1], targetDir, localFilename, 'binary'))
 			self._ftp.storbinary('STOR {}'.format(pathElements[-1]), open(localFilename, 'rb'))
 
 		if len(dirElements) > 0:
@@ -228,15 +233,15 @@ try:
 	for filename in removedFiles:
 		assert(not os.path.isfile(filename))
 		destFilename = ConvertPcLocalToHostLocal(filename)
-		print "deleting {}".format(destFilename)
+		print("deleting {}".format(destFilename))
 		try:
 			ftp.delete(destFilename)
 		except:
-			print "### IFNORING DELETE ERROR"
+			print("### IFNORING DELETE ERROR")
 
 
 except Exception as e:
-	print e
+	print(e)
 	print(traceback.format_exc())
 	ftpWasSuccessfull = False
 finally:
@@ -244,10 +249,10 @@ finally:
 		ftp.quit()
 
 if ftpWasSuccessfull:
-	print "\nSaving new deployment database"
+	print("\nSaving new deployment database")
 	pickle.dump(fileCRC, open(DB_FILENAME, 'wb'))
 else:
-	print "\nThe FTP failed so NOT saving database"
+	print("\nThe FTP failed so NOT saving database")
 
 
 

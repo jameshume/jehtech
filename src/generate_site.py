@@ -25,6 +25,7 @@ import subprocess
 import zlib
 import shutil
 import pickle
+import codecs
 
 DEPLOYED_DIR = '../__deployed'
 
@@ -32,7 +33,7 @@ def GenerateRunningCheckSum(data, value):
 	return zlib.adler32(data, value) & 0xffffffff
 
 def combine_files(base_dir, dest_file, is_debug=False):
-	print "COMBINING", base_dir, dest_file
+	print("COMBINING", base_dir, dest_file)
 	un_minimised_temp_aggregate_file = os.path.join(base_dir, "un_minimised_temp_aggregate.file") 
 	minimised_aggregate_file = os.path.join(base_dir, "minimised_aggregate.file") 
 	indexFileName     = os.path.join(base_dir, "contents.txt")
@@ -49,22 +50,23 @@ def combine_files(base_dir, dest_file, is_debug=False):
 	foundPrevRunningCRC = False
 	prevRunningCRC = 0
 	if os.path.isfile(indexInfoFilename):
+		print("Loading {}".format(indexInfoFilename))
 		prevRunningCRC = pickle.load(open(indexInfoFilename, 'rb'))
 		foundPrevRunningCRC = True
 
 	# Only regenerate the unminimsed combination of all the JS files if need be
 	regenerated = False
 	if os.path.isfile(un_minimised_temp_aggregate_file) and foundPrevRunningCRC and (prevRunningCRC == runningCRC):
-		print 'The contents of "{}" has not changed. Skipping regeneration step.'.format(base_dir)
+		print('The contents of "{}" has not changed. Skipping regeneration step.'.format(base_dir))
 	else:
-		print 'The contents of "{}" has changed. Regenerating...'.format(base_dir)
+		print('The contents of "{}" has changed. Regenerating...'.format(base_dir))
 		regenerated = True
 		pickle.dump(runningCRC, open(indexInfoFilename, 'wb'))
 		fh     = open(indexFileName, 'r')
 		fh_new = open(un_minimised_temp_aggregate_file, 'w')
 		for filename in fh.readlines():
 			filename = filename.strip()
-			print "\t", filename
+			print("\t", filename)
 			fh_curr = open(os.path.join(base_dir, filename), 'r')
 			fh_new.write(fh_curr.read())
 			fh_curr.close()
@@ -72,17 +74,17 @@ def combine_files(base_dir, dest_file, is_debug=False):
 		fh.close()
 
 	if is_debug:
-		print "### NOTE: This is a debug run so minimised file is just a copy of unmin"
+		print("### NOTE: This is a debug run so minimised file is just a copy of unmin")
 		shutil.copyfile(un_minimised_temp_aggregate_file, minimised_aggregate_file)
 	elif regenerated or not os.path.isfile(minimised_aggregate_file):
-		print "Calling yuicompressor..."
+		print("Calling yuicompressor...")
 		fileType="js"
 		if dest_file[-3:] == "css": fileType="css"
 		args = ["java", "-jar",  "yuicompressor-2.4.8.jar",  "--type", fileType, "-o", minimised_aggregate_file, un_minimised_temp_aggregate_file]
-		print args
+		print(args)
 		subprocess.call(args)
 	
-	print "Copying {} to {}".format(minimised_aggregate_file, dest_file)
+	print("Copying {} to {}".format(minimised_aggregate_file, dest_file))
 	shutil.copyfile(minimised_aggregate_file, dest_file)
 
 
@@ -160,7 +162,7 @@ def get_links_insert(currentDirName):
 			if (el.tag == 'a') and (at == 'href'):
 				el.set(at, newLink + '/' + el.get(at))
 
-	linksHtml = lxml.etree.tostring(doc.getroot().get_element_by_id("jehtech_contents_div"), pretty_print=True, method='html')
+	linksHtml = lxml.etree.tostring(doc.getroot().get_element_by_id("jehtech_contents_div"), pretty_print=True, method='html').decode()
 	return linksHtml
 
 def deploy_site():
@@ -198,8 +200,8 @@ def deploy_site():
 		
 		# Read in the current HTML files contents
 		htmlFileName = os.path.join(dirname, filename)
-		print "Deploying", dirname, filename, htmlFileName
-		htmlFile = open(htmlFileName, 'r')
+		print("Deploying", dirname, filename, htmlFileName)
+		htmlFile = codecs.open(htmlFileName, 'r', 'utf-8')
 		htmlFileContents = htmlFile.read();
 		htmlFile.close()
 		
@@ -207,15 +209,18 @@ def deploy_site():
 		deployed_dir = os.path.join('..', DEPLOYED_DIR, dirname)
 		if (dirname != '.'):
 			if not os.path.exists(deployed_dir):
-				print "Creating directory", deployed_dir
+				print("Creating directory", deployed_dir)
 				mkdir_p(deployed_dir)
 			newFileName = os.path.join('..', DEPLOYED_DIR, dirname, filename)
-			print "(A) Opening new file {}".format(newFileName)
+			print("(A) Opening new file {}".format(newFileName))
 			newFile = open(newFileName, 'w')
 		else:
 			newFileName = os.path.join('..', DEPLOYED_DIR, filename)
-			print "(B) Opening new file {}".format(newFileName)
+			print("(B) Opening new file {}".format(newFileName))
 			newFile = open(newFileName, 'w')
+
+
+		print(type(linksHtml))
 
 		# Copy the contents of the curr html to it's deployed file but add in the
 		# links page
@@ -240,10 +245,10 @@ def deploy_site():
 		if os.path.exists(filename):
 			target = os.path.join(DEPLOYED_DIR, filename)
 			if os.path.isdir(filename):
-				print "Copying directory", filename, "to", target
+				print("Copying directory", filename, "to", target)
 				shutil.copytree(filename, target)
 			elif os.path.isfile(filename):
-				print "Copying file", filename, "to", target
+				print("Copying file", filename, "to", target)
 				shutil.copy(filename, target)
 			else:
 				raise Exception('### WARNING: {} not copied!'.format(filename))

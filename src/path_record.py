@@ -37,7 +37,7 @@ class PathRecord:
 		"""Returns (True, commonPath) if the path is in our records, (False, commonPath) otherwise
 		   where commonPath is the same as path if True was returned, otherwise it is the deepest
 			path seen that matches as much of path as possible"""
-		print "Searching for path {}".format(path)
+		print("Searching for path {}".format(path))
 		pathEls = None
 		if type(path) == str:
 			pathEls = self.pathExplode(path)
@@ -83,32 +83,32 @@ if __name__ == "__main__":
 	# Can detect all elements in the path
 	detectPath = pathEls[0]
 	found, commonPath = pr.havePath(detectPath)
-	print found, commonPath
+	print(found, commonPath)
 	assert(found)
 	assert(commonPath == detectPath)
 
 	detectPath = os.path.join(*pathEls[0:2])
 	found, commonPath = pr.havePath(detectPath)
-	print found, commonPath
+	print(found, commonPath)
 	assert(found)
 	assert(commonPath == detectPath)
 
 	detectPath = os.path.join(*pathEls[0:3])
 	found, commonPath = pr.havePath(detectPath)
-	print found, commonPath
+	print(found, commonPath)
 	assert(found)
 	assert(commonPath == detectPath)
 
 	detectPath = os.path.join(*pathEls[0:4])
 	found, commonPath = pr.havePath(detectPath)
-	print found, commonPath
+	print(found, commonPath)
 	assert(found)
 	assert(commonPath == detectPath)
 
 	# Can detect a path we don't have
 	detectPath = "bb"
 	found, commonPath = pr.havePath(detectPath)
-	print found, commonPath
+	print(found, commonPath)
 	assert(not found)
 	assert(commonPath == "")
 
@@ -117,7 +117,7 @@ if __name__ == "__main__":
 	newPathEls.extend(["ee"])
 	detectPath = os.path.join(*newPathEls)
 	found, commonPath = pr.havePath(detectPath)
-	print found, commonPath
+	print(found, commonPath)
 	assert(not found)
 	assert(commonPath == os.path.join(*pathEls[0:2]))
 
@@ -127,26 +127,26 @@ if __name__ == "__main__":
 
 	detectPath = pathEls2[0]
 	found, commonPath = pr.havePath(detectPath)
-	print found, commonPath
+	print(found, commonPath)
 	assert(found)
 	assert(commonPath == detectPath)
 
 	detectPath = os.path.join(*pathEls2[0:2])
 	found, commonPath = pr.havePath(detectPath)
-	print found, commonPath
+	print(found, commonPath)
 	assert(found)
 	assert(commonPath == detectPath)
 
 	detectPath = os.path.join(*pathEls2[0:3])
 	found, commonPath = pr.havePath(detectPath)
-	print found, commonPath
+	print(found, commonPath)
 	assert(found)
 	assert(commonPath == detectPath)
 
 	# Make sure we can find paths using arrays and not strings
 	detectPath = pathEls2[0:2]
 	found, commonPath = pr.havePath(detectPath)
-	print found, commonPath
+	print(found, commonPath)
 	assert(found)
 	assert(commonPath == os.path.join(*detectPath[0:2]))
 
