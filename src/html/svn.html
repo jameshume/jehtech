@@ -323,6 +323,17 @@ svn commit</pre>
 			<pre>[-r <i>revision</i>] ^/path/to/external local/path</pre>
 		</div> <!-- END: H2 Externals -->
 
+		<h2>My Repository Moved!</h2>
+		<div>
+			<p>
+				Recently a repository I had checked out was moved for various reasons. I still had some
+				files in my checkout that were modified so I didn't want to have to re-checkout from
+				the new location and manually add these edits. Solution was the command 
+				<a href="http://svnbook.red-bean.com/en/1.7/svn.ref.svn.c.relocate.html" target="_blank"><code>svn relocate</code></a>.
+			</p>
+			<pre>svn relocate FROM-PREFIX TO-PREFIX</pre>
+		</div>
+
 		<h2>Misc</h2>
 		<div>
 			<h3>Check Your SSH Connection</h3>

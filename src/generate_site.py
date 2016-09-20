@@ -202,6 +202,7 @@ def deploy_site():
 		htmlFileName = os.path.join(dirname, filename)
 		print("Deploying", dirname, filename, htmlFileName)
 		htmlFile = codecs.open(htmlFileName, 'r', 'utf-8')
+		#htmlFile = open(htmlFileName, 'r')
 		htmlFileContents = htmlFile.read();
 		htmlFile.close()
 		
@@ -213,14 +214,13 @@ def deploy_site():
 				mkdir_p(deployed_dir)
 			newFileName = os.path.join('..', DEPLOYED_DIR, dirname, filename)
 			print("(A) Opening new file {}".format(newFileName))
-			newFile = open(newFileName, 'w')
 		else:
 			newFileName = os.path.join('..', DEPLOYED_DIR, filename)
 			print("(B) Opening new file {}".format(newFileName))
-			newFile = open(newFileName, 'w')
 
 
 		print(type(linksHtml))
+		print(type(htmlFileContents))
 
 		# Copy the contents of the curr html to it's deployed file but add in the
 		# links page
@@ -228,6 +228,8 @@ def deploy_site():
 		htmlFileContents = prog_css.sub('<link rel="stylesheet" href="{}{}jeh-monolith.css" type="text/css" />'.format(link_to_root, "" if link_to_root == "" else '/'), htmlFileContents)
 		htmlFileContents = prog_js.sub('<script src="{}{}jeh-monolith.js"></script>'.format(link_to_root, "" if link_to_root == "" else '/'), htmlFileContents)
 		htmlFileContents = prog_img.sub('{}{}images/jeh-tech'.format(link_to_root, "" if link_to_root == "" else '/'), htmlFileContents)
+		#newFile = open(newFileName, 'w')
+		newFile = codecs.open(newFileName, 'w', 'utf-8')
 		newFile.write(htmlFileContents)
 		newFile.close()
 	os.chdir('..')
