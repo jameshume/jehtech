@@ -3,4 +3,5 @@ __deployed
 *.swp
 *.pyc
 *.bin
+*.data
 src/reCaptureSecret.txt

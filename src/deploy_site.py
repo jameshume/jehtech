@@ -2,12 +2,14 @@ from __future__ import division
 import os
 import zlib
 import pickle
-#import ftplib_mod as ftplib
-import ftplib
 import string 
 import path_record
 import traceback
 import sys
+if sys.version_info[0] < 3:
+	import ftplib_mod as ftplib
+else:
+	import ftplib_mod_py3 as ftplib
 
 DB_FILENAME = 'deployment_db.bin'
 DEPLOYED_DIR = os.path.join('..','__deployed')

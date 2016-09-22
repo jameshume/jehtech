@@ -76,6 +76,13 @@
       <li>The amazing <a href="https://www.khanacademy.org/math" target="_blank">Khan Achademy</a>.</li>
       <li>The amazing <a href="https://www.ck12.org" target="_blank">CK12 Foundation</a>.</li>
    </ol>
+   <p>
+   		For a more in-dept look at calculus the following book is AMAZING! Written really well.
+   		I wish I'd had this book when I was at school!
+   </p>
+   <ol>
+   	<li><a name="calc_life_saver" href="http://press.princeton.edu/video/banner/" target="_blank">The Calculus Lifesaver</a>, Adrian Banner.</li>
+   </ol>
 </div>
 
 <h2>Partial fractions</h2>
@@ -307,7 +314,9 @@
 
 <h2>Limits</h2>
 <div>
-       <p>Intuitively,
+	<h3>Definition</h3>
+
+    <p>Intuitively,
        $$\lim_{x\to c} f(x)=L$$
           If $f$ is defined near (but not necessarily at) $c$ and $\operatorname{f}(x)$ approaches $L$
 	  as $x$ approaches $c$. More rigorously, let $f$ be defined at all $x$ in an open interval
@@ -317,11 +326,12 @@
 
 	  If and only if for each $e&gt;0$, there exists $d&gt;0$ such that if $0&lt;Z|x-c|&lt;d$ 
 	  then $|f(x)-L|&lt; e$. 
-       </p><p> 
+     </p>
+     <p> 
 	  I.e., no matter how close to $L$ we get, there is always a value of $x$ arbitrarily close to $c$, 
 	  but which is not $c$, that yields this value close to $L$.
-       </p>
-       <h3>Limit Properties</h3>
+     </p>
+     <h3>Limit Properties</h3>
        <table style="border: 0px;">
          <tr><td>Uniquness:</td>
 	     <td>If $\lim f(x) = L_1$ and $\lim f(x) = L_2$ then $L_1 = L_2$</td>
@@ -342,6 +352,12 @@
 	     <td>$\lim [f(x)^n] = [\lim f(x)]^n,\ \forall n \gt 0$</td>
 	 </tr>
        </table>
+
+     <h3>The Sandwich Principle</h3>
+     <p>
+     	If $g(x) \le f(x) \le h(x)$ for all x near a, and $\lim_{x \rightarrow a} g(x) = \lim_{x \rightarrow a} h(x) = L$, then $\lim_{x \rightarrow a} f(x) = L$ too.
+     </p>
+
        <h3>L'Hopital's Rule</h3>
        <p>Can be summarised as follows...
           $$\lim_{x\to a} \left\{\frac{f(x)}{g(x)}\right\} = \lim_{x\to a} \left\{\frac{f'(x)}{g'(x)}\right\}$$
@@ -362,6 +378,39 @@
 
 <h2>Differentiation</h2>
 <div>
+		<h3>Definition</h3>
+		<p>
+			A function is <em>continuous at a point</em> if it can &quot;be drawn without taking the pen off the
+			paper&quot; <a href="#calc_life_saver">[Ref]</a>. This means, more formally, that
+			a function $f(x)$ is continuous at $x = a$ if $\lim_{x \rightarrow a}f(x) = f(a)$.
+			For a function to be differntiable at a point, it must be continuous at that point....
+		</p>
+		<p>
+			The derivative of a function $f(x)$ with respect to it's variable $x$ is defined 
+			by the following limit, assuming that limit exists. 
+
+			$$
+				f'(x) = \lim_{h \rightarrow 0} \frac{f(x + h) - f(x)}{h}
+			$$
+
+			If the limit does not exist
+			the function does not have a derivative at that point.
+		</p>
+		<p>This is why, for example the function $f(x) = |x|$ does not have a defined derivative 
+			at $x = 0$, because the limit does not exist at that point.
+		</p>
+		<p>
+			A function is <em>continuous over an interval $[a,b]$</em> if:
+		</p>
+		<ol>
+			<li>it is continuous at every point in $(a, b)$,</li>
+			<li>it is right-continuous at $x = a$, i.e., $\lim_{x\rightarrow a^{+}} f(x) = f(a) \ne \infty$</li>
+			<li>it is left-continuous at $x = b$, i.e., $\lim_{x\rightarrow b^{-}} f(x) = f(b) \ne \infty$</li>
+		</ol>
+		<p>
+			If a function is differentiable then it must also be continuous.
+		</p>
+
 		<h3>Basic Differential Coefficients</h3>
 		<div style="float:left;">
 		$$\frac{d}{dx}(x^n) = nx^{n-1}\\
