@@ -49,7 +49,7 @@ echo STARTING DIFF
 echo LEFT IS  "$LEFT_FILE_DESCR" 
 echo RIGHT IS "$RIGHT_FILE_DESCR"
 p4merge -nl "$LEFT_FILE_DESCR" -nr "$RIGHT_FILE_DESCR" "$LEFT" "$RIGHT"</pre>
-    <p>Save the above script somewhere on your <tt>PATH</tt>. I called it <tt>p4_diff_helper.sh</tt>. Then in the subversion config file (~/.subversion/config) add in the diff command under the [helpers] section.</p>
+    <p>Save the above script somewhere on your <tt>PATH</tt>. I called it <tt>p4_diff_helper.sh</tt>. Then in the subversion config file (<tt>~/.subversion/config</tt> for linux and <tt>%appdata%\subversion\config</tt> for windows) add in the diff command under the [helpers] section.</p>
     <pre class="prettyprint linenums">[helpers]
 &lt;snip&gt;
 ### Set diff-cmd to the absolute path of your 'diff' program.
@@ -76,7 +76,7 @@ p4merge "$BASE" "$MINE" "$THEIRS" "$MERGED"</pre>
 		<p>
 			Again, assuming you save the above on the <tt>PATH</tt> as 
 			<tt>p4_merge_helper.sh</tt>, modify the subversion config file 
-			(~/.subversion/config) add in the merge command under the [helpers] 
+			(<tt>~/.subversion/config</tt> for linux and <tt>%appdata%\subversion\config</tt> for windows) add in the merge command under the [helpers] 
 			section.
 		</p>
 
