@@ -371,6 +371,27 @@ if (adaption_field_contains_pcr) {
 		</p>		
 }
 	</div> <!-- END: H2 -->
+
+	<h2>Dunno Yet</h2>
+	<div>
+		<p><a href="http://www.silabs.com/support%20documents/technicaldocs/an377.pdf" target="_blank">TIMING AND SYNCHRONIZATION IN BROADCAST VIDEO</a>.
+		</p>
+		<pre>
+Consumer video - 50 to 60 frames per second
+Computer displays - 70 to 90 frames per second.
+
+Vertical sync - timing info indicating when new image starts
+Horizontal sync - timing info indicating when new scan line starts
+
+Progressive video - display fill images, scan line after scan line, on image after the other. Does better non-flicker vertically.
+Interlaces - display odd lines in one image then even lines in the next. Halves data being sent. But - each scan line is then refreshed 1/2 often as should be.
+
+Resolution. 720x480i - suffix "i" means interlaced.
+            720x480p - suffix "p" means progressive
+
+
+		</pre>
+	</div><!-- END: H2 - Video Recording -->
 </div> <!-- END H1 padding div -->
 
 </div>
