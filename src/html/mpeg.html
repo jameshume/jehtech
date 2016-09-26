@@ -189,6 +189,57 @@
 			<img src="##IMG_DIR##/mpeg/receiver_more_detail_1.jpg"/>
 		</p>
 
+		<p>
+			Why do we need to stay in sync? Why should the receiver bother about the frequency
+			of the encoder? Surely if they both have a local clock set to the same frequency there
+			should be no problem. The trouble is that even though two clocks may have the same
+			<em>nominal</em> frequency, their <em>actual</em> or <em>real</em> frequencies will
+			differ by some small amount. Furthermore, these frequencies will not be constant. They
+			will vary with environmental effects such as temperature and change as the crytal
+			ages. They will also exhibit a certain amount of jitter. But, what effect can this
+			have and why should we be concerned? Let's once again look at the overall process...
+		</p>
+
+		<p>
+			<img src="##IMG_DIR##/mpeg/enc_dec_with_cbr_vbr.jpg"/>
+		</p>
+
+		<p>
+			The image above shows that the video equipment is generating X frames per
+			second. Each frame is digitised and then encoded. Each frame will take a slightly
+			longer or shorter time to encode and result in a larger or smaller representation,
+			depending on things like the amount of change from the previous frame, the contents etc.
+			Thus, in general the encoding will result in a variable bit rate. This can be converted
+			to a constant bit rate by simply adding null bytes to each encoded frame so that the
+			bit rate becomes constant.
+		</p>
+		<p>
+			Lets consider CBR as it will make things easier. Now lets assume that the transmit-across-the-network
+			stage and the decode stage are all instantaneous. In this case we just decode each frame
+			as we get it and just display it... no problem.
+		</p>
+		<p>
+			Now lets imagine that the decode is no longer instantaneous. Like the encoder, it may take 
+			a little longer to decode some frames and a little less time to decode others. When it takes
+			a little longer, what happens to the frame following right behind it? Clearly we need to
+			be able to queue up that frame rather than dropping it. And what happens if the decoder
+			was really quick on one frame? If the next frame isn't immediately available then the
+			decoder either has to output nothing (so we see a video glitch) or hold on (repeat a frame). Thus is might
+			be an idea to have a few frames in the buffer ready to decode! 
+		</p>
+		<p>
+			Then there is the transmission path. That will often have a delay and when going over Ethernet, for
+			example, that delay will vary in a random fashion. So we need a receive buffer to smooth
+			this out too.
+		</p>
+		<p>
+			Then there is our local clock v.s. the clock of the encoder. If our clock is faster than
+			the encoders, even only by a little bit, we will, over time cause a buffer underrun in the
+			decoder. And if we were even only a little slower, eventually we would have to drop
+			a frame. That's why keeping in sync with the encoder clock and using the DTS/PTS timestamps
+			is important.
+		</p>
+
 		<h4>Time Sync</h4>
 		<p>
 			Using the PCR timestamps, the receiver can discipline its local oscillator so that the local
