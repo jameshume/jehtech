@@ -887,7 +887,7 @@ def parse257(resp):
 
 
 def print_line(line):
-    '''Default retrlines callback to print(a line.''')
+    '''Default retrlines callback to print() a line.'''
     print(line)
 
 

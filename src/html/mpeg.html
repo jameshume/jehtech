@@ -304,22 +304,6 @@
 			is and how MPEG tries to help solve it by providing the PCR timestamps and the D/PTS timestamps.
 		</p>
 
-		<h3>ASI / SDI</h3>
-		<p>
-
-		</p>		
-		<blockquote>
-			<p>
-				ASI is a unidirectional tranmission link to transmit data between digital video equipment ... a streaming
-				data format which often carries an MPEG TS ... typically over 75-ohm coax terminated with BNCs ...
-				It is strictly just an interface ... the format for how data is carried ... DVB-ASI is carried at a 270 Mbps line rate ...
-				derived from a 27 MHz byte clock multiplied by 10 bits.
-			</p><p>
-				-- <a href="http://www.tvtechnology.com/expertise/0003/asynchronous-interfaces-for-video-servers/183969" target="_blank">TVTechnology article</a>.
-			</p>
-		</blockquote>
-		<p></p>
-
 		<h3>A PES Packet</h3>
 		<p>
 			<img src="##IMG_DIR##/mpeg/PES_Packet_Header.jpg"/>
@@ -368,12 +352,31 @@ if (adaption_field_contains_pcr) {
 		</p>
 		<p>
 			<img src="##IMG_DIR##/mpeg/PMT_PAT.jpg"/>
-		</p>		
-}
+		</p>
 	</div> <!-- END: H2 -->
 
 	<h2>Dunno Yet</h2>
 	<div>
+        <h3>ASI / SDI</h3>
+        <p>
+
+        </p>        
+        <blockquote>
+            <p>
+                ASI is a unidirectional tranmission link to transmit data between digital video equipment ... a streaming
+                data format which often carries an MPEG TS ... typically over 75-ohm coax terminated with BNCs ...
+                It is strictly just an interface ... the format for how data is carried ... DVB-ASI is carried at a 270 Mbps line rate ...
+                derived from a 27 MHz byte clock multiplied by 10 bits.
+            </p><p>
+                -- <a href="http://www.tvtechnology.com/expertise/0003/asynchronous-interfaces-for-video-servers/183969" target="_blank">TVTechnology article</a>.
+            </p>
+        </blockquote>
+        <p>
+            SDI converts a 27MHz parallel stream of a diginal video interface into a 270 Mbps serial stream that can also be 
+            transmitted over a 75-ohm coaxial cable.
+        </p>
+
+        <h3>Misc</h3>
 		<p><a href="http://www.silabs.com/support%20documents/technicaldocs/an377.pdf" target="_blank">TIMING AND SYNCHRONIZATION IN BROADCAST VIDEO</a>.
 		</p>
 		<pre>
