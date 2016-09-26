@@ -47,6 +47,10 @@
 			<li><a href="http://www.tvtechnology.com/expertise/0003/asynchronous-interfaces-for-video-servers/183969" 
 				target="_blank">&quot;Asynchronous Interfaces For Video Servers&quot;, TVTechnology article</a>.
 			</li>
+            <li><a href="http://www.haberdar.org/discrete-cosine-transform-tutorial.htm" 
+                 target="_blank">Hakan Haberdar, "Generating Random Number from Image of a Probability Density Function"</a>, 
+                 Computer Science Tutorials [online], (Accessed 09-26-2016).
+            </li>
 		</ol>
 	</div> <!-- END H2: References -->
 
@@ -141,7 +145,7 @@
 		<p>
 			The PS is used in environments that are not noisy. The PS can only support one program. It generally
 			consists of long, variable-length packets. Each packet has a header and a corrupt header can mean
-			and entire packet loss.
+			an entire packet loss.
 		</p>
 		<p>
 			The TS, which consists of smaller 188-byte packets, is used in noisy environments as the
@@ -188,7 +192,7 @@
 		<h4>Time Sync</h4>
 		<p>
 			Using the PCR timestamps, the receiver can discipline its local oscillator so that the local
-			clock should be, within some tolerance, synchonisation (i.e., frequency and phase)
+			clock should be, within some tolerance, synchonised (i.e., same frequency and phase)
 			with the encoder's clock. Then once the receiver's clock is correct, the decoder blocks can
 			use the PTS and DTS timestamps correctly to play out video/audio/etc synchronously.
 		</p>
@@ -311,7 +315,20 @@
 
 		<h3>A Transport Stream Packet</h3>
 		<p>
+			A transport stream packet is shown below. The TS is designed for use in noisy, error-prone, environments. It can include
+			more than one program and each program can have its own independent time base. The splitting up of the PES into 188 byte
+			packets (size can be greater) also adds to the error resistance.
+		</p>
+		<p>
 			<img src="##IMG_DIR##/mpeg/TS_188_Byte_packet.jpg"/>
+		</p>
+		<p>
+			A transport stream packet is at a minimum 188 bytes in length. The first 4 bytes are the header and the remaining 184 bytes are 
+			the payload. A PES packet will be distributed across several TS packet layloads.
+		</p>
+		<p>
+			When a PCR is present the size increases by another 48 bytes, for example, so not all TS packets will be only 188 bytes. In the
+			described base, for instance, the packet size would be 236 bytes.
 		</p>
 		<p>
 			So, for example, one common operation might be to check whether the TS 
@@ -346,7 +363,7 @@ if (adaption_field_contains_pcr) {
 			</tr>
 		</table>
 		<p>
-			From the root PID (<tt>0x0000</tt>) we can find the Program Map Table (TS-PMT), which
+			From the root PID (<tt>0x0000</tt>), known  as the Program Association Table (PAT), we can find the Program Map Table (PMT), which
 			gives a list of programs for this TS. From the PMT we can in turn find each ES 
 			associated with that program.
 		</p>
