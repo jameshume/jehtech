@@ -102,6 +102,10 @@
 				<tr><td>GOP</td>
 					<td>Group Of Pictures</td>
 				</tr>
+				<tr><td>T-STD</td>
+				    <td>Transport Stream System Target Decoder</td>
+				    <td>Conceptual model used to model the decoding process during the construction or verification of Transport Streams</td>
+				</tr>
 			</table>
 		</p>
 		<ul>
@@ -409,7 +413,8 @@ if (adaption_field_contains_pcr) {
 }</pre>
 
 		<p>
-			PIDs are unique identifies. Some PIDs are reserved:
+			One of the most important fields is the PID. PIDs are unique identifiers, which, via the Program Specific Information (PSI)
+			tables, the contents of the TS data packet. Some PIDs are reserved:
 		</p>
 		<table>
 			<tr>
@@ -418,14 +423,17 @@ if (adaption_field_contains_pcr) {
 			<tr>
 				<td>Conditional Access Table</td> <td>TS-CAT</td> <td>0x0001</td>
 			</tr>
-		</table>
+		</table>		
 		<p>
 			From the root PID (<tt>0x0000</tt>), known  as the Program Association Table (PAT), we can find the Program Map Table (PMT), which
-			gives a list of programs for this TS. From the PMT we can in turn find each ES 
-			associated with that program.
+			gives a list of programs for this TS. From the PMT we can in turn find each ES associated with that program. 
 		</p>
 		<p>
 			<img src="##IMG_DIR##/mpeg/PMT_PAT.jpg"/>
+		</p>
+		<p>
+			Other PSI tables are also located via the PAT, such as the Conditional Acess Table (CAT) and Network Information Table (NIT). 
+			Consult the standard for info on these tables... too much to write here.
 		</p>
 	</div> <!-- END: H2 -->
 
