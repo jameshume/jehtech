@@ -51,6 +51,9 @@
                  target="_blank">Hakan Haberdar, "Generating Random Number from Image of a Probability Density Function"</a>, 
                  Computer Science Tutorials [online], (Accessed 09-26-2016).
             </li>
+            <li><a href="https://www.vcodex.com/historical-timeline-of-video-coding-standards-and-formats/"
+                   target="_blank">Historical Timeline of Viedo Coding Standards</a>, VCodex.com.
+            </li>
 		</ol>
 	</div> <!-- END H2: References -->
 
@@ -95,6 +98,9 @@
 				<tr><td>PSI</td>
 					 <td>Program Specific Information</td>
 					 <td></td>
+				</tr>
+				<tr><td>GOP</td>
+					<td>Group Of Pictures</td>
 				</tr>
 			</table>
 		</p>
@@ -425,9 +431,70 @@ if (adaption_field_contains_pcr) {
 
 	<h2>Dunno Yet</h2>
 	<div>
+        <h3>AES Audio</h3>
+        <p>
+            <a href="https://tech.ebu.ch/docs/tech/tech3250.pdf"
+               target="_blank">Specification of the Digital Audio Interface (The AES/EBU interface)</a>, Third Edition, EBU, 2004. -- <b>Warning:</b> the channel status word appears to wrong in this document as they've mis-labelled the bytes and there are one too many bytes in it! Using <a href="https://en.wikipedia.org/wiki/AES3#Channel_status_word" target="_blank">Wikipedia info</a> instead!
+        </p>
+        <p>
+            <a href="https://tech.ebu.ch/docs/other/aes-ebu-eg.pdf"
+               target="_blank">Engineering Guidelines: The EBU/AES Digital Audio Interface</a>, J. Emmett, EBU, 1995.
+        </p>
+        <p>
+            In its original design AES was made to carry "two channels of periodically sampled and linearly 
+            represented audio", i.e., LPCM data. However, AES can carry compressed audio data instead, for
+            which an extension to the standard was made.
+        </p>
+        <p>
+            AES is a sequence of blocks, where each block is composed of 192 frames: 
+            When LPCM audio is used the frequency at which AES frames occur is the same
+            as the sampling rate of the PCM audio.
+        </p>
+        <p>
+            Each of these frames has two 32-bit subframes, one for each of the two audio channels. Each subframe is meant to be one LCPM sample. 
+            It contains at most
+            20 or 24 bits of audio data and the rest if the bits form part of other information structures
+            that are spread across the 192 subframes. I.e., these structures are created by appending each
+            bit from the 192 subframes into one data block.
+        </p>
+        <p>
+            <img src="##IMG_DIR##/mpeg/aes_block_frame_subframe.jpg"/>
+        </p>
+        <p>
+            As said, &quot;other information&quot; structures are spread across the 192 subframes.
+            If you take the C bit from the first subframe for channel A as bit 0 of the channel status data, and the C bit 
+            from the 192<sup>th</sup> subframe for channel A as bit 192 of the channel status data, you construct 
+            the channel status message. This message carries information associated with the audio signal and is shown below.
+        </p>
+        <p>
+            <img src="##IMG_DIR##/mpeg/aes_build_up_chan_status.jpg"/>
+        </p>
+        <p>
+            As mentioned, AES frames can carry compressed data. When this is the case bit 1 of the channel configuration
+            message indicates whether the audio samples represent linear PCM samples or &quot;something else&quot;.
+            When this bit is 0, the samples are LPCM, when it is 1, the samples are &quot;something else&quot;. This
+            usually means compressed audio data conforming to some standard, for example Dolby audio etc. The SMPTE
+            standard 337M-2000 describes how not-PCM-audio-data can be inserted into an AES3 packet stream. One example
+            of not-PCM-audio-data is timestamp data used to sync audio with video.
+        </p>
+        <p>
+            When transmitting not-PCM-sample-data there are two modes available. 
+        </p>
+        <ol>
+            <li>Frame mode: here the audio bits from a frame's two subchannels are combined to give a 48-bit chunk of data.
+            </li>
+            <li>Subframe mode: the channels are treated independently.
+            </li>
+        </ol>
+
+        <h3>Audio Standards</h3>
+        <p>
+            <a href="http://www.grc.upv.es/docencia/tra/referencias/AudioCoding/Brandenburg_mp3_aac.pdf"
+               target="_blank">MP3 and AAC Explained</a>, K. Brandenburg.
+        </p>
+
         <h3>ASI / SDI</h3>
         <p>
-
         </p>        
         <blockquote>
             <p>
@@ -442,6 +509,13 @@ if (adaption_field_contains_pcr) {
         <p>
             SDI converts a 27MHz parallel stream of a diginal video interface into a 270 Mbps serial stream that can also be 
             transmitted over a 75-ohm coaxial cable.
+        </p>
+        <p>
+            <a href="https://en.wikipedia.org/wiki/Serial_digital_interface#Data_format"
+               target="_blank">SDI on Wikipedia</a>.
+        </p>
+        <p>
+            Audio is transmitted over SDI via the formats ancillary data, which is <q>... provided as a standardized transport for non-video payload within a serial digital signal; it is used for things such as embedded audio, closed captions, timecode, and other sorts of metadata...</q>.
         </p>
 
         <h3>Misc</h3>
