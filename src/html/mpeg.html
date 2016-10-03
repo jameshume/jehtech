@@ -54,6 +54,15 @@
             <li><a href="https://www.vcodex.com/historical-timeline-of-video-coding-standards-and-formats/"
                    target="_blank">Historical Timeline of Viedo Coding Standards</a>, VCodex.com.
             </li>
+            <li><a href="https://www.iem.thm.de/telekom-labor/zinke/mk/mpeg2beg/beginnzi.htm"
+                   target="_blank">A Biginners Guide for MPEG-2 Standard</a>, Victor Lo, City University of Honk Kong.
+            </li>
+            <li><a href="http://info.tek.com/www-a-guide-to-mpeg-fundamentals-and-protocol-analysis.html"
+                   target="_blank">A Guide to MPEG Fundamentals and Protocol Analysis</a>, Tektonix.
+            </li>
+            <li><a href="http://www.streaminglearningcenter.com/AME_Reference.pdf"
+                target="_blank">Mastering the Adobe Media Encoder: Critical Concepts and Definitions</a>, Jan Ozer -- This is a really good high level tutorial about bit rates and frame rates, resolution, CBR and VBR and how the inter-relate in terms of the final encoded video quality.
+            </li>
 		</ol>
 	</div> <!-- END H2: References -->
 
@@ -135,20 +144,21 @@
 			As said, it is the encoder's job to convert this into
 			digitised, <em>compressed</em> data. The reason for this is that the frame rate and resolution 
 			required generally means that the data rate coming out of
-			the video equipment, even after digitising, would be far to great to transmit. The bandwidth
+			the video equipment, even after digitising, would be far too great to transmit. The bandwidth
 			of most transmission media (e.g., satellite, over the internet etc.) would not be able to
 			support these data rates.
 		</p>
 		<p>
 			Enter MPEG(-2). It is the job of the encoder to compress the video and audio data and produce
 			an <b>elementary stream</b> which is just a byte stream containing the encoded data. MPEG doesn't
-			actually specifiy what the bytes in this stream mean.... that's completely up to the encoder, which
+			actually specifiy what the bytes in the video/audio data means.... that's completely up to the encoder, which
 			is why you will have noticed if that different MPEG files can require difference codecs (codec stands 
-			for COder/DECoder). This stream may be emitted at a constant or variable bit rate (CBR, VBR respectively).
+			for COder/DECoder). All MPEG does is to define the structure of the stream: i.e., the headers and ordering
+            of frame information etc. This stream may be emitted at a constant or variable bit rate (CBR, VBR respectively).
 		</p>
 		<p>
 			Once the <b>elemtary stream</b> (ES) is created the packetiser will chunk it up into packets of either constant
-			or variable size. Each packet has a header and payload. The packetised streams are them multiplexed into
+			or variable size. Each packet has a header and payload. The packetised streams are then multiplexed into
 			either a <b>program stream</b> (PS) or a <b>transport stream</b> (TS). <em>I am generally ignoring the
 			program stream in favour of the transport streams in this discussion</em>.
 		</p>
@@ -220,11 +230,20 @@
 			longer or shorter time to encode and result in a larger or smaller representation,
 			depending on things like the amount of change from the previous frame, the contents etc.
 			Thus, in general the encoding will result in a variable bit rate. This can be converted
-			to a constant bit rate by simply adding null bytes to each encoded frame so that the
+			to a constant bit rate by simply adding stuffing bytes to each encoded frame so that the
 			bit rate becomes constant.
 		</p>
+        <p>
+            When we talk about bit rate, we mean the size of the video (or audio) data per second. I.e., in
+            one second how many bits of data do we expect out of the encoder. For example, if the encoder is
+            spewing out data at 500 kbps we know that one second of video data requires 500 kbits
+            of data to transmit it. The frame rate and resolution of the video and the bit rate output from the encoder are
+            related by the amount of compression that the encoder is able to perform: the frame rate cannot
+            be changed, so what determines the bit rate is how much the encoder can compress the frames.
+        </p>
 		<p>
-			Lets consider CBR as it will make things easier. Now lets assume that the transmit-across-the-network
+			Lets consider CBR as it will make things easier (bit rate is constant). 
+            Now lets assume that the transmit-across-the-network
 			stage and the decode stage are all instantaneous. In this case we just decode each frame
 			as we get it and just display it... no problem.
 		</p>
@@ -235,7 +254,9 @@
 			be able to queue up that frame rather than dropping it. And what happens if the decoder
 			was really quick on one frame? If the next frame isn't immediately available then the
 			decoder either has to output nothing (so we see a video glitch) or hold on (repeat a frame). Thus is might
-			be an idea to have a few frames in the buffer ready to decode! 
+			be an idea to have a few frames in the buffer ready to decode! The same applies to the encoder: some frames might
+            take longer to encode than others, so the decoder also has to decouple from this using a buffer.
+            Incidently the variable encoding time is another reason why PTS timestamps are important.
 		</p>
 		<p>
 			Then there is the transmission path. That will often have a delay and when going over Ethernet, for
@@ -437,6 +458,41 @@ if (adaption_field_contains_pcr) {
 		</p>
 	</div> <!-- END: H2 -->
 
+    <h2>Video Streams</h2>
+    <div>
+        <p>
+            There are three types of pictures that use different coding methods: 
+        </p>
+        <ol>
+            <li><b>Intra-coded (I)</b> pictures are coded using information only from themselves. This means that an I frame can be decoded <em>independently</em> of any other frame. They provide a start point from which future predictively decoded frames can be decoded.</li>
+            <li><b>Predictive-coded (P)</b> use motion compensated prediction from a past reference frame/field. This means that to decode a P frame you need another frame as reference from which you can derive the P frame. You <em>cannot</em> independently decode a P frame. A P frame can be used as the reference for a later P frame (P frames can be the basis for future prediction).</li>
+            <li><b>Bidirectionally predictive-coded (B)</b> pictures use motion compensated prediction from past and/or future reference frames. Like a P frame, a B frame cannot be independently decoded. B frames are <em>not</em> used as a reference for future prediction.</li>
+        </ol>
+        <p>
+            This relationship is shown below:
+        </p>
+        <p>
+            <img src="##IMG_DIR##/mpeg/mpeg_frame_types.jpg" />
+        </p>
+        <p>
+            In general the amount of compression that each frame gives increases from I to B. Because the I frame is used as the basis from
+            which we can decode a P frame - we use the I frame + motion compensation - the I frame has the least compression as the quality 
+            of the subsequent P and B frames depend on it. B frames offer the most compression.
+        </p>
+        <p>
+            Interestingly, because B frames exist, the sequence of frames output by an encoder will not likely be the order in which
+            they are presented to the end viewer. The frames are output in <b>stream order</b>, which is the order in which the decoder
+            must decode them.
+        </p>
+        <p>
+            For example, imagine you have the following frame <em>display</em> order: I<sub>1</sub> P<sub>1</sub> B<sub>1</sub> P<sub>2</sub>. In order to encode 
+            frame B<sub>1</sub>, the encoder needs both frames P<sub>1</sub> and P<sub>2</sub> as B<sub>1</sub> is a predicated frame based on the
+            contents of the past frame P<sub>1</sub> and the future frame P<sub>2</sub>. Thus the <em>stream</em> 
+            order will be I<sub>1</sub> P<sub>1</sub> P<sub>2</sub> B<sub>1</sub>.
+        </p>
+        
+    </div> <!-- END H2 Video Streams -->
+
 	<h2>Dunno Yet</h2>
 	<div>
         <h3>AES Audio</h3>
@@ -542,7 +598,9 @@ Interlaces - display odd lines in one image then even lines in the next. Halves 
 Resolution. 720x480i - suffix "i" means interlaced.
             720x480p - suffix "p" means progressive
 
-
+SCR is 27Mhz
+27MHz / 300 == 90kHz
+PCR is measured as 33 bits of 90kHz clock and remaining 9 bits of a 27MHz clock. (2^9 = 512 but 2^8 = 256 which is not enough to store 300) (2^33 = 8,589,934,592 - enough to stop 90,000 ticks of 90kHz clock or 1 second in clock tick time)
 		</pre>
 	</div><!-- END: H2 - Video Recording -->
 </div> <!-- END H1 padding div -->
