@@ -437,6 +437,152 @@ if (adaption_field_contains_pcr) {
 		</p>
 	</div> <!-- END: H2 -->
 
+	<h2>ES STUFF</h2>
+	<div>
+		<p>
+			A video elementary stream (ES) is laid out as a series of sequence headers followed by a series of other optional, variable sized headers and data until the actual picture data.
+			The actual header structures and sequences in which the header data must be parsed is quite detailed so I don't think it is worth replicating here: just gotta go through
+			the standard which lays down the structure very clearly. Just as an idea, here is a 30,000 foot view of one picture sequence:
+		</p>
+		<p>
+			<img src="##IMG_DIR##/mpeg/video_es_organisation.jpg"/>
+		</p>
+		<p>
+			Meh, okay here are a few of the header formats, but not all of them by an means!
+		</p>
+
+		<div style="float:left; margin-right:10px;">
+			<table style="padding: 0px; margin: 0px 0px 0px -2px; border:0px;">
+				<tr style="background:black; color:white; padding: 0px; margin:0px; border:0px">
+					<td colspan="2" style="margin:0px;">Start Codes</td>
+				</tr>
+			</table>
+			<table style="margin: -3px 0px 0px 0px;">
+				<tr>
+					<td><b>Name</b></td><td><b>Code</b></td>
+				</tr>
+				<tr><td>picture_start_code</td><td>0x00</td></tr>
+				<tr><td>slice_start_code</td><td>0x01 – 0xAF</td></tr>
+				<tr><td>user_data_start_code</td><td>0xB2</td></tr>
+				<tr><td>sequence_header_code</td><td>0xB3</td></tr>
+				<tr><td>sequence_error_code</td><td>0xB4</td></tr>
+				<tr><td>extension_start_code</td><td>0xB5</td></tr>
+				<tr><td>sequence_end_code</td><td>0xB7</td></tr>
+				<tr><td>group_start_code</td><td>0xB8</td></tr>
+				<tr><td>system_start_code</td><td>0xB9 – 0xFF</td></tr>
+			</table>
+		</div>
+
+		<div style="float:left; margin-right:10px;">
+			<table style="padding: 0px; margin: 0px 0px 0px -2px; border:0px;">
+				<tr style="background:black; color:white; padding: 0px; margin:0px; border:0px">
+					<td colspan="2" style="margin:0px;">Sequence Header</td>
+				</tr>
+			</table>
+			<table style="margin: -3px 0px 0px 0px;">
+				<tr><td><b>Field Name</b></td><td><b>Bits</b></td></tr>
+				<tr><td>sequence_header_code</td><td>32</td></tr>
+				<tr><td>horizontal_size_value</td><td>12</td></tr>
+				<tr><td>vertical_size_value</td><td>12</td></tr>
+				<tr><td>aspect_ratio_information</td><td>4</td></tr>
+				<tr><td>frame_rate_control</td><td>4</td></tr>
+				<tr><td>bit_rate_value</td><td>18</td></tr>
+				<tr><td>marker_bit</td><td>1</td></tr>
+				<tr><td>vbv_buffer_size_value</td><td>10</td></tr>
+				<tr><td>contrained_parameters_flag</td><td>1</td></tr>
+				<tr><td>load_intra_quantiser_matrix</td><td>1</td></tr>
+				<tr><td colspan="2">if (load_intra_quantiser_matrix):</td></tr>
+				<tr><td style="padding-left:30px;">intra_quantiser_matrix</td><td>8*64</td></tr>
+				<tr><td>load_non_intra_quantiser_matrix</td><td>1</td></tr>
+				<tr><td colspan="2">if (load_non_intra_quantiser_matrix):</td></tr>
+				<tr><td style="padding-left:30px;">load_non_intra_quantiser_matrix</td><td>8*64</td></tr>
+				<tr><td colspan="2">next_start_code</td>
+				</tr>
+			</table>
+		</div>
+
+		<div style="float:left; margin-right:10px;">
+			<table style="padding: 0px; margin: 0px 0px 0px -2px; border:0px;">
+				<tr style="background:black; color:white; padding: 0px; margin:0px; border:0px">
+					<td colspan="2" style="margin:0px;">Sequence Extension</td>
+				</tr>
+			</table>
+			<table style="margin: -3px 0px 0px 0px;">
+				<tr><td><b>Field Name</b></td><td><b>Bits</b></td></tr>
+				<tr><td>extension_start_code</td><td>32</td></tr>
+				<tr><td>extension_start_code_identifier</td><td>4</td></tr>
+				<tr><td>profile_and_level_indication</td><td>8</td></tr>
+				<tr><td>progressive_sequence</td><td>1 </td></tr>
+				<tr><td>chroma_format</td><td>2 </td></tr>
+				<tr><td>horizontal_size_extension</td><td>2 </td></tr>
+				<tr><td>vertical_size_extension</td><td>2 </td></tr>
+				<tr><td>bit_rate_extension</td><td>12 </td></tr>
+				<tr><td>marker_bit</td><td>1 </td></tr>
+				<tr><td>vbv_buffer_size_extension</td><td>8</td></tr>
+				<tr><td>low_delay</td><td>1 </td></tr>
+				<tr><td>frame_rate_extension_n</td><td>2 </td></tr>
+				<tr><td>frame_rate_extension_d</td><td>5 </td></tr>
+				<tr><td colspan="2">next_start_code</td></tr>
+			</table>
+		</div>
+
+		<div style="float:left; margin-right:10px;">
+			<table style="padding: 0px; margin: 0px 0px 0px -2px; border:0px;">
+				<tr style="background:black; color:white; padding: 0px; margin:0px; border:0px">
+					<td colspan="2" style="margin:0px;">GOP Header</td>
+				</tr>
+			</table>
+			<table style="margin: -3px 0px 0px 0px;">
+				<tr><td><b>Field Name</b></td><td><b>Bits</b></td></tr>		
+				<tr><td>group_start_code</td><td>32 </td></tr>
+				<tr><td>time_code</td><td>25 </td></tr>
+				<tr><td>closed_gop</td><td>1 </td></tr>
+				<tr><td>broken_link</td><td>1 </td></tr>
+				<tr><td colspan="2">next_start_code</td></tr>
+			</table>
+		</div>
+
+		<div style="float:left; margin-right:10px;">
+			<table style="padding: 0px; margin: 0px 0px 0px -2px; border:0px;">
+				<tr style="background:black; color:white; padding: 0px; margin:0px; border:0px">
+					<td colspan="2" style="margin:0px;">Picture Header</td>
+				</tr>
+			</table>
+			<table style="margin: -3px 0px 0px 0px;">
+				<tr><td><b>Field Name</b></td><td><b>Bits</b></td></tr>		
+				<tr><td>picture_start_code</td><td>32</td></tr>
+				<tr><td>temporal_reference</td><td>10</td></tr>
+				<tr><td>picture_coding_type<br/>
+						<table style="border:0px; margin-left:30px;">
+							<tr><td>I</td><td>=</td><td>0x1</td></tr>
+							<tr><td>P</td><td>=</td><td>0x2</td></tr>
+							<tr><td>B</td><td>=</td><td>0x3</td></tr>
+						</table>
+					</td>
+					<td>3</td></tr>
+
+				<tr><td>vbv_delay</td><td>16 </td></tr>
+				<tr><td>if (picture_coding_type is P or B)</td></tr>
+				<tr><td style="padding-left:30px;">full_pel_forward_vector</td><td>1 </td></tr>
+				<tr><td style="padding-left:30px;">forward_f_code</td><td>3 </td></tr>
+				<tr><td colspan="2">if (picture_coding_type is B):</td></tr>
+				<tr><td style="padding-left:30px;">full_pel_backward_vector</td><td>1 </td></tr>
+				<tr><td style="padding-left:30px;">backward_f_code</td><td>3 </td></tr>
+				<tr><td colspan="2">while (nextbits() is '1'):</td></tr>
+				<tr><td style="padding-left:30px;">extra_bit_picture with value '1'</td><td>1 </td></tr>
+				<tr><td style="padding-left:30px;">extra_information_picture</td><td>8 </td></tr>
+				<tr><td>extra_bit_picture with value '0'</td><td> 1 </td></tr>
+				<tr><td colspan="2">next_start_code</td></tr>
+			</table>
+		</div>
+
+		<p style="clear:both;">
+			One interesting field is the <tt>temporal_reference</tt> field in the picture header. As we've noted the coded order and display order are different. The 
+			<tt>temporal_reference</tt> tells the decoder where in this sequence the frame lies in terms of its <em>display</em> order.
+		</p>
+
+	</div> <!-- END: H2 -->
+
 	<h2>Dunno Yet</h2>
 	<div>
         <h3>AES Audio</h3>
