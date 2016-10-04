@@ -485,15 +485,37 @@ if (adaption_field_contains_pcr) {
             must decode them.
         </p>
         <p>
+            <img src="##IMG_DIR##/mpeg/DTS_PTS_relationship.jpg" style="float:left; margin-right: 5px;"/>
+
             For example, imagine you have the following frame <em>display</em> order: I<sub>1</sub> P<sub>1</sub> B<sub>1</sub> P<sub>2</sub>. In order to encode 
             frame B<sub>1</sub>, the encoder needs both frames P<sub>1</sub> and P<sub>2</sub> as B<sub>1</sub> is a predicated frame based on the
             contents of the past frame P<sub>1</sub> and the future frame P<sub>2</sub>. Thus the <em>stream</em> 
             order will be I<sub>1</sub> P<sub>1</sub> P<sub>2</sub> B<sub>1</sub>.
         </p>
-        
+        <p>
+            To look at this in &quot;real life&quot; I've loaded some random TS file into <a href="http://www.pjdaniel.org.uk/mpeg/" target="_blank">MPEG-2 TS packet analyser</a>
+            and read out, from the start of the file, the DTS/PTS timestamps for the first few video frames. Put the values into a spreadsheet, shown to the left (or above depending
+            on your window size and how contents have re-flowed).
+        </p>
+        <p>
+            I've &quot;normalised&quot; the original timestamps to make them more readable. I've taken the first DTS value and subtracted that from all PTS and DTS values, which I've then divided by 1800.
+            You can see that the DTS increments monotonically and linearly because the frames are transmitted in decoded order, not display order. It is for this reason that you can see
+            the PTS values move around.
+        </p>
+        <p>
+            The highlighted boxed show how groups of frames are displayed in a different order
+            to the order in which they are decoded. You can see they are decoded <em>before</em>
+            they are displayed. This implies that the frames after them in the TS strean rely on 
+            their contents. This implies that the 2 frames following each highlighted box are
+            B frames <em>because they rely on a frame in the future</em>. So, we can infer that frames 6; 10; 14; 18 and so on are B frames. The frames 7; 11; 15; 19 could also
+            be B frames, but they could also be I frames.
+        </p>
+        <p>
+            So we can distinguish, just from the frame ordering, which frames are B frames. But, we can only do this for a small subset, the rest could be any type. Luckily, each frame has information embedded in it's header that tells us what type it is. This discussion was really just to illustrate the re-ordering :)
+        </p>
     </div> <!-- END H2 Video Streams -->
 
-	<h2>Dunno Yet</h2>
+	<h2 style="clear:both;">Dunno Yet</h2>
 	<div>
         <h3>AES Audio</h3>
         <p>
