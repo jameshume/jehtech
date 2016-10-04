@@ -458,7 +458,7 @@ if (adaption_field_contains_pcr) {
 		</p>
 	</div> <!-- END: H2 -->
 
-	<h2>ES STUFF</h2>
+	<h2>Video Elementary Streams</h2>
 	<div>
 		<p>
 			A video elementary stream (ES) is laid out as a series of sequence headers followed by a series of other optional, variable sized headers and data until the actual picture data.
@@ -598,14 +598,10 @@ if (adaption_field_contains_pcr) {
 		</div>
 
 		<p style="clear:both;">
-			One interesting field is the <tt>temporal_reference</tt> field in the picture header. As we've noted the coded order and display order are different. The 
+			One interesting field is the <tt>temporal_reference</tt> field in the picture header. As will note in a bit, the coded order and display order are different. The 
 			<tt>temporal_reference</tt> tells the decoder where in this sequence the frame lies in terms of its <em>display</em> order.
 		</p>
 
-	</div> <!-- END: H2 -->
-
-    <h2>Video Streams</h2>
-    <div>
         <p>
             There are three types of pictures that use different coding methods: 
         </p>
@@ -631,7 +627,7 @@ if (adaption_field_contains_pcr) {
             must decode them.
         </p>
         <p>
-            <img src="##IMG_DIR##/mpeg/DTS_PTS_relationship.jpg" style="float:left; margin-right: 5px;"/>
+            <img src="##IMG_DIR##/mpeg/DTS_PTS_relationship.jpg" style="float:left; margin-right: 5px; margin-bottom: 5px;"/>
 
             For example, imagine you have the following frame <em>display</em> order: I<sub>1</sub> P<sub>1</sub> B<sub>1</sub> P<sub>2</sub>. In order to encode 
             frame B<sub>1</sub>, the encoder needs both frames P<sub>1</sub> and P<sub>2</sub> as B<sub>1</sub> is a predicated frame based on the
