@@ -47,6 +47,9 @@
 			<li><a href="http://www.tvtechnology.com/expertise/0003/asynchronous-interfaces-for-video-servers/183969" 
 				target="_blank">&quot;Asynchronous Interfaces For Video Servers&quot;, TVTechnology article</a>.
 			</li>
+			<li><a href="http://www.silabs.com/support%20documents/technicaldocs/an377.pdf" 
+			       target="_blank">Timing and Synchronisation In Broadcast Video</a>, Silicon Labs.
+			</li>
             <li><a href="http://www.haberdar.org/discrete-cosine-transform-tutorial.htm" 
                  target="_blank">Hakan Haberdar, "Generating Random Number from Image of a Probability Density Function"</a>, 
                  Computer Science Tutorials [online], (Accessed 09-26-2016).
@@ -66,7 +69,51 @@
 		</ol>
 	</div> <!-- END H2: References -->
 
-	<h2>Diagrams</h2>
+	<h2>Video Introduction</h2>
+	<div>
+		
+		<p>
+			Video is a series of still images that are displayed quickly enough, one after the other, so that
+			the human eye/brain percieves only continuous motion and not individual stills. Each still image is 
+			called a <b>frame</b>. Consumer video displays between 50 and 60 frames per second. Computer 
+			displays typically display between 70 and 90 frames per second. The number of full frames per
+			second is called the <b>frame rate</b>. It is sometimes refered to as the <b>temperal resolution</b> of
+			the image: how quickly the image is being scanned.
+		</p>
+		<p>
+			First video screens were CRTs. An electron beam was &quot;fired&quot; at a screen which contained
+			rows of pixels. A pixel was phosphorous and would illuminate when the electron beam hit it. By
+			scanning the electron beam horizontally for each line a picture could be created. The is shown
+			in the image below (crudely).
+		</p>
+		<p>
+			<img src="##IMG_DIR##/mpeg/electron_beam_scan.jpg"/>
+		</p>
+		<p>
+			When the electron beam has finished one line, it must return to the start of the next
+			line. Whilst it is doing this it must be turned off, otherwise it would re-paint
+			pixels it shouldn't on its return path. This turning-off-during-return is called
+			<b>blanking</b>.
+		</p>
+		<p>
+			By scanning quickly enough, an image can be &quot;painted&quot; on the screen. Each pixel
+			would fluoresce for a certain amount of time so by scanning image after image on the screen
+			quickly enough, the human eye/brain perceives a moving picture without any flicker.
+		</p>
+
+		<pre>
+Vertical sync - timing info indicating when new image starts
+Horizontal sync - timing info indicating when new scan line starts
+
+Progressive video - display fill images, scan line after scan line, on image after the other. Does better non-flicker vertically.
+Interlaces - display odd lines in one image then even lines in the next. Halves data being sent. But - each scan line is then refreshed 1/2 often as should be.
+
+Resolution. 720x480i - suffix "i" means interlaced.
+            720x480p - suffix "p" means progressive
+		</pre>
+	</div> <!-- End: Video Intro -->
+        
+	<h2>MPEG Introduction</h2>
 	<div>
 		<p>
 			Pissing around looking at 
@@ -277,6 +324,12 @@
 			clock should be, within some tolerance, synchonised (i.e., same frequency and phase)
 			with the encoder's clock. Then once the receiver's clock is correct, the decoder blocks can
 			use the PTS and DTS timestamps correctly to play out video/audio/etc synchronously.
+		</p>
+
+		<p>
+			PCR is measured as 33 bits of 90kHz clock and remaining 9 bits of a 27MHz clock. 
+			(2^9 = 512 but 2^8 = 256 which is not enough to store 300 | 2^33 = 8,589,934,592 - enough 
+			to stop 90,000 ticks of 90kHz clock or 1 second in clock tick time).
 		</p>
 
 		<p>
@@ -745,28 +798,7 @@ if (adaption_field_contains_pcr) {
         <p>
             Audio is transmitted over SDI via the formats ancillary data, which is <q>... provided as a standardized transport for non-video payload within a serial digital signal; it is used for things such as embedded audio, closed captions, timecode, and other sorts of metadata...</q>.
         </p>
-
-        <h3>Misc</h3>
-		<p><a href="http://www.silabs.com/support%20documents/technicaldocs/an377.pdf" target="_blank">TIMING AND SYNCHRONIZATION IN BROADCAST VIDEO</a>.
-		</p>
-		<pre>
-Consumer video - 50 to 60 frames per second
-Computer displays - 70 to 90 frames per second.
-
-Vertical sync - timing info indicating when new image starts
-Horizontal sync - timing info indicating when new scan line starts
-
-Progressive video - display fill images, scan line after scan line, on image after the other. Does better non-flicker vertically.
-Interlaces - display odd lines in one image then even lines in the next. Halves data being sent. But - each scan line is then refreshed 1/2 often as should be.
-
-Resolution. 720x480i - suffix "i" means interlaced.
-            720x480p - suffix "p" means progressive
-
-SCR is 27Mhz
-27MHz / 300 == 90kHz
-PCR is measured as 33 bits of 90kHz clock and remaining 9 bits of a 27MHz clock. (2^9 = 512 but 2^8 = 256 which is not enough to store 300) (2^33 = 8,589,934,592 - enough to stop 90,000 ticks of 90kHz clock or 1 second in clock tick time)
-		</pre>
-	</div><!-- END: H2 - Video Recording -->
+	</div><!-- END: H2 - Dunno Yet -->
 </div> <!-- END H1 padding div -->
 
 </div>
