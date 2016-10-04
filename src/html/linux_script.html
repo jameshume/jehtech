@@ -775,22 +775,6 @@ done</pre>
          <h3>Halt script if variable NOT set</h3>
          <pre class="prettyprint linenums"><a href="http://linuxcommand.org/lc3_man_pages/seth.html" target="_blank">set</a> -u</pre>
 
-         <h3>Parse Version Strings: Splitting Strings On A Delimeter</h3>
-         <p>
-            I wanted to be able to check the IPython version in a shell script to
-            let the user know if it needed upgrading and to offer to do the upgrade
-            automatically. I knew I could spit the string onto multiple lines 
-            using <tt>tr</tt> and then parse it in a <tt>for</tt> loop, but a quick
-            bit of googling and StackOverflow came to the rescue again 
-            <a href="http://stackoverflow.com/questions/918886/how-do-i-split-a-string-on-a-delimiter-in-bash"
-               target="_blank">[3]</a>.
-         </p>
-         <pre class="prettyprint linenums">IFS="." read -a pyVerInfo &lt;&lt;&lt; "$pyVer"
-         <p>
-            This cool little snippet splits the string up using a full-stop as the
-            delimeter and saves it as an array to the variable <tt>pyVerInfo</tt>.
-         </p>
-         
          <a name="ExecAlternative"><h3>Find --exec alternative when you want to exec a script function</h3></a>
          <p>
             For when you want to do an operation on a set of files but can't
