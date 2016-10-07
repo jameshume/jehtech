@@ -44,11 +44,11 @@
 		Really bloody useful for parsing command line options given to scripts
 		with ease!
 	</p>
-	<pre class="prettyprint linenums lang-python">
-import argparse
+	<pre class="prettyprint linenums lang-python">import argparse
 
 parser = argparse.ArgumentParser(description="Describe your program here")
-	</pre>
+# Define arguments
+args = parser.parse_args()</pre>
 
 	<p>
 		You can <tt>add_argument()</tt>'s to the parser. Arguments can be positional

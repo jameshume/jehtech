@@ -336,6 +336,18 @@ svn commit</pre>
 
 		<h2>Misc</h2>
 		<div>
+			<h3>Generate A Patch File</h3>
+			<p>
+				Useful when uploading diffs to ReviewBoard for example. Use the following:
+			</p>
+			<pre>svn diff --internal-diff -rX:Y &gt; patch.diff</pre>
+			<p>
+				Note the use of the <tt>--internal-diff</tt>. If your SVN config file 
+				specifies a diff tool other than the internal SVN diff tool your patch
+				won't be generated. This option ensures that the SVN internal diff tool
+				is used to the patch file comes out right.
+			</p>
+
 			<h3>Check Your SSH Connection</h3>
 			<p>
 				If your are having trouble with your SSH connection, you can check 
