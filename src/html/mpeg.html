@@ -66,6 +66,8 @@
             <li><a href="http://www.streaminglearningcenter.com/AME_Reference.pdf"
                 target="_blank">Mastering the Adobe Media Encoder: Critical Concepts and Definitions</a>, Jan Ozer -- This is a really good high level tutorial about bit rates and frame rates, resolution, CBR and VBR and how the inter-relate in terms of the final encoded video quality.
             </li>
+            <li>TOREAD: <a href="http://dranger.com/ffmpeg/tutorial01.html" target="_blank">An ffmpeg and SDL Tutorial</a>, dranger.com
+            </li>
 		</ol>
 	</div> <!-- END H2: References -->
 
@@ -799,6 +801,21 @@ if (adaption_field_contains_pcr) {
             Audio is transmitted over SDI via the formats ancillary data, which is <q>... provided as a standardized transport for non-video payload within a serial digital signal; it is used for things such as embedded audio, closed captions, timecode, and other sorts of metadata...</q>.
         </p>
 	</div><!-- END: H2 - Dunno Yet -->
+
+    <h2>FFMPEG</h2>
+    <div>
+        <p>
+            To extract each frame of a video file as an individual picture run the following. FFMPEG parses the output
+            (<code>printf</code>-like) string and understands from it what you are trying to do. 
+            It will name the frames <code>frame_00001</code>, <code>frame_00002</code> and so on.
+        </p>
+        <pre>ffmpeg -i &lt;your-input-file&gt; "frame_%05d.png"</pre>
+        <p>
+            To extract a specific audio channel from a video file use the following. FFMPEG will create
+            the type of file you request via the extension. Normally use <code>.wav</code>.
+        </p>
+        <pre>ffmpeg -i &lt;your-input-file&gt; -map 0:2 &lt;name-of-output-file&gt;</pre>
+    </div>
 </div> <!-- END H1 padding div -->
 
 </div>
