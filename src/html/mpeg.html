@@ -50,24 +50,28 @@
 			<li><a href="http://www.silabs.com/support%20documents/technicaldocs/an377.pdf" 
 			       target="_blank">Timing and Synchronisation In Broadcast Video</a>, Silicon Labs.
 			</li>
-            <li><a href="http://www.haberdar.org/discrete-cosine-transform-tutorial.htm" 
-                 target="_blank">Hakan Haberdar, "Generating Random Number from Image of a Probability Density Function"</a>, 
-                 Computer Science Tutorials [online], (Accessed 09-26-2016).
-            </li>
-            <li><a href="https://www.vcodex.com/historical-timeline-of-video-coding-standards-and-formats/"
-                   target="_blank">Historical Timeline of Viedo Coding Standards</a>, VCodex.com.
-            </li>
-            <li><a href="https://www.iem.thm.de/telekom-labor/zinke/mk/mpeg2beg/beginnzi.htm"
-                   target="_blank">A Biginners Guide for MPEG-2 Standard</a>, Victor Lo, City University of Honk Kong.
-            </li>
-            <li><a href="http://info.tek.com/www-a-guide-to-mpeg-fundamentals-and-protocol-analysis.html"
-                   target="_blank">A Guide to MPEG Fundamentals and Protocol Analysis</a>, Tektonix.
-            </li>
-            <li><a href="http://www.streaminglearningcenter.com/AME_Reference.pdf"
-                target="_blank">Mastering the Adobe Media Encoder: Critical Concepts and Definitions</a>, Jan Ozer -- This is a really good high level tutorial about bit rates and frame rates, resolution, CBR and VBR and how the inter-relate in terms of the final encoded video quality.
-            </li>
-            <li>TOREAD: <a href="http://dranger.com/ffmpeg/tutorial01.html" target="_blank">An ffmpeg and SDL Tutorial</a>, dranger.com
-            </li>
+			<li><a href="http://www.haberdar.org/discrete-cosine-transform-tutorial.htm" 
+			     target="_blank">Hakan Haberdar, "Generating Random Number from Image of a Probability Density Function"</a>, 
+				Computer Science Tutorials [online], (Accessed 09-26-2016).
+			</li>
+			<li><a href="https://www.vcodex.com/historical-timeline-of-video-coding-standards-and-formats/"
+				target="_blank">Historical Timeline of Viedo Coding Standards</a>, VCodex.com.
+			</li>
+			<li><a href="https://www.iem.thm.de/telekom-labor/zinke/mk/mpeg2beg/beginnzi.htm"
+				target="_blank">A Biginners Guide for MPEG-2 Standard</a>, Victor Lo, City University of Honk Kong.
+			</li>
+			<li><a href="http://info.tek.com/www-a-guide-to-mpeg-fundamentals-and-protocol-analysis.html"
+				target="_blank">A Guide to MPEG Fundamentals and Protocol Analysis</a>, Tektonix.
+			</li>
+			<li><a href="http://www.streaminglearningcenter.com/AME_Reference.pdf"
+				target="_blank">Mastering the Adobe Media Encoder: Critical Concepts and Definitions</a>, 
+				Jan Ozer -- This is a really good high level tutorial about bit rates and frame rates, resolution, 
+				CBR and VBR and how the inter-relate in terms of the final encoded video quality.
+			</li>
+			<li>TOREAD: <a href="http://dranger.com/ffmpeg/tutorial01.html" target="_blank">An ffmpeg and SDL Tutorial</a>, dranger.com
+			</li>
+			<li>How Video Works, M. Weise &amp; D. Weynand. ISBN 0-240-80614-X
+			</li>
 		</ol>
 	</div> <!-- END H2: References -->
 
@@ -95,24 +99,59 @@
 			When the electron beam has finished one line, it must return to the start of the next
 			line. Whilst it is doing this it must be turned off, otherwise it would re-paint
 			pixels it shouldn't on its return path. This turning-off-during-return is called
-			<b>blanking</b>.
+			<b>blanking</b>. There are two forms of blanking: <b>horizontal blanking</b> and
+			<b>vertical blanking</b>. Horizontal blanking is used to disable the electron beam
+			as it travels from the end of one line down to the start of the next line. Vertical
+			blanking is used when an entire frame has been painted and the beam has to move
+			back to the top left of the first scan line. Blanking information is part of the video
+			signal. Vertical sync is timing info indicating when new image starts.
+			Horizontal sync is timing info indicating when new scan line starts.
 		</p>
 		<p>
 			By scanning quickly enough, an image can be &quot;painted&quot; on the screen. Each pixel
 			would fluoresce for a certain amount of time so by scanning image after image on the screen
-			quickly enough, the human eye/brain perceives a moving picture without any flicker.
+			quickly enough, the human eye/brain perceives a moving picture without any flicker. The eye
+			retains an image for somewhere between $\frac{1}{30}$ and $\frac{1}{32}$ seconds. This is
+			known as the <b>persistence of vision</b>. This is why the
+			the frame rate has to be greater than roughly 32Hz, otherwise flicker will be perceived.
 		</p>
-
-		<pre>
-Vertical sync - timing info indicating when new image starts
-Horizontal sync - timing info indicating when new scan line starts
-
-Progressive video - display fill images, scan line after scan line, on image after the other. Does better non-flicker vertically.
-Interlaces - display odd lines in one image then even lines in the next. Halves data being sent. But - each scan line is then refreshed 1/2 often as should be.
-
-Resolution. 720x480i - suffix "i" means interlaced.
-            720x480p - suffix "p" means progressive
-		</pre>
+		<p>
+			Very early TV standards were developed by the NTSC in the Americas and in Europe a system 
+			call PAL was used. France and Soviets used SECAM.
+		</p>
+		<p>
+			NTSC uses 30 fps and 525 lines per frame. 480 lines actively used.
+		</p>
+		<p>
+			PAL &amp; SECAM use 25 fps and 625 lines per frame. 580 lines actively used.
+		</p>
+		<p>
+			Not all of the lines are actively used due to vertical blanking. Horiztonal
+			blanking occurs before and after each line. As said, the blanking information
+			is part of the early video signals:
+		</p>
+		<p>
+			<img src="##IMG_DIR##/mpeg/blanked_and_active_video.jpg"/>
+		</p>
+		<p>
+			But wait, haven't we just said that persistence of vision lasts between $\frac{1}{30}$ and $\frac{1}{32}$ seconds?
+			Yes, and that is a problem. At 30 fps for NTSC and 25 fps for PAL/SECAM, it is possible that visual
+			flicker could be seen. The frame rate needs to be increased. This is why  interlaced video was invented.
+			By transmitting the odd lines and then the even lines, for the same amount of data, the frame rate can be doubled,
+			which helps eliminate the effects of flicker. A frame is split up into the odd lines and the event lines, each set
+			of lines being transmitted and displayed seperately. Each set of lines is called a <b>field</b>. This process of
+			field-by-field scanning is called <b>interlaced scanning</b>. The higher frame rate gets traded off against
+			slightly worse vertical flicker for fast moving objects.
+		</p>
+		<p>
+			Modern compression and data rates mean that interlaced scanning isn't needed as much so most displays use
+			progressive scans where the frame is just the frame - both odd and even lines. The display fills the
+			image line after line. This is prefereable because it is more robust to vertical flicker.
+		</p>
+		<p>
+			This is why we see the &quot;i&quot; and &quot;p&quot; to resolutions. For example, for 720x480i, the 
+			suffix &quot;i&quot; means interlaced and for 720x480p, suffix &quot;p&quot; means progressive.
+		</p>
 	</div> <!-- End: Video Intro -->
         
 	<h2>MPEG Introduction</h2>
@@ -661,9 +700,25 @@ if (adaption_field_contains_pcr) {
             There are three types of pictures that use different coding methods: 
         </p>
         <ol>
-            <li><b>Intra-coded (I)</b> pictures are coded using information only from themselves. This means that an I frame can be decoded <em>independently</em> of any other frame. They provide a start point from which future predictively decoded frames can be decoded.</li>
-            <li><b>Predictive-coded (P)</b> use motion compensated prediction from a past reference frame/field. This means that to decode a P frame you need another frame as reference from which you can derive the P frame. You <em>cannot</em> independently decode a P frame. A P frame can be used as the reference for a later P frame (P frames can be the basis for future prediction).</li>
-            <li><b>Bidirectionally predictive-coded (B)</b> pictures use motion compensated prediction from past and/or future reference frames. Like a P frame, a B frame cannot be independently decoded. B frames are <em>not</em> used as a reference for future prediction.</li>
+            <li>
+            	<b>Intra-coded (I)</b> pictures are coded using information only from themselves. 
+            	This means that an I frame can be decoded <em>independently</em> of any other frame. 
+            	They provide a start point from which future predictively decoded frames can be decoded.
+            	Each I-frame is divided into 8x8 pixel blocks, each block being placed in a
+            	16x16 block called a <b>macroblock</b>.
+            </li>
+            <li>
+            	<b>Predictive-coded (P)</b> use motion compensated prediction from a past reference 
+            	frame/field: motion vectors for picture blocks. 
+            	This means that to decode a P frame you need another frame as reference 
+            	from which you can derive the P frame. You <em>cannot</em> independently decode a P 
+            	frame. A P frame can be used as the reference for a later P frame (P frames can be 
+            	the basis for future prediction).
+            </li>
+            <li>
+            	<b>Bidirectionally predictive-coded (B)</b> pictures use motion compensated prediction
+            	 from past and/or future reference frames. Like a P frame, a B frame cannot be independently 
+            	 decoded. B frames are <em>not</em> used as a reference for future prediction.</li>
         </ol>
         <p>
             This relationship is shown below:
@@ -709,6 +764,8 @@ if (adaption_field_contains_pcr) {
         </p>
         <p>
             So we can distinguish, just from the frame ordering, which frames are B frames. But, we can only do this for a small subset, the rest could be any type. Luckily, each frame has information embedded in it's header that tells us what type it is. This discussion was really just to illustrate the re-ordering :)
+        </p>
+        <p style="clear:both;">
         </p>
     </div> <!-- END H2 Video Streams -->
 
