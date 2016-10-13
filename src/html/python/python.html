@@ -59,26 +59,59 @@
 
 <h2>PyLint: Linting Python Code</h2>
 <div>
+		<h3>Run PyLint</h3>
+		<pre>find . -name '*.py' | xargs pylint --rcfile=pylint_config_filename</pre>
+		<p>
+			Use the <code>-rn</code> option to suppress the summary tables at the end of the pylint output.
+		</p>
+
 		<h3>Message Format</h3>
 		<p>
 			The messages have the following format:
 		</p>
-<pre class="prettyprint">
-MESSAGE_TYPE: LINE_NUM:[OBJECT:] MESSAGE
-</pre>
+		<pre class="prettyprint">MESSAGE_TYPE: LINE_NUM:[OBJECT:] MESSAGE</pre>
 		<p>
 			The message type can be one of the following:
 			<table style="border: 0px">
 				<tr><td><tt>[R]</tt></td> <td>means refactoring is recommended,</td></tr>
-				<tr><td><tt>[C]</tt></td> <td> means there was a code style violation,</td></tr>
-				<tr><td><tt>[W]</tt></td> <td> for warning about a minor issue,</td></tr>
-				<tr><td><tt>[E]</tt></td> <td> for error or potential bug,</td></tr>
-				<tr><td><tt>[F]</tt></td> <td> indicates that a fatal error occurred, blocking further analysis.</td></tr>
+				<tr><td><tt>[C]</tt></td> <td>means there was a code style violation,</td></tr>
+				<tr><td><tt>[W]</tt></td> <td>for warning about a minor issue,</td></tr>
+				<tr><td><tt>[E]</tt></td> <td>for error or potential bug,</td></tr>
+				<tr><td><tt>[F]</tt></td> <td>indicates that a fatal error occurred, blocking further analysis.</td></tr>
 			</table>
 		</p>
-		<h3>Run PyLint</h3>
-		<pre>find . -name '*.py' | xargs pylint --rcfile=pylint_config_filename</pre>
-		<h3>Supress messages in code</h3>
+
+		<h3>Configuring Pylint</h3>
+		<p>
+			If you want to apply blanket settings across many files use the <code>--rcfile=&lt;filename&gt;</code>
+			switch. In the rcfile you can specify things like messages to supress at a global level, for example. This
+			is much easier than trying to list everything you want to supress on the command line each time
+			your run pyline.
+		</p>
+		<p>
+			To generate a template pylint rcfile use:
+		</p>
+		<pre>pylint --generate-rcfile</pre>
+
+		<h3>Explain An Error Message</h3>
+		<p>
+			In an error message you will get, at the end of the message a string in parenthesis.
+			For example you light see something like this:
+		</p>
+		<pre>C:289, 4: Missing method docstring (missing-docstring)
+C:293, 4: Invalid method name "im_an_error" (invalid-name)</pre>
+		<p>To get help on either of these errors, type:</p>
+		<pre>pylint --help-msg=missing-docstring</pre>
+		<p>
+			Or...
+		</p>
+		<pre>pylint --help-msg=invalid-name</pre>
+
+		<h3>Suppressing Error Messages</h3>
+		<p>
+			To disable an error message for the entire file use <code>--disable=msg-name</code>. So, if you want to
+			ignore all missing docstrings use <code>--disable=missing-docstring</code>.
+		</p>
 		<p>
 			Find all <a href="http://pylint-messages.wikidot.com/all-codes" target="_blank">PyLint codes here</a>. Or, you can use the command line
 			&quot;<b><tt>pylint --list-msgs</tt></b>&quot; to list error messages and their corresponding codes.
@@ -87,7 +120,8 @@ MESSAGE_TYPE: LINE_NUM:[OBJECT:] MESSAGE
 			To supress an error message for a specifc line of code, or for a block of code (put comment on first line of block start),
 			use <tt>#pylint: disable=...</tt> 
 		</p>
-		<h3>Use PyLint to count LOC</h3>
+
+		<h3>Use PyLint To Count LOC</h3>
 		<p>
 			Thanks to the author of, and comments made, for the following
 			<a href="http://stackoverflow.com/questions/9076672/how-to-count-lines-of-code-in-python-the-right-way#answer-15360716" target="_blank">

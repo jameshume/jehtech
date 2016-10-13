@@ -72,6 +72,10 @@
 			</li>
 			<li>How Video Works, M. Weise &amp; D. Weynand. ISBN 0-240-80614-X
 			</li>
+            <li><a href="https://ffmpeg.org/ffmpeg-filters.html" target="_blank">FFMPEG Filters</a>.
+            </li>
+            <li><a href="https://trac.ffmpeg.org/wiki/Scaling%20(resizing)%20with%20ffmpeg" target="_blank">Scaling (Resizing) With FFMPEG.</a>.
+            </li>
 		</ol>
 	</div> <!-- END H2: References -->
 
@@ -861,6 +865,7 @@ if (adaption_field_contains_pcr) {
 
     <h2>FFMPEG</h2>
     <div>
+        <h3>ffmpeg</h3>
         <p>
             To extract each frame of a video file as an individual picture run the following. FFMPEG parses the output
             (<code>printf</code>-like) string and understands from it what you are trying to do. 
@@ -868,11 +873,83 @@ if (adaption_field_contains_pcr) {
         </p>
         <pre>ffmpeg -i &lt;your-input-file&gt; "frame_%05d.png"</pre>
         <p>
+            You can use other options to output just specific frames too...
+        </p>
+        <pre>ffmpeg -i &lt;your-input-file&gt; -ss 00:00:00:00.000 -vframes 1 &lt;name-of-output-file&gt;</pre>
+        <p>
+            ... where <code>-vframes</code> sets the number of video frames to output and <code>-ss</code> sets the start time offset.
+        </p>
+        <p>
+            Or, lets say you want to output some number of frames from a specific time, you could write....
+        </p>
+        <pre>ffmpeg -i &lt;your-input-file&gt; -ss 00:01:11.123 -vframes 10 "frame_%02d.png"</pre>
+        <p>
+            Or, do the same but not for 10 frames, just for 5 seconds...
+        </p>
+        <pre>ffmpeg -i &lt;your-input-file&gt; -ss 00:01:11.123 -t 5 "frame_%02d.png"</pre>
+        <p>
+            If you don't want the full frame quality you can also scale the output images
+            and even change them to grey scale if space is an issue. Use the switch
+            <code>-s widthxheight</code>, e.g., <code>192x168</code>. You can also use the
+            <code>-vf scale=w:h</code>. The 
+            <a href="https://trac.ffmpeg.org/wiki/Scaling%20(resizing)%20with%20ffmpeg" target="_blank"><code>scale</code></a> 
+            parameter is neat because if
+            you want to keep the same aspect ratio you can just set one of either the width
+            or height to <code>-1</code>. You can even use refer to the input scale using the
+            variables <code>ih</code>, for input height and <code>iw</code>, for input
+            width. Eg, <code>-vf scale=iw/4:-1</code>.
+        </p>
+        <p>
+            To grayscale use the switch <code>-pix_fmt gray</code> (use the command
+            <code>ffmpeg -pix_fmts</code> to view avilable formats).
+        </p>
+        <pre>ffmpeg -i &lt;your-input-file&gt; -vf scale=192:-1 -pix_fmt gray "frame_%05d.png"</pre>
+        <p>
             To extract a specific audio channel from a video file use the following. FFMPEG will create
             the type of file you request via the extension. Normally use <code>.wav</code>.
         </p>
         <pre>ffmpeg -i &lt;your-input-file&gt; -map 0:2 &lt;name-of-output-file&gt;</pre>
+        <p>
+            <a href="https://ffmpeg.org/ffmpeg-filters.html#Filtering-Introduction" target="_blank">Filtering</a> is
+            done via to <b><code>-vf</code></b> option. For example to output one image every I-frame:
+        </p>
+        <pre>ffmpeg -i input.flv -vf "<a href="https://ffmpeg.org/ffmpeg-filters.html#select_002c-aselect" target="_blank">select</a>='eq(pict_type,PICT_TYPE_I)'" -vsync vfr thumb%04d.png</pre>
+
+        <h3>ffprobe</h3>
+        <p>
+            To get information on your video file you can also use <a href="https://ffmpeg.org/ffprobe.html" target="_blank"><code>ffprobe</code></a>. To extract
+            the frame information use:
+        </p>
+        <pre>ffprobe -show_packets -i &lt;your-input-file&gt;</pre>
+        <p>
+           The <code>ffprobe</code> command lets you select streams too...
+        </p>
+        <pre># Select only audio streams
+ffprobe -show_packets -select_streams a -i &lt;your-input-file&gt;
+
+# Select onl video streams
+ffprobe -show_packets -select_streams v -i &lt;your-input-file&gt;
+
+# Select only the video stream with index 1
+ffprobe -show_packets -select_streams v:1 -i &lt;your-input-file&gt;</pre>
     </div>
+    	<p>
+    		Other useful flags include <code>-show_frames</code>, <code>-show_streams</code>, 
+    		<code>-show_programs</code>, <code>-count_frames</code>, <code>--count_packets</code>.
+    	</p>
+        <P>
+            For example, to find information of all video streams you could use the following.
+            Then by looking for the string &quot;<code>id=0x...</code>&quot; you can find
+            the PIDs for each video stream.
+        </P>
+        <pre>ffprobe -show_streams -select_streams v -i &lt;your-input-file&gt;</pre>
+        <p>
+            Because the PCR values normally get transmitted with the video stream for any
+            program, you could also use the following and grab, from the program dump,
+            the string &quot;<code>pcr_pid=xxx&quot;</code>, which should match the
+            &quot;<code>id=...</code>&quot; string in the video stream info dump.
+        </p>
+        <pre>ffprobe -show_programs -select_streams v -i &lt;your-input-file&gt;</pre>
 </div> <!-- END H1 padding div -->
 
 </div>
