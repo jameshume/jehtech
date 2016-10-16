@@ -63,6 +63,127 @@
 				in C: reading a file line by line and an enhanced strok function.
 			</p>
 		</div> <!-- END: H2 -->
+
+		<h2>LValues, RValues etc </h2>
+		<div>
+			<p>
+				First some terminology. In C, an <b>object</b> is just a region of data storage that represents a value. 
+				Why do we say &quot;data storage&quot;. This is because we could mean RAM, a register, ROM or any other
+				kind of memory. It's just a generic term.
+			</p>
+			<p>
+				An <b>expression</b> is a sequence of operators and operands that,
+			</p> 
+			<ul>
+				<li>computes a value, or</li>
+				<li>results in an object (a region of data that can represent a value), or</li>
+				<li>results in a function, or</li>
+				<li>generates side effects, or</li>
+				<li>is some combination of any of the above</li>
+			</ul>
+			<p>
+				In C &amp; C++ an <b>lvalue</b> is defined as:
+							</p>
+			<blockquote>
+				<p>
+					... an expression with an object type or an incomplete type other than void;
+					if an lvalue does not designate an object when it is evaluated, the behavior is undefined.
+					When an object is said to have a particular type, the type is specified by the lvalue used to
+					designate the object...
+				</p>
+				<p>
+				</p>
+			</blockquote>
+
+			<p>
+				So firstly an lvalue has to <q>designate an object</q>. This means that an lvalue has to
+				be something that we can use, in our program, to locate an object. I.e. it has to 
+				be a name we can use to access an area of memory that respresents a value of some type.
+			</p>
+
+			<p>	
+				This being the case, what is then, <q>an expression with an object type</q>? 
+				Consider, <tt>12 + 10;</tt>. It is an expression because
+				it computes a value. But this value isn't associated with a region of data storage, so it is not an lvalue. The expression
+				<tt>int a = 12 + 10;</tt>, however, computes a value but results in an object, an area of data storage, 
+				that is refered to using the symbol <tt>a</tt>. Therefore it is an <q>expression with an object type</q>.
+			</p>
+			<p>
+				Because an lvalue represents some value in data storage it can persist beyond its current expression. The lvalue
+				represents a way to locate an object (region of data storage).
+			</p>
+			<p>
+				If we assign into something, we must be assigning into an lvalue because we need to store the value in an object, i.e.,
+				an area of data storage that can hold the value and that we can locate via a name in our program. 
+				Thus <tt>A = B</tt> requires that <tt>A</tt> be an lvalue. It must also be modifiable, so not const!
+			</p>
+			<p>
+				So, straight away, we can tell that literals are not lvalues. For example the literal 123.321 does is not represented
+				by a region of data storage. It's just a number that exists at compile time. <tt>double x = 123.321</tt> is however
+				an expression that creates a region of data storage, refered to by the variable named <tt>x</tt>. 
+				This region of data storage represents the literal 123.321 and is therefore an lvalue.
+			</p>
+			<p>
+				Also, lets say that a function returns a pointer to an integer, then <tt>*(some_function());</tt> must also be an lvalue
+				because it yields the region of data storage that represents a value, even if we don't do anything with it.
+			</p>
+			<p>
+				We might note that the expression <tt>int a; int b; a + b = 10;</tt> is clearly not valid because the subexpression
+				<tt>a + b</tt> is <em>not</em> an lvalue. Why? Well the value resulting <tt>a + b</tt> might, for the duration of
+				this expresison exist in, say, a register, so there is an area of data storage in which the value resides. The 
+				thing is that this data storage is not &quot;designated&quot; by anything in our program. There is no way
+				for us to access, or locate, this storage, so the result is <em>not</em> an lvalue.
+			</p>
+			<p>
+				C only really talks about lvalues. Rvalues are mentioned in the standard, but only once: <q>What is sometimes called rvalue is in this International Standard described
+				as the value of an expression</q>. So we could say that rvalues are any value not represented by an object (region of memory) that can
+				be &quot;designated&quot;, or accessed, by a name in our program. For example,
+				in the expression <tt>int a = (b + c) + 10</tt>, the sub-expression <tt>b + c</tt> represents a value that is not associated
+				with a region of memory in the program.
+			       	It is an expression, but not one with <q>an object type</q>.
+				Obviously the result exists at least in a register, but we cannot
+				refer to the result using a symbol in our program, so it is not an lvalue.
+			</p>
+			<p>
+				C++ has quite a few more types!
+			</p>
+
+
+			<pre>
+
+An xvalue (an eXpiring value) also refers to an object, usually near the end of its lifetime (so that its
+resources may be moved, for example). An xvalue is the result of certain kinds of expressions involving
+rvalue references (8.3.2). [ Example: The result of calling a function whose return type is an rvalue
+reference is an xvalue.  end example ]
+
+A glvalue (generalized lvalue) is an lvalue or an xvalue.
+
+An rvalue (so called, historically, because rvalues could appear on the right-hand side of an assignment
+expression) is an xvalue, a temporary object (12.2) or subobject thereof, or a value that is not associated
+with an object.
+
+A prvalue (pure rvalue) is an rvalue that is not an xvalue. [ Example: The result of calling a function
+whose return type is not a reference is a prvalue. The value of a literal such as 12, 7.3e5, or true is
+also a prvalue.  end example ]</pre>
+		</div>
+
+		<h2>Casting in C &amp; C++</h2>
+		<div>
+			<h3>C v.s. C++</h3>
+			<p>
+				In C there is no checking done when you make a cast. You can cast from any type to another
+				and the compiler will not complain. In C++, C-style casts should be avoided because the
+				C++ casts offer a safer way to cast.
+			</p>
+
+			<h3>Static &amp; Reinterpret Casts</h3>
+			<p>
+				A static cast converts betwen related types, but will not allow you
+				to convert between unrelated types. For example, a static cast
+				will not cast away constness or volatility.
+			</p>
+
+		</div>
 	</div> <!-- END H1 padding div -->
 	</div>
 </body>
