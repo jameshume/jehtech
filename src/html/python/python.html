@@ -121,6 +121,24 @@ C:293, 4: Invalid method name "im_an_error" (invalid-name)</pre>
 			use <tt>#pylint: disable=...</tt> 
 		</p>
 
+		<h3>Longer/Different Allowed Function/Variable/etc Names</h3>
+		<p>
+			Sometimes I just want names longer than 30 characters. You could say that these names
+			are too long, but then, esp. for functions, I find shortening the name makes it less
+			meaningful or introduces abbreviations for things, which can make the code harder to
+			read, esp. if the aabreviation isn't a standard/well-known one.
+		</p>
+		<p>
+			In your rcfile navigate to the section <tt>[BASIC]</tt>. Here you can edit the regular
+			expressions that are used to validate things like functions names. E.g., I sometimes 
+			change:
+		</p>
+		<pre>function-rgx=[a-z_][a-z0-9_]{2,30}</pre>
+		<p>
+			To:
+		</p>
+		<pre>function-rgx=[a-z_][a-z0-9_]{2,<b><u>40</u></b>}</pre>
+
 		<h3>Use PyLint To Count LOC</h3>
 		<p>
 			Thanks to the author of, and comments made, for the following

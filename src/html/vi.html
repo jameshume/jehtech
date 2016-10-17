@@ -32,7 +32,7 @@
 :v/regexp/d  -- delete lines NOT matching regexp (same as above)</pre>
     <h2>Editor Font</h2>
 	 <h3>Type Face</h3>
-    <p>To bring up a font selecton dialog type the following (works on Windows and Linux but not all platforms may support it).</p>
+    <p>To bring up a font selection dialog type the following (works on Windows and Linux but not all platforms may support it).</p>
     <pre>set <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#'guifont'">guifont</a>=*</pre>
     <p>To see what font you have set type the following.</p>
     <pre>set <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#'guifont'">guifont</a>?</pre>
@@ -52,6 +52,12 @@
 	</ul>
 
 	<h2>Miscellaneous</h2>
+	<h3>Runtimepath on Windows</h3>
+	<p>
+		This is <tt>%userprofile%\vimfiles</tt>. Create the file <tt>vimrc</tt> to act as the equivalent of the Linux <tt>~/.vimrc</tt> file.
+		Under the windows run time path create the folder <tt>plugins</tt> (and <tt>bundle</tt> for pathogen).
+	</p>
+
 	<h3>Veritcal Line For Page Edge</h3>
 	<p>
 		If you want to make sure you're code is only 80, 100 or whatever characters in width and want a vertical guide line on that column use the following:
@@ -90,6 +96,14 @@ filetype plugin indent on</pre>
 	<p>
 		Now any puglins you install to <tt>~/.vim/bundle</tt> will be automatically available to you. Yay!
 	</p>
+    <p>
+        <b>On Windows</b> just replace <tt>~/.vim</tt> with <tt>%userprofile%\vimfiles</tt>. This is the Windows
+        equivalent of the linux <tt>~/.vim</tt> folder. 
+    </p>
+    <p>
+        To check if Pathogen and any bundles have been loaded use <tt>:scriptnames</tt> and
+        search for <tt>pathogen.vim</tt>.
+    </p>
 
 	 <h3>Better Code Navigation</h3>
 	 <p>
@@ -123,6 +137,14 @@ cp ./ctags.1 /usr/local/share/man/man1/ctags.1  &amp;&amp;  chmod 644 /usr/local
 		<tt><a target="_blank" href="http://vim-taglist.sourceforge.net/manual.html#:TlistOpen">:TlistOpen</a></tt> and
 		there you go! Proper IDE style code navigation pane...
 	</p>
+
+    <h3>Syntastic</h3>
+    <p>
+        Wow, get PyLint running on your Python code and display the results in your Vim editor... awesome!
+    </p>
+    <p>
+        Follow instructions at <a href="https://github.com/scrooloose/syntastic" target="_blank">https://github.com/scrooloose/syntastic</a>.
+    </p>
 
     <h2>Make Linux Vim Key Shortcuts Behave Like Windows</h2>
     <p>I use Vim a lot on Windows and like the cut/copy/paste key shortcuts. Wanted to replicate on my Linux box.
@@ -160,8 +182,23 @@ execute pathogen#infect()
 <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/filetype.html#filetype">filetype</a> plugin indent on
 
 source $VIMRUNTIME/<a target="_blank" href="http://vim.cybermirror.org/runtime/mswin.vim">mswin.vim</a>
-<a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/gui.html#:behave">behave</a> mswin</pre>
+<a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/gui.html#:behave">behave</a> mswin
+ 
+set spell spelllang=en_gb
+set guifont=consolas:h12
+colorscheme despacio
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0</pre>
+
     <p>Or, if you want to get fancy with the listchars settings...</p>
+
     <pre>set <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#'encoding'">encoding</a>=utf-8
 set <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#'listchars'">listchars</a>=tab:&raquo;.,trail:&middot;</pre>
 
