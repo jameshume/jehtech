@@ -26,6 +26,23 @@
 		<div id="page_contents">
 		</div>
 
+		<h2>Symbolic Links</h2>
+		<div>
+			<p>Joy, didn't realise windows could do this. The <code>mklink</code> command lets you create hard and soft links 
+			   to either files or directories (if to a directory you need to use the <code>/D</code> option as the default
+			   is to link files).
+			</p>
+			<pre>mklink LINK TARGET</pre>
+			<p>For example to create a hard link in my current directory to another file I could use:
+			</p>
+			<pre>mklink /h my_link_name C:\path\to\my\target\file</pre>
+			<p>
+				Some of the options are a little confusing. For example what is the difference between
+				a &quot;directory link&quot; and a &quot;directry junction&quot;? Found the
+				answer in <a href="http://superuser.com/questions/343074/directory-junction-vs-directory-symbolic-link" target="_blank">in this SO thread</a>.
+			</p>
+		</div>
+		
 		<h2>Batch Parameters</h2>
 		<div>
 			<p>

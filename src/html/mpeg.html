@@ -156,6 +156,32 @@
 			This is why we see the &quot;i&quot; and &quot;p&quot; to resolutions. For example, for 720x480i, the 
 			suffix &quot;i&quot; means interlaced and for 720x480p, suffix &quot;p&quot; means progressive.
 		</p>
+
+        <h3>ASI / SDI</h3>
+        <p>
+        </p>        
+        <blockquote>
+            <p>
+                ASI is a unidirectional tranmission link to transmit data between digital video equipment ... a streaming
+                data format which often carries an MPEG TS ... typically over 75-ohm coax terminated with BNCs ...
+                It is strictly just an interface ... the format for how data is carried ... DVB-ASI is carried at a 270 Mbps line rate ...
+                derived from a 27 MHz byte clock multiplied by 10 bits.
+            </p><footer>
+                -- <a href="http://www.tvtechnology.com/expertise/0003/asynchronous-interfaces-for-video-servers/183969" target="_blank">TVTechnology article</a>.
+            </footer>
+        </blockquote>
+        <p>
+            SDI converts a 27MHz parallel stream of a diginal video interface into a 270 Mbps serial stream that can also be 
+            transmitted over a 75-ohm coaxial cable.
+        </p>
+        <p>
+            <a href="https://en.wikipedia.org/wiki/Serial_digital_interface#Data_format"
+               target="_blank">SDI on Wikipedia</a>.
+        </p>
+        <p>
+            Audio is transmitted over SDI via the formats ancillary data, which is <q>... provided as a standardized transport for non-video payload within a serial digital signal; it is used for things such as embedded audio, closed captions, timecode, and other sorts of metadata...</q>.
+        </p>
+
 	</div> <!-- End: Video Intro -->
         
 	<h2>MPEG Introduction</h2>
@@ -773,8 +799,21 @@ if (adaption_field_contains_pcr) {
         </p>
     </div> <!-- END H2 Video Streams -->
 
-	<h2 style="clear:both;">Dunno Yet</h2>
+	<h2 style="clear:both;">Audio</h2>
 	<div>
+        <h3>Surround Sound, Audio Mixing</h3>
+        <p>
+            Links to make notes on:
+        </p>
+        <p>https://documentation.apple.com/en/logicpro/usermanual/index.html#chapter=39%26section=2%26tasks=true
+        </p>
+        <p>http://www.dolby.com/us/en/technologies/a-guide-to-dolby-metadata.pdf
+        </p>
+        <p>http://www.dolby.com/us/en/guide/surround-sound-speaker-setup/5-1-setup.html
+        </p>
+        <p>https://en.wikipedia.org/wiki/Audio_mixing_(recorded_music)#Downmixing
+        </p>
+
         <h3>AES Audio</h3>
         <p>
             <a href="https://tech.ebu.ch/docs/tech/tech3250.pdf"
@@ -835,31 +874,6 @@ if (adaption_field_contains_pcr) {
         <p>
             <a href="http://www.grc.upv.es/docencia/tra/referencias/AudioCoding/Brandenburg_mp3_aac.pdf"
                target="_blank">MP3 and AAC Explained</a>, K. Brandenburg.
-        </p>
-
-        <h3>ASI / SDI</h3>
-        <p>
-        </p>        
-        <blockquote>
-            <p>
-                ASI is a unidirectional tranmission link to transmit data between digital video equipment ... a streaming
-                data format which often carries an MPEG TS ... typically over 75-ohm coax terminated with BNCs ...
-                It is strictly just an interface ... the format for how data is carried ... DVB-ASI is carried at a 270 Mbps line rate ...
-                derived from a 27 MHz byte clock multiplied by 10 bits.
-            </p><p>
-                -- <a href="http://www.tvtechnology.com/expertise/0003/asynchronous-interfaces-for-video-servers/183969" target="_blank">TVTechnology article</a>.
-            </p>
-        </blockquote>
-        <p>
-            SDI converts a 27MHz parallel stream of a diginal video interface into a 270 Mbps serial stream that can also be 
-            transmitted over a 75-ohm coaxial cable.
-        </p>
-        <p>
-            <a href="https://en.wikipedia.org/wiki/Serial_digital_interface#Data_format"
-               target="_blank">SDI on Wikipedia</a>.
-        </p>
-        <p>
-            Audio is transmitted over SDI via the formats ancillary data, which is <q>... provided as a standardized transport for non-video payload within a serial digital signal; it is used for things such as embedded audio, closed captions, timecode, and other sorts of metadata...</q>.
         </p>
 	</div><!-- END: H2 - Dunno Yet -->
 

@@ -340,12 +340,15 @@ svn commit</pre>
 			<p>
 				Useful when uploading diffs to ReviewBoard for example. Use the following:
 			</p>
-			<pre>svn diff --internal-diff -rX:Y &gt; patch.diff</pre>
+			<pre>svn diff --internal-diff --patch-compatible -rX:Y &gt; patch.diff</pre>
 			<p>
 				Note the use of the <tt>--internal-diff</tt>. If your SVN config file 
 				specifies a diff tool other than the internal SVN diff tool your patch
 				won't be generated. This option ensures that the SVN internal diff tool
-				is used to the patch file comes out right.
+				is used to the patch file comes out right. Also notice <tt>--patch-compatible</tt>.
+				This will make sure new, previously non-existent, files are added to the diff. (You
+				might then have to edit the resulting patch file to replace the text <tt>(nonexistent)</tt>
+				with <tt>(revision 0)</tt>).
 			</p>
 
 			<h3>Check Your SSH Connection</h3>
