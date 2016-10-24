@@ -45,6 +45,7 @@
 		<li><a href="https://www.dabapps.com/blog/introduction-to-pip-and-virtualenv-python/"
 			target="_blank">A non-magical introduction to Pip and Virtualenv for Python beginners</a> by Jamie Matthews.
 		</li>
+	</ol>
 </div>
 
 
@@ -60,6 +61,14 @@
 <h2>PyLint: Linting Python Code</h2>
 <div>
 		<h3>Run PyLint</h3>
+		<p>
+			Generally you can run pylint on a directory. But note that directory and subdirectories
+			you want to check must have the <tt>__init__.py</tt> file in them, even if it is just 
+			empty.
+		</p>
+		<p>
+			To just run pylint individually on all your python files do this...
+		</p>
 		<pre>find . -name '*.py' | xargs pylint --rcfile=pylint_config_filename</pre>
 		<p>
 			Use the <code>-rn</code> option to suppress the summary tables at the end of the pylint output.
@@ -93,6 +102,17 @@
 		</p>
 		<pre>pylint --generate-rcfile</pre>
 
+		<p>
+			Inside the generated rcfile there are a few things that can be interesting. The
+			most interesting is the <tt>init-hook</tt> which you can set, for example, to
+			update the <tt>PYTHONPATH</tt> so that pylint can find all the imported modules:
+		</p>
+		<pre>[MASTER]
+init-hook='import sys; sys.path.append(...);'</pre>
+		<p>
+			Note that the string is a one-liner python script.
+		</p>
+
 		<h3>Explain An Error Message</h3>
 		<p>
 			In an error message you will get, at the end of the message a string in parenthesis.
@@ -121,6 +141,24 @@ C:293, 4: Invalid method name "im_an_error" (invalid-name)</pre>
 			use <tt>#pylint: disable=...</tt> 
 		</p>
 
+		<h3>Longer/Different Allowed Function/Variable/etc Names</h3>
+		<p>
+			Sometimes I just want names longer than 30 characters. You could say that these names
+			are too long, but then, esp. for functions, I find shortening the name makes it less
+			meaningful or introduces abbreviations for things, which can make the code harder to
+			read, esp. if the aabreviation isn't a standard/well-known one.
+		</p>
+		<p>
+			In your rcfile navigate to the section <tt>[BASIC]</tt>. Here you can edit the regular
+			expressions that are used to validate things like functions names. E.g., I sometimes 
+			change:
+		</p>
+		<pre>function-rgx=[a-z_][a-z0-9_]{2,30}</pre>
+		<p>
+			To:
+		</p>
+		<pre>function-rgx=[a-z_][a-z0-9_]{2,<b><u>40</u></b>}</pre>
+
 		<h3>Use PyLint To Count LOC</h3>
 		<p>
 			Thanks to the author of, and comments made, for the following
@@ -139,6 +177,28 @@ C:293, 4: Invalid method name "im_an_error" (invalid-name)</pre>
 			passed to <tt>grep</tt> which searches for the &quot;Raw Metrics&quot; table heading and then outputs it along 
 			with the next 14 lines (due to the <tt>-A 14</tt> option).
 		</p>
+</div>
+
+<h2>Flake8</h2>
+<div>
+	<p>Flake8 is another static analyser / PEP8 conformace checker to python. I have found that
+		sometimes it finds things that pylint doesn't and vice versa, so hey, why not use both?!
+	</p>
+	<p>
+		To configure it with the equivalent of a pylint rcfile just create the file <tt>tox.ini</tt>
+		or <tt>setup.cfg</tt> (I prefer the former as the latter is a little too generic) in the
+		directory that you run flake8 from. This avoids having to use a global config file - you
+		can have one per project this way. All the command line options that you would configure 
+		flake8 with become INI file style settings. For example, if you ran:
+	</p>
+	<pre>flake8 --ignore=E221 --max-line-length==100</pre>
+	<p>
+		This would become the following in the config file (note the file must have the
+		header <tt>[flake8]</tt>:
+	</p>
+	<pre>[flake8]
+ignore = E221
+max-line-length = 100</pre>
 </div>
 
 <h2>Installing Python Libraries From Wheel Files</h2>

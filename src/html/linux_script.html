@@ -837,6 +837,19 @@ done</pre>
                target="_blank">getopts</a>.
             </li>
          </ul>
+
+         <h3>Kill Script On First Error</h3>
+         <p>
+            If you would like your bash script to fail on the first command that returns a non
+            zero error code use:
+         </p>
+         <pre>set -e</pre>
+         <p>
+            You can cancel it by using <tt>+e</tt>
+         </p>
+
+         <h3>Echo Each Command Before Execution</h3>
+         <pre>set -x</tt>
       </div><!-- End H2: Misc Script Stuff -->
 
       <h2>Debug .so Loading Using LD_DEBUG</h2>
