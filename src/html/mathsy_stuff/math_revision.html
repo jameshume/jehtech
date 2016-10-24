@@ -353,12 +353,46 @@
 	 </tr>
        </table>
 
-     <h3>The Sandwich Principle</h3>
+     <h3>Ways To &quot;Solve&quot; Limits</h3>
+     <p>
+     	If the limit is not of the form $x \to \infty$, i.e., $x$ tends to some known number, first try pluggin that number into the
+	equation. If you get a determinate answer thats great. 
+     </p>
+     <p>Generally though we get an indeterminate answer because we get a divide by zero...
+     </p>
+     <p>
+     	If you can tansform the function you're taking the limit of to something where there is no longer a divide by zero, note
+	that original function and the transform are not exactly identical. Let's say the original function is $f(x)$ and you have
+	transformed it to $g(x)$. 
+     </p>
+     <p>
+	If $x \to n$ and at $n$ $f(n)$ is indeterminate, our transform to $g(n)$ is not. This means $f(x)$ and $g(x)$ are not the
+	same function. But because limits are only concerned with values <em>near</em> $n$ and <em> not at</em> $n$, this is okay 
+	as the functions are identical everywhere else.
+     </p>
+     <p>
+     	When numerator non-zero but demominator zero, there is at least one vertical asymptote in your function. Either the limit
+	will exist here or you will only have a left or right sided limit if on one side the y-axis tends in the opposite direction
+	to the other side of the asymptote.
+     </p>
+     <h4>Factor Everything</h4>
+     <p>
+	If $f(x) = \frac{2x^2 + 12x + 10}{2x + 2}$ then factor to $f(x) = \frac{(2x + 2)(x + 5)}{(2x+2)}$ and cancel out the
+	denominator. You can also use the difference of two cubes to help with more complex functions: $a^3 - b^3 = (a - b)(a^2 + ab + b^2)$.
+     </p>
+     <h4>Get Rid Of Square Roots</h4>
+     <p>
+     	TODO
+     </p>
+
+
+
+     <h4>The Sandwich Principle</h4>
      <p>
      	If $g(x) \le f(x) \le h(x)$ for all x near a, and $\lim_{x \rightarrow a} g(x) = \lim_{x \rightarrow a} h(x) = L$, then $\lim_{x \rightarrow a} f(x) = L$ too.
      </p>
 
-       <h3>L'Hopital's Rule</h3>
+       <h4>L'Hopital's Rule</h4>
        <p>Can be summarised as follows...
           $$\lim_{x\to a} \left\{\frac{f(x)}{g(x)}\right\} = \lim_{x\to a} \left\{\frac{f'(x)}{g'(x)}\right\}$$
           L'Hopital's rule can be used when the normal limit is indeterminate. For example...
