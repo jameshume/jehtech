@@ -385,9 +385,95 @@
      </p>
      <h4>Get Rid Of Square Roots</h4>
      <p>
-     	TODO
-     </p>
+     	For problems where $x \to a$, where a is not $\infty$ you get rid of square roots by <em>multiplying by the conjugate</em>.
+     	If you have $\sqrt{expr} + C$ you multiply by $\sqrt{expr} - C$. If you have $\sqrt{expr} - C$ you multiply by $\sqrt{expr} + C$:
 
+     	$$
+     		\lim_{x \to a} \left( \frac{\sqrt{\text{expr}} - C}{x - D} \times \frac{\sqrt{\text{expr}} + C}{\sqrt{\text{expr}} + C} \right) = \lim_{x \to a} \frac{\text{expr} - c^2}{(x - D)(\sqrt{\text{expr}} + C)}
+     	$$
+
+     	Now when $x = a$, hopefully you won't have an indeterminate fraction!
+     </p>
+     <h4>Rational Functions</h4>
+     <p>
+     	When $x \to \infty$, <b>the leading term dominates</b>. If $p(x) = a_0x^n + a_1x^{n-1} + a_n$ then the leading term is $a_1x^n$. Putting $p_L(x) = a_1x^n$, we say
+     	that...
+
+     	$$
+     		\lim_{x \to \infty} \frac{p(x)}{p_L(x)} = 1
+     	$$ 
+
+     	This does not mean that $p(x)$ ever equals $p_L(x)$, just that the ratio of the two tends to one as $x$ tends to
+     	infinity!
+     </p>
+     <p>
+     	If you are taking the limit of a rational function like the one below...
+
+     	$$
+     		\lim_{x \to \infty} \left( \frac{n(x)}{d(x)} \right)
+     	$$
+
+     	... you can't just substitute infinity for $x$ because you
+     	get $\frac{\infty}{\infty}$ which doesn't make a lot of sense...
+
+     <P>
+     </P>
+     	So do this...
+
+     	$$
+     		\lim_{x \to \infty} \left( \frac{n(x) \times \frac{n_L(x)}{n_L(x)}}{d(x) \times \frac{d_L(x)}{d_L(x)}} \right) = 
+     		
+     		\lim_{x \to \infty} \left( \frac{\frac{n(x)}{n_L(x)} \times n_L(x)}{\frac{d(x)}{d_L(x)} \times d_L(x)} \right) = 
+     		
+     		\lim_{x \to \infty} \left( \frac{\frac{n(x)}{n_L(x)}}{\frac{d(x)}{d_L(x)}} \times \frac{n_L(x)}{d_L(x)} \right) 
+     	$$
+
+     	We know that because the leading term dominates... 
+
+     	$$
+     		\text{As } x \to \infty \text{ the fraction } \frac{n(x)}{n_L(x)} \text{ tends to } 1 \text{ as does } \frac{d(x)}{d_L(x)}
+     	$$
+
+     	Which means that we will really be looking at the limit of...
+
+     	$$
+     		\frac{n_L(x)}{d_L(x)}
+     	$$
+
+     	... as $x$ tends to infinity!
+     </p>
+     <p>
+     	A numerical example. Solve
+
+     	$$
+     		lim_{x \to \infty} \left(  \frac{x + 5x^5}{4x^8 + 7x^4 + x + 1234} \right)
+     	$$ 
+
+     	So we do...
+
+     	$$
+     		lim_{x \to \infty} 
+     			\left(  
+     				\frac{
+     					\frac{x + 5x^5}{5x^5}
+     				}{
+     					\frac{4x^8 + 7x^4 + x + 1234}{4x^8} 
+     				}
+     				\times 
+     				\frac{5x^5}{4x^8} 
+     			\right)
+     	$$ 
+
+     	Everything tends to one except $\frac{5x^5}{4x^8}$, which is equal to $\frac{5}{4x^3}$, so we know that this tends to zero!
+     </p>
+     <p>
+     	In general, for our polynomials $n(x)$ and $d(x)$:
+     </p>
+     <ol>
+     	<li>If degree of n == degree of d, then limit is finite and nonzero as $x \to \pm \infty$</li>
+     	<li>If degree of n > degree of d, then limit is $\infty$ or $-\infty$ as as $x \to \pm\infty$</li>
+     	<li>If degree of n < degree of d, then limit is 0 as $x \to +\infty$</li></li>
+     </ol>
 
 
      <h4>The Sandwich Principle</h4>
