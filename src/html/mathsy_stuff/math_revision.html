@@ -15,6 +15,12 @@
 			displayAlign: "left",
 			displayIndent: "2em"
 		});
+    MathJax.Hub.Queue(function () { 
+      var pre = MathJax.HTML.addElement(document.body,"pre"); 
+          MathJax.HTML.addText(pre,MathJax.Message.Log()); 
+          MathJax.HTML.addElement(document.body,"hr"); 
+          MathJax.HTML.addText(document.body,MathJax.Hub.config.root); 
+    });     
 	</script>
 	<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
 	<style>
@@ -328,9 +334,15 @@
 	  then $|f(x)-L|&lt; e$. 
      </p>
      <p> 
-	  I.e., no matter how close to $L$ we get, there is always a value of $x$ arbitrarily close to $c$, 
-	  but which is not $c$, that yields this value close to $L$.
+	  I.e., no matter how close to $L$ we get, there is always a value of $x$ arbitrarily close to the limit value, $c$, but which is not $c$, that yields this value close to $L$.
      </p>
+     <p>
+      Ie. We can pick a window around the y-axis value $L$ and if we keep shrinking this window,
+      we will always find an $x$ value, either side of $c$ that will yield a y-value in this
+      error window. So, the error can be arbitraily small and we will always find an $x$ either side
+      of $c$ to satisfy it :) This is the <em>two sided limit</em>.
+     </p>
+
      <h3>Limit Properties</h3>
      <p>
      	Most of these are only true when the limits are <em>finite</em>...
@@ -446,13 +458,13 @@
      	A numerical example. Solve
 
      	$$
-     		lim_{x \to \infty} \left(  \frac{x + 5x^5}{4x^8 + 7x^4 + x + 1234} \right)
+     		\lim_{x \to \infty} \left(  \frac{x + 5x^5}{4x^8 + 7x^4 + x + 1234} \right)
      	$$ 
 
      	So we do...
 
      	$$
-     		lim_{x \to \infty} 
+     		\lim_{x \to \infty} 
      			\left(  
      				\frac{
      					\frac{x + 5x^5}{5x^5}
@@ -474,7 +486,21 @@
      	<li>If degree of n > degree of d, then limit is $\infty$ or $-\infty$ as as $x \to \pm\infty$</li>
      	<li>If degree of n < degree of d, then limit is 0 as $x \to +\infty$</li></li>
      </ol>
+     <h4>N-th Roots...</h4>
+     <p>
+        When there are square roots, or indeed n-th roots in the equation the leading term idea still works. All that happens is that
+        when you divide the n-th root by the leading term you bring it back under the square root.
+     </p>
+     <p>
+        Be careful when $x \to -\infty$ because $\sqrt{x^2} \ne x$ when $x$ is negative! It equals $-x$. Use the following rule.
+        If you write...
 
+        $$
+          ^n\sqrt{x^{\text{some power}}} = x^m
+        $$
+
+        You need a minus in front of $x^m$ when $n$ is even and $m$ is odd.
+     </p>
 
      <h4>The Sandwich Principle</h4>
      <p>
@@ -520,7 +546,7 @@
 			the function does not have a derivative at that point.
 		</p>
 		<p>This is why, for example the function $f(x) = |x|$ does not have a defined derivative 
-			at $x = 0$, because the limit does not exist at that point.
+			at $x = 0$, because the limit (of tjhe differentiation) does not exist at that point. The function is continuous at that point because the left and right limits are the same, but the derivative function does not exist.
 		</p>
 		<p>
 			A function is <em>continuous over an interval $[a,b]$</em> if:
@@ -533,6 +559,39 @@
 		<p>
 			If a function is differentiable then it must also be continuous.
 		</p>
+    <p>
+      If $h$ is replaced with $\Delta x$ we would write
+
+      $$
+        f'(x) = \lim_{\Delta x \rightarrow 0} \frac{f(x + \Delta x) - f(x)}{\Delta x}
+      $$
+
+      Where $\Delta$ just means a &quot;small change in&quot;. This small change in $x$ leads
+      to a small change in $y$, which is given by $f(x + \Delta x) - f(x)$. Therefore we can
+      write:
+
+      $$
+      f'(x) = \lim_{\Delta x \rightarrow 0} \frac{\Delta y}{\Delta x} = \frac{\mathrm dy}{\mathrm dx}
+      $$
+
+      I.e, if $y= f(x), f'(x)$ can be written as $\frac{\mathrm dy}{\mathrm dx}$.
+    </p>
+    <p>
+      Now at school, as we'll see in the integration by parts section, sometimes $\frac{\mathrm dy}{\mathrm dx}$ was treated as a fraction although my teacher always said that it wasn't a fraction. The above,
+      which I didn't know at the time, explains why. And, finally, in the awesome book &quot;The Calculus 
+      Lifesaver&quot; by Adrian Banner <a href="#calc_life_saver">[Ref]</a> I know why :)
+    </p>
+    <blockquote>
+      <p>
+        Unfortunately neither $\mathrm dy$ or $\mathrm dx$ means anything by itself ...
+      </p>
+      <p>
+        ... the quantity $\frac{\mathrm dy}{\mathrm dx}$ is <b>not actually a fraction</b> at all - it's the <b>limit</b> of the fraction $\frac{\mathrm dy}{\mathrm dx}$ as $\Delta x \to 0$.
+      </p>
+      <footer>-- &quot;<a href="#calc_life_saver">The Calculus Lifesaver</a>&quot; by Adrian Banner
+      </footer>
+    </blockquote>
+    <p></p>
 
 		<h3>Basic Differential Coefficients</h3>
 		<div style="float:left;">
@@ -553,17 +612,52 @@
 			\frac{d}{dx}(x^x) = x^x(1+\ln x)$$
 		</div>
 		<h3 style="clear:both;">Chain Rule</h3>
+    <p>
+      Using this when you need to differentiate a function that is made up
+      of the result of one function passed into the next and so on. I.e. if
+      $h(x) = f(g(x))$.
+    </p>
 		<p>
 			$$\frac{dy}{dx} = \frac{dy}{du} \times \frac{du}{dx}$$
 		</p>
 		<h3>Quotient Rule</h3>
+    <p>
+      When you have a function $h(x)$ that can be expressed as a fraction, $\frac{f(x)}{g(x)}$
+      use the quotient rule to allow you do differentiate $f(x)$ and $g(x)$ independently (easier!)
+      and the combine the results using this rule. $f(x)$ becomes $u$ and $g(x)$ becomes $v$:
+    </p>
 		<p>
 			$$\frac{dy}{dx} = \frac{v\frac{du}{dx} \times y\frac{dv}{dx}}{v^2}$$
 		</p>
 		<h3>Product Rule</h3>
+    <p>
+      Use the product rule when trying to differentiate a quantity that is the
+      multiplication of two function. I.e when trying to find the derivative of
+      $h(x)$ when $h(x) = f(x)g(x)$. One of these functions becomes $u$, the
+      other $v$. Use this so you can diffentiate the simpler functions $f(x)$ and
+      $g(x)$ independently and then combine the results.
+    </p>
+    <p>
+      For two functions...
+    </p>
 		<p>
 			$$\frac{dy}{dx} = u\frac{dv}{dx} \times v\frac{du}{dx}$$
 		</p>
+    <p>
+      Or for three functions...
+      $$\frac{dy}{dx} = \frac{du}{dx}vw \times u\frac{dv}{dx}w \times uv\frac{dw}{dx}w$$
+    </p>
+    <p>
+      Or, even, for any number of funtions...
+    </p>
+    <blockquote>
+      <p>
+          ... add up the group $abc...uvw$ $n$ times and put a $d/dx$ in front of a different variable in each term ...
+      </p>
+      <footer>-- Para phrased from &quot;<a href="#calc_life_saver">The Calculus Lifesaver</a>&quot; by Adrian Banner
+      </footer>
+    </blockquote>
+    <p></p>
 </div>
 
 <h2>Integration</h2>

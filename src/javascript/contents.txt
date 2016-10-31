@@ -5,3 +5,4 @@ mpld3.v0.2.js
 run_prettify.js
 jeh-tech.js
 jeh-tech-canvas.js
+paper-full.min.js

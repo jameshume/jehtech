@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+<!-- Load the Paper.js library -->
+<script type="text/javascript" src="js/paper-full.js"></script>
+<!-- Define inlined JavaScript -->
+<script type="text/javascript">
+	window.onload = function() {
+		var canvas = document.getElementById('myCanvas');
+		paper.setup(canvas);
+
+		function Resistor(top_left_point, bottom_right_point) 
+		{
+			this.height = bottom_right_point.y - top_left_point.y;
+			this.width= bottom_right_point.x - top_left_point.x;
+
+			this.outer_rect = paper.Path.Rectangle(top_left_point, bottom_right_point);
+			this.outer_rect.strokeColor = 'black';
+			this.outer_rect.fillColor = '#ffffff';
+			
+			this.level_rect = paper.Path.Rectangle(new paper.Point(top_left_point.x, top_left_point.y + this.height / 2.0), bottom_right_point);
+			this.level_rect.strokeColor = 'black';
+			this.level_rect.fillColor = '#ff0000';	
+
+			this.text = new paper.PointText({
+				point: new paper.Point(top_left_point.x + this.width /  2.0, top_left_point.y + this.height / 2.0),
+				justification: 'center',
+				fontSize: 12,
+				fillColor: 'black'
+			});
+			this.text.content = "50\u2126";
+			this.ohms = 50;
+
+			this.selectable_id = this.level_rect.id;
+
+			this.move_level = function(mouse_delta) {
+				var jj = this.level_rect.segments[1].point.y + mouse_delta.y;
+				if (jj > this.outer_rect.segments[0].point.y) jj = this.outer_rect.segments[0].point.y;
+				if (jj < this.outer_rect.segments[1].point.y) jj = this.outer_rect.segments[1].point.y;
+				this.level_rect.segments[1].point.y = jj;
+				this.level_rect.segments[2].point.y = jj;
+				this.ohms = (this.outer_rect.segments[0].point.y - jj) / this.height * 100;
+				this.text.content = (this.ohms).toFixed(1).toString() + "\u2126";
+			}
+		}
+
+		var x1 = 100;
+		var y1 = 50;
+
+		var resistor_1 = new Resistor(new paper.Point(x1,y1), 
+			                          new paper.Point(x1+50,y1+70));
+		var resistor_2 = new Resistor(new paper.Point(x1,y1+120), 
+			                          new paper.Point(x1+50,y1+190));
+
+		var path_before_resistors = new paper.Path();
+		path_before_resistors.add(new paper.Point(x1+25, y1));
+		path_before_resistors.add(new paper.Point(x1+25, y1-50));
+		path_before_resistors.add(new paper.Point(x1-75, y1-50));
+		path_before_resistors.add(new paper.Point(x1-75, y1+70));
+		path_before_resistors.strokeColor = 'black';
+
+		var path_after_resistors = new paper.Path();
+		path_after_resistors.add(new paper.Point(x1+25, y1 + 190));
+		path_after_resistors.add(new paper.Point(x1+25, y1 + 215));
+		path_after_resistors.add(new paper.Point(x1+75, y1 + 215));
+		path_after_resistors.add(new paper.Point(x1+25, y1 + 215));
+		path_after_resistors.add(new paper.Point(x1+25, y1 + 250));
+		path_after_resistors.add(new paper.Point(x1-75, y1 + 250));
+		path_after_resistors.add(new paper.Point(x1-75, y1 + 120));
+		path_after_resistors.strokeColor = 'black';
+
+		var path_between_resistors = new paper.Path();
+		path_between_resistors.add(new paper.Point(x1 + 25, y1 + 70));
+		path_between_resistors.add(new paper.Point(x1 + 25, y1 + 95));
+		path_between_resistors.add(new paper.Point(x1 + 75, y1 + 95));
+		path_between_resistors.add(new paper.Point(x1 + 25, y1 + 95));
+		path_between_resistors.add(new paper.Point(x1 + 25, y1 + 120));
+		path_between_resistors.strokeColor = 'black';
+
+		var connect1 = new paper.Path.Circle(new paper.Point(x1+80, y1+215), 5);
+		connect1.strokeColor = 'black';
+		connect1.fillColor = 'black';
+
+		var connect2 = new paper.Path.Circle(new paper.Point(x1+80, y1+95), 5);
+		connect2.strokeColor = 'black';
+		connect2.fillColor = 'black';
+
+		var connect3 = new paper.Path.Circle(new paper.Point(x1-75, y1+115), 5);
+		connect3.strokeColor = 'black';
+		connect3.fillColor = 'black';
+
+		var connect4 = new paper.Path.Circle(new paper.Point(x1-75, y1+75), 5);
+		connect4.strokeColor = 'black';
+		connect4.fillColor = 'black';
+
+		var volts_text = new paper.PointText({
+				point: new paper.Point(x1 + 80, y1 + 160),
+				justification: 'left',
+				fontSize: 12,
+				fillColor: 'black'
+			});
+		volts_text.content = "2.5 volts";
+
+		var battery_text = new paper.PointText({
+				point: new paper.Point(x1 -75, y1 + 100),
+				justification: 'center',
+				fontSize: 12,
+				fillColor: 'black'
+			});
+		battery_text.content = "5 volts";
+
+		var selectables = {};
+		selectables[resistor_1.selectable_id] = resistor_1;
+		selectables[resistor_2.selectable_id] = resistor_2;
+
+		var currentObject = null;
+		var selectables_tool = new paper.Tool();
+		selectables_tool.onMouseDown = function(event) {
+			var hitResult = 
+				paper.project.hitTest(
+					event.point,  
+					{
+	            		segments: true,
+	            		stroke: true,
+	            		fill: true,
+	            		tolerance: 5
+	        		}
+	        	);
+
+			if (hitResult === null) {
+				currentObject = null;
+				return;
+			}
+
+			if(hitResult.item.id in selectables) {
+				currentObject = selectables[hitResult.item.id];
+			}
+			else {
+				currentObject = null;
+			}
+		}
+
+		selectables_tool.onMouseDrag = function(event) {
+			if (currentObject !== null) {
+				
+				currentObject.move_level(event.delta);
+
+				var v2 = 5.0 * (resistor_2.ohms/(resistor_1.ohms + resistor_2.ohms));
+				volts_text.content = v2.toFixed(2).toString()+ " volts";
+				
+			}
+		}
+
+		selectables_tool.activate();
+
+		paper.view.draw();
+	}
+</script>
+</head>
+<body>
+	<canvas id="myCanvas" style="width:240px; height: 300px; border: 0px;"></canvas>
+</body>
+</html>
