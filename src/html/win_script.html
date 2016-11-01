@@ -26,7 +26,7 @@
 		<div id="page_contents">
 		</div>
 
-		<h2>Symbolic Links</h2>
+		<h2>Hard Links, Junctions and Symbolic Links</h2>
 		<div>
 			<p>Joy, didn't realise windows could do this. The <code>mklink</code> command lets you create hard and soft links 
 			   to either files or directories (if to a directory you need to use the <code>/D</code> option as the default
@@ -38,9 +38,118 @@
 			<pre>mklink /h my_link_name C:\path\to\my\target\file</pre>
 			<p>
 				Some of the options are a little confusing. For example what is the difference between
-				a &quot;directory link&quot; and a &quot;directry junction&quot;? Found the
+				a &quot;directory link&quot; and a &quot;directory junction&quot;? Found the
 				answer in <a href="http://superuser.com/questions/343074/directory-junction-vs-directory-symbolic-link" target="_blank">in this SO thread</a>.
 			</p>
+
+			<h3>Symbolic Links: Files and Directories</h3>
+			<p>
+				This is the default, whether you are creating a link to a directory or a file. Symbolic links
+				have the advantage that you can &quot;point&quot; to files &amp; directories that are on
+				different volumes or remote shares. They have the disadvantage that changes to the target files/directories are
+				not immediately visible: you'd have to access the symbolic link to find out. Also, if the
+				target is deleted the link becomes invalid: i.e., symbolic links can point to a non-existent target.
+			</p>
+			<p>
+				For example, from my local machine I can do the following:
+			</p>
+			<pre>&gt; mklink /D jehtech \\jehtech_server01\jehtech
+&gt; dir *jehtech*
+ Volume in drive C has no label.
+ Volume Serial Number is 9641-ED4A
+
+ Directory of c:\Users\localuser1
+
+25/10/2016  11:11    <b>&lt;SYMLINKD&gt;</b>     jehtech [\\jehtech_server01\jehtech]
+               0 File(s)              0 bytes
+               1 Dir(s)  417,195,425,792 bytes free</pre>
+
+            <p>Note that by default directory links (<tt>/D</tt>) are soft links, which is why you can
+            &quot;point&quot; to directories on different local and remote volumes by default.
+            </p>
+
+            <p>
+            	Symbolic links are reparse points. This means that when NTFS accesss a symbolic link,
+            	it reads the links reparse data which causes the object manager (the kernel level
+            	module that issued the request) to re-issue the request with the target path from
+            	the symbolic link.
+            	<a href="https://msdn.microsoft.com/en-us/library/ms995846.aspx" target="_blank">[Ref]</a>.
+            </p>
+            <p>
+                Interestingly if the symbolic link exists on a remote file system it is processed on the
+                <em>local</em> system <a href="http://www.tuxera.com/community/ntfs-3g-advanced/junction-points-and-symbolic-links/"
+                target="_blank">[Ref]</a>. This was clarified to me by the following SO answer:
+            </p>
+            <a name="softlink_where_processed_example"></a>
+            <blockquote>
+                <p>
+                    Suppose that on a machine named Alice you were to put a junction point c:\myjp and a directory symbolic link c:\mysymlink, both pointing to c:\targetfolder. While you're using Alice you won't notice much difference between them. But if you're using another machine named Bob, then
+                </p>
+                <pre>\\Alice\c$\myjp -> \\Alice\c$\targetfolder</pre>
+                <p>but</p>
+                <pre>\\Alice\c$\mysymlink -> \\Bob\c$\targetfolder</pre>
+                </p>
+                <footer>-- <a href="http://superuser.com/questions/343074/directory-junction-vs-directory-symbolic-link" target="_blank">SO thread</a></footer>
+            </blockquote>
+            <p></p>
+			<h3>Hardlinks: Files</h3>
+			<p>
+				Hardlinks have the advantage that changes to the file by another user will
+				be immediately reflected in all hardlinks to that file. For example, if the
+				file size changes, you'll see it immediately in the file system. Also,
+				the file will not be deleted until all hardlinks to the file are deleted.
+				The disadvantage is that you cannot hardlink to files in differed volumes.
+				Note this means different local and remote volumes. So you cannot hardlink
+				to a file on you C: from the D:, for example.
+			</p>
+			<blockquote>
+				<p>
+				A hard link is the file system representation of a <b>file</b> by which more than one path references a single file <b>in the same volume</b>.
+				</p>
+				<footer><a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa365006(v=vs.85).aspx" target="_blank">-- Windows Dev Center</a></footer>
+			</blockquote>
+            <p>
+                There is no mention in the MS docs of harlinks using reparse points, so these aren't involved.
+            </p>
+
+			<h3>Junctions (aka Soft Links): Files &amp; Directories</h3>
+			<p>
+				The junction point requires you to link to a directory on a local volume. 
+            	If I try to create a junction to a remote share, I will get the following error:
+            </p>
+            <pre>&gt; mklink /J jehtech2 \\jehtech_server01\jehtech
+Local volumes are required to complete the operation.</pre>
+			<p>
+				However, unlike hardlinks, junctions can point to files on different <em>local</em> volumes:
+			</p>
+			<pre>C:\&gt;rem hardlinks to different local volumes fail
+C:\&gt;mklink <b>/H</b> jehtech.py E:\jehtech.py
+The system cannot move the file to a different disk drive.
+
+C:\&gt;rem junctions to different <b>local</b> volumes allowed
+C:\&gt;mklink <b>/J</b> jehtech.py E:\jehtech.py
+Junction created for jehtech.py <<===>> E:\jehtech.py</pre>
+			<p>
+				Note that junction points still can't point to remote shares. You need symbolic links for that!
+			</p>
+            <blockquote>
+                <p>
+                A junction (also called a soft link) differs from a hard link in that the storage objects it references are separate directories, and a junction can link directories located on different local volumes on the same computer. Otherwise, junctions operate identically to hard links.
+                </p>
+                <footer><a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa365006(v=vs.85).aspx" target="_blank">-- Windows Dev Center</a></footer>
+            </blockquote>
+            <p>
+                Junctions also appear to be implemented through reparse points <a href="https://msdn.microsoft.com/en-us/library/ms995846.aspx" target="_blank">[Ref]</a>:
+            </p>
+            <blockquote>
+                <p>
+                Junctions are the Win2K equivalent of UNIX symbol links (although unlike UNIX symbolic links, junctions can't be applied to files). If you create the junction C:\articles\documents that references D:\documents, you can access files stored in D:\documents by using the path C:\articles\documents. The junction's reparse point stores the redirected path information, and as for mount-point traversal, the I/O manager modifies the name and reissues the name lookup when NTFS encounters a junction.</p>
+                <footer><a href="https://msdn.microsoft.com/en-us/library/ms995846.aspx" target="_blank">Inside Win2K NTFS, Part 1</a>, by Mark Russinovich</footer>
+            </blockquote>
+            <p>
+                Unlinke symbolic links, junctions are processed on the server if accessed remotely. <a href="#softlink_where_processed_example">See the example</a>
+                under symbolic links for more information.
+            </p>
 		</div>
 		
 		<h2>Batch Parameters</h2>

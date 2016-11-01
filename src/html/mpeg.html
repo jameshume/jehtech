@@ -76,6 +76,8 @@
             </li>
             <li><a href="https://trac.ffmpeg.org/wiki/Scaling%20(resizing)%20with%20ffmpeg" target="_blank">Scaling (Resizing) With FFMPEG.</a>.
             </li>
+            <li><a href="https://www.youtube.com/watch?v=1NI7-tRYsPo" target="_blank">What Is DVB-ASI?</a>, Ensemble Designs (YouTube video).
+            </li>
 		</ol>
 	</div> <!-- END H2: References -->
 
@@ -159,6 +161,11 @@
 
         <h3>ASI / SDI</h3>
         <p>
+        	ASI stands for Asynchonous Serial Interface. It is a compressed form of an A/V signal and is really
+        	just an encapuslation method in that it carries data between two points and is often used to
+        	encapsulate MPEG transport stream data. It carries data at a constant bit rate of 270 Mbps which
+        	results in a payload rate of 213 Mbps <a href="https://www.youtube.com/watch?v=1NI7-tRYsPo" target="_blank">[Ref]</a>.
+        	ASI can be used to transmit multiple programs.
         </p>        
         <blockquote>
             <p>
@@ -172,7 +179,8 @@
         </blockquote>
         <p>
             SDI converts a 27MHz parallel stream of a diginal video interface into a 270 Mbps serial stream that can also be 
-            transmitted over a 75-ohm coaxial cable.
+            transmitted over a 75-ohm coaxial cable. It carries an uncompressed form of an A/V signal and can only
+            transmit the one program.
         </p>
         <p>
             <a href="https://en.wikipedia.org/wiki/Serial_digital_interface#Data_format"
@@ -928,6 +936,14 @@ if (adaption_field_contains_pcr) {
             done via to <b><code>-vf</code></b> option. For example to output one image every I-frame:
         </p>
         <pre>ffmpeg -i input.flv -vf "<a href="https://ffmpeg.org/ffmpeg-filters.html#select_002c-aselect" target="_blank">select</a>='eq(pict_type,PICT_TYPE_I)'" -vsync vfr thumb%04d.png</pre>
+
+        <p>
+        	One thing I wanted to do was to be able to artifically increase the bit depth of a WAV file. This doesn't get you better resolution note! You still have the original quantisation error from the lower bit depth. It just enabled me to compare it more easily with another WAV file of differing bit depth.
+        </p>
+        <pre>ffmpeg -acodec pcm_s32le output-file.wav -i input-file.wav</pre>
+        <p>
+        	The parameter <tt>acodec</tt> sets the output audio codec to be used.
+        </p>
 
         <h3>ffprobe</h3>
         <p>
