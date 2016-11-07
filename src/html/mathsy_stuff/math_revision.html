@@ -367,6 +367,7 @@
 	     <td>$\lim [f(x)^n] = [\lim f(x)]^n,\ \forall n \gt 0$</td>
 	 </tr>
        </table>
+       <p></p>
 
      <h3>Ways To &quot;Solve&quot; Limits</h3>
      <p>
@@ -523,6 +524,52 @@
 
 	   $$\lim_{x\to 0} \frac{\cosh(x)-e^x}{x} = -1$$
        </p>
+
+
+    <h4>Trig functions</h4>
+    <p>
+    	For small values of $x$, $y = \sin(x)$ and $y = x$ are approximately the same. For really small values, I'm not even 
+    	sure my computer has enough precision to be able to accurately show the difference. But, using a small python script
+    	we can get the idea:
+    </p>
+    <img src="##IMG_DIR##/small_sine.png" alt="y=sin(x) vs y=x for very small values of x"/>
+    <p>
+    	The above image was generated using the following script:
+    </p>
+    <pre>import matplotlib.pyplot as pl 
+import numpy as np 
+
+x = np.arange(-0.0001,0.0001, 0.000001)
+y_lin = x
+y_sin = np.sin(x)
+
+pl.plot(x,y_sin, color="green")
+pl.plot(x,y_lin, color="red")
+pl.grid()
+pl.legend(['y=sin(x)', 'y=x'])
+pl.show()</pre>
+
+	<p>In fact if your <code>print(y_sin/y_lin)</code> you just get an array of 1's because the computer does
+	not have the precision to do any better. I think even at small values of $x$ it is <em>not</em> the case
+	that $sin(x)=x$, but it is <em>very</em> close. So in reality, even for tiny $x$:
+
+	$$ \frac{\sin(x)}{x} \ne 1 $$
+
+	But, the following does hold:
+
+	$$ \lim_{x \to 0} \frac{\sin(x)}{x} = 1 $$
+	</p>       
+	<p>
+		The following also hold:
+
+		$$
+			\lim_{x \to 0} \cos(x) = 1
+		$$
+
+		$$
+			\lim_{x \to 0} \frac{\tan(x)}{x} = 1
+		$$
+	</p>
 </div>
 
 <h2>Differentiation</h2>
@@ -658,6 +705,8 @@
       </footer>
     </blockquote>
     <p></p>
+
+
 </div>
 
 <h2>Integration</h2>

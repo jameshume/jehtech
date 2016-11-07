@@ -21,12 +21,18 @@
 			this.outer_rect.strokeColor = 'black';
 			this.outer_rect.fillColor = '#ffffff';
 			
-			this.level_rect = paper.Path.Rectangle(new paper.Point(top_left_point.x, top_left_point.y + this.height / 2.0), bottom_right_point);
+			this.level_rect = paper.Path.Rectangle(
+				new paper.Point(
+					top_left_point.x, 
+					top_left_point.y + this.height / 2.0), 
+				bottom_right_point);
 			this.level_rect.strokeColor = 'black';
 			this.level_rect.fillColor = '#ff0000';	
 
 			this.text = new paper.PointText({
-				point: new paper.Point(top_left_point.x + this.width /  2.0, top_left_point.y + this.height / 2.0),
+				point: new paper.Point(
+					top_left_point.x + this.width /  2.0, 
+					top_left_point.y + this.height / 2.0),
 				justification: 'center',
 				fontSize: 12,
 				fillColor: 'black'
@@ -37,12 +43,14 @@
 			this.selectable_id = this.level_rect.id;
 
 			this.move_level = function(mouse_delta) {
-				var jj = this.level_rect.segments[1].point.y + mouse_delta.y;
-				if (jj > this.outer_rect.segments[0].point.y) jj = this.outer_rect.segments[0].point.y;
-				if (jj < this.outer_rect.segments[1].point.y) jj = this.outer_rect.segments[1].point.y;
-				this.level_rect.segments[1].point.y = jj;
-				this.level_rect.segments[2].point.y = jj;
-				this.ohms = (this.outer_rect.segments[0].point.y - jj) / this.height * 100;
+				var new_level = this.level_rect.segments[1].point.y + mouse_delta.y;
+				if (new_level > this.outer_rect.segments[0].point.y) 
+					new_level = this.outer_rect.segments[0].point.y;
+				if (new_level < this.outer_rect.segments[1].point.y) 
+					new_level = this.outer_rect.segments[1].point.y;
+				this.level_rect.segments[1].point.y = new_level;
+				this.level_rect.segments[2].point.y = new_level;
+				this.ohms = (this.outer_rect.segments[0].point.y - new_level) / this.height * 100;
 				this.text.content = (this.ohms).toFixed(1).toString() + "\u2126";
 			}
 		}

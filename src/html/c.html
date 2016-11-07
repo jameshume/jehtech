@@ -197,6 +197,80 @@ also a prvalue.  end example ]</pre>
 			</p>
 
 		</div>
+
+		<h2>IOStreams</h2>
+		<div>
+			<h3>Output Stream Manipulators</h3>
+			<p>
+				<b>Manipulators</b> are objects known to IOStream that allows a stream to be changed. Include
+				<code>&lt;iomanip&gt;</code>. Mostly, states are persistent.
+			</p>
+			<table>
+			<tr>
+				<td><code>cout.put(c)</code></td><td>Write char c to stdout.</td>
+			</tr>
+			<tr>
+				<td><code>std::endl</code></td><td>Writes a newline (&quot;\n&quot;) then calls <code>cout.flush()</code>. Note this is <em>not</em> a cross platform newline which is sometimes a confusion. It just outputs &quot;\n&quot;, not &quot;\r\n&quot; or anything else.</td>
+			</tr>
+			<tr>
+				<td><code>std::flush</code></td><td>Calls <code>cout.flush()</code>.</td>
+			</tr>
+			<tr>
+				<td><code>std::ends</code></td><td>Prints NULL character to cout.</td>
+			</tr>
+			<tr>
+				<td><code>setw(uint)</code></td><td>Sets field width. Default is right aligned.</td>
+			</tr>
+			<tr>
+				<td><code>cout.setf(flag-to-set, flag-to-clear)</code></td><td><code>flag-to-clear</code>, the second parameter clears all flags before setting <code>flag-to-set</code>.</td>
+			</tr>
+			<tr>
+				<td><code>cout.unsetf(flag-to-clear)</code></td><td>Clear a flag.</td>
+			</tr>
+			<tr>
+				<td><code>ios::hex ios::oct ios::dec</code></td><td>For integer output.</td>
+			</tr>			
+			<tr>
+				<td><code>ios::basefield</code></td><td>Mask to clear all integer output formats.</td>
+			</tr>
+			<tr>
+				<td><code>ios::showbase</code></td><td>Puts a &quot;0x&quot; in front of hex output etc.</td>
+			</tr>
+			<tr>
+				<td><code>ios::showpos</code></td><td>Shows the positive sign for values.</td>
+			</tr>
+			<tr>
+				<td><code>cout.precision()</code></td><td>Sets precision of floating point output.</td>
+			</tr>
+			<td>
+				<td><code>ios::fixed ios::scientific</code></td><td></td>
+			</td>
+			<tr>
+				<td><code>ios:uppercase</code></td><td>Force hexadecimal alpha characters to uppercase.</td>
+			</tr>
+			<tr>
+				<td><code>ios:left</code></td><td>Sets left alignment when field width greater than width of whats being printed.</td>
+			</tr>
+			<tr>
+				<td><code>ios::adjustfield</code></td><td>Mask to clear all alignments.</td>
+			</tr>
+			<tr>
+				<td><code>(void *)</code></td><td>Cast any pointer to <code>void *</code> to print the pointer</td>
+			</tr>
+			</table>
+			<p>
+			</p>
+			<h3>Input Streams</h3>
+			<p>
+				By default input streams ignore whitespace.
+			</p>
+			<p>
+				Usually line buffered. I.e. <code>cin >> var;</code> will not return until <code>RETURN</code> is pressed.
+			</p>
+			<p>
+				Quietly go into a safe, do-nothing, mode upon error.
+			</p>
+		</div>
 	</div> <!-- END H1 padding div -->
 	</div>
 </body>
