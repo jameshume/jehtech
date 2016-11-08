@@ -7,6 +7,16 @@
 	<!-- META_INSERT -->
 	<!-- CSS_INSERT -->
 	<!-- JAVASCRIPT_INSERT -->
+	<script type="text/x-mathjax-config">
+		MathJax.Hub.Config({
+			tex2jax: {
+				inlineMath: [['$','$'], ['\\(','\\)']]
+			},
+			displayAlign: "left",
+			displayIndent: "2em"
+		}); 
+	</script>
+	<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>	
 </head>
 
 <body>
@@ -406,9 +416,44 @@
 		</p>
 
 		<p>
-			PCR is measured as 33 bits of 90kHz clock and remaining 9 bits of a 27MHz clock. 
-			(2^9 = 512 but 2^8 = 256 which is not enough to store 300 | 2^33 = 8,589,934,592 - enough 
-			to stop 90,000 ticks of 90kHz clock or 1 second in clock tick time).
+			PCR is measured as 33 bits of 90kHz clock and remaining 9 bits of a 27MHz clock, the
+			<b>system clock frequency</b>. The system clock frequency's accuracy is restricted
+			by the the MPEG 2 standard:
+
+			$$
+			 27 000 000 - 810 Hz \le \text{system clock freq} \le 27 000 000 + 810 Hz
+			$$
+		</p>
+		<p> 
+			The PCR timestamp is split up into a 9 bit field, the extension, and a
+			33 bit field, the base, as follows:
+
+			$$
+			   \text{base} = \frac{\text{system clock freq} \times t(i)}{300} \mod 2^{33}
+			$$
+
+			$$
+			   \text{ext} = \text{system clock freq} \times t(i) \mod 300
+			$$
+
+			The quantity $\text{system clock freq} \times t(i)$ just gives the number of
+			clock ticks that have occurred at time $t(i)$ seconds.
+		</p>
+		<p>
+			For every 300 clock ticks the $\text{base}$ will increment by 1, whilst the
+			$\text{ext}$ increments by 1 for every single clock tick but only ranges
+			from 0 to 299.
+		</p>
+		<p>
+			So, $\text{ext}$ is like the high precision portion of the clock time stamp. It
+			will go from 0 to 299, and when it wraps back round to 0, $\text{base}$ increments
+			by 1. Thus the PCR is defined as follows:
+
+			$$
+			   PCR(i) = PCR_{base}(i) \times 300 + PCR_{ext}(i)
+			$$
+
+			Where $PCR(i)$ is the number of system clock ticks that have passed at time $t(i)$.
 		</p>
 
 		<p>
@@ -543,6 +588,9 @@
 		<p>
 			When a PCR is present the size increases by another 48 bytes, for example, so not all TS packets will be only 188 bytes. In the
 			described base, for instance, the packet size would be 236 bytes.
+		</p>
+		<P> The <b>continuity counter</b> is a 4-bit field incrementing with each Transport Stream packet with the
+            same PID, unless the adaptation field control of the packet is '00' or '10', in which case it does not increment.
 		</p>
 		<p>
 			So, for example, one common operation might be to check whether the TS 
