@@ -14,9 +14,9 @@
 			},
 			displayAlign: "left",
 			displayIndent: "2em"
-		}); 
+		});
 	</script>
-	<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>	
+	<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
 </head>
 
 <body>
@@ -54,14 +54,14 @@
 			<li><a href="https://www.youtube.com/watch?v=t22HpVwybso"
 				target="_blank">Packet Timing, Enseble Design</a>.
 			</li>
-			<li><a href="http://www.tvtechnology.com/expertise/0003/asynchronous-interfaces-for-video-servers/183969" 
+			<li><a href="http://www.tvtechnology.com/expertise/0003/asynchronous-interfaces-for-video-servers/183969"
 				target="_blank">&quot;Asynchronous Interfaces For Video Servers&quot;, TVTechnology article</a>.
 			</li>
-			<li><a href="http://www.silabs.com/support%20documents/technicaldocs/an377.pdf" 
+			<li><a href="http://www.silabs.com/support%20documents/technicaldocs/an377.pdf"
 			       target="_blank">Timing and Synchronisation In Broadcast Video</a>, Silicon Labs.
 			</li>
-			<li><a href="http://www.haberdar.org/discrete-cosine-transform-tutorial.htm" 
-			     target="_blank">Hakan Haberdar, "Generating Random Number from Image of a Probability Density Function"</a>, 
+			<li><a href="http://www.haberdar.org/discrete-cosine-transform-tutorial.htm"
+			     target="_blank">Hakan Haberdar, "Generating Random Number from Image of a Probability Density Function"</a>,
 				Computer Science Tutorials [online], (Accessed 09-26-2016).
 			</li>
 			<li><a href="https://www.vcodex.com/historical-timeline-of-video-coding-standards-and-formats/"
@@ -74,8 +74,8 @@
 				target="_blank">A Guide to MPEG Fundamentals and Protocol Analysis</a>, Tektonix.
 			</li>
 			<li><a href="http://www.streaminglearningcenter.com/AME_Reference.pdf"
-				target="_blank">Mastering the Adobe Media Encoder: Critical Concepts and Definitions</a>, 
-				Jan Ozer -- This is a really good high level tutorial about bit rates and frame rates, resolution, 
+				target="_blank">Mastering the Adobe Media Encoder: Critical Concepts and Definitions</a>,
+				Jan Ozer -- This is a really good high level tutorial about bit rates and frame rates, resolution,
 				CBR and VBR and how the inter-relate in terms of the final encoded video quality.
 			</li>
 			<li>TOREAD: <a href="http://dranger.com/ffmpeg/tutorial01.html" target="_blank">An ffmpeg and SDL Tutorial</a>, dranger.com
@@ -96,11 +96,11 @@
 
 	<h2>Video Introduction</h2>
 	<div>
-		
+
 		<p>
 			Video is a series of still images that are displayed quickly enough, one after the other, so that
-			the human eye/brain percieves only continuous motion and not individual stills. Each still image is 
-			called a <b>frame</b>. Consumer video displays between 50 and 60 frames per second. Computer 
+			the human eye/brain percieves only continuous motion and not individual stills. Each still image is
+			called a <b>frame</b>. Consumer video displays between 50 and 60 frames per second. Computer
 			displays typically display between 70 and 90 frames per second. The number of full frames per
 			second is called the <b>frame rate</b>. It is sometimes refered to as the <b>temperal resolution</b> of
 			the image: how quickly the image is being scanned.
@@ -135,7 +135,7 @@
 			the frame rate has to be greater than roughly 32Hz, otherwise flicker will be perceived.
 		</p>
 		<p>
-			Very early TV standards were developed by the NTSC in the Americas and in Europe a system 
+			Very early TV standards were developed by the NTSC in the Americas and in Europe a system
 			call PAL was used. France and Soviets used SECAM.
 		</p>
 		<p>
@@ -168,7 +168,7 @@
 			image line after line. This is prefereable because it is more robust to vertical flicker.
 		</p>
 		<p>
-			This is why we see the &quot;i&quot; and &quot;p&quot; to resolutions. For example, for 720x480i, the 
+			This is why we see the &quot;i&quot; and &quot;p&quot; to resolutions. For example, for 720x480i, the
 			suffix &quot;i&quot; means interlaced and for 720x480p, suffix &quot;p&quot; means progressive.
 		</p>
 
@@ -179,7 +179,7 @@
         	encapsulate MPEG transport stream data. It carries data at a constant bit rate of 270 Mbps which
         	results in a payload rate of 213 Mbps <a href="https://www.youtube.com/watch?v=1NI7-tRYsPo" target="_blank">[Ref]</a>.
         	ASI can be used to transmit multiple programs.
-        </p>        
+        </p>
         <blockquote>
             <p>
                 ASI is a unidirectional tranmission link to transmit data between digital video equipment ... a streaming
@@ -191,7 +191,7 @@
             </footer>
         </blockquote>
         <p>
-            SDI converts a 27MHz parallel stream of a diginal video interface into a 270 Mbps serial stream that can also be 
+            SDI converts a 27MHz parallel stream of a diginal video interface into a 270 Mbps serial stream that can also be
             transmitted over a 75-ohm coaxial cable. It carries an uncompressed form of an A/V signal and can only
             transmit the one program.
         </p>
@@ -204,11 +204,11 @@
         </p>
 
 	</div> <!-- End: Video Intro -->
-        
+
 	<h2>MPEG Introduction</h2>
 	<div>
 		<p>
-			Pissing around looking at 
+			Pissing around looking at
 			<a href="https://github.com/jameshume/py_mpeg_1" target="_blank">PCRs etc in Python simulation</a>.
 		</p>
 		<p>
@@ -218,11 +218,11 @@
 				<tr><td>STC</td>
 					<td>System Time Clock</td>
 					<td>Time that PU should be decoded and presented to output device. 33-bit. Units of 90kHz.</td>
-				</tr> 
+				</tr>
 				<tr><td>SCR</td>
 					 <td>System Clock Reference</td>
 					 <td>Clock Reference at the PES level. 42-bit. Tells demux what STC should be when each clock reference is received. Units of 27MHz.</td>
-				</tr> 
+				</tr>
 				<tr><td>DTS</td>
 					 <td>Decoding Time Stamp</td>
 					 <td>Type of STC.</td>
@@ -281,7 +281,7 @@
 		</p>
 		<p>
 			As said, it is the encoder's job to convert this into
-			digitised, <em>compressed</em> data. The reason for this is that the frame rate and resolution 
+			digitised, <em>compressed</em> data. The reason for this is that the frame rate and resolution
 			required generally means that the data rate coming out of
 			the video equipment, even after digitising, would be far too great to transmit. The bandwidth
 			of most transmission media (e.g., satellite, over the internet etc.) would not be able to
@@ -291,7 +291,7 @@
 			Enter MPEG(-2). It is the job of the encoder to compress the video and audio data and produce
 			an <b>elementary stream</b> which is just a byte stream containing the encoded data. MPEG doesn't
 			actually specifiy what the bytes in the video/audio data means.... that's completely up to the encoder, which
-			is why you will have noticed if that different MPEG files can require difference codecs (codec stands 
+			is why you will have noticed if that different MPEG files can require difference codecs (codec stands
 			for COder/DECoder). All MPEG does is to define the structure of the stream: i.e., the headers and ordering
             of frame information etc. This stream may be emitted at a constant or variable bit rate (CBR, VBR respectively).
 		</p>
@@ -314,7 +314,7 @@
 			contain many programs.
 		</p>
 		<p>
-			A summary of the flow from ES to PES to TS is shown below. 
+			A summary of the flow from ES to PES to TS is shown below.
 		</p>
 		<p>
 			<img src="##IMG_DIR##/mpeg/flow_of_stream_packet_types.jpg"/>
@@ -329,15 +329,15 @@
 		<h4>Intro</h4>
 		<p>
 			As was mentioned, the receiver must play back all the streams synchronously to ensure that things
-			like lipsync are correct. How can it do this? 
+			like lipsync are correct. How can it do this?
 		</p>
 		<p>
-			The answer lies in the <b>Program Clock Reference</b> (PCR), the <b>Decoding Time Stamp</b> (DTS) 
-			and <b>Presentation Time Stamp</b> (PTS) data that is transmitted with the presentation 
+			The answer lies in the <b>Program Clock Reference</b> (PCR), the <b>Decoding Time Stamp</b> (DTS)
+			and <b>Presentation Time Stamp</b> (PTS) data that is transmitted with the presentation
 			data (video, audio, subtitles etc). The PCR allows the receiver to estimate the frequency of
 			the encoder clock. The DTS tells the receiver when a <b>Presentation Unit</b> (PU) should be
 			decoded and the PTS tells the receiver when a decoded PU should be presented to the display
-			device. 
+			device.
 		</p>
 		<p>
 			Shown below, we see that the PTS/DTS are used by the decoders and the PCR is used by
@@ -381,13 +381,13 @@
             be changed, so what determines the bit rate is how much the encoder can compress the frames.
         </p>
 		<p>
-			Lets consider CBR as it will make things easier (bit rate is constant). 
+			Lets consider CBR as it will make things easier (bit rate is constant).
             Now lets assume that the transmit-across-the-network
 			stage and the decode stage are all instantaneous. In this case we just decode each frame
 			as we get it and just display it... no problem.
 		</p>
 		<p>
-			Now lets imagine that the decode is no longer instantaneous. Like the encoder, it may take 
+			Now lets imagine that the decode is no longer instantaneous. Like the encoder, it may take
 			a little longer to decode some frames and a little less time to decode others. When it takes
 			a little longer, what happens to the frame following right behind it? Clearly we need to
 			be able to queue up that frame rather than dropping it. And what happens if the decoder
@@ -427,7 +427,7 @@
 			 27 000 000 - 810 Hz \le \text{system clock freq} \le 27 000 000 + 810 Hz
 			$$
 		</p>
-		<p> 
+		<p>
 			The PCR timestamp is split up into a 9 bit field, the extension, and a
 			33 bit field, the base, as follows:
 
@@ -458,14 +458,20 @@
 
 			Where $PCR(i)$ is the number of system clock ticks that have passed at time $t(i)$.
 		</p>
+		<p>
+			The 27MHz portion of the clock only needs 9 bits to represent its maximum value of 299.
+			So, last question... Why 33 bits for the 90 kHz clock? I'm only guessing but it could
+			be that they wanted to be able to represent (over) a days worth of elaphsed time in
+			90kHz clock ticks.
+		</p>
 
 		<p>
-			Okay, so how do we use these PCR timestamps to acheive at least synchonisation? 
+			Okay, so how do we use these PCR timestamps to acheive at least synchonisation?
 		</p>
 		<p>
 			If we had a perfect system the clocks at both ends would have zero
 			drift and zero jitter. The communication channel would have a constant, zero delay and never
-			drops or corrupts TS packets. 
+			drops or corrupts TS packets.
 			In this case all we are doing is making sure the receiver's clock is running at the same
 			speed as the encoder's clock. It is easy to do. Could we now just take the difference between
 			consequtive PCR timestamps? That would certainly give us the frequency of the encoder's clock
@@ -536,7 +542,7 @@
 		</table>
 		<p>
 			As we can see the rate of change in the differences is still the same. Thus we'll get the
-			frequency right. Once we have the frequency right, we will also be able to pull in the 
+			frequency right. Once we have the frequency right, we will also be able to pull in the
 			phase as well.
 		</p>
 		<p>
@@ -585,7 +591,7 @@
 			<img src="##IMG_DIR##/mpeg/TS_188_Byte_packet.jpg"/>
 		</p>
 		<p>
-			A transport stream packet is at a minimum 188 bytes in length. The first 4 bytes are the header and the remaining 184 bytes are 
+			A transport stream packet is at a minimum 188 bytes in length. The first 4 bytes are the header and the remaining 184 bytes are
 			the payload. A PES packet will be distributed across several TS packet layloads.
 		</p>
 		<p>
@@ -596,14 +602,14 @@
             same PID, unless the adaptation field control of the packet is '00' or '10', in which case it does not increment.
 		</p>
 		<p>
-			So, for example, one common operation might be to check whether the TS 
+			So, for example, one common operation might be to check whether the TS
 			packet contains a PCR. The following test would do it (if you wrote it for real
 			you'd just make it a one-liner!):
 		</p>
 
 		<pre class="prettyprint linenums">bool adaption_field_length_valid = false;
 bool adaption_field_contains_pcr = false;
-bool adaption_field_present = (raw_ts_packet[3] &amp; 0x20) 
+bool adaption_field_present = (raw_ts_packet[3] &amp; 0x20)
 
 if (adaption_field_present) {
    adaption_field_length_valid = (raw_ts_packet[4] > 0);
@@ -612,7 +618,7 @@ if (adaption_field_present) {
 }
 
 if (adaption_field_contains_pcr) {
-   // raw_ts_packet[6] to raw_ts_packet[10] and 
+   // raw_ts_packet[6] to raw_ts_packet[10] and
    // raw_ts_packet[11] &amp; 0xC0 &gt;&gt; 6
 }</pre>
 
@@ -627,16 +633,16 @@ if (adaption_field_contains_pcr) {
 			<tr>
 				<td>Conditional Access Table</td> <td>TS-CAT</td> <td>0x0001</td>
 			</tr>
-		</table>		
+		</table>
 		<p>
 			From the root PID (<tt>0x0000</tt>), known  as the Program Association Table (PAT), we can find the Program Map Table (PMT), which
-			gives a list of programs for this TS. From the PMT we can in turn find each ES associated with that program. 
+			gives a list of programs for this TS. From the PMT we can in turn find each ES associated with that program.
 		</p>
 		<p>
 			<img src="##IMG_DIR##/mpeg/PMT_PAT.jpg"/>
 		</p>
 		<p>
-			Other PSI tables are also located via the PAT, such as the Conditional Acess Table (CAT) and Network Information Table (NIT). 
+			Other PSI tables are also located via the PAT, such as the Conditional Acess Table (CAT) and Network Information Table (NIT).
 			Consult the standard for info on these tables... too much to write here.
 		</p>
 	</div> <!-- END: H2 -->
@@ -737,7 +743,7 @@ if (adaption_field_contains_pcr) {
 				</tr>
 			</table>
 			<table style="margin: -3px 0px 0px 0px;">
-				<tr><td><b>Field Name</b></td><td><b>Bits</b></td></tr>		
+				<tr><td><b>Field Name</b></td><td><b>Bits</b></td></tr>
 				<tr><td>group_start_code</td><td>32 </td></tr>
 				<tr><td>time_code</td><td>25 </td></tr>
 				<tr><td>closed_gop</td><td>1 </td></tr>
@@ -753,7 +759,7 @@ if (adaption_field_contains_pcr) {
 				</tr>
 			</table>
 			<table style="margin: -3px 0px 0px 0px;">
-				<tr><td><b>Field Name</b></td><td><b>Bits</b></td></tr>		
+				<tr><td><b>Field Name</b></td><td><b>Bits</b></td></tr>
 				<tr><td>picture_start_code</td><td>32</td></tr>
 				<tr><td>temporal_reference</td><td>10</td></tr>
 				<tr><td>picture_coding_type<br/>
@@ -781,32 +787,32 @@ if (adaption_field_contains_pcr) {
 		</div>
 
 		<p style="clear:both;">
-			One interesting field is the <tt>temporal_reference</tt> field in the picture header. As will note in a bit, the coded order and display order are different. The 
+			One interesting field is the <tt>temporal_reference</tt> field in the picture header. As will note in a bit, the coded order and display order are different. The
 			<tt>temporal_reference</tt> tells the decoder where in this sequence the frame lies in terms of its <em>display</em> order.
 		</p>
 
         <p>
-            There are three types of pictures that use different coding methods: 
+            There are three types of pictures that use different coding methods:
         </p>
         <ol>
             <li>
-            	<b>Intra-coded (I)</b> pictures are coded using information only from themselves. 
-            	This means that an I frame can be decoded <em>independently</em> of any other frame. 
+            	<b>Intra-coded (I)</b> pictures are coded using information only from themselves.
+            	This means that an I frame can be decoded <em>independently</em> of any other frame.
             	They provide a start point from which future predictively decoded frames can be decoded.
             	Each I-frame is divided into 8x8 pixel blocks, each block being placed in a
             	16x16 block called a <b>macroblock</b>.
             </li>
             <li>
-            	<b>Predictive-coded (P)</b> use motion compensated prediction from a past reference 
-            	frame/field: motion vectors for picture blocks. 
-            	This means that to decode a P frame you need another frame as reference 
-            	from which you can derive the P frame. You <em>cannot</em> independently decode a P 
-            	frame. A P frame can be used as the reference for a later P frame (P frames can be 
+            	<b>Predictive-coded (P)</b> use motion compensated prediction from a past reference
+            	frame/field: motion vectors for picture blocks.
+            	This means that to decode a P frame you need another frame as reference
+            	from which you can derive the P frame. You <em>cannot</em> independently decode a P
+            	frame. A P frame can be used as the reference for a later P frame (P frames can be
             	the basis for future prediction).
             </li>
             <li>
             	<b>Bidirectionally predictive-coded (B)</b> pictures use motion compensated prediction
-            	 from past and/or future reference frames. Like a P frame, a B frame cannot be independently 
+            	 from past and/or future reference frames. Like a P frame, a B frame cannot be independently
             	 decoded. B frames are <em>not</em> used as a reference for future prediction.</li>
         </ol>
         <p>
@@ -817,7 +823,7 @@ if (adaption_field_contains_pcr) {
         </p>
         <p>
             In general the amount of compression that each frame gives increases from I to B. Because the I frame is used as the basis from
-            which we can decode a P frame - we use the I frame + motion compensation - the I frame has the least compression as the quality 
+            which we can decode a P frame - we use the I frame + motion compensation - the I frame has the least compression as the quality
             of the subsequent P and B frames depend on it. B frames offer the most compression.
         </p>
         <p>
@@ -828,9 +834,9 @@ if (adaption_field_contains_pcr) {
         <p>
             <img src="##IMG_DIR##/mpeg/DTS_PTS_relationship.jpg" style="float:left; margin-right: 5px; margin-bottom: 5px;"/>
 
-            For example, imagine you have the following frame <em>display</em> order: I<sub>1</sub> P<sub>1</sub> B<sub>1</sub> P<sub>2</sub>. In order to encode 
+            For example, imagine you have the following frame <em>display</em> order: I<sub>1</sub> P<sub>1</sub> B<sub>1</sub> P<sub>2</sub>. In order to encode
             frame B<sub>1</sub>, the encoder needs both frames P<sub>1</sub> and P<sub>2</sub> as B<sub>1</sub> is a predicated frame based on the
-            contents of the past frame P<sub>1</sub> and the future frame P<sub>2</sub>. Thus the <em>stream</em> 
+            contents of the past frame P<sub>1</sub> and the future frame P<sub>2</sub>. Thus the <em>stream</em>
             order will be I<sub>1</sub> P<sub>1</sub> P<sub>2</sub> B<sub>1</sub>.
         </p>
         <p>
@@ -846,7 +852,7 @@ if (adaption_field_contains_pcr) {
         <p>
             The highlighted boxed show how groups of frames are displayed in a different order
             to the order in which they are decoded. You can see they are decoded <em>before</em>
-            they are displayed. This implies that the frames after them in the TS strean rely on 
+            they are displayed. This implies that the frames after them in the TS strean rely on
             their contents. This implies that the 2 frames following each highlighted box are
             B frames <em>because they rely on a frame in the future</em>. So, we can infer that frames 6; 10; 14; 18 and so on are B frames. The frames 7; 11; 15; 19 could also
             be B frames, but they could also be I frames.
@@ -883,17 +889,17 @@ if (adaption_field_contains_pcr) {
                target="_blank">Engineering Guidelines: The EBU/AES Digital Audio Interface</a>, J. Emmett, EBU, 1995.
         </p>
         <p>
-            In its original design AES was made to carry "two channels of periodically sampled and linearly 
+            In its original design AES was made to carry "two channels of periodically sampled and linearly
             represented audio", i.e., LPCM data. However, AES can carry compressed audio data instead, for
             which an extension to the standard was made.
         </p>
         <p>
-            AES is a sequence of blocks, where each block is composed of 192 frames: 
+            AES is a sequence of blocks, where each block is composed of 192 frames:
             When LPCM audio is used the frequency at which AES frames occur is the same
             as the sampling rate of the PCM audio.
         </p>
         <p>
-            Each of these frames has two 32-bit subframes, one for each of the two audio channels. Each subframe is meant to be one LCPM sample. 
+            Each of these frames has two 32-bit subframes, one for each of the two audio channels. Each subframe is meant to be one LCPM sample.
             It contains at most
             20 or 24 bits of audio data and the rest if the bits form part of other information structures
             that are spread across the 192 subframes. I.e., these structures are created by appending each
@@ -904,8 +910,8 @@ if (adaption_field_contains_pcr) {
         </p>
         <p>
             As said, &quot;other information&quot; structures are spread across the 192 subframes.
-            If you take the C bit from the first subframe for channel A as bit 0 of the channel status data, and the C bit 
-            from the 192<sup>th</sup> subframe for channel A as bit 192 of the channel status data, you construct 
+            If you take the C bit from the first subframe for channel A as bit 0 of the channel status data, and the C bit
+            from the 192<sup>th</sup> subframe for channel A as bit 192 of the channel status data, you construct
             the channel status message. This message carries information associated with the audio signal and is shown below.
         </p>
         <p>
@@ -920,7 +926,7 @@ if (adaption_field_contains_pcr) {
             of not-PCM-audio-data is timestamp data used to sync audio with video.
         </p>
         <p>
-            When transmitting not-PCM-sample-data there are two modes available. 
+            When transmitting not-PCM-sample-data there are two modes available.
         </p>
         <ol>
             <li>Frame mode: here the audio bits from a frame's two subchannels are combined to give a 48-bit chunk of data.
@@ -941,7 +947,7 @@ if (adaption_field_contains_pcr) {
         <h3>ffmpeg</h3>
         <p>
             To extract each frame of a video file as an individual picture run the following. FFMPEG parses the output
-            (<code>printf</code>-like) string and understands from it what you are trying to do. 
+            (<code>printf</code>-like) string and understands from it what you are trying to do.
             It will name the frames <code>frame_00001</code>, <code>frame_00002</code> and so on.
         </p>
         <pre>ffmpeg -i &lt;your-input-file&gt; "frame_%05d.png"</pre>
@@ -964,8 +970,8 @@ if (adaption_field_contains_pcr) {
             If you don't want the full frame quality you can also scale the output images
             and even change them to grey scale if space is an issue. Use the switch
             <code>-s widthxheight</code>, e.g., <code>192x168</code>. You can also use the
-            <code>-vf scale=w:h</code>. The 
-            <a href="https://trac.ffmpeg.org/wiki/Scaling%20(resizing)%20with%20ffmpeg" target="_blank"><code>scale</code></a> 
+            <code>-vf scale=w:h</code>. The
+            <a href="https://trac.ffmpeg.org/wiki/Scaling%20(resizing)%20with%20ffmpeg" target="_blank"><code>scale</code></a>
             parameter is neat because if
             you want to keep the same aspect ratio you can just set one of either the width
             or height to <code>-1</code>. You can even use refer to the input scale using the
@@ -1015,7 +1021,7 @@ ffprobe -show_packets -select_streams v -i &lt;your-input-file&gt;
 ffprobe -show_packets -select_streams v:1 -i &lt;your-input-file&gt;</pre>
     </div>
     	<p>
-    		Other useful flags include <code>-show_frames</code>, <code>-show_streams</code>, 
+    		Other useful flags include <code>-show_frames</code>, <code>-show_streams</code>,
     		<code>-show_programs</code>, <code>-count_frames</code>, <code>--count_packets</code>.
     	</p>
         <P>
@@ -1039,4 +1045,4 @@ ffprobe -show_packets -select_streams v:1 -i &lt;your-input-file&gt;</pre>
 </body>
 </html>
 
-	
+
