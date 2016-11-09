@@ -53,7 +53,7 @@
 				</ol>
 			</div>
 
-			<h2>Pandas</h2>
+			<h2>Introduction</h2>
 			<div>
 				<p>
 					A funny little example to see how average house prices differ in the UK using Pandas. 
@@ -106,14 +106,27 @@ fig.savefig(r'pandas_landreg.png')
 	This will output the following:<br/>
 		<img src="##IMG_DIR##/python/pandas_landreg.png" alt="Pandas plot of UK langregistry prices">
 	</p>
+        </div> <!-- End H2 Intro -->
 
-				<h3>Rough and ready notes</h3>
-				<p>All the following is just notes from ref 
-					<a href="http://shop.oreilly.com/product/0636920023784.do"
-					target="_blank">[1]</a> augmented by
-					<a href="http://pandas.pydata.org/pandas-docs/stable/api.html"
-					target="_blank">[3]</a>
-				</p>
+        <h2>Read Data In From Files</h2>
+        <div>
+            <h3>From Tab Delimited File</h3>
+            <p>If the data doesn't have column headings...</p>
+            <pre>df = pandas.read_table('filename', header=None, index_col=0)</pre>
+            <p>The parameter <code>header=None</code> tells pandas there are no column headers.</p>
+            <p>The parameter <code>index_col=0</code> tells pandas to use column 0 in the file as the index.</p>
+            <p>You can use other paramters like <code>names=['col1', ...]</code> to give columns specific names. To set the index name use <code>df.index.name = 'a_name'</code>.</p>
+            </pre>
+        </div> <!-- End H2 Read in files -->
+
+        <h2>Rough and ready notes</h2>
+        <div>
+			<p>All the following is just notes from ref 
+				<a href="http://shop.oreilly.com/product/0636920023784.do"
+				target="_blank">[1]</a> augmented by
+				<a href="http://pandas.pydata.org/pandas-docs/stable/api.html"
+				target="_blank">[3]</a>
+			</p>
 <pre>
 Pandas workhouses: Series and DataFrame
 
@@ -532,7 +545,7 @@ R style pipes in Python
    target="_blank">http://stackoverflow.com/questions/28252585/functional-pipes-in-python-like-from-dplyr</a>
 
 </pre>
-			</div>
+			</div> <!-- END H2: Rough and read notes -->
 		</div>
 	</div>
 </body>
