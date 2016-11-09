@@ -579,7 +579,7 @@
 		<p>
 			A transport stream packet is shown below. The TS is designed for use in noisy, error-prone, environments. It can include
 			more than one program and each program can have its own independent time base. The splitting up of the PES into 188 byte
-			packets (size can be greater) also adds to the error resistance.
+			packets (size can be greater) also adds to the error resistance. All header fields are stored <b>big-endian</b>.
 		</p>
 		<p>
 			<img src="##IMG_DIR##/mpeg/TS_188_Byte_packet.jpg"/>
