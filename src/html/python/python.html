@@ -222,6 +222,38 @@ max-line-length = 100</pre>
 	<pre>pip install C:\Users\my_user_name\Downloads\lxml-3.6.4-cp27-cp27m-win_amd64.whl</pre>
 </div> <!-- END H2 Install Python Libraries From Wheel Files -->
 
+<h2>Python functions gotcha: default argument values - default value evaluated only once!</h2>
+<div>
+	<p>
+		Ooh this one is interesting and is not at all how I intuitively imagined default values. 
+		I assumed that when a function parameter has a default value, that on <em>every</em>
+		call to the function, the parameter is initialised with the default value. This is
+		<em>not</em> the case! The default value is evaluated only once and acts like a 
+		static variable in a C function after that! The following example is taken from
+		the <a href="https://docs.python.org/3/tutorial/controlflow.html#default-argument-values" target="_blank">Python docs on functions</a>:
+	</p>
+	<pre class="prettyprint linenums">def f(a, L=[]):
+    # Caution! You might not expect it but this function accumulates
+    # the arguments passed to it on subsequent calls
+    L.append(a)
+    return L
+
+print(f(1))  # Prints [1]
+print(f(2))  # Prints [1, 2], not [2] as you might expect!</pre>
+	<p>
+		This is summarised in the docs...
+	</p>
+	<blockquote>
+		<p>
+			The default value is evaluated only once. This makes a difference when
+		 	the default is a mutable object such as a list, dictionary, or instances of most classes ...
+        	[because] the default ... [will] be shared between subsequent calls ...
+        </p>
+        <footer>-- <a href="https://docs.python.org/3/tutorial/controlflow.html#default-argument-values" target="_blank">Python docs</a>.</footer>
+	</blockquote>
+	<p></p>
+</div>
+
 <h2>Infinite recursion in <tt>__setattr__()</tt> &amp; <tt>__getattr__()</tt> in Python</h2>
 <div>
 		<h3>The recursion problem</h3>
