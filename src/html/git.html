@@ -167,6 +167,18 @@ Ignoring files: File globs in .gitignore
                    # but do track lib.a, even though you're ignoring .a files above
                    !lib.a
 
+List Files In Repo
+
+List files currently being tracked on branch master:
+    git ls-tree -r master --name-only
+
+List files currnetly being tracked on current pranch
+    git ls-tree -r HEAD --name-only
+
+`--name-only` hids the git commit hash number and a couple other columns.
+You don't appear to need to specify the `--full-tree` option.
+
+
 Diffing
    git diff: What you have changed but NOT staged
    git diff --staged: What will go into next commit
