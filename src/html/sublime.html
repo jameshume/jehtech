@@ -49,21 +49,35 @@
 		</p>
 	</div>
 
+    <h2>Put An Icon Next To Sublime In Windows Context Menu</h2>
+    <p>See <a href="http://stackoverflow.com/questions/3681032/set-icon-for-custom-right-click-context-menu-item-for-all-desktop-shortcuts-win" target="_blank">this SO thread</a>.
+    </p>
+    <pre>Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\*\shell\Open with Sublime Text]
+"Icon"="\"C:\\Program Files\\Sublime Text 3\\sublime_text.exe\""
+
+[HKEY_CLASSES_ROOT\*\shell\Open with Sublime Text\command]
+@="C:\\Program Files\\Sublime Text 3\\sublime_text.exe \"%1\""</pre>
+
 	<h2>My Settings</h2>
 	<div>
 		<pre>{
-   "anaconda_linting": false,
-   "color_scheme": "Packages/Color Scheme - Default/Monokai.tmTheme",
-   "draw_white_space": "all",
-   "font_size": 11,
-   "highlight_line": true,
-   "highlight_modified_tabs": true,
-   "ignored_packages":
-   [
-   ],
-   "tab_size": 4,
-   "translate_tabs_to_spaces": true,
-   "highlight_modified_tabs": true
+    "anaconda_linting": false,
+    "color_scheme": "Packages/Monokai Neue/Monokai-Neue.tmTheme",
+    "draw_white_space": "all",
+    "font_size": 12,
+    "highlight_line": true,
+    "highlight_modified_tabs": true,
+    "ignored_packages":
+    [
+    ],
+    "rulers":
+    [
+        100
+    ],
+    "tab_size": 4,
+    "translate_tabs_to_spaces": true
 }</pre>
 	</div>
 
