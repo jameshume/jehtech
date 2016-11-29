@@ -331,7 +331,47 @@ also a prvalue.  end example ]</pre>
 			<p>
 				Quietly go into a safe, do-nothing, mode upon error.
 			</p>
-		</div>
+		</div> <!-- END IOSTREAMS -->
+
+		<h2>Google Test (On Windows)</h2>
+		<div>
+			<p>
+				Jeez it took ages to set this bugger up... so save yourself some time and don'try to open the existing msvc project
+				files and <b>instead re-generate them using cmake!</b> I promise you it will save you the heart-ache. These are the steps:
+			</p>
+			<ol>
+				<li>Download and install CMake and make sure you select the option to put CMake on the path</li>
+				<li>Pick a root directory and clone the CMake git repo there. I'm gonna use <code>C:\Users\jehtech\googletest_msvc</code>.
+				    Therefore from the git command prompt naviage to <code>/c/users/jehtech/googletest_msvc</code> and type 
+				    <code>git clone git@github.com:google/googletest.git</code>. This will create the subdirectory <code>googletest</code>.
+				</li>
+				<li><b>Absolutely ignore the existing MSVC project files in <code>C:\Users\jehtech\googletest_msvc\googletest\googletest\msvc</code>!!</b>
+				</li>
+				<li>From the same directory, but in your normal console, type <code>cmake -Dgtest_build_samples=ON googletest_msvc</code>. Using
+				    <code>-Dgtest_build_samples=ON</code> tells CMake to generate project files that contain the Google Test examples as well.
+				</li>
+				<li>CMake should now generate your MSVC project files for you in the directory <code>C:\Users\jehtech\googletest_msvc</code>.
+				</li>
+				<li>Load the project file <code>googletest-distribution.sln</code> and build the solution for both Debug and Release. This 
+				    will create the directories <code>C:\Users\James\googletest_msvc\googlemock\gtest\{Debug,Release}</code> that contain
+				    the built gtest libraries.
+				</li>				
+			</ol>
+			<p>
+				But annoyingly I still get the following when trying to create my own project, although the sample tests do not seem
+				to have this problem for some reason.
+			</p>
+			<pre>
+Severity	Code	Description	Project	File	Line	Suppression State
+Error	C2440	'<function-style-cast>': cannot convert from 'initializer list' to 'testing::internal::AssertHelper'	test_mpeg	c:\users\james\documents\git\mpeg_ts_messing\gtest\src\gtest_binary_buffer.cpp	12	
+Severity	Code	Description	Project	File	Line	Suppression State
+Error	C2065	'gtest_ar': undeclared identifier	test_mpeg	c:\users\james\documents\git\mpeg_ts_messing\gtest\src\gtest_binary_buffer.cpp	12	
+Severity	Code	Description	Project	File	Line	Suppression State
+Error	C2589	'switch': illegal token on right side of '::'	test_mpeg	c:\users\james\documents\git\mpeg_ts_messing\gtest\src\gtest_binary_buffer.cpp	12	
+Severity	Code	Description	Project	File	Line	Suppression State
+Error	C2181	illegal else without matching if	test_mpeg	c:\users\james\documents\git\mpeg_ts_messing\gtest\src\gtest_binary_buffer.cpp	12				
+			</pre>
+		</div> <!-- END GTEST -->
 	</div> <!-- END H1 padding div -->
 	</div>
 </body>
