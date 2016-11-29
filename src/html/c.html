@@ -180,6 +180,56 @@ whose return type is not a reference is a prvalue. The value of a literal such a
 also a prvalue.  end example ]</pre>
 		</div>
 
+		<h2>MSVC</h2>
+		<div>
+			<h3>C/C++ Run Time Library (RTL)</h3>
+			<p>
+				In MSVC projects you can either statically or dynamically link against the run time library.
+				The C and C++ RTL libraries include the standard C/C++ functions that the standards
+				require. So, in C, it is functions like <code>malloc()</code>, <code>memcpy()</code> etc etc,
+				and in C++ it is these and the C++ STL.
+			</p>
+			<p>
+				When using MSVC, different versions have different RTLs and for each version there
+				are several variants depending on whether you are compiling for debug or release and
+				whether you static vs dynamic linking. Note: there are only multi-threaded libraries
+				available (there used to be single threaded but no more).
+			</p>
+			<p>
+				To statically link against the RTL implies that the RTL code is linked into your program so
+				that your program does not have any external dependencies as far as using the C/C++ standard
+				library functions goes. 
+			</p>
+			<p>
+				To dynamically link against the RTL means that your program is
+				compiled without the RTL &quot;backed in&quot; and thus requires a certain s
+				et of DLLs, which must be present on the host when your program
+				is executed. 
+			</p>
+			<p>
+				The former has the advantage that you don't care whether your host has the 
+				correct RTL installed (because your program already contains all the RTL functions it needs)
+				but the disadvantage that it is slightly bigger. The latter has the
+				advantage that it will be slightly smaller (and if there was a patch etc to the RTL you
+				wouldn't have to redistribute your app), but it has the disandvantage that the host
+				must have the correct RTL DLLs available and if it doesn't you have to distribute them.
+			</p>
+			<p>
+				In debug libraries, the debug symbols are generated (.pdb) files and no opimization is
+				used. In release libraries, symbols are stripped and code optimization is used.
+			</p>
+			<p>
+				Your link options are <a href="https://msdn.microsoft.com/en-us/library/2kzt1wy3.aspx" target="_blank">[Ref]</a>:
+			</p>
+			<ol>
+				<li><code>/MD[d]</code>:Use multi-threaded dynamic RTL. No 'd' for release, 'd' for debug.</li>
+				<li><code>/MT[d]</code>:Use multi-threaded static RTL. No 'd' for release, 'd' for debug.</li>
+			</ol>
+			<p>
+				<img src="##IMG_DIR##/msvc_rtl_select.png" alt="Screenshot of MSVC++ 2015 project properties and where to find the Runtime Library settings"/>
+			</p>
+		</div>
+
 		<h2>Casting in C &amp; C++</h2>
 		<div>
 			<h3>C v.s. C++</h3>
