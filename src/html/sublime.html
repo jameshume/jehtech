@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>Sublime Text 3 Notes</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">Sublime Text 3 Notes</h1>
+<div style="padding-right:10px;">
+
+	<h2>Page Contents</h2>
+	<div id="page_contents">
+	</div>
+
+	<h2>Tab Colours</h2>
+	<div>
+		<p>
+			Suprisingly difficult! Dispite lots of threads on the subject, still took some figuring out. 
+			I am using the &quot;Monokai&quot; theme. For your theme perhaps a different file needs editing but you
+			can play with it...
+		</p>
+		<p>
+			In <code>C:\Program Files\Sublime Text 3\Packages</code> there is a file <code>Theme - Default.<b>sublime-package</b></code>.
+			Backup this file and then rename a copy to <code>Theme - Default.<b>zip</b></code>. Extract the file to a temporary
+			location and edit the file medium_dark_selected_tab_bg.png. Change it any way you like (I just filled it with red). Write
+			the file back to the ZIP and then rename the ZIP back to its original name so that it has the <code>.sublime-package</code>
+			extension. Load up sublime and your tabs should be highlighted.
+		</p>
+		<p>
+			Now my tabs look like this:
+		</p>
+		<p>
+			<img src="##IMG_DIR##/sublime_tab.png" alt="Sublime Text With Tab Colour Changed"/>
+		</p>
+	</div>
+
+	<h2>My Settings</h2>
+	<div>
+		<pre>{
+   "anaconda_linting": false,
+   "color_scheme": "Packages/Color Scheme - Default/Monokai.tmTheme",
+   "draw_white_space": "all",
+   "font_size": 11,
+   "highlight_line": true,
+   "highlight_modified_tabs": true,
+   "ignored_packages":
+   [
+   ],
+   "tab_size": 4,
+   "translate_tabs_to_spaces": true,
+   "highlight_modified_tabs": true
+}</pre>
+	</div>
+
+</div> <!-- END H1 padding div -->
+</div> <!-- END Content div -->
+</body>
+</html>
+
+	

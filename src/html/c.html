@@ -56,10 +56,21 @@
 			</ol>
 		</div> <!-- END H2: References -->
 
+		<h2>Todo/To Read</h2>
+		<div>
+			<ul>
+				<li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2002/n1377.htm#More%20on%20A&&" target="_blank">A Proposal to Add Move Semantics Support to the C++ Language</a></li>
+				<li><a href="http://www.drdobbs.com/move-constructors/184403855" target="_blank">Move Constructors</a></li>
+				<li><a href="http://erdani.com/publications/traits.html" target="_blank">Traits: The else-if-then of Types</a></li>
+				<li><a href="http://erdani.com/publications/xp2000.pdf" target="_blank">The Design Is In The Code</a></li>
+				<li><a href="http://www.drdobbs.com/cpp/generic-change-the-way-you-write-excepti/184403758" target="_blank">Generic: Change the Way You Write Exception-Safe Code — Forever</a></li>
+			</ul>
+		</div>
+
 		<h2>Some Play</h2>
 		<div>
 			<p>
-				Some <a href="https://github.com/jameshume/MessingWithC/tree/master/ctest" target="_blank">little playing</a> 
+				Some <a href="https://github.com/jameshume/MessingWithC/tree/master/ctest" target="_blank">little playing</a>
 				in C: reading a file line by line and an enhanced strok function.
 			</p>
 		</div> <!-- END: H2 -->
@@ -67,13 +78,13 @@
 		<h2>LValues, RValues etc </h2>
 		<div>
 			<p>
-				First some terminology. In C, an <b>object</b> is just a region of data storage that represents a value. 
-				Why does the standard talk about &quot;data storage&quot;? I think this is because we could mean RAM, 
+				First some terminology. In C, an <b>object</b> is just a region of data storage that represents a value.
+				Why does the standard talk about &quot;data storage&quot;? I think this is because we could mean RAM,
 				a register, ROM or any other kind of memory. It's just a generic term; an abstraction.
 			</p>
 			<p>
 				In the standard, an <b>expression</b> is a sequence of operators and operands that,
-			</p> 
+			</p>
 			<ul>
 				<li>computes a value, or</li>
 				<li>results in an object (a region of data that can represent a value), or</li>
@@ -86,28 +97,28 @@
 							</p>
 			<blockquote>
 				<p>
-					An lvalue is an expression with an object type or an incomplete type other than void ... 
-					When an object is said to have a particular type, the type is specified by the lvalue 
+					An lvalue is an expression with an object type or an incomplete type other than void ...
+					When an object is said to have a particular type, the type is specified by the lvalue
 					used to designate the object ...
 				</p>
 				<p>
-					... Except when it is the operand of the sizeof operator, the unary &amp; operator, 
-					the ++ operator, the -- operator, or the left operand of the . operator or an 
-					assignment operator, an lvalue that does not have array type is converted to the 
+					... Except when it is the operand of the sizeof operator, the unary &amp; operator,
+					the ++ operator, the -- operator, or the left operand of the . operator or an
+					assignment operator, an lvalue that does not have array type is converted to the
 					value stored in the designated object (and is no longer an lvalue) ...
 				</p>
 				<footer>-- ISO/IEC 9899:1999</footer>
 			</blockquote>
 
 			<p>
-				What does <q>an expression with an object type</q> mean? It is just an expression 
-				that results in an object, i.e., an area of memory we can name (identify) in our 
+				What does <q>an expression with an object type</q> mean? It is just an expression
+				that results in an object, i.e., an area of memory we can name (identify) in our
 				program.
 			</p>
 
 			<p>
 				An lvalue has to <q>designate an object</q>. This means that an lvalue has to
-				be something that we can use, in our program, to locate an object. I.e. it has to 
+				be something that we can use, in our program, to locate an object. I.e. it has to
 				be a name that we can use to access an area of memory that represents a value of some type:
 				it is an <q>object locator</q>. It could also be thought of as <q>an address that is
 					stored into</q> <a href="https://users.soe.ucsc.edu/~pohl/code/lvalue.htm" target="_blank">[Ref]</a>.
@@ -120,20 +131,20 @@
 
 			<p>
 				If we assign into something, we must be assigning into an lvalue because we need to store the value in an object, i.e.,
-				an area of data storage that can hold the value and that we can locate via a name in our program. 
+				an area of data storage that can hold the value and that we can locate via a name in our program.
 				Thus <tt>A = B</tt> requires that <tt>A</tt> be an lvalue. It must also be modifiable, so not const!
 			</p>
 			<p>
 				So, straight away, we can tell that literals are not lvalues. For example the literal 123.321 does is not represented
 				by a region of data storage. It's just a number that exists at compile time. <tt>double x = 123.321</tt> is however
-				an expression that creates a region of data storage, refered to by the variable named <tt>x</tt>. 
+				an expression that creates a region of data storage, refered to by the variable named <tt>x</tt>.
 				This region of data storage represents the literal 123.321 and is therefore an lvalue.
 			</p>
 			<p>
 				Also, lets say that a function returns a pointer to an integer, then <tt>*(some_function());</tt> must also be an lvalue
 				because it yields the region of data storage that represents a value, even if we don't do anything with it.
 			</p>
-			
+
 			<p>
 				An interesting example is this:
 			</p>
@@ -144,11 +155,11 @@ a + b = 22;</pre>
 				Obviously we can't do this because we intuitively know that one cannot assign a value into
 				an expression because the value <tt>a + b</tt> is just that, a temporary value. However,
 				this temporary value must exist in memory, even it it is only temporarily in a register.
-				The variables <tt>a</tt> and <tt>b</tt> are lvalues, but they may only exist in a 
+				The variables <tt>a</tt> and <tt>b</tt> are lvalues, but they may only exist in a
 				register, so just having some storage isn't quite enough, it would seem.
 			</p>
 			<p>
-				The answer comes from the second paragraph in the definition: <q>an lvalue [when used as an operand] ... is converted to the 
+				The answer comes from the second paragraph in the definition: <q>an lvalue [when used as an operand] ... is converted to the
 				value stored in the designated object (and is no longer an lvalue)</q>. Ah ha! In the
 				expression <tt>a + b</tt>, the operands are converted to values and are no longer lvalues,
 				hence the result is not an lvalue. This gives a standards-based explanation of our intuition :)
@@ -279,7 +290,7 @@ also a prvalue.  end example ]</pre>
 			</tr>
 			<tr>
 				<td><code>ios::hex ios::oct ios::dec</code></td><td>For integer output.</td>
-			</tr>			
+			</tr>
 			<tr>
 				<td><code>ios::basefield</code></td><td>Mask to clear all integer output formats.</td>
 			</tr>
@@ -326,4 +337,4 @@ also a prvalue.  end example ]</pre>
 </body>
 </html>
 
-	
+
