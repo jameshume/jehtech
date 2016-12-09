@@ -25,10 +25,28 @@
     <p>Just a collection of MySQL stuff that I find most useful and often forget
        and then end up having to search to time and time again...
     </p>
+
+    <h2>To Read</h2>
+    <div>
+        <ul>
+            <li>http://stackoverflow.com/questions/10908561/mysql-meaning-of-primary-key-unique-key-and-key-when-used-together</li>
+            <li>DJango PositiveIntegerField max different to INT max in MYSQL: http://dev.mysql.com/doc/refman/5.7/en/integer-types.html</li>
+            <li>http://stackoverflow.com/questions/4601138/what-is-the-significance-of-the-index-name-when-creating-an-index-in-mysql</li>
+            <li>http://www.w3schools.com/sql/sql_select_into.asp</li>
+            <li>http://komlenic.com/244/8-reasons-why-mysqls-enum-data-type-is-evil/</li>
+            <li>https://www.percona.com/blog/2008/01/24/enum-fields-vs-varchar-vs-int-joined-table-what-is-faster/</li>
+            <li>bigint(20) unsigned DEFAULT NULL,</li>
+            <li>http://stackoverflow.com/questions/3330435/is-there-an-sqlite-equivalent-to-mysqls-describe-table</li>
+            <li>https://www.sitepoint.com/getting-started-sqlite3-basic-commands/</li>
+            <li>http://dev.mysql.com/doc/refman/5.7/en/insert-on-duplicate.html</li>
+            <li>http://www.w3resource.com/sql/joins/natural-join.php</li>
+        </ul>
+    </div>
+
     <h2>Installing on Ubuntu and adding a non-root user
     </h2>
-    <p>Install mysql with root password. The installer will pop up a screen asking for the 
-       root password which you should set following usual 
+    <p>Install mysql with root password. The installer will pop up a screen asking for the
+       root password which you should set following usual
        <a href="http://en.wikipedia.org/wiki/Password_strength#Guidelines_for_strong_passwords" target="_blank">
        strong password guidelines</a>.
     </p>
@@ -44,7 +62,7 @@ tcp    0      0 <b>localhost</b>:mysql    *:*        LISTEN      7168/mysqld
 	 <p>
 	 	You should see the above if the server is running. Note that by default MySQL will <em>only
 		bind to localhost</em>. For any other setup you must edit the configuration file (<tt>/etc/mysql/my.cnf</tt>
-	 	on Ubuntu) to change the line  
+	 	on Ubuntu) to change the line
 		&quot;<tt><a href="http://dev.mysql.com/doc/refman/5.1/en/server-options.html#option_mysqld_bind-address" target="_blank">bind-address</a> = 127.0.0.1</tt>&quot;
 		to bind to your host's address (or <tt>0.0.0.0</tt> to listen on all interfaces) and then restart the server (&quot;<tt>sudo /etc/init.d/mysql restart</tt>&quot;).
 		</p>
@@ -61,13 +79,13 @@ tcp    0      0 <b>localhost</b>:mysql    *:*        LISTEN      7168/mysqld
 tcp    0      0 <b>*</b>:mysql    *:*        LISTEN      7168/mysqld
 <em>                ^
                 Note: the new bind address</em></pre>
-		
+
 	<p>To check if the MySQL DB is accepting remote connections you can use the following from a remote machine.
 	</p>
 	<pre class="prettyprint linenums">mysqladmin ping -u &lt;your-username&gt; -p&lt;your-password&gt; -h &lt;host-ip-address&gt;
                                      ^
                                      Note: no space between '-p' and pwd string</pre>
-	
+
 	<p>If it isn't then you will need to trouble shoot. If the <tt>netstat</tt> on the MySQL host is showing the server
 		as running and bound to the correct interface, then try checking firewall rules using <tt>sudo iptables -L</tt>
 		to list the firewall rules being enforced, but to allow access to your MySQL server through your filewall is
@@ -80,10 +98,10 @@ tcp    0      0 <b>*</b>:mysql    *:*        LISTEN      7168/mysqld
 
     <pre class="prettyprint linenums:4">$ mysql -u root -p
 Enter password: password-you-chose-during-install</pre>
-    <p>Create a new user for your database (NewUser in example below) that is not root. 
+    <p>Create a new user for your database (NewUser in example below) that is not root.
        Only has access to a specific database (called A_Specfic_DB database in example below)
-       but can access all tables in that database and do almost anything in that one database except 
-       create and drop tables and modify privalidges. Doing this so that the scripts I use 
+       but can access all tables in that database and do almost anything in that one database except
+       create and drop tables and modify privalidges. Doing this so that the scripts I use
        to access the DB will have limited scope to do terrible damage. Might also consider not
        granting DELETE priviladges too.
     </p>
@@ -94,7 +112,7 @@ Enter password: password-you-chose-during-install</pre>
 
     <p>
        MySQL account names consist of a user name and a host name. This enables creation of accounts for users with the same name who can connect from different hosts.
-		 In the above example the DB will only accept connections made by <tt>NewUser</tt> from the local machine. To specify that 
+		 In the above example the DB will only accept connections made by <tt>NewUser</tt> from the local machine. To specify that
 		 <tt>NewUser</tt> can connect from anywhere we would <tt>CREATE USER 'NewUser'</tt>, which is equivalent to <tt>CREATE USER 'NewUser'@'%'</tt>.
     <p>
 
@@ -118,12 +136,12 @@ Enter password: password-you-chose-during-install</pre>
 +-----------------------------------------------------------------------------------+</pre>
 
     <p>Worth noting that <tt>GRANT OPTION</tt> is not covered in a normal grant all command. It has to be specifically and explicitly added to a user's permissions.</p>
-    
+
 	 <h2>Describing Tables &amp; Information Schemas</h2>
 	 <p>The easist way to get information about a specific table is to see the SQL that would be required to generate it. To do this you would type the following...</p>
 	 <pre class="prettyprint linenums lang-sql">SHOW CREATE TABLE &lt;table name&gt;</pre>
 	 <p>This isn't particularly easy to parse from a script though. I wanted to get information about primary keys etc so the following solution works a lot better in this case.</p>
-	 <pre class="prettyprint linenums lang-sql">SELECT COLUMN_NAME,CONSTRAINT_NAME, REFERENCED_TABLE_NAME,REFERENCED_COLUMN_NAME 
+	 <pre class="prettyprint linenums lang-sql">SELECT COLUMN_NAME,CONSTRAINT_NAME, REFERENCED_TABLE_NAME,REFERENCED_COLUMN_NAME
 FROM <a target="_blank" href="http://dev.mysql.com/doc/refman/5.5/en/information-schema.html">INFORMATION_SCHEMA</a>.<a target="_blank" href="http://dev.mysql.com/doc/refman/5.5/en/key-column-usage-table.html">KEY_COLUMN_USAGE </a>
 WHERE TABLE_SCHEMA = &lt;database name&gt; AND TABLE_NAME = &lt;table name&gt;;</pre>
 	 <p>Note: If you are seeing a lot of NULLs it could be that you do not have sufficient priviledges to
@@ -133,7 +151,7 @@ WHERE TABLE_SCHEMA = &lt;database name&gt; AND TABLE_NAME = &lt;table name&gt;;<
 
 		<h2>Multiple Joins On Same Table</h2>
 		<p>
-			To <a href="http://dev.mysql.com/doc/refman/5.5/en/join.html" target=_blank">JOIN</a> 
+			To <a href="http://dev.mysql.com/doc/refman/5.5/en/join.html" target=_blank">JOIN</a>
 			on the same table more than once the key is to use aliases to rename each instance of the target table
 			so that we can distinguish the multiple copies of the same sets of columns from the target table...
 		</p>
@@ -166,35 +184,35 @@ FOREIGN KEY(refB) REFERENCES Ref(refId)
 INSERT INTO Ref VALUES (NULL, 'RefB');
 INSERT INTO Ref VALUES (NULL, 'RefC');
 
-INSERT INTO Main 
-   SELECT NULL, r1.refId, r2.refId 
-      FROM Ref AS r1 CROSS JOIN Ref AS r2 
+INSERT INTO Main
+   SELECT NULL, r1.refId, r2.refId
+      FROM Ref AS r1 CROSS JOIN Ref AS r2
       WHERE r1.refName='RefA' AND r2.refName='RefB';
 
-INSERT INTO Main 
-   SELECT NULL, r1.refId, r2.refId 
-      FROM Ref AS r1 CROSS JOIN Ref AS r2 
+INSERT INTO Main
+   SELECT NULL, r1.refId, r2.refId
+      FROM Ref AS r1 CROSS JOIN Ref AS r2
       WHERE r1.refName='RefA' AND r2.refName='RefC';
 
-INSERT INTO Main 
-   SELECT NULL, r1.refId, r2.refId 
-      FROM Ref AS r1 CROSS JOIN Ref AS r2 
+INSERT INTO Main
+   SELECT NULL, r1.refId, r2.refId
+      FROM Ref AS r1 CROSS JOIN Ref AS r2
       WHERE r1.refName='RefB' AND r2.refName='RefC';</pre>
 
 		<p>
-			To insert the correct foreign keys into the <tt>Main</tt> table I'm using a CROSS 
-			<a href="http://dev.mysql.com/doc/refman/5.5/en/join.html" target=_blank">JOIN</a>. The MySQL manual explains that &quot;...In MySQL, 
-			JOIN, CROSS JOIN, and INNER JOIN are syntactic equivalents (they can replace each other). In standard SQL, they are not equivalent. 
-			INNER JOIN is used with an ON clause, CROSS JOIN is used otherwise...&quot;. I'm joining <tt>Ref</tt> on <tt>Ref</tt> so that I can select the primary 
+			To insert the correct foreign keys into the <tt>Main</tt> table I'm using a CROSS
+			<a href="http://dev.mysql.com/doc/refman/5.5/en/join.html" target=_blank">JOIN</a>. The MySQL manual explains that &quot;...In MySQL,
+			JOIN, CROSS JOIN, and INNER JOIN are syntactic equivalents (they can replace each other). In standard SQL, they are not equivalent.
+			INNER JOIN is used with an ON clause, CROSS JOIN is used otherwise...&quot;. I'm joining <tt>Ref</tt> on <tt>Ref</tt> so that I can select the primary
 			key for each referenced item by name to insert the key as a foreign key in <tt>Main</tt>.
 		</p>
 
 
 		<pre class="prettyprint lang-sql linenums">SELECT * FROM Main;
 
-SELECT Main.*, r1.refName AS refAName, r2.refName as refBName 
-FROM Main 
-INNER JOIN Ref AS r1 ON Main.refA=r1.refId 
+SELECT Main.*, r1.refName AS refAName, r2.refName as refBName
+FROM Main
+INNER JOIN Ref AS r1 ON Main.refA=r1.refId
 INNER JOIN Ref AS r2 ON Main.refB=r2.refId;</pre>
 
 		<p>
@@ -234,7 +252,7 @@ mainId   refA   refB   refId   refName
 		Credits to <a href="http://stackoverflow.com/users/1505860/shlomi-noach" target="_blank">
 			Shlomi Noach</a> and <a target="_blank" href="http://stackoverflow.com/users/966491/tom-mac">Tom Mac</a>
 			who posted their  <a target="_blank" href="http://stackoverflow.com/questions/11366006/mysql-on-vs-using">
-			answers to this on SO.</a> 
+			answers to this on SO.</a>
 		</p>
 
 		<ul>
@@ -249,7 +267,7 @@ mainId   refA   refB   refId   refName
 
 		<pre class="prettyprint lang-sql linenums" style="float: left;">CREATE TABLE A( aId INT NOT NULL AUTO_INCREMENT, PRIMARY KEY (aId));
 CREATE TABLE B( bId INT NOT NULL AUTO_INCREMENT, aId INT NOT NULL, PRIMARY KEY (bId));</pre>
-<pre class="prettyprint lang-sql linenums" style="float: left; clear:left;">&gt; SELECT * FROM A;                   
+<pre class="prettyprint lang-sql linenums" style="float: left; clear:left;">&gt; SELECT * FROM A;
 +-----+
 | aId |
 +-----+
@@ -266,12 +284,12 @@ CREATE TABLE B( bId INT NOT NULL AUTO_INCREMENT, aId INT NOT NULL, PRIMARY KEY (
 
 
 
-  and  
+  and
 <F5>
 
 
 </pre>
-<pre class="prettyprint lang-sql linenums" style="float: left;">&gt; SELECT * FROM B;                      
+<pre class="prettyprint lang-sql linenums" style="float: left;">&gt; SELECT * FROM B;
 +-----+-----+
 | bId | aId |
 +-----+-----+
@@ -299,7 +317,7 @@ CREATE TABLE B( bId INT NOT NULL AUTO_INCREMENT, aId INT NOT NULL, PRIMARY KEY (
 
 
 
-  VS.  
+  VS.
 
 
 
@@ -320,15 +338,15 @@ CREATE TABLE B( bId INT NOT NULL AUTO_INCREMENT, aId INT NOT NULL, PRIMARY KEY (
 		<h2 style="clear: left;">Use Left Join To Find What Isn't In The Other Table</h2>
 		<p>
 		We have two tables, &quot;A&quot; and &quot;B&quot;, table &quot;A&quot; with a column (not necessarily
-		the primary key) <tt>id</tt> and &quot;B&quot; with <tt>id</tt>, which would usually be a foreign key referecing <tt>A.id</tt>. 
+		the primary key) <tt>id</tt> and &quot;B&quot; with <tt>id</tt>, which would usually be a foreign key referecing <tt>A.id</tt>.
 		The challenge is to find all the <tt>id</tt>s in table &quot;A&quot; that do not occur in table &quot;B&quot;.
 		</p>
 		<p>To do this, left join A with B on <tt>id</tt> and select all the rows in B
-		   which are NULL. 
+		   which are NULL.
 		</p>
 		<pre class="prettyprint lang-sql linenums">SELECT DISTINCT ...
-FROM a 
-LEFT JOIN b 
+FROM a
+LEFT JOIN b
 ON id
 WHERE b.id IS NULL
 </pre>
@@ -339,10 +357,10 @@ WHERE b.id IS NULL
 		<p>
 		Credits to <a href="http://stackoverflow.com/users/1163867/marcinjuraszek" target="_blank">
 		Marcin Juraszek</a> who posted his <a target="_blank" href="http://stackoverflow.com/questions/15977126/sql-server-select-rows-that-match-all-items-in-a-list">
-			answer to this on SO.</a> 
+			answer to this on SO.</a>
 		</p>
 		<p>
-			In this example there is a table of items and a table of groups. Each group is identified by 
+			In this example there is a table of items and a table of groups. Each group is identified by
 			a unique name. There is an items2groups table to provide a many-to-many relationship.
 		</p><p>
 		The challenge is to find all items that belong to <em>all</em> groups in a set of groups...
@@ -350,11 +368,11 @@ WHERE b.id IS NULL
 		<pre class="prettyprint lang-sql linenums">SELECT *
 FROM items
 WHERE ( items.groupId IN ( SELECT groupId
-                           FROM items2groups 
-                           JOIN groups 
+                           FROM items2groups
+                           JOIN groups
                            USING (groupId)
-                           WHERE groups.groupName IN (&lt;LIST&gt;) 
-                           GROUP BY groupId 
+                           WHERE groups.groupName IN (&lt;LIST&gt;)
+                           GROUP BY groupId
                            HAVING COUNT(itemId) NOT = LEN(&lt;LIST&gt;)
                          )
       )</pre>
@@ -367,7 +385,7 @@ WHERE ( items.groupId IN ( SELECT groupId
 
 		<h2>INTERSECT And MINUS In MySQL</h2>
 		<p>
-			Credits to Carsten H. Pedersen's article 
+			Credits to Carsten H. Pedersen's article
 			<a href="http://www.bitbybit.dk/carsten/blog/?p=71" target="_blank">
 				Doing INTERSECT and MINUS in MySQL</a>.
 		</p>
