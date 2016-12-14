@@ -5,7 +5,7 @@ Assume the dir structure has
 	+ javascript: contains all javascript used by the site. seperate files
 	              that will be combiend into one file and minimised. The order
 	              of inclusion into the monolith is defined in order.txt
-	+ css:        contains all CSS used by the site. seperate files that 
+	+ css:        contains all CSS used by the site. seperate files that
 	              will be combined intil one file and minimised. The order
 	              of inclusion into the monolith is defined in order.txt
 
@@ -34,11 +34,11 @@ def GenerateRunningCheckSum(data, value):
 
 def combine_files(base_dir, dest_file, is_debug=False):
 	print("COMBINING", base_dir, dest_file)
-	un_minimised_temp_aggregate_file = os.path.join(base_dir, "un_minimised_temp_aggregate.file") 
-	minimised_aggregate_file = os.path.join(base_dir, "minimised_aggregate.file") 
+	un_minimised_temp_aggregate_file = os.path.join(base_dir, "un_minimised_temp_aggregate.file")
+	minimised_aggregate_file = os.path.join(base_dir, "minimised_aggregate.file")
 	indexFileName     = os.path.join(base_dir, "contents.txt")
 	indexInfoFilename = os.path.join(base_dir, "contents.data")
-	
+
 	#
 	# Do a running CRC of all the files listed in the index
 	runningCRC = 0
@@ -83,7 +83,7 @@ def combine_files(base_dir, dest_file, is_debug=False):
 		args = ["java", "-jar",  "yuicompressor-2.4.8.jar",  "--type", fileType, "-o", minimised_aggregate_file, un_minimised_temp_aggregate_file]
 		print(args)
 		subprocess.call(args)
-	
+
 	print("Copying {} to {}".format(minimised_aggregate_file, dest_file))
 	shutil.copyfile(minimised_aggregate_file, dest_file)
 
@@ -92,10 +92,10 @@ def mkdir_p(path):
 	""" Recursively make a directory path """
 	try:
 		os.makedirs(path)
-	except OSError as exc: 
+	except OSError as exc:
 		if exc.errno == errno.EEXIST and os.path.isdir(path):
 			pass
-		else: 
+		else:
 			raise
 
 def find_html_files(base_dir):
@@ -140,7 +140,7 @@ def path_explode(path):
 	while len(tail) > 0:
 		l.insert(0, tail)
 		head, tail = os.path.split(head)
-		
+
 	return l
 
 def get_relative_to_root(currentDirName):
@@ -165,27 +165,69 @@ def get_links_insert(currentDirName):
 	linksHtml = lxml.etree.tostring(doc.getroot().get_element_by_id("jehtech_contents_div"), pretty_print=True, method='html').decode()
 	return linksHtml
 
+def create_references(contents):
+	"""
+	## REF LIST START ##
+	##Short name@long descr@link##
+	## REF LIST END ##
+	"""
+	start_refs = re.compile(r'^\w*##\w*REF\w+LIST\w*START\w*##')
+	end_refs = re.compile(r'^\w*##\w*REF\w+LIST\w+END\w*##')
+	a_ref = re.compile(r'^\w*##\w*([^@]+)\w*@\w*([^@]+)\w*@\w*([^@]+)##')
+
+	start_found = False
+	end_found = False
+	for lineno, line in enumerate(contents):
+	    line = line.strip()
+	    if start_refs.match(line) is not None:
+	        conents[lineno] = "<ol>"
+	        start_found = True
+	        break
+
+	if not start_found:
+	    print "No reference section found"
+	    return
+
+	for line in in_fh:
+	    line = line.strip()
+
+	    if end_refs.match(line) is not None:
+	        conents[lineno] = "<\ol>"
+	        end_found = True
+	        break
+
+	    m = a_ref.match(line)
+	    if m is not None:
+	        if end_found:
+	            raise Exception("Reference spec found after reference section end")
+	        contents[lineno] = """<li><a name="{}" href="{}" target="_blank">{}</a>.
+	   </li>
+	""".format(m.group(0), m.group(2), m.group(1))
+
+	if not end_found:
+	    raise Exception("Could not find end of reference section")
+
 def deploy_site():
 	# Delete any existing deployment and begin creating a new one...
 	if os.path.isdir(DEPLOYED_DIR):
 		shutil.rmtree(DEPLOYED_DIR)
 	os.mkdir(DEPLOYED_DIR)
-	
+
 	# Combine javascript and CSS files into monoliths
 	monoJsFilename  = os.path.join(DEPLOYED_DIR, 'jeh-monolith.js')
 	combine_files("./javascript", monoJsFilename)
-	
+
 	monoCssFilename = os.path.join(DEPLOYED_DIR, 'jeh-monolith.css')
 	combine_files("./css", monoCssFilename)
-	
+
 	# Regex to put in the links into all the HTML pages
 	prog = re.compile('(<\s*div\s+id\s*=\s*"includedContent"\s*>)', re.IGNORECASE)
-	
+
 	# Regexs to put in JS and CSS
 	prog_css = re.compile('(<!--\s*CSS_INSERT\s*-->)', re.IGNORECASE)
 	prog_js  = re.compile('(<!--\s*JAVASCRIPT_INSERT\s*-->)', re.IGNORECASE)
 	prog_img = re.compile('##IMG_DIR##')
-	
+
 	last_dirname = None
 	link_to_root = ""
 	doc = None
@@ -197,7 +239,7 @@ def deploy_site():
 			link_to_root = get_relative_to_root(dirname)
 			linksHtml = get_links_insert(dirname)
 			last_dirname = dirname
-		
+
 		# Read in the current HTML files contents
 		htmlFileName = os.path.join(dirname, filename)
 		print("Deploying", dirname, filename, htmlFileName)
@@ -205,7 +247,7 @@ def deploy_site():
 		#htmlFile = open(htmlFileName, 'r')
 		htmlFileContents = htmlFile.read();
 		htmlFile.close()
-		
+
 		# Create and open the file in the deployed folder.
 		deployed_dir = os.path.join('..', DEPLOYED_DIR, dirname)
 		if (dirname != '.'):
@@ -217,10 +259,6 @@ def deploy_site():
 		else:
 			newFileName = os.path.join('..', DEPLOYED_DIR, filename)
 			print("(B) Opening new file {}".format(newFileName))
-
-
-		print(type(linksHtml))
-		print(type(htmlFileContents))
 
 		# Copy the contents of the curr html to it's deployed file but add in the
 		# links page
@@ -240,7 +278,7 @@ def deploy_site():
 	nonHtmlFiles = [ #'reCaptchaSecret.txt',
 	                 'robots.txt',
 	                 'downloadables',
-	                 'images', 
+	                 'images',
 	                 'fonts']
 
 	for filename in nonHtmlFiles:
