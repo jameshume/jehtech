@@ -95,6 +95,14 @@ merge-tool-cmd = p4_merge_helper.sh</pre>
 			information into the trace for instances where merges where made back into
 			the line, or where the line was copied out to another branch.
 		</p>
+		<h3>Properties</h3>
+		<p>
+			Too see changes in properties use the following command:
+		</p>
+		<pre>svn log -v --diff --depth=empty .</pre>
+		<p>
+			Grep the output for &quot;Modified: svn:externals&quot;
+		</p>
 
 		<h2>SVN Ignore Files</h2>
 		<p>The following will ignore all *.orig files from the current directory and all subdirectories</p>
