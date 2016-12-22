@@ -185,7 +185,7 @@ def create_references(contents):
 	        break
 
 	if not start_found:
-	    print "No reference section found"
+	    print("No reference section found")
 	    return
 
 	for line in in_fh:

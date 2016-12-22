@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>Oracle DB notes</title>
+	<!-- META_INSERT -->
+	<meta name="description" content="Notes on Oracle DB & SQL">
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+  <div id="header">
+	  -- This is JEHTech --
+  </div>
+
+   <div id="sidebar">
+    <h1 class="title">Links...</h1>
+    <div id="includedContent"></div>
+  </div>
+
+  <div id="content">
+  <h1 class="title">Oracle DB &amp; SQL</h1>
+  <pre>
+Database objects
+- schema
+- nonschema
+
++ schema - a collection of logical structure of data or objects.
++ view - virtual table - provides access to sibset of columns or some restricted rows of one or more table. views act like a realy table but does not physically take any space. There is non data in it it is just a stored SQL script.
++ materialised view - has a real table filled by an sql query. truncated and refilled with specified time frequency.
++ constrains - provide data integrity
++ index used fo rimporiving speed of data retieval from tables
++ triggers are compiled programs in the db and execute on specific event (insert, update, etc). Used for peroming another operiion on/before/after main operation
++ create my_user identified by password;
+  grant create session, create table to my_user;
++ To access other's tables need to use schema name. eg. HR.employees not juset employees
+  grant all on empoyees to my_user < my_user needs privaledges granted by HR user.
+
+
+From the system account you need to create users:
+eg
+	create user my_new_user identified by MY_NEW_USER_PASSWORD;
+	grant connect, resource, dba to my_new_user;
+	grant create session, grant any privilege to my_new_user;
+	grant unlimited tablespace to my_new_user;
+
+To see a list of users:
+   select * from dba_users;
+
+Virtual Columns
+----------------
+Virtual columns - save disk space, need not update if formula changes:
+create table blah(
+	virt_col_1 number generated always as (another_column * 111) virtual
+);
+
+the keyword virtual means that the table never takes physical space.
+
+NULL values
+-----------
+To do arithmetic on NULL values you need to tell the DB how to handle NULL. use `SELECT AVG(NVL(columns_name, 0)) FROM table;`. Probably best to make the arithmetic value NOT NULL and use a default!
+otherwise NULL values will be ignored.
+
+To insert default values, unlike in MySQL where you would use NULL, in Oracle you specify &quot;default&quot; instead.
+
+MERGING
+--------
+Insert values from table A into table B. Where a PK exists in A and B, update the data in B with the data from A. If a PK does not exist in B, but does in A, just insert new row from A.
+For equivalent in MySQL see https://www.xaprb.com/blog/2006/02/21/flexible-insert-and-update-in-mysql/
+
+eg.
+
+MERGE INTO B
+    USING A
+    ON (B.pk = A.pk) -- OR any number of columns to match
+WHEN MATCHED THEN
+	UPDATE SET B.col1 = A.col1,
+	           B.col2 = A.col2
+	[[DELETE] WHERE condition] -- If you put DELETE in, where the WHERE condition is met the row is deleted, otherwise its updated
+WHEN NOT MATCHED THEN
+	INSERT(col-spec)
+	VALUES(A.col1, A.col2, ...)
+	[WHERE condition]
+
+You can even use the DELETE command if you like. This lets you combine multiple insert, update and delete statements into one locigcal block.
+
+
+
+
+
+
+  </pre>
+  </div>
+
+</body>
+</html>
+
