@@ -20,7 +20,7 @@
    </div>
 
    <div id="content">
-   
+
       <h1 class="title">Linux (Scripting)</h1>
       <div style="padding-right:10px;">
 
@@ -52,12 +52,12 @@
                    target="_blank">StackOverflow: Capturing Groups From a Grep RegEx</a>.
             </li>
 				<!-- 6 -->
-            <li><a href="https://tiswww.case.edu/php/chet/bash/bash.html" 
+            <li><a href="https://tiswww.case.edu/php/chet/bash/bash.html"
                    target="_blank">Bash Manual Page</a>.
             </li>
 				<!-- 7 -->
             <li><a href="http://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash"
-                   target="_blank">Parse script parameters</a>. 
+                   target="_blank">Parse script parameters</a>.
             </li>
 				<!-- 8 -->
             <li><a href="http://www.tldp.org/LDP/abs/html/parameter-substitution.html"
@@ -86,27 +86,36 @@
          </ol>
       </div> <!-- END H2: References -->
 
+      <h2>To Read</h2>
+      <div>
+          <ul>
+            <li>http://www.thegeekstuff.com/2011/08/bash-history-expansion/</li>
+            <li>https://magcius.github.io/xplain/article/index.html</li>
+            <li>http://byobu.co/about.html</li>
+          </ul>
+      </div>
+
       <h2>Running Ubuntu On VirtualBox</h2>
       <div>
          <h3>Installing Ubuntu Guest Additions</h3>
          <p>
             The <a href="https://www.virtualbox.org/manual/ch04.html"
                    target="_blank">guest additions</a> are needed because
-            <q>they consist of device drivers and system applications that optimize 
+            <q>they consist of device drivers and system applications that optimize
             the guest operating system for better performance and usability</q>.
-            They allow the system to do things like get the screen to scale 
-            correctly in full screen mode, enable mouse pointer integration, 
+            They allow the system to do things like get the screen to scale
+            correctly in full screen mode, enable mouse pointer integration,
             share clipboard and folders between host and guest and so on. See
             the link for full details.
          </p>
          <p>
-            You can normally just install them from the VirtualBox menu as 
+            You can normally just install them from the VirtualBox menu as
             shown below:
          </p>
          <p>
             <img src="##IMG_DIR##/install_guest_additions_from_menu.png" alt="Image showing how to install guest additions on VirtualBox from VirtualBox menu"/>
          </p>
-         <p>If that fails for whatever reason you can install and download the 
+         <p>If that fails for whatever reason you can install and download the
             latest guest additions ISO from the VirtualBox webstite. You can then
             add the CD to the VM's media as shown below (whilst the VM is powered
             off).
@@ -114,9 +123,9 @@
          <p>
             <img src="##IMG_DIR##/add_vbox_additions_iso.png" alt="Image showing how to add a CD ISO to VM on VirtualBox"/>
          </p>
-         <p>Now power up the VM. It will be 
-            mounted on <tt>/media/&lt;user name&gt;/VBOXADDITIONS_x.x.x_xxxxx</tt>. 
-            Change dir into that folder and <tt>sudo run VBoxLinuxAdditions.run</tt>. 
+         <p>Now power up the VM. It will be
+            mounted on <tt>/media/&lt;user name&gt;/VBOXADDITIONS_x.x.x_xxxxx</tt>.
+            Change dir into that folder and <tt>sudo run VBoxLinuxAdditions.run</tt>.
             Reboot.
          </p>
          <h3>Adding A Shared Directory Between Host and Guest</h3>
@@ -135,7 +144,7 @@
          </p>
          <p>
             To fix, open a terminal window and type &quot;<tt>sudo usermod -G vboxsf -a &lt;user name&gt;</tt>&quot;.
-            Then log off, log on again. Now you should be able to acccess the 
+            Then log off, log on again. Now you should be able to acccess the
             shared directory, found under <tt>/media/sf_&lt;share dir name&gt;</tt>,
             which from the above example would be <tt>/media/s_virtual_transfer</tt>.
          </p>
@@ -144,24 +153,24 @@
       <h2>Install Ubuntu MATE On Lenovo G510</h2>
       <div>
          <p>
-            Installing from a USB stick is sorta easy. Set the BIOS to boot use UEFI: 
-            <q>... UEFI ... allows booting from hard disks as large as 9.4 ZB ... 
-            UEFI allows more boot options, doesn’t prescribe particular file systems, 
-            and has excellent network booting abilities. OS boot loaders can also serve 
+            Installing from a USB stick is sorta easy. Set the BIOS to boot use UEFI:
+            <q>... UEFI ... allows booting from hard disks as large as 9.4 ZB ...
+            UEFI allows more boot options, doesn’t prescribe particular file systems,
+            and has excellent network booting abilities. OS boot loaders can also serve
             as extensions to the UEFI, which itself can function as a proper boot loader...</q>
             <a href="http://www.howtogeek.com/56958/" target="_blank">[ref]</a>
             To do this reboot your laptop and press F2 continually until the BIOS config
             opens.
          </p><p>
-            Then the next challenge is to get the wireless working. You need to 
-            install the broadcom drivers. To do this you must <b>disable</b> 
-            <a href="http://forums.fedoraforum.org/showthread.php?p=1758847" target="_blank">[ref]</a> 
-            secure booting 
-            <a href="http://www.pcworld.com/article/2901262/microsoft-tightens-windows-10s-secure-boot-screws-where-does-that-leave-linux.html" 
+            Then the next challenge is to get the wireless working. You need to
+            install the broadcom drivers. To do this you must <b>disable</b>
+            <a href="http://forums.fedoraforum.org/showthread.php?p=1758847" target="_blank">[ref]</a>
+            secure booting
+            <a href="http://www.pcworld.com/article/2901262/microsoft-tightens-windows-10s-secure-boot-screws-where-does-that-leave-linux.html"
                target="_blank">[ref]</a>
-            in your BIOS settings. If you don't do this you will find that the next steps 
-            <a href="http://askubuntu.com/questions/553615/cant-enable-the-proprietary-drivers-for-broadcom-bcm43142-wireless-after-instal" 
-               target="_blank">[ref]</a> give you an error along the lines of 
+            in your BIOS settings. If you don't do this you will find that the next steps
+            <a href="http://askubuntu.com/questions/553615/cant-enable-the-proprietary-drivers-for-broadcom-bcm43142-wireless-after-instal"
+               target="_blank">[ref]</a> give you an error along the lines of
             &quot;ERROR: could not insert 'wl': Required key not available&quot;.
          </p> <p>
             Boot Ubuntu and load a console window. Type the following:
@@ -172,6 +181,34 @@ sudo apt-get install bcmwl-kernel-source</pre>
          <p>
             Reboot. This should get your wireless up and running.
          </p>
+      </div>
+
+      <h2>Running XServer On Windows</h2>
+      <div>
+            <p>
+                <a href="http://www.straightrunning.com/XmingNotes/" target="_blank">Xming</a>
+                with putty worked out-of-the-box for me on my Windows 10 machine. Download
+                and install Xming. Once installed, from the start menu, run Xming &gt; XLaunch.
+                From there select &quot;Multiple windows&quot;. If you're only going to have the
+                one XServer running, just leave the display number as zero.
+            </p>
+            <p>
+                Next start a Putty session with X11 forwarding enabled:
+            </p>
+            <p>
+                <img src="##IMG_DIR##/setup_x11_putty.png" alt="Screen shot of Putty with X11 forwarding enabled"/>
+            </p>
+            <p>
+                From your SSH session, if you launch a GUI application should now magically appear
+                on your desktop :)
+            </p>
+      </div>
+
+      <h2>Fix Putty Linux Terminal Session Function Keys And Keypad</h2>
+      <div>
+          <p>Pressing the HOME key normally doesn't work in my Putty sessions when loggin onto a Linux box.
+          This is because the Putty terminal type needs setting up:</p>
+          <p><img src="##IMG_DIR##/putty_linux_terminal_type.png" alt="Screenshot of Putty terminal type configuration for Linux"/></p>
       </div>
 
 		<h2>GRUB - A Bootloader</h2>
@@ -193,7 +230,7 @@ sudo apt-get install bcmwl-kernel-source</pre>
 		<h2>Static Shell Script Analysis With ShellCheck</h2>
 		<div>
 			<p>
-				Visit the <a href="http://www.shellcheck.net" target="_blank">ShellCheck website</a> 
+				Visit the <a href="http://www.shellcheck.net" target="_blank">ShellCheck website</a>
 				and paste in your script to get a detailed analysis. You can learn a
 				ton of reaslly useful bash information using this really quickly. For example,
 				two common errors I used to make were:
@@ -218,62 +255,62 @@ sudo apt-get install bcmwl-kernel-source</pre>
 			</p>
 			<pre>JEHTECH=1234 some-command</pre>
 			<p>
-				What is this doing and why is it possible? References <a href="#ref10">10</a> 
-				through <a href="#ref13">13</a> are really good starters, but in the end, however, it is all 
+				What is this doing and why is it possible? References <a href="#ref10">10</a>
+				through <a href="#ref13">13</a> are really good starters, but in the end, however, it is all
 				available in the bash man page :) It says:
 			</p>
 			<blockquote>
 				<p>
-					...A  simple command is a sequence of optional variable assignments 
-					followed by blank-separated words and redirections, 
-					and terminated by a control operator... 
+					...A  simple command is a sequence of optional variable assignments
+					followed by blank-separated words and redirections,
+					and terminated by a control operator...
 				</p>
 				<footer>-- Bash man page</footer>
 			</blockquote>
 			<p>
-				Ignoring redirections and the control character 
-				(&quot;||&quot;, &quot;&amp;&quot;, &quot;&amp;&amp;&quot;, 
-				&quot;;&quot;, &quot;;;&quot;, &quot;(&quot;, &quot;)&quot;, 
+				Ignoring redirections and the control character
+				(&quot;||&quot;, &quot;&amp;&quot;, &quot;&amp;&amp;&quot;,
+				&quot;;&quot;, &quot;;;&quot;, &quot;(&quot;, &quot;)&quot;,
 				&quot;|&quot;, &quot;|&amp;&quot;, &quot;&lt;newline&gt;&quot;),
 				this means that a simple command is:
 			</p>
 			<pre  class="prettyprint linenums">[VAR1=value VAR2=value ...] COMMAND PARAM1 PARM2 ...</pre>
 			<p>
 				The command can result from the expansion of a variable, or be a
-				literal. It also does not have to be present (ie., you just have a 
-				variable assignment on its own).  The bash man page proceeds to say 
+				literal. It also does not have to be present (ie., you just have a
+				variable assignment on its own).  The bash man page proceeds to say
 				later on...
 			</p>
 			<blockquote>
 				<p>
-					...When a simple command is executed, the shell performs the 
-					following expansions, assignments, and redirections, from left 
+					...When a simple command is executed, the shell performs the
+					following expansions, assignments, and redirections, from left
 					to right.
 				</p>
 				<ol>
 					<li>
-						The words that the parser has marked as variable assignments 
-						(those preceding the command name) and redirections are saved 
+						The words that the parser has marked as variable assignments
+						(those preceding the command name) and redirections are saved
 						for later processing.
 					</li>
 					<li>
-						The words that are not variable assignments or redirections are 
-						expanded.  If any words remain after expansion, the first word 
+						The words that are not variable assignments or redirections are
+						expanded.  If any words remain after expansion, the first word
 						is taken to be the name of the command and the  remaining  words
 						are the arguments.
 					</li>
 					<li>Redirections are performed ...</li>
 					<li>
-						The  text  after  the  = in each variable assignment undergoes 
-						tilde expansion, parameter expansion, command substitution, 
+						The  text  after  the  = in each variable assignment undergoes
+						tilde expansion, parameter expansion, command substitution,
 						arithmetic expansion, and quote removal before being assigned to the
 						variable.
 					</li>
 				</ol>
 				<p>
-					If no command name results, the variable assignments affect the 
-					current shell environment.  <b>Otherwise, the variables are added 
-					to the environment of the executed command and do not affect 
+					If no command name results, the variable assignments affect the
+					current shell environment.  <b>Otherwise, the variables are added
+					to the environment of the executed command and do not affect
 					the current shell environment</b>...
 				</p>
 				<footer>
@@ -294,13 +331,13 @@ sudo apt-get install bcmwl-kernel-source</pre>
 ~$ JAMES="BYE BYE" echo "$JAMES"
 HELLO</pre>
 			<p>
-				This puzzled me for a bit, but because <q>...words that are not variable assignments or redirections are expanded...</q> 
+				This puzzled me for a bit, but because <q>...words that are not variable assignments or redirections are expanded...</q>
 				<b>before</b> the command is executed, the following is happening.
 			</p>
 			<ol>
 				<li>The variable assignment <tt>JAMES="BYE BYE"</tt> is saved. So the line being processed is now just <tt>echo "$JAMES"</tt>
 				</li>
-				<li>Now variable expansion occurs. The value of <tt>$JAMES</tt> is still &quot;HELLO&quot; because that is the value 
+				<li>Now variable expansion occurs. The value of <tt>$JAMES</tt> is still &quot;HELLO&quot; because that is the value
 				    of the variable in the current shell. The new assignment that happens as part of our simple command has not
 					 taken effect yet! The command to be executed is therefore now <tt>echo HELLO</tt>.
 				</li>
@@ -315,7 +352,7 @@ HELLO</pre>
 		<div>
 			<p>
 				The bash shell variable <tt>$IFS</tt> is a list of delimeters that
-				the shell will use to split words on. I like to think of it as 
+				the shell will use to split words on. I like to think of it as
 				the delimeter list I'd supply to the C function <tt>strtok()</tt>.
 				Once a word has been tokenized the shell does not see it as one &quot;block&quot;
 				but as many seperate tokens/parameters.
@@ -346,14 +383,14 @@ a b c d e#f</pre>
 			<p>
 				Our original string had many spaces between the &quot;d&quot; and &quot;e&quot; but
 				the <tt>echo</tt> output does not. What has happened here is that parmeter expansion
-				occured (this occurs <b>before</b> the entire command line is evaluated). 
+				occured (this occurs <b>before</b> the entire command line is evaluated).
 			</p>
 			<p>
 				The bash shell had to substitute the value of <tt>$JEHTECH</tt> and when
 				it does this is splits or tokenises the resulting expansion based on the
 				delimeters in <tt>$IFS</tt>. The default value for <tt>$IFS</tt> is <tt>&lt;space&gt;&lt;tab&gt;&lt;newline&gt;</tt>,
 				so any of the characters in any consecutive order are &quot;deleted&quot; and used as a
-				seperator between words. The result is that bash finds the tokens 
+				seperator between words. The result is that bash finds the tokens
 				&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, and &quot;e#f&quot;.
 			</p>
 			<p>
@@ -366,12 +403,12 @@ a b c d     e#f
 			<p>
 				In the above example, although parameter expansion has taken place,
 				no word splitting has been performed. The reason is, is that bash
-				will not perform word splitting when the expansion (be it parmeter, 
+				will not perform word splitting when the expansion (be it parmeter,
 				arithemetic or command substitution) occurs in quotes.
 			</p>
 			<div class="box_container"><div class="info">
 				<p>
-					 Bash will not perform word splitting when the expansion (be it parmeter, 
+					 Bash will not perform word splitting when the expansion (be it parmeter,
 					arithemetic or command substitution) occurs in quotes.
 				</p>
 			</div></div>
@@ -379,8 +416,8 @@ a b c d     e#f
 				It is for this reason that tools like <a href="http://www.shellcheck.net" target="_blank">ShellCheck</a>
 				will always recommend that double quotes should be used to avoid word splitting.
 				This is because the effects of word splitting are often not wanted. For example, if
-				you received a variable from the user in one of your scripts, and lets say it is 
-				a directory from which you need to work from. If you do the following, and the 
+				you received a variable from the user in one of your scripts, and lets say it is
+				a directory from which you need to work from. If you do the following, and the
 				directory name contains a space, the parameter substitution will create two tokens
 				when only one was meant - the directory name that unluckily contained a space. Try
 				the following:
@@ -399,7 +436,7 @@ drwxr-xr-x 2 jehtech jehtech 4096 Aug 12 10:36 jeh tech/
 
 ~$ rmdir jeh\ tech/</pre>
 			<p>
-				Note how the command <tt>ll -d $MYDIR</tt> fails, but 
+				Note how the command <tt>ll -d $MYDIR</tt> fails, but
 				<tt>ll -d &quot;$MYDIR&quot;</tt> does what is expected!
 			</p>
 			<p>
@@ -412,9 +449,9 @@ drwxr-xr-x 2 jehtech jehtech 4096 Aug 12 10:36 jeh tech/
 			<p>
 				I wanted to be able to check the IPython version in a shell script to
 				let the user know if it needed upgrading and to offer to do the upgrade
-				automatically. I knew I could spit the string onto multiple lines 
+				automatically. I knew I could spit the string onto multiple lines
 				using <tt>tr</tt> and then parse it in a <tt>for</tt> loop, but a quick
-				bit of googling and StackOverflow came to the rescue again 
+				bit of googling and StackOverflow came to the rescue again
 				<a href="http://stackoverflow.com/questions/918886/how-do-i-split-a-string-on-a-delimiter-in-bash"
 				   target="_blank">[3]</a>.
 			</p>
@@ -434,7 +471,7 @@ fi</pre>
             If you know that your shell script will require root permissions
             and must be run with <tt>sudo</tt>, you can cause the script to
             output a useful error message and abort if it isn't run as such,
-            rather than a bunch of commands just failing. To do this you can 
+            rather than a bunch of commands just failing. To do this you can
             check the user's effective user ID
             <a href="https://en.wikipedia.org/wiki/User_identifier"
                target="_blank">[4]</a>, which will be zero if s/he has
@@ -464,11 +501,11 @@ fi</pre>
          </p>
          <pre>PS1='\[\e[0;33m\]\u@\h:\w\$ \[\e[0m\]'</pre>
          <p>
-            Note that the &quot;<tt>\[</tt>&quot; and &quot;<tt>\]</tt>&quot; 
+            Note that the &quot;<tt>\[</tt>&quot; and &quot;<tt>\]</tt>&quot;
             surrounding the &quot;<tt>\e...</tt>&quot; constructs
             are very important as otherwise the size of the prompt is
-            miscalculated and when cycling through command history the display 
-            messes up 
+            miscalculated and when cycling through command history the display
+            messes up
             <a href="http://www.cyberciti.biz/faq/bash-shell-change-the-color-of-my-shell-prompt-under-linux-or-unix/"
             target="_blank">[1]</a>.
          </p>
@@ -478,7 +515,7 @@ fi</pre>
          <p>
             I really dislike it when the cwd printed in the prompt begins
             to get too long and take up most of the terminal line. What I
-            wanted was for the cwd to collapse a little when this happended. 
+            wanted was for the cwd to collapse a little when this happended.
             To do this I set my <tt>PS1</tt> environment variable as follows
             and used the (hacky) Python script, also shown below.
          </p>
@@ -541,10 +578,10 @@ This is JEH-Tech.com</pre>
             by the shell as <tt>echo $JEH_TECH</tt>, which is passed to <tt>eval</tt>.
             Eval then re-evalulates this string which <tt>echo</tt>es the value
             of the variable <tt>JEH_TECH</tt>. Thus we have essentially
-            dereferenced <tt>jtRef</tt>.
+            dereferenced <tt>jtRef</tt>. <b>Note however that eval is a potentially massive security whole!!</b>
          </p>
          <p>
-            However, in Bash, there is a much easier syntax 
+            However, in Bash, there is a much easier syntax
             <a href="http://stackoverflow.com/questions/11065077/eval-command-in-bash-and-its-typical-uses"
                target="_blank">[2]</a>. We could just write
             the following.
@@ -552,7 +589,7 @@ This is JEH-Tech.com</pre>
          <pre class="prettyprint linenums">$ echo ${!jtRef}
 This is JEH-Tech.com</pre>
          <p>
-            In Bash, the variable expansion mechanism 
+            In Bash, the variable expansion mechanism
             <tt>${!<em>varName</em>}</tt> does the dereferencing much more
             elegantly for us...
          </p>
@@ -560,24 +597,24 @@ This is JEH-Tech.com</pre>
          <h3>Splitting up PATH-like Variable Using Sed and Tr</h3>
          <div>
             <p>
-               To split up the path variable, i.e, do the equivalent of a 
-               <tt>split()</tt> function in bash, I used a combination of 
+               To split up the path variable, i.e, do the equivalent of a
+               <tt>split()</tt> function in bash, I used a combination of
                <tt>tr</tt> and <tt>sed</tt>.
             </p>
             <p>
                Why do the split? Two reasons. Firstly, grep would match
                the first occurrence of a string. So if <tt>PATH=/aaa/bbb</tt>
-               and I wish to add <tt>/aaa</tt>, <tt>grep</tt>ing for it before 
-               adding it to the path (so I don't clutter it with duplicates) 
+               and I wish to add <tt>/aaa</tt>, <tt>grep</tt>ing for it before
+               adding it to the path (so I don't clutter it with duplicates)
                won't work: I can't use word boundaries in the regexp because the
                <tt>/</tt> appears to count as a word boundary and grepping for
-               possible colons becomes tedious. Secondly, sed works on a line by 
+               possible colons becomes tedious. Secondly, sed works on a line by
                line basis.
             </p>
             <p>
-               So, my solution is this... use <tt>tr</tt> to break the path 
+               So, my solution is this... use <tt>tr</tt> to break the path
                string across many lines, one line per path element, and then
-               use <tt>sed</tt> to blank out the matching path, and then use 
+               use <tt>sed</tt> to blank out the matching path, and then use
                <tt>tr</tt> to re-collapse it all back into one string (removing
                the duplicate newline resulting from the blank line created by
                <tt>sed</tt>
@@ -591,15 +628,15 @@ This is JEH-Tech.com</pre>
                The snipped works as follows...
 
                <ol>
-                  <li><tt>echo -e "${!varname}"</tt> echoes the value of the 
-                      variable referenced by <tt>varname</tt> to stdout, which 
+                  <li><tt>echo -e "${!varname}"</tt> echoes the value of the
+                      variable referenced by <tt>varname</tt> to stdout, which
                       is piped into <tt>tr</tt>.
                   </li>
                   <li><tt>tr ":" "\n"</tt> replaces all colons in the path
                       string with newlines so that sed can work line by line
                   </li>
                   <li><tt>sed -e "s@^$path_2_del\$@@g"</tt> blanks out the line
-                      (deletes the line but not the trailing newline) that 
+                      (deletes the line but not the trailing newline) that
                       matches <em>the entire</em> path and no more. The use of
                       the <tt>@</tt> is because if we used a forward slash we'd
                       have to go to the trouble of escapre the path seperators.
@@ -695,12 +732,12 @@ function remove_from_path() {
             <ul>
                <li><a href="http://stackoverflow.com/questions/1891797/capturing-groups-from-a-grep-regex"
                       target="_blank">StackOverflow: Capturing Groups From a Grep RegEx</a>.
-               <li><a href="https://tiswww.case.edu/php/chet/bash/bash.html" 
+               <li><a href="https://tiswww.case.edu/php/chet/bash/bash.html"
                       target="_blank">Bash Manual Page</a>.</li>
             </ul>
          </p>
          <p>
-            Combining this with the info from section &quot;<a href="#ExecAlternative">Find --exec alternative when you want to exec a script function</a>&quot; 
+            Combining this with the info from section &quot;<a href="#ExecAlternative">Find --exec alternative when you want to exec a script function</a>&quot;
             the following worked quite well. This would work for files of the format
             &quot;part1_part2.txt&quot;
          </p>
@@ -715,9 +752,9 @@ do
    echo "First group is $group1 and second is $group2"
 done</pre>
 
-         <p>From the Bash manual: <q>... parenthesized subexpressions ... are 
-            saved in the array variable <tt><b>BASH_REMATCH</b></tt> ...  index 0 is 
-            [the match of] the entire regular expression ... index n is the 
+         <p>From the Bash manual: <q>... parenthesized subexpressions ... are
+            saved in the array variable <tt><b>BASH_REMATCH</b></tt> ...  index 0 is
+            [the match of] the entire regular expression ... index n is the
             [match of] the nth parenthesized subexpression.</q>
          </p>
       </div> <!-- End H2: New bash Test -->
@@ -761,10 +798,10 @@ done</pre>
             so all that was needed was exhanging one sample name for another...
          </p>
          <pre class="prettyprint linenums">N=new_samp &amp;&amp;
-O=old_samp &amp;&amp; 
-find -name "*$O*" |  
+O=old_samp &amp;&amp;
+find -name "*$O*" |
   while read oldf
-  do 
+  do
     newf=$(echo $oldf | sed "s/$O/${N}_corrected/")
     cp o=$oldf n=$newf
 done</pre>
@@ -790,11 +827,11 @@ done</pre>
          <h3>Read</h3>
          <h4>Piping Output To Read</h4>
          <p>
-            The builtin 
-            <tt><a href="http://linuxcommand.org/lc3_man_pages/readh.html" target="_blank">read</a></tt> 
-            is very useful for 
-            <a href="http://stackoverflow.com/questions/226703/how-do-i-prompt-for-input-in-a-linux-shell-script/27875395#2787539" 
-               target="_blank">reading in user input</a>, 
+            The builtin
+            <tt><a href="http://linuxcommand.org/lc3_man_pages/readh.html" target="_blank">read</a></tt>
+            is very useful for
+            <a href="http://stackoverflow.com/questions/226703/how-do-i-prompt-for-input-in-a-linux-shell-script/27875395#2787539"
+               target="_blank">reading in user input</a>,
             or for reading and processing the output of a command like <tt>find</tt> line by line. For example:
          </p>
          <pre class="prettyprint linenums">for dir in "list of dirs ":
@@ -808,16 +845,16 @@ do
 done</pre>
          <p>
             One thing that might catch you out is that variables inside the
-            <tt>while</tt> loop 
+            <tt>while</tt> loop
             <a href="http://mywiki.wooledge.org/BashFAQ/024"
                target="_blank">disappear after the loop terminates</a>. The
-            summary is that the <tt>while</tt> loop is executed in a 
-            sub shell, so will have a new variable and context. 
+            summary is that the <tt>while</tt> loop is executed in a
+            sub shell, so will have a new variable and context.
          </p>
          <h4>Reading Files Line By Line</h4>
          <p>
             Another useful example is when you want to read a file line by
-            line in your bash script. This was answered perfectly in 
+            line in your bash script. This was answered perfectly in
             <a href="http://stackoverflow.com/questions/10929453/bash-scripting-read-file-line-by-line this"
                target="_blank">SO thread</a>.
          </p>
@@ -862,8 +899,8 @@ done</pre>
             loader debug output just set <tt>export LD_DEBUG=</tt>.
          </p>
          <p>
-            Annoyingly on QNX (I know it's POSIX-like and not Linux) it appears 
-            you need to set <tt>DL_DEBUG</tt> (Note &quot;DL&quot;, 
+            Annoyingly on QNX (I know it's POSIX-like and not Linux) it appears
+            you need to set <tt>DL_DEBUG</tt> (Note &quot;DL&quot;,
             not &quot;LD&quot;)...
          </p>
       </div>  <!-- END: H2: Debug .so Loading Using LD_DEBUG -->
@@ -879,4 +916,4 @@ done</pre>
 </body>
 </html>
 
-   
+
