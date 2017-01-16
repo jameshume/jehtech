@@ -626,7 +626,7 @@ This is JEH-Tech.com</pre>
                For example, removing a path element has the following script
                snuippet
             </p>
-            <pre>echo -e "${!varname}" | tr ":" "\n" | sed -e "s@^$path_2_del\$@@g" | tr -s "\n" ":" | sed -e 's/:$//'</pre>
+			<pre class="prettyprint linenums">echo -e "${!varname}" | tr ":" "\n" | sed -e "s@^$path_2_del\$@@g" | tr -s "\n" ":" | sed -e 's/:$//'</pre>
             <p>
                The snipped works as follows...
 
@@ -649,6 +649,14 @@ This is JEH-Tech.com</pre>
                       that may have been left.
                   </li>
                </ol>
+			</p>
+			<p>
+				Or... the following sed script would have done the same...
+			</p>
+			<pre class="prettyprint linenums">s/\(:\{0,1\}\)PATH_TO_DELETE\(:\{0,1\}\)/\1\2/g
+s/::*/:/g
+s/^://g
+s/:$//g</pre>
          </div>
 
          <h3>Resulting Script To Add/Remove Path Elements From PATH-like Variables</h3>
@@ -889,7 +897,7 @@ done</pre>
          </p>
 
          <h3>Echo Each Command Before Execution</h3>
-         <pre>set -x</tt>
+		 <pre>set -x</pre>
       </div><!-- End H2: Misc Script Stuff -->
 
       <h2>Debug .so Loading Using LD_DEBUG</h2>
@@ -914,6 +922,286 @@ done</pre>
       		<li><a href="https://wiki.linuxfoundation.org/networking/netem" target="_blank">NetEm</a>.</li>
       	</ul>
       </div> <!-- END H2 Netem -->
+
+	  <h2>Sed</h2>
+	  <div>
+		<h3>Intro</h3>
+		<p>
+			Sed applies each command to line 1, then each command to line 2 and so on. Each line of input is held in the <em>pattern space</em>, a small temporary buffer where commands are applied. The basic command flow is shown below but it does not account
+			for commands that can alter flow control etc.
+		</p>
+		<p>
+			<img src="##IMG_DIR##/sed_basic_flow.png" alt="Diagram of Sed data flow"/>
+		</p>
+		<p>
+			So if there is a file with the following contents:
+		</p>
+		<pre>jeh-tech</pre>
+		<p>
+			And we use the following script:
+		</p>
+		<pre>s/jeh/JEH/
+s/jeh/DOH/</pre>
+		<p>The output would be</p>
+		<pre>JEH-tech</pre>
+		<p>
+			This is because the line <code>jeh-tech</code> is read into the pattern buffer. The first 
+			replace command changes the string to <code>JEH-tech</code>, which means that the second 
+			command does not match so no replacement is made.
+		</p>
+		<p>
+			Sed will apply commands to every line. To stop this behaviour Sed must be told which lines
+			to match by suppling zero through two <em>addresses</em> (which can be regular expressions 
+			or line numbers etc).
+		</p>
+		<p>
+			The general syntax is:
+		</p>
+		<pre>[address[, address]]command</pre>
+		<p>
+			Or...
+		</p>
+		<pre>[address[, address]] { 
+command
+command
+...
+command
+} # << Ending brace must be on it's own line.</pre>
+		<p>
+			The above applies multiple commands to each line matching the main address (and possibly sub addresses). 
+		</p>
+		<p>
+			Addresses always require a slash (/) as a delimeter.
+		</p>
+		<p>
+			<ul>
+				<li>No address = command applied to each line,</li>
+				<li>One address = applied to any line matching,</li>
+				<li>
+					<p>
+						Two comma seperated address = command applied to first line matching first address 
+						and all lines until (including) line matching second address. For example, using 
+						the following script:
+					</p>
+					<pre>/^START/,/^END/ {
+   s/jeh/JEH/
+}</pre>
+					<p> Applied to the following file:
+					</p>
+					<pre>jeh-tech
+START
+jeh-tech
+jehtest
+END
+jeh-tech</pre>
+					<p>Sed would output the following:
+					</p>
+					<pre>jeh-tech
+START
+<b>JEH</b>-tech
+<b>JEH</b>test
+END
+jeh-tech</pre>
+					<p>Note how the text subsitution that capitalised the letters <code>jeh</code>
+					 	is only applied to lines between <code>START</code> and <code>END</code>.
+					</p>
+				</li>
+				<li>Address suffixed by ! = command applied to lines not matching.</li>
+			</ul>
+		</p>
+
+		<h3>Substitution</h3>
+		<p>
+			The substituion command looks like this:
+		</p>
+		<pre>[address]s/search_pat/replace/flags</pre>
+		<p>
+			Command delimeter can be any character, you don't have to use slash (/). Note, you have to use slashes 
+			for addresses, however.
+		</p>
+		<p>
+			The following meta-characters can be used in the replacement string:
+		</p>
+		<p>
+			<table>
+				<tr><td>&amp;</td><td>Replaced by the string matched by the regular expression.</td></tr>
+				<tr><td>\n</td><td>Matches n<sup>th</sup> substring match by &quot;\(&quot; and &quot;\)&quot;.</td></tr>
+				<tr><td>\</td><td>Escapre char</td></tr>
+			</table>
+		</p>
+		<p>
+			Flags can include:
+			<table>
+			<tr><td>n</td><td>Number from 1 to 512: Replacement made for n<sup>th</sup> occurence of search_pat.</td></tr>
+			<tr><td>g</td><td>Change all occurrences in pattern space, not just first (default behaviour)</td></tr>
+			<tr><td>p</td><td>Print contents of pattern space</td></tr>
+			<tr><td>w <em>file</em></td><td>Write pattern space to file</td></tr>
+			</table>
+		</p>
+		<p>
+			For example, to apply a substitution command to the second occurence of a search pattern 
+			to only those lines containing the word &quot;test&quot;, one could use the following
+		</p>
+		<pre>/test/s/jeh/JEH/2
+^^^^^ ^^^^^^^^^ ^
+^^^^^ ^^^^^^^^^ 2nd occurence
+^^^^^ <em>command</em>
+^^^^^
+<em>address</em></pre>
+		<p>	
+			If we applied the above to the following lines:	
+		</p>
+		<pre>jeh-tech-jeh
+jehtest
+jehtestjeh</pre>
+		<p>
+			We would get the following output:
+		</p>
+		<pre>
+jeh-tech-jeh # Second occurence not replaced - no address "test"
+jehtest      # The address "test" is present but no 2nd occurence of "jeh"
+jehtestJEH   # Address "test" found and second occurence of "jeh" replaced</pre>
+
+		<h3>Deletion</h3>
+		<pre>/<em>address</em>/d</pre>
+		<p>
+			Deletes the entire line (contents of pattern space really) matched by <em>address</em>. A new line
+			of input is then read and the script starts from the top again.
+		</p>
+
+		<h3>Append, Insert, Change</h3>
+		<p>
+			These are <b>multi-line</b> commands...
+		</p>
+		<h4>Append</h4>
+		<pre># Append text after current line in pattern space
+[<em>line-address</em>]<b>a</b>\
+text1\ #< To insert multiple lines use more backslashes
+text2</pre>
+		<p>
+			For example, operating on the following file:
+		</p>
+		<pre>jeh-tech-jeh
+jehtest</pre>
+		<p>
+			Using the insert command:
+		</p>
+		<pre>/test/a\
+Text to be inserted</pre>
+		<p>
+			Will give the following output:
+		</p>
+		<pre>jeh-tech-jeh
+jehtest
+Text to be inserted</pre>
+
+		<h4>Insert</h4>
+		<pre># Insert text before current line in pattern space
+[<em>line-address</em>]<b>i</b>\
+text</pre>
+		<p>
+			On the same file, replacing the append with an insert would give the following:
+		</p>
+		<pre>jeh-tech-jeh
+Text to be inserted
+jehtest</pre>
+		<h4>Change</h4>
+		<pre># Change contents of pattern space
+[<em>address</em>]<b>c</b>\
+text</pre>
+		
+		<h3>Transform</h3>
+		<pre>[<em>address</em>]<b>y</b>/abc/xyz/</pre>
+
+		<h3>Printing</h3>
+		<pre>p</pre>
+		<p>
+			Normally just on its own. It prints the contents of the pattern buffer.
+		</p>
+		<pre>[<em>address</em>]=</pre>
+		<p>
+			The above will print the line number of the match.
+		</p>
+
+		<h3>Multiple Lines</h3>
+		<h4>Joining Lines</h4>
+		<p>
+			To append a new line (with new line character) to the pattern space use the <code><b>N</b></code> 
+			command. Meta character &quot;<code>^</code>&quot; matches the start of the <em>first</em> line.
+			The meta character &quot;<code>$</code>&quot; matches the very last end-of-line missing all intermediate
+			new lines.
+		</p>
+		<p>
+			To find the string &quot;See chapter eight for more details&quot;, and replace &quot;eight&quot; with,
+			say, &quot;nine&quot; we may have to use a multi-line match if the string could be split across two
+			lines. To find it you need to use this:
+		</p>
+		<pre>s/See chapter eight for more details/See chapter nine for more details/g
+/See/ {
+   $!N  # Use $! to make 'N' more 'friendly'
+   s/ *\n//g
+   s/See chapter eight for more details/See chapter nine for more details/g
+}</pre>
+		<p>
+			The above could be refined quite a bit because it will mess up the output line splitting
+			a little, but beyond the amount of time I want to spend on this.
+		</p>
+		<p>
+			The command <code>N</code> will cause Sed to quit if there is no next line. The current line
+			won't even be printed out. <b>To get around this use <code>$!N</code></b>... it's a more
+			friendly behaviour.
+		</p>
+
+		<h3>The Hold Space</h3>
+		<p>
+			The <b>hold space</b> is a little side buffer that can have the contents of the pattern 
+			space copied into it and vice versa.
+
+			<table>
+				<tr><td>h or H</td><td>Copy or append pattern space into hold space</td></tr>
+				<tr><td>g or G</td><td>Copy or append hold space into pattern space</td></tr>
+				<tr><td>x</td><td>Exchange pattern space contents with hold space</td></tr>
+			</table>
+		</p>
+
+		<h3>Analysis Of Some One Liners</h3>
+		<p>
+			Eric Pement has made a <a href="http://sed.sourceforge.net/sed1line.txt" target="_blank">compilation 
+			of some useful Sed one liners</a>. I thought we could use the above notes to try and understand
+			some of them...
+		</p>
+		<pre># insert a blank line above and below every line which matches "regex"
+sed '/regex/{x;p;x;G;}'</pre>
+		<p>
+		 	The line in the pattern buffer matches regex. It is placed onto the hold space using the &quot;x&quot;
+		 	command (the hold space is empty). Then contents of pattern space, which is now empty, is printed, 
+		 	so a blank line gets output. Exchange back and append the contents of the hold space (blank) into pattern space,
+			effectively appending a blank line. So a blank line gets inserted before and after the line matching
+			regex! Clever Eric :)
+		</p>
+		<pre># number each line of a file (simple left alignment).
+sed = filename | sed 'N;s/\n/\t/'</pre>
+		<p>
+			The first sed command prints the line number of the match (and every line is matched), then a newline,
+			then the contents of the matched line. This is piped into a new sed which then re-joins these lines and
+			replaces the embeddewd new line created with a tab.
+		</p>
+		<pre># join pairs of lines side-by-side (like "paste")
+sed '$!N;s/\n/ /'</pre>
+		<p>
+			This one is interesting because it does pairs of lines. It doesn't just join every single line.
+			The reason is the way the command &quot;N&quot; functions. First line read into pattern space.
+			Second line appended into pattern space. Then embedded newline replaced by a space. Then next line
+			from file (now the third line) is then read into the pattern space and the process continues. Hence
+			paris of lines being joined.
+		</p>
+		<pre> # print only lines which match regular expression (emulates "grep")
+ sed -n '/regexp/p'           # method 1
+ sed '/regexp/!d'             # method 2</pre>
+	 	<p>
+	 		The command <code>sed -n</code> stops the automatic printing of the pattern space.
+	 	</p>
+	  </div> <!-- End Sed notes -->
    </div> <!-- END H1 padding div -->
    </div>
 </body>
