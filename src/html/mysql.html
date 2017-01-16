@@ -150,9 +150,68 @@ WHERE TABLE_SCHEMA = &lt;database name&gt; AND TABLE_NAME = &lt;table name&gt;;<
 		 <a target="_blank" href="http://dev.mysql.com/doc/refman/5.5/en/privileges-provided.html#priv_process">PROCESS</a>
 		 privilege. Basically, regarless of which engine you use, you will need have some (appropriate) privilege on an object to see information about it.</p>
 
+		<h2>Some SQL Revision</h2>
+		<h3>Select Unique Values</h3>
+		<pre>SELECT <b>DISTINCT</b> ... </pre>
+
+		<h3>Sorting Data</h3>
+		<pre>SELECT ... 
+FROM ... 
+WHERE ... 
+<b>ORDER BY col1, ..., colN [ASC|DESC]</b></pre>
+
+
+		<h3>Filtering Data</h3>
+		<pre><b>WHERE [NOT] x OP y</b>
+WHERE x &lt;&gt; y                   # Non matches
+WHERE x != y                   # Non matches
+WHERE x IS NULL                # How to check for NULL values
+WHERE x = 1 AND y = 2 OR x = 3 # AND has higest precedence
+WHERE x IN (1, 2, ...)         # Normally quicker than list of ORs
+WHERE x IN (SELECT ...)        # IN can contain sub-selects
+WHERE x LIKE '%something%'     # Wildcard matching</pre>
+
+		<p>When wildcard matching using the <tt>LIKE</tt> operator the following wildcards could be useful: %, _, [].</p>
+		<p><tt>%</tt> means match any number of occurences of any character. Note that fixed width char fields may be padded with spaces!</p>
+		<p><tt>_</tt> matches any single character.</p>
+		<p><tt>[]</tt> specifies a set of characters. Can negate the set of chars using <tt>[^]</tt>.</p>
+
+		<h3>Grouping Data</h3>
+		<pre>SELECT group_by_col, FUNC1(*) AS new_col_name, FUNC2(*) AS newer_col_name, ...
+FROM ...
+WHERE ...
+<b>GROUP BY</b> group_by_col
+<b>HAVING</b> FUNC1(*) OP <i>condition</i></pre>
+		<p>Note the difference between <tt>WHERE</tt> and <tt>HAVING</tt>. The former selects rows and the latter selects groups. 
+		   Therefore <tt>WHERE</tt> will select what is aggregated into groups (i.e., which rows have the aggregating functions 
+		   applied to them) and <tt>HAVING</tt> specifies which of the resulting group measures make it to the final 
+		   &quot;cut&quot;. Put another way, <tt>WHERE</tt> filters data <em>before</em> it is grouped and <tt>HAVING</tt> filters
+		   data <em>after</em> it has been grouped.
+		</p>
+
+		<h3>Subqueries</h3>
+		<p>Using subqueries to build a list of selection criteria for the <tt>WHERE</tt> clause:
+		<pre>SELECT ... 
+FROM ...
+WHERE x IN (SELECT field
+   FROM ...
+   WHERE y IN (SELECT field
+      FROM ...
+      WHERE ... <em>and so on...</em>));</pre>
+
+      	<p>Using subqueries to generate calculated fields:</p>
+      	<pre>
+SELECT x, 
+       y, 
+       (SELECT FUNC(*)
+               FROM ...
+               WHERE ...) AS z
+WHERE ....</pre>
+		<p></p>
+
 		<h2>Multiple Joins On Same Table</h2>
 		<p>
-			To <a href="http://dev.mysql.com/doc/refman/5.5/en/join.html" target=_blank">JOIN</a>
+			To <a href="http://dev.mysql.com/doc/refman/5.5/en/join.html" target="_blank">JOIN</a>
 			on the same table more than once the key is to use aliases to rename each instance of the target table
 			so that we can distinguish the multiple copies of the same sets of columns from the target table...
 		</p>
@@ -248,7 +307,7 @@ mainId   refA   refB   refId   refName
 3        2      3      3       RefC</pre>
 
 
-		<h2>ON vs. USING</h2>
+		<h2>ON vs. USING vs Natural Join</h2>
 		<p>
 		Credits to <a href="http://stackoverflow.com/users/1505860/shlomi-noach" target="_blank">
 			Shlomi Noach</a> and <a target="_blank" href="http://stackoverflow.com/users/966491/tom-mac">Tom Mac</a>
@@ -283,10 +342,8 @@ CREATE TABLE B( bId INT NOT NULL AUTO_INCREMENT, aId INT NOT NULL, PRIMARY KEY (
 
 
 
-
-
   and
-<F5>
+
 
 
 </pre>
@@ -335,7 +392,9 @@ CREATE TABLE B( bId INT NOT NULL AUTO_INCREMENT, aId INT NOT NULL, PRIMARY KEY (
 |   3 |   5 |   3 |
 +-----+-----+-----+</pre>
         <p style="clear:both">
-            TODO: Contrast this with NATRUAL JOIN??
+            This is slightly different from a <em>NATRUAL JOIN</em>. In a &quot;natural join&quot; you are not doing a
+            <tt>SELECT *</tt>, but instead doing a select where you individually specify the columns that are to
+            be selected from the join (and thereby can eliminate the duplicated columns).
         </p>
 
 		<h2 style="clear: left;">Use Left Join To Find What Isn't In The Other Table</h2>
