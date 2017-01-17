@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>Python DJango Notes</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+	<div id="header">
+		-- This is JEHTech --
+	</div>
+
+	<div id="sidebar">
+		<h1 class="title">Links...</h1>
+		<div id="includedContent"></div>
+	</div>
+
+	<div id="content">
+        <h1 class="title">DJango Notes</h1>
+
+        <h2>Page Contents</h2>
+        <div id="page_contents">
+        </div>
+
+        <h2>Create A Django Project</h2>
+        <div>
+            <h3>Creating The Project</h3>
+            <p>
+                Running from the directory in which you want to house your new project that you
+                have named <em>&lt;prj-name&gt;</em>:
+            </p>
+            <pre>django-admin startproject <em>&lt;prj-name&gt;</em></pre>
+            <p>
+                Creates a new directory named <em>&lt;prj-name&gt;</em> under your CWD:
+            </p>
+            <pre>prj-name
+  |
+  +-- prj-name/
+        |
+        +-- urls.py &lt;- The global index mapping views to URLs</pre>
+
+            <h3>Add A New App</h3>
+            <p>
+                From the project directory <em>&lt;prj-name&gt;</em>:
+            </p>
+            <pre>python manage.py startapp <em>&lt;app-name&gt;</em></pre>
+            <p>
+                This extends the directory structure as follows:
+            </p>
+            <pre>prj-name
+  |
+  +-- prj-name/
+  |     |
+  |     +-- urls.py &lt;- The global index mapping views to URLs
+  |
+  +-- app-name/
+        |
+        +-- admin.py
+        +-- apps.py
+        +-- models.py
+        +-- tests.py
+        +-- views.py
+        +-- migrations/
+        +-- urls.py</pre>
+            <p>
+                Then modify <tt><em>&lt;prj-name&gt;</em>/<em>&lt;prj-name&gt;</em>/urls.py</tt>
+                (the global index) to point at
+                <tt><em>&lt;prj-name&gt;</em>/<em>&lt;app-name&gt;</em>/urls.py</tt>.
+            </p>
+
+
+            <h3>Running The Development Server</h3>
+            <p>
+                From the project directory <em>&lt;prj-name&gt;</em>:
+            </p>
+            <pre>python manage.py runserver <i>ip-address</i>:<i>port</i></pre>
+        </div> <!-- END H2: Create A Django Project -->
+
+        <h2>Database Migrations</h2>
+        <div>
+        </div>
+	</div> <!-- End content div -->
+</body>
+</html>
+
+

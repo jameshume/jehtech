@@ -89,7 +89,6 @@
       <h2>To Read</h2>
       <div>
           <ul>
-            <li>http://www.thegeekstuff.com/2011/08/bash-history-expansion/</li>
             <li>https://magcius.github.io/xplain/article/index.html</li>
             <li>http://byobu.co/about.html</li>
             <li>http://stackoverflow.com/questions/16045139/redirector-in-ubuntu</li>
@@ -246,7 +245,7 @@ sudo apt-get install bcmwl-kernel-source</pre>
 					    target="_blank">Iterating over ls output is fragile. Use globs</a>.
 				</li>
 				<li><a href="https://github.com/koalaman/shellcheck/wiki/SC2015"
-					    target="_blank">A && B || C is not if-then-else</a>.
+					    target="_blank">A &amp;&amp; B || C is not if-then-else</a>.
 			</ul>
 		</div>
 
@@ -922,6 +921,29 @@ done</pre>
       		<li><a href="https://wiki.linuxfoundation.org/networking/netem" target="_blank">NetEm</a>.</li>
       	</ul>
       </div> <!-- END H2 Netem -->
+
+      <h2>Bash History Expansion</h2>
+      <div>
+        <p>Notes based on <a href="http://www.thegeekstuff.com/2011/08/bash-history-expansion/" target="_blank">this article</a>.
+        </p>
+        <p>&quot;Basic&quot; execution of commands from the shell history:</p>
+        <pre>!4              # Display and execute the fourth commnd in the history table
+!-2             # Display and execute command type 2 commands back
+!!              # Display and execute previous command  } These two are ...
+!-1             # Display and execute previous command  } ... equivalent
+!word           # Search backwards through command history for first command
+                # that <em>starts</em> with &quot;word&quot;. If found,
+                # display and execute command
+!?word          # Search backwards through command history for first command
+                # that <em>contains</em> &quot;word&quot;. If found,
+                # display and execute command
+^str1^str2^     # Change the first occurence of str1 in previous command
+                # to str2
+!!:s/str1/str2  # Same as previous
+!!:gs/str1/str2 # Change ALL occurences of str1 in previous command to str2
+!!:n            # Get the nth argument of the previous command</pre>
+
+      </div>
 
 	  <h2>Sed</h2>
 	  <div>
