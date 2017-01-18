@@ -15,7 +15,7 @@
 </div>
 
 <div id="sidebar">
-	<h1 class="title">Links...</h1>		
+	<h1 class="title">Links...</h1>
 	<div id="includedContent"></div>
 </div>
 
@@ -42,7 +42,7 @@
 		directory!
 	</p>
 	<p>
-		The solution was found in this 
+		The solution was found in this
 		<a href="https://superuser.com/questions/232373/how-to-tell-git-which-private-key-to-use/920849#920849"
 			target="_blank">SO thread answer</a>. The solution is to create a
 		shell script that will involke the ssh client with the a parameter to tell
@@ -75,11 +75,11 @@ ssh -i /absolute/path/to/key/folder/id_rsa $*</pre>
 	</p>
 	<pre>ssh-add ~/.ssh/some_key_name</pre>
 	<p>
-		So to make the addition permanent I consulted 
+		So to make the addition permanent I consulted
 		<a href="http://stackoverflow.com/questions/3466626/add-private-key-permanently-with-ssh-add-on-ubuntu" target="_blank">this SO thread</a>.
-		When you created the OpenSSH key pair you probably stored it as <tt>~/.ssh/some_key_name</tt> 
+		When you created the OpenSSH key pair you probably stored it as <tt>~/.ssh/some_key_name</tt>
 		(the private key) and <tt>~/.ssh/some_key_name.pub</tt> (the public key). To add these permanently to your
-		keyring edit the file <tt>~/.ssh/config</tt> (and if it is empty just create it). Add the 
+		keyring edit the file <tt>~/.ssh/config</tt> (and if it is empty just create it). Add the
 		following line (replicate once for each key you wish to permenantly add):
 	</p>
 	<pre>IdentityFile ~/.ssh/some_key_name</pre>
@@ -117,7 +117,7 @@ Some git config...
       git config --list
 
    To see a specific key’s config...
-      git config key-name	
+      git config key-name
       For example...
          git config user.name
 
@@ -184,7 +184,7 @@ Diffing
    git diff --staged: What will go into next commit
    git diff --cached: synonym
 
-   NOTE: If you modify a file AFTER staging, the modifications after the stage 
+   NOTE: If you modify a file AFTER staging, the modifications after the stage
          willl not be committed in this commit unless added again.
 
    git difftool to use external diff tool
@@ -231,13 +231,18 @@ Remotes
 
    Fetch and pull
       git fetch [remote-name]. Gets modifications from remote
-   
+
       Cloned repos have been automatically saved as the remote "origin" by default.
-   
+
       git pull = git fetch + merge
-   
+
    Push to remotes
       git push [remote-name] [branch-name]
+      For example, if the name of the remote it "origin" and the local branch name is "master"...
+         git push origin master
+
+      Can use git push -u origin master - The -u tells get to remember parameters so next time
+                                          can just type "git push".
 
 Branching
    Each commit is poitner to snapshot plus author/committer details, msg etc and
@@ -255,16 +260,16 @@ Branching
 
    HEAD points to current branch head, so changes when you change branch
 
-   To SWITCH BRANCH use 
+   To SWITCH BRANCH use
       git checkout branch-name
    Now, HEAD will point to new branch and NOT prev branch
 
    NOTE: SWITCHING BRANCHES CHANGES FILES IN YOUR WORKING DIRECTORY.
-         When you switch branches, Git resets your working directory to look 
+         When you switch branches, Git resets your working directory to look
          like it did the last time you committed on that branch!
 
    git checkout -b branch-name is shorthand for
-      git branch branch-name 
+      git branch branch-name
       git checkout branch-name
 
 
@@ -295,10 +300,10 @@ Integrate
       C0 --+--&gt;C3-.-.-.-.-.-.-.-.-&gt;C5
            |                      /
            +--&gt;C2------&gt;C4 .-.-.-/
-                        | 
+                        |
                         some_branch
 
-      Do final commit in some_branch then check out the branch you wish to merge 
+      Do final commit in some_branch then check out the branch you wish to merge
       into (master above) and run git merge:
          git checkout master
          git merge some_branch
@@ -308,7 +313,7 @@ Integrate
       New merge commit not performed until you resolve conflict. Conflict file
       will have conflict markers added to it.
 
-     Use 
+     Use
         git mergetool
 </pre>
 </div> <!-- END H2 Git Notes -->
