@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>Linux Kernel notes</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">Linux Kernel notes</h1>
+<div style="padding-right:10px;">
+
+<h2>To Read</h2>
+<div>
+  <ol>
+    <li><a href="https://googleprojectzero.blogspot.co.uk/2016/06/exploiting-recursion-in-linux-kernel_20.html"
+         target="_blank">Exploiting Recursion in the Linux Kernel </a>,
+    </li>
+  </ol>
+</div>
+
+<h2>Building The Kernel</h2>
+<div>
+    <pre>sudo wget www.kernel.org/pub/linux/kernel/v5.x/linux-4.9.4.tar.bz2
+   tar xzvf linux-4.9.4.tar.gz 
+   cd linux-4.9.4/
+   make clean
+   sudo apt-get install libncurses5-dev
+   make menuconfig # needs curses
+or sudo apt-get install libqt4-dev
+   make xconfig # needs qt</pre>
+</div>
+
+</div>
+</body>
+</html>
