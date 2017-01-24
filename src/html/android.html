@@ -52,7 +52,100 @@
   </ol>
 </div>
 
+<h2>Where Is The SDK And Accessing ADB From The Command Line</h2>
+<div>
+  <h3>Find SDK And Add ADB To Path</h3>
+  <p>
+    Having downloaded the Android Developer Studio with SDK bundle, I could not find the
+    <code>adb</code> command. The solution was given in this
+    <a href="http://stackoverflow.com/questions/30812493/adb-exe-not-found-after-installing-android-studio"
+       target="_blank">SO thread</a>.
+  </p>
+  <p>
+    The SDK is found in <code>C:\%HOMEPATH%\AppData\Local\Android\sdk</code>. The <code>adb</code>
+    utility is found under <code>platform-tools\adb.exe</code>. Add this path to your system
+    <code>PATH</code>.
+  </p>
 
-</div>
+  <h3>Run ADB</h3>
+  <p>
+    To list devices detected type:
+  </p>
+  <pre>adb devices -l</pre>
+  <p>
+    To connected to a particular device using a shell interface type:
+  </p>
+  <pre>adb -s xxx shell</pre>
+  <p>Where <code>xxx</code> is identifier for the device you wish to select as seen in the
+     <code>adb devices -l</code> output.
+  </p>
+</div> <!-- END Where is the SDK -->
+
+<h2>MotionEvents</h2>
+<div>
+    <p>
+        You can intercept all touch events to your <code>Activity</code> using the following:
+    </p>
+    <pre class="prettyprint linenums">public class MainActivity extends AppCompatActivity {
+
+    private static final Map<Integer, String> mMotionEventMap;
+    static {
+        /* Action event map, not including deprecated values and also not including
+         * *_MASK and *_SHIFT constants because these are only needed with getAction() */
+        Map<Integer, String> mMEMInitialiser = new HashMap<Integer, String>();
+        mMEMInitialiser.put(MotionEvent.ACTION_BUTTON_PRESS,   "ACTION_BUTTON_PRESS");
+        mMEMInitialiser.put(MotionEvent.ACTION_BUTTON_RELEASE, "ACTION_BUTTON_RELEASE");
+        mMEMInitialiser.put(MotionEvent.ACTION_CANCEL,         "ACTION_CANCEL");
+        mMEMInitialiser.put(MotionEvent.ACTION_DOWN,           "ACTION_DOWN");
+        mMEMInitialiser.put(MotionEvent.ACTION_HOVER_ENTER,    "ACTION_HOVER_ENTER");
+        mMEMInitialiser.put(MotionEvent.ACTION_HOVER_EXIT,     "ACTION_HOVER_EXIT");
+        mMEMInitialiser.put(MotionEvent.ACTION_HOVER_MOVE,     "ACTION_HOVER_MOVE");
+        mMEMInitialiser.put(MotionEvent.ACTION_MOVE,           "ACTION_MOVE");
+        mMEMInitialiser.put(MotionEvent.ACTION_OUTSIDE,        "ACTION_OUTSIDE");
+        mMEMInitialiser.put(MotionEvent.ACTION_POINTER_DOWN,   "ACTION_POINTER_DOWN");
+        mMEMInitialiser.put(MotionEvent.ACTION_POINTER_UP,     "ACTION_POINTER_UP");
+        mMEMInitialiser.put(MotionEvent.ACTION_SCROLL,         "ACTION_SCROLL");
+        mMEMInitialiser.put(MotionEvent.ACTION_UP,             "ACTION_UP");
+        mMotionEventMap = mMEMInitialiser;
+    }
+
+    ... &lt;snip&gt; ...
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        final String DEBUG_TAG = "JEHTECH";
+        final int historySize  = event.getHistorySize();
+        final int pointerCount = event.getPointerCount();
+        final int action       = MotionEventCompat.getActionMasked(event);
+        final String actionStr = mMotionEventMap.get(action);
+
+        if (actionStr != null) {
+            Log.d(
+                DEBUG_TAG,
+                "Action was " + actionStr + " (#" + action + "), with " + pointerCount +
+                    " pointers and a history size of " + historySize);
+            return true;
+
+        }
+
+        Log.d(DEBUG_TAG, "Action was #" + action);
+        return super.onTouchEvent(event);
+    }
+
+    ... &lt;snip&gt; ...
+}</pre>
+    <p>To get information on <code>MotionEvent</code>s it appears that the best thing to use is
+       <code>MotionEventCompat.getActionMasked()</code> because this offers (at the time of writing
+       Jan 2017) the most cross-device compatible and mult-touch capable interface for interpretting
+       touch events.
+    </p>
+    <p>The function <code>getAction()</code> is (almost) <em>deprecated</em> by the looks of things:
+    <q>You should always use the method <code>getActionMasked()</code> (or better yet, the compatability version
+       <code>MotionEventCompat.getActionMasked()</code>) to retrieve the action of a <code>MotionEvent</code>. Unlike the
+       older <code>getAction()</code> method, <code>getActionMasked()</code> is designed to work with multiple pointers.
+    </q> -- <a href="https://developer.android.com/training/gestures/multi.html" target="_blank">[Ref]</a>.
+</div> <!-- END MotionEvents DIV -->
+
+</div> <!-- END PADDING DIV -->
 </body>
 </html>

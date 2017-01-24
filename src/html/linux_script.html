@@ -941,8 +941,9 @@ done</pre>
                 # to str2
 !!:s/str1/str2  # Same as previous
 !!:gs/str1/str2 # Change ALL occurences of str1 in previous command to str2
-!!:n            # Get the nth argument of the previous command</pre>
-
+!!:n            # Get the nth argument of the previous command
+!!:$            # Get last argument or the previous command
+!$              # Shorthand for above</pre>
       </div>
 
 	  <h2>Sed</h2>
@@ -1224,6 +1225,30 @@ sed '$!N;s/\n/ /'</pre>
 	 		The command <code>sed -n</code> stops the automatic printing of the pattern space.
 	 	</p>
 	  </div> <!-- End Sed notes -->
+
+
+    <h2>Screen Sessions</h2>
+    <div>
+      <p>
+        When SSH'ing into you Linux machine, if you leave the terminal alone for too long it will
+        disconnect, which could kill a long-running application you've set up. Soloution is to use
+        the screen utility <a href="https://www.howtoforge.com/linux_screen" target="_blank">[Ref]</a>.
+      </p>
+      <pre>screen # Start screen session
+       # Ctrl a c - Create new screen
+       # Ctrl a n - Switches to next screen
+       # Ctrl a p - Switches to previous screen
+       # Ctrl a d - Detaches a screen session (session keeps running in bg)</pre>
+      <p>
+        If you detach a screen session you can see a list of available sessions using:
+      </p>
+      <pre>screen -ls</pre>
+      <p>
+        Reconnect to one of them using:
+      </p>
+      <pre>screen -r xxxx</pre>
+    </div> <!-- END Screen sessions -->
+
    </div> <!-- END H1 padding div -->
    </div>
 </body>
