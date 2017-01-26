@@ -35,12 +35,10 @@
             <li>http://www.w3schools.com/sql/sql_select_into.asp</li>
             <li>http://komlenic.com/244/8-reasons-why-mysqls-enum-data-type-is-evil/</li>
             <li>https://www.percona.com/blog/2008/01/24/enum-fields-vs-varchar-vs-int-joined-table-what-is-faster/</li>
-            <li>bigint(20) unsigned DEFAULT NULL,</li>
+            <li>bigint(20) unsigned DEFAULT NULL, see - http://stackoverflow.com/questions/3135804/types-in-mysql-bigint20-vs-int20</li>
             <li>http://stackoverflow.com/questions/3330435/is-there-an-sqlite-equivalent-to-mysqls-describe-table</li>
             <li>https://www.sitepoint.com/getting-started-sqlite3-basic-commands/</li>
             <li>http://dev.mysql.com/doc/refman/5.7/en/insert-on-duplicate.html</li>
-            <li>http://www.w3resource.com/sql/joins/natural-join.php</li>
-            <li>Update on vs using with natrual join</li>
         </ul>
     </div>
 
@@ -155,26 +153,44 @@ WHERE TABLE_SCHEMA = &lt;database name&gt; AND TABLE_NAME = &lt;table name&gt;;<
 		<pre>SELECT <b>DISTINCT</b> ... </pre>
 
 		<h3>Sorting Data</h3>
-		<pre>SELECT ... 
-FROM ... 
-WHERE ... 
+		<pre class="prettyprint lang-sql linenums">SELECT ...
+FROM ...
+WHERE ...
 <b>ORDER BY col1, ..., colN [ASC|DESC]</b></pre>
 
+        <h3>Limit Number Of Rows Returned</h3>
+        <pre class="prettyprint lang-sql linenums">
+SELECT ... FROM ... LIMIT 10;   # Selects the first 10 rows
+SELECT ... FROM ... LIMIT 5,10; # Select rows 6-15. First argument specifies
+                                # the offset of the first row to return (indexed
+                                # from 0 not 1), and the second specifies the
+                                # maximum number of rows to return </pre>
 
 		<h3>Filtering Data</h3>
-		<pre><b>WHERE [NOT] x OP y</b>
+		<pre class="prettyprint lang-sql linenums"><b>WHERE [NOT] x OP y</b>
 WHERE x &lt;&gt; y                   # Non matches
 WHERE x != y                   # Non matches
 WHERE x IS NULL                # How to check for NULL values
 WHERE x = 1 AND y = 2 OR x = 3 # AND has higest precedence
 WHERE x IN (1, 2, ...)         # Normally quicker than list of ORs
 WHERE x IN (SELECT ...)        # IN can contain sub-selects
-WHERE x LIKE '%something%'     # Wildcard matching</pre>
+WHERE x LIKE '%something%'     # Wildcard matching
+WHERE x BETWEEN a AND b        # Check a range of values.
+                               # For dates use #mm/dd/yyyy#</pre>
 
 		<p>When wildcard matching using the <tt>LIKE</tt> operator the following wildcards could be useful: %, _, [].</p>
 		<p><tt>%</tt> means match any number of occurences of any character. Note that fixed width char fields may be padded with spaces!</p>
 		<p><tt>_</tt> matches any single character.</p>
 		<p><tt>[]</tt> specifies a set of characters. Can negate the set of chars using <tt>[^]</tt>.</p>
+
+        <p>Be aware that when <b>comparing NULLs</b> you must use <tt><b>IS NULL</b></tt>:
+        </p>
+        <pre class="prettyprint lang-sql linenums">-- WRONG!!
+select case when NULL = NULL then 'Null Is Null' else 'WTF' end as Result;</pre>
+        <p>The above will output the text &quot;WTF&quot;! The reason is that to compare NULL
+            values, we should use the following to get the correct result:</p>
+        <pre class="prettyprint lang-sql linenums">-- RIGHT
+select case when NULL IS NULL then 'Null Is Null' else 'WTF' end as Result; -- CORRECT :)</pre>
 
 		<h3>Grouping Data</h3>
 		<pre>SELECT group_by_col, FUNC1(*) AS new_col_name, FUNC2(*) AS newer_col_name, ...
@@ -182,16 +198,20 @@ FROM ...
 WHERE ...
 <b>GROUP BY</b> group_by_col
 <b>HAVING</b> FUNC1(*) OP <i>condition</i></pre>
-		<p>Note the difference between <tt>WHERE</tt> and <tt>HAVING</tt>. The former selects rows and the latter selects groups. 
-		   Therefore <tt>WHERE</tt> will select what is aggregated into groups (i.e., which rows have the aggregating functions 
-		   applied to them) and <tt>HAVING</tt> specifies which of the resulting group measures make it to the final 
+		<p>Note the difference between <tt>WHERE</tt> and <tt>HAVING</tt>. The former selects rows and the latter selects groups.
+		   Therefore <tt>WHERE</tt> will select what is aggregated into groups (i.e., which rows have the aggregating functions
+		   applied to them) and <tt>HAVING</tt> specifies which of the resulting group measures make it to the final
 		   &quot;cut&quot;. Put another way, <tt>WHERE</tt> filters data <em>before</em> it is grouped and <tt>HAVING</tt> filters
 		   data <em>after</em> it has been grouped.
 		</p>
+        <p>
+            <tt>FUNC()</tt> is generally one of <tt>AVG()</tt>, <tt>COUNT([DISTINCT])</tt>, <tt>MAX()</tt>,
+            <tt>MIN()</tt>, <tt>STD()</tt>, <tt>SUM()</tt>, <tt>VARIANCE()</tt> etc...
+        </p>
 
 		<h3>Subqueries</h3>
 		<p>Using subqueries to build a list of selection criteria for the <tt>WHERE</tt> clause:
-		<pre>SELECT ... 
+		<pre class="prettyprint lang-sql linenums">SELECT ...
 FROM ...
 WHERE x IN (SELECT field
    FROM ...
@@ -199,10 +219,17 @@ WHERE x IN (SELECT field
       FROM ...
       WHERE ... <em>and so on...</em>));</pre>
 
+        <p>Also can test for at least one match or all matches of an operator comarison. For example,
+           wanting to select a row if a column is greater than at least one value from a subquery
+           etc...</p>
+        <pre class="prettyprint lang-sql linenums">SELECT ...
+FROM
+WHERE x &lt;OP&gt; <b>ANY|ALL</b> (SELECT field ...);</pre>
+
       	<p>Using subqueries to generate calculated fields:</p>
-      	<pre>
-SELECT x, 
-       y, 
+      	<pre class="prettyprint lang-sql linenums">
+SELECT x,
+       y,
        (SELECT FUNC(*)
                FROM ...
                WHERE ...) AS z
@@ -392,10 +419,17 @@ CREATE TABLE B( bId INT NOT NULL AUTO_INCREMENT, aId INT NOT NULL, PRIMARY KEY (
 |   3 |   5 |   3 |
 +-----+-----+-----+</pre>
         <p style="clear:both">
-            This is slightly different from a <em>NATRUAL JOIN</em>. In a &quot;natural join&quot; you are not doing a
-            <tt>SELECT *</tt>, but instead doing a select where you individually specify the columns that are to
-            be selected from the join (and thereby can eliminate the duplicated columns).
+            Using <tt>ON</tt> is not much different from a <em>NATRUAL JOIN</em>. From the MySQL
+            documentation: <q>The <tt>NATURAL [LEFT] JOIN</tt> of two tables is defined to be
+            semantically equivalent to an INNER JOIN or a LEFT JOIN with a USING clause that names
+            all columns that exist in both tables</q>.
         </p>
+        <p>
+            For example, in the following, the two tables t1 and t2 are joined on all commonly named
+            columns between the two tables, and those common column names only appear once in the
+            result.
+        </p>
+        <pre class="prettyprint lang-sql linenums">SELECT * FROM t1 NATURAL JOIN t2;</pre>
 
 		<h2 style="clear: left;">Use Left Join To Find What Isn't In The Other Table</h2>
 		<p>

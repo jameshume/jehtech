@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>SQLite DB notes</title>
+	<!-- META_INSERT -->
+	<meta name="description" content="Notes on SQLite DB & SQL">
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+
+    <style>
+        table thead tr td {
+            font-weight: bold;
+            background-color: gray;
+        }
+    </style>
+</head>
+
+<body>
+  <div id="header">
+	  -- This is JEHTech --
+  </div>
+
+   <div id="sidebar">
+    <h1 class="title">Links...</h1>
+    <div id="includedContent"></div>
+  </div>
+
+  <div id="content">
+    <h1 class="title">SQLite DB</h1>
+    <div>
+        <h2>Dot commands</h2>
+        <p>
+            <table>
+                <thead>
+                    <tr><td>Command</td><td>Meaning</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>.databases</td><td>List names and files of attached databases.</td>
+                    </tr>
+                    <tr><td>.indexes ?TABLE?</td><td>Show names of all indexes.</td>
+                    </tr>
+                    <tr><td>.schema ?PATTERN?</td>
+                        <td>Show the CREATE statements matching PATTERN. Add --indent for
+                            pretty-printing.
+                        </td>
+                    </tr>
+                    <tr><td>.show</td><td>Show the current values for various settings</td>
+                    </tr>
+                    <tr><td>.tables ?TABLE?</td>
+                        <td>List names of tables If TABLE specified, only list tables matching
+                            LIKE pattern TABLE.
+                        </td>
+                    </tr>
+                     <tr><td>.dump</td><td>Dump database in SQL text format.</td>
+                    </tr>
+                </tbody>
+            </table>
+    </div>
+  </div>
+
+</body>
+</html>
+
