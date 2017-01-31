@@ -55,6 +55,7 @@
     </li>
     <li>https://blog.jayway.com/2012/10/24/a-practical-approach-to-the-aosp-build-system/</li>
     <li>https://software.intel.com/en-us/articles/building-an-android-command-line-application-using-the-ndk-build-tools</li>
+    <li>http://www.imajeenyus.com/computer/20130301_android_tablet/android/unpack_repack_recovery_image.html</li>
   </ol>
 </div>
 
@@ -86,6 +87,85 @@
      <code>adb devices -l</code> output.
   </p>
 </div> <!-- END Where is the SDK -->
+
+<h2>Generating Events Programatically</h2>
+<div>
+  <p>
+    I needed to be able to generate touch events for a project I was working on. These touch
+    events had to be injected somewhere into the Android event infrastructure so that they would
+    appear to the system as if they were actually from the touchscreen.
+  </p>
+
+  <h3>References</h3>
+  <ol>
+    <li><a name="ref1"></a> http://newandroidbook.com/files/AndroidInput.pdf</li>
+    <li><a name="ref2"></a>http://www.linuxjournal.com/article/6396 and http://www.linuxjournal.com/article/6429</li>
+    <li><a name="ref3"></a>https://github.com/jpunz/AndroidEventInjector/blob/master/Injector.java</li>
+    <li><a name="ref4"></a>http://www.pocketmagic.net/injecting-events-programatically-on-android/</li>
+    <li><a name="ref5"></a>http://www.pocketmagic.net/programmatically-injecting-events-on-android-part-2/</li>
+  </ol>
+
+  <h3>Using ADB sendevent &amp; getevent</h3>
+  <p>
+    Using ADB there are the <code>getevent</code> and <code>sendevent</code> commands which are
+    usefull while debugging, but I needed to write some kind of service/daemon. The commands do
+    appear to be useable <em>without</em> root privileges, which is nice.
+  </p>
+
+  <h3>The &quot;input&quot; Command</h3>
+  <p>
+    It is also possible to use the <code>input</code> command line utitlity. For example,
+    the following will inject an artificial home-button touch event, making it look asif the user
+    actually pressed the home button <a href="#ref3">[Ref]</a>:
+  </p>
+  <pre class="prettyprint linenums">input keyevent 3</pre>
+  <p>
+    The command does appear to be useable <em>without</em> root privileges, which is nice.
+  </p>
+
+  <h3>Write To The Device's  /dev/input/xxx</h3>
+  <p>
+    Android is based on Linux and uses the Linux Input Subsystem. This means that every input
+    device has created a node under <code>/dev/input</code>. This device can be written to if you
+    want to inject event messages into the system and make them appear asif they came from that
+    device. Downside is, this requires root privileges.
+  </p>
+  <p>
+    A little example based on the pocketmagic articles <a href="#ref4">[Ref]</a><a href="#ref5">[Ref]</a>:
+  </p>
+  <pre class="prettyprint linenums">// Copy of <a href="http://lxr.free-electrons.com/source/include/uapi/linux/input.h#L25" target="_blank">struct input_event</a>
+struct uinput_event
+{
+  struct timeval time;
+  uint16_t type;
+  uint16_t code;
+  int32_t value;
+};
+
+static void sendInputEvent(int fd, uint16_t type, uint16_t code, int32_t value)
+{
+  struct uinput_event ev = {
+    .type  = type,
+    .code  = code,
+    .value = value
+  };
+  gettimeofday(&amp;pev.time, NULL);
+
+  write(fd, &amp;ev, sizeof(ev));
+}
+
+... &lt;snip&gt; ...
+
+fd = open("/dev/input/eventX", O_RDWR); // X is an integer number
+if (fd < 0) {
+  // Handle error
+}
+
+// Send a touch event at coordinates 100, 100
+sendInputEvent(fd, EV_ABS, ABS_MT_POSITION_X, 100);   // Have to get these values from ...
+sendInputEvent(fd, EV_ABS, ABS_MT_POSITION_Y, 100);   // ... <a href="http://lxr.free-electrons.com/source/include/uapi/linux/input-event-codes.h" target="_blank">input-event-codes.h</a>.
+sendInputEvent(fd, EV_KEY, BTN_TOUCH, 1);</pre>
+</div> <!-- END -->
 
 <h2>MotionEvents</h2>
 <div>
