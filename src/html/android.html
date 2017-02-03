@@ -86,7 +86,163 @@
   <p>Where <code>xxx</code> is identifier for the device you wish to select as seen in the
      <code>adb devices -l</code> output.
   </p>
+
+  <h3>Fastboot ROMs</h3>
+  <pre>adb reboot bootloader
+fastboot boot boot.img</pre>
+
+  <h3>Recovery</h3>
+  <pre>adb reboot recovery</pre>
+
 </div> <!-- END Where is the SDK -->
+
+<h2>TODO</h2>
+<div>
+    <ul>
+        <li>http://elinux.org/Android_Build_System</li>
+        <li>http://ericdev.blogspot.co.uk/2010/06/cc-closer-look-at-android-project-build.html</li>
+        <li>http://www.androidenea.com/2009/08/init-process-and-initrc.html</li>
+        <li>http://liuluheng.github.io/wiki/public_html/Mobile/Android/Firmware%20Development.html</li>
+        <li>https://www.kingoapp.com/root-tutorials/how-to-root-android-6.0-marshmallow.htm</li>
+        <li>http://www.addictivetips.com/mobile/android-partitions-explained-boot-system-recovery-data-cache-misc/</li>
+    </ul>
+</div> <!-- Building Android -->
+
+<h2>Getting Detailed System Information &amp; Backing Up System</h2>
+<p>
+    Based on the following references:
+    <ul>
+        <li>The following articles talk about extracting images and device trees and what you can do with
+            them once you've got them:
+            <ul>
+                <li><a href="https://www.youtube.com/watch?v=DyUainEJwLM" target="_blank">Pull Your Own Stock Android Firmware From Your Device</a>, by Rootjunky.com.</li>
+                <li><a href="https://forum.xda-developers.com/showthread.php?t=2771411" target="_blank">Dump Stock Rom And Build Flashable Image</a>, XDA Developers thread.</li>
+                <li><a href="http://www.imajeenyus.com/computer/20130301_android_tablet/android/unpack_repack_recovery_image.html" target="_blank">Unpack And Repack Recover Image</a> Lindsay Wilson, imajeenyus.com.</li>
+                <li><a href="http://www.cnx-software.com/2015/12/07/how-to-extract-kernel-img-with-mkboot-script/" target="_blank">How to Extract a Kernel Image With The MKBoot Script</a>, CNXSoft.</li></li>
+                <li><a href="http://www.cnx-software.com/2014/05/12/how-to-extract-a-device-tree-file-from-android-firmware-files/" target="_blank">How to Extract a Device Tree File from Android Firmware Files</a>, CNXSoft.</li>
+                <li><a href="https://github.com/xiaolu/mkbootimg_tools" target="_blank">mkbootimg_tools</a>, xiaolu on GitHub.</li>
+                <li><a href="http://batakang.com/ftp/DEVICE_INFO/Android_Device_System_Information.zip" target="_blank">Android_Device_System_Information.zip</a>, BataKang.</li>
+            </ul>
+        </li>
+        <li>For an interesting look at the Android boot process look here:
+            <ul>
+                <li><a href="http://www.onsandroid.com/2014/10/in-depth-android-boot-sequence-process.html" target="_blank">Android Boot Sequence / Init Process</a>, Suresh Achari.</li>
+                <li><a href="http://www.slideshare.net/StacyWylie/timings-of-init-android-ramdisks-for-the-practical-hacker" target="_blank">Timings of Init : Android Ramdisks for the Practical Hacker</a>, Stacy Devino.</li>
+            </ul>
+        </li>
+        <li>For information Android security and SELinux:
+            <ul>
+                <li><a href="https://events.linuxfoundation.org/sites/events/files/slides/abs2014_seforandroid_smalley.pdf" target="_blank">Security Enhancements (SE) for Android</a>, Stephen Smalley, NSA.</li>
+                <li><a href="https://www.codeproject.com/Articles/806904/Android-Security-Customization-with-SEAndroid" target="_blank">Android Security Customization with SEAndroid</a>, Code Project.</li>
+                <li><a href="https://source.android.com/security/selinux/implement.html" target="_blank">Implementing SELinux</a>, Android Docs.</li>
+                <li><a href="https://software.intel.com/en-us/android/articles/android-security-customization-with-seandroid" target="_blank">Android Security Customization with SEAndroid</a>, Liang Zhang (Intel).</li>
+                <li>https://wiki.gentoo.org/wiki/SELinux/Tutorials</li>
+                <li>http://www.all-things-android.com/content/se-android-commands</li>
+                <li>https://boundarydevices.com/android-security-part-3-security-enhanced-linux-in-android/</li>
+            </ul>
+        </li>
+    </ul>
+</p>
+<p>
+  Batakang.com has a really useful script <code>Android_Device_System_Information.bat</code>, which
+  you can get
+  <a href="http://batakang.com/ftp/DEVICE_INFO/Android_Device_System_Information.zip" target="_blank">here in a ZIP file</a>.
+  Download and extract into any directory. you can then use the script to get a ton of useful information about your device.
+</p>
+<p>
+  When I tried running it I was interested in the msm partitions. This line of the script didn't work
+  out of the box for me but it was pretty easy to explorer the directory structure under
+  <code>/dev/block/platform</code> to eventually find the <code>by-name</code> directory that
+  has a load of symbolic links, named by device name, linking to the device on which they reside.
+  In my case it was <code>/dev/block/platform/soc/624000.ufshc/by-name/</code>.
+</p>
+<p>
+  By looking into this directory I could see where my recovery image resided:
+</p>
+<pre>&gt; adb root
+&gt; adb shell "ls -la /dev/block/platform/soc/624000.ufshc/by-name"
+lrwxrwxrwx root     root              1970-01-12 12:43 aboot -> /dev/block/sde23
+lrwxrwxrwx root     root              1970-01-12 12:43 abootbak -> /dev/block/sde24
+... &lt;snip&gt; ...
+lrwxrwxrwx root     root              1970-01-12 12:43 <b>recovery -> /dev/block/sda13</b></pre>
+<p>
+    Using the above listing we can find out which block devices correspond to our boot, system, recovery and userfata images.
+    These can then be extracted to files using the
+    <a href="http://man7.org/linux/man-pages/man1/dd.1.html" target="_blank">dd</a>
+    comand to copy the device contents to a file:
+</p>
+<pre><a href="http://man7.org/linux/man-pages/man1/dd.1.html" target="_blank">dd</a> if=/dev/block/sdXXX of=/directory/of/your/name.img</pre>
+<p>
+    These files can then be pulled off the device using the following:
+</p>
+<pre>adb pull /directory/of/your/name.img name.img</pre>
+<p>
+    For example, from the above I might want to get by boot image. This happened to map to
+    <code>/dev/block/sde36</code>. The boot image contains the kernel and ramdisk: the critical
+    stuff needed to load the device. So, I would do...
+</p>
+<pre>dd if=/dev/block/sde36 of=/data/local/tmp/boot.img
+adb pull /data/local/tmp/boot.img boot.img</pre>
+<p>
+    <em>Or</em> as i found out later, it is much easier to do
+</p>
+<pre>adb pull /dev/block/sde36 boot.img</pre>
+<p>BUT, when I tried this with the system image it had problems so I reverted to using dd. Dunno what happened :(</p>
+<p>
+    Once you have your boot image you can then use the
+    <a href="https://github.com/xiaolu/mkbootimg_tools" target="_blank">mkbootimg_tools</a>
+    to unpack your boot image:
+</p>
+<pre>./mkboot ../boot.img ../boot-unpacked</pre>
+<p>
+Then you can edit things on the RAM disk or place new commands on there etc:
+</p>
+<pre>vim ../boot-unpacked/ramdisk/service_contexts</pre>
+<p>
+Then you can repack this boot image and either fastboot or flash it to you phone:
+</p>
+<pre>./mkboot ../boot-unpacked ../boot_new.img</pre>
+<p>
+    If you want to grab other partitions, like system etc, you should download a recovery rom such
+    as a TWRP recovery ROM for your device and use the backup features to back partitions up and
+    save them to your local disk. The TWRP recovery, which you can fastboot (you don't need to flash it)
+    will backup your selected partitions to a folder on your device, which you can mount and copy from.
+</p>
+<p>
+    For example, loading a TWRP recovery ROM and clicking &quot;backup&quot; showed the first screen
+    shown below. Just select what you want to backup. Continuing with the backup then loads a
+    progress screen (second image below). The screen text will tell you where it is putting the backups on you phone's
+    storage (note the second image's text shows the text &quot;<code>Backup Folder: /data/media/0/TWRP/BACKUPS/</code>&quot;).
+</p>
+<p>
+    <img src="##IMG_DIR##/twrp_recovery_backup.png" alt="Screenshot of TRWP recovery backup selection screen"/>
+    <img src="##IMG_DIR##/twrp_recovery_backup_progress.png" alt="Screenshot of TRWP recovery backup progress screen"/>
+</p>
+<p>
+     The recovery ROM still lets you access your phone. Mine was mounted on Windows at
+     <code>This PC\MIX\Internal Storage\TWRP\BACKUPS\ed16622e\2017-02-03--07-04-30_MXB48T</code>.
+</p>
+<p>
+    PS: Used this 
+    <a href="http://www.droidviews.com/take-screeshots-in-cwm-twrp-recovery-mode/" target="_blank">utility</a> 
+    to take the screenshots....
+</p>
+
+<h2>Rooting Your Phone</h2>
+<p>
+  The following two articles explain how rooting your phone actually works:
+  <ol>
+      <li>https://seasonofcode.com/posts/how-rooting-works-a-technical-explanation-of-the-android-rooting-process.html</li>
+      <li>https://jon.oberheide.org/files/bsides11-dontrootrobots.pdf</li>
+      <li>http://www.linuxtopia.org/online_books/writing_SELinux_policy_guide/file_contexts_07.html</li>
+      <li>https://www.kingoapp.com/root-tutorials/how-to-root-android-6.0-marshmallow.htm</li>
+  </ol>
+</p>
+
+<h2>Touch Events</h2>
+<p>http://lxr.free-electrons.com/source/Documentation/input/event-codes.txt</p>
+<p>https://www.kernel.org/doc/Documentation/input/multi-touch-protocol.txt</p>
+
 
 <h2>Generating Events Programatically</h2>
 <div>
