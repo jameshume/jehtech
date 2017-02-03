@@ -29,19 +29,64 @@
     <li><a href="https://googleprojectzero.blogspot.co.uk/2016/06/exploiting-recursion-in-linux-kernel_20.html"
          target="_blank">Exploiting Recursion in the Linux Kernel </a>,
     </li>
+    <li><a href="http://free-electrons.com/doc/training/linux-kernel/linux-kernel-labs.pdf"
+           target="_blank">Linux Kernel and Driver Development Training Lab Book</a>, FreeElectrons.com.
+    </li>
+    <li>http://irl.cs.ucla.edu/~yingdi/web/paperreading/smp_locking.pdf</li>
+    <li>https://www.kernel.org/pub/linux/kernel/people/mochel/doc/papers/ols-2005/mochel.pdf</li>
   </ol>
 </div>
 
 <h2>Building The Kernel</h2>
 <div>
-    <pre>sudo wget www.kernel.org/pub/linux/kernel/v5.x/linux-4.9.4.tar.bz2
+    <pre>Can get kernel version using make kernelversion
+
+   sudo wget www.kernel.org/pub/linux/kernel/v5.x/linux-4.9.4.tar.bz2
    tar xzvf linux-4.9.4.tar.gz 
    cd linux-4.9.4/
    make clean
    sudo apt-get install libncurses5-dev
    make menuconfig # needs curses
 or sudo apt-get install libqt4-dev
-   make xconfig # needs qt</pre>
+   make xconfig # needs qt
+
+
+----
+
+
+http://newandroidbook.com/Book/Input.html
+=========================================
+
+/proc/interupts - To look at interrupt lines claimed by drivers - architecture dependent
+/proc/stat      - shows interrupt count
+
+Input driver model docs:
+    Documentation/input/, and in particular input.txt
+
+When driver registers as input device, the following is auto created:
+  /dev/input/eventX (cat this to get dump of linux input events as they happen)
+As well as sysfs entries.
+
+/proc/bus/input/devices - Where system keeps track of all devices
+
+/sys/class/input/eventX - directory - info about device assoc. with this event
+    cat /sys/class/input/eventX/uevent to get device info such as major and minor numnber etc
+
+getevent and sendevent command:
+    system/core/toolbox/(get|send)event.c.
+For example `getevent -l` lists the devices and their human readable names and associated "eventX"
+
+Both tools seem to use the /dev/input/eventXX to read and write events. To write events you need
+to have root access to make /dev/input/eventXX writeable!
+
+https://wiki.ubuntu.com/DebuggingTouchpadDetection/evtest
+http://stackoverflow.com/questions/16695432/input-event-structure-description-from-linux-input-h
+http://www.usb.org/developers/hidpage
+https://www.kernel.org/doc/Documentation/input/multi-touch-protocol.txt
+https://source.android.com/devices/input/touch-devices.html
+
+
+   </pre>
 </div>
 
 </div>
