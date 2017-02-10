@@ -23,6 +23,10 @@
 <h1 class="title">Android notes</h1>
 <div style="padding-right:10px;">
 
+<h2>Page Contents</h2>
+<div id="page_contents">
+</div>
+
 <h2>Interesting Reads and References</h2>
 <div>
   <ol>
@@ -105,6 +109,8 @@ fastboot boot boot.img</pre>
         <li>http://liuluheng.github.io/wiki/public_html/Mobile/Android/Firmware%20Development.html</li>
         <li>https://www.kingoapp.com/root-tutorials/how-to-root-android-6.0-marshmallow.htm</li>
         <li>http://www.addictivetips.com/mobile/android-partitions-explained-boot-system-recovery-data-cache-misc/</li>
+        <li>https://en.wikipedia.org/wiki/Evdev</li>
+        <li>https://joeshaw.org/linux-input-ecosystem/</li>
     </ul>
 </div> <!-- Building Android -->
 
@@ -280,6 +286,7 @@ Then you can repack this boot image and either fastboot or flash it to you phone
   </p>
 
   <h3>Write To The Device's  /dev/input/xxx</h3>
+  <p>http://linuxwacom.sourceforge.net/wiki/index.php/Kernel_Input_Event_Overview</p>
   <p>
     Android is based on Linux and uses the Linux Input Subsystem. This means that every input
     device has created a node under <code>/dev/input</code>. This device can be written to if you
@@ -320,7 +327,8 @@ if (fd < 0) {
 // Send a touch event at coordinates 100, 100
 sendInputEvent(fd, EV_ABS, ABS_MT_POSITION_X, 100);   // Have to get these values from ...
 sendInputEvent(fd, EV_ABS, ABS_MT_POSITION_Y, 100);   // ... <a href="http://lxr.free-electrons.com/source/include/uapi/linux/input-event-codes.h" target="_blank">input-event-codes.h</a>.
-sendInputEvent(fd, EV_KEY, BTN_TOUCH, 1);</pre>
+sendInputEvent(fd, EV_KEY, BTN_TOUCH, 1);
+sendInputEvent(fd, EV_SYN, SYN_REPORT, 1);</pre>
 </div> <!-- END -->
 
 <h2>MotionEvents</h2>
@@ -387,6 +395,16 @@ sendInputEvent(fd, EV_KEY, BTN_TOUCH, 1);</pre>
        older <code>getAction()</code> method, <code>getActionMasked()</code> is designed to work with multiple pointers.
     </q> -- <a href="https://developer.android.com/training/gestures/multi.html" target="_blank">[Ref]</a>.
 </div> <!-- END MotionEvents DIV -->
+
+<h2>NDK Applications And PThreads</h2>
+<div>
+  <p>If you want to use the <code>pthread</code> library in Android, you do not have to link
+     against an external library: it is baked into the
+     <a href="https://android.googlesource.com/platform/bionic/+/ics-mr1-release/libc/docs/OVERVIEW.TXT"
+        target="_blank">Bionic C library</a> already. Note, however,
+     that it does not give a full <code>pthread</code> implementation. Notably things like
+     <code>pthread_cancel</code> are not supported.
+</div>
 
 </div> <!-- END PADDING DIV -->
 </body>
