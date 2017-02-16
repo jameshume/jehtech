@@ -104,7 +104,7 @@
 		<p>
 			To just run pylint individually on all your python files do this...
 		</p>
-		<pre>find . -name '*.py' | xargs pylint --rcfile=pylint_config_filename</pre>
+		<pre  class="prettyprint linenums">find . -name '*.py' | xargs pylint --rcfile=pylint_config_filename</pre>
 		<p>
 			Use the <code>-rn</code> option to suppress the summary tables at the end of the pylint output.
 		</p>
@@ -135,14 +135,14 @@
 		<p>
 			To generate a template pylint rcfile use:
 		</p>
-		<pre>pylint --generate-rcfile</pre>
+		<pre class="prettyprint linenums">pylint --generate-rcfile</pre>
 
 		<p>
 			Inside the generated rcfile there are a few things that can be interesting. The
 			most interesting is the <tt>init-hook</tt> which you can set, for example, to
 			update the <tt>PYTHONPATH</tt> so that pylint can find all the imported modules:
 		</p>
-		<pre>[MASTER]
+		<pre class="prettyprint linenums">[MASTER]
 init-hook='import sys; sys.path.append(...);'</pre>
 		<p>
 			Note that the string is a one-liner python script.
@@ -160,7 +160,7 @@ C:293, 4: Invalid method name "im_an_error" (invalid-name)</pre>
 		<p>
 			Or...
 		</p>
-		<pre>pylint --help-msg=invalid-name</pre>
+		<pre class="prettyprint linenums">pylint --help-msg=invalid-name</pre>
 
 		<h3>Suppressing Error Messages</h3>
 		<p>
@@ -226,12 +226,12 @@ C:293, 4: Invalid method name "im_an_error" (invalid-name)</pre>
 		can have one per project this way. All the command line options that you would configure 
 		flake8 with become INI file style settings. For example, if you ran:
 	</p>
-	<pre>flake8 --ignore=E221 --max-line-length==100</pre>
+	<pre class="prettyprint linenums">flake8 --ignore=E221 --max-line-length==100</pre>
 	<p>
 		This would become the following in the config file (note the file must have the
 		header <tt>[flake8]</tt>:
 	</p>
-	<pre>[flake8]
+	<pre class="prettyprint linenums">[flake8]
 ignore = E221
 max-line-length = 100</pre>
 </div>
@@ -243,18 +243,18 @@ max-line-length = 100</pre>
 		<q>are the new standard of python distribution</q>. First make sure you have wheels
 		installed:
 	</p>
-	<pre>pip install wheel</pre>
+	<pre class="prettyprint linenums">pip install wheel</pre>
 	<p>
 		Once you have installed wheels you can download wheel files (*.whl) to anywhere on your
 		computer and run the following:
 	</p>
-	<pre>pip install /path/to/your/wheel/file.whl</pre>
+	<pre class="prettyprint linenums">pip install /path/to/your/wheel/file.whl</pre>
 	<p>
 		So, for example, when I wanted to install lxml on my Windows box, I went to Christoph Gohlke's
 		<a href="http://www.lfd.uci.edu/~gohlke/pythonlibs/" target="_blank">Unofficial Windows Binaries for Python Extension Packages</a>
 		and downloaded the file <tt>lxml-3.6.4-cp27-cp27m-win_amd64.whl</tt> and typed the following:
 	</p>
-	<pre>pip install C:\Users\my_user_name\Downloads\lxml-3.6.4-cp27-cp27m-win_amd64.whl</pre>
+	<pre class="prettyprint linenums">pip install C:\Users\my_user_name\Downloads\lxml-3.6.4-cp27-cp27m-win_amd64.whl</pre>
 </div> <!-- END H2 Install Python Libraries From Wheel Files -->
 
 <h2>Windows Python Module Installers: When Python Can't Be Found</h2>
@@ -281,7 +281,7 @@ max-line-length = 100</pre>
 	<p>
 		For example, my registery file, after edit looked like this:
 	</p>
-	<pre>Windows Registry Editor Version 5.00
+	<pre class="prettyprint linenums">Windows Registry Editor Version 5.00
 
 [HKEY_CURRENT_USER\SOFTWARE\Python]
 
@@ -345,7 +345,7 @@ print(f(2))  # Prints [1, 2], not [2] as you might expect!</pre>
 		Python lambda's bind late (are lazily bound) <a href="https://en.wikipedia.org/wiki/Lazy_evaluation"
 		target="_blank">[Ref]</a>. This means the the following code will have the output shown:
 	</p>
-	<pre>x = 1
+	<pre class="prettyprint linenums">x = 1
 f = lambda y: y * x
 print f(2)
 x = 10
@@ -353,7 +353,6 @@ print f(2)
 # Outputs:
 # 2
 # 20</pre>
-</div>
 	<p>
 		I.e., the value of x is looked up in the surrounding scope when the function is <em>called</em> and <em>not</em> when the expression
 		creating the lambda is evaluated. This
@@ -395,7 +394,7 @@ print f(2)
 		This is the same example as you find in many classic examples <a href="http://docs.python-guide.org/en/latest/writing/gotchas/"
 		target="_blank">[Ref]</a>, replicated here:
 	</p> 
-	<pre>def create_multipliers():
+	<pre class="prettyprint linenums">def create_multipliers():
    return [lambda x : i * x for i in range(5)]
 
 for multiplier in create_multipliers():
@@ -417,7 +416,7 @@ for multiplier in create_multipliers():
 	<p>
 		I.e., <code>create_multipliers()</code> is called. This creates a list of 4 lambda functions:
 	</p>
-	<pre>[lambda1, lambda2, lambda3, lambda4]</pre>
+	<pre class="prettyprint linenums">[lambda1, lambda2, lambda3, lambda4]</pre>
 	<p>
 		Each <code>lambdaX</code> has not yet been evaluated, so by the time this list has been 
 		create, the variable <code>i</code> has the value 4. Later, when any of the lambda functions
@@ -426,8 +425,36 @@ for multiplier in create_multipliers():
 	</p>
 	<p>
 		Note, that this is a little different in C++. In C++ (C++11 or greater) however, you 
-		would have to pass x by reference to get the same result.
+		would have to pass x by reference to get the same result. If we transliterate the first
+		example to C++ we get:
 	</p>
+	<pre class="prettyprint linenums">#include &lt;iostream&gt;
+
+int main(int argc, char* argv[])
+{
+	int x = 1;
+	auto myLambda = [x](int y) { 
+		return x * y; 
+	};
+	std::cout &lt;&lt; myLambda(2) &lt;&lt; "\n";
+	x = 10;
+	std::cout &lt;&lt; myLambda(2) &lt;&lt; "\n";
+	return 0;
+}
+// Prints:
+// 2
+// 2 (notice here Python would print 20!</pre>
+	<p>
+		To get the behaviour of Python we have to do the following:
+	</p>
+	<pre class="prettyprint linenums">auto myLambda = [<b><u>&amp;</u></b>x](int y) { 
+		return x * y; 
+	};</pre>
+	<p>
+		Note the ampersand added before <code>x</code> so that the outer scope is passed
+		to the lambda by reference, not value!
+	</p>
+
 </div> <!-- END Python Binding -->
 
 
