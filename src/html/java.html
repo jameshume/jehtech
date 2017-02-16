@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>Java notes</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">Java</h1>
+<div style="padding-right:10px;">
+
+<h2>Page Contents</h2>
+<div id="page_contents">
+</div>
+
+<h2>Convert String To Enum</h2>
+<div id="page_contents">
+	<p>Don't have to define your own map, just use The enum class' <code>valueOf()</code>
+	   function.
+	</p>
+	<blockquote>
+		<p>
+			The enum declaration defines a class (called an enum type). The enum class body can
+			include methods and other fields. The compiler automatically adds some special methods
+			when it creates an enum. For example, they have a static values method that returns an
+			array containing all of the values of the enum in the order they are declared.
+			<a href="https://docs.oracle.com/javase/tutorial/java/javaOO/enum.html" target="_blank">[Ref]</a>.
+		</p>
+	</blockquote>
+	<pre class="prettyprint linenums">public enum Speeds {
+   SONIC_SPEED, LIGHT_SPEED, RIDICULOUS_SPEED, LUDICROUS_SPEED
+}
+
+public class Test {
+   public static void main(String[] args) {
+      System.out.println(Speeds.valueof("LUDICOUS_SPEED"));
+   }
+}</pre>
+</div>
+
+
+</div> <!-- END H1 padding div -->
+</div>
+</body>
+</html>
+
+
