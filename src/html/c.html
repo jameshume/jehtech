@@ -75,7 +75,18 @@
                 <li>http://advancedlinuxprogramming.com/alp-folder/</li>
                 <li>https://linux.die.net/man/3/daemon</li>
                 <li>http://stackoverflow.com/questions/22409780/flock-vs-lockf-on-linux</li>
+                <li>https://balau82.wordpress.com/2010/10/06/trace-and-profile-function-calls-with-gcc/</li>
+                <li>https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html</li>
 			</ul>
+		</div>
+
+
+
+		<h2>Debugging</h2>
+		<div>
+			<p>Use GCC compiler option &quot;<code>-finstrument-functions</code>&quot; and implement these functions:</p>
+			<pre>void __cyg_profile_func_enter (void *, void *) __attribute__((no_instrument_function));
+void __cyg_profile_func_exit (void *, void *) __attribute__((no_instrument_function));</pre>
 		</div>
 
 		<h2>Some Play</h2>

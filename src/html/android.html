@@ -64,6 +64,7 @@
     <li>http://events.linuxfoundation.org/images/stories/slides/abs2013_gargentas.pdf</li>
     <li>http://rts.lab.asu.edu/web_438/project_final/Talk%208%20AndroidArc_Binder.pdf</li>
     <li>http://newandroidbook.com/files/Andevcon-Binder.pdf</li>
+    <li>https://code.tutsplus.com/tutorials/android-essentials-working-with-strings-and-string-arrays--mobile-7838</li>
   </ol>
 </div>
 
@@ -241,7 +242,14 @@ Then you can repack this boot image and either fastboot or flash it to you phone
     to take the screenshots....
 </p>
 
+<h2>Write To Android Log From C (NDK)</h2>
+<div>
+  <pre>#include &lt;android/log.h&gt;
+__android_log_print(ANDROID_LOG_DEBUG, "LOG_TAG", "printf like syntax", ...);</pre>
+</div>
+
 <h2>Rooting Your Phone</h2>
+<div>
 <p>
   The following two articles explain how rooting your phone actually works:
   <ol>
@@ -251,11 +259,27 @@ Then you can repack this boot image and either fastboot or flash it to you phone
       <li>https://www.kingoapp.com/root-tutorials/how-to-root-android-6.0-marshmallow.htm</li>
   </ol>
 </p>
+</div> <!-- Rooting your phone -->
+
+<h2>Logs</h2>
+<div>
+  <pre>adb shell cat /proc/kmsg # Get the system log
+logcat # Get the Android log</pre>
+</div>
+
+<h2>Camera Stuff</h2>
+<div>
+    <ul>
+        <li>http://stackoverflow.com/questions/37434494/android-camera-2-preview-size-and-devices-aspect-ratio</li>
+        <li>http://stackoverflow.com/questions/17019588/crop-camera-preview-for-textureview */</li>
+    </ul>
+</div>
 
 <h2>Touch Events</h2>
+<div>
 <p>http://lxr.free-electrons.com/source/Documentation/input/event-codes.txt</p>
 <p>https://www.kernel.org/doc/Documentation/input/multi-touch-protocol.txt</p>
-
+</div> <!-- END Touch Events -->
 
 <h2>Generating Events Programmatically</h2>
 <div>
@@ -583,8 +607,8 @@ sendInputEvent(fd, EV_SYN, SYN_REPORT, 1);</pre>
   - frameworks/base/core/jni/android_net_LocalSocketImpl.cpp
   - libcore/luni/src/main/java/libcore/io/Libcore.java
   - libcore/luni/src/main/java/libcore/io/BlockGuardOs.java
-  - system/core/libcutils/socket_local_client.c
   - system/core/libcutils/socket_local_server.c
+  - system/core/libcutils/socket_local_client.c
 
 Both the LocalSocket and LocalServerSocket classes use the LocalSocketImpl to do
 their socket operatations.
@@ -604,8 +628,12 @@ The LocalServerSocket constructor
   - Binds the socket to the name (done through impl.bind)
      -  impl.bind() doesn't do much more than call bindLocal() which is a JNI function defined in
         android_net_LocalSocketImpl.cpp (as socket_bind_local()). socket_bind_local() is just
-        the JNI code to get the utf8 string from java world into CPP world which is then passed 
-        to socket_local_server_bind() in socket_local_client.c
+        the JNI code to get the utf8 string from java world into CPP world which is then passed
+        to socket_local_server_bind() in socket_local_server.c.
+          - This in turn creates the socket using the Linux socket API to create a UNIX domain
+            socket (AF_LOCAL) using the abstract name space, which decouples the socket from the
+            filesystem. It does this by calling socket_make_sockaddr_un() in socket_local_client.c
+            (humph!).
   - Listens on that socket (done through impl.listen)
 
 

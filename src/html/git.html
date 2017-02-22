@@ -85,6 +85,152 @@ ssh -i /absolute/path/to/key/folder/id_rsa $*</pre>
 	<pre>IdentityFile ~/.ssh/some_key_name</pre>
 </div> <!-- END: Create A Public/Private Keypair -->
 
+<h2>Add &amp; Commit A Subset Of Changes</h2>
+<div>
+    <p>
+        I enjoyed learning about this because it is quite often that I find I've fixed two bugs or
+        more in the same file. This can be because the two bugs are so tightly coupled that fixing
+        one depended on another, or it was a quick fix for something I noticed on the fly and was
+        so simple it wasn't worth creating a branch just for this fix. Either way, I end up with a
+        file that contains changes that address multiple bugs/tickets.
+    </p>
+    <p>
+        Lets test it out. Create a new repo and add a test file...
+    </p>
+    <pre class="prettyprint linenums">$ git init learngit
+Initialized empty Git repository in C:/Users/jh/Documents/Sandbox/learngit/.git/
+
+$ cd learngit
+
+$ echo "#include &lt;stdio.h&gt;
+        return 0;
+&gt;
+&gt; int main(int argc)
+&gt; {
+&gt;         return 0;
+&gt; }
+&gt; " &gt; test.c
+
+$ git commit -m "Create a test file.
+
+Create a test file so that in a future commit I can test patch adds"
+[master (root-commit) f573b91] Create a test file.
+ 1 file changed, 6 insertions(+)
+ create mode 100644 test.c</pre>
+    <p>
+        We've created a little git repository and added one file called <code>test/c</code> to it.
+        Very very simple. Now let's spoof making two bug fixes by adding the following comments
+        just above the <code>return 0</code> statement:
+    </p>
+    <pre class="prettyprint linenums">/* This line fixes bug A*/
+/* This line fixes bug B*/
+/* This line fixes bug A*/</pre>
+    <p>
+        Okay, now I want to make two seperate commits as I'd like to have one commit that deals
+        soley with the changes I've made to fix bug A, and another commit that deals soley with
+        the changes I've made to fix bug B. This way, any one looking back through the logs will be
+        able to easily understand which changes fix which bug.
+    </p>
+    <p>
+        To do this I use the following command:
+    </p>
+    <pre class="prettyprint linenums">git add -p test.c</pre>
+    <p>
+        This launches an interactive command line utility:
+    </p>
+    <pre class="prettyprint linenums">$git add -p test.c<
+diff --git a/test.c b/test.c
+index 312d3cd..36da841 100644
+--- a/test.c
++++ b/test.c
+@@ -2,5 +2,8 @@
+
+ int main(int argc)
+ {
++       /* This line fixes bug A*/
++       /* This line fixes bug B*/
++       /* This line fixes bug A*/
+        return 0;
+ }
+<b>Stage this hunk [y,n,q,a,d,/,e,?]? e</b></pre>
+    <p>
+        The GIT command line askes me whether I want to stage this hunk. What is a &quot;hunk&quot;?
+        A hunk is just a set of changes. Currently, we can see above that all the changes in the
+        file are grouped together because they app have a plus sign next to them, indicating that
+        they will be added in one group.
+    </p>
+    <p>
+        I don't want the line for bug B to be added in this group. So I must split the current hunk
+        into smaller hunks. I do this by entering &quot;e&quot;, as shown. This will start the
+        configured text editor.
+    </p>
+    <p>
+        To avoid committing the lines associated with bug B, I relpace the <code>+</code> symbol
+        at the line start, with a <code>#</code> symbol as so (partial file in editor shown):
+    </p>
+    <pre class="prettyprint linenums">int main(int argc)
+ {
++       /* This line fixes bug A*/
+#       /* This line fixes bug B*/
++       /* This line fixes bug A*/
+        return 0;
+ }</pre>
+    <p>
+        Save and exit from the editor. The command ends. Now if I look at the GIT status, I see
+        the following:
+    </p>
+    <pre class="prettyprint linenums">$ git status
+On branch master
+Changes to be committed:
+  (use "git reset HEAD &lt;file&gt;..." to unstage)
+
+        modified:   test.c
+
+Changes not staged for commit:
+  (use "git add &gt;file&gt;..." to update what will be committed)
+  (use "git checkout -- &lt;file&gt;..." to discard changes in working directory)
+
+        modified:   test.c</pre>
+    <p>
+        Oh la la! My file is both staged and unstaged. So have we staged only the changes for bug A?
+        Lets find out by looking at what will go into the next commit:
+    </p>
+    <pre class="prettyprint linenums">$ git diff --staged
+diff --git a/test.c b/test.c
+index 312d3cd..67cc02e 100644
+--- a/test.c
++++ b/test.c
+@@ -2,5 +2,7 @@
+
+ int main(int argc)
+ {
++       /* This line fixes bug A*/
++       /* This line fixes bug A*/
+        return 0;
+ }</pre>
+    <p>
+        Sweet! So now I can commit these changes, then add the remaining bug B changes and commit
+        them in a seperate commit... happy days!
+    </p>
+    <p>
+        BUT before I do this, I should really make sure that the changes that I have staged are
+        good: they produce a compilable set of changes that don't break the build and the changes
+        do in fact do what the commit message associated with them says. To do this I would like
+        to save my unstaged changes and take them out of the workspace, whilst leaving the
+        staged changes in the workspace:
+    </p>
+    <pre class="prettyprint linenums">$ git stash --keep-index</pre>
+    <p>
+        Now I can review/test etc the staged changes in isolation. Once I'm happy I can run
+        a <code>git commit</code>, and then to restore the remaining unstaged stuff I can run:
+    </p>
+    <pre class="prettyprint linenums">$ git stash pop</pre>
+    <p>
+        I can now repeat these steps for the bug B changes and so one...
+    </p>
+
+</div> <!-- END Adding Only Parts Of Giles -->
+
 <h2>Basic Git Notes</h2>
 <div>
 	<pre>
