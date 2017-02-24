@@ -65,6 +65,7 @@
     <li>http://rts.lab.asu.edu/web_438/project_final/Talk%208%20AndroidArc_Binder.pdf</li>
     <li>http://newandroidbook.com/files/Andevcon-Binder.pdf</li>
     <li>https://code.tutsplus.com/tutorials/android-essentials-working-with-strings-and-string-arrays--mobile-7838</li>
+    <li>https://source.android.com/devices/graphics/architecture.html</li>
   </ol>
 </div>
 
@@ -503,6 +504,35 @@ sendInputEvent(fd, EV_SYN, SYN_REPORT, 1);</pre>
      that it does not give a full <code>pthread</code> implementation. Notably things like
      <code>pthread_cancel</code> are not supported.
 </div>
+
+<h2>Intent and Broadcast Receiver</h2>
+<div>
+  <pre>// In the sender activity
+Intent localIntent = new Intent(MY_INTENT_STR).putExtra(MY_INTENT_STR_EXTRA, item);
+LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
+
+// In the receiver activity
+public class MainActivity extends AppCompatActivity {
+    protected MyReceiver mReciever;
+
+    // ... &lt;snip&gt; ...
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        // ... &lt;snip&gt; ...
+        mReciever = new MyReceiver();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReciever, new IntentFilter(MY_INTENT_STR));
+        // ... &lt;snip&gt; ...
+    }
+
+    class MyReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(final Context context, Intent intent) {
+            Log.d(DEBUG_TAG, "GOT broadcast: " + intent.getExtras() /* &lt;snip&gt; ... */);
+        }
+    }
+}</pre>
+</div> <!-- END Intent -->
 
 <h2>Android Build Tree</h2>
 <div>
