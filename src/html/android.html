@@ -23,6 +23,10 @@
 <h1 class="title">Android notes</h1>
 <div style="padding-right:10px;">
 
+<h2>Page Contents</h2>
+<div id="page_contents">
+</div>
+
 <h2>Interesting Reads and References</h2>
 <div>
   <ol>
@@ -56,6 +60,12 @@
     <li>https://blog.jayway.com/2012/10/24/a-practical-approach-to-the-aosp-build-system/</li>
     <li>https://software.intel.com/en-us/articles/building-an-android-command-line-application-using-the-ndk-build-tools</li>
     <li>http://www.imajeenyus.com/computer/20130301_android_tablet/android/unpack_repack_recovery_image.html</li>
+    <li>http://www.slideshare.net/jserv/android-ipc-mechanism</li>
+    <li>http://events.linuxfoundation.org/images/stories/slides/abs2013_gargentas.pdf</li>
+    <li>http://rts.lab.asu.edu/web_438/project_final/Talk%208%20AndroidArc_Binder.pdf</li>
+    <li>http://newandroidbook.com/files/Andevcon-Binder.pdf</li>
+    <li>https://code.tutsplus.com/tutorials/android-essentials-working-with-strings-and-string-arrays--mobile-7838</li>
+    <li>https://source.android.com/devices/graphics/architecture.html</li>
   </ol>
 </div>
 
@@ -105,6 +115,10 @@ fastboot boot boot.img</pre>
         <li>http://liuluheng.github.io/wiki/public_html/Mobile/Android/Firmware%20Development.html</li>
         <li>https://www.kingoapp.com/root-tutorials/how-to-root-android-6.0-marshmallow.htm</li>
         <li>http://www.addictivetips.com/mobile/android-partitions-explained-boot-system-recovery-data-cache-misc/</li>
+        <li>https://en.wikipedia.org/wiki/Evdev</li>
+        <li>https://joeshaw.org/linux-input-ecosystem/</li>
+        <li>http://rts.lab.asu.edu/web_438/project_final/Talk%208%20AndroidArc_Binder.pdf</li>
+        <li>http://www.toptip.ca/2013/01/unix-domain-socket-with-abstract-socket.html?m=1<br/>and<br/>http://stackoverflow.com/questions/14643571/localsocket-communication-with-unix-domain-in-android-ndk<br/>and<br/>https://developer.android.com/reference/android/net/LocalServerSocket.html<br/>and<br/>https://developer.android.com/reference/android/net/LocalSocket.html</li>
     </ul>
 </div> <!-- Building Android -->
 
@@ -118,7 +132,7 @@ fastboot boot boot.img</pre>
                 <li><a href="https://www.youtube.com/watch?v=DyUainEJwLM" target="_blank">Pull Your Own Stock Android Firmware From Your Device</a>, by Rootjunky.com.</li>
                 <li><a href="https://forum.xda-developers.com/showthread.php?t=2771411" target="_blank">Dump Stock Rom And Build Flashable Image</a>, XDA Developers thread.</li>
                 <li><a href="http://www.imajeenyus.com/computer/20130301_android_tablet/android/unpack_repack_recovery_image.html" target="_blank">Unpack And Repack Recover Image</a> Lindsay Wilson, imajeenyus.com.</li>
-                <li><a href="http://www.cnx-software.com/2015/12/07/how-to-extract-kernel-img-with-mkboot-script/" target="_blank">How to Extract a Kernel Image With The MKBoot Script</a>, CNXSoft.</li></li>
+                <li><a href="http://www.cnx-software.com/2015/12/07/how-to-extract-kernel-img-with-mkboot-script/" target="_blank">How to Extract a Kernel Image With The MKBoot Script</a>, CNXSoft.</li>
                 <li><a href="http://www.cnx-software.com/2014/05/12/how-to-extract-a-device-tree-file-from-android-firmware-files/" target="_blank">How to Extract a Device Tree File from Android Firmware Files</a>, CNXSoft.</li>
                 <li><a href="https://github.com/xiaolu/mkbootimg_tools" target="_blank">mkbootimg_tools</a>, xiaolu on GitHub.</li>
                 <li><a href="http://batakang.com/ftp/DEVICE_INFO/Android_Device_System_Information.zip" target="_blank">Android_Device_System_Information.zip</a>, BataKang.</li>
@@ -166,7 +180,7 @@ lrwxrwxrwx root     root              1970-01-12 12:43 abootbak -> /dev/block/sd
 ... &lt;snip&gt; ...
 lrwxrwxrwx root     root              1970-01-12 12:43 <b>recovery -> /dev/block/sda13</b></pre>
 <p>
-    Using the above listing we can find out which block devices correspond to our boot, system, recovery and userfata images.
+    Using the above listing we can find out which block devices correspond to our boot, system, recovery and userdata images.
     These can then be extracted to files using the
     <a href="http://man7.org/linux/man-pages/man1/dd.1.html" target="_blank">dd</a>
     comand to copy the device contents to a file:
@@ -187,7 +201,8 @@ adb pull /data/local/tmp/boot.img boot.img</pre>
     <em>Or</em> as i found out later, it is much easier to do
 </p>
 <pre>adb pull /dev/block/sde36 boot.img</pre>
-<p>BUT, when I tried this with the system image it had problems so I reverted to using dd. Dunno what happened :(</p>
+<p>Note you can only do this with partitions that are not in use, such as the boot or
+   recovery partition. For everything else install a TWRP recover image (see below).</p>
 <p>
     Once you have your boot image you can then use the
     <a href="https://github.com/xiaolu/mkbootimg_tools" target="_blank">mkbootimg_tools</a>
@@ -223,12 +238,19 @@ Then you can repack this boot image and either fastboot or flash it to you phone
      <code>This PC\MIX\Internal Storage\TWRP\BACKUPS\ed16622e\2017-02-03--07-04-30_MXB48T</code>.
 </p>
 <p>
-    PS: Used this 
-    <a href="http://www.droidviews.com/take-screeshots-in-cwm-twrp-recovery-mode/" target="_blank">utility</a> 
+    PS: Used this
+    <a href="http://www.droidviews.com/take-screeshots-in-cwm-twrp-recovery-mode/" target="_blank">utility</a>
     to take the screenshots....
 </p>
 
+<h2>Write To Android Log From C (NDK)</h2>
+<div>
+  <pre>#include &lt;android/log.h&gt;
+__android_log_print(ANDROID_LOG_DEBUG, "LOG_TAG", "printf like syntax", ...);</pre>
+</div>
+
 <h2>Rooting Your Phone</h2>
+<div>
 <p>
   The following two articles explain how rooting your phone actually works:
   <ol>
@@ -238,13 +260,29 @@ Then you can repack this boot image and either fastboot or flash it to you phone
       <li>https://www.kingoapp.com/root-tutorials/how-to-root-android-6.0-marshmallow.htm</li>
   </ol>
 </p>
+</div> <!-- Rooting your phone -->
+
+<h2>Logs</h2>
+<div>
+  <pre>adb shell cat /proc/kmsg # Get the system log
+logcat # Get the Android log</pre>
+</div>
+
+<h2>Camera Stuff</h2>
+<div>
+    <ul>
+        <li>http://stackoverflow.com/questions/37434494/android-camera-2-preview-size-and-devices-aspect-ratio</li>
+        <li>http://stackoverflow.com/questions/17019588/crop-camera-preview-for-textureview */</li>
+    </ul>
+</div>
 
 <h2>Touch Events</h2>
+<div>
 <p>http://lxr.free-electrons.com/source/Documentation/input/event-codes.txt</p>
 <p>https://www.kernel.org/doc/Documentation/input/multi-touch-protocol.txt</p>
+</div> <!-- END Touch Events -->
 
-
-<h2>Generating Events Programatically</h2>
+<h2>Generating Events Programmatically</h2>
 <div>
   <p>
     I needed to be able to generate touch events for a project I was working on. These touch
@@ -263,9 +301,72 @@ Then you can repack this boot image and either fastboot or flash it to you phone
 
   <h3>Using ADB sendevent &amp; getevent</h3>
   <p>
-    Using ADB there are the <code>getevent</code> and <code>sendevent</code> commands which are
-    usefull while debugging, but I needed to write some kind of service/daemon. The commands do
-    appear to be useable <em>without</em> root privileges, which is nice.
+    Using ADB there are the
+    <code><a href="https://source.android.com/devices/input/getevent.html" target="_blank">getevent</a></code>
+    and <code>sendevent</code> commands which are
+    usefull while debugging, but I needed to write some kind of service/daemon.
+  </p>
+  <p>
+    To get a pretty printed list of events comming out of your device use:
+  </p>
+  <pre>getevent -lt /dev/input/eventX</pre>
+  <p>
+    The <code>-l</code> option tells <code>getevent</code> to label event types and names in
+    plain text. The <code>-t</code> option prints out the timestamps.
+    For example, a quick tap on my touch screen gives this:
+  </p>
+  <pre># getevent -lt /dev/input/event4
+[    4339.714135] EV_ABS       ABS_MT_TRACKING_ID   00000015
+[    4339.714135] EV_ABS       ABS_MT_POSITION_X    0000055c
+[    4339.714135] EV_ABS       ABS_MT_POSITION_Y    000001e9
+[    4339.714135] EV_ABS       ABS_MT_PRESSURE      00000049
+[    4339.714135] EV_ABS       ABS_MT_TOUCH_MAJOR   00000008
+[    4339.714135] EV_KEY       BTN_TOUCH            DOWN
+[    4339.714135] EV_SYN       SYN_REPORT           00000000
+[    4339.720836] EV_ABS       ABS_MT_PRESSURE      00000033
+[    4339.720836] EV_ABS       ABS_MT_TOUCH_MAJOR   00000007
+[    4339.720836] EV_SYN       SYN_REPORT           00000000
+[    4339.738694] EV_ABS       ABS_MT_TRACKING_ID   ffffffff
+[    4339.738694] EV_KEY       BTN_TOUCH            UP
+[    4339.738694] EV_SYN       SYN_REPORT           00000000</pre>
+  <p>Here we are seeing the Linux input layer messages being sent from the driver into the
+     input layer. Here we are seeing
+     <a href="https://www.kernel.org/doc/Documentation/input/multi-touch-protocol.txt"
+        target="_blank">Linux multi-touch messages</a>.
+  </p>
+  <p>
+    From the above we can see that the device is typ &quot;B&quot;. The first message is the
+    tracking ID (<code>ABS_MT_TRACKING_ID</code>). Because screens are multi-touch, i.e., more than
+    one finger can be used on the device at any one time, the coordinates sent to the Linux input layer
+    have to be associated with a finger, or stylus etc. It is the hardware's/driver's responsibility
+    to keep track of the various active touch points and give them an ID. For example, if I touch
+    the screen with one finger, as in this case, the first finger is assigned the number 15. If I
+    then touched the screen with a second finger, it might be assigned the number 16, for example.
+  </p>
+  <p>
+    The second pair of messages are the x and y coordinates of the pointing device with ID 15. The
+    coordinates are, I believe, in device coordinate units. Either the input layer or users of the
+    input layer convert these to pixels (I think - need to confirm this).
+  </p>
+  <p>
+    Next we have the pressure and the area of the major touch - see the <a href="https://www.kernel.org/doc/Documentation/input/multi-touch-protocol.txt"
+        target="_blank">Linux multi-touch messages</a> doc.
+  </p>
+  <p>
+    Next to indicate that there is a finger pressed a <code>BTN_TOUCH</code> message is sent with
+    the finger-down flag set.
+  </p>
+  <p>
+    Finally to indicate the end of this particular event a <code>SYN_REPORT</code> message is sent.
+  </p>
+  <p>
+    Next a set of pressure and major-touch messages are sent to indicate a change in the pressure
+    of my touch. This set of events is ended using another <code>SYN_REPORT</code>. Note, because
+    we are still talking about the same touch point, no tracking ID needs to be sent.
+  </p>
+  <p>
+    Finally in the next block of messages we see a tacking ID of -1. This indicates that the current
+    slot (the tracking ID) is no longer being used.
   </p>
 
   <h3>The &quot;input&quot; Command</h3>
@@ -280,11 +381,16 @@ Then you can repack this boot image and either fastboot or flash it to you phone
   </p>
 
   <h3>Write To The Device's  /dev/input/xxx</h3>
+  <p>http://linuxwacom.sourceforge.net/wiki/index.php/Kernel_Input_Event_Overview</p>
   <p>
     Android is based on Linux and uses the Linux Input Subsystem. This means that every input
     device has created a node under <code>/dev/input</code>. This device can be written to if you
     want to inject event messages into the system and make them appear asif they came from that
     device. Downside is, this requires root privileges.
+  </p>
+  <p>
+    This is essentially, I think, what the <code>send|getevent</code> command line utils are doing,
+    but this shows how to do it from your program directly without having to fork these commands.
   </p>
   <p>
     A little example based on the pocketmagic articles <a href="#ref4">[Ref]</a><a href="#ref5">[Ref]</a>:
@@ -320,7 +426,8 @@ if (fd < 0) {
 // Send a touch event at coordinates 100, 100
 sendInputEvent(fd, EV_ABS, ABS_MT_POSITION_X, 100);   // Have to get these values from ...
 sendInputEvent(fd, EV_ABS, ABS_MT_POSITION_Y, 100);   // ... <a href="http://lxr.free-electrons.com/source/include/uapi/linux/input-event-codes.h" target="_blank">input-event-codes.h</a>.
-sendInputEvent(fd, EV_KEY, BTN_TOUCH, 1);</pre>
+sendInputEvent(fd, EV_KEY, BTN_TOUCH, 1);
+sendInputEvent(fd, EV_SYN, SYN_REPORT, 1);</pre>
 </div> <!-- END -->
 
 <h2>MotionEvents</h2>
@@ -387,6 +494,183 @@ sendInputEvent(fd, EV_KEY, BTN_TOUCH, 1);</pre>
        older <code>getAction()</code> method, <code>getActionMasked()</code> is designed to work with multiple pointers.
     </q> -- <a href="https://developer.android.com/training/gestures/multi.html" target="_blank">[Ref]</a>.
 </div> <!-- END MotionEvents DIV -->
+
+<h2>NDK Applications And PThreads</h2>
+<div>
+  <p>If you want to use the <code>pthread</code> library in Android, you do not have to link
+     against an external library: it is baked into the
+     <a href="https://android.googlesource.com/platform/bionic/+/ics-mr1-release/libc/docs/OVERVIEW.TXT"
+        target="_blank">Bionic C library</a> already. Note, however,
+     that it does not give a full <code>pthread</code> implementation. Notably things like
+     <code>pthread_cancel</code> are not supported.
+</div>
+
+<h2>Intent and Broadcast Receiver</h2>
+<div>
+  <pre>// In the sender activity
+Intent localIntent = new Intent(MY_INTENT_STR).putExtra(MY_INTENT_STR_EXTRA, item);
+LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
+
+// In the receiver activity
+public class MainActivity extends AppCompatActivity {
+    protected MyReceiver mReciever;
+
+    // ... &lt;snip&gt; ...
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        // ... &lt;snip&gt; ...
+        mReciever = new MyReceiver();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReciever, new IntentFilter(MY_INTENT_STR));
+        // ... &lt;snip&gt; ...
+    }
+
+    class MyReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(final Context context, Intent intent) {
+            Log.d(DEBUG_TAG, "GOT broadcast: " + intent.getExtras() /* &lt;snip&gt; ... */);
+        }
+    }
+}</pre>
+</div> <!-- END Intent -->
+
+<h2>Android Build Tree</h2>
+<div>
+<p>
+  The top-level view of the android build tree is as follows:
+</p>
+<pre>.
+|-- abi
+|-- art
+|-- bionic          - Bionic is Android's libc (standard C library)
+|-- bootable
+|-- build
+|-- cts
+|-- dalvik          - The Dalvik virtual machine
+|-- developers
+|-- development
+|-- device          - Product make definitions
+|-- docs
+|-- external
+|-- frameworks
+|-- hardware
+|-- kernel          - The Linux kernel
+|-- libcore
+|-- libnativehelper
+|-- ndk
+|-- out
+|-- packages
+|-- pdk
+|-- prebuilts       - Things like compiler chains for various platforms
+|-- sdk
+|-- system
+|-- tools
+`-- vendor</pre>
+<p>
+  The directory <code>bionic</code> contains the code for Android's implementation of the standard
+  C library. The library also wraps up other well known libraries such as pthreads, so when using
+  pthreads, you don't need to link against any extra libraries. Note, however, that the Android
+  implementation <em>does not support the entire POSIX pthread standard</em>. Notably things like
+  <code>pthread_cancel</code> are not supported.
+</p>
+<p>
+  The directory <code>kernel</code> contains the Linux kernel, on top of which Android is build.
+  The kernel in the Android build tree contains Android modifications to the Linux kernel. Many
+  of these have now gone upstream and exist in the master kernel branch as well. Android introduced
+  concepts such as wavelocks.
+</p>
+<p>
+  The <code>device</code> directory contains data and build scripts relevant to specific devices.
+  Under <code>device</code> the vendor specific build configs/scripts exist generically as
+  &quot;<code>./device/&lt;company-name&gt;/&lt;device-name&gt;</code>&quot;.
+  So, for example, the <code>device</code> directory of the build tree from Qualcomm looks like
+  this:
+</p>
+
+<h3>Devices</h3>
+<p>
+  References:
+</p>
+<ul>
+  <li><a href="http://source.android.com/source/add-device.html" taret="_blank">Adding a New Device</a></li>
+</ul>
+<pre>device/qcom/
+|-- apq8084
+|-- common
+|-- mpq8064
+|-- msm7627a
+|-- msm7630_surf
+|-- msm8226
+&lt;snip&gt;</pre>
+<p>
+  Under the folder for a particular device the following 3 files are the most significant in
+  terms of defining the build:
+</p>
+<p>
+  <ul>
+    <li>Android.mk</li>
+    <li>AndroidBoard.mk</li>
+    <li>AndroidProducts.mk
+      <ul><li>Seems to have one purpose and that is to &quot;point&quot; to the product definition
+      makefile, named as the device vendor wishes.</li></ul>
+    </li>
+    <li>BoardConfig.mk
+      <ul><li>Board specific configuration</li></ul>
+    </li>
+    <li>vendorsetup.sh
+      <ul><li>Adds a lunch combo for your device. e.g. by calling <code>add_lunch_combo &lt;product-name&gt;</code>.</li></ul>
+    </li>
+  </ul>
+</p>
+<p>
+  
+</p>
+</div> <!-- END: H2 Android Build Tree -->
+
+<h2>LocalSocket &amp; LocalServerSocket</h2>
+<div>
+  <pre>Files of interest:
+  - frameworks/base/core/java/android/net/LocalServerSocket.java
+  - frameworks/base/core/java/android/net/LocalSocket.java
+  - frameworks/base/core/java/android/net/LocalSocketAddress.java
+  - frameworks/base/core/java/android/net/LocalSocketImpl.java
+  - frameworks/base/core/jni/android_net_LocalSocketImpl.cpp
+  - libcore/luni/src/main/java/libcore/io/Libcore.java
+  - libcore/luni/src/main/java/libcore/io/BlockGuardOs.java
+  - system/core/libcutils/socket_local_server.c
+  - system/core/libcutils/socket_local_client.c
+
+Both the LocalSocket and LocalServerSocket classes use the LocalSocketImpl to do
+their socket operatations.
+
+The LocalSocketImpl class is mostly a wrapper for the JNI cpp module that does the actual linux
+API calls. It creates the Input and Output socket stream classes (with some thread saftey gaurantees)
+and provides the object methods.
+
+The LocalServerSocket constructor
+  - Creates the local socket as a stream socket (done through impl.create)
+      - Results in call from impl to Libcore.os.socket(OsConstants.AF_UNIX, osType, 0); This function
+        ends up calling os.socket(). What is does is to &quot;tag&quot; the socket created by
+        os.socket(). Haven't looked into what this actually means, but the base is a call to
+        Java os.socket().
+  - Creates a new LocalSocketAddress with the given name
+      - This is a thin class that mostly just holds the name as a string
+  - Binds the socket to the name (done through impl.bind)
+     -  impl.bind() doesn't do much more than call bindLocal() which is a JNI function defined in
+        android_net_LocalSocketImpl.cpp (as socket_bind_local()). socket_bind_local() is just
+        the JNI code to get the utf8 string from java world into CPP world which is then passed
+        to socket_local_server_bind() in socket_local_server.c.
+          - This in turn creates the socket using the Linux socket API to create a UNIX domain
+            socket (AF_LOCAL) using the abstract name space, which decouples the socket from the
+            filesystem. It does this by calling socket_make_sockaddr_un() in socket_local_client.c
+            (humph!).
+  - Listens on that socket (done through impl.listen)
+
+
+
+
+  </pre>
+</div>
 
 </div> <!-- END PADDING DIV -->
 </body>

@@ -104,7 +104,7 @@
 		<p>
 			To just run pylint individually on all your python files do this...
 		</p>
-		<pre>find . -name '*.py' | xargs pylint --rcfile=pylint_config_filename</pre>
+		<pre  class="prettyprint linenums">find . -name '*.py' | xargs pylint --rcfile=pylint_config_filename</pre>
 		<p>
 			Use the <code>-rn</code> option to suppress the summary tables at the end of the pylint output.
 		</p>
@@ -135,14 +135,14 @@
 		<p>
 			To generate a template pylint rcfile use:
 		</p>
-		<pre>pylint --generate-rcfile</pre>
+		<pre class="prettyprint linenums">pylint --generate-rcfile</pre>
 
 		<p>
 			Inside the generated rcfile there are a few things that can be interesting. The
 			most interesting is the <tt>init-hook</tt> which you can set, for example, to
 			update the <tt>PYTHONPATH</tt> so that pylint can find all the imported modules:
 		</p>
-		<pre>[MASTER]
+		<pre class="prettyprint linenums">[MASTER]
 init-hook='import sys; sys.path.append(...);'</pre>
 		<p>
 			Note that the string is a one-liner python script.
@@ -160,7 +160,7 @@ C:293, 4: Invalid method name "im_an_error" (invalid-name)</pre>
 		<p>
 			Or...
 		</p>
-		<pre>pylint --help-msg=invalid-name</pre>
+		<pre class="prettyprint linenums">pylint --help-msg=invalid-name</pre>
 
 		<h3>Suppressing Error Messages</h3>
 		<p>
@@ -226,12 +226,12 @@ C:293, 4: Invalid method name "im_an_error" (invalid-name)</pre>
 		can have one per project this way. All the command line options that you would configure 
 		flake8 with become INI file style settings. For example, if you ran:
 	</p>
-	<pre>flake8 --ignore=E221 --max-line-length==100</pre>
+	<pre class="prettyprint linenums">flake8 --ignore=E221 --max-line-length==100</pre>
 	<p>
 		This would become the following in the config file (note the file must have the
 		header <tt>[flake8]</tt>:
 	</p>
-	<pre>[flake8]
+	<pre class="prettyprint linenums">[flake8]
 ignore = E221
 max-line-length = 100</pre>
 </div>
@@ -243,18 +243,18 @@ max-line-length = 100</pre>
 		<q>are the new standard of python distribution</q>. First make sure you have wheels
 		installed:
 	</p>
-	<pre>pip install wheel</pre>
+	<pre class="prettyprint linenums">pip install wheel</pre>
 	<p>
 		Once you have installed wheels you can download wheel files (*.whl) to anywhere on your
 		computer and run the following:
 	</p>
-	<pre>pip install /path/to/your/wheel/file.whl</pre>
+	<pre class="prettyprint linenums">pip install /path/to/your/wheel/file.whl</pre>
 	<p>
 		So, for example, when I wanted to install lxml on my Windows box, I went to Christoph Gohlke's
 		<a href="http://www.lfd.uci.edu/~gohlke/pythonlibs/" target="_blank">Unofficial Windows Binaries for Python Extension Packages</a>
 		and downloaded the file <tt>lxml-3.6.4-cp27-cp27m-win_amd64.whl</tt> and typed the following:
 	</p>
-	<pre>pip install C:\Users\my_user_name\Downloads\lxml-3.6.4-cp27-cp27m-win_amd64.whl</pre>
+	<pre class="prettyprint linenums">pip install C:\Users\my_user_name\Downloads\lxml-3.6.4-cp27-cp27m-win_amd64.whl</pre>
 </div> <!-- END H2 Install Python Libraries From Wheel Files -->
 
 <h2>Windows Python Module Installers: When Python Can't Be Found</h2>
@@ -281,7 +281,7 @@ max-line-length = 100</pre>
 	<p>
 		For example, my registery file, after edit looked like this:
 	</p>
-	<pre>Windows Registry Editor Version 5.00
+	<pre class="prettyprint linenums">Windows Registry Editor Version 5.00
 
 [HKEY_CURRENT_USER\SOFTWARE\Python]
 
@@ -312,9 +312,10 @@ max-line-length = 100</pre>
 		Ooh this one is interesting and is not at all how I intuitively imagined default values. 
 		I assumed that when a function parameter has a default value, that on <em>every</em>
 		call to the function, the parameter is initialised with the default value. This is
-		<em>not</em> the case! The default value is evaluated only once and acts like a 
-		static variable in a C function after that! The following example is taken from
-		the <a href="https://docs.python.org/3/tutorial/controlflow.html#default-argument-values" target="_blank">Python docs on functions</a>:
+		<em>not</em> the case, as I found <a href="http://docs.python-guide.org/en/latest/writing/gotchas/" target="_blank">[Ref]</a>! 
+		The default value is evaluated only once and acts like a static variable in a 
+		C function after that! The following example is taken from the 
+		<a href="https://docs.python.org/3/tutorial/controlflow.html#default-argument-values" target="_blank">Python docs on functions</a>:
 	</p>
 	<pre class="prettyprint linenums">def f(a, L=[]):
     # Caution! You might not expect it but this function accumulates
@@ -337,6 +338,125 @@ print(f(2))  # Prints [1, 2], not [2] as you might expect!</pre>
 	</blockquote>
 	<p></p>
 </div>
+
+<h2>Python Binding (vs C++11 Binding)</h2>
+<div>
+	<p>
+		Python lambda's bind late (are lazily bound) <a href="https://en.wikipedia.org/wiki/Lazy_evaluation"
+		target="_blank">[Ref]</a>. This means the the following code will have the output shown:
+	</p>
+	<pre class="prettyprint linenums">x = 1
+f = lambda y: y * x
+print f(2)
+x = 10
+print f(2)
+# Outputs:
+# 2
+# 20</pre>
+	<p>
+		I.e., the value of x is looked up in the surrounding scope when the function is <em>called</em> and <em>not</em> when the expression
+		creating the lambda is evaluated. This
+		means that in the statement <code>f = lambda y: y * x</code>, the variable <code>x</code> is <em>not</em>
+		evaluated straight away. It is delayed until <code>x</code> is actually needed. Hence the two different
+		values are output when we call <code>f(2)</code> with the same parameter value.
+	</p>
+	<p>
+		We can go to the <a href="https://docs.python.org/2/reference/executionmodel.html#naming-and-binding" target="_blank">Python docs</a> 
+		for further information:
+	</p>
+	<blockquote>
+		<p>
+			A block is a piece of Python program text that is executed as a unit. The following are blocks:
+			<ul>
+				<li>A module,</li>
+				<li>A function body,</li>
+				<li>A class,</li>
+				<li>A script file,</li>
+				<li>...</li>
+			</ul>
+		</p>
+		<p>
+			... When a name is used in a code block, it is <b>resolved using the nearest enclosing scope</b>. 
+			The set of all such scopes visible to a code block is called the block’s environment ...
+	    </p>
+	    <p>
+	    	If a name is bound in a block, it is a local variable of that block.  ...
+	    	If a variable is used in a code block but not defined there, it is a <b>free variable</b>.
+	    </p>
+	    <footer>-- <a href="https://docs.python.org/2/reference/executionmodel.html#naming-and-binding" target="_blank">Python docs</a></footer>
+    </blockquote>
+    <p>
+    	So, we can see that in the lambda expression above, the variable <code>x</code> is a free variable.
+    	So, it is resolved using the nearest enclosing scope. The nearest enclosing scope in the above example
+    	happens to be the global scope.
+    </p>
+	<p>
+		This is the same example as you find in many classic examples <a href="http://docs.python-guide.org/en/latest/writing/gotchas/"
+		target="_blank">[Ref]</a>, replicated here:
+	</p> 
+	<pre class="prettyprint linenums">def create_multipliers():
+   return [lambda x : i * x for i in range(5)]
+
+for multiplier in create_multipliers():
+   print multiplier(2)
+
+# Outputs
+# 8 8 8 8 (newlines removed for brievity)</pre>
+	<p>
+		Why does it output 8's? Because the list comprehension creates a list of lambda functions,
+		in which the variable <code>i</code> has <em>not yet</em> been evaluated. By the time
+		we come to evaluate the lambda <code>i</code> is set to 4. How is <code>i</code> evaluated?
+		As it is a free variable in the lambda it is &quot;resolved using the nearest enclosing scope&quot;.
+		The nearest enclosing scope is the function body of <code>create_multiplies()</code> (because
+		a list comprehesion is not a block, so <code>i</code> is bound in <code>create_multiplies()</code>).
+		By the time <code>create_multiplies()</code> exits, <code>i</code> is 4, but because the lambda
+		closes this scope, every time <code>i</code> is looked up, it is 4, because the lookup of <code>i</code>
+		does not occur until later, when the lambdas are actually evaluated.
+	</p>
+	<p>
+		I.e., <code>create_multipliers()</code> is called. This creates a list of 4 lambda functions:
+	</p>
+	<pre class="prettyprint linenums">[lambda1, lambda2, lambda3, lambda4]</pre>
+	<p>
+		Each <code>lambdaX</code> has not yet been evaluated, so by the time this list has been 
+		create, the variable <code>i</code> has the value 4. Later, when any of the lambda functions
+		are called, <code>i</code> is evaluated so Python searches down the scope chain until it
+		finds the first <code>i</code>, which it does and in this case it has the value 4!
+	</p>
+	<p>
+		Note, that this is a little different in C++. In C++ (C++11 or greater) however, you 
+		would have to pass x by reference to get the same result. If we transliterate the first
+		example to C++ we get:
+	</p>
+	<pre class="prettyprint linenums">#include &lt;iostream&gt;
+
+int main(int argc, char* argv[])
+{
+	int x = 1;
+	auto myLambda = [x](int y) { 
+		return x * y; 
+	};
+	std::cout &lt;&lt; myLambda(2) &lt;&lt; "\n";
+	x = 10;
+	std::cout &lt;&lt; myLambda(2) &lt;&lt; "\n";
+	return 0;
+}
+// Prints:
+// 2
+// 2 (notice here Python would print 20!</pre>
+	<p>
+		To get the behaviour of Python we have to do the following:
+	</p>
+	<pre class="prettyprint linenums">auto myLambda = [<b><u>&amp;</u></b>x](int y) { 
+		return x * y; 
+	};</pre>
+	<p>
+		Note the ampersand added before <code>x</code> so that the outer scope is passed
+		to the lambda by reference, not value!
+	</p>
+
+</div> <!-- END Python Binding -->
+
 
 <h2>Infinite recursion in <tt>__setattr__()</tt> &amp; <tt>__getattr__()</tt> in Python</h2>
 <div>

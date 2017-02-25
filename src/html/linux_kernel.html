@@ -37,6 +37,50 @@
   </ol>
 </div>
 
+<h2>Unbind A Kernel Driver</h2>
+<p>
+  Most drivers have an entry under <code>/sys/bus/xxx/drivers/yyy</code>. For example if you
+  <code>ls</code> the directory <code>/sys/bus</code> you will see somthing similar to the
+  following:
+</p>
+<pre>/sys/bus
+|-- acpi
+|-- event_source
+|-- i2c
+|-- mdio_bus
+|-- mmc
+|-- pci
+|-- pci_express
+|-- platform
+|-- pnp
+|-- rapidio
+|-- scsi
+|-- sdio
+|-- serio
+|-- spi
+|-- usb
+&lt;snip&gt;</pre>
+<p>
+  The different types of busses are listed. Under each bus, the following structure is seen:
+</p>
+<pre>/sys/bus/XXX
+|-- devices
+`-- drivers
+</pre>
+<p>
+  We're interested in the <code>drivers</code> subdirectory. Let's take a look at a sample directory
+  for I2C drivers:
+</p>
+<pre>/sys/bus/i2c/drivers
+|-- 88PM860x
+|-- aat2870
+&lt;snip&gt;
+|-- wm8350
+`-- wm8994</pre>
+<p>
+  Under the <code>drivers</code> directory we can see (above) a list of devices for which drivers
+  exist.
+</p>
 <h2>Building The Kernel</h2>
 <div>
     <pre>Can get kernel version using make kernelversion

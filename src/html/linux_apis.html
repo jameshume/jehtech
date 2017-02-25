@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>Linux Programming Notes</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">Linux Programming Notes</h1>
+<div style="padding-right:10px;">
+
+<h2>To Read</h2>
+<div>
+  <ol>
+  <li>http://stackoverflow.com/questions/31755790/sockets-unix-domain-udp-c-recvfrom-fail-to-populate-the-source-address?noredirect=1#comment51445587_31755790</li>
+  <li>http://www.toptip.ca/2013/01/unix-domain-socket-with-abstract-socket.html?m=1</li>
+  <li>http://man7.org/linux/man-pages/man7/unix.7.html</li>
+  <li>http://stackoverflow.com/questions/14643571/localsocket-communication-with-unix-domain-in-android-ndk</li>
+  <li>http://www.informit.com/articles/article.aspx?p=366888&seqNum=8</li>
+  <li>http://www.thegeekstuff.com/2013/07/linux-process-life-cycle/</li>
+  <li>Todo: async-signal safe</li>
+  </ol>
+</div>
+
+<h2>Processes, Process Groups &amp; Sessions</h2>
+<div>
+    <h3>References</h3>
+    <ul>
+        <li>https://www.win.tue.nl/~aeb/linux/lk/lk-10.html</li>
+    </ul>
+
+    <h2>Processes</h2>
+    <p>
+        A process has its own independent address space, isolating it from all other processes
+        in the system. I.e., a process cannot access the memory of another processes directly.
+        This first process in a Linux system is the <code>init</code> process, with a PID of 1. Each
+        process in the system is assigned a unique integer to identify it, called the Process IDentifier,
+        or PID.
+    </p>
+    <p>
+        Processes are created in Linux by <code>fork()</code>ing an existing process. In the
+        beginning Linux would copy the processes in its entirity: the parent process' memory would be cloned
+        for the new chile process and the page tables for the child would be created to
+        &quot;point&quot; correctly to the new memory. That's <em>expensive</em> as the
+        system has to copy a potentially large amount of memory. For example, if a huge processes
+        using, say, 1.5GB of RAM just wanted to <code>exec</code> a really small utility, the 1.5GB
+        of memory is copied only to be immediately used for a process requiring minimal memory, say
+        5MB! What a waste of time!
+    </p>
+    <p>
+        That is why <b>modern Linux now uses <em>copy-on-write paages</em></b>. This way the memory space of the
+        parent processes is only copied to the child if the child tries to write to it. Therefore,
+        in the above example, the parent and child will share the same memory until the child
+        <code>exec</code>s another program. Therefore the potentially hige memory copy is avoided.
+        Should the child modify the shared memory, a copy of the addressed memory page(s) are
+        created for the child, but only the modified pages need be copied, so it is again as
+        efficient as possible.
+    </p>
+    <blockquote>
+        <p>
+            ... Under Linux, fork(2) is implemented using <b>copy-on-write pages</b>, so the only penalty
+            incurred by fork(2) is the time and memory required to duplicate the parent's page
+            tables, and to create a unique task structure  for  the  child. However, in the bad
+            old days a fork(2) would require making a complete copy of the caller's data space,
+            often  needlessly...
+        </p>
+        <footer>-- Linux man page for vfork</footer>
+    </blockquote>
+    <p></p>
+</div>
+
+<h2>Create Daemons</h2>
+<div>
+    <h3>References</h3>
+    <ul>
+        <li>http://www.tldp.org/LDP/intro-linux/html/sect_04_02.html</li>
+        <li>https://www.freedesktop.org/software/systemd/man/daemon.html</li>
+    </ul>
+
+    <h3>What Is A Daemon?</h3>
+    <p>
+        A daemon is a Linux process that runs &quot;in the background&quot;. This means that it is
+        not visible to the user: it does not output anything to the screen, via a terminal, for
+        example. It is also a direct child of <code>init</code> so that it is not dependent on
+        any other process staying alive (at least directly).
+    </p>
+</div>
+
+</div> <!-- END padding div -->
+</div> <!-- END content div -->
+</body>
+</html>
