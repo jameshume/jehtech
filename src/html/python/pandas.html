@@ -135,20 +135,38 @@ fig.savefig(r'pandas_landreg.png')
 df.datetime_column = pd.to_datetime(dfAssayInf.datetime_column, format=DATETIME_FORMAT, errors='raise')</pre>
         </div> <!-- End H2 Read in files -->
 
-        <h2>Row Operations</h2>
-        <h3>Iterate Through Rows</h3>
-        <pre>df.iterrows()</pre>
-        
-        <h3>Create/Modify Column Based On A Column</h3>
-        <pre>df['col-name'] = df.apply(a_function, axis=1)</pre>
-        <p>
-        	The parameter <code>axis=1</code> means applying the function to columns, 
-        	i.e., each row will be iterated over and passed as a <code>Series</code> object 
-        	to the function <code>a_function</code>.
-        </p>
+        <h2>Cleaning Data</h2>
+        <div>
+        	<h3>Renaming Rows</h3>
+        	<p>
+        		You can reset all the column names at once by writing into to <code>df.columns</code> attribute.
+        	</p>
+        	<p>
+        		To selectively rename columns it is easier to use <code>df.rename({ col1_name : col1_new_name, ...})</code>.
+        	</p>
 
-        <h3>Filter By Set Membership</h3>
-        <pre>df[df['col-name'].<a href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.isin.html#pandas-dataframe-isin" target="_blank">isin</a>([1, 2, 3, ...])]</pre>
+	        <h3>Create/Modify Column Based On A Column</h3>
+	        <pre>df['col-name'] = df.apply(a_function, axis=1)</pre>
+	        <p>
+	        	The parameter <code>axis=1</code> means applying the function to columns, 
+	        	i.e., each row will be iterated over and passed as a <code>Series</code> object 
+	        	to the function <code>a_function</code>.
+	        </p>
+
+	        <h3>Create Empty Column</h3>
+	        <pre>df.newNanCol = np.nan
+df.newStringCol = ""
+# And so on...</pre>
+        </div> <!-- END H2 Cleaning Data -->
+
+        <h2>Row Operations</h2>
+        <div>
+	        <h3>Iterate Through Rows</h3>
+	        <pre>df.iterrows()</pre>
+	        
+	        <h3>Filter By Set Membership</h3>
+	        <pre>df[df['col-name'].<a href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.isin.html#pandas-dataframe-isin" target="_blank">isin</a>([1, 2, 3, ...])]</pre>
+	    </div> <!-- END Row Operations H2 -->
 
         <h2>Rough and ready notes</h2>
         <div>
