@@ -27,19 +27,110 @@
 		<h2>Tone</h2>
 		<p>
 			A very nice example on how re-wording can really change the tone of
-			something <a href="http://meta.stackoverflow.com/questions/323579/am-i-being-too-snippy-or-how-should-one-treat-questions-where-op-doesnt-chec?cb=1" _target=_blank">from this SO thread</a>.
+			something <a href="http://meta.stackoverflow.com/questions/323579/am-i-being-too-snippy-or-how-should-one-treat-questions-where-op-doesnt-chec?cb=1" _target="_blank">from this SO thread</a>.
 		</p>
 		<p>
 		Change <q>Had you looked at the error console, it would have informed you what the issue was</q>, to <q>If you look at the error console, it can tell you what the issue is</q>, really does make a super difference!
 		</p>
-
-
 
 		<h2>Useful Utilities...</h2>
 		<ul>
 			<li><a href="http://www.dependencywalker.com/" target="_blank">Dependency Walker</a>.
 			<li><a href="https://pogostick.net/~pnh/ntpasswd/" target="_blank">Forgot your Windows admin password? Password reset ISO</a></li>
 		</ul>
+
+<h2>HTTP Methods</h2>
+<div>
+	<h3>Idempotent</h3>
+	<blockquote>
+		<p>... aside from error or expiration issues ... the side-effects of N &gt; 0 identical
+		   requests is the same as for a single request ... The methods GET, HEAD,
+		   PUT and DELETE share this property. Also, the methods OPTIONS and
+		   TRACE ...
+		</p>
+		<footer><a href="https://tools.ietf.org/html/rfc2616#section-9.6" target="_blank">RFC 2616 HTTP/1.1</a>, section 9.1.2</footer>
+	</blockquote>
+	<p>
+		This means that the side effect of a request is identical whether 1 such request is sent or
+		a million! A side effect might be changing a value in a database or uploading a file, for
+		example.
+	</p>
+	<p>
+		On thing to notice in the above definition is that POST is <em>not</em> necessarily
+		idempotent! I.e., two identical POST requests may have different side effects than a single
+		such request. You'll see why in the section on this method.
+	</p>
+
+	<h3>GET</h3>
+	<blockquote>
+		<p>
+			... retrieve whatever information ... is identified by the Request-URI. If the Request-URI refers
+			to a data-producing process, it is the produced data which shall be returned ...
+		</p>
+		<footer><a href="https://tools.ietf.org/html/rfc2616#section-9.6" target="_blank">RFC 2616 HTTP/1.1</a>, section 9.3</footer>
+	</blockquote>
+	<p>
+		GET is idempotent because the request can be made any number of times but the content
+		on the server will not change. I.e. the side effect is the same whether 1 or many requests
+		are sent (there are no side effects).
+	</p>
+
+	<h3>POST</h3>
+	<blockquote>
+		<p>
+			... requests that the origin server accept the
+			entity enclosed in the request as a new subordinate of the resource
+			identified by the Request-URI...
+		</p>
+		<footer><a href="https://tools.ietf.org/html/rfc2616#section-9.6" target="_blank">RFC 2616 HTTP/1.1</a>, section 9.5</footer>
+	</blockquote>
+	<p>
+		&quot;Subordinate&quot; just indicates an &quot;is contained/owned/part-of&quot;
+		relationship. E.g. a file is subordinate to a directory.
+	</p>
+	<p>
+		&quot;Accept[ing] the enitity ... as a new subordinate&quot; implies that whatever
+		is POSTed is always added as new, which could, for example, be an append operation.
+		Therefore, two such requests will not have the same side effect as one such event. In
+		the former two objects could be added to, say, a list, and in the latter only one.
+		Therefore <b>POST need not be idempotent</b>. In fact, one of the RFC examples is
+		&quot;extending a database through an append operation&quot;.
+	</p>
+	<blockquote>
+		<p>
+			... The actual function performed by the POST method is determined by the
+			server and is usually dependent on the Request-URI ...
+		</p>
+		<footer><a href="https://tools.ietf.org/html/rfc2616#section-9.6" target="_blank">RFC 2616 HTTP/1.1</a>, section 9.5</footer>
+	</blockquote>
+	<p>
+		In the POST request, and this is the reason for the non-idempotency, the URI
+		identifies the <em>resource that will process/handle</em> the message contents. Because the
+		processing is whatever the server likes, POSTs cannot guarantee idempotency, because the
+		server can do whatever it likes with the message contents... all that was specified was the
+		resource that operates on the contents!
+	</p>
+
+	<h3>PUT</h3>
+	<blockquote>
+		<p>...The PUT method requests that the enclosed entity be stored under the
+		   supplied Request-URI ..</p>
+		<footer><a href="https://tools.ietf.org/html/rfc2616#section-9.6" target="_blank">RFC 2616 HTTP/1.1</a>, section 9.6</footer>
+	</blockquote>
+	<p>
+		In a PUT request, the URI identifies the <em>entity in the request</em>, i.e., the message
+		contents. This is why idempotency is required. If we PUT the same uniquely identified thing
+		many times, we should still have one uniquely identified thing!
+	</p>
+
+	<h3>DELETE</h3>
+	<blockquote>
+		<p>... requests that the origin server delete the resource
+   identified by the Request-URI ...</p>
+		<footer><a href="https://tools.ietf.org/html/rfc2616#section-9.6" target="_blank">RFC 2616 HTTP/1.1</a>, section 9.7</footer>
+	</blockquote>
+	<p></p>
+</div>
 
 		<h2>Miscrosoft Word Shortcut Keys</h2>
 		<p>

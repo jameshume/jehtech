@@ -72,6 +72,15 @@ sudo apt-get install sublime-text-installer</pre>
         </p>
     </div>
 
+    <h2>Add key shortcuts to insert snippet</h2>
+    <div>
+        <p>In <code>Preferences &gt; Keybindings &gt; User</code> add the following:
+        <pre>[
+    {"keys": ["ctrl+shift+,"], "command": "insert_snippet", "args": {"contents": "&lt;"}},
+    {"keys": ["ctrl+shift+."], "command": "insert_snippet", "args": {"contents": "&gt;"}}
+]</pre>
+    </div>
+
 	<h2>My Settings</h2>
 	<div>
 		<pre>{

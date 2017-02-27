@@ -19,7 +19,7 @@
 		<div id="includedContent"></div>
 	</div>
 
-	<div id="content">
+	<div id="content"><div style="padding-right:15px;">
 		<h1 class="title">XML Notes...</h1>
 		<p>
 			Mostly just notes from various books on XML, most noteably &quot;Beginning XML 5<sup>th</sup>
@@ -35,30 +35,119 @@
 		</ol>
 
 		<h2><a id="URL_vs_URI_vs_URN"></a>URL, URI or URN?</h2>
+		<h3>Summary...</h3>
+		<ul>
+			<li><p>
+				URL is <u>U</u>niform <u>R</u>esource <u>L</u>ocator.<br/>
+				<tt style="padding-left:12pt">[Scheme]://[Domain]:[Port]/[Path]?[QueryString]#[FragmentId]</tt><br/>
+				URL points to something &quot;real&quot;, i.e., a resource on a network which can be located using the URL.
+				</p></li>
+			<li><p>
+				URN is <u>U</u>niform <u>R</u>esource <u>N</u>ame.<br/>
+				<tt style="padding-left:12pt">urn:[namespace identifier]:[namespace specific string]</tt><br/>
+				</p><p>
+				&quot;Namespace identifier&quot; is just a string that identifies how the &quot;namespace specific string&quot;
+				should be evaluated. It is usually registered with IANA. E.g.<br/>
+				<tt style="padding-left:12pt">isbn:1234567891234</tt>
+			</p></li>
+			<li><p>
+				URI is <u>U</u>niform <u>R</u>esource <u>I</u>dentifier. It is a superset of URL and includes URLs and
+				URNs. URI is just a unique string that identifies something and does not have to have any other meaning other than that. I.e.,
+				it does not have to &quot;point&quot; to anything real. Some example of URIs are, taken
+				verbatim from the <a href="http://www.ietf.org/rfc/rfc3986.txt" target="_blank">RFC</a>:
+				</p>
+				<pre>ftp://ftp.is.co.za/rfc/rfc1808.txt
+http://www.ietf.org/rfc/rfc2396.txt
+ldap://[2001:db8::7]/c=GB?objectClass?one
+mailto:John.Doe@example.com
+news:comp.infosystems.www.servers.unix
+tel:+1-816-555-1212
+telnet://192.0.2.16:80/
+urn:oasis:names:specification:docbook:dtd:xml:4.1.2</pre>
+			</li>
+			<li>
+				<div class="box_container">
+					<div class="info">
+						<p>URLs both identify objects and tell you how to find them. URIs just
+						   identify objects (so are a superset of URLs), and URNs are just URIs
+						   that may persists through time.
+						</p>
+					</div>
+				</div>
+			</li>
+		</ul>
+
+		<h3>More Detail...</h3>
 		<p>
-			URL is <u>U</u>niform <u>R</u>esource <u>L</u>ocator.<br/>
-			<tt style="padding-left:12pt">[Scheme]://[Domain]:[Port]/[Path]?[QueryString]#[FragmentId]</tt><br/>
-			URL points to something &quot;real&quot;, i.e., a resource on a network which can be located using the URL.
+			The following
+			<a href="http://stackoverflow.com/questions/176264/what-is-the-difference-between-a-uri-a-url-and-a-urn?answertab=votes#tab-top"
+			   target="_blank">StackOverflow thread</a> gives many really good expanations. You can 
+			<a href="http://www.ietf.org/rfc/rfc3986.txt" target="_blank">read the RFC here</a>.
 		</p>
 		<p>
-			URN is <u>U</u>niform <u>R</u>esource <u>N</u>ame.<br/>
-			<tt style="padding-left:12pt">urn:[namespace identifier]:[namespace specific string]</tt><br/>
-			&quot;Namespace identifier&quot; is just a string that identifies how the &quot;namespace specific string&quot;
-			should be evaluated. It is usually refistered with IANA. E.g.<br/>
-			<tt style="padding-left:12pt">isbn:1234567891234</tt>
+			From the RFC an &quot;identifier&quot; is defined as follows:
 		</p>
-		<p>URI is <u>U</u>niform <u>R</u>esource <u>I</u>dentifier. It is a superset of URL and includes URLs and
-		   URNs. URI is just a unique string that identifies something and does not have to have any other meaning other than that. I.e.,
-			it does not have to &quot;point&quot; to anything real.
+		<blockquote>
+			<p>
+				An identifier embodies the information required to distinguish
+	      		what is being identified from all other things within its scope of
+	      		identification.
+			</p>
+		</blockquote>
+		<p>
+			So how is a URL different from a URI. The RFC also explains that:
+		</p>
+		<blockquote>
+			<p>
+				A URI can be further classified as a locator, a name, or both.  The
+				term "Uniform Resource Locator" (URL) refers to the subset of URIs
+				that, in addition to identifying a resource, provide a means of
+				locating the resource by describing its primary access mechanism
+				(e.g., its network "location")
+   			</p>
+		</blockquote>
+		<p>
+			So, a <em>locator</em> is something that will <q>provide a means of
+			locating the resource</q>. A URL is therefore an identifier and a locator, whereas
+			a URI is an identifier, but not necessarily a locator.
+		</p>
+		<p>
+			I.e., URIs uniquely identify things but may not tell you how to find them. URLs are
+			the subset of URIs that tell you how to find the objects identified.
+		</p>
+		<p>
+			And what about URNs?
+		</p>
+		<blockquote>
+			<p>
+			   The term "Uniform Resource Name"
+			   (URN) ... refer[s] to both URIs ... which are required to remain globally unique
+			   and persistent even when the resource ceases to exist or becomes
+			   unavailable, and to any other URI ...
+			  </p>
+		</blockquote>
+		<p>
+			So URNs are just URIs that may or may not persist even when the resource has ceased to
+			exist. Kind of a permanent URI which is more heavily regulated, usually by IANA.
+		</p>
+		<p>So, to summarise we could say that URLs both identify objects and tell you how to find them. URIs just identify objects,
+			and URNs are just URIs that may persists through time.
 		</p>
 
-		<h2><a id="namespaces"></a>Namespaces</h2>
+		<h2><a id="namespaces"></a>Namespaces (xmlns)</h2>
 		<h3>Default</h3>
 		<p>
 			A way of grouping elements under a common heading in order to differentiate them from similarly named items. 
 			Usually use a URL, URN (or URI). Note that namespaces that look like URLs are not URLs, the URL string is just 
 			used as a guaranteably unqiue identifer.
 		</p>
+		<div class="box_container">
+		<div class="info">
+			<p>Namespaces that look like URLs are not URLs: the URL string is just
+			used as a guaranteably unqiue identifer.
+			</p>
+		</div>
+		</div>
 		<p>
 		To include a node and all children added it to the node using &quot;<tt>xmlns=URI</tt>&quot; as such:
 		</p>
@@ -73,6 +162,14 @@
 			This is call a <em>default namespace</em> and does <em>not</em> apply to attributes. Attribute namespaces must be
 			serparately declared.
 		</p>
+		<div class="box_container">
+		<div class="info">
+			<p>Default namespaces to <em>not</em> apply to attributes. Attribute namespaces must be
+			serparately declared!
+			</p>
+		</div>
+		</div>
+
 		<h3>Explicit</h3>
 		<p>
 			Explicit namespace declaration needs a prefix to represent it (must not include colon or be reserved, e.g., &quot;xmlns&quot;, &quot;xml&quot;...).
@@ -100,8 +197,21 @@
 		<h2><a id="dtds"></a>Document Type Definitions (DTDs)</h2>
 		<p>
 			Used to give rules for verifying the vocab of the document and its structure. Associate with a document 
-			internally by including inline with document or externally by references a separate DTD file.
+			internally by including inline with document or externally by referencing a separate DTD file.
 		</p>
+		<p>
+			<b>Note:</b> XML Schemas are the more &quot;modern&quot; way of defining what the structure
+			of an XML document should look like!
+		</p>
+		<blockquote>
+			<p>
+				DTDs ... [do] not offer all of the functionality of XML Schema ...
+				DTDs have a unique syntax held over from SGML DTDs ...
+				[and] are often criticized because of this need to learn a new syntax ...
+			</p>
+			<footer>-- <a href="http://www.informit.com/articles/printerfriendly/24614" target="_blank">Converting a DTD into a Schema</a>,  David Gulbransen</footer>
+		</blockquote>
+
 		<p>Declare a DTD using...
 		</p>
 		<pre>&lt;?xml version=&quot;1.0&quot;?&gt;
@@ -223,10 +333,158 @@
 			More specifically, it has no fixed value, no default and is not required.
 		</p>
 
+
+		<h2>XML Schemas (XSD)</h2>
+		<p>
+			Based on <a href="https://www.w3.org/TR/xmlschema-0/" target="_blank">XML Schema Part 0:
+			Primer Second Edition W3C Recommendation 28 October 2004</a>.
+		</p>
+		<p>
+			Minimal document looks like:
+		</p>
+		<pre class="prettyprint linenums">&lt;xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+   &lt;xsd:annotation&gt;
+      &lt;xsd:documentation xml:lang="en"&gt;
+         Some description of schema with copyright notice.
+      &lt;/xsd:documentation&gt;
+   &lt;/xsd:annotation&gt;
+&lt;/xsd:schema&gt;</pre>
+	  <p>
+	  	Everything is prefixed with <code>xsd:</code>. After the annotation sections comes the
+	  	structure that will define the grammar of any XML file based on this schema.
+	  </p>
+	  <p>
+	  	Either complex or simple types can be defined:
+	  </p>
+	  <ul>
+	  	<li><b>Complex types:</b> allow elements in their content and may carry attributes.</li>
+	  	<li><b>Simple types:</b> can<em>not</em> have element content and can<em>not</em> carry attributes.</li>
+	  </ul>
+	  <p>
+	  	Also, its important to understand the difference between definitions and declarations:
+	  </p>
+	  <ul>
+	  	<li><b>Definitions</b> create new types.</li>
+	  	<li><b>Declarations</b> enable elements and attributes with specific names and types to appear in documents.</li>
+	  </ul>
+
+	  <p>
+	  	Okay, so I have visitors coming and going and I want to save this traffic so that I know
+	  	who is in the building at any one time. For each visitor I want to know:
+	  </p>
+	  <ol>
+	  	<li>Their full name and title,</li>
+	  	<li>Their company name and address,</li>
+	  	<li>Who they have come to see,</li>
+	  	<li>The time they arrived,</li>
+	  	<li>The time they left,</li>
+	  </ol>
+	  <p>
+	  	There are some simple types here and some complex types. The name and title could just be
+	  	a string, in which case it would be a simple type or it could be a complex type splitting
+	  	up the name into entries for title, forename and surename, for example. Maybe, my log should
+	  	look like this per visitor:
+	  </p>
+	  <pre class="prettyprint linenums">&lt;visitor&gt;
+   &lt;name&gt;Mike Jordan&lt;/name&gt;
+   &lt;company&gt;
+      &lt;name&gt;MBNA Lts.&lt;/name&gt;
+      &lt;address&gt;
+         &lt;number_or_name&gt;Building 123&lt;/number_or_name&gt;
+         &lt;street1&gt;The Business Estate&lt;/street1&gt;
+         &lt;street2&gt;310 Business Road&lt;/street2&gt;
+         &lt;postcode&gt;BE345LT&lt;/postcode&gt;
+      &lt;/address&gt;
+   &lt;/company&gt;
+   &lt;visited&gt;Yvette Prieto&lt;/visited&gt;
+   &lt;time_in&gt;10:44 01/02/2017&lt;/time_in&gt;
+   &lt;time_out&gt;11:25 01/02/2017&lt;/time_out&gt;
+&lt;/visitor&gt;</pre>
+		<p>The point of an XSD spec is to ensure that whenever an XML entry is made in my log, it
+		is done correctly. Information about the visitor should not be missed out and the contents
+		of the fields should be sensible. For example, the time fields should give a time and
+		date in a specific format.
+		</p>
+		<p>
+			So I can <em>declare</em> a <code>visitor</code> node in the document. This allows this
+			node to occur once in my document:
+		</p>
+		<pre class="prettyprint linenums">&lt;xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+   &lt;xsd:annotation&gt;
+      ...
+   &lt;/xsd:annotaton&gt;
+   <b>&lt;xsd:element name="visitor" type="VisitorType"/&gt;</b>
+ &lt;/xsd:schema&gt;</pre>
+
+ 		<div style="float:right; margin:10px; padding: 5px; width:300px; border: 1px solid gray; background:white; border-radius:10px;" >
+ 			<p style="text-align:center;">
+ 				<b>Simple XSD Built-in Types</b>
+ 			</p>
+ 			<p>
+ 				There are many simple types that are &quot;built-in&quot; to the XSD spec. To use
+ 				these types just prefix them with &quot;<code>xsd:</code>&quot;.
+ 				Some of the most common you might use are...
+ 			</p>
+ 			<ul>
+ 				<li>string,</li>
+ 				<li>integer,</li>
+ 				<li>(positive|negative)Integer,</li>
+ 				<li>unsigned(Short|Int|Long), signed variants by using lower case of type without the &quot;unsigned&quot; prefix,</li>
+ 				<li>float, double,</li>
+ 				<li>dateTime, date, time,</li>
+ 				<li>duration</li>
+ 			</ul>
+ 		</div>
+
+ 		<p>But, I must define what a <code>VisitorType</code> is. So underneath the declaration
+ 		I also need to add the following defition:</p>
+ 		<pre class="prettyprint linenums">
+&lt;xsd:complexType name="VisitorType"&gt;
+   &lt;xsd:sequence&gt;
+      &lt;xsd:element name=&quot;name&quot; type=&quot;xsd:string&quot;/&gt;
+      <b>&lt;xsd:element name=&quot;company&quot; type=&quot;CompanyType&quot;/&gt;</b>
+      &lt;xsd:element name=&quot;visited&quot; type=&quot;xsd:string&quot;/&gt;
+      &lt;xsd:element name=&quot;time_in&quot; type=&quot;xsd:dateTime&quot;/&gt;
+      &lt;xsd:element name=&quot;time_out&quot; type=&quot;xsd:dateTime&quot;/&gt;
+   &lt;/xsd:sequence&gt;
+&lt;/xsd:complexType&gt;</pre>
+	<p>
+		Now we've defined what the <code>VisitorType</code> looks like. Most of the nodes residing
+		inside the <code>VisitorType</code> are <em>simple types</em>. These are the ones where
+		the type reads &quot;<code>xsd:...</code> (see the side note to the right). But there is
+		a complex type in there, the <code>CompanyType</code>. This still needs to be
+		defined:
+	</p>
+
+<pre class="prettyprint linenums">&lt;xsd:complexType name=&quot;CompanyType&quot;&gt;
+   &lt;xsd:sequence&gt;
+      &lt;xsd:element name=&quot;name&quot; type=&quot;xsd:string&quot;/&gt;
+      &lt;xsd:element name=&quot;address&quot; type=&quot;AddressType&quot;/&gt;
+   &lt;/xsd:sequence&gt;
+&lt;/xsd:complexType&gt;</pre>
+
+	<p>And this type also has an embedded complex type:</p>
+
+<pre class="prettyprint linenums">&lt;xsd:complexType name=&quot;AddressType&quot;&gt;
+   &lt;xsd:sequence&gt;
+      &lt;xsd:element name=&quot;number_or_name&quot; type=&quot;xsd:string&quot;/&gt;
+      &lt;xsd:element name=&quot;street1&quot; type=&quot;xsd:string&quot;/&gt;
+      &lt;xsd:element name=&quot;street2&quot; type=&quot;xsd:string&quot;/&gt;
+      &lt;xsd:element name=&quot;postcode&quot; type=&quot;xsd:string&quot;/&gt;
+   &lt;/xsd:sequence&gt;
+&lt;/xsd:complexType&gt;</pre>
+
+	<p>As you can see, we have to keep defining until we only have built in types.</p>
+
+
+
+
+
 		<h2><a id="xpath"></a>XPath</h2>
 		<p>Used to specify/select parts of XML documents of interest</p>
 
-	</div>
+
+	</div></div>
 </body>
 </html>
 

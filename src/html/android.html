@@ -507,7 +507,7 @@ sendInputEvent(fd, EV_SYN, SYN_REPORT, 1);</pre>
 
 <h2>Intent and Broadcast Receiver</h2>
 <div>
-  <pre>// In the sender activity
+  <pre class="prettyprint linenums">// In the sender activity
 Intent localIntent = new Intent(MY_INTENT_STR).putExtra(MY_INTENT_STR_EXTRA, item);
 LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
 
