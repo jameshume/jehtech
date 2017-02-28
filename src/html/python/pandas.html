@@ -142,7 +142,9 @@ df.datetime_column = pd.to_datetime(dfAssayInf.datetime_column, format=DATETIME_
         		You can reset all the column names at once by writing into to <code>df.columns</code> attribute.
         	</p>
         	<p>
-        		To selectively rename columns it is easier to use <code>df.rename({ col1_name : col1_new_name, ...})</code>.
+        		To selectively rename columns it is easier to use 
+        		<code><a href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.rename.html" 
+        		target="_blank">df.rename</a>(columns = {col1_name : col1_new_name, ...})</code>.
         	</p>
 
 	        <h3>Create/Modify Column Based On A Column</h3>

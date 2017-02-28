@@ -68,7 +68,7 @@
                 <li>http://www.cs.rpi.edu/~moorthy/Courses/os98/Pgms/socket.html</li>
                 <li>http://www.alexonlinux.com/signal-handling-in-linux</li>
                 <li>http://www.netzmafia.de/skripten/unix/linux-daemon-howto.html</li>
-                <li>http://www.informit.com/articles/article.aspx?p=397655&seqNum=6</li>
+                <li>http://www.informit.com/articles/article.aspx?p=397655&amp;seqNum=6</li>
                 <li>https://computing.llnl.gov/tutorials/pthreads/</li>
                 <li>http://stackoverflow.com/questions/17954432/creating-a-daemon-in-linux</li>
                 <li>https://www.freedesktop.org/software/systemd/man/daemon.html</li>
@@ -99,6 +99,7 @@ void __cyg_profile_func_exit (void *, void *) __attribute__((no_instrument_funct
 
 		<h2>LValues, RValues etc </h2>
 		<div>
+			<h3>LValues</h3>
 			<p>
 				First some terminology. In C, an <b>object</b> is just a region of data storage that represents a value.
 				Why does the standard talk about &quot;data storage&quot;? I think this is because we could mean RAM,
@@ -187,30 +188,75 @@ a + b = 22;</pre>
 				hence the result is not an lvalue. This gives a standards-based explanation of our intuition :)
 			</p>
 			<p>
+				And to just be double sure that we're on the right track, Thomas Becker's article <a href="http://thbecker.net/articles/rvalue_references/section_01.html" target="_blank"> C++ Rvalue References Explained</a> has this to say:
+			</p>
+			<blockquote>
+				<p>
+					An <em>lvalue</em> is an expression that refers to a memory location and allows us to take the address of that memory location via the &amp; operator.
+				</p>
+				<footer>-- <a href="http://thbecker.net/articles/rvalue_references/section_01.html" target="_blank"> C++ Rvalue References Explained</a></footer>
+			</blockquote>
+			<p>
 				C only really talks about lvalues. Rvalues are mentioned in the standard, but only once: <q>What is sometimes called rvalue is in this International Standard described
 				as the value of an expression</q>. Thus rvalues are just really anything that isn't an lvalue.
 			</p>
+
+			<h3>C++11: RValues, RValue References &amp; Universal References</h3>
+			<p>
+				First some references:
+			</p>
+			<ul>
+				<li><a href="https://accu.org/index.php/journals/1887" target="_blank">Universal References in C++11</a>, Scott Meyers</li>
+				<li><a href="http://thbecker.net/articles/rvalue_references/section_01.html" target="_blank"> C++ Rvalue References Explained</a>, Thomas Becker</li>
+			</ul>
 			<p>
 				C++ has quite a few more types!
 			</p>
 
+			<blockquote>
+				<p>
+					An <b>xvalue</b> (an eXpiring value) also refers to an object, usually near the end of its lifetime (so that its
+					resources may be moved, for example). An xvalue is the result of certain kinds of expressions involving
+					rvalue references (8.3.2). 
+				</p>
+				<p>				
+					A <b>glvalue</b> (generalized lvalue) is an lvalue or an xvalue.
+				</p>
+				<p>
+					An <b>rvalue</b> ... is an xvalue, a temporary object (12.2) or subobject thereof, or a value that is not associated
+					with an object.
+				</p>
+				<p>
+					A <b>prvalue</b> (pure rvalue) is an rvalue that is not an xvalue. [ Example: The result of calling a function
+					whose return type is not a reference is a prvalue. The value of a literal such as 12, 7.3e5, or true is
+					also a prvalue ... ]
+				<p>
+			</blockquote>
 
-			<pre>
+			<p>Oh man! Read the standards docs really isn't easy... eek!
+			</p>
+			<p>
+				We can gleam that an rvalue is something that is about to expire (its lifetime is over), 
+				a temporary objects (like the result of A * B, for example) or a value that is not addressable.
+			</p>
+			<p>
+				This implies it is something that is short lived and won't be used or have side effects almost
+				immediately after its last reference. For example, in the expression <code>a = b * c</code>,
+				the result of <code>b* c</code> is a temporary object and we can't take it's address.
+			</p>
+			<p>
+				This gives us some idea: rvalues are things we can't really access in our code in
+				any meaningful way. They are transients that exist to accomplish a task. So if
+				<code>b * c</code> involves two matrix classes and they both are large matricies, why
+				copy the result into a? Why not just let a have the resources of the temporary result
+				instead of copying the temporary into a and then destroying the temporary. Could save
+				ourselves a huge copy operation. This is one of the key motivations for rvalue references.
+			</p>
 
-An xvalue (an eXpiring value) also refers to an object, usually near the end of its lifetime (so that its
-resources may be moved, for example). An xvalue is the result of certain kinds of expressions involving
-rvalue references (8.3.2). [ Example: The result of calling a function whose return type is an rvalue
-reference is an xvalue.  end example ]
-
-A glvalue (generalized lvalue) is an lvalue or an xvalue.
-
-An rvalue (so called, historically, because rvalues could appear on the right-hand side of an assignment
-expression) is an xvalue, a temporary object (12.2) or subobject thereof, or a value that is not associated
-with an object.
-
-A prvalue (pure rvalue) is an rvalue that is not an xvalue. [ Example: The result of calling a function
-whose return type is not a reference is a prvalue. The value of a literal such as 12, 7.3e5, or true is
-also a prvalue.  end example ]</pre>
+			<p>Now though, I'm bailing refering to the referenced articles as the standard isn't something
+			   that I would call a &quot;learning/teaching resource&quot;. The rest of this is just notes 
+			   on the referenced, as I'm still getting to grips with the RValue and Universal references!
+			</p>
 		</div>
 
 		<h2>MSVC</h2>
