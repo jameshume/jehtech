@@ -112,7 +112,7 @@ fig.savefig(r'pandas_landreg.png')
         <div>
             <h3>From Tab Delimited File</h3>
             <p>If the data doesn't have column headings...</p>
-            <pre>df = <a href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.read_table.html#pandas-read-table" target="_blank">pandas.read_table</a>('filename', header=None, index_col=0)</pre>
+            <pre  class="prettyprint linenums lang-python">df = <a href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.read_table.html#pandas-read-table" target="_blank">pandas.read_table</a>('filename', header=None, index_col=0)</pre>
             <p>The parameter <code>header=None</code> tells pandas there are no column headers.</p>
             <p>The parameter <code>index_col=0</code> tells pandas to use column 0 in the file as the index.</p>
             <p>You can use other paramters like <code>names=['col1', ...]</code> to give columns specific names. To set the index name use <code>df.index.name = 'a_name'</code>.</p>
@@ -120,7 +120,7 @@ fig.savefig(r'pandas_landreg.png')
 
             <h3>From Microsoft Excel File</h3>
             <p>Also really easy:</p>
-            <pre>df = <a href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.read_excel.html#pandas-read-excel" target="_blank">pandas.read_excel</a>('filename', sheetname='string or int-index', index_col=0, skiprows=0, names=['col1_name', ...])</pre>
+            <pre class="prettyprint linenums lang-python">df = <a href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.read_excel.html#pandas-read-excel" target="_blank">pandas.read_excel</a>('filename', sheetname='string or int-index', index_col=0, skiprows=0, names=['col1_name', ...])</pre>
             <p>
             	The <code>filename</code> can be a filename on your local PC or a URL. It can also be an xlrd object.
             </p>
@@ -128,16 +128,16 @@ fig.savefig(r'pandas_landreg.png')
             <h3>Massage Data Formats</h3>
             <h4>Rename The Index Column</h4>
             <p>Often when reading in a file, having specified the index column, I want to give it a name. Done like so:</p>
-            <pre>df.index.name = 'string-name'</pre>
+            <pre class="prettyprint linenums lang-python">df.index.name = 'string-name'</pre>
 
             <h4>Get The Date Formats In Order</h4>
-            <pre>DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
+            <pre class="prettyprint linenums lang-python">DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 df.datetime_column = pd.to_datetime(dfAssayInf.datetime_column, format=DATETIME_FORMAT, errors='raise')</pre>
         </div> <!-- End H2 Read in files -->
 
         <h2>Cleaning Data</h2>
         <div>
-        	<h3>Renaming Rows</h3>
+        	<h3>Renaming Columns</h3>
         	<p>
         		You can reset all the column names at once by writing into to <code>df.columns</code> attribute.
         	</p>
@@ -148,7 +148,7 @@ df.datetime_column = pd.to_datetime(dfAssayInf.datetime_column, format=DATETIME_
         	</p>
 
 	        <h3>Create/Modify Column Based On A Column</h3>
-	        <pre>df['col-name'] = df.apply(a_function, axis=1)</pre>
+	        <pre class="prettyprint linenums lang-python">df['col-name'] = df.apply(a_function, axis=1)</pre>
 	        <p>
 	        	The parameter <code>axis=1</code> means applying the function to columns, 
 	        	i.e., each row will be iterated over and passed as a <code>Series</code> object 
@@ -156,7 +156,7 @@ df.datetime_column = pd.to_datetime(dfAssayInf.datetime_column, format=DATETIME_
 	        </p>
 
 	        <h3>Create Empty Column</h3>
-	        <pre>df.newNanCol = np.nan
+	        <pre class="prettyprint linenums lang-python">df.newNanCol = np.nan
 df.newStringCol = ""
 # And so on...</pre>
         </div> <!-- END H2 Cleaning Data -->
@@ -164,11 +164,34 @@ df.newStringCol = ""
         <h2>Row Operations</h2>
         <div>
 	        <h3>Iterate Through Rows</h3>
-	        <pre>df.iterrows()</pre>
+	        <pre class="prettyprint linenums lang-python">df.iterrows() -> (index_value, series)</pre>
+	        <p>
+	        	The function <code>iterrows()</code> returns a tuple for every row in the data frame. The
+	        	first tuple member is the index entry for the row and the second is a Series object
+	        	representing the columns in that row.
+	        </p>
 	        
 	        <h3>Filter By Set Membership</h3>
-	        <pre>df[df['col-name'].<a href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.isin.html#pandas-dataframe-isin" target="_blank">isin</a>([1, 2, 3, ...])]</pre>
+	        <pre class="prettyprint linenums lang-python">df[df['col-name'].<a href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.isin.html#pandas-dataframe-isin" target="_blank">isin</a>([1, 2, 3, ...])]</pre>
 	    </div> <!-- END Row Operations H2 -->
+
+	    <h2>Dates &amp; Time</h2>
+	    <div>
+	    	<h3>Parse A String Into A Date</h3>
+	    	<pre class="prettyprint linenums lang-python">pd.to_datetime('10/08/2011', format='%d/%m/%Y')</pre>
+	    	<h3>Creating Date Ranges</h3>
+	    	<pre class="prettyprint linenums lang-python">pd.date_range(pd.to_datetime('10/08/2011', format='%d/%m/%Y'), periods=10)</pre>
+	    	<p>
+	    		The above creates a range of dates from &quot;10/08/2011&quot; to &quot;2011-08-19&quot;. What <code>periods</code>
+	    		means is defined by another optional parameter <code>freq</code>.
+	    	<p>
+	    		You'll note that instead of just passing the string &quot;10/08/2011&quot; straight to <code>date_range()</code>,
+	    		I wrap it inside a <code>to_datetime()</code> call. The reason for this was that, dispite my locale settings
+	    		being correct, <code>date_range()</code> seemed to be interpretting the string as month-day-year, even when
+	    		I set <code>tz='gmt'</code>. So to be explicit, remove ambiguity (the code becomes more self documenting) and 
+	    		to make sure I don't trip myself up on these issues, I tend to do this.
+	    	</p>
+	    </div>
 
         <h2>Rough and ready notes</h2>
         <div>
