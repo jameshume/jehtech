@@ -481,7 +481,32 @@ urn:oasis:names:specification:docbook:dtd:xml:4.1.2</pre>
 
 
 		<h2><a id="xpath"></a>XPath</h2>
-		<p>Used to specify/select parts of XML documents of interest</p>
+		<div>
+			<p>Used to specify/select parts of XML documents of interest...
+			</p>
+			<p>
+				<table>
+					<tr><td>/</td><td>Selects the document root node</td></tr>
+					<tr><td>/<i>nodename</i></td><td>Selects the node named <i>nodename</i> that is a direct child of the root node</td></tr>
+					<tr><td><i>nodename</i></td><td>Selects the node named <i>nodename</i> that is a direct child of the current node</td></tr>
+					<tr><td>//</td><td>Selects all descendent nodes of the current node</td></tr>
+					<tr><td>//<i>nodename</i></td><td>Selects all the nodes named <i>nodename</i> that are a descendent of the current node</td></tr>
+					<tr><td>.</td></td>Selects current node</tr>
+					<tr><td>.</td></td>Selects parent node</tr>
+					<tr><td>@</td></td>Selects attribute nodes</tr>
+					<tr><td><i>nodename[<i>predicate</i>]</i></td><td>Selects the node named <i>nodename</i> that matches the predicate. The predicate can be anything like:
+						<table>
+							<tr><td>[<i>idx</i>]</td><td>Selects the idx<sup>th</sup> child named <i>nodename</i> of currnet node</td></tr>
+							<tr><td>[last()-<i>i</i>]</td><td>Selects the last (minus <i>i</i> (optional)) child of the currnet node</td></tr>
+							<tr><td>[<i>childnodename</i> <i>op</i> <i>value</i>]</td><td>Selects the last child of the current node that itself has a child node named <i>childnodename</i> which has a value <i>op</i> than/to <i>value</i>. Operator can be on of <code>[| + - * div = != &lt; &gt; &lt;= &gt;= or and mod]</code>.</td></tr>
+						</table>
+						</td></tr>
+					<tr><td>//<i>nodename</i>[@<i>attrname</i>=<i>value</i>]</td><td>Selects any node named <i>nodename</i> that has an attribute named <i>attrname</i> with the value <i>value</i>.</td></tr>
+					<tr><td>*</td><td>Matches any node</td></tr>
+					<tr><td>@*</td><td>Matches any attribute</td></tr>
+				</table>
+			</p>
+		</div>
 
 
 	</div></div>
