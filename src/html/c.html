@@ -441,6 +441,139 @@ Severity	Code	Description	Project	File	Line	Suppression State
 Error	C2181	illegal else without matching if	test_mpeg	c:\users\james\documents\git\mpeg_ts_messing\gtest\src\gtest_binary_buffer.cpp	12				
 			</pre>
 		</div> <!-- END GTEST -->
+
+		<h2>Smart Pointers</h2>
+		<div> 
+			<p> Defined in &lt;memory&gt; 
+			</p>
+			<h3>Shared Pointers</h3>
+			<p>
+				For <em>shared ownership</em> use <code>shared_ptr</code>. You can have many shared pointers pointing at the
+				same object. That object is only freed when the number of pointers to the object
+				reaches 0.
+			</p>
+			<p>
+				For shared use where ownership is not required <code>weak_ptr</code> is used.
+			</p>
+			<pre class="prettyprint linenums">#include &lt;memory&gt;
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+class Transformer 
+{
+protected:
+   std::string mName;
+public:
+   Transformer(const std::string &amp;name) : mName(name) { }
+   std::string GetName() { return mName; }
+};
+
+class Autobot : public Transformer 
+{ 
+public:
+   Autobot(const std::string &amp;name) : Transformer(name) { }
+   ~Autobot() { std::cout &lt;&lt; "** Deleting Autobot " &lt;&lt; mName &lt;&lt; std::endl; }
+};
+
+class Decepticon : public Transformer 
+{
+public:
+   Decepticon(const std::string &amp;name) : Transformer(name) { }
+   ~Decepticon() { std::cout &lt;&lt; "** Deleting Decepticon " &lt;&lt; mName &lt;&lt; std::endl; }
+};
+
+int main(int argc, char *argv[])
+{
+   // Note in C++11 No longer need space between two template endings: &gt;&gt; not &gt;space&gt;
+   std::vector&lt;std::shared_ptr&lt;Transformer&gt;&gt; characters;
+   std::shared_ptr&lt;Transformer&gt; pOptimusPrime(new Autobot("OptimusPrime"));
+   std::shared_ptr&lt;Transformer&gt; pBumblebee(new Autobot("Bumblebee"));
+
+   {
+      std::shared_ptr&lt;Transformer&gt; pMegatron(new Decepticon("Megatron"));
+
+      std::cout &lt;&lt; "Before vector insertion:\n" 
+                   "   Optimus has " &lt;&lt; pOptimusPrime.use_count() &lt;&lt; " owners\n" 
+                   "   Bumblebee has " &lt;&lt; pBumblebee.use_count() &lt;&lt; " owners\n" 
+                   "   Megatron has " &lt;&lt; pMegatron.use_count() &lt;&lt; " owners\n";
+
+      characters.push_back(pOptimusPrime);
+      characters.push_back(pOptimusPrime);
+      characters.push_back(pBumblebee);
+      characters.push_back(pMegatron);
+      characters.push_back(pOptimusPrime);
+      characters.push_back(pMegatron);
+
+      std::cout &lt;&lt; "After vector insertion:\n" 
+                   "   Optimus has " &lt;&lt; pOptimusPrime.use_count() &lt;&lt; " owners\n" 
+                   "   Bumblebee has " &lt;&lt; pBumblebee.use_count() &lt;&lt; " owners\n" 
+                   "   Megatron has " &lt;&lt; pMegatron.use_count() &lt;&lt; " owners\n";
+
+      std::cout &lt;&lt; "\n"
+                   "Now we'll remove the evil Megatron from the list\n";
+      for(auto it = characters.begin(); it != characters.end(); )
+      {
+         if((*it)->GetName() == "Megatron")
+            it = characters.erase(it);
+         else
+            ++it;
+      }
+
+      std::cout &lt;&lt; "\n"
+                   "Removing Megatron from the list means that..\n";
+
+                   std::cout &lt;&lt; "Megatron has " &lt;&lt; pMegatron.use_count() &lt;&lt; " owners\n"
+                                "Now only pMegatron holds a reference. As we go out\n"
+                                "of scope Megatron will die!\n";
+   }
+
+   std::cout &lt;&lt; "\n"
+                "Thankfully our other heros survived.";
+
+   std::cout &lt;&lt; "\n"
+                "Because our heros are in the list, we can empty the original\n"
+                "smart pointers and they will continue to exist...\n";
+
+   pOptimusPrime.reset();
+   pBumblebee.reset();
+
+
+   std::cout &lt;&lt; "\n"
+                "Now we exit, Optimus and Megatron should also be\n"
+                "destroyed (noooo, Optimus!)\n";
+
+   return 0;
+}
+/*
+OUTPUT IS:
+
+Before vector insertion:
+   Optimus has 1 owners
+   Bumblebee has 1 owners
+   Megatron has 1 owners
+After vector insertion:
+   Optimus has 4 owners
+   Bumblebee has 2 owners
+   Megatron has 3 owners
+
+Now we'll remove the evil Megatron from the list
+
+Removing Megatron from the list means that..
+Megatron has 1 owners
+Now only pMegatron holds a reference. As we go out
+of scope Megatron will die!
+** Deleting Decepticon Megatron
+
+Thankfully our other heros survived.
+Because our heros are in the list, we can empty the original
+smart pointers and they will continue to exist...
+
+Now we exit, Optimus and Megatron should also be
+destroyed (noooo, Optimus!)
+** Deleting Autobot Bumblebee
+** Deleting Autobot OptimusPrime
+*/</pre>
+		</div> <!-- END H2 Smart Pointers -->
 	</div> <!-- END H1 padding div -->
 	</div>
 </body>
