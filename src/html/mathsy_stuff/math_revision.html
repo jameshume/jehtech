@@ -87,7 +87,64 @@
 
 <h2>Partial fractions</h2>
 <div>
-    <p>The rules are...</p>
+    <p>
+      The point of partial fractions is to do the reverse of:
+
+      $$
+        \frac{5}{x - 4} + \frac{3}{x + 1} = \frac{8x - 7}{x^2 - 3x -4} 
+      $$
+    </p>
+    <p>
+      In other words, given the following,
+
+      $$
+        \frac{8x - 7}{x^2 - 3x - 4}
+      $$
+
+      Partial fractions let us go back to,
+
+      $$
+        \frac{5}{x - 4} + \frac{3}{x + 1}
+      $$
+
+      We would start this by first factoring the above to get,
+
+      $$
+        \frac{8x - 7}{x^2 - 3x - 4} = \frac{8x - 7}{(x - 4)(x + 1)}
+      $$
+
+      We know that we want to get to something like,
+
+      $$
+        \frac{8x - 7}{(x - 4)(x + 1)} = \frac{A}{(x - 4)} - \frac{B}{(x + 1)}
+      $$
+
+      We can remove the denominators by multiplying through by $(x - 4)(x + 1)$ to give,
+
+      $$
+        8x - 7 = A(x + 1) - B(x - 4) = (A - B)x - (-A - 4B)
+      $$
+
+      Matching terms between $8x - 7$ and $(A - B)x + (A + 4B)$, we get,
+
+      $$
+        A - B = 8 \text{ and,}\\
+        A + 4B = 7 
+      $$
+
+      Solving these simultaneous linear equations, we get,
+
+      $$ A = 7\frac{4}{5} \text{, and } B = -\frac{1}{5}$$
+
+      And so we can get back to
+
+      $$
+        \frac{8x - 7}{(x - 4)(x + 1)} = \frac{7\frac{4}{5}}{(x - 4)} + \frac{\frac{1}{5}}{(x + 1)}
+      $$
+
+      Yucky example, sorry!
+    </p>
+    <h3>Summary Of Partial Fraction Rules</h3>
     <ul><li>Numerator must be lower degree than denominator. If not, then first divide out.</li>
         <li>Factorise denominator into its prime factors.</li>
 	<li>A linear factor $s+a$ gives partial fraction $A \over (s+a)$</li>
@@ -210,10 +267,11 @@
        $$S_n=na+\frac{(n-1)d}2$$
     </p>
 
+    <a id="geom_progression"></a>
     <h3>Geometric Progression</h3>
     <p>
        $$x(n)=a,ar,ar^2,ar^3,\ldots,ar^n,\ldots$$
-       $$S_n= \frac{a(1+r^n)}{1-r},n&gt;0$$
+       $$S_n= \frac{a(1-r^n)}{1-r},n&gt;0$$
        If $|r|&lt;1$, then as $n \to \infty$, $r^n \to 0$,
        $$S_\infty = \frac{a}{1-r}$$
        Or, if $n&lt;0$ (useful for the z-transform), then
