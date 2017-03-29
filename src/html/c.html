@@ -82,10 +82,36 @@
                 <li>http://cellperformance.beyond3d.com/articles/2006/05/demystifying-the-restrict-keyword.html</li>
                 <li>std::find and std::remove to delete from vector (http://stackoverflow.com/questions/39912/how-do-i-remove-an-item-from-a-stl-vector-with-a-certain-value)</li>
                 <li>http://stackoverflow.com/questions/610245/where-and-why-do-i-have-to-put-the-template-and-typename-keywords</li>
+                <li>Casts and inheritance static vs dynamic -- http://ideone.com/J7hUIw</li>
+                <li>Access specifier on inheritance - https://ideone.com/gg19T4</li>
+                <li>https://herbsutter.com/2008/01/01/gotw-88-a-candidate-for-the-most-important-const/</li>
+                <li>http://stackoverflow.com/questions/2784262/does-a-const-reference-prolong-the-life-of-a-temporary</li>
+                <li>http://ideone.com/0Ff84V</li>
+                <li>http://stackoverflow.com/questions/4908539/a-way-in-c-to-hide-a-specific-function</li>
+                <li>https://en.wikipedia.org/wiki/Double_dispatch</li>
+                <li>https://en.wikipedia.org/wiki/Virtual_method_table</li>
 			</ul>
 		</div>
 
-
+		<h2>Online Work Pads (Compilers and Code Analysers)</h2>
+		<p>
+			The following are quite good online &quot;work pads&quot; for testing out snippets of code and
+			investigating the behaviour of a bit of code across several compilers (or at least versions of).
+		</p>
+		<ul>
+			<li><a href="http://ideone.com" target="_blank">http://ideone.com</a></li>
+			<li><a href="http://coliru.stacked-crooked.com" target="_blank">http://coliru.stacked-crooked.com</a></li>
+			<li><a href="http://webcompiler.cloudapp.net" target="_blank">http://webcompiler.cloudapp.net</a> - for microsoft VC only</li>
+			<li><a href="http://rextester.com/runcode" target="_blank">http://rextester.com/runcode</a></li>
+			<li><a href="http://www.onlinegdb.com" target="_blank">http://www.onlinegdb.com</a></li>
+			<li><a href="https://wandbox.org" target="_blank">https://wandbox.org</a></li>
+		</ul>
+		<p>
+			To compare compilers and view the output assembler try there:
+		</p>
+		<ul>
+			<li><a href="https://godbolt.org" target="_blank">https://godbolt.org</a></li>
+		</ul>
 
 		<h2>Debugging</h2>
 		<div>
@@ -324,13 +350,55 @@ a + b = 22;</pre>
 				C++ casts offer a safer way to cast.
 			</p>
 
+			<h3>Casts Are More Than Treating One Type As Another!</h3>
+			<p>
+				Interestingly a cast may do more than just &quot;switching&quot; types. The compiler
+				may have to generate extra code to achieve this!
+			</p>
+			<p>
+				<blockquote>
+					<p>
+						Many programmers believe that casts do nothing but tell compilers to
+						treat  one  type  as  another,  but  this  is  mistaken.  Type  conversions  of
+						any kind (either explicit via casts or implicit by compilers) often <b>lead to
+						code that is executed at runtime</b>.
+					</p>
+					<footer>--<a href="http://www.aristeia.com/EC3E/3E_item27.pdf" target="_blank">Effective  C++,  Third  Edition</a>, Scott Meyers.</footer>
+				</blockquote>
+			</p>
+			<p>
+				This chapter is particularly illumiating. It explains why <code>dynamic_cast</code>s
+				can be &quot;expensive&quot; - many compilers will do string compares on class names
+				to perform the RTTI. I guess they might store a type variable behind the scenes
+				that the compiler generate code to check against. (Need to reed up on this lol)
+			</p>
+
 			<h3>Static &amp; Reinterpret Casts</h3>
 			<p>
 				A static cast converts betwen related types, but will not allow you
 				to convert between unrelated types. For example, a static cast
 				will not cast away constness or volatility.
 			</p>
-
+			<p>
+				When you <code>static_cast</code> you're basically saying to the compiler that
+				you guarantee that the type is what you say it is. This means, especially for
+				down-casts from base classes to child classes, the compiler won't emmit code to
+				do run time checks. Thus <code>static_cast</code> is less safe. It may still
+				emmit code to do the cast, just not the type checking code.
+			</p>
+			<p>
+				Reinterpret casts are even more unsafe...
+			</p>
+			<blockquote>
+				<p>
+					Unlike static_cast, but like const_cast, the reinterpret_cast expression does
+					not compile to any CPU instructions. It is purely a compiler directive which
+					instructs the compiler to treat the sequence of bits (object representation)
+					of expression as if it had the [new type].
+				</p>
+				<footer>-- cppreference.com</footer>
+			</blockquote>
+			<p></p>
 		</div>
 
 		<h2>IOStreams</h2>
@@ -579,6 +647,61 @@ destroyed (noooo, Optimus!)
 ** Deleting Autobot OptimusPrime
 */</pre>
 		</div> <!-- END H2 Smart Pointers -->
+
+		<h2>Templates</h2>
+		<div>
+			<h3>Calling Functions In a Templated Base Class - Gotcha!</h3>
+			<p>
+				This one really surprised me! When you inherit from a base class that is a template
+				beware calling base class functions from the derivied class. The functions names
+				are not looked up as you'd expect (or at least how I'd have expected lol).
+			</p>
+			<p>
+				<b>If in doubt, always prefix base-class function calls with &quot;<code>this-&gt;</code>&quot;!</b>
+			</p>
+			<pre class="prettyprint linenums">#include &lt;iostream&gt;
+using namespace std;
+
+void bar()
+{
+   std::cout &lt;&lt; "Gloal bar()\n";
+}
+
+template &lt;typename T&gt;
+class Base
+{
+public:
+   void bar()
+   {
+      std::cout &lt;&lt; "Template bar()\n";
+   }
+};
+
+template &lt;typename T&gt;
+class Derived : Base&lt;T&gt;
+{
+public:
+   void foo()
+   {
+      <b>bar(); // WARNING! Does NOT do what you might expect!</b>
+      this->bar();
+      Base&lt;T&gt;::bar();
+   }
+};
+
+int main()
+{
+   Derived&lt;int&gt; d;
+   d.foo();
+   return 0;
+}
+
+/* OUTPUTS:
+Gloal bar()
+Template bar()
+Template bar()
+*/</pre>
+		</div>
 	</div> <!-- END H1 padding div -->
 	</div>
 </body>
