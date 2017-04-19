@@ -490,10 +490,12 @@ urn:oasis:names:specification:docbook:dtd:xml:4.1.2</pre>
 					<tr><td>/<i>nodename</i></td><td>Selects the node named <i>nodename</i> that is a direct child of the root node</td></tr>
 					<tr><td><i>nodename</i></td><td>Selects the node named <i>nodename</i> that is a direct child of the current node</td></tr>
 					<tr><td>//</td><td>Selects all descendent nodes of the current node</td></tr>
-					<tr><td>//<i>nodename</i></td><td>Selects all the nodes named <i>nodename</i> that are a descendent of the current node</td></tr>
-					<tr><td>.</td></td>Selects current node</tr>
-					<tr><td>.</td></td>Selects parent node</tr>
-					<tr><td>@</td></td>Selects attribute nodes</tr>
+					<tr><td>//<i>nodename</i></td>
+					    <td>Selects all the nodes named <i>nodename</i> that are a descendent of the current node</td>
+					</tr>
+					<tr><td>.</td><td>Selects current node</td></tr>
+					<tr><td>..</td><td>Selects parent node</td></tr>
+					<tr><td>@</td><td>Selects attribute nodes</td></tr>
 					<tr><td><i>nodename[<i>predicate</i>]</i></td><td>Selects the node named <i>nodename</i> that matches the predicate. The predicate can be anything like:
 						<table>
 							<tr><td>[<i>idx</i>]</td><td>Selects the idx<sup>th</sup> child named <i>nodename</i> of currnet node</td></tr>
@@ -505,6 +507,16 @@ urn:oasis:names:specification:docbook:dtd:xml:4.1.2</pre>
 					<tr><td>*</td><td>Matches any node</td></tr>
 					<tr><td>@*</td><td>Matches any attribute</td></tr>
 				</table>
+			</p>
+			<p>
+				So for example you could specify a relative XPath like the one below.
+			</p>
+			<pre>testSet[1]/test[inputs/input[1]/@value='ival']</pre>
+			<p>
+				The above says to find all of the <code>test</code> nodes in the <i>first</i>
+				<code>testSet</code> child of the current node, where the
+				first <code>input</code> to the <code>test</code> has a property called
+				&quot;value&quot; with the value &quot;ival&quot;.
 			</p>
 		</div>
 

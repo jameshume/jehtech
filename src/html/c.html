@@ -90,6 +90,10 @@
                 <li>http://stackoverflow.com/questions/4908539/a-way-in-c-to-hide-a-specific-function</li>
                 <li>https://en.wikipedia.org/wiki/Double_dispatch</li>
                 <li>https://en.wikipedia.org/wiki/Virtual_method_table</li>
+                <li>http://stackoverflow.com/questions/1872220/is-it-possible-to-iterate-over-arguments-in-variadic-macros</li>
+                <li>https://channel9.msdn.com/Series/C9-Lectures-Stephan-T-Lavavej-Core-C-</li>
+                <li>https://github.com/isocpp/CppCoreGuidelines</li>
+                <li>http://stackoverflow.com/questions/9599807/how-to-add-indention-to-the-stream-operator</li>
 			</ul>
 		</div>
 
@@ -115,10 +119,219 @@
 
 		<h2>Debugging</h2>
 		<div>
+			<h3>Instrumenting Functions</h3>
 			<p>Use GCC compiler option &quot;<code>-finstrument-functions</code>&quot; and implement these functions:</p>
 			<pre>void __cyg_profile_func_enter (void *, void *) __attribute__((no_instrument_function));
 void __cyg_profile_func_exit (void *, void *) __attribute__((no_instrument_function));</pre>
+
+			<h3>Valgrind</h3>
+			<pre>valgrind \
+    --tool=memcheck \
+    --track-origins=yes \
+    --num-callers=30 \
+    --leak-check=full \
+    --show-reachable=yes \
+    --leak-resolution=high \
+    --trace-children=yes \
+    -v \
+    path/to/binary &lt;args for binary&gt;</pre>
 		</div>
+
+		<h2>Preprocessor Stringization</h2>
+		<div>
+		<h3>Stringize Parameter Tokens</h3>
+		<p>
+			To convert the expression passed as a macro parameter to a string use the # operator:
+			<blockquote>
+				<p>
+					If ... a parameter is immediately preceded by a # ... both are replaced by a
+					single character string literal preprocessing token that
+					contains the spelling of the preprocessing token sequence for the corresponding
+					argument.
+				</p>
+				<footer>Section 6.10.3.2, C99 standard.</footer>
+			</blockquote>
+		</p>
+		<p>
+			In fact, the standard goes on to mention other conditions such that &quot;<code>#x</code>&quot;
+			is replaced with the result of the pseudo code &quot;<code>strip(escape(collapse_consequtive_whitespace(string(arg)))</code>&quot;.
+			The macro argument in the replacement list is first converted to a string. Any consecutive
+			whitspace sequences are converted to just one whitespace, then &quot; is espaced to \&quot;,
+			then any preceeding or trailing whitespace is stripped.
+		</p>
+
+		<p>
+			It is the above beviour that allows the following (contrived example) to work:
+		</p>
+		<pre class="prettyprint linenums">#include &lt;stdio.h&gt;
+
+#define str(x) #x
+
+int main(void) {
+	printf(str(jehtech      says "hi" \t to you all));
+	return 0;
+}
+/*
+ * Printf preprocesses to (use -E gcc option):
+ *    printf("jehtech says \"hi\" \t to you all");
+ *                  ^^^    ^^
+ *                  ^^^    Notice how &quot; has been replaced with \&quot;
+ *                  Notice how whitespace has been collaped
+ * OUTPUTS:
+ *    jehtech says "hi" <i>&lt;tab-char&gt;</i> to you all
+  */</pre>
+		<p>
+			Notice how the whitespace between &quot;jehtech&quot; and &quot;says&quot; has been
+			collapsed into one space and how the &quot; has been escaped to \&quot; (must have been
+			otherwise we'd get a compile error).
+		</p>
+
+		<div class="box_container">
+			<div class="info">
+				<p><b>#x</b> in a macro replacement list is replaced by the result of the pseudo code &quot;<b><code>strip(escape(collapse_consequtive_whitespace(string(arg)))</code></b>	&quot;</p>
+			</div>
+		</div>
+
+		<p>
+			For (another) example, the following defines (a rather junk, but served to illustrate) assert macro:
+		</p>
+		<pre class="prettyprint linenums">#include &lt;stdio.h&gt;
+
+#define ASSERT_EQ(exp, val) \
+do { \
+   if ((exp) != (val)) \
+      fprintf(stderr, "ASSERTION FAILURE: " #exp " != " #val); \
+      exit(1); \
+} while(0)
+
+int main(void)
+{
+	ASSERT_EQ(4 + 5, 1);
+	return 0;
+}
+/*
+ * Outputs to STDERR:
+ *    ASSERTION FAILURE: 4 + 5 != 1
+ */</pre>
+		<p>
+			In the macro line <code>fprintf(stderr, "ASSERTION FAILURE: " #exp " != " #val)</code>,
+			the parameters <code>exp</code> and <code>val</code> are preceded by a #. The preprocessor
+			evaluated the macro use and replaces #exp with the string containing preprocessing token sequence:
+			 &quot;4 + 5&quot;. Same for #val. Hence the output of the program.
+		</p>
+
+		<h3>Glue Parameter Tokens</h3>
+		<p>
+			Another very useful feature is the ability to glue tokens together using ##:
+		</p>
+		<p>
+			<blockquote>
+				<p>
+					If ... a parameter is immediately preceded or followed by a ## preprocessing
+					token, the parameter is replaced by the corresponding argument’s preprocessing
+					token sequence ...
+				</p>
+				<footer>Section 6.10.3.3, C99 standard.</footer>
+			</blockquote>
+		</p>
+		<p>
+			One example of how you might &quot;glue&quot; a parameter's token sequence together
+			with other tokens is shown below.
+		</p>
+		<pre class="prettyprint linenums">#include &lt;stdio.h&gt;
+#include &lt;stddef.h&gt;
+
+#define DEF_STRUCT_FOR_OFFSET(type) \
+struct type##OffsetStruct { \
+   char dummy; \
+   type value; \
+}
+
+DEF_STRUCT_FOR_OFFSET(int);
+DEF_STRUCT_FOR_OFFSET(long);
+DEF_STRUCT_FOR_OFFSET(double);
+
+int main(void)
+{
+	printf("Alignment required for int is %d bytes\n", offsetof(struct intOffsetStruct, value));
+	printf("Alignment required for long is %d bytes\n", offsetof(struct longOffsetStruct, value));
+	printf("Alignment required for double is %d bytes\n", offsetof(struct doubleOffsetStruct, value));
+	return 0;
+}
+/*
+ * The line &quot;DEF_STRUCT_FOR_OFFSET(int);&quot; expands to:
+ *    struct intOffsetStruct { char dummy; int value; };
+ *           ^^^
+ *           Notice the ## glue at work
+ * Same applies to the other similar lines.
+ */</pre>
+		<p>
+			The line of interest is &quot;<code>struct type##OffsetStruct</code>. When the preprocessor
+			sees a use of the macro it replaces the parameter &quot;<code>type##</code>&quot; with
+			its tokens. Note, unlike a single # the tokens are <em>not</em> not converted into a string.
+			They are just pasted as tokens in the program. Hence, &quot;<code>DEF_STRUCT_FOR_OFFSET(int)</code>&quot;
+			declares a structure named &quot;<code>intOffsetStruct</code>&quot;. Hence the
+			description of ## as &quot;glue&quot;.
+		</p>
+		<p>
+			Note the ## tokens can surround a parameter name, so you can &quot;glue&quot; on both sides.
+		</p>
+
+		<h3>Stringize The Result Of Expansion</h3>
+		<p>
+			If we change the example you saw for the stringize example slightly as shown below,
+			we'll get a slightly unexpected outcome:
+		</p>
+		<pre class="prettyprint linenums">#include &lt;stdio.h&gt;
+
+#define ASSERT_EQ(exp, val) \
+do { \
+   if ((exp) != (val)) \
+      fprintf(stderr, "ASSERTION FAILURE: " #exp " != " #val); \
+      exit(1); \
+} while(0)
+
+#define JUNK_SUM (4 + 5)
+
+int main(void)
+{
+	ASSERT_EQ(JUNK_SUM, 1);
+	return 0;
+}
+/*
+ * Outputs to STDERR:
+ *    ASSERTION FAILURE: JUNK_SUM != 1
+ */</pre>
+ 		<p>
+ 			The output is &quot;JUNK_SUM != 1&quot;. Why was it this, and not &quot;(4 + 5) != 1&quot;?!
+ 		</p>
+ 		<p>
+ 			The reason is that the preprocessor evaluates &quot;#exp&quot; <em>before</em> expanding
+ 			out &quot;exp&quot;. Thus it gets the string &quot;JUNK_SUM&quot;. We'd like it to
+ 			print out &quot;(4 + 5) != 1&quot;. How can we accomplish this?
+ 		</p>
+ 		<pre class="prettyprint linenums">#include &lt;stdio.h&gt;
+
+<b>
+#define xstr(x) str(x)
+#define str(x) #x
+</b>
+#define ASSERT_EQ(exp, val) \
+do { \
+    if ((exp) != (val)) \
+       fprintf(stderr, "ASSERTION FAILURE: " <b>xstr(exp)</b> " != " #val); \
+       exit(1); \
+} while(0)
+
+#define JUNK_SUM (4 + 5)
+
+int main(void)
+{
+   ASSERT_EQ(JUNK_SUM, 1);
+   return 0;
+}</pre>
+
+		</div> <!-- END H2 Preprocessor Stringization -->
 
 		<h2>Some Play</h2>
 		<div>
@@ -248,9 +461,9 @@ a + b = 22;</pre>
 				<p>
 					An <b>xvalue</b> (an eXpiring value) also refers to an object, usually near the end of its lifetime (so that its
 					resources may be moved, for example). An xvalue is the result of certain kinds of expressions involving
-					rvalue references (8.3.2). 
+					rvalue references (8.3.2).
 				</p>
-				<p>				
+				<p>
 					A <b>glvalue</b> (generalized lvalue) is an lvalue or an xvalue.
 				</p>
 				<p>
@@ -288,7 +501,6 @@ a + b = 22;</pre>
 			   that I would call a &quot;learning/teaching resource&quot;. The rest of this is just notes 
 			   on the referenced, as I'm still getting to grips with the RValue and Universal references!
 			</p>
-			
 		</div>
 
 		<h2>MSVC</h2>
@@ -497,7 +709,7 @@ a + b = 22;</pre>
 				<li>Load the project file <code>googletest-distribution.sln</code> and build the solution for both Debug and Release. This 
 				    will create the directories <code>C:\Users\James\googletest_msvc\googlemock\gtest\{Debug,Release}</code> that contain
 				    the built gtest libraries.
-				</li>				
+				</li>
 			</ol>
 			<p>
 				But annoyingly I still get the following when trying to create my own project, although the sample tests do not seem
@@ -511,8 +723,7 @@ Error	C2065	'gtest_ar': undeclared identifier	test_mpeg	c:\users\james\documents
 Severity	Code	Description	Project	File	Line	Suppression State
 Error	C2589	'switch': illegal token on right side of '::'	test_mpeg	c:\users\james\documents\git\mpeg_ts_messing\gtest\src\gtest_binary_buffer.cpp	12	
 Severity	Code	Description	Project	File	Line	Suppression State
-Error	C2181	illegal else without matching if	test_mpeg	c:\users\james\documents\git\mpeg_ts_messing\gtest\src\gtest_binary_buffer.cpp	12				
-			</pre>
+Error	C2181	illegal else without matching if	test_mpeg	c:\users\james\documents\git\mpeg_ts_messing\gtest\src\gtest_binary_buffer.cpp	12</pre>
 		</div> <!-- END GTEST -->
 
 		<h2>Smart Pointers</h2>
@@ -701,7 +912,81 @@ Gloal bar()
 Template bar()
 Template bar()
 */</pre>
-		</div>
+		</div> <!-- END H2 Templates -->
+
+		<h2>Vectors</h2>
+		<div>
+			<h3>Erasing Elements</h3>
+			<p>
+				If you don't want to use <code>remove_if()</code> use the following...
+			</p>
+				<pre class="prettyprint linenums">myVector::iterator itr = myVector.begin();
+myVector::iterator itrEnd = myVector.end();
+while(itr != itrEnd)
+{
+    if (delete_condition)
+    {
+        it = v.erase(it);
+    }
+    else
+    {
+        ++it;
+    }
+}</pre>
+			<p>
+				If it is a simple find-by-some-condition and you are using C++11 use:
+			</p>
+			<pre class="prettyprint linenums">#include &lt;algorithm&gt;
+myVector.erase(
+    std::remove_if(
+        myVector.begin(), myVector.end(), [](T const &amp; x) -> bool { /* Code here */ }),
+    myVector.end());</pre>
+    		<p>
+    			But, of course, you might not be using C++11, in which case use a callable instead
+    			of the lambda. This can be a function or a structure implementing the call operator.
+    			Example below:
+    		</p>
+    		<pre class="prettyprint linenums">class MyComparitor
+{
+public:
+    MyComparitor
+    (
+        std::string needle
+    ) : mNeedle(needle)
+    {
+    }
+
+    bool operator()(const MyObject *const obj) const
+    {
+        return obj->someProperty == mNeedle;
+    }
+private:
+    std::string mNeedle;
+};
+
+myVector.erase(
+    std::remove_if(
+        myVector.begin(), myVector.end(), MyComparitor(&quot;String to find&quot;));
+    		</pre>
+    		<p>
+    			You may be wondering if the order of evaluation of the <code>vec.erase()</code>
+    			parameter <code>vec.end()</code> (repeated twice) matters. The answer is it does not. The reason is
+    			that <code>std::remove()</code> does not change the size of <code>vec</code>. The
+    			remove operation works by shoving all of the elements to be removed to the end
+    			of the vector by <i>swapping</i> elements and returning the start of the range
+    			at the end of the vector which is to be deleted. Hence the end iterator does not
+    			change: the location remains the same, it's just the contents that differs!
+    		</p>
+    		<p>
+    			Note that, particularly for vectors, this <i>erase-remove</i> idiom would be a lot
+    			faster than removing each matching element individualy, if there is more than one
+    			such element. The reason is that removing each element individually requires
+    			every element &quot;to the right&quot; in the vector's array to be moved left by
+    			one. Therefore, if there are n targets, you do n swaps rather than n removes and
+    			array reshuffles (a lot more work!).
+    		</p>
+
+		</div> <!-- END H2: vectors -->
 	</div> <!-- END H1 padding div -->
 	</div>
 </body>

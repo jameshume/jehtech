@@ -1242,19 +1242,48 @@ sed '$!N;s/\n/ /'</pre>
         disconnect, which could kill a long-running application you've set up. Soloution is to use
         the screen utility <a href="https://www.howtoforge.com/linux_screen" target="_blank">[Ref]</a>.
       </p>
+      <h3>Cheat Sheet</h3>
       <pre>screen # Start screen session
-       # Ctrl a c - Create new screen
-       # Ctrl a n - Switches to next screen
-       # Ctrl a p - Switches to previous screen
-       # Ctrl a d - Detaches a screen session (session keeps running in bg)</pre>
+       # Ctrl+a, c   - Create new screen.
+       # Ctrl+a, n   - Switches to next screen.
+       # Ctrl+a, p   - Switches to previous screen.
+       # Ctrl+a, d   - Detaches a screen session (session keeps running in bg).
+       # Ctrl+a, ESC - Allows you to move cursor around screen - copy/scrollback mode.
+                       Can use vim-like search syntax...
+                       When in copy mode these keys are useful...
+                          - B|b, E|e       - move the cursor WORD by WORD
+                          - Ctrl+b, Crel+f - scroll the display up/down a full screen.
+       # Ctrl+a, r -   Toggle the current window's line-wrap setting.
+       # Ctrl-a, *   - List users connected to your screen session.</pre>
+
+      <h3>View Available Screens</h3>
       <p>
         If you detach a screen session you can see a list of available sessions using:
       </p>
       <pre>screen -ls</pre>
+      <h3>Reconnect To A Screen</h3>
       <p>
         Reconnect to one of them using:
       </p>
       <pre>screen -r xxxx</pre>
+      <h3>Are You On A Screen Or A Real Terminal</h3>
+      <p>
+        To find out if you are running in a screen or a real terminal type:
+      </p>
+      <pre>echo $STY</pre>
+      <p>
+        If the result is an empty string then you're on a real terminal.
+      </p>
+      <p>
+        To find out who else is connected to your screen session you can either use
+        <code>ctrl+a, *</code> or the <code>lsof</code> command that displays information about 
+        files opened by processes.
+      </p>
+      <h3>Detatch A Screen</h3>
+      <p>
+        To detach an attached screen, enter:
+       </p>
+      <pre>screen -D [<i>screenName</i>]</pre>
     </div> <!-- END Screen sessions -->
 
    </div> <!-- END H1 padding div -->

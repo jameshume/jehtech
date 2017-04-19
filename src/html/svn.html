@@ -195,16 +195,33 @@ svn commit -m "message"</pre>
 				<div class="box_container">
 					<div class="warning">
 						<p>
-							Once you have reintegrated a branch into trunk, it is no longer &quot;alive&quot;. It
+							Pre v1.8:  The [--reintegrate] option is critical for reintegrating changes from a branch back into its original line of development—don't forget it! ... By specifying the --reintegrate option, you're asking Subversion to carefully replicate only those changes unique to your branch.
+						<br/>
+						-- See
+						&quot;<a href="http://svnbook.red-bean.com/en/1.7/svn-book.html#svn.branchemerge.basicmerging.reintegrate"
+							target="_blank">Svn Red Bean</a>&quot;.
+						</p>
+					</div>
+				</div> <!-- END box_container DIV -->
+			</p>
+			<p>
+				<div class="box_container">
+					<div class="warning">
+						<p>
+							Pre v1.8: Once you have reintegrated a branch into trunk, it is no longer &quot;alive&quot;. It
 							is generally unfit for futher use after it has been reintegrated!
 						<br/>
-						See
+						--  See
 						&quot;<a href="http://svnbook.red-bean.com/en/1.8/svn-book.html#svn.branchmerge.advanced.reintegratetwice"
 							target="_blank">Keeping a Reintegrated Branch Alive</a>&quot;
 						for further information.
 						</p>
 					</div>
 				</div> <!-- END box_container DIV -->
+			</p>
+			<p>
+				It is possible, pre 1.8, to <a target="_blank" href="http://svnbook.red-bean.com/en/1.7/svn-book.html#svn.branchmerge.advanced.reintegratetwice">keep the re-integrated branch alive</a>. But,
+				you must do this <b>as soon</b> as you have done the original reintegrate!
 			</p>
 
 			<h4>SVN 1.8 onwards</h4>
