@@ -277,6 +277,11 @@ int main(void)
 			Note the ## tokens can surround a parameter name, so you can &quot;glue&quot; on both sides.
 		</p>
 
+		<h3>Summary Of Macro Expansion</h3>
+		<p>
+			<img src="##IMG_DIR##/c_proprocessing_stages.png" alt="Flow diagram describribing how c preprocessor expands macros"/>
+		</p>
+
 		<h3>Stringize The Result Of Expansion</h3>
 		<p>
 			If we change the example you saw for the stringize example slightly as shown below,
@@ -312,10 +317,9 @@ int main(void)
  		</p>
  		<pre class="prettyprint linenums">#include &lt;stdio.h&gt;
 
-<b>
-#define xstr(x) str(x)
-#define str(x) #x
-</b>
+<b>#define xstr(x) str(x)
+#define str(x) #x</b>
+
 #define ASSERT_EQ(exp, val) \
 do { \
     if ((exp) != (val)) \

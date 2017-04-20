@@ -477,9 +477,6 @@ urn:oasis:names:specification:docbook:dtd:xml:4.1.2</pre>
 	<p>As you can see, we have to keep defining until we only have built in types.</p>
 
 
-
-
-
 		<h2><a id="xpath"></a>XPath</h2>
 		<div>
 			<p>Used to specify/select parts of XML documents of interest...
@@ -498,7 +495,7 @@ urn:oasis:names:specification:docbook:dtd:xml:4.1.2</pre>
 					<tr><td>@</td><td>Selects attribute nodes</td></tr>
 					<tr><td><i>nodename[<i>predicate</i>]</i></td><td>Selects the node named <i>nodename</i> that matches the predicate. The predicate can be anything like:
 						<table>
-							<tr><td>[<i>idx</i>]</td><td>Selects the idx<sup>th</sup> child named <i>nodename</i> of currnet node</td></tr>
+							<tr><td>[<i>idx</i>]</td><td>Selects the idx<sup>th</sup> child named <i>nodename</i> of currnet node. Indicies start from 1.</td></tr>
 							<tr><td>[last()-<i>i</i>]</td><td>Selects the last (minus <i>i</i> (optional)) child of the currnet node</td></tr>
 							<tr><td>[<i>childnodename</i> <i>op</i> <i>value</i>]</td><td>Selects the last child of the current node that itself has a child node named <i>childnodename</i> which has a value <i>op</i> than/to <i>value</i>. Operator can be on of <code>[| + - * div = != &lt; &gt; &lt;= &gt;= or and mod]</code>.</td></tr>
 						</table>
@@ -518,7 +515,59 @@ urn:oasis:names:specification:docbook:dtd:xml:4.1.2</pre>
 				first <code>input</code> to the <code>test</code> has a property called
 				&quot;value&quot; with the value &quot;ival&quot;.
 			</p>
-		</div>
+			<p>
+				As another example, if you were searching for all nodes which can an attribute
+				containing a particular string
+				<a href="http://stackoverflow.com/questions/7405212/xpath-to-search-for-a-node-that-has-any-attribute-containing-a-specific-string"
+				   target="_blank">[Ref]</a> you might use the following:
+			</p>
+			<pre>
+//*[@*[starts-with(., 'the-string-you're-looking-for')]]
+^^^ ^^ ^^^^^^^^^^^ ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^ ^^ ^^^^^^^^^^^ ^  String attribute is compared with
+^^^ ^^ ^^^^^^^^^^^ Pass the current attribute node(set) being considered
+^^^ ^^ The starts-with function returns true if the first argument string starts
+^^^ ^^   with the second argument string, and otherwise returns false.
+^^^ Matches any attribute that matches the following predicate
+Matches any node that matches the following predicate</pre>
+			<p>
+				Interestingly, as the SO user points out, the above is not the same as the following:
+			</p>
+			<pre>//*[starts-with(@*, 'the-string-you're-looking-for')]</pre>
+			<p>
+				The reason for this can be found in the
+				<a href="https://www.w3.org/TR/xpath/#function-string" __target="_blank">W3C docs on string functions</a>.
+				From the docs we see the following:
+			</p>
+			<p>
+				<blockquote>
+					<p>
+						The string function converts an object to a string as follows:
+					</p>
+					<ul>
+						<li><b>A node-set is converted to a string by returning the string-value of the node in the node-set that is first in document order. If the node-set is empty, an empty string is returned.</b>
+						</li>
+						<li>A number is converted to a string as follows:
+							<ul>
+								<li>NaN is converted to the string NaN</li>
+								<li>positive [and negative] zero is converted to the string 0</li>
+								<li>positive infinity is converted to the string Infinity</li>
+								<li>negative infinity is converted to the string -Infinity</li>
+								<li>if the number is an integer, the number is represented in decimal form as a Number with no decimal point and no leading zeros, preceded by a minus sign (-) if the number is negative</li>
+								<li>otherwise, the number is represented in decimal form as a Number including a decimal point with at least one digit before the decimal point and at least one digit after the decimal point, preceded by a minus sign (-) if the number is negative; there must be no leading zeros before the decimal point apart possibly from the one required digit immediately before the decimal point; beyond the one required digit after the decimal point there must be as many, but only as many, more digits as are needed to uniquely distinguish the number from all other IEEE 754 numeric values.</li>
+							</ul>
+						</li>
+						<li>The boolean false value is converted to the string false. The boolean true value is converted to the string true.</li>
+						<li>An object of a type other than the four basic types is converted to a string in a way that is dependent on that type</li>
+						<li>If the argument is omitted, it defaults to a node-set with the context node as its only member.</li>
+					</ul>
+					<footer><a href="https://www.w3.org/TR/xpath/#function-string" __target="_blank">W3C docs on string functions</a></footer>
+				</blockquote>
+			</p>
+			<p>
+				Thus by passing the nodeset
+				<code>@*</code> to <code>starts-with()</code> the function will only consider the first node: GOTCHA :)
+			</p>
 
 
 	</div></div>
