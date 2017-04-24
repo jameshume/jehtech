@@ -216,8 +216,8 @@ int main(void)
 		<p>
 			In the macro line <code>fprintf(stderr, "ASSERTION FAILURE: " #exp " != " #val)</code>,
 			the parameters <code>exp</code> and <code>val</code> are preceded by a #. The preprocessor
-			evaluated the macro use and replaces #exp with the string containing preprocessing token sequence:
-			 &quot;4 + 5&quot;. Same for #val. Hence the output of the program.
+			evaluated the macro use and replaces <code>#exp</code> with the string containing preprocessing token sequence:
+			 &quot;4 + 5&quot;. Same for <code>#val</code>. Hence the output of the program.
 		</p>
 
 		<h3>Glue Parameter Tokens</h3>
@@ -310,10 +310,41 @@ int main(void)
  		<p>
  			The output is &quot;JUNK_SUM != 1&quot;. Why was it this, and not &quot;(4 + 5) != 1&quot;?!
  		</p>
+        <p>
+            Let's be the preprocessor and follow the flow chart above. We find the macro invocation
+            <code>ASSERT_EQ(JUNK_SUM, 1)</code> and determine that the arguments are <code>exp == JUNK_SUM</code>
+            and <code>val == 1</code>. We now look through the macro's replacement token sequence.
+        </p>
+        <p>
+            The first place in which arguments are encountered is in the line <code>if ((exp) != (val))</code>.
+            Here neither argument is preceeded by a # or ##, and in the case of a ## neither is followed by a ## either.
+            So, we replace the arguments in the preprocessing token sequence with the arguments fully expanded.
+            Therefore <code>val</code> is replaced with <code>1</code>. As 1 is just a literal it cannot be
+            expanded further. We reaplce <code>exp</code> with <code>JUNK</code>. This is another macro, so
+            we fully expand that first to get <code>(4+5)</code>. This is now fully expanded (but if there
+            had been any macros encountered in the expansion we would have recursively continued to expand everything).
+            Thus <code>exp</code> gets replaced with <code>(4+5)</code> to yield <code>if (((4+5)) != (1))</code>.
+        </p>
+        <p>
+            That went well. So we keep evaluating the macro's replacement token sequence. we encounter both
+            <code>#exp</code> and <code>#val</code> again, except this time they are both preceeded by
+            a # symbol. So now we would replace <code>#exp</code> with the result of
+            <code>strip(escape(collapse_consequtive_whitespace(string(JUNK)))</code>. Ah, we just
+            converted the token JUNK to the string &quot;JUNK&quot;. Ooops. Same for <code>#val</code>,
+            that got expanded to the string &quot;1&quot;.
+        </p>
+        <p>
+            Now that all the arguments in the macros replacement list have been expanded we would
+            rescan for more macro names and replace, but now JUNK does not exist as a preprocessing
+            token but as a plain string, so we do nothing more to it. Hence we print out &quot;ASSERTION FAILURE: JUNK_SUM != 1&quot;.
+        </p>
  		<p>
- 			The reason is that the preprocessor evaluates &quot;#exp&quot; <em>before</em> expanding
- 			out &quot;exp&quot;. Thus it gets the string &quot;JUNK_SUM&quot;. We'd like it to
- 			print out &quot;(4 + 5) != 1&quot;. How can we accomplish this?
+ 			So... in summary, the reason is that the preprocessor evaluates/strigizes <code>#exp</code> <em>before</em> expanding
+ 			out <code>exp</code>. Thus it gets the string &quot;JUNK_SUM&quot;. 
+        </p>
+        <p> BUT.... We'd like it to
+ 			print out &quot;(4 + 5) != 1&quot;. How can we accomplish this? The code snippet below
+            shows us how...
  		</p>
  		<pre class="prettyprint linenums">#include &lt;stdio.h&gt;
 
@@ -334,7 +365,13 @@ int main(void)
    ASSERT_EQ(JUNK_SUM, 1);
    return 0;
 }</pre>
-
+            <p>Why does it work? In <code>xstr(exp)</code>, the argument <code>exp</code> is first
+            replaced to give <code>xstr((4+5))</code>. But the expansion continues until everything is 
+            fully expanded out, so now <code>xstr((4+5))</code> is expanded out to <code>#(4+5)</code>.
+            Not this is expanded out to the string &quot;(4+5)&quot;. Hence we can print out 
+            what was in <code>JUNK_SUM</code> instead of the string &quot;JUNK_SUM&quot;. We can
+            apply to same technique for as many levels of macro as the real thing we want to stringize is
+            behind :)
 		</div> <!-- END H2 Preprocessor Stringization -->
 
 		<h2>Some Play</h2>
