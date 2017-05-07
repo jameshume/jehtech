@@ -130,8 +130,28 @@
             <li>https://www.gearslutz.com/board/post-production-forum/184636-definitive-explanation-29-97-23-98-timecode.html</li>
             <li>http://www.paradiso-design.net/videostandards_en.html</li>
             <li>http://datagenetics.com/blog/november32012/index.html</li>
+            <li>https://codesequoia.wordpress.com/2014/02/24/understanding-scte-35/</li>
         </ul>
     </div> <!-- H2 TODO intro -->
+
+    <h2>Glossary</h2>
+    <div>
+        <p>
+            <table>
+                <thead>
+                    <tr><td>Acronym</td><td>Meaning</td><td>Brief Description</td></tr>
+                </thead>
+                <tbody>
+                    <tr><td>ATSC</td><td>Advanced Television Systems Committee</td><td>An international, non-profit organization developing voluntary standards for digital television.</td></tr>
+                    <tr><td>NTSC</td><td>National Television System Committee</td><td>NTSC is the video system or standard used in North America and most of South America.</td></tr>
+                    <tr><td>PAL</td><td>Phase Alternating Line</td><td>A colour encoding system for analogue television used in broadcast television systems.</td></tr>
+                    <tr><td>SECAM</td><td>Séquentiel couleur à mémoire - French for &quot;Sequential colour with memory&quot;</td><td></td></tr>
+                    <tr><td>SSM</td><td>Source Specific Multicast</td><td><q>A method of delivering multicast packets in which the only packets that are delivered to a receiver are those originating from a specific source address requested by the receiver. By so limiting the source, SSM reduces demands on the network and improves security</q> -- <a href="https://en.wikipedia.org/wiki/Source-specific_multicast" target="_blank">From WikiPedia</a>.</td>
+                    <tr><td>UPID</td><td>Unique Program Identifier</td><td></td></tr>
+                </tbody>
+            </table>
+        </p>
+    </div>
 
 	<h2>Video Introduction</h2>
 	<div>
@@ -904,6 +924,23 @@ if (adaption_field_contains_pcr) {
         </p>
     </div> <!-- END H2 Video Streams -->
 
+    <h2>SCTE-35: Advertisment insertion opportunities</h2>
+    <div>
+        <p></p>
+        <blockquote>
+            <p>
+                SCTE-35 is a standard to signal an advertisement (ad) insertion opportunity in a transport stream ...
+                Ads are not hard coded into the TV program. Instead, the broadcasters insert the ad to the time slot on the fly. This allows broadcasters to change ads based on the air time, geographic location, or even personal preference ... Analog broadcasting used a special audio tone called DTMF to signal the ad time slot. In digital broadcasting, we use SCTE-35 ...
+            </p>
+            <p>
+                ... SCTE-35 was originally designed for ad insertion. However, it turned out to be also useful for more general segmentation signaling ...
+            </p>
+            <footer>-- <a href="https://codesequoia.wordpress.com/2014/02/24/understanding-scte-35/" target="_blank">Understanding SCTE-35</a>
+            </footer>
+        </blockquote>
+        <p></p>
+    </div>
+
 	<h2 style="clear:both;">Audio</h2>
 	<div>
         <h3>Surround Sound, Audio Mixing</h3>
@@ -1035,9 +1072,8 @@ if (adaption_field_contains_pcr) {
         <h4>Dialog Normalization</h4>
         <p>
         </p>
-
-
 	</div><!-- END: H2 - Dunno Yet -->
+
 
     <h2>FFMPEG</h2>
     <div>
