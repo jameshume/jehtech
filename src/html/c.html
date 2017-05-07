@@ -1013,9 +1013,9 @@ myVector.erase(
     			You may be wondering if the order of evaluation of the <code>vec.erase()</code>
     			parameter <code>vec.end()</code> (repeated twice) matters. The answer is it does not. The reason is
     			that <code>std::remove()</code> does not change the size of <code>vec</code>. The
-    			remove operation works by shoving all of the elements to be removed to the end
-    			of the vector by <i>swapping</i> elements and returning the start of the range
-    			at the end of the vector which is to be deleted. Hence the end iterator does not
+    			remove operation works by moving elements around so that to the left of the returned
+				new end iterator is the new contents and to the right (and including) is effectively invalid.
+				Hence the end iterator does not
     			change: the location remains the same, it's just the contents that differs!
     		</p>
     		<p>
@@ -1026,6 +1026,57 @@ myVector.erase(
     			one. Therefore, if there are n targets, you do n swaps rather than n removes and
     			array reshuffles (a lot more work!).
     		</p>
+			<p>
+				We can look at this a little more closely by just looking at what <code>remove()</code> does...
+			</p>
+<pre>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+#include &lt;algorithm&gt;
+#include &lt;iomanip&gt;
+
+template&lt;typename T&gt;
+void PrintElements(const std::string &amp;prefix, const T &amp;container, const unsigned int width=3)
+{
+   std::cout &lt; prefix;
+   for (const auto &amp;elem : container) std::cout &lt; std::setw(width) &lt; std::right &lt; elem;
+   std::cout &lt;lt; std::endl;
+}
+
+template&lt;typename T&gt;
+void PrintEnd(const std::string &amp;prefix, T itA, T itB, const unsigned int width=3)
+{
+   auto dist = (std::distance(itA, itB) + 1u) * width + prefix.size() + 1u;
+   std::cout &lt;lt; std::setw(dist) &lt;lt; std::right &lt;lt; "^\n";
+}
+
+int main(int argc, char *argv[])
+{
+   std::vector<int> testVec = { 1, 10, 2, 10, 3, 10, 4, 10, 5, 10, 6 };
+
+   PrintElements("Before remove: ", testVec);
+   PrintEnd("Before remove: ", testVec.begin(), testVec.end());
+
+   auto newEnd = std::remove(testVec.begin(), testVec.end(), 10);
+   PrintElements("After remove:  ", testVec);
+   PrintEnd("After remove:  ", testVec.begin(), newEnd);
+
+   testVec.erase(testVec.begin(), newEnd);
+   PrintElements("After erase:   ", testVec);
+   PrintEnd("After erase:   ", testVec.begin(), testVec.end());
+
+   return 0;
+}
+/* 
+ * OUTPUTS:
+ * Before remove:   1 10  2 10  3 10  4 10  5 10  6
+ *                                                   ^
+ * After remove:    1  2  3  4  5  6  4 10  5 10  6
+ *                                    ^
+ * After erase:     4 10  5 10  6
+ *                                 ^
+ */</pre>
+
 
 		</div> <!-- END H2: vectors -->
 	</div> <!-- END H1 padding div -->
