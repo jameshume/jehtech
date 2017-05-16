@@ -623,8 +623,40 @@ public class MainActivity extends AppCompatActivity {
   </ul>
 </p>
 <p>
-  
 </p>
+<h3>Build Notes</h3>
+<p>
+     This section is just a summary of 
+     <a href="http://ericdev.blogspot.co.uk/2010/06/cc-closer-look-at-android-project-build.html" target="_blank">A closer look at the Android project build system</a> and <a href="http://elinux.org/Android_Build_System" target="_blank">Android Build System</a>. 
+</p>
+<ul>
+    <li>The linux kernel is cross compiled into a standalone library using a gcc cross compiler. Does not depend on anything else.</li>
+    <li>All other native apps depend on bionic.</li>
+    <li>Everything else uses Java compiler for Android. Java compiler location specified by <code>$JAVA_HOME</code> env variable.</li>
+</ul>
+<p>
+  Build using <code>source build/envsetup.sh</code>. The build will define the product, build variant, simulator, and type (release or debug).
+</p>
+<p>
+  If you're building on Ubuntu 16 you will need to install Sun's OpenJDK 
+  <a href="https://askubuntu.com/questions/761127/how-do-i-install-openjdk-7-on-ubuntu-16-04-or-higher" 
+     target="_blank">[Ref]</a>:
+</p>
+<pre>sudo add-apt-repository ppa:openjdk-r/ppa  
+sudo apt-get update   
+sudo apt-get install openjdk-7-jdk </pre>
+<p>
+  You will also need to install the <code>repo</code> tool: its a source code configuration 
+  management tool used by the Android project. The repo tool is a front end to git written in Python.
+</p>
+<p>
+  To build Qualcomm BSPs look at 
+  <a href="https://wiki.codeaurora.org/xwiki/bin/QAEP/release" 
+     target="_blank">https://wiki.codeaurora.org/xwiki/bin/QAEP/release</a>. 
+  Seems to have a more comprehensive BSP list than that available by following the Xiaomi Git Wiki link.
+</p>
+
+
 </div> <!-- END: H2 Android Build Tree -->
 
 <h2>LocalSocket &amp; LocalServerSocket</h2>

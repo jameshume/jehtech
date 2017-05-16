@@ -95,6 +95,14 @@
                 <li>https://github.com/isocpp/CppCoreGuidelines</li>
                 <li>http://stackoverflow.com/questions/9599807/how-to-add-indention-to-the-stream-operator</li>
                 <li>http://stackoverflow.com/questions/411103/function-with-same-name-but-different-signature-in-derived-class<br>and my test http://ideone.com/BPeDtm</li>
+                <li>https://vimeo.com/97337253</li>
+                <li>https://vimeo.com/97337258</li>
+                <li>https://vimeo.com/97329153</li>
+                <li>https://vimeo.com/97318797</li>
+                <li>https://vimeo.com/97315939</li>
+                <li>https://vimeo.com/68390510</li>
+                <li>https://vimeo.com/68390509</li>
+                <li>https://vimeo.com/68390478</li>
 			</ul>
 		</div>
 
@@ -254,10 +262,10 @@ DEF_STRUCT_FOR_OFFSET(double);
 
 int main(void)
 {
-	printf("Alignment required for int is %d bytes\n", offsetof(struct intOffsetStruct, value));
-	printf("Alignment required for long is %d bytes\n", offsetof(struct longOffsetStruct, value));
-	printf("Alignment required for double is %d bytes\n", offsetof(struct doubleOffsetStruct, value));
-	return 0;
+   printf("Alignment required for int is %d bytes\n", offsetof(struct intOffsetStruct, value));
+   printf("Alignment required for long is %d bytes\n", offsetof(struct longOffsetStruct, value));
+   printf("Alignment required for double is %d bytes\n", offsetof(struct doubleOffsetStruct, value));
+   return 0;
 }
 /*
  * The line &quot;DEF_STRUCT_FOR_OFFSET(int);&quot; expands to:
@@ -301,8 +309,8 @@ do { \
 
 int main(void)
 {
-	ASSERT_EQ(JUNK_SUM, 1);
-	return 0;
+   ASSERT_EQ(JUNK_SUM, 1);
+   return 0;
 }
 /*
  * Outputs to STDERR:
@@ -457,15 +465,17 @@ int main(void)
 			<p>
 				An interesting example is this:
 			</p>
-			<pre>int a = 1;
+			<pre class="prettyprint linenums">int a = 1;
 int b = 3;
 a + b = 22;</pre>
 			<p>
 				Obviously we can't do this because we intuitively know that one cannot assign a value into
 				an expression because the value <tt>a + b</tt> is just that, a temporary value. However,
 				this temporary value must exist in memory, even it it is only temporarily in a register.
+            </p>
+            <p>
 				The variables <tt>a</tt> and <tt>b</tt> are lvalues, but they may only exist in a
-				register, so just having some storage isn't quite enough, it would seem.
+				register. But so would the result <code>a + b</code>, so just having some storage isn't quite enough, it would seem.
 			</p>
 			<p>
 				The answer comes from the second paragraph in the definition: <q>an lvalue [when used as an operand] ... is converted to the
@@ -473,6 +483,10 @@ a + b = 22;</pre>
 				expression <tt>a + b</tt>, the operands are converted to values and are no longer lvalues,
 				hence the result is not an lvalue. This gives a standards-based explanation of our intuition :)
 			</p>
+            <p>
+                The important thing to note is that the is no name (designator) that we can use to access
+                the temporary value resulting from <code>a + b</code>, in this case.
+            </p>
 			<p>
 				And to just be double sure that we're on the right track, Thomas Becker's article <a href="http://thbecker.net/articles/rvalue_references/section_01.html" target="_blank"> C++ Rvalue References Explained</a> has this to say:
 			</p>
@@ -486,6 +500,28 @@ a + b = 22;</pre>
 				C only really talks about lvalues. Rvalues are mentioned in the standard, but only once: <q>What is sometimes called rvalue is in this International Standard described
 				as the value of an expression</q>. Thus rvalues are just really anything that isn't an lvalue.
 			</p>
+            <p>
+                Scott Meyers also says a similar thing:
+            </p>
+            <blockquote>
+                <p>
+                    An lvalue is something you can typically make an assignment too, or take its address ... it <em>has a name</em> ...
+                </p>
+                <footer>-- <a href="https://vimeo.com/97344493" target="_blank">Scott Meyers - C++ Type Deduction and Why You Care</a></footer>
+            </blockquote>
+            <p>
+                In <a href="https://vimeo.com/97344493" target="_blank">Scott Meyer's talk</a> 
+                (admittedly about C++ but the same applies for C in the case of lvalues) he gives these
+                examples:
+            </p>
+            <pre class="prettyprint linenums">int x = 22;
+const int cx = x;</pre>
+            <p>
+                The variable <code>x</code> is an lvalue because it has a name, you can take its address and you can assigned to it.
+            </p>
+            <p>
+                The variable <code>cx</code> is also an lvalue. You can't assigned to it, but it has a name and you can therefore take its address.
+            </p>
 
 			<h3>C++11: RValues, RValue References &amp; Universal References</h3>
 			<p>
@@ -493,7 +529,7 @@ a + b = 22;</pre>
 			</p>
 			<ul>
 				<li><a href="https://accu.org/index.php/journals/1887" target="_blank">Universal References in C++11</a>, Scott Meyers</li>
-				<li><a href="http://thbecker.net/articles/rvalue_references/section_01.html" target="_blank"> C++ Rvalue References Explained</a>, Thomas Becker</li>
+				<li><a href="http://thbecker.net/articles/rvalue_references/section_01.html" target="_blank">C++ Rvalue References Explained</a>, Thomas Becker</li>
 			</ul>
 			<p>
 				C++ has quite a few more types!
@@ -522,20 +558,20 @@ a + b = 22;</pre>
 			<p>Oh man! Read the standards docs really isn't easy... eek!
 			</p>
 			<p>
-				We can gleam that an rvalue is something that is about to expire (its lifetime is over), 
-				a temporary objects (like the result of A * B, for example) or a value that is not addressable.
+				We can gleam that an rvalue is something that is <em>about to expire (its lifetime is over)</em>, 
+				a temporary object (like the result of A * B, for example) or a value that is not addressable.
 			</p>
 			<p>
-				This implies it is something that is short lived and won't be used or have side effects almost
+				This implies it is <em>something that is short lived</em> and won't be used or have side effects almost
 				immediately after its last reference. For example, in the expression <code>a = b * c</code>,
-				the result of <code>b* c</code> is a temporary object and we can't take it's address.
+				the result of <code>b * c</code> is a temporary object and we can't take it's address.
 			</p>
 			<p>
 				This gives us some idea: rvalues are things we can't really access in our code in
 				any meaningful way. They are transients that exist to accomplish a task. So if
 				<code>b * c</code> involves two matrix classes and they both are large matricies, why
-				copy the result into a? Why not just let a have the resources of the temporary result
-				instead of copying the temporary into a and then destroying the temporary. Could save
+				copy the result into <code>a</code>? Why not just let <code>a</code> have the resources of the temporary result
+				instead of copying the temporary into <code>a</code> and then destroying the temporary? Could save
 				ourselves a huge copy operation. This is one of the key motivations for rvalue references.
 			</p>
 
@@ -543,6 +579,53 @@ a + b = 22;</pre>
 			   that I would call a &quot;learning/teaching resource&quot;. The rest of this is just notes 
 			   on the referenced, as I'm still getting to grips with the RValue and Universal references!
 			</p>
+            <p>
+                Expanding on the previous quote by Scott Meyers:
+            </p>
+            <blockquote>
+                <p>
+                    An rvalue, generally speaking, is a <em>temporary object</em> ... Rvalues have <em>no name</em> and you <em>can’t take their address</em> ...
+                </p>
+                <footer>-- <a href="https://vimeo.com/97344493" target="_blank">Scott Meyers - C++ Type Deduction and Why You Care</a></footer>
+            </blockquote>
+            <p>
+            </p>
+
+            <h4>Continuing with Thomas Becker's article...</h4>
+            <p>
+                <b>Move semantics</b> means swapping resource handles between an lvalue and a temporary (rvalue).
+            </p>
+            <p>
+                If matricies are classes with large data the code <code>matrixA = matrixB * matrixC</code>
+               constructs a temporary object to represent the result of the multiplication and then copies
+               that data into <code>matrixA</code>. A copy has been wasted! The temporary's resources could
+               just be <em>transfered rather than copied</em>!
+            </p>
+            <p>
+                This needs some kind of &quot;move constructor&quot;, a lot like a &quot;copy constructor&quot;,
+                but which moves the resources instead of copying them. The type that allows us to do this is the
+                <b>rvalue reference</b>, represented by a double ampersand (&amp;&amp;) 
+                (or as Scott Meyers calls them, <b>Universal References</b> because they
+                may actual refer to either an lvalue of an rvalue in some cases):
+            </p>
+            <pre class="prettyprint linenums">Matrix&amp; Matrix::operator=(Matrix<b>&amp;&amp;</b> rhs)
+//                              ^^
+//                              New type: rvalue reference
+{
+  // ...
+  // swap this->mArrayOfValues and rhs.mArrayOfValues
+  // ...
+}</pre>
+            <ul>
+                <li>RValue references are prefered by rvalues. LValues prefer lvalue references.</li>
+                <li>RValues allow a function to branch at compile time (via overload resolution) on the condition "Am I being called on an lvalue or an rvalue?"</li>
+            </ul>
+
+            <div class="box_container">
+            <div class="info">
+                <p>RValue references are prefered by rvalues. LValues prefer lvalue references. RValues allow a function to branch at compile time (via overload resolution) on the condition "Am I being called on an lvalue or an rvalue?"</p>
+            </div>
+            </div>
 		</div>
 
 		<h2>MSVC</h2>
@@ -567,8 +650,8 @@ a + b = 22;</pre>
 			</p>
 			<p>
 				To dynamically link against the RTL means that your program is
-				compiled without the RTL &quot;backed in&quot; and thus requires a certain s
-				et of DLLs, which must be present on the host when your program
+				compiled without the RTL &quot;backed in&quot; and thus requires a certain
+				set of DLLs, which must be present on the host when your program
 				is executed. 
 			</p>
 			<p>
@@ -1014,9 +1097,9 @@ myVector.erase(
     			You may be wondering if the order of evaluation of the <code>vec.erase()</code>
     			parameter <code>vec.end()</code> (repeated twice) matters. The answer is it does not. The reason is
     			that <code>std::remove()</code> does not change the size of <code>vec</code>. The
-    			remove operation works by shoving all of the elements to be removed to the end
-    			of the vector by <i>swapping</i> elements and returning the start of the range
-    			at the end of the vector which is to be deleted. Hence the end iterator does not
+    			remove operation works by moving elements around so that to the left of the returned
+				new end iterator is the new contents and to the right (and including) is effectively invalid.
+				Hence the end iterator does not
     			change: the location remains the same, it's just the contents that differs!
     		</p>
     		<p>
@@ -1027,6 +1110,57 @@ myVector.erase(
     			one. Therefore, if there are n targets, you do n swaps rather than n removes and
     			array reshuffles (a lot more work!).
     		</p>
+			<p>
+				We can look at this a little more closely by just looking at what <code>remove()</code> does...
+			</p>
+<pre>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+#include &lt;algorithm&gt;
+#include &lt;iomanip&gt;
+
+template&lt;typename T&gt;
+void PrintElements(const std::string &amp;prefix, const T &amp;container, const unsigned int width=3)
+{
+   std::cout &lt; prefix;
+   for (const auto &amp;elem : container) std::cout &lt; std::setw(width) &lt; std::right &lt; elem;
+   std::cout &lt;lt; std::endl;
+}
+
+template&lt;typename T&gt;
+void PrintEnd(const std::string &amp;prefix, T itA, T itB, const unsigned int width=3)
+{
+   auto dist = (std::distance(itA, itB) + 1u) * width + prefix.size() + 1u;
+   std::cout &lt;lt; std::setw(dist) &lt;lt; std::right &lt;lt; "^\n";
+}
+
+int main(int argc, char *argv[])
+{
+   std::vector<int> testVec = { 1, 10, 2, 10, 3, 10, 4, 10, 5, 10, 6 };
+
+   PrintElements("Before remove: ", testVec);
+   PrintEnd("Before remove: ", testVec.begin(), testVec.end());
+
+   auto newEnd = std::remove(testVec.begin(), testVec.end(), 10);
+   PrintElements("After remove:  ", testVec);
+   PrintEnd("After remove:  ", testVec.begin(), newEnd);
+
+   testVec.erase(testVec.begin(), newEnd);
+   PrintElements("After erase:   ", testVec);
+   PrintEnd("After erase:   ", testVec.begin(), testVec.end());
+
+   return 0;
+}
+/* 
+ * OUTPUTS:
+ * Before remove:   1 10  2 10  3 10  4 10  5 10  6
+ *                                                   ^
+ * After remove:    1  2  3  4  5  6  4 10  5 10  6
+ *                                    ^
+ * After erase:     4 10  5 10  6
+ *                                 ^
+ */</pre>
+
 
 		</div> <!-- END H2: vectors -->
 	</div> <!-- END H1 padding div -->
