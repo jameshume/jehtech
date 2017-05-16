@@ -689,6 +689,64 @@ chmod a+x ~/bin/repo</pre>
 <h2>Linux Kernel Input And Android Input Components</h2>
 <div>
   <p>
+    <img src="##IMG_DIR##/android_nix_event_framework.png" alt=""/>
+  </p>
+  <p>
+     In the Linux Kernel, device drivers register with the linux input core as input devices
+     and advertise the type of input that they provide. The driver will then translate events
+     into types recognised by the input core, which are then published through the evdev device,
+     which is axccessible from user space.
+  </p>
+  <p>
+    In the Android code in the Linux user space the first file to query <code>/dev/input/eventXXX</code> is
+    the Android Event Hub, which is found in <code>frameworks/base/services/ionput/EventHub.cpp</code>.
+    The event hub is compiled as part of the NDK because it is native C++ code. Compared to the
+    <code>InputReader</code> it is relatively &quot;simple&quot; and most sets up an <code>epoll</code>
+    and <code>inotify</code> set to monitor the directory <code>/dev/input</code> to detect additions
+    and deletions from this directory, to auto-detect system input devices and also poll all the
+    files within to receive input events from the kernel evdev.
+  </p>
+  <p>
+  	Most of the important work in the event hub happens in the function <code>EventHub::getEvents()</code>.
+  	This provides a &quot;container&quot; which monitors all the devices, their addition and deletion and
+  	polls for events from them. It stashes all of these events in interal linked lists, as <code>RawEvent</code> 
+  	objects, which can then be
+  	emptied into the buffer passed to <code>getEvents()</code>, which is how the <code>InputReader</code>
+  	harvests all the input events from all devices in the system.
+  </p>
+  <p>
+  	The <code>RawEvent</code> objects map to the Linux <code>input_event</code> structure as follows:
+  </p>
+  <pre>RawEvent.type     = input_event.type;
+RawEvent.scanCode = input_event.code;
+RawEvent.value    = input_event.value;
+RawEvent.keyCode  = input_event.code; // Unless there is a key map available!!</pre>
+  <p>
+    Other fields that do not correspond to the <code>input_event</code> structure fields are:
+  </p>
+  <pre>deviceId // The device ID
+flags    // Can be filled in if a key mapper is used for this device
+when     // An event time stamp</pre>
+  <p>
+  	There are 3 special raw event types: <code>DEVICE_ADDED</code>, <code>DEVICE_REMOVED</code> 
+  	and <code>FINISHED_DEVICE_SCAN</code>. 
+  </p>
+  <p>
+  	So onto the next component, the <code>InputReader</code>... this is a more complicated class than
+  	the event hub - its almost 6 times bigger in size!
+  </p>
+  <p>
+  	The input reader (also native in C++) starts a thread which continually polls <code>EventHub::getEvents()</code>, which
+  	incidently, will block if there are no events available. The thread works by calling <code>loopOnce()</code>.
+  </p>
+  <p>
+  	The loop function is where <code>EventHub::getEvents()</code> is called. It passes in a private buffer which
+  	is filled with as many events (<code>RawEvent</code> objects) from the event hub as possible.
+  </p>
+  <p>
+  	The <code>InputMapper</code> inheritance diagram is shown below:
+  </p>
+  <p>
     <img src="##IMG_DIR##/android_input_mappers.png" alt="Class inheritance diagram of InputMapper classes"/>
   </p>
 </div>
