@@ -260,6 +260,11 @@ __android_log_print(ANDROID_LOG_DEBUG, "LOG_TAG", "printf like syntax", ...);</p
       <li>https://www.kingoapp.com/root-tutorials/how-to-root-android-6.0-marshmallow.htm</li>
   </ol>
 </p>
+<p>
+  When we say a bootloader is <em>locked</em>, it means that it will not flash/boot updates unless
+  they are digitally signed by its vendor. <b>Warning:</b> unlocking your bootloader completely
+  eliminates your device's security - its like not password protecting your desktop's BIOS!
+</p>
 </div> <!-- Rooting your phone -->
 
 <h2>Logs</h2>
@@ -552,7 +557,7 @@ public class MainActivity extends AppCompatActivity {
 |-- device          - Product make definitions
 |-- docs
 |-- external
-|-- frameworks
+|-- frameworks      - Native support for the Android frameworks, e.g. binder support functions etc
 |-- hardware
 |-- kernel          - The Linux kernel
 |-- libcore
@@ -625,6 +630,7 @@ public class MainActivity extends AppCompatActivity {
 <p>
 </p>
 <h3>Build Notes</h3>
+<h4>Intro</h4>
 <p>
      This section is just a summary of 
      <a href="http://ericdev.blogspot.co.uk/2010/06/cc-closer-look-at-android-project-build.html" target="_blank">A closer look at the Android project build system</a> and <a href="http://elinux.org/Android_Build_System" target="_blank">Android Build System</a>. 
@@ -637,27 +643,55 @@ public class MainActivity extends AppCompatActivity {
 <p>
   Build using <code>source build/envsetup.sh</code>. The build will define the product, build variant, simulator, and type (release or debug).
 </p>
+
+<h4>Preparation</h4>
+<h5>Install Sun's openJDK</h5>
 <p>
-  If you're building on Ubuntu 16 you will need to install Sun's OpenJDK 
-  <a href="https://askubuntu.com/questions/761127/how-do-i-install-openjdk-7-on-ubuntu-16-04-or-higher" 
+  If you're building on Ubuntu 16 you will need to install Sun's OpenJDK
+  <a href="https://askubuntu.com/questions/761127/how-do-i-install-openjdk-7-on-ubuntu-16-04-or-higher"
      target="_blank">[Ref]</a>:
 </p>
-<pre>sudo add-apt-repository ppa:openjdk-r/ppa  
-sudo apt-get update   
-sudo apt-get install openjdk-7-jdk </pre>
+<pre>sudo add-apt-repository ppa:openjdk-r/ppa
+sudo apt-get update
+sudo apt-get install openjdk-7-jdk</pre>
+
+<h5>Install Repo</h5>
 <p>
-  You will also need to install the <code>repo</code> tool: its a source code configuration 
-  management tool used by the Android project. The repo tool is a front end to git written in Python.
+  You will also need to install &quot;Repo&quot;, a tool, written in Python, built on top of git that makes it easier to work with Git and Android <a target="_blank" href="https://source.android.com/source/downloading">[Ref]</a>. Download using the following (you can replace <code>~/bin/repo</code> with a directory of your choice):
 </p>
+<pre>curl https://storage.googleapis.com/git-repo-downloads/repo &gt; ~/bin/repo
+chmod a+x ~/bin/repo</pre>
+
+<h5>Configure USB Access</h5>
 <p>
-  To build Qualcomm BSPs look at 
+  You will also need to configure USB access <a href="https://source.android.com/source/initializing" target="_blank">[Ref]</a>
+  because might not be able to access USB devices by default:
+</p>
+<pre>wget -S -O - http://source.android.com/source/51-android.txt | sed "s/&lt;username&gt;/$USER/" | sudo tee &gt;/dev/null /etc/udev/rules.d/51-android.rules; sudo udevadm control --reload-rules</pre>
+
+<h5>Building for QualComm chipsets</h5>
+<p>
+  <b>To build Qualcomm BSPs look at</b>
   <a href="https://wiki.codeaurora.org/xwiki/bin/QAEP/release" 
      target="_blank">https://wiki.codeaurora.org/xwiki/bin/QAEP/release</a>. 
-  Seems to have a more comprehensive BSP list than that available by following the Xiaomi Git Wiki link.
+  Seems to have a more comprehensive BSP list than that available by following the Xiaomi Git Wiki link!
+  Checkout using:
+</p>
+<pre>repo init -u git://codeaurora.org/platform/manifest.git -b release -m [manifest] –-repo-url=git://codeaurora.org/tools/repo.git --repo-branch=caf-stable</pre>
+<p>
+  Replace <code>[manifest]</code> with the manifest that matches the BSP you want to build. For example, 
+  if you want to build for the BSP <code>linux_android_board_support_package_v<b>la.br_.1.2.4-01810-8x16.0-2</b>.zip</code>
+  you would need to specify the manifest file as <code><b>LA.BR.1.2.4-01810-8x16.0</b>.xml</code> <a href="https://developer.qualcomm.com/download/db410c/linux-android-software-build-and-installation-guide.pdf" target="_blank">[Ref]</a>.
 </p>
 
-
 </div> <!-- END: H2 Android Build Tree -->
+
+<h2>Linux Kernel Input And Android Input Components</h2>
+<div>
+  <p>
+    <img src="##IMG_DIR##/android_input_mappers.png" alt="Class inheritance diagram of InputMapper classes"/>
+  </p>
+</div>
 
 <h2>LocalSocket &amp; LocalServerSocket</h2>
 <div>
