@@ -270,15 +270,30 @@ __android_log_print(ANDROID_LOG_DEBUG, "LOG_TAG", "printf like syntax", ...);</p
   <ol>
       <li>https://seasonofcode.com/posts/how-rooting-works-a-technical-explanation-of-the-android-rooting-process.html</li>
       <li>https://jon.oberheide.org/files/bsides11-dontrootrobots.pdf</li>
-      <li>http://www.linuxtopia.org/online_books/writing_SELinux_policy_guide/file_contexts_07.html</li>
       <li>https://www.kingoapp.com/root-tutorials/how-to-root-android-6.0-marshmallow.htm</li>
   </ol>
+</p>
+<p>
+  Rooting a device means to get root access to the Linux system that Android is built on top of.
+  Root access allows you to execute <em>anything</em>. It gives you complete control over your phone.
+  A &quot;normal&quot; phone user executes with certain limited permissions so she cannot execute
+  or do anything they please.
 </p>
 <p>
   When we say a bootloader is <em>locked</em>, it means that it will not flash/boot updates unless
   they are digitally signed by its vendor. <b>Warning:</b> unlocking your bootloader completely
   eliminates your device's security - its like not password protecting your desktop's BIOS!
+  When a bootload is <em>unlocked</em>, it will let you flash/boot any ROMs of your choosing,
+  signed or not.
 </p>
+<blockquote>
+	<p>
+	... if you can hack / trick one of these system processes running in privileged mode to execute your arbitrary code, you have just gained privileged access to the system. This how all one-click-root methods work, including z4root, gingerbreak, and so on ...
+	</p>
+	<foorter>-- <a href="https://seasonofcode.com/posts/how-rooting-works-a-technical-explanation-of-the-android-rooting-process.html" target="_blank">How Rooting Works, By Chuan Ji, Oct 19, 2011.</a>
+	</foorter>
+</blockquote>
+<p></p>
 </div> <!-- Rooting your phone -->
 
 <h2>Logs</h2>
