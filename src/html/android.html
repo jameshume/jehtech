@@ -39,6 +39,10 @@
          target="_blank">The Dalvik Virtual Machine Architecture</a>, David Ehringer, March 2010.
     </li>
     <li>
+      <a href="https://software.intel.com/en-us/blogs/2014/06/18/art-vs-dalvik-introducing-the-new-android-x86-runtime"
+         target="_blank">ART vs Dalvik - Introducing the New Android x86 Runtime</a>, Miao W. (Intel), June 18, 2014.
+    </li>
+    <li>
       <a href="http://www.electronicsweekly.com/blogs/eyes-on-android/what-is/the-dalvik-virtual-machine-2011-10/"
          target="_blank">What is the Dalvik Virtual Machine?</a>, Bright Sparks Staff.
     <li>
@@ -304,6 +308,7 @@ logcat # Get the Android log</pre>
     <li><a name="ref5"></a>http://www.pocketmagic.net/programmatically-injecting-events-on-android-part-2/</li>
   </ol>
 
+  <a name="UsingADBSendEventGetEvent"></a>
   <h3>Using ADB sendevent &amp; getevent</h3>
   <p>
     Using ADB there are the
@@ -597,7 +602,7 @@ public class MainActivity extends AppCompatActivity {
   References:
 </p>
 <ul>
-  <li><a href="http://source.android.com/source/add-device.html" taret="_blank">Adding a New Device</a></li>
+  <li><a href="http://source.android.com/source/add-device.html" target="_blank">Adding a New Device</a></li>
 </ul>
 <pre>device/qcom/
 |-- apq8084
@@ -613,16 +618,16 @@ public class MainActivity extends AppCompatActivity {
 </p>
 <p>
   <ul>
-    <li>Android.mk</li>
-    <li>AndroidBoard.mk</li>
-    <li>AndroidProducts.mk
+    <li><code>Android.mk</code></li>
+    <li><code>AndroidBoard.mk</code></li>
+    <li><code>AndroidProducts.mk</code>
       <ul><li>Seems to have one purpose and that is to &quot;point&quot; to the product definition
       makefile, named as the device vendor wishes.</li></ul>
     </li>
-    <li>BoardConfig.mk
+    <li><code>BoardConfig.mk</code>
       <ul><li>Board specific configuration</li></ul>
     </li>
-    <li>vendorsetup.sh
+    <li><code>vendorsetup.sh</code>
       <ul><li>Adds a lunch combo for your device. e.g. by calling <code>add_lunch_combo &lt;product-name&gt;</code>.</li></ul>
     </li>
   </ul>
@@ -632,8 +637,8 @@ public class MainActivity extends AppCompatActivity {
 <h3>Build Notes</h3>
 <h4>Intro</h4>
 <p>
-     This section is just a summary of 
-     <a href="http://ericdev.blogspot.co.uk/2010/06/cc-closer-look-at-android-project-build.html" target="_blank">A closer look at the Android project build system</a> and <a href="http://elinux.org/Android_Build_System" target="_blank">Android Build System</a>. 
+     This section is just a summary of
+     <a href="http://ericdev.blogspot.co.uk/2010/06/cc-closer-look-at-android-project-build.html" target="_blank">A closer look at the Android project build system</a> and <a href="http://elinux.org/Android_Build_System" target="_blank">Android Build System</a>.
 </p>
 <ul>
     <li>The linux kernel is cross compiled into a standalone library using a gcc cross compiler. Does not depend on anything else.</li>
@@ -645,7 +650,7 @@ public class MainActivity extends AppCompatActivity {
 </p>
 
 <h4>Preparation</h4>
-<h5>Install Sun's openJDK</h5>
+<h5>Install OpenJDK</h5>
 <p>
   If you're building on Ubuntu 16 you will need to install Sun's OpenJDK
   <a href="https://askubuntu.com/questions/761127/how-do-i-install-openjdk-7-on-ubuntu-16-04-or-higher"
@@ -654,6 +659,14 @@ public class MainActivity extends AppCompatActivity {
 <pre>sudo add-apt-repository ppa:openjdk-r/ppa
 sudo apt-get update
 sudo apt-get install openjdk-7-jdk</pre>
+<p>
+    Note that different versions of Android will require different versions of Java. You can
+    install multiple versions of Java on your machine using <code>apt-get</code> and it won't
+    overwrite existing versions. To choose an &quot;active&quot; version use
+    <code>sudo update-alternatives --config java</code>. It will display a little choice menu
+    on your console that lists the installed versions (the currenly active version is marked by
+    a *). Just choose the version you want...
+</p>
 
 <h5>Install Repo</h5>
 <p>
@@ -677,20 +690,71 @@ chmod a+x ~/bin/repo</pre>
   Seems to have a more comprehensive BSP list than that available by following the Xiaomi Git Wiki link!
   Checkout using:
 </p>
-<pre>repo init -u git://codeaurora.org/platform/manifest.git -b release -m [manifest] –-repo-url=git://codeaurora.org/tools/repo.git --repo-branch=caf-stable</pre>
+<pre>repo init \
+   -u git://codeaurora.org/platform/manifest.git \
+   -b release \
+   -m &lt;manifest&gt; \
+   –-repo-url=git://codeaurora.org/tools/repo.git \
+   --repo-branch=caf-stable \
+   [--depth=1]</pre>
 <p>
-  Replace <code>[manifest]</code> with the manifest that matches the BSP you want to build. For example, 
+  Replace <code>&lt;manifest&gt;</code> with the manifest that matches the BSP you want to build. For example, 
   if you want to build for the BSP <code>linux_android_board_support_package_v<b>la.br_.1.2.4-01810-8x16.0-2</b>.zip</code>
   you would need to specify the manifest file as <code><b>LA.BR.1.2.4-01810-8x16.0</b>.xml</code> <a href="https://developer.qualcomm.com/download/db410c/linux-android-software-build-and-installation-guide.pdf" target="_blank">[Ref]</a>.
+</p>
+<p>
+  The repo tool will download the many repositories that make up the entire code base and it is
+  the manifest file that tells to tool which repositories and branches need to be retreived.
+</p>
+<p>
+  The other option you might consider is <code>--depth=1</code>. It
+  tells repo to create a shallow clone with a history truncated to the last 1 commit, which should
+  reduce the amount of history you have to download.
+</p>
+
+<h5>Sync Up</h5>
+<p>
+  Next step, after initialising the repo directory, is to download everything. This is done with the
+  &quot;sync&quot; command:
+</p>
+<pre>repo sync -j 4</pre>
+<p>
+  The <code>-j</code> option allows you to specifiy how many projects should be fetched simulataneously.
+  The beefier your internet connection and other hardware (like num cores etc) the higher you might
+  want to push this number. Fetching nultiple projects at a time may help reduce the total
+  download time.
+</p>
+<p>
+  The first sync will take a-g-e-s, as in many hours! From what I've read there is not a lot
+  one can do about this (apart from the <code>--depth</code> option discussed above). You could also try
+  to edit the manifest file (found in the <code>.repo</code> directory) to remove prebuilt toolchains
+  that do not match your system, which may save about 1GB download <a href="https://forum.xda-developers.com/showthread.php?t=2786681" target="_blank">[Ref]</a>.
 </p>
 
 </div> <!-- END: H2 Android Build Tree -->
 
 <h2>Linux Kernel Input And Android Input Components</h2>
 <div>
+  <h3>Useful Links &amp; Reference</h3>
+  <p>
+    <ul>
+      <li><a href="https://source.android.com/devices/input/overview" target="_blank">Android Docs: Input Overview</a></li>
+    </ul>
+  </p>
+  <h3>A 30,000 Foot View</h3>
+  <p>
+    The route that a device input takes is shown in a very high-level sense below.
+  </p>
   <p>
     <img src="##IMG_DIR##/android_nix_event_framework.png" alt=""/>
   </p>
+  <p>
+    The Android docs summarise this process quite well. I'm interested in touch devices and
+    the so the section &quot;<a href = "https://source.android.com/devices/input/touch-devices#touch-device-operation" target="_blank">Touch Device Oeration</a>&quot; was very useful. It basically says that events go from the <code>EventHub</code> to <code>InputReader</code> to <code>InputDispatcher</code>.
+    The dispatcher then <q>... uses the <code>WindowManagerPolicy</code> to determine whether the events should be dispatched and whether they should wake the device. Then, the <code>InputDispatcher</code> delivers the events to the appropriate applications ...</q>.
+  </p>
+
+  <h3>Linux Events</h3>
   <p>
      In the Linux Kernel, device drivers register with the linux input core as input devices
      and advertise the type of input that they provide. The driver will then translate events
@@ -698,17 +762,75 @@ chmod a+x ~/bin/repo</pre>
      which is axccessible from user space.
   </p>
   <p>
+    As the Android docs say, <q>The [Linux] input device drivers are responsible for translating device-specific
+    signals into a standard input event format, by way of the Linux input protocol</q>.
+  </p>
+
+  <h3>Getting Information From Pseudo File Systems</h3>
+  <p>
+    We will see that the Linux device drivers will send events up into userspace, to be collected
+    by the Android EventHub via <code>/dev/input/eventX</code>, where X is a number representing
+    the event associated with the specific device.
+  </p>
+  <p>
+    We can get more information about this device from various locations.
+  </p>
+  <p>
+    We can list all of the devices in our system, and find their pseudo file locations by
+    using the <code>/proc/bus/input/devices</code> pseudo file, for example:
+  </p>
+  <pre># cat /proc/bus/input/devices
+...
+I: Bus=0018 Vendor=0000 Product=0000 Version=0000
+N: Name="atmel-maxtouch"
+P: Phys=
+S: Sysfs=/devices/soc/75ba000.i2c/i2c-12/12-004a/input/input4
+U: Uniq=
+H: Handlers=mdss_fb event4 kgsl cpufreq
+B: PROP=2
+B: EV=b
+B: KEY=400 0 0 40008800 4000000000 0
+B: ABS=661800000000000
+...</pre>
+  <p>
+    Here, for example, we have found out about our touch controller. This phone is using the
+    Atmel MaxTouch chipset. We now know where this devce is located in the sysfs pseudo file system,
+    namely <code><b>/sys</b>/devices/soc/75ba000.i2c/i2c-12/12-004a/input/input4</code> (note how
+    we prefixed the path with <code>/sys</code>).
+  </p>
+  <p>
+    The important bit is the trailing <code>/inputX</code>, where in this case <code>X</code> is 4.
+  </p>
+  <p>
+    We now know that this devices events should be transmitted from Linux kernel space to user space
+    via the special file <code>/dev/input/event4</code>.
+  </p>
+  <p>
+    The reported Sysfs location can also be found using the far more friendly
+    symbolic link <code>/sys/class/input/event4</code>, which &quot;points&quot; to
+    <code>/sys/devices/soc/75ba000.i2c/i2c-12/12-004a/input/input4</code> in this case.
+  </p>
+
+  <h3>Event Hub</h3>
+  <p></p>
+  <blockquote>
+    <p>
+    ... the Android EventHub component reads input events from the kernel by opening the evdev driver associated with each input device ...
+    </p>
+    <footer>-- <a href="https://source.android.com/devices/input/overview" target="_blank">Android Docs: Input Overview</a></footer>
+  </blockquote>
+  <p>
     In the Android code in the Linux user space the first file to query <code>/dev/input/eventXXX</code> is
     the Android Event Hub, which is found in <code>frameworks/base/services/ionput/EventHub.cpp</code>.
-    The event hub is compiled as part of the NDK because it is native C++ code. Compared to the
+    The event hub is compiled using the NDK because it is native C++ code. Compared to the
     <code>InputReader</code> it is relatively &quot;simple&quot; and most sets up an <code>epoll</code>
     and <code>inotify</code> set to monitor the directory <code>/dev/input</code> to detect additions
-    and deletions from this directory, to auto-detect system input devices and also poll all the
-    files within to receive input events from the kernel evdev.
+    and deletions from this directory, and also poll all the files within to receive input events 
+    from the various kernel drivers.
   </p>
   <p>
   	Most of the important work in the event hub happens in the function <code>EventHub::getEvents()</code>.
-  	This provides a &quot;container&quot; which monitors all the devices, their addition and deletion and
+  	This provides a &quot;container&quot; or &quot;manager&quot;, which monitors all the devices, their addition and deletion and
   	polls for events from them. It stashes all of these events in interal linked lists, as <code>RawEvent</code> 
   	objects, which can then be
   	emptied into the buffer passed to <code>getEvents()</code>, which is how the <code>InputReader</code>
@@ -729,11 +851,30 @@ flags    // Can be filled in if a key mapper is used for this device
 when     // An event time stamp</pre>
   <p>
   	There are 3 special raw event types: <code>DEVICE_ADDED</code>, <code>DEVICE_REMOVED</code> 
-  	and <code>FINISHED_DEVICE_SCAN</code>. 
+  	and <code>FINISHED_DEVICE_SCAN</code>. As the RawEvent type is assigned the
+    Linux event type, these special types are given values higher than the existing Linux event
+    types. Values below <code>EventHubInterface::FIRST_SYNTHETIC_EVENT</code> are the Linux event
+    types and everything else is an Android specific event type (see <code>InputReader::processEventsLocked()</code>).
   </p>
+
+  <h3>Input Reader</h3>
   <p>
   	So onto the next component, the <code>InputReader</code>... this is a more complicated class than
-  	the event hub - its almost 6 times bigger in size!
+  	the event hub - its almost 6 times larger in terms of LoC! (And the EventHub was complicated enough :-S).
+    It is here that things like multi-touch events received from the Linux drivers are converted into 
+    MotionEvents etc.
+  </p>
+  <blockquote>
+    <p>
+    ... The Android InputReader component then decodes the input events according to the device class and produces a stream of Android input events. As part of this process, the Linux input protocol event codes are translated into Android event codes according to the input device configuration, keyboard layout files, and various mapping tables...
+    </p>
+    <footer>-- <a href="https://source.android.com/devices/input/overview" target="_blank">Android Docs: Input Overview</a></footer>
+  </blockquote>
+  <p>
+    The class comments tell us that the <q>... input reader reads raw event data from the event hub
+    and processes it into input events that it sends to the input listener ... Most of the work it
+    does happens on the input reader thread but the InputReader can receive queries from other system
+    components running on arbitrary threads ...</q>.
   </p>
   <p>
   	The input reader (also native in C++) starts a thread which continually polls <code>EventHub::getEvents()</code>, which
@@ -744,10 +885,26 @@ when     // An event time stamp</pre>
   	is filled with as many events (<code>RawEvent</code> objects) from the event hub as possible.
   </p>
   <p>
-  	The <code>InputMapper</code> inheritance diagram is shown below:
+  	Structure:
   </p>
   <p>
     <img src="##IMG_DIR##/android_input_mappers.png" alt="Class inheritance diagram of InputMapper classes"/>
+  </p>
+  <p>
+    One function of the reader is to aggregate the fine-grained events comming up from Linux. As
+    we saw in the &quot;<a href="#UsingADBSendEventGetEvent">Using ADB sendevent &amp; getevent</a>&quot; section, just one touch on the
+    mobile devices screen will generate multiple events:
+  </p>
+  <pre>EV_ABS       ABS_MT_TRACKING_ID   00000015
+EV_ABS       ABS_MT_POSITION_X    0000055c
+EV_ABS       ABS_MT_POSITION_Y    000001e9
+EV_ABS       ABS_MT_PRESSURE      00000049
+EV_ABS       ABS_MT_TOUCH_MAJOR   00000008
+EV_KEY       BTN_TOUCH            DOWN
+EV_SYN       SYN_REPORT           00000000</pre>
+  <p>
+    One thing that the InputReader will do is to &quot;accumulate&quot; these events into one event
+    that is then sent on to its listener(s).
   </p>
 </div>
 
@@ -789,10 +946,6 @@ The LocalServerSocket constructor
             filesystem. It does this by calling socket_make_sockaddr_un() in socket_local_client.c
             (humph!).
   - Listens on that socket (done through impl.listen)
-
-
-
-
   </pre>
 </div>
 

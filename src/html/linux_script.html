@@ -221,6 +221,36 @@ sudo apt-get install bcmwl-kernel-source</pre>
           <p><img src="##IMG_DIR##/putty_linux_terminal_type.png" alt="Screenshot of Putty terminal type configuration for Linux"/></p>
       </div>
 
+      <h2>Install Packages Offline</h2>
+      <p>
+        Needed to do this for a computer without an internet connection. SO to the rescue again:
+      </p>
+      <ul>
+        <li><a href="http://stackoverflow.com/questions/4419268/how-do-i-download-a-package-from-apt-get-without-installing-it" target"_blank">Download a package without installing it</a>,</li>
+        <li><a href="https://askubuntu.com/questions/974/how-can-i-install-software-or-packages-without-internet-offline" target"_blank">Install packages without internet</a>.</li>
+      </ul>
+      <p>
+        In summary, to download a package and all of its dependencies, without installing them, to
+        a directory of your choosing use the following commands:
+      </p>
+      <pre>MYBASE=/a/directory/of/your/choosing
+mkdir -p $MYBASE/archives/partial
+apt-get -d -o dir::cache=$MYBASE -o Debug::NoLocking=1 install package</pre>
+      <p>
+        The <code>-d</code> option tells <code>apt-get</code> not to install, just download (although
+        you still need to use the <code>install</code> command in the command line string).
+      </p>
+      <p>
+        The <code>-o dir::cache=$MYBASE</code> option means use the specified directory as the location to cache all the
+        <code>.deb</code> files required.
+      </p>
+      <p>
+        Then all yoy need to do is to copy your directory to your other machine with no internet
+        (tar up the cache directory to transfer) and run the following:
+      </p>
+      <pre>MYBASE=/where/you/copied/the/cache/to
+apt-get dir::cache=$MYBASE install package</pre>
+
 		<h2>GRUB - A Bootloader</h2>
 		<div>
 			<h3>Access From Bootup</h3>
