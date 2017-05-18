@@ -70,6 +70,8 @@
     <li>http://newandroidbook.com/files/Andevcon-Binder.pdf</li>
     <li>https://code.tutsplus.com/tutorials/android-essentials-working-with-strings-and-string-arrays--mobile-7838</li>
     <li>https://source.android.com/devices/graphics/architecture.html</li>
+    <li>https://www.slideshare.net/chrissimmonds/android-bootslides20</li>
+    <li>https://forum.xda-developers.com/showthread.php?t=443994  -- HOWTO: Unpack, Edit, and Repack Boot Images</li>
   </ol>
 </div>
 
@@ -214,9 +216,17 @@ adb pull /data/local/tmp/boot.img boot.img</pre>
 </p>
 <pre>./mkboot ../boot.img ../boot-unpacked</pre>
 <p>
+  See also the tool <a href="http://newandroidbook.com/tools/imgtool.html" target="_blank">imgtool</a>, provided by
+  Jonathan Levin on his website.
+</p>
+<p>
 Then you can edit things on the RAM disk or place new commands on there etc:
 </p>
 <pre>vim ../boot-unpacked/ramdisk/service_contexts</pre>
+<p>
+  You can also do things like checkout the Linux version being used:
+</p>
+<pre>zgrep -a 'Linux version' ../boot-unpacked/kernel</pre>
 <p>
 Then you can repack this boot image and either fastboot or flash it to you phone:
 </p>
@@ -562,7 +572,7 @@ public class MainActivity extends AppCompatActivity {
 |-- device          - Product make definitions
 |-- docs
 |-- external
-|-- frameworks      - Native support for the Android frameworks, e.g. binder support functions etc
+|-- frameworks      - Android frameworks, e.g. binder support functions etc, native and Java code
 |-- hardware
 |-- kernel          - The Linux kernel
 |-- libcore
@@ -731,6 +741,26 @@ chmod a+x ~/bin/repo</pre>
   that do not match your system, which may save about 1GB download <a href="https://forum.xda-developers.com/showthread.php?t=2786681" target="_blank">[Ref]</a>.
 </p>
 
+<h5>Build the Kernel</h5>
+<p>
+  use the following to build the kernel:
+</p>
+
+<pre>source build/envsetup.sh
+lunch &lt;product you're building for&gt;
+make bootimage</pre>
+
+<p>
+  The build should produce at least the following files in <code>out/target/product/&lt;product&gt;</code> <a href="https://www.slideshare.net/chrissimmonds/android-bootslides20" target="_blank">[Ref]</a>:
+</p>
+<ul>
+  <li><code>boot.img</code>: Kernel and ramdisk used for normal boot. It is created using the <code>mkbootimg</code> tool and contains a compressed kernel, the kernel command line and optionaly a ramdisk.</li>
+  <li><code>recovery.img</code>: Kernel and ramdisk to boot into recover mode. Created in the same way as <code>boot.img</code> with same-ish contents.</li>
+  <li><code>system.img</code>: File system image for /system, which contains the OS binaries and frameworks. Mounted read only. Contains all the Android and vendor specific binaries, config files and more.</li>
+  <li><code>userdata.img</code>: The file system image for /data, which contains user data and configuration files. This is where user's personal data resides.</li>
+  <li><code>cache.img</code>: The file system image for /cache, used for updates and recovery.</li>
+</ul>
+
 </div> <!-- END: H2 Android Build Tree -->
 
 <h2>Linux Kernel Input And Android Input Components</h2>
@@ -866,7 +896,7 @@ when     // An event time stamp</pre>
   </p>
   <blockquote>
     <p>
-    ... The Android InputReader component then decodes the input events according to the device class and produces a stream of Android input events. As part of this process, the Linux input protocol event codes are translated into Android event codes according to the input device configuration, keyboard layout files, and various mapping tables...
+    ... The Android InputReader component then decodes the input events according to the device class and produces a stream of Android input events. As part of this process, the Linux input protocol event codes are translated into Android event codes according to the input device configuration, keyboard layout files, and various mapping tables ...
     </p>
     <footer>-- <a href="https://source.android.com/devices/input/overview" target="_blank">Android Docs: Input Overview</a></footer>
   </blockquote>
@@ -905,6 +935,20 @@ EV_SYN       SYN_REPORT           00000000</pre>
   <p>
     One thing that the InputReader will do is to &quot;accumulate&quot; these events into one event
     that is then sent on to its listener(s).
+  </p>
+
+  <h3>Input Dispatcher</h3>
+    <blockquote>
+    <p>
+    ... Finally, the InputReader sends input events to the InputDispatcher which forwards them to the appropriate window ...
+    </p>
+    <footer>-- <a href="https://source.android.com/devices/input/overview" target="_blank">Android Docs: Input Overview</a></footer>
+  </blockquote>
+  <p>
+    So, the dispatcher is the guy who sends the events of into the Android input ecosystem. However, the
+    above quote doesn't meantion that there a policy manager which has first dibs on the events and can
+    instruct the dispatcher as to whether an event should in fact be forwarded. For example, the policy
+    manager may well intercept power button presses.
   </p>
 </div>
 
