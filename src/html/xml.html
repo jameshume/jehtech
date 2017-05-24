@@ -570,10 +570,9 @@ Matches any node that matches the following predicate</pre>
 			</p>
 			<p>
 				Thus by passing the nodeset
-				<code>@*</code> to <code>starts-with()</code> the function will only consider the first node: GOTCHA :)
+				<code>@*</code> to <code>starts-with()</code> the function will only consider the first node because it's
+				first argument is of type string, and so <code>@*</code> is converted to a string by returning the string-value of the node in the node-set: GOTCHA :)
 			</p>
-
-
 	</div></div>
 </body>
 </html>

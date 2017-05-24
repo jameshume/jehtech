@@ -232,6 +232,10 @@ Then you can repack this boot image and either fastboot or flash it to you phone
 </p>
 <pre>./mkboot ../boot-unpacked ../boot_new.img</pre>
 <p>
+    For more information you can see
+    <a href="http://android-dls.com/wiki/index.php?title=HOWTO:_Unpack%2C_Edit%2C_and_Re-Pack_Boot_Images" target="_blank">HOWTO: Unpack, Edit, and Re-Pack Boot Images</a>.
+</p>
+<p>
     If you want to grab other partitions, like system etc, you should download a recovery rom such
     as a TWRP recovery ROM for your device and use the backup features to back partitions up and
     save them to your local disk. The TWRP recovery, which you can fastboot (you don't need to flash it)
@@ -283,8 +287,19 @@ __android_log_print(ANDROID_LOG_DEBUG, "LOG_TAG", "printf like syntax", ...);</p
   When we say a bootloader is <em>locked</em>, it means that it will not flash/boot updates unless
   they are digitally signed by its vendor. <b>Warning:</b> unlocking your bootloader completely
   eliminates your device's security - its like not password protecting your desktop's BIOS!
+  </p>
+  <blockquote>
+    <p>
+    Bootloader integrity is always verified using a hardware root of trust. For verifying boot and recovery partitions, the bootloader has a fixed OEM key available to it. It always attempts to verify the boot partition using the OEM key first and try other possible keys only if this verification fails.
+    </p>
+    <footer>-- <a href="https://source.android.com/security/verifiedboot/verified-boot" target="_blank">Verified Boot, Android Docs</a>.</footer>
+</blockquote>
+  <p>
   When a bootload is <em>unlocked</em>, it will let you flash/boot any ROMs of your choosing,
-  signed or not.
+  signed or not!
+</p>
+<p>
+    So, how can we get root permissions on a device? The following quote explains it nicely:
 </p>
 <blockquote>
 	<p>
@@ -681,7 +696,7 @@ public class MainActivity extends AppCompatActivity {
   <a href="https://askubuntu.com/questions/761127/how-do-i-install-openjdk-7-on-ubuntu-16-04-or-higher"
      target="_blank">[Ref]</a>:
 </p>
-<pre>sudo add-apt-repository ppa:openjdk-r/ppa
+<pre class="prettyprint linenums">sudo add-apt-repository ppa:openjdk-r/ppa
 sudo apt-get update
 sudo apt-get install openjdk-7-jdk</pre>
 <p>
@@ -697,7 +712,7 @@ sudo apt-get install openjdk-7-jdk</pre>
 <p>
   You will also need to install &quot;Repo&quot;, a tool, written in Python, built on top of git that makes it easier to work with Git and Android <a target="_blank" href="https://source.android.com/source/downloading">[Ref]</a>. Download using the following (you can replace <code>~/bin/repo</code> with a directory of your choice):
 </p>
-<pre>curl https://storage.googleapis.com/git-repo-downloads/repo &gt; ~/bin/repo
+<pre class="prettyprint linenums">curl https://storage.googleapis.com/git-repo-downloads/repo &gt; ~/bin/repo
 chmod a+x ~/bin/repo</pre>
 
 <h5>Configure USB Access</h5>
@@ -705,7 +720,7 @@ chmod a+x ~/bin/repo</pre>
   You will also need to configure USB access <a href="https://source.android.com/source/initializing" target="_blank">[Ref]</a>
   because might not be able to access USB devices by default:
 </p>
-<pre>wget -S -O - http://source.android.com/source/51-android.txt | sed "s/&lt;username&gt;/$USER/" | sudo tee &gt;/dev/null /etc/udev/rules.d/51-android.rules; sudo udevadm control --reload-rules</pre>
+<pre class="prettyprint linenums">wget -S -O - http://source.android.com/source/51-android.txt | sed "s/&lt;username&gt;/$USER/" | sudo tee &gt;/dev/null /etc/udev/rules.d/51-android.rules; sudo udevadm control --reload-rules</pre>
 
 <h5>Building for QualComm chipsets</h5>
 <p>
@@ -715,7 +730,7 @@ chmod a+x ~/bin/repo</pre>
   Seems to have a more comprehensive BSP list than that available by following the Xiaomi Git Wiki link!
   Checkout using:
 </p>
-<pre>repo init \
+<pre class="prettyprint linenums">repo init \
    -u git://codeaurora.org/platform/manifest.git \
    -b release \
    -m &lt;manifest&gt; \
@@ -742,7 +757,7 @@ chmod a+x ~/bin/repo</pre>
   Next step, after initialising the repo directory, is to download everything. This is done with the
   &quot;sync&quot; command:
 </p>
-<pre>repo sync -j 4</pre>
+<pre class="prettyprint linenums">repo sync -j 4</pre>
 <p>
   The <code>-j</code> option allows you to specifiy how many projects should be fetched simulataneously.
   The beefier your internet connection and other hardware (like num cores etc) the higher you might
@@ -761,8 +776,25 @@ chmod a+x ~/bin/repo</pre>
   use the following to build the kernel:
 </p>
 
-<pre>source build/envsetup.sh
-lunch &lt;product you're building for&gt;
+<pre>source build/envsetup.sh</pre>
+
+<p> Sourcing <code>envsetup.sh</code> gives you these rather useful commands (and more - the list is truncated) to search and navigate
+    the source tree <a href="http://elinux.org/Android_Build_System#Helper_macros_and_functions" target="_blank">[Ref]</a>:
+
+    <table>
+        <tr><td><code>croot</code></td><td>change directory to the top of the tree<td></tr>
+        <tr><td><code>cgrep <i>&lt;pattern&gt;</i></code></td><td>grep on all local C/C++ files<td></tr>
+        <tr><td><code>jgrep <i>&lt;pattern&gt;</i></code></td><td>grep on all local Java files<td></tr>
+        <tr><td><code>resgrep <i>&lt;pattern&gt;</i></code></td><td>grep on all local res/*.xml files<td></tr>
+        <tr><td><code>godir <i>&lt;filename&gt;</i></code></td><td>go to the directory containing a file<td></tr>
+    </table>
+</p>
+
+<p>
+    Having sourced the environment setup continue to make the boot image like so:
+</p>
+
+<pre class="prettyprint linenums">lunch &lt;product you're building for&gt;
 make bootimage</pre>
 
 <p>
@@ -824,7 +856,7 @@ make bootimage</pre>
     We can list all of the devices in our system, and find their pseudo file locations by
     using the <code>/proc/bus/input/devices</code> pseudo file, for example:
   </p>
-  <pre># cat /proc/bus/input/devices
+  <pre class="prettyprint linenums"># cat /proc/bus/input/devices
 ...
 I: Bus=0018 Vendor=0000 Product=0000 Version=0000
 N: Name="atmel-maxtouch"
@@ -953,6 +985,7 @@ EV_SYN       SYN_REPORT           00000000</pre>
   </p>
 
   <h3>Input Dispatcher</h3>
+  <p></p>
     <blockquote>
     <p>
     ... Finally, the InputReader sends input events to the InputDispatcher which forwards them to the appropriate window ...
@@ -961,7 +994,7 @@ EV_SYN       SYN_REPORT           00000000</pre>
   </blockquote>
   <p>
     So, the dispatcher is the guy who sends the events of into the Android input ecosystem. However, the
-    above quote doesn't meantion that there a policy manager which has first dibs on the events and can
+    above quote doesn't meantion that there is a <b>policy manager which has first dibs on the events</b> and can
     instruct the dispatcher as to whether an event should in fact be forwarded. For example, the policy
     manager may well intercept power button presses.
   </p>
