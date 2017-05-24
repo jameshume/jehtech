@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="13.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>450</x>
+      <y>330</y>
+      <w>150</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>RawEvent
+--
+int32_t code
+int32_t deviceId
+int32_t type
+int32_t value
+nsecs_t when</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

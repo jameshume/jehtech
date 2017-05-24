@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="13.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>170</x>
+      <y>140</y>
+      <w>140</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>input_event
+--
+timeval time
+__u16  type
+__u16  code
+__s32   value</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>400</x>
+      <y>160</y>
+      <w>240</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>timeval
+--
+__kernel_time_t           tv_sec
+__kernel_suseconds_t  tv_usec</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>300</x>
+      <y>190</y>
+      <w>120</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>100.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+</diagram>
