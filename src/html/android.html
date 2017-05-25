@@ -962,8 +962,14 @@ when     // An event time stamp</pre>
     unexpectedly closed or that a &quot;standard&quot; event has occurred.
   </p>
   <p>
-    For standard events, each device, as represented in the event hub's <code>Device</code> structure is located 
-    via its <code>deviceId</code> (TODO - where is device ID found assigned?). 
+    For standard events, each device, as represented in the event hub's <code>Device</code> structure (keyed vector) is located 
+    via its <code>deviceId</code>. 
+  </p>
+  <p>
+    The <code>deviceId</code> is initialised from <code>eventItem.data.u32</code>, when read into the event list, 
+    which was set by the event hub <code>epoll_ctl()</code> command when the device was opened, having 
+    been detected (see <code>openDeviceLocked()</code>). The <code>deviceId</code> is just a number that is 
+    incremented each time a new device is opened.
   </p>
   <p>
     Once the device is found, as many as possible of the Linux <code>input_event</code>s are read from the device and 
@@ -977,7 +983,8 @@ when     // An event time stamp</pre>
   </p>
   <p>
     Once all events have been processed, if there were any newly available devices detected, these
-    are dealt with. This is how the opening-devices list is populated. 
+    are dealt with. This is how the opening-devices list is populated (see 
+    <code>openDeviceLocked()</code> via <code>readNotifyLocked</code>).
   </p>
   <p>
     Otherwise, if the caller's buffer is full, or a device was deleted or added, control is returned, otherwise the function may
