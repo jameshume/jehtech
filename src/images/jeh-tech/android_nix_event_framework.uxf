@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="13.3">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
   <zoom_level>10</zoom_level>
   <element>
     <id>UMLClass</id>
@@ -69,7 +70,7 @@ transparency=1</panel_attributes>
       <w>170</w>
       <h>30</h>
     </coordinates>
-    <panel_attributes>Linux evdev</panel_attributes>
+    <panel_attributes>Event Handler</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -105,7 +106,7 @@ layer=-1</panel_attributes>
       <h>180</h>
     </coordinates>
     <panel_attributes>transparency=1
-customelement=
+
 
 bg=white
 layer=-2</panel_attributes>
@@ -153,7 +154,7 @@ layer=-2</panel_attributes>
       <h>80</h>
     </coordinates>
     <panel_attributes>transparency=1
-customelement=
+
 
 bg=white
 layer=-2</panel_attributes>
@@ -333,12 +334,15 @@ fg=blue</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>850</x>
-      <y>300</y>
-      <w>250</w>
-      <h>110</h>
+      <x>840</x>
+      <y>320</y>
+      <w>310</w>
+      <h>70</h>
     </coordinates>
     <panel_attributes>The EventHub keeps track of all input devices, reading out all of the Linux input_events generated and passing them to the InputReader as Android RawEvent structures
+style=wordwrap
+valign=center
+halign=center
 bg=light_gray</panel_attributes>
     <additional_attributes/>
   </element>

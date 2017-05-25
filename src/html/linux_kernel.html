@@ -27,14 +27,26 @@
 <div>
   <ol>
     <li><a href="https://googleprojectzero.blogspot.co.uk/2016/06/exploiting-recursion-in-linux-kernel_20.html"
-         target="_blank">Exploiting Recursion in the Linux Kernel </a>,
+           target="_blank">Exploiting Recursion in the Linux Kernel </a>,
     </li>
     <li><a href="http://free-electrons.com/doc/training/linux-kernel/linux-kernel-labs.pdf"
            target="_blank">Linux Kernel and Driver Development Training Lab Book</a>, FreeElectrons.com.
     </li>
+    <li><a href="https://events.linuxfoundation.org/sites/events/files/slides/petazzoni-device-tree-dummies.pdf"
+           target="_blank">Linux Device Tree For Dummies</a> Thomas Petazzoni.
+    </li>
+    <li><a href="http://elinux.org/images/8/8e/Rutland-presentation_3.pdf"
+           target="_blank">Device Tree: The Disaster so Far</a>, Mark Rutland 2013
+    </li>
+    <li><a href="http://elinux.org/Device_Tree_presentations_papers_articles"
+           target="_blank">Device Tree presentations papers articles</a>.
+    <li><a href="https://www.gitbook.com/book/0xax/linux-insides/details"
+           target="_blank">Linux Insides</a>, GitBook by @0xAX
+    </li>
+    <li><a href="https://www.kernel.org/pub/linux/kernel/people/mochel/doc/papers/ols-2005/mochel.pdf"
+           target="_blank">The sysfs Filesystem</a>
+    </li>
     <li>http://irl.cs.ucla.edu/~yingdi/web/paperreading/smp_locking.pdf</li>
-    <li>https://www.kernel.org/pub/linux/kernel/people/mochel/doc/papers/ols-2005/mochel.pdf</li>
-    <li>https://www.gitbook.com/book/0xax/linux-insides/details</li>
   </ol>
 </div>
 
@@ -42,19 +54,14 @@
 <p>
   Most drivers have an entry under <code>/sys/bus/xxx/drivers/yyy</code>. For example if you
   <code>ls</code> the directory <code>/sys/bus</code> you will see somthing similar to the
-  following:
+  following (list snipped to shorten it):
 </p>
 <pre>/sys/bus
-|-- acpi
-|-- event_source
 |-- i2c
-|-- mdio_bus
-|-- mmc
 |-- pci
 |-- pci_express
 |-- platform
 |-- pnp
-|-- rapidio
 |-- scsi
 |-- sdio
 |-- serio
@@ -75,9 +82,7 @@
 <pre>/sys/bus/i2c/drivers
 |-- 88PM860x
 |-- aat2870
-&lt;snip&gt;
-|-- wm8350
-`-- wm8994</pre>
+&lt;snip&gt;</pre>
 <p>
   Under the <code>drivers</code> directory we can see (above) a list of devices for which drivers
   exist.

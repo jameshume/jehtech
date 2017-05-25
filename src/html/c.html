@@ -759,8 +759,11 @@ const int cx = x;</pre>
 				<td><code>std::ends</code></td><td>Prints NULL character to cout.</td>
 			</tr>
 			<tr>
-				<td><code>setw(uint)</code></td><td>Sets field width. Default is right aligned.</td>
+				<td><code>setw(c)</code></td><td>Sets c as the stream's fill character.</td>
 			</tr>
+            <tr>
+                <td><code>setfill()</code></td><td>Sets field width. Default is right aligned.</td>
+            </tr>
 			<tr>
 				<td><code>cout.setf(flag-to-set, flag-to-clear)</code></td><td><code>flag-to-clear</code>, the second parameter clears all flags before setting <code>flag-to-set</code>.</td>
 			</tr>

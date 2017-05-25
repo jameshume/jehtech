@@ -725,8 +725,8 @@ chmod a+x ~/bin/repo</pre>
 <h5>Building for QualComm chipsets</h5>
 <p>
   <b>To build Qualcomm BSPs look at</b>
-  <a href="https://wiki.codeaurora.org/xwiki/bin/QAEP/release" 
-     target="_blank">https://wiki.codeaurora.org/xwiki/bin/QAEP/release</a>. 
+  <a href="https://wiki.codeaurora.org/xwiki/bin/QAEP/release"
+     target="_blank">https://wiki.codeaurora.org/xwiki/bin/QAEP/release</a>.
   Seems to have a more comprehensive BSP list than that available by following the Xiaomi Git Wiki link!
   Checkout using:
 </p>
@@ -738,7 +738,7 @@ chmod a+x ~/bin/repo</pre>
    --repo-branch=caf-stable \
    [--depth=1]</pre>
 <p>
-  Replace <code>&lt;manifest&gt;</code> with the manifest that matches the BSP you want to build. For example, 
+  Replace <code>&lt;manifest&gt;</code> with the manifest that matches the BSP you want to build. For example,
   if you want to build for the BSP <code>linux_android_board_support_package_v<b>la.br_.1.2.4-01810-8x16.0-2</b>.zip</code>
   you would need to specify the manifest file as <code><b>LA.BR.1.2.4-01810-8x16.0</b>.xml</code> <a href="https://developer.qualcomm.com/download/db410c/linux-android-software-build-and-installation-guide.pdf" target="_blank">[Ref]</a>.
 </p>
@@ -833,6 +833,11 @@ make bootimage</pre>
 
   <h3>Linux Events</h3>
   <p>
+      See also
+      <a href="http://www.linuxjournal.com/article/6396" target="_blank">Using the Input Subsystem, Part I</a> and
+       <a href="http://www.linuxjournal.com/node/6429/print" target="_blank">Using the Input Subsystem, Part II by Brad Hards</a>.
+  </p>
+  <p>
      In the Linux Kernel, device drivers register with the linux input core as input devices
      and advertise the type of input that they provide. The driver will then translate events
      into types recognised by the input core, which are then published through the evdev device,
@@ -905,13 +910,13 @@ B: ABS=661800000000000
     The event hub is compiled using the NDK because it is native C++ code. Compared to the
     <code>InputReader</code> it is relatively &quot;simple&quot; and most sets up an <code>epoll</code>
     and <code>inotify</code> set to monitor the directory <code>/dev/input</code> to detect additions
-    and deletions from this directory, and also poll all the files within to receive input events 
+    and deletions from this directory, and also poll all the files within to receive input events
     from the various kernel drivers.
   </p>
   <p>
   	Most of the important work in the event hub happens in the function <code>EventHub::getEvents()</code>.
   	This provides a &quot;container&quot; or &quot;manager&quot;, which monitors all the devices, their addition and deletion and
-  	polls for events from them. It stashes all of these events in interal linked lists, as <code>RawEvent</code> 
+  	polls for events from them. It stashes all of these events in interal linked lists, as <code>RawEvent</code>
   	objects, which can then be
   	emptied into the buffer passed to <code>getEvents()</code>, which is how the <code>InputReader</code>
   	harvests all the input events from all devices in the system.
@@ -935,7 +940,7 @@ when     // An event time stamp</pre>
     <img src="##IMG_DIR##/android_raw_event.png" alt="Class diagram of Android RawEvent structure"/>
   </p>
   <p>
-  	There are 3 special raw event types: <code>DEVICE_ADDED</code>, <code>DEVICE_REMOVED</code> 
+  	There are 3 special raw event types: <code>DEVICE_ADDED</code>, <code>DEVICE_REMOVED</code>
   	and <code>FINISHED_DEVICE_SCAN</code>. As the RawEvent type is assigned the
     Linux event type, these special types are given values higher than the existing Linux event
     types. Values below <code>EventHubInterface::FIRST_SYNTHETIC_EVENT</code> are the Linux event
@@ -950,30 +955,30 @@ when     // An event time stamp</pre>
   </p>
   <p>
     Every time <code>getEvents()</code> is called, as many as possible of the devices in the closing-devices
-    list are copied into the caller's buffer as raw events and the device deleted from the event hub's records.
+    list are copied into the caller's buffer as raw events and the device deleted from the event hub's closing-devices list.
     The same applies to the opening-devices list.
   </p>
   <p>
     Next the pending events are examined. The events are held in a list (filled in later in the loop) and dequeued one by one until
-    they are all processed or there is no more space in the caller's buffer. 
+    they are all processed or there is no more space in the caller's buffer.
   </p>
   <p>
     Each event is either a notification that a device has become newly available for read, has been
     unexpectedly closed or that a &quot;standard&quot; event has occurred.
   </p>
   <p>
-    For standard events, each device, as represented in the event hub's <code>Device</code> structure (keyed vector) is located 
-    via its <code>deviceId</code>. 
+    For standard events, each device, as represented in the event hub's <code>Device</code> structure (keyed vector) is located
+    via its <code>deviceId</code>.
   </p>
   <p>
-    The <code>deviceId</code> is initialised from <code>eventItem.data.u32</code>, when read into the event list, 
-    which was set by the event hub <code>epoll_ctl()</code> command when the device was opened, having 
-    been detected (see <code>openDeviceLocked()</code>). The <code>deviceId</code> is just a number that is 
+    In <code>getEvents()</code> the <code>deviceId</code> is initialised from <code>eventItem.data.u32</code>, when read into the event list,
+    which was set by the event hub <code>epoll_ctl()</code> command when the device was opened
+    (see <code>openDeviceLocked()</code>). The <code>deviceId</code> is just a number that is
     incremented each time a new device is opened.
   </p>
   <p>
-    Once the device is found, as many as possible of the Linux <code>input_event</code>s are read from the device and 
-    each is processed and copied (via conversion from an <code>input_event</code> to a <code>RawEvent</code>) 
+    Once the device is found, as many as possible of the Linux <code>input_event</code>s are read from the device and
+    each is processed and copied (via conversion from an <code>input_event</code> to a <code>RawEvent</code>)
     into the next available space in the caller's input buffer. There is some stuff about overriding the
     event's timestamp but I've skipped that detail.
   </p>
@@ -983,7 +988,7 @@ when     // An event time stamp</pre>
   </p>
   <p>
     Once all events have been processed, if there were any newly available devices detected, these
-    are dealt with. This is how the opening-devices list is populated (see 
+    are dealt with. This is how the opening-devices list is populated (see
     <code>openDeviceLocked()</code> via <code>readNotifyLocked</code>).
   </p>
   <p>
@@ -991,11 +996,12 @@ when     // An event time stamp</pre>
     block waiting for further events. As many events as possible are read into a list which is then, as descibed already, processed on the
     next loop iteration.
   </p>
+
   <h3>Input Reader</h3>
   <p>
   	So onto the next component, the <code>InputReader</code>... this is a more complicated class than
   	the event hub - its almost 6 times larger in terms of LoC! (And the EventHub was complicated enough :-S).
-    It is here that things like multi-touch events received from the Linux drivers are converted into 
+    It is here that things like multi-touch events received from the Linux drivers are converted into
     MotionEvents etc.
   </p>
   <blockquote>
