@@ -23,6 +23,10 @@
 <h1 class="title">Linux Programming Notes</h1>
 <div style="padding-right:10px;">
 
+<h2>Page Contents</h2>
+<div id="page_contents">
+</div>
+
 <h2>To Read</h2>
 <div>
   <ol>
@@ -113,98 +117,128 @@
         are watching.
     </p>
     <p>
-        So lets, for example, watch a directory 
-        (<a href="https://github.com/jameshume/MessingWithC/blob/master/inotify/monitor_dir.cpp" target="_blank">see in github</a>)...
+        So lets, for example, watch a directory. You can  
+        <a href="https://github.com/jameshume/MessingWithC/blob/master/inotify/monitor_fs.cpp" target="_blank">
+        get the example code here</a>. I won't just splurge it all out here, we'll just look at the important bits.
     </p>
-    <pre class="prettyprint linenums">#include &lt;iostream&gt;
-#include &lt;sys/inotify.h&gt;
-#include &lt;unistd.h&gt;
-#include &lt;errno.h&gt;
-#include &lt;cstring&gt;
-#include &lt;map&gt;
-#include &lt;string&gt;
-
-static char buffer[1024];
-#define MAP_PAIR(x) { x, #x },
-static std::map&lt;uint32_t, std::string&gt; codes = {
-    MAP_PAIR(IN_ACCESS)
-    MAP_PAIR(IN_ATTRIB)
-    MAP_PAIR(IN_CLOSE_WRITE)
-    MAP_PAIR(IN_CLOSE_NOWRITE)
-    MAP_PAIR(IN_CREATE)
-    MAP_PAIR(IN_DELETE)
-    MAP_PAIR(IN_DELETE_SELF)
-    MAP_PAIR(IN_MODIFY)
-    MAP_PAIR(IN_MOVE_SELF)
-    MAP_PAIR(IN_MOVED_FROM)
-    MAP_PAIR(IN_MOVED_TO)
-    MAP_PAIR(IN_OPEN)
-    MAP_PAIR(IN_IGNORED)
-    MAP_PAIR(IN_ISDIR)
-    MAP_PAIR(IN_Q_OVERFLOW)
-    MAP_PAIR(IN_UNMOUNT)
-};
-
-int main(int argc, char *argv[])
+    <p>
+    	To start receiving events relating to files/firectory you need to create an inotify file descriptor:
+    </p>
+    <pre class="prettyprint linenums">int inotifyFd = inotify_init();</pre>
+    <p>
+    	To tie a directory/file to this file descriptor use the following:
+    </p>
+    <pre class="prettyprint linenums">watchDescriptor = inotify_add_watch(inotifyFd, argv[1], IN_ALL);</pre>
+    <p>
+    	In the example code I do no command line checking so the first argument to the script is the file
+    	or directory being watched. The macro <code>IN_ALL</code> is my own macro that is just a combination
+    	of all the types of events that can be received.
+    </p>
+    <p>
+    	To receive events you must <code>read()</code> from the inotify file descriptor:
+    </p>
+    <pre class="prettyprint linenums">bytesRead = read(inotifyFd, buffer, sizeof(buffer))</pre>
+    <p>
+    	Here is the main point to note here is that the size of the <code>buffer</code> is
+    	much larger than <code>sizeof(struct inotify_event)</code>! The reason for this is
+    	that the <code>inotify_event</code> strcture contains as its last member an unsized
+    	array. I think this was a C99 thing and I'm not sure it is even officially supported
+    	in C++, but not getting any errors or warnings so it looks fine.
+    </p>
+    <p>
+    	The last element <code>name</code> is an unsized array, which means that the actual size
+    	of the array is the <code>sizeof(struct inotify_event) + inotify_event.len</code>, where
+    	the <code>len</code> field gives the byte-length (includes all null bytes after string).
+    </p>
+    <p>
+    	This is why I read data into <code>buffer</code>. To read at least one event <code>buffer</code>
+    	needs to be at least <code>sizeof(struct inotify_event) + NAME_MAX + 1</code> bytes in size. Note
+    	that reading events will only read entire events, it will never split an event structure across
+    	two reads, for example, therefore you can be certain to only ever read an integer number
+    	of events.
+    </p>
+    <p>
+    	So the <code>buffer</code> has one or possibly more events in it. Hence once
+    	<code>read()</code> fills the buffer we must traverse across all the
+    	<code>inotify_events</code> contained within:
+    </p>
+	<pre class="prettyprint linenums">const char *const bufferEnd = buffer + bytesRead;
+while(buffer &lt; bufferEnd)
 {
-    int success;
-    ssize_t bytesRead;
-    struct inotify_event iNotifyEvent;
-
-    int inotifyFd = inotify_init();
-    if (inotifyFd < 0)
-    {
-        std::cerr &lt;&lt; "Failed to create inotify file descriptor" &lt;&lt; std::endl;
-        return 1;
-    }
-
-    success = inotify_add_watch(inotifyFd, argv[1], IN_CREATE | IN_DELETE | IN_DELETE_SELF);
-    if (success &lt; 0)
-    {
-        std::cerr &lt;&lt; "Failed to add the directory '" &lt;&lt; argv[1] &lt;&lt; "' to the watch list" << std::endl;
-        return 1;
-    }
-
-    while(true)
-    {
-        bytesRead = read(inotifyFd, buffer, sizeof(buffer));
-        if ( ((bytesRead == -1) &amp;&amp; errno != EINTR) || (bytesRead < sizeof(iNotifyEvent)) )
-        {
-            break;
-        }
-
-        memcpy(&amp;iNotifyEvent, buffer, bytesRead);
-
-        std::cout &lt;&lt; "Event info:\n";
-        std::cout &lt;&lt; "   Watch descriptor.... " &lt;&lt; iNotifyEvent.wd << "\n";
-        std::cout &lt;&lt; "   Mask................ " &lt;&lt; iNotifyEvent.mask << "\n";
-        std::cout &lt;&lt; "   Cookie.............. " &lt;&lt; iNotifyEvent.cookie << "\n";
-        std::cout &lt;&lt; "   Length of name...... " &lt;&lt; iNotifyEvent.len << "\n";
-        std::cout &lt;&lt; "   Name................ " &lt;&lt; iNotifyEvent.name <<"\n";
-
-        std::cout &lt;&lt; "Event mask includes:\n";
-        for (auto it=codes.begin(); it!=codes.end(); ++it)
-        {
-            if (iNotifyEvent.mask &amp; it->first)
-            {
-                std::cout &lt;&lt; "   - " &lt;&lt; it->second &lt;&lt; "\n";
-            }
-        }
-        std::cout &lt;&lt; std::endl;
-    }
-
-    if (bytesRead == -1)
-    {
-        std::cerr &lt;&lt; "Error reading inotify file id" &lt;&lt; std::endl;
-        std::cerr &lt;&lt; "Errno is '" &lt;&lt; strerror(errno) &lt;&lt; "' (" &lt;&lt; errno &lt;&lt; ")" &lt;&lt; std::endl;
-    }
-    else if (bytesRead != sizeof(iNotifyEvent))
-    {
-       std::cerr &lt;&lt; "Error reading inotify file id. Unexpected number of bytes" &lt;&lt; std::endl;
-    }
-
-    return 0;
+   struct inotify_event *iNotifyEvent = reinterpret_cast&lt;struct inotify_event *&gt;(buffer);
+   dump_inotify_event(iNotifyEvent);
+   buffer += sizeof(struct inotify_event) + iNotifyEvent->len;
 }</pre>
+	<p>
+		This code does a <code>reinterpret_cast</code>, which means the buffer must
+		be correctly aligned: if you statically allocate a buffer you must make sure it is
+    	correctly alligned. To work around this I've dynamically allocated the buffer which
+    	guarantees correct alignment. 
+	</p>
+	<p>
+		The address of <code>buffer[0]</code> is the start of the first event struct.
+		To get to the start of the next structure we forward the pointer 
+		<code>sizeof(struct inotify_event) + iNotifyEvent->len</code> bytes. This is the 
+		size of the structure plus the size of the file name string <em>and</em> all of the
+		NULL bytes after it: the name has the terminating NULL byte but also as many extra
+		NULL bytes required to pad the subsequent structure to the correct alignment.
+		Thus we can increment the pointer in this way without
+    	worrying about alignment within the buffer. Happy days!
+	</p>
+	<p>
+		To cleanup we must remove the watch on the directory/file and then close the
+		inotify descriptor:
+	</p>
+	<pre class="prettyprint linenums">inotify_rm_watch(inotifyFd, watchDescriptor);
+close(inotifyFd);</pre>
+</div>
+
+<h2>Select, Poll, EPoll</h2>
+<div>
+	<h3>Select</h3>
+	<p>
+		The Linux man page says that:
+	</p>
+	<blockquote>
+		<p>
+			select() ... allow[s] a program to monitor multiple file descriptors, waiting 
+			until one or more of the file descriptors become &quot;ready&quot; for some class of 
+			I/O operation ... (e.g. without blocking or a sufficiently small write) ...
+		</p>
+		<footer>-- <a href="http://man7.org/linux/man-pages/man2/select.2.html" target="_blank">Linux Man Pages</a></footer>
+	</blockquote>
+	<p>
+		Select will wait on a set of file descriptors with a timeout. You specify three sets of
+		file descriptor sets to watch for three different events:
+	</p>
+	<ol>
+		<li>File descriptor becoming reads for reading,</li>
+		<li>File descriptor becoming reads for writing,</li>
+		<li>Exceptional conditions.</li>
+	</ol>
+	<p>
+		The sets of file descriptors being watched for events are descibed by <code>fd_set</code>s.
+		A set is created and manipulated as follows:
+	</p>
+	<pre class="prettyprint linenums">fd_set fd_set;
+FD_ZERO(&amp;fd_set);                        // CLEAR the set
+FD_SET(file_descriptor, &amp;fd_set);        // ADD a file descriptor to the set
+FD_CLR(file_descriptor, &amp;fd_set);        // REMOVE a file descriptor to the set
+if (FD_ISSET(file_descriptor, &amp;fd_set))  // TEST if fd is part of set
+   ; // file_descriptor is part of fd_set</pre>
+   <p>
+		Note that <code>select()</code> overwrites the <code>fd_set</code> variables you
+		pass it so, if you use it in a loop remember to re-initialise the set each time!
+   </p>
+
+   <h3>Poll</h3>
+
+   <h3>EPoll</h3>
+
+   <h3>Select Vs Poll</h3>
+   <p>
+		I found <a href="https://daniel.haxx.se/docs/poll-vs-select.html" target="_blank">Daniel Stenberg's analysis</a> a very good read for this.	
+   </p>
 </div>
 
 </div> <!-- END padding div -->
