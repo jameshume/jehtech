@@ -104,8 +104,10 @@
     </p>
 </div>
 
+
 <h2>File System Notifications</h2>
 <div>
+    <a name="inotify"></a>
     <h3>INotify</h3>
     <p>
         You can use the <code>inotify</code> APIs to &quot;listen&quot; for events relating
@@ -117,7 +119,7 @@
         are watching.
     </p>
     <p>
-        So lets, for example, watch a directory. You can  
+        So lets, for example, watch a directory. You can
         <a href="https://github.com/jameshume/MessingWithC/blob/master/inotify/monitor_fs.cpp" target="_blank">
         get the example code here</a>. I won't just splurge it all out here, we'll just look at the important bits.
     </p>
@@ -173,12 +175,12 @@ while(buffer &lt; bufferEnd)
 		This code does a <code>reinterpret_cast</code>, which means the buffer must
 		be correctly aligned: if you statically allocate a buffer you must make sure it is
     	correctly alligned. To work around this I've dynamically allocated the buffer which
-    	guarantees correct alignment. 
+    	guarantees correct alignment.
 	</p>
 	<p>
 		The address of <code>buffer[0]</code> is the start of the first event struct.
-		To get to the start of the next structure we forward the pointer 
-		<code>sizeof(struct inotify_event) + iNotifyEvent->len</code> bytes. This is the 
+		To get to the start of the next structure we forward the pointer
+		<code>sizeof(struct inotify_event) + iNotifyEvent->len</code> bytes. This is the
 		size of the structure plus the size of the file name string <em>and</em> all of the
 		NULL bytes after it: the name has the terminating NULL byte but also as many extra
 		NULL bytes required to pad the subsequent structure to the correct alignment.
@@ -193,28 +195,30 @@ while(buffer &lt; bufferEnd)
 close(inotifyFd);</pre>
 </div>
 
+<a name="select_poll_epoll"></a>
 <h2>Select, Poll, EPoll</h2>
 <div>
+    <a name="select"></a>
 	<h3>Select</h3>
 	<p>
 		The Linux man page says that:
 	</p>
 	<blockquote>
 		<p>
-			select() ... allow[s] a program to monitor multiple file descriptors, waiting 
-			until one or more of the file descriptors become &quot;ready&quot; for some class of 
+			select() ... allow[s] a program to monitor multiple file descriptors, waiting
+			until one or more of the file descriptors become &quot;ready&quot; for some class of
 			I/O operation ... (e.g. without blocking or a sufficiently small write) ...
 		</p>
 		<footer>-- <a href="http://man7.org/linux/man-pages/man2/select.2.html" target="_blank">Linux Man Pages</a></footer>
 	</blockquote>
 	<p>
 		Select will wait on a set of file descriptors with a timeout. You specify three sets of
-		file descriptor sets to watch for three different events:
+		file descriptor to watch for three different events:
 	</p>
 	<ol>
-		<li>File descriptor becoming reads for reading,</li>
-		<li>File descriptor becoming reads for writing,</li>
-		<li>Exceptional conditions.</li>
+		<li>File descriptors becoming ready for reading,</li>
+		<li>File descriptors becoming ready for writing,</li>
+		<li>File descriptors suffering exceptional conditions.</li>
 	</ol>
 	<p>
 		The sets of file descriptors being watched for events are descibed by <code>fd_set</code>s.
@@ -231,13 +235,16 @@ if (FD_ISSET(file_descriptor, &amp;fd_set))  // TEST if fd is part of set
 		pass it so, if you use it in a loop remember to re-initialise the set each time!
    </p>
 
+   <a name="poll"></a>
    <h3>Poll</h3>
 
+   <a name="epoll"></a>
    <h3>EPoll</h3>
 
+   <a name="select_vs_poll"></a>
    <h3>Select Vs Poll</h3>
    <p>
-		I found <a href="https://daniel.haxx.se/docs/poll-vs-select.html" target="_blank">Daniel Stenberg's analysis</a> a very good read for this.	
+		I found <a href="https://daniel.haxx.se/docs/poll-vs-select.html" target="_blank">Daniel Stenberg's analysis</a> a very good read for this.
    </p>
 </div>
 
