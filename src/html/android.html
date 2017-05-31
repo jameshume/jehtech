@@ -72,6 +72,7 @@
     <li>https://source.android.com/devices/graphics/architecture.html</li>
     <li>https://www.slideshare.net/chrissimmonds/android-bootslides20</li>
     <li>https://forum.xda-developers.com/showthread.php?t=443994  -- HOWTO: Unpack, Edit, and Repack Boot Images</li>
+    <li>http://people.redhat.com/dwalsh/SELinux/Presentations/ManageRHEL5.pdf AWESOME SELINUX INTRO</li>
   </ol>
 </div>
 
@@ -1103,6 +1104,24 @@ The LocalServerSocket constructor
   - Listens on that socket (done through impl.listen)
   </pre>
 </div>
+
+<h2>Security</h2>
+<div>
+
+  <h3>References</h3>
+  <ul>
+    <li><a href="https://source.android.com/security/selinux/concepts" target="_blank">SELinux concepts</a>, Android docs.</li>
+  </ul>
+
+  <h3>Intro</h3>
+  <p>
+    See the <a href="linux_security.html#SELinux">linux section</a> for more details on SELinux.
+  </p>
+  <p>
+    If you have root access to your phone you can disable SELinux enforcement using the <code>setenforce</code> command.
+  </p>
+</div>
+
 
 </div> <!-- END PADDING DIV -->
 </body>
