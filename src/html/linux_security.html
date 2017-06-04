@@ -1,0 +1,175 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>Linux Security Notes</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">Linux Security Notes</h1>
+<div style="padding-right:10px;">
+
+<a id="SELinux"></a>
+<h2>SE Linux</h2>
+<h3>References</h3>
+<ul>
+  <li><a href="http://people.redhat.com/dwalsh/SELinux/Presentations/ManageRHEL5.pdf"
+         target="_blank">Managing Red Hat Enterprise Linux</a>, D J Walsh, K MacMilan.
+         <ul><li>Note: this &quot;article&quot;/section is mainly notes based on this reference.</li></ul>
+  </li>
+  <li><a href="http://freecomputerbooks.com/books/The_SELinux_Notebook-4th_Edition.pdf"
+         target="_blank">The SELinux Notebook</a>, 4th edition.
+      <ul><li>Note: this &quot;article&quot;/section is mainly notes based on this reference.</li></ul>
+  </li>
+  <li><a href="https://en.wikipedia.org/wiki/Discretionary_access_control"
+         target="_blank">Discretionary access control</a>, Wikipedia.
+  </li>
+  <li><a href="https://en.wikipedia.org/wiki/Mandatory_access_control"
+         target="_blank">Mandatory access control</a>, Wikipedia.
+  </li>
+  <li><a href="https://en.wikipedia.org/wiki/Principle_of_least_privilege",
+        target="_blank">Principle of Least Privilege</a>, Wikipedia.
+  </li>
+  <li><a href="https://en.wikipedia.org/wiki/Linux_Security_Modules"
+         target="_blank">Linux Security Modules</a>, Wikipedia.
+  </li>
+  <li><a href="https://source.android.com/security/selinux/concepts"
+         target="_blank">SELinux concepts</a>, Android Docs.
+  </li>
+</ul>
+<h3>Linux without the SE</h3>
+<p>
+  The Linux kernel controls that access that a process has to resources. In the standard Linux
+  <u>D</u>iscrtionary <u>A</u>ccess <u>C</u>ontroll (DAC) this is does by assigning users and
+  resources to groups. Processes are given the same group and user IDs as the user that started
+  the process. The process can then access a resource if it shares either the same user or group ID
+  with the resource, or if the resource is &quot;public&quot;.
+</p>
+<p>
+  I.e., a process accesses a resource based on the resource access bits:
+</p>
+<ol>
+  <li>If the resource available to anyone, the the process can access it,</li>
+  <li>Otherwise if the process and resource are in the same group then the the process can access it,</li>
+  <li>Otherwies if the process and resource are owned by the same user, the process can access it,</li>
+  <li>Otherwise the process cannot access the resource.</li>
+</ol>
+<p>
+  This is called a security <em>policy</em>. The policy is the set of rules used to make access
+  control decisions.
+</p>
+<p>
+  Therefore, access to system resources must be set by the system admin, who will decide which
+  users belong to which groups and which system resources belong to which group (and user). However,
+  the system is <em>discretionary</em> <q>in the sense that a subject with a certain access permission is capable of passing that permission (perhaps indirectly) on to any other subject</q> <a href="https://en.wikipedia.org/wiki/Discretionary_access_control" target="_blank">[Ref]</a>.
+</p>
+<p>
+  This discretionary access means that the system admin is not totally in control of who accesses
+  what. For example, Bob can change the group associated with a file he owns and suddenly
+  give a different set of indiviudals the right to read/write/execute that file. This is not
+  in the system admin's control. Bob has been able to make to make a <em>policy decision</em>!
+</p>
+<p>
+  The main RedHat article referenced <a href="http://people.redhat.com/dwalsh/SELinux/Presentations/ManageRHEL5.pdf" target="_blank">[Ref]</a>,
+  describes some of the disadvantages in more detail. In summary they are:
+</p>
+<ul>
+  <li>Processes' access is based on users' access: the kernel can not distinguish applications from users,</li>
+  <li>Processes can change security properties: discretionary access control. Processes can escape security policy!</li>
+  <li>Only 2 privilege levels, user and root: too simplistic and no way to enforce &quot;least-privilege&quot; (i.e., a process should be given
+      only those priviliges essential for it to perform its work) <a href="https://en.wikipedia.org/wiki/Principle_of_least_privilege", target="_blank">[Ref]</a></li>
+</ul>
+<div class="box_container"><div class="info">
+  <p>
+    <b>Summary of terminology:
+  </b>
+  <ul>
+    <li><em>Security policy</em> is the set of rules used to make access control decisions.</li>
+    <li><em>Discretionary access</em> means that a subject with a certain access permission is capable of passing that permission on.</li>
+    <li><em>Least-privilege</em> describes a security mindset that states that a process should be given
+      only those priviliges essential for it to perform its work.</li>
+  </ul>
+</div></div>
+
+<h3>SELinux</h3>
+<p>
+  SELinux stands for <u>S</u>ecurity <u>E</u>nhanced Linux. It is built on years of the NSA's
+  security research and is an applicaton of their Flash security architecture, implemented as part of the
+  <a href="https://en.wikipedia.org/wiki/Linux_Security_Modules" target="_blank">Linux Security Module (LSM)</a>
+  framework. It adds <em><u>M</u>anditory <u>A</u>ccess <u>C</u>ontroll (MAC)</em> to Linux:
+</p>
+
+<blockquote>
+  <p>
+    ...With mandatory access control, this security policy is <em>centrally controlled</em> by a security policy administrator; users do not have the ability to override the policy ... By contrast, discretionary access control ... allows users the ability to make policy decisions and/or assign security attributes. ... MAC-enabled systems allow policy administrators to implement organization-wide security policies. Under MAC (and unlike DAC), users cannot override or modify this policy, either accidentally or intentionally ... in principle ...
+  </p>
+  <footer><a href="https://en.wikipedia.org/wiki/Mandatory_access_control"
+             target="_blank">Mandatory access control, Wikipedia</a>.
+  </footer>
+</blockquote>
+<p>
+  Most intestestingly, for me at least, Android uses SELinux (since 4.3)
+  <a href="https://source.android.com/security/selinux/concepts" target="_blank">[Ref]</a>
+  which means that it is
+  a very heavily used and &quot;industry-leading&quot; security measure. If you're going to work in the guts of
+  Android, a little knowledge of SELinux goes a long way... hence why I'm trying to learn a little
+  about it.
+</p>
+<p>
+  So, a more secure Linux: access control is mandatory (default denial - anythong not explicilty allowed is denied), more fine grained (no longer just root and not-root) and also implements the principle of least-privilege.
+</p>
+<p>
+  There are thee forms of access control, the only one I've made notes on is <em><u>T</u>ype <u>E</u>nforcement</em> (TE),
+  which is the primary SELinux mechanism.
+</p>
+<p>
+  Now all processes and files have a <em>security context</em>. A security context defines the security settings
+  applied to a subject (user, resource etc). I guess the entire set of security contexts applied to everything
+  ina system constitutes the security policy.
+</p>
+<p>
+  The SELinux <em>security context</em> is applied via a label associated with every user, process and resource:
+</p>
+<pre>user:role:type:level</pre>
+<p>
+  The field <code>type</code> is used for type enforcement (TE), the role and level fields I will
+  ignore.
+</p>
+<p>
+  Access is only allowed between types via the security policy and every process and resources
+  used by that processes must have a security context (remember denial by default).
+</p>
+<p>
+  The security context associated with a process is called the processes' <em>domain</em>.
+</p>
+<blockquote>
+  <p>
+    When a type is associated with a process, it defines what processes
+    (or domains) the SELinux user (the subject) can access.
+  </p><p>
+    When a type is associated with an object, it defines what access
+    permissions the SELinux user has to that object.
+  </p>
+  <footer><a href="http://freecomputerbooks.com/books/The_SELinux_Notebook-4th_Edition.pdf"
+             target="_blank">The SELinux Notebook</a>
+  </footer>
+</blockquote>
+<p></p>
+</div> <!-- End padding right div -->
+</div> <!-- End content div -->
+</body>
+</html>
