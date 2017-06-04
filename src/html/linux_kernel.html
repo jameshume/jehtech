@@ -40,6 +40,7 @@
     </li>
     <li><a href="http://elinux.org/Device_Tree_presentations_papers_articles"
            target="_blank">Device Tree presentations papers articles</a>.
+    </li>
     <li><a href="https://www.gitbook.com/book/0xax/linux-insides/details"
            target="_blank">Linux Insides</a>, GitBook by @0xAX
     </li>
@@ -50,7 +51,168 @@
   </ol>
 </div>
 
-<h2>Unbind A Kernel Driver</h2>
+<h2>Start Of Notes</h2>
+<h3>Downloading The Kernel Source &amp; A Look At Its Structure</h3>
+<p>
+  To download the latest, bleeding edge, of the kernel source, do the following:
+</p>
+<pre>git clone (html|git)://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git</pre>
+<p>
+  Now we can have a look at the first level of the directory structure:
+  <img style="float: left;" src="##IMG_DIR##/linux_source_dir.png" alt="Picture of directories in the linux root directory with some annotation"/>
+</p>
+<p>
+  The <code>arch</code> directory contains all of the architecture dependent code. This code is specific
+  to each platform that the kernel will run on. The kernel itself is as generic as possible, but
+  because at this low level it does have to be concerned with architecture specifics this is where
+  you'll find the implementations.
+</p>
+<p>
+  The <code>block</code> directory contains the Linux block I/O layer files which are used to help
+  manage block devices, like your harddisk, for example.
+</p>
+<p>
+  The <code>Documentation</code> directory is very useful! Here you can find many bits of documentation
+  on the Linux kernel. The files are mostly text files, but under <code>Documentation/DocBook</code>
+  you will find a set of files that can be built using <code>make</code> to produce PDF or HTML
+  documentation. 
+</p>
+<p>
+  If, for example you are interested in learning about the kernel debugger, there
+  is a book on that in <code>kgdb.xml</code>. If you want to compile the documentation for just
+  this, for example, edit the Makefile under <code>Documentation/DocBook/Makefile</code> and change
+  the variable <code>DOCBOOKS</code>. You can do this by renaming or commenting out the existing
+  variable and re-defining it with just the resource you want (you might want to do this as the
+  build of the complete set of books fails sometimes - or at least did for me).
+</p>
+<p>
+  To compile your DocBook, return to the root directory of the linux source and run <code>make pdfdocs</code>.
+  The PDF will be build and stored in the DocBooks directory.
+</p>
+<p>
+  The <code>drivers</code> directory contains a slew of device drivers organised under their type.
+  So, for example, input device drivers (think keyboard, touchpad etc) are found under <code>drivers/input</code> and
+  PCI device drivers under <code>drivers/pci</code>. There may be further hierachical organisation too. For example,
+  under <code>drivers/input</code> there are further subdirectories for keyboards, touch screens, mice etc.
+  Other character device drivers such as <code>/dev/null</code> are found under <code>drivers/char</code>.
+</p>
+<p>
+  The <code>fs</code> directory houses filesystem modules. These support a managery of file systems
+  like FAT, NTFS, ext3, ext4 and more. These allow the Linux user to mount Windows file systems, 
+  use the Linux filesystems and many more, including Mac.
+</p>
+
+<h3 style="clear:both;">Configuring The Kernel</h3>
+<p>
+  The Kernel... a pretty complex beast. As such there is a lot of configuration that can be done.
+  Most hardware providers will have reference configurations that are used as a basis for product
+  specific configurations. Some distributions will provide the configuration file used to build 
+  the kernel in the <code>/boot</code> directory. Or sometimes in <code>/proc/config.gz</code>,
+  but this is often not configured as a build option.
+</p>
+<p>
+  Anyway, all these configurations are found in configuration files (<code>.config</code> files), which
+  are generally many thousands of lines long.
+</p>
+<p>
+  Given that there are so many options, Linux provides utilities to help with the configuration 
+  processes (as well as reference configurations from various distros/manufacturers etc).
+</p>
+<p>
+  There are three main ways to configure the Linux kernel. Each of them uses the current config and
+  gives you a way to update it:
+</p>
+<ol>
+  <li>config - this is a basic command line interface: a ton of yes/no style of questions, which you don't want to use!</li>
+  <li>menuconfig - an ncurses inferface with help options etc.</li>
+  <li>xconfig - a GUI based interface.</li>
+</ol>
+<p>
+  These targets can all be found in <code>scripts/kconfig/makefile</code>.
+</p>
+
+<p>
+  The current config is stored in the root directory in the file <code>.config</code>. The default
+  config file used can be taken from your system. For example, when I ran menuconfig it creates
+  the configuration file from <code>/boot/config-4.4.0-78-generic</code>.
+</p>
+<p>
+  When you are compiling your own kernel you will probably specify the architecture so you'd specify
+  something like <code>make ARCH=arm menuconfig</code>, for example. But, this will still use a
+  default config and probably not the one you want. Therefore the full make command will be something
+  like <code>make ARCH=arm menuconfig arch/arm/configs/corgi_config</code>, if you're building for the 
+  ARM Corgi platform. When you do this, the old <code>.config</code> will be overwritten by your
+  new configuration.
+</p>
+
+<h4>Menuconfig</h4>
+<p>
+  Menuconfig presents a nice ncurses display that you 
+  can navigate around using the instructions at the top of the window. You involke it 
+  using <code>make menuconfig</code>...
+</p>
+<p>
+  <img src="##IMG_DIR##/menuconfig.png" alt="Screen shot of kernel configuraton tool menuconfig"/>
+</p>
+<p>
+  What you'll notice is that there are a nice set of menus and when you use the help you will
+  be given some information about the item you've selected. 
+  For example, the help for <code>System Type &gt; MMU-based Paged Memory Management Support</code>,
+  reads as follows:
+</p>
+<p>
+  <img src="##IMG_DIR##/menuconfig_help_eg.png" alt="Screen shot of kernel configuraton tool menuconfig"/>
+</p>
+<p>
+  Nice, but how does menuconfig know all this stuff?! When it runs it reads the main <code>Kconfig</code>
+  file, found in the root directory. This will source the main Kconfig for the architecture you are compiling
+  for. The variable <code>SRCARCH</code> is used as it is a slightly modified, depending on platform,
+  version of <code>ARCH</code>. The main Kconfig file is taken from <code>arch/$SRCARCH/Kconfig</code>. So,
+  if we're compiling for arm, the Kconfig file would be found in <code>arch/arm/Kconfig</code>. This file
+  defines a lot of things but also sources a ton of other Kconfig files!
+</p>
+<p>
+  We can look in this file to get an idea of the syntax:
+</p>
+<pre>...
+menu "System Type"
+
+config MMU
+   bool "MMU-based Paged Memory Management Support"
+   default y
+   help
+      Select if you want MMU-based virtualised addressing space
+      support by paged memory management. If unsure, say 'Y'.
+...</pre>
+<p>
+  We can see that a menu called &quot;System Type&quot; is being defined. If we look in the first menuconfig
+  screenshot we can see that menu item highlighted. We can drill into this menu to find the menu
+  item &quot;MMU-based Paged Memory Management Support&quot;. If we then select the help feature for this item, we see the second screenshot
+  shown above, which matches the description we found in our main Kconfig file :)
+</p>
+<p>
+  Not every menu item is defined in the main file however. It sources many others and will also pull in
+  all Kconfig files it finds. For example there is a Kconfig file in most of the leaf directories of
+  the drivers tree.
+</p>
+
+<h4>Xconfig</h4>
+<p>
+  Involked in the same way: <code>make ARCH=arm xconfig arch/arm/configs/corgi_config</code>, following our example so far.
+</p>
+<p>
+  <img src="##IMG_DIR##/xconfig.png" alt="Screen shot of kernel configuraton tool xconfig"/>
+</p>
+<p>
+  Xconfig has a few nice advantages like a GUI which will show you the symbols next to the
+  menu descriptions and a beefed up find functionality.
+</p>
+
+</div>
+
+
+
+<h2 style="clear:both;">Unbind A Kernel Driver</h2>
 <p>
   Most drivers have an entry under <code>/sys/bus/xxx/drivers/yyy</code>. For example if you
   <code>ls</code> the directory <code>/sys/bus</code> you will see somthing similar to the
