@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="13.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLHierarchy</id>
+    <coordinates>
+      <x>10</x>
+      <y>10</y>
+      <w>240</w>
+      <h>880</h>
+    </coordinates>
+    <panel_attributes>type=Package
+linux
+	arch
+		arm
+		arm64
+		x86
+		...
+	block
+	certs
+	crypto
+	Documentation
+	drivers
+	firmware
+	fs
+	include
+	init
+	ipc
+	kernel
+	lib
+	mm
+	net
+	samples
+	scripts
+	security
+	sound
+	tools
+	usr
+	virt</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>290</x>
+      <y>70</y>
+      <w>190</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>Architecture dependent files go here, including device tree specification (DTS) files.
+bg=blue
+style=autoresize
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>120</x>
+      <y>50</y>
+      <w>190</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;170.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>290</x>
+      <y>170</y>
+      <w>190</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Block I/O layer support
+bg=blue
+style=autoresize
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>130</x>
+      <y>170</y>
+      <w>180</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;50.0;160.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>290</x>
+      <y>220</y>
+      <w>190</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>A lot of good Linux documentation here. Can be compiled into HTML/PDF etc. Not always 100% up to date (usually close though) but super useful!
+bg=blue
+style=autoresize
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>200</x>
+      <y>260</y>
+      <w>110</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;60.0;90.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>290</x>
+      <y>340</y>
+      <w>190</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>All device drivers
+bg=blue
+style=autoresize
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>150</x>
+      <y>330</y>
+      <w>160</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;20.0;140.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>290</x>
+      <y>380</y>
+      <w>190</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>File system support like ext3, FAT etc.
+bg=blue
+style=autoresize
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>110</x>
+      <y>380</y>
+      <w>200</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;30.0;180.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>290</x>
+      <y>430</y>
+      <w>190</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>Kernel-space include files
+bg=blue
+style=autoresize
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>150</x>
+      <y>430</y>
+      <w>160</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;20.0;140.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>290</x>
+      <y>480</y>
+      <w>190</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>Inter Process Communication (IPC)
+bg=blue
+style=autoresize
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>120</x>
+      <y>480</y>
+      <w>190</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;30.0;170.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>290</x>
+      <y>530</y>
+      <w>190</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>The kernel itself: the scheduler etc
+bg=blue
+style=autoresize
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>130</x>
+      <y>520</y>
+      <w>180</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;20.0;160.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>290</x>
+      <y>640</y>
+      <w>190</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>Linux Secutiry Module (LSM) framework. Provides the "hooks" that security policy modules use, like SELinux , for example.
+bg=blue
+style=autoresize
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>150</x>
+      <y>680</y>
+      <w>160</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;50.0;140.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>290</x>
+      <y>580</y>
+      <w>190</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>Memory models
+bg=blue
+style=autoresize
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>130</x>
+      <y>580</y>
+      <w>180</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;20.0;160.0;20.0</additional_attributes>
+  </element>
+</diagram>
