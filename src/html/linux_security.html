@@ -27,6 +27,11 @@
 <h2>SE Linux</h2>
 <h3>References</h3>
 <ul>
+  <li><a href="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security-Enhanced_Linux/index.html"
+         target="_blank">Red Hat Enterprise Linux 6, Security-Enhanced Linux User Guide</a>.
+         <ul><li>Note: this &quot;article&quot;/section is mainly notes based on this reference.
+         This is a r-e-a-l-l-y good bit of documentation!</li></ul>
+  </li>
   <li><a href="http://people.redhat.com/dwalsh/SELinux/Presentations/ManageRHEL5.pdf"
          target="_blank">Managing Red Hat Enterprise Linux</a>, D J Walsh, K MacMilan.
          <ul><li>Note: this &quot;article&quot;/section is mainly notes based on this reference.</li></ul>
@@ -105,7 +110,7 @@
   </ul>
 </div></div>
 
-<h3>SELinux</h3>
+<h3>SELinux: A Bird's Eye View</h3>
 <p>
   SELinux stands for <u>S</u>ecurity <u>E</u>nhanced Linux. It is built on years of the NSA's
   security research and is an applicaton of their Flash security architecture, implemented as part of the
@@ -137,12 +142,23 @@
   which is the primary SELinux mechanism.
 </p>
 <p>
-  Now all processes and files have a <em>security context</em>. A security context defines the security settings
+  The basic, 30k foot view of SELinux operation is this...
+  Whenever a process accesses a file (this could be disk-based, a socket or shared memory, for example)
+  or some other resource, this is intercepted in the kernel by SELinux. It will check all of the
+  rules in the security policy and if the rules allow it access is granted, otherwise it is denied.
+  The same is true when a user attempts to start a process. This is shown below:
+</p>
+
+<h3>Security Contents</h3>
+<p>
+  All processes and files have a <em>security context</em>. A security context defines the security settings
   applied to a subject (user, resource etc). I guess the entire set of security contexts applied to everything
   ina system constitutes the security policy.
 </p>
 <p>
-  The SELinux <em>security context</em> is applied via a label associated with every user, process and resource:
+  The SELinux <em>security context</em> is applied via a label associated with every user, process and resource.
+  To put it another way, we can say that the rights of a process depend on it's security context. A security
+  context is defined as follows:
 </p>
 <pre>user:role:type:level</pre>
 <p>
@@ -154,6 +170,7 @@
   used by that processes must have a security context (remember denial by default).
 </p>
 <p>
+  A &quot;<em>domain</em>&quot; is a little bit of jargon you'll hear a lot:
   The security context associated with a process is called the processes' <em>domain</em>.
 </p>
 <blockquote>
