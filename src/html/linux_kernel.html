@@ -23,6 +23,10 @@
 <h1 class="title">Linux Kernel notes</h1>
 <div style="padding-right:10px;">
 
+<h2>Page Contents</h2>
+<div id="page_contents">
+</div>
+
 <h2>To Read</h2>
 <div>
   <ol>
@@ -52,7 +56,7 @@
   </ol>
 </div>
 
-<h2>Start Of Notes</h2>
+<h2>Configure &amp; Build the Linux Kernel</h2>
 <h3>Downloading The Kernel Source &amp; A Look At Its Structure</h3>
 <p>
   To download the latest, bleeding edge, of the kernel source, do the following:
@@ -145,13 +149,24 @@
   ARM Corgi platform. When you do this, the old <code>.config</code> will be overwritten by your
   new configuration.
 </p>
+<p>
+  Interestingly, but perhaps unsuprisingly, launching most of the config tools will involve a
+  compilation step on the host machine. You can see the exact steps taken by running the make command
+  with the extra option <code>V=1</code>. The make step is required to build the config tool being
+  used.
+</p>
 
 <h4>Menuconfig</h4>
 <p>
-  Menuconfig presents a nice ncurses display that you 
-  can navigate around using the instructions at the top of the window. You involke it 
-  using <code>make menuconfig</code>...
+  Menuconfig presents a nice ncurses display that you
+  can navigate around using the instructions at the top of the window. If you do not have ncurses
+  installed, install it using:
 </p>
+<pre>sudo apt-get install libncurses5-dev</pre>
+<p>
+  You can run menu config using:
+</p>
+<pre>make menuconfig</pre>
 <p>
   <img src="##IMG_DIR##/menuconfig.png" alt="Screen shot of kernel configuraton tool menuconfig"/>
 </p>
@@ -199,8 +214,13 @@ config MMU
 
 <h4>Xconfig</h4>
 <p>
-  Involked in the same way: <code>make ARCH=arm xconfig arch/arm/configs/corgi_config</code>, following our example so far.
+  Nicer GUI application that requires QT. If you no not have QT installed, you can do so by running the following command:
 </p>
+<pre>sudo apt-get install libqt4-dev</pre>
+<p>
+  Involked in the same way (following our example so far):
+</p>
+<pre>make ARCH=arm xconfig arch/arm/configs/corgi_config</pre>
 <p>
   <img src="##IMG_DIR##/xconfig.png" alt="Screen shot of kernel configuraton tool xconfig"/>
 </p>
@@ -211,7 +231,37 @@ config MMU
 
 </div>
 
+<h3 style="clear:both;">Building The Kernel</h3>
+<p>
+  The Kernels own documentation in <a href="https://www.kernel.org/doc/Documentation/kbuild/makefiles.txt"
+  target="_blank">Documentation/kbuild/makefiles.txt</a> is very comprehensive!
+</p>
+<p>
+  The makefile target <code>make oldconfig</code> <q>reads the existing .config file and prompts the user for options in the current kernel source that are not found in the file. This is useful when taking an existing configuration and moving it to a new kernel</q>
+  <a href="https://stackoverflow.com/questions/4178526/what-does-make-oldconfig-do-exactly-in-the-linux-kernel-makefile" target="_blank">[Ref]</a>. 
+  Before the command is run you would have copied an older kernel config file into the kernel
+  root as <code>.config</code>. This make target &quot;refreshes&quot; it by asking questions
+  for newer options not found in the config file.
+</p>
+<p>
+https://serverfault.com/questions/568395/what-is-creating-the-generated-autoconf-h
+</p>
 
+<pre>
+https://devtalk.nvidia.com/default/topic/906942/failed-to-compile-kernel-module-gcc-cannot-recognize-aarch64-option-mgeneral-regs-only-/
+
+https://developer.android.com/ndk/guides/standalone_toolchain.html
+
+  Aaaah cross compile for android, make sure you are using the Android prebuilt toolchains!
+
+   export PATH=/path-to-android-src-root/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/bin:$PATH
+   make prepare ARCH=arm64 CROSS_COMPILE=aarch64-linux-android- V=1
+
+
+   https://glandium.org/blog/?p=2664 - saving my arse!
+
+   Modules.symvers ???
+</pre>
 
 <h2 style="clear:both;">Unbind A Kernel Driver</h2>
 <p>
@@ -252,22 +302,7 @@ config MMU
 </p>
 <h2>Building The Kernel</h2>
 <div>
-    <pre>Can get kernel version using make kernelversion
-
-   sudo wget www.kernel.org/pub/linux/kernel/v5.x/linux-4.9.4.tar.bz2
-   tar xzvf linux-4.9.4.tar.gz 
-   cd linux-4.9.4/
-   make clean
-   sudo apt-get install libncurses5-dev
-   make menuconfig # needs curses
-or sudo apt-get install libqt4-dev
-   make xconfig # needs qt
-
-
-----
-
-
-http://newandroidbook.com/Book/Input.html
+    <pre>http://newandroidbook.com/Book/Input.html
 =========================================
 
 /proc/interupts - To look at interrupt lines claimed by drivers - architecture dependent
@@ -334,6 +369,11 @@ https://source.android.com/devices/input/touch-devices.html
 #                      Install the modules built in the module directory
 #                      Assumes install directory is already created
 </pre>
+
+<h2>Work Queues</h2>
+<p>
+  <img src="##IMG_DIR##/lin_kern_delayed_work.png" alt="Image of Linux kernel Work Queue structure and construction"/>
+</p>
 
 </div>
 

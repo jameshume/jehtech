@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>290</x>
+      <y>160</y>
+      <w>220</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>**delayed_work**
+&lt;&lt;workqueue.h&gt;&gt;
+--
+work : struct work_struct
+timer : struct timer_list
+wq : struct workqueue_struct *
+cpu : int
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>620</x>
+      <y>150</y>
+      <w>380</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>**work_struct**
+&lt;&lt;workqueue.h&gt;&gt;
+--
+data : atomic_long_t
+entry : struct list_head
+func : work_func_t
+lockdep_map : struct lockdep_map [if CONFIG_LOCKDEP]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>500</x>
+      <y>210</y>
+      <w>140</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>120.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>620</x>
+      <y>320</y>
+      <w>250</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>**workqueue_struct**
+&lt;&lt;workqueue.c&gt;&gt;
+--
+Meant to be opaque - pImpl pattern</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>500</x>
+      <y>210</y>
+      <w>140</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>120.0;150.0;70.0;150.0;70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>620</x>
+      <y>430</y>
+      <w>250</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>**timer_list**
+&lt;&lt;timer.h&gt;&gt;
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>500</x>
+      <y>210</y>
+      <w>140</w>
+      <h>260</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>120.0;240.0;70.0;240.0;70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>440</x>
+      <y>810</y>
+      <w>150</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>workqueue_struct*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>140</x>
+      <y>810</y>
+      <w>190</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>/create_workqueue("name")/
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>320</x>
+      <y>820</y>
+      <w>140</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>120.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>580</x>
+      <y>820</y>
+      <w>140</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>120.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>700</x>
+      <y>810</y>
+      <w>360</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>/queue_delayed_work(workqueue_struct*, work_struct*)/
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>580</x>
+      <y>700</y>
+      <w>220</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>200.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>780</x>
+      <y>690</y>
+      <w>190</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>/INIT_DELAYED_WORK()/
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>800</x>
+      <y>570</y>
+      <w>150</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>my_delayed_func</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>870</x>
+      <y>600</y>
+      <w>30</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>870</x>
+      <y>720</y>
+      <w>30</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>870</x>
+      <y>580</y>
+      <w>350</w>
+      <h>350</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+/called after delay/</panel_attributes>
+    <additional_attributes>80.0;10.0;230.0;10.0;230.0;330.0;10.0;330.0;10.0;270.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>450</x>
+      <y>700</y>
+      <w>130</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>work_struct</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>440</x>
+      <y>670</y>
+      <w>150</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>delayed_work</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>790</x>
+      <y>710</y>
+      <w>20</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=.
+1
+fg=red
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>150</x>
+      <y>830</y>
+      <w>20</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=.
+2
+fg=red
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>710</x>
+      <y>830</y>
+      <w>20</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=.
+3
+fg=red
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>820</x>
+      <y>590</y>
+      <w>20</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>lt=.
+4
+fg=red
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>150</x>
+      <y>500</y>
+      <w>1010</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;990.0;10.0</additional_attributes>
+  </element>
+</diagram>
