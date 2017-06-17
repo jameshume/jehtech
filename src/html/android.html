@@ -691,7 +691,7 @@ public class MainActivity extends AppCompatActivity {
 </p>
 
 <h4>Preparation</h4>
-<h5>Install OpenJDK</h5>
+<h5>Install OpenJDK (And Select The Right Version)</h5>
 <p>
   If you're building on Ubuntu 16 you will need to install Sun's OpenJDK
   <a href="https://askubuntu.com/questions/761127/how-do-i-install-openjdk-7-on-ubuntu-16-04-or-higher"
@@ -703,11 +703,41 @@ sudo apt-get install openjdk-7-jdk</pre>
 <p>
     Note that different versions of Android will require different versions of Java. You can
     install multiple versions of Java on your machine using <code>apt-get</code> and it won't
-    overwrite existing versions. To choose an &quot;active&quot; version use
+    overwrite existing versions. 
+</p>
+<div class="box_container">
+    <div class="info">
+        <p>Different versions of Android require different versions of Java. You can install
+        multiple Java versions, but make sure you have selected the &quot;active&quot; version
+        that is appropriate to your Android version. The compilation will warn you if it isnt.
+        </p>
+    </div>
+</div>
+<p>
+    To see what versions of Java you have available on your system type the following:
+</p>
+<pre><b>jehtech$</b> sudo update-alternatives --list java
+/usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java
+/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java</pre>
+<p>
+    Above I see on my system I have Java v 7 and 8 installed.
+</p>
+<p> 
+    To choose an &quot;active&quot; version use
     <code>sudo update-alternatives --config java</code>. It will display a little choice menu
     on your console that lists the installed versions (the currenly active version is marked by
-    a *). Just choose the version you want...
+    a *). Just choose the version you want:
 </p>
+<pre><b>jehtech$</b> sudo update-alternatives --config java
+There are 2 choices for the alternative java (providing /usr/bin/java).
+
+  Selection    Path                                            Priority   Status
+------------------------------------------------------------
+* 0            /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java   1081      auto mode
+  1            /usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java   1071      manual mode
+  2            /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java   1081      manual mode
+
+Press &lt;enter&gt; to keep the current choice[*], or type selection number:</pre>
 
 <h5>Install Repo</h5>
 <p>
