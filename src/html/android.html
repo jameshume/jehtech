@@ -73,10 +73,12 @@
     <li>https://www.slideshare.net/chrissimmonds/android-bootslides20</li>
     <li>https://forum.xda-developers.com/showthread.php?t=443994  -- HOWTO: Unpack, Edit, and Repack Boot Images</li>
     <li>http://people.redhat.com/dwalsh/SELinux/Presentations/ManageRHEL5.pdf AWESOME SELINUX INTRO</li>
+    <li>http://www.technobuzz.net/root-mi-note-2-and-install-twrp-recovery/</li>
+    <li>https://source.android.com/devices/input/key-layout-files</li>
   </ol>
 </div>
 
-<h2>Where Is The SDK And Accessing ADB From The Command Line</h2>
+<h2>Using ADB: Cheet sheet.</h2>
 <div>
   <h3>Find SDK And Add ADB To Path</h3>
   <p>
@@ -103,6 +105,34 @@
   <p>Where <code>xxx</code> is identifier for the device you wish to select as seen in the
      <code>adb devices -l</code> output.
   </p>
+  <p>
+    To wait for a device to become available:
+  </p>
+  <pre>adb [-s xxx] wait-for-usb-device</pre>
+  <p>
+    To switch to root (if you're phone has been rooted):
+  </p>
+  <pre>adb [-s xxx] root</pre>
+  <p>
+    To push a file to your device:
+  </p>
+  <pre>adb [-s xxx]  push your.file /data/local/tmp</pre>
+  <p>
+    To remount <code>/system</code> read/write:
+  </p>
+  <pre>adb remount</pre>
+  <p>
+    To view android logs:
+  </p>
+  <pre>adb logcat</pre>
+  <p>
+    To view kernel logs:
+  </p>
+  <pre>adb shell cat /proc/kmsg</pre>
+  <p>
+    To send keyevents:
+  </p>
+  <pre>adb shell input keyevent KEYCODE_BACK</pre>
 
   <h3>Fastboot ROMs</h3>
   <pre>adb reboot bootloader
@@ -126,6 +156,7 @@ fastboot boot boot.img</pre>
         <li>https://joeshaw.org/linux-input-ecosystem/</li>
         <li>http://rts.lab.asu.edu/web_438/project_final/Talk%208%20AndroidArc_Binder.pdf</li>
         <li>http://www.toptip.ca/2013/01/unix-domain-socket-with-abstract-socket.html?m=1<br/>and<br/>http://stackoverflow.com/questions/14643571/localsocket-communication-with-unix-domain-in-android-ndk<br/>and<br/>https://developer.android.com/reference/android/net/LocalServerSocket.html<br/>and<br/>https://developer.android.com/reference/android/net/LocalSocket.html</li>
+        <li>Key Layout Files - how to assign keys your driver passes to android a key code: https://source.android.com/devices/input/key-layout-files and https://developer.android.com/ndk/reference/keycodes_8h.html</li>
     </ul>
 </div> <!-- Building Android -->
 
@@ -1107,7 +1138,6 @@ The LocalServerSocket constructor
 
 <h2>Security</h2>
 <div>
-
   <h3>References</h3>
   <ul>
     <li><a href="https://source.android.com/security/selinux/concepts" target="_blank">SELinux concepts</a>, Android docs.</li>
@@ -1122,6 +1152,22 @@ The LocalServerSocket constructor
   </p>
 </div>
 
+<h2>Kernel Panics</h2>
+<pre>cat /proc/last_kmsg          # device must have CONFIG_ANDROID_RAM enabled in /proc. (newer than deprecated apanic)
+cat /proc/last_mcrash             # ???
+
+# The tombstone is simply a file with extra data about the crashed process
+cat /data/tombstones/tombstone_01 # replace 01 appropriately.
+
+# enable CONFIG_APANIC and set CONFIG_APANIC_PLABE (oldskool Android)
+ls /data/dontpanic                # some devices copy contents of several /proc files here.
+/proc/apanic_console              # saved to dontpanic.
+/proc/apanic_threads              # saved to dontpanic.
+
+https://stackoverflow.com/questions/18118807/linux-apanic-mechanism-and-difference-from-newer-ram-console-persistent-ram-mech
+http://elinux.org/Android_Kernel_Features#RAM_CONSOLE
+
+https://source.android.com/devices/tech/debug/</pre>
 
 </div> <!-- END PADDING DIV -->
 </body>

@@ -53,6 +53,13 @@
     </li>
     <li>http://irl.cs.ucla.edu/~yingdi/web/paperreading/smp_locking.pdf</li>
     <li>https://stackoverflow.com/questions/20301591/m-option-in-make-command-makefile</li>
+    <li>https://sysplay.in/blog/linux-kernel-internals/2015/04/kernel-threads/</li>
+    <li>http://www.evanjones.ca/software/threading-linus-msg.html - Linus on COE</li>
+    <li>https://www.kernel.org/doc/Documentation/timers/timers-howto.txt</li>
+    <li>include/linux/jiffies.h and kernel/time/jiffies.c</li>
+    <li>https://0xax.gitbooks.io/linux-insides/content/SyncPrim/sync-3.html</li>
+    <li>http://elinux.org/Debugging_by_printing</li>
+    <li>http://www.makelinux.net/ldd3/chp-11-sect-5</li>
   </ol>
 </div>
 
@@ -369,6 +376,164 @@ https://source.android.com/devices/input/touch-devices.html
 #                      Install the modules built in the module directory
 #                      Assumes install directory is already created
 </pre>
+
+<h2>Linux Kernel and Driver Development Training Lab Book</h2>
+<p>
+    Notes created whilst working through
+    <a href="http://free-electrons.com/doc/training/linux-kernel/linux-kernel-labs.pdf"
+       target="_blank">Linux Kernel and Driver Development Training Lab Book</a> by FreeElectrons.com.
+</p>
+
+<h3>Setup</h3>
+Note: To begin with I had a rather limited setup where I was doing this. I was compiling on a Linux
+server but only had a Windows desktop PC. Setting up an NFS server from Windows or from a Virtual Box running Linux
+or through Cygwin took way too much time and was getting in the way of actually learning anything
+so I gave up and used a pure Linux system... I'd advise anyone reading this to do the same!!!
+
+<h4>Download The Source</h4>
+<p>
+    Download the linux kernel:
+</p>
+<pre>git clone git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git --depth=1</pre>
+<p>
+    The flag <code>--depth=1</code> means we ignore all history to make download faster.
+</p>
+<p>
+    Use stable releases:
+</p>
+<pre>cd ~/linux-kernel-labs/src/linux/
+git remote add stable git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+git fetch stable</pre>
+
+<p>Select a branch:</p>
+<pre># list available braches
+git branch -a
+
+# Create a local branch starting from that remote branch
+git checkout -b 4.9.y stable/linux-4.9.y</pre>
+
+<h4>Setup USB to Serial</h4>
+<p>Picocom is a minimal dumb-terminal emulation program. Type Ctrl+A, Ctrl+X to exit once connected.
+</p>
+<pre>sudo apt-get install picocom
+sudo adduser $USER dialout
+picocom -b 115200 /dev/ttyUSB0
+</pre>
+
+<h4>Setup TFTP Server</h4>
+<pre>sudo apt-get install tftpd-hpa</pre>
+<p>
+    By default all files you want to be TFTP'able should be placed in <code>/var/lib/tftpboot</code>.
+    In my install, the directory was owned by root and not in any group which was a pain, so
+    <code>sudo chgroup YOUR_GROUP /var/lib/tftpboot</code> so you can get easier access to this
+    directory. <code>YOUR_GROUP</code> should be a group you already belong to, or a new group,
+    up to you. If you wanted to add a new group, say <code>tftp_users</code>, for example, you
+    could run <code>sudo groupadd tftp_users</code> and then run
+    <code> sudo adduser jh tftp_users </code>, to add yourself to the group and then
+    <code>sudo chgroup tftp_users /var/lib/tftpboot</code> to put the directory in this same group.
+    Then probably <code>sudo chmod g+w /var/lib/tftpboot</code> to give this new group write
+    permissions on the directory.
+</p>
+
+<h4>Setup NFS Server</h4>
+<pre>sudo apt-get install nfs-kernel-server</pre>
+<p>Run <code>sudo vi /etc/exports</code> to add this line, replacing &quot;&lt;user&gt;&quot;
+with your username and the IP address with your board's IP address.</p>
+<pre>/home/&lt;user&gt;/linux-kernel-labs/modules/nfsroot 192.168.2.100(rw,no_root_squash,no_subtree_check)</pre>
+<p>Restart server:</p>
+<pre>sudo /etc/init.d/nfs-kernel-server restart</pre>
+
+<h4> Setup Uboot</h4>
+<p>
+    The version of UBoot I had by default on my BB did not have the &quot;<code>saveenv</code>&quot;
+    command :( So, for now at least, I will type the boot commands manually rather than worrying
+    about creating a new UBoot image. Can do that later if this becomes a real pain.
+</p>
+
+<pre>setenv serverip 192.168.2.1
+setenv ipaddr 192.168.2.100
+tftp 0x81000000 test.txt
+md 0x81000000</pre>
+<p>
+    The memory dump showed contents of <code>test.txt</code>, so we know the TFTP server is
+    running correctly.
+</p>
+
+
+<h3>Compiling The Kernel</h3>
+<p>
+    This section of the lab book was a little thin. Export the following:
+</p>
+<pre>sudo apt-get install gcc-arm-linux-gnueabi # Get the cross compiler tool chain
+dpkg -L gcc-arm-linux-gnueabi # Find out path and name of tool chain
+</pre>
+<p>If the folder for the <code>gcc-arm-linux-gnueabi-</code> toolchain is not on your PATH,
+add it, then export the following environment variables...</p>
+<pre>export CROSS_COMPILE=arm-linux-gnueabi-
+export ARCH=arm</pre>
+<p>
+    To configure the kernel type:
+</p>
+<pre>make menuconfig omap2plus_defconfig</pre>
+<p>
+    Note the file <code>omap2plus_defconfig</code> is found in <code>arch/arm/configs/</code>.
+    Made sure config had <code>CONFIG_ROOT_NFS=y</code> set. To find this hit &quot;/&quot; and
+    type CONFIG_ROOT_NFS. The search results will look like this:
+</p>
+<p><img src="##IMG_DIR##/linux-labs-mennuconfig1.png" alt="Screenshot of Linux menuconfig search results for CONFIG_ROOT_NFS"/></p>
+<p>
+    The red box highlights the information we need: how to find this configuration option
+    in the menu system, which can be quite a maze. Navigate File Systems > Network File Systems and
+    you should see the menu shown below:
+</p>
+<p><img src="##IMG_DIR##/linux-labs-mennuconfig2.png" alt="Screenshot of Linux menuconfig File Systems > Network File Systems"/></p>
+<p>
+    The image above shows a <code>[*]</code> next to &quot;NFS client support&quot;. This means that
+    the support will be compiled into the kernel image. All of the other options with an <code>[M]</code>
+    next to them are compiled as modules. They will not be included in the compiled kernel image
+    but can be loaded seperately as modules later. Modules marked with <code>[ ]</code> are not
+    compiled at all.
+</p>
+<p>
+    Exit and save your config. You will see the exit message:
+</p>
+<pre># configuration written to .config</pre>
+<p>
+    The config system has copied the file <code>arch/arm/configs/omap2plus_defconfig</code> to the
+    root directory and merged in any changes you made manually from the menuconfig utility.
+</p>
+<p>
+    Now set the build the kernel:
+</p>
+<pre>make -j16 # -j sets number of threads used for build</pre>
+<p>
+    The last build message you should see is...
+</p>
+<pre>Kernel: arch/arm/boot/zImage is ready</pre>
+<p>
+    If you list the directory <code>arch/arm/boot</code> you will see the <code>zImage</code> file
+    and another file named <code>dts/am335x-bone.dtb</code>. This is the Linux Device Tree blob.
+    It gives the entire hardware description of the board in a format the Kernel can read &amp; understand.
+    <a href="https://events.linuxfoundation.org/sites/events/files/slides/petazzoni-device-tree-dummies.pdf"
+       target="_blank">[Ref]</a>. Copy both files to TFTP home directory.
+</p>
+<p>
+    Now we can boot the kernel. From UBoot type:
+</p>
+<pre>setenv bootargs root=/dev/nfs rw ip=192.168.2.100 console=ttyO0 nfsroot=192.168.2.1:/linlab
+setenv serverip 192.168.2.1
+setenv ipaddr 192.168.2.100
+tftp 0x81000000 zImage
+tftp 0x82000000 am335x-boneblack.dtb
+bootz 0x81000000 - 0x82000000</pre>
+
+<p>
+    The NFS directory it booted from (you should see a message &quot;<code> VFS: Mounted root (nfs filesystem) on device 0:14</code>&quot;)
+    should contain the data from the course labs <a href="http://free-electrons.com/doc/training/linux-kernel/linux-kernel-labs.tar.xz">TAR file</a>.
+    If it does not,  you will see a kernel panic saying &quot;<code> Kernel panic - not syncing: No working init found</code>&quot;. If you 
+    see this, make sure that the directory you shared as <code>/linlab</code> contains the <code>modules\nfsroot</code> folder from the
+    lab file.
+</p>
 
 <h2>Work Queues</h2>
 <p>
