@@ -558,6 +558,22 @@ fi</pre>
          </p>
       </div> <!-- END: H2 -->
 
+      <h2>Users, Groups, Permissions</h2>
+      <div>
+        <p>Change the group assigned to a resource:</p>
+        <pre>sudo chgroup &lt;group-name&gt; &lt;resource&gt;</pre>
+        <p>Change the owner/group/all permissions assigned to a resource</p>
+        <pre>sudo chmod [ogu]+[rwx] &lt;resource&gt;</pre>
+        <p>Add a user to a group:</p>
+        <pre>sudo adduser &lt;new-username&gt; &lt;group-name&gt;</pre>
+        <p>Create a new group:</p>
+        <pre>sudo groupadd &lt;new-groupname&gt;</pre>
+        <p>List groups user belongs too:</p>
+        <pre>groups</pre>
+        <p>List all groups on system:</p>
+        <pre>cut -d: -f1 /etc/group</pre>
+      </div> <!-- END: H2 -->
+
       <h2>Linux Prompt With Colours</h2>
       <div>
          <p>
