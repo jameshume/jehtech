@@ -133,13 +133,23 @@
     To send keyevents:
   </p>
   <pre>adb shell input keyevent KEYCODE_BACK</pre>
+  <p>
+    To install an app:
+  </p>
+  <pre>adb install app-name.apk</pre>
+  <p>
+    To reboot [into recovery]:
+  </p>
+  <pre>adb reboot [recovery]</pre>
 
-  <h3>Fastboot ROMs</h3>
+  <h3>Fastboot &amp; Flash ROMs</h3>
   <pre>adb reboot bootloader
-fastboot boot boot.img</pre>
+fastboot boot boot.img
+fastboot flash boot boot.img
+fastboot flash recovery recovery.img
+fastboot reboot</pre>
 
-  <h3>Recovery</h3>
-  <pre>adb reboot recovery</pre>
+
 
 </div> <!-- END Where is the SDK -->
 

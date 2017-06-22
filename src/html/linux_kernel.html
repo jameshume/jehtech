@@ -27,14 +27,23 @@
 <div id="page_contents">
 </div>
 
-<h2>To Read</h2>
+<h2>References / To Read</h2>
 <div>
   <ol>
+    <li><a href="http://free-electrons.com/doc/books/lkn.pdf"
+           target="_blank">Linux Kernel In A Nutshell</a>, Greg Kroah-Hartman, O'Reilly Media (PDF of entire book release by free electrons!).
+    </li>
+    <li><a href="https://doc.lagout.org/operating%20system%20/linux/Essential%20Linux%20Device%20Drivers.pdf"
+           target="_blank">Essential Linux Device Drivers</a>, Sreekrishnan Venkateswaran, Prentice Hall (Not sure if this is legit?)</a>
+    </li>
     <li><a href="https://googleprojectzero.blogspot.co.uk/2016/06/exploiting-recursion-in-linux-kernel_20.html"
            target="_blank">Exploiting Recursion in the Linux Kernel </a>,
     </li>
     <li><a href="http://free-electrons.com/doc/training/linux-kernel/linux-kernel-labs.pdf"
            target="_blank">Linux Kernel and Driver Development Training Lab Book</a>, FreeElectrons.com.
+    </li>
+    <li><a href="http://free-electrons.com/doc/training/linux-kernel/linux-kernel-slides.pdf"
+           target="_blank">Linux Kernel and Driver Development Training Slides</a>, FreeElectrons.com.
     </li>
     <li><a href="https://events.linuxfoundation.org/sites/events/files/slides/petazzoni-device-tree-dummies.pdf"
            target="_blank">Linux Device Tree For Dummies</a> Thomas Petazzoni.
@@ -64,6 +73,7 @@
 </div>
 
 <h2>Configure &amp; Build the Linux Kernel</h2>
+<div>
 <h3>Downloading The Kernel Source &amp; A Look At Its Structure</h3>
 <p>
   To download the latest, bleeding edge, of the kernel source, do the following:
@@ -87,7 +97,7 @@
   The <code>Documentation</code> directory is very useful! Here you can find many bits of documentation
   on the Linux kernel. The files are mostly text files, but under <code>Documentation/DocBook</code>
   you will find a set of files that can be built using <code>make</code> to produce PDF or HTML
-  documentation. 
+  documentation.
 </p>
 <p>
   If, for example you are interested in learning about the kernel debugger, there
@@ -110,7 +120,7 @@
 </p>
 <p>
   The <code>fs</code> directory houses filesystem modules. These support a managery of file systems
-  like FAT, NTFS, ext3, ext4 and more. These allow the Linux user to mount Windows file systems, 
+  like FAT, NTFS, ext3, ext4 and more. These allow the Linux user to mount Windows file systems,
   use the Linux filesystems and many more, including Mac.
 </p>
 
@@ -118,7 +128,7 @@
 <p>
   The Kernel... a pretty complex beast. As such there is a lot of configuration that can be done.
   Most hardware providers will have reference configurations that are used as a basis for product
-  specific configurations. Some distributions will provide the configuration file used to build 
+  specific configurations. Some distributions will provide the configuration file used to build
   the kernel in the <code>/boot</code> directory. Or sometimes in <code>/proc/config.gz</code>,
   but this is often not configured as a build option.
 </p>
@@ -127,7 +137,7 @@
   are generally many thousands of lines long.
 </p>
 <p>
-  Given that there are so many options, Linux provides utilities to help with the configuration 
+  Given that there are so many options, Linux provides utilities to help with the configuration
   processes (as well as reference configurations from various distros/manufacturers etc).
 </p>
 <p>
@@ -137,6 +147,7 @@
 <ol>
   <li>config - this is a basic command line interface: a ton of yes/no style of questions, which you don't want to use!</li>
   <li>menuconfig - an ncurses inferface with help options etc.</li>
+  <li>nconfig - a newer version of menuconfig with improved user interface, still ncurses based.</li>
   <li>xconfig - a GUI based interface.</li>
 </ol>
 <p>
@@ -152,7 +163,7 @@
   When you are compiling your own kernel you will probably specify the architecture so you'd specify
   something like <code>make ARCH=arm menuconfig</code>, for example. But, this will still use a
   default config and probably not the one you want. Therefore the full make command will be something
-  like <code>make ARCH=arm menuconfig arch/arm/configs/corgi_config</code>, if you're building for the 
+  like <code>make ARCH=arm menuconfig arch/arm/configs/corgi_config</code>, if you're building for the
   ARM Corgi platform. When you do this, the old <code>.config</code> will be overwritten by your
   new configuration.
 </p>
@@ -179,7 +190,7 @@
 </p>
 <p>
   What you'll notice is that there are a nice set of menus and when you use the help you will
-  be given some information about the item you've selected. 
+  be given some information about the item you've selected.
   For example, the help for <code>System Type &gt; MMU-based Paged Memory Management Support</code>,
   reads as follows:
 </p>
@@ -245,7 +256,7 @@ config MMU
 </p>
 <p>
   The makefile target <code>make oldconfig</code> <q>reads the existing .config file and prompts the user for options in the current kernel source that are not found in the file. This is useful when taking an existing configuration and moving it to a new kernel</q>
-  <a href="https://stackoverflow.com/questions/4178526/what-does-make-oldconfig-do-exactly-in-the-linux-kernel-makefile" target="_blank">[Ref]</a>. 
+  <a href="https://stackoverflow.com/questions/4178526/what-does-make-oldconfig-do-exactly-in-the-linux-kernel-makefile" target="_blank">[Ref]</a>.
   Before the command is run you would have copied an older kernel config file into the kernel
   root as <code>.config</code>. This make target &quot;refreshes&quot; it by asking questions
   for newer options not found in the config file.
@@ -269,8 +280,10 @@ https://developer.android.com/ndk/guides/standalone_toolchain.html
 
    Modules.symvers ???
 </pre>
+</div> <!-- End H2 -->
 
 <h2 style="clear:both;">Unbind A Kernel Driver</h2>
+<div>
 <p>
   Most drivers have an entry under <code>/sys/bus/xxx/drivers/yyy</code>. For example if you
   <code>ls</code> the directory <code>/sys/bus</code> you will see somthing similar to the
@@ -307,6 +320,8 @@ https://developer.android.com/ndk/guides/standalone_toolchain.html
   Under the <code>drivers</code> directory we can see (above) a list of devices for which drivers
   exist.
 </p>
+</div> <!-- End H2 -->
+
 <h2>Building The Kernel</h2>
 <div>
     <pre>http://newandroidbook.com/Book/Input.html
@@ -376,12 +391,15 @@ https://source.android.com/devices/input/touch-devices.html
 #                      Install the modules built in the module directory
 #                      Assumes install directory is already created
 </pre>
+</div> <!-- End H2 -->
 
 <h2>Linux Kernel and Driver Development Training Lab Book</h2>
+<div>
 <p>
     Notes created whilst working through
     <a href="http://free-electrons.com/doc/training/linux-kernel/linux-kernel-labs.pdf"
-       target="_blank">Linux Kernel and Driver Development Training Lab Book</a> by FreeElectrons.com.
+       target="_blank">Linux Kernel and Driver Development Training Lab Book</a> by FreeElectrons.com, 
+    whilst consulting the <a href="http://free-electrons.com/doc/training/linux-kernel/linux-kernel-slides.pdf" target="_blank">accompanying slides</a>.
 </p>
 
 <h3>Setup</h3>
@@ -434,14 +452,49 @@ picocom -b 115200 /dev/ttyUSB0
     Then probably <code>sudo chmod g+w /var/lib/tftpboot</code> to give this new group write
     permissions on the directory.
 </p>
+<p>
+  Alternatively you could change the root directory that the sever uses (see below).
+</p>
+<p>
+  To start/stop etc the server use the following commands:
+</p>
+<pre>service tftpd-hpa status # Usefully also prints out logs
+service tftpd-hpa stop
+service tftpd-hpa start
+service tftpd-hpa restart</pre>
+<p>
+  To edit the server configuration edit <code>/etc/default/tftpd-hpa</code>. The default when
+  I installed it was this:
+</p>
+<pre>TFTP_USERNAME=&quot;tftp&quot;
+TFTP_DIRECTORY=&quot;/var/lib/tftpboot&quot;
+TFTP_ADDRESS=&quot;:69&quot;
+TFTP_OPTIONS=&quot;--secure&quot;</pre>
+<p>
+  To the options I added <code>--verbose</code>.
+</p>
 
 <h4>Setup NFS Server</h4>
+<p>The Linux Kernel, as configured for the lab book exercises, mounts the root file system over
+NFS. Thus we need to setup the NFS server on our machine. Note: I tried doing this from a Windows
+box and it is torture so just use a native Linux machine and save yourself heartache...</p>
 <pre>sudo apt-get install nfs-kernel-server</pre>
 <p>Run <code>sudo vi /etc/exports</code> to add this line, replacing &quot;&lt;user&gt;&quot;
 with your username and the IP address with your board's IP address.</p>
 <pre>/home/&lt;user&gt;/linux-kernel-labs/modules/nfsroot 192.168.2.100(rw,no_root_squash,no_subtree_check)</pre>
 <p>Restart server:</p>
 <pre>sudo /etc/init.d/nfs-kernel-server restart</pre>
+<p>
+  Now unpack the lab files so that you get the directory mentioned above:
+</p>
+<pre>cd /home/&lt;user&gt;
+wget http://free-electrons.com/doc/training/linux-kernel/linux-kernel-labs.tar.xz
+tar xvf linux-kernel-labs.tar.xz</pre>
+<p>
+  For futher information on how to configure the NFS server and even shorted the export path
+  used, see the Ubuntu community guide
+  <a href="https://help.ubuntu.com/community/SettingUpNFSHowTo" target="_blank">SettingUpNFSHowTo</a>.
+</p>
 
 <h4> Setup Uboot</h4>
 <p>
@@ -457,6 +510,10 @@ md 0x81000000</pre>
 <p>
     The memory dump showed contents of <code>test.txt</code>, so we know the TFTP server is
     running correctly.
+</p>
+<p>
+  NOTE: In UBoot, if you want to copy-past these into picocom copy the text into an editor
+  and then replace newlines by &quot;&amp;&amp;&quot; to get a one-liner.
 </p>
 
 
@@ -505,14 +562,17 @@ export ARCH=arm</pre>
 <p>
     Now set the build the kernel:
 </p>
-<pre>make -j16 # -j sets number of threads used for build</pre>
+<pre># * -jX (optional) sets number of threads used for parallel build.
+# * V=1 (optional) puts the build into verbose mode so that you can
+#   see the toolchain commands being involked.
+make -j16 V=1</pre>
 <p>
     The last build message you should see is...
 </p>
 <pre>Kernel: arch/arm/boot/zImage is ready</pre>
 <p>
     If you list the directory <code>arch/arm/boot</code> you will see the <code>zImage</code> file
-    and another file named <code>dts/am335x-bone.dtb</code>. This is the Linux Device Tree blob.
+    and another file named <code>dts/am335x-boneblack.dtb</code>. This is the Linux Device Tree blob.
     It gives the entire hardware description of the board in a format the Kernel can read &amp; understand.
     <a href="https://events.linuxfoundation.org/sites/events/files/slides/petazzoni-device-tree-dummies.pdf"
        target="_blank">[Ref]</a>. Copy both files to TFTP home directory.
@@ -520,7 +580,7 @@ export ARCH=arm</pre>
 <p>
     Now we can boot the kernel. From UBoot type:
 </p>
-<pre>setenv bootargs root=/dev/nfs rw ip=192.168.2.100 console=ttyO0 nfsroot=192.168.2.1:/linlab
+<pre>setenv bootargs root=/dev/nfs rw ip=192.168.2.100 console=ttyO0 nfsroot=192.168.2.1:/home/&lt;user&gt;/linux-kernel-labs/modules/nfsroot
 setenv serverip 192.168.2.1
 setenv ipaddr 192.168.2.100
 tftp 0x81000000 zImage
@@ -528,20 +588,287 @@ tftp 0x82000000 am335x-boneblack.dtb
 bootz 0x81000000 - 0x82000000</pre>
 
 <p>
-    The NFS directory it booted from (you should see a message &quot;<code> VFS: Mounted root (nfs filesystem) on device 0:14</code>&quot;)
+    The NFS directory it booted from (you should see a message &quot;<code>VFS: Mounted root (nfs filesystem) on device 0:14</code>&quot;)
     should contain the data from the course labs <a href="http://free-electrons.com/doc/training/linux-kernel/linux-kernel-labs.tar.xz">TAR file</a>.
-    If it does not,  you will see a kernel panic saying &quot;<code> Kernel panic - not syncing: No working init found</code>&quot;. If you 
-    see this, make sure that the directory you shared as <code>/linlab</code> contains the <code>modules\nfsroot</code> folder from the
+    If it does not,  you will see a kernel panic saying &quot;<code>Kernel panic - not syncing: No working init found</code>&quot;. If you
+    see this, make sure that the directory you shared as <code>/home/&lt;user&gt;/linux-kernel-labs/modules/nfsroot</code> contains the <code>modules\nfsroot</code> folder from the
     lab file.
 </p>
 
+<h3>Writing Modules</h3>
+<h4>References</h4>
+<ul>
+  <li>Linux Kernel Development, Third Edition, Robert Love.</li>
+  <li><a href="https://www.kernel.org/doc/Documentation/kbuild/modules.txt" target="_blank">Building External Modules</a>, Linux Kernel Documentation.</li>
+  <li><a href="https://glandium.org/blog/?p=2664" target="_blank">Building A Linux Kernel Module Without The Exact Kernel Headers</a>, Glandium.org.</li>
+  <li><a href="https://github.com/jameshume/free-electrons-linux-kernel-labs/tree/master/hello" target="_blank">My solutions to exercises</a>.</li>
+</ul>
+<h4>Building and Loading</h4>
+<p>
+  The lab book instructions at this point really are pretty sparse. Writing the module isn't
+  hard and grepping the source code for files with &quot;version&quot; in their name brought me to
+  <code>&lt;linux-root&gt;/fs/proc/version.c</code>, which shows how to get the Linux version.
+  My solution is
+  <a href="https://github.com/jameshume/free-electrons-linux-kernel-labs/tree/master/hello" target="_blank">here on GitHub</a> and 
+  a snapshot is shown below:
+</p>
+<pre class="prettyprint linenums">static int __init hello_init(void)
+{...}
+
+static void __exit hello_exit(void)
+{...}
+
+module_init(hello_init);
+module_exit(hello_exit);</pre>
+<p>
+  The only interesting things in the snippet are the tokens <code>__init</code> and <code>__exit</code>.
+  The functions marked by <code>__init</code> can be removed after either kernel boot or module load completes
+  and the functions marked by <code>__exit</code> can be removed by the compiler if the code is built
+  into the kernel, as these functions would never be called.
+</p>
+<p>
+  Navigate to the NFS file system you unpacked and exported over NFS. Change to the <code>root/hello</code>.
+  In the Makefile, I have changed the value of <code>$KDIR</code> as I stashed the kernel source
+  in a different location to that specified in the lab book. Run <code>make all</code> to build.
+</p>
+<p>
+  Once built, from the board's console you can type <code>insmod /root/hello/hello_version.ko</code>
+  to load the module.
+</p>
+<p>
+  In my <a href="https://github.com/jameshume/free-electrons-linux-kernel-labs/tree/master/hello" target="_blank">GitHub area</a>,
+  I've used my own external build, outside the lab directory, but doing it the lab way will also do an external build. I preffered the
+  former so that I could stash everything in my GitHub repo more easily.
+</p>
+<h4>How Linux Verifies &amp; Loads Modules</h4>
+<p>
+  At this point I want to use some previous learning to talk about how the Kernel loads modules and
+  why <b>you should build modules with the <i>exact</i> kernel headers used to compile your kernel</b> <a href="https://glandium.org/blog/?p=2664" target="_blank">[Ref]</a><a href="https://unix.stackexchange.com/questions/125624/unable-to-load-module-disagrees-about-version-of-symbol-module-layout" target="_blank">[Ref]</a>. In summary...
+</p>
+<blockquote>
+  <p>...The Linux kernel contains data structures whose layout varies not only from version to version but also depending on the compilation options. As a consequence, when you compile a kernel module, you need to have not only the header files from the kernel source, but also some header files that are generated during the kernel compilation...
+  </p>
+  <footer>-- <a href="https://unix.stackexchange.com/questions/125624/unable-to-load-module-disagrees-about-version-of-symbol-module-layout" target="_blank">Gilles' answer</a> on SO</footer>
+</blockquote>
+<p>
+  When you build your module you'll get a whole load of files generated in your module's
+  directory.
+</p>
+<p>
+  One file of importance is <code>Module.symvers</code>, which contains a list of all
+  exported symbols from a kernel build <a href="https://www.kernel.org/doc/Documentation/kbuild/modules.txt" target="_blank">[Ref]</a>
+  and their corresponding CRC (if <code>CONFIG_MODVERSIONS</code> is enabled, which it is in this lab).
+</p>
+<p>
+  This set of exported kernel symbols is known as the <em>exported kernel interfaces</em>. Modules
+  can only use these explicitly exported functions which are marked as exported in the kernel code
+  by the macro <code>EXPORT_SYMBOL_[GPL]</code> (the <code>_GPL</code> suffix is option, i.e., we have 2 macros here).
+</p>
+<p>
+  Another file of import is <code>hello_version.mod.c</code>, which is auto-generated by the build
+  and compiled into the resulting <code>.ko</code> kernel object file. The file contains some information
+  that is used to &quot;tag&quot; the module with the verssion of the kernel it was built against,
+  so that when it is loaded, the running kernel can check that the module was compiled against the
+  correct kernel headers <a href="https://glandium.org/blog/?p=2664" target="_blank">[Ref]</a>.
+</p>
+<p>
+  In <code>hello_version.mod.c</code>, the macro <code>MODULE_INFO(vermagic, VERMAGIC_STRING)</code>
+  is used (define in <a href="http://elixir.free-electrons.com/linux/latest/source/include/linux/moduleparam.h" target="_blank"><code>linux/moduleparam.h</code></a>). This macro will define a static and constant variable in the section <code>.modinfo</code>.
+  The variable name is based on the tag, which in this case is &quot;vermagic&quot;. The value is defined by <code>VERMAGIC_STRING</code> which is
+  based on the the kernel version and git repo status. Thus, when
+  the module is loaded the kernel can scan the <code>.modinfo</code> section of the module object file
+  for the &quot;vermagic&quot; symbol and check that it matches the kernel's own version magic, in
+  this way checking that the module being loaded is indeed written for this version of the kernel.
+</p>
+<p>
+  In this file we also see how the module intialisation and exit functions are found by the kernel,
+  and also realise what the macros <code>module_init</code> and <code>module_exit</code> do:
+</p>
+<pre class="prettyprint linenums">__visible struct module __this_module
+__attribute__((section(".gnu.linkonce.this_module"))) = {
+    .name = KBUILD_MODNAME,
+    .init = init_module,
+#ifdef CONFIG_MODULE_UNLOAD
+    .exit = cleanup_module,
+#endif
+    .arch = MODULE_ARCH_INIT,
+};</pre>
+<p>
+  So here we can see a structure that is stored in a specific section. When loading the module
+  the kernel will be able to find this structure in this section and consult the member variables
+  <code>.init</code> and <code>.exit</code> to locate the module's initialisation and exit functions.
+</p>
+
+<h4>Debugging</h4>
+<p>
+  Bugger! The first problem I saw was when I tried to load the module using <code>insmod</code>:
+</p>
+<pre>[ 7121.807971] hello_version: disagrees about version of symbol <b>module_layout</b>
+insmod: can't insert 'hello_version.ko': invalid module format</pre>
+<p>
+  This implies a mismatch between the kernel version and the header files the module was compiled
+  against! This is very strange as I must surely be building against the right kernel... I've built
+  the kernel and loaded it on the BB after all!
+</p>
+<p>
+  Refering back to the file <code>hello_version.mod.c</code>, this symbol can be found:
+</p>
+<pre class="prettyprint linenums">static const struct modversion_info ____versions[]
+__used
+__attribute__((section("__versions"))) = {
+    { 0xb1dd2595, __VMLINUX_SYMBOL_STR(module_layout) },
+...</pre>
+<p>
+This structure is declared in <code>include/linux/module.h</code> and looks like this:
+</p>
+<pre class="prettyprint linenums">struct modversion_info {
+  unsigned long crc;
+  char name[MODULE_NAME_LEN];
+};</pre>
+<p>
+  So we can see that the <code>.mod.c</code> file is creating an array of <code>modversion_info</code>
+  structs in the section named <code>__versions</code>. The symbol named &quot;module_layout&quot;
+  (the macro <code>__VMLINUX_SYMBOL_STR</code> just strigifies it's argument) is given a CRC value of
+  <code>0xb1dd2595</code>.
+  This CRC value has been read out of <code>Module.symvers</code>.
+</p>
+<p>
+  So, the &quot;invalid module format&quot; message is due to a mismatch between the module's
+  recorded CRC for the symbol <code>module_layout</code> and the CRC the kernel expects (see
+  <code>check_version()</code> in <code>kernel/module.c</code>). Question is how on earth
+  has this happened?!
+</p>
+<p>
+  Just using <code>modprobe -f &lt;module&gt;</code><a href="https://askubuntu.com/questions/14627/no-symbol-version-for-module-layout-when-trying-to-load-usbhid-ko" target="_blank">[Ref]</a> won't get
+  me out of trouble here either :(
+</p>
+<p>
+  So, now deciding to enable debug for just <code>kernel/module.c</code> so that the <code>pr_debug()</code> macros
+  will become non-empty and emmit debugging information
+  <a href="https://www.kernel.org/doc/local/pr_debug.txt" target="_blank">[Ref]</a>.
+  When re-building the kernel I used the following:
+</p>
+<pre class="prettyprint linenums">make clean &amp;&amp; make -j16 CFLAGS_module.o=-DDEBUG</pre>
+<p>
+  If you type <code>dmesg</code> with debug enabled for <code>module.c</code>, you'll see a lot
+  more information output to the system log.
+</p>
+<p>
+  <b>Balls! Cleaning and recompiling kernel solved this issue!</b>
+</p>
+
+<h4>Adding A Parameter To The Module</h4>
+<p>
+  Modules can be given parameters at either boot time, if compiled into the kernel, or on module
+  load. They allow some flexibility in module configuration so that, for instance, you could take
+  the same binary and run it on different systems by just toggling a parameter... useful!
+</p>
+<p>
+  Define using:
+</p>
+<pre class="prettyprint linenums">/* params:
+ *   name - name if parameter variable you declared in your code and
+ *          the name exposed to user (to use different names use
+ *          module_param_named())
+ *   type - paramers data type: byte | [u]short | [u]int | [u]long |
+ *          charp | [inv]bool
+ *   perm - octal format or by or'ing S_IRUGO | S_IWUSR etc etc
+ */
+... definition-of-your-variable-name ...
+module_param(name, type, perm);</pre>
+<p>
+  So for the lab exercise, have to add:
+</p>
+<pre class="prettyprint linenums">static char *who_param = NULL;
+module_param(who_param, charp, 0644);</pre>
+<p>
+  Another way of doing this would be to get the kernel to copy the string into a buffer:
+</p>
+<pre class="prettyprint linenums">#define MAX_WHO_SIZE 25
+static char who_param_buf[MAX_WHO_SIZE];
+module_param_string(who_param, who_param_buf, MAX_WHO_SIZE, 0644);</pre>
+<p>
+  Recompile the module and then load it by typing, for example:
+</p>
+<pre class="prettyprint linenums">insmod hello_version.ko who_param=JEHTech</pre>
+
+<h4>Adding Time Information</h4>
+<p>
+  See <code><a href="http://elixir.free-electrons.com/linux/latest/source/include/linux/timekeeping.h#L18" target="_blank">include/linux/timekeeping.h</a></code>.
+</p>
+<pre class="prettyprint linenums">/*** In your driver */
+#include &lt;linux/time.h&gt;
+void do_gettimeofday(struct timeval *tv)
+
+/*** From include/uapi/linux/time.h */
+struct timeval {
+  __kernel_time_t   tv_sec;   /* seconds */
+  __kernel_suseconds_t  tv_usec;  /* microseconds */
+};</pre>
+<p>
+   So for our driver, we need to record the time when it was loaded and then record the time when
+   it was removed and calculate the difference. Also note that <b>floating point operations
+   should not be done in kernel code</b>, in case you were thinking of converting values to doubles
+   to do the maths.
+</p>
+<pre class="prettyprint linenums">/*** Global variables: */
+struct timeval load_time, unload_time;
+
+/*** In the init function: */
+do_gettimeofday(&amp;load_time);
+
+/*** In the exit function */
+struct timeval diff_time;
+do_gettimeofday(&amp;unload_time);
+
+diff_time.tv_sec = unload_time.tv_sec - load_time.tv_sec;
+diff_time.tv_usec = unload_time.tv_usec - load_time.tv_usec;
+if (diff_time.tv_usec < 0) {
+   diff_time.tv_usec += 1000000;
+   diff_time.tv_sec -= 1;
+}
+
+printk(KERN_ALERT "Driver loaded for %ld seconds, %ld usec\n", diff_time.tv_sec, diff_time.tv_usec);
+printk(KERN_ALERT "Goodbye\n");</pre>
+
+<h4>Follow Linux Kernel Coding Standards</h4>
+<pre>~/linux-kernel-labs/src/linux/scripts/checkpatch.pl --file --no-tree hello_version.c</pre>
+
+<h3>I2C Driver For Wii Nunchuck</h3>
+<h4>References</h4>
+<ul>
+  <li>Essential Linux Device Drivers, S. Vankateswaran, Prentice Hall.</li>
+  <li><a href="https://www.kernel.org/doc/Documentation/i2c/instantiating-devices" target="_blank">How To Instantiate I2C Devices</a>, Linux Docs.</li>
+  <li><a href="https://www.kernel.org/doc/Documentation/i2c/writing-clients" target="_blank">Writing I2C Clients</a>, Linux Docs.</li>
+  <li><a href="https://www.kernel.org/doc/Documentation/i2c/functionality" target="_blank">Checking I2C Functionality Supported</a>, Linux Docs.</li>
+</ul>
+
+<h4>The Linux I2C Core</h4>
+<p>
+  The I<sup>2</sup>C core is a set of convenience functions for driver developers that &quot;hook&quot;
+  into the Linux driver infrastructure...
+</p>
+<blockquote>
+  <p>
+    The I<sup>2</sup>C core is a code base consisting of routines and data structures available to
+    host adapter drivers and client drivers. Common code in the core makes the driver developer's
+    job easier.
+  </p>
+  <footer>Chapter 8, Essential Linux Device Drivers</footer>
+</blockquote>
+<p></p>
+
+
+</div> <!-- End H2 -->
+
 <h2>Work Queues</h2>
+<div>
 <p>
   <img src="##IMG_DIR##/lin_kern_delayed_work.png" alt="Image of Linux kernel Work Queue structure and construction"/>
 </p>
+</div> <!-- End H2 -->
 
 </div>
-
 </div>
 </body>
 </html>
