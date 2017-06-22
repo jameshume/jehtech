@@ -1011,7 +1011,7 @@ when     // An event time stamp</pre>
   <p>
     <img src="##IMG_DIR##/android_raw_event.png" alt="Class diagram of Android RawEvent structure"/>
   </p>
-  <p>
+  <p style="clear: all;">
   	There are 3 special raw event types: <code>DEVICE_ADDED</code>, <code>DEVICE_REMOVED</code>
   	and <code>FINISHED_DEVICE_SCAN</code>. As the RawEvent type is assigned the
     Linux event type, these special types are given values higher than the existing Linux event
@@ -1068,8 +1068,13 @@ when     // An event time stamp</pre>
     block waiting for further events. As many events as possible are read into a list which is then, as descibed already, processed on the
     next loop iteration.
   </p>
+  <p style="float: left;">
+    <img src="##IMG_DIR##/android_readNotifyLocked.png" alt="Flow diagram of Android EventHub readNotifyLocked function" style="float: left;"/>
+    <img src="##IMG_DIR##/android_openDeviceLocked.png" alt="Flow diagram of Android EventHub  openDeviceLocked function" style="float: left;"/>
+  </p>
+  <p style="clear: both;"></p>
 
-  <h3>Input Reader</h3>
+  <h3  style="clear: both;">Input Reader</h3>
   <p>
   	So onto the next component, the <code>InputReader</code>... this is a more complicated class than
   	the event hub - its almost 6 times larger in terms of LoC! (And the EventHub was complicated enough :-S).
