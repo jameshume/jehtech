@@ -118,6 +118,9 @@ fig.savefig(r'pandas_landreg.png')
             <p>You can use other paramters like <code>names=['col1', ...]</code> to give columns specific names. To set the index name use <code>df.index.name = 'a_name'</code>.</p>
             </pre>
 
+            <h3>From A CSV File</h3>
+            <pre class="prettyprint linenums lang-python">df = <a href="https://pandas.pydata.org/pandas-docs/stable/generated/pandas.read_csv.html" target="_blank">pandas.read_csv</a>(filename, header=None, skipinitialspace=True)</pre>
+
             <h3>From Microsoft Excel File</h3>
             <p>Also really easy:</p>
             <pre class="prettyprint linenums lang-python">df = <a href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.read_excel.html#pandas-read-excel" target="_blank">pandas.read_excel</a>('filename', sheetname='string or int-index', index_col=0, skiprows=0, names=['col1_name', ...])</pre>
@@ -159,6 +162,23 @@ df.datetime_column = pd.to_datetime(dfAssayInf.datetime_column, format=DATETIME_
 	        <pre class="prettyprint linenums lang-python">df.newNanCol = np.nan
 df.newStringCol = ""
 # And so on...</pre>
+
+            <h3>Remove Rows Where No Column Has A Value From A Set</h3>
+            <pre>df[df.isin([list, of, values]).any(axis=1)]</pre>
+
+            <h3>Select Columns Of Certain Types</h3>
+            <p>
+                To return a dataframe with only columns of certain types or excluding certain types
+                use:
+            </p>
+            <pre><a href="https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.select_dtypes.html" target="_blank">df.select_dtypes</a>(include=[...], exclude=[...])</pre>
+            <p>
+                You can select numeric types using <code>'numpy.number'</code>, strings (and objects) using <code>'object'</code>, datetimes using <code>'datetime'</code> and much more (see the doc link).
+            </p>
+
+            <h3>Trim All Strings</h3>
+            <pre>df_obj = <a href="https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.select_dtypes.html" target="_blank">df.select_dtypes</a>(['object'])
+df[df_obj.columns] = df_obj.<a href="https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.apply.html" target="_blank">apply</a>(lambda x: x.str.strip())</pre>
         </div> <!-- END H2 Cleaning Data -->
 
         <h2>Row Operations</h2>
