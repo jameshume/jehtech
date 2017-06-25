@@ -1,0 +1,617 @@
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="13.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>630</x>
+      <y>390</y>
+      <w>460</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>Bus Type A</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>850</x>
+      <y>420</y>
+      <w>220</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>Map
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>860</x>
+      <y>450</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>DevID_A.1
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>960</x>
+      <y>450</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Drv_A
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>960</x>
+      <y>480</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Drv_A
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>860</x>
+      <y>480</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>DevID_A.2
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>860</x>
+      <y>510</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>DevID_B
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>960</x>
+      <y>510</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Drv_B
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>900</x>
+      <y>530</y>
+      <w>30</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=.
+lw=10
+group=1</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1000</x>
+      <y>530</y>
+      <w>30</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=.
+lw=10
+group=1</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1270</x>
+      <y>460</y>
+      <w>100</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>Driver For 
+Device A</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1050</x>
+      <y>460</y>
+      <w>240</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+Register</panel_attributes>
+    <additional_attributes>10.0;20.0;220.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1170</x>
+      <y>470</y>
+      <w>30</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1120</x>
+      <y>520</y>
+      <w>120</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>*device_driver*
+
+.probe =
+.remove=
+.shutdown =
+.suspend =
+.resume =</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>650</x>
+      <y>780</y>
+      <w>200</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>Adapter Driver 
+For Bus Type A</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>740</x>
+      <y>600</y>
+      <w>90</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+Register</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;180.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>740</x>
+      <y>820</y>
+      <w>30</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=-
+lw=3</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>820</x>
+      <y>880</y>
+      <w>100</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>Device A.1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>740</x>
+      <y>880</y>
+      <w>100</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=-
+</panel_attributes>
+    <additional_attributes>80.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1310</x>
+      <y>230</y>
+      <w>90</w>
+      <h>250</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+Register
+
+
+
+</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;230.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>1220</x>
+      <y>130</y>
+      <w>200</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>Framework</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>860</x>
+      <y>110</y>
+      <w>90</w>
+      <h>300</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+Register</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;280.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>640</x>
+      <y>80</y>
+      <w>450</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>Core</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>640</x>
+      <y>170</y>
+      <w>120</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>*bus_type*
+
+.match =
+.uevent
+.probe =
+.remove=
+.shutdown =
+.suspend =
+.resume =
+.online =
+.offline =</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>750</x>
+      <y>250</y>
+      <w>140</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;120.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>740</x>
+      <y>910</y>
+      <w>50</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=.
+Bus
+lw=3</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>550</x>
+      <y>650</y>
+      <w>120</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>*device_driver*
+
+.probe =
+.remove=
+.shutdown =
+.suspend =
+.resume =</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>660</x>
+      <y>700</y>
+      <w>110</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;90.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>910</x>
+      <y>880</y>
+      <w>170</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=.
+represented
+by</panel_attributes>
+    <additional_attributes>150.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1060</x>
+      <y>880</y>
+      <w>100</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>device</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1140</x>
+      <y>900</y>
+      <w>270</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>At the lowest level, every device in a Linux system is represented by an instance of struct device. The device structure contains the information that the device model core needs to model the system.
+fg=white
+bg=gray
+transparency=0
+lw=2
+layer=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1360</x>
+      <y>380</y>
+      <w>270</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>The device driver-model tracks all of the drivers known to the system. The main reason for this tracking is to enable the driver core to match up drivers with new devices.
+fg=white
+bg=gray
+transparency=0
+lw=2
+layer=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>320</x>
+      <y>480</y>
+      <w>350</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>A bus is a channel between the processor and one or more devices. For the purposes of the device model, all devices are connected via a bus, even if it is an internal, virtual, "platform" bus. Buses can plug into each other. A USB controller is usually a PCI device, for example. The device model represents the actual connections between buses and the devices they control.
+fg=white
+lw=2
+bg=gray
+transparency=0
+layer=2
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>150</x>
+      <y>0</y>
+      <w>440</w>
+      <h>450</h>
+    </coordinates>
+    <panel_attributes>bg=#aaaaaa
+lw=2
+The bus type object provides the driver core with this interface:
+
+*match:	*
+Called, perhaps multiple times, whenever a new device or driver is added for this bus.
+*uevent: *
+Called when a device is added, removed, or a few other things that generate uevents to add the environment variables.
+*probe: *
+Called when a new device or driver add to this bus, and callback the specific driver's probe to initial the matched device.
+*remove: *
+Called when a device removed from this bus.
+*shutdown: *
+Called at shut-down time to quiesce the device.
+*online: *
+Called to put the device back online (after offlining it).
+*offline: *
+Called to put the device offline for hot-removal. May fail.
+*suspend: *
+Called when a device on this bus wants to go to sleep mode.
+*resume: *
+Called to bring a device on this bus out of sleep mode.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1250</x>
+      <y>540</y>
+      <w>440</w>
+      <h>350</h>
+    </coordinates>
+    <panel_attributes>lw=2
+bg=#aaaaaa
+The device driver supplies the bus object with a set of callbacks - an interface by which the bus controller can talk to the device driver...
+
+*probe: *
+This callback holds the driver-specific logic to bind the driver to a given device. That includes verifying that the device is present, that it's a version the driver can handle, that driver data structures can be allocated and initialized, and that any hardware can be initialized.
+*remove: *
+Called to unbind a driver from a device. This may be called if a device is physically removed from the system, if the driver module is being unloaded, etc.
+*shutdown: *
+Called at shut-down time to quiesce the device.
+*suspend: *
+Called to put the device to sleep mode. Usually to a low power state.
+*resume: *
+Called to bring a device from sleep mode.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1170</x>
+      <y>630</y>
+      <w>100</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;80.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>580</x>
+      <y>210</y>
+      <w>80</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>60.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1360</x>
+      <y>470</y>
+      <w>570</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+
+Exports attributes
+
+
+
+</panel_attributes>
+    <additional_attributes>550.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1910</x>
+      <y>470</y>
+      <w>100</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>Driver
+Attributes</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1750</x>
+      <y>550</y>
+      <w>140</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>*driver_attribute*
+
+.show =
+.store=</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1810</x>
+      <y>480</y>
+      <w>30</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>90</x>
+      <y>440</y>
+      <w>560</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+
+Exports attributes
+
+
+
+</panel_attributes>
+    <additional_attributes>10.0;20.0;540.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>440</y>
+      <w>100</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>Bus
+Attributes</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>100</x>
+      <y>520</y>
+      <w>140</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>*bus_attribute*
+
+.show =
+.store=</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>160</x>
+      <y>450</y>
+      <w>30</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
+  </element>
+</diagram>
