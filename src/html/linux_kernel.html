@@ -401,12 +401,18 @@ https://source.android.com/devices/input/touch-devices.html
        target="_blank">Linux Kernel and Driver Development Training Lab Book</a> by FreeElectrons.com, 
     whilst consulting the <a href="http://free-electrons.com/doc/training/linux-kernel/linux-kernel-slides.pdf" target="_blank">accompanying slides</a>.
 </p>
+<p>
+    Use the lab slides! To begin with I hadn't found them and thought the lab book was a little
+    short on descriptions. When I found out they also had slides it made a lot more sense!
+</p>
 
 <h3>Setup</h3>
+<p>
 Note: To begin with I had a rather limited setup where I was doing this. I was compiling on a Linux
 server but only had a Windows desktop PC. Setting up an NFS server from Windows or from a Virtual Box running Linux
 or through Cygwin took way too much time and was getting in the way of actually learning anything
 so I gave up and used a pure Linux system... I'd advise anyone reading this to do the same!!!
+</p>
 
 <h4>Download The Source</h4>
 <p>
@@ -421,7 +427,11 @@ so I gave up and used a pure Linux system... I'd advise anyone reading this to d
 </p>
 <pre>cd ~/linux-kernel-labs/src/linux/
 git remote add stable git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
-git fetch stable</pre>
+git fetch stable [--depth=1]</pre>
+<p>
+    Again you can use <code>--depth=1</code> to speed up the download, but note you won't have
+    any log history
+</p>
 
 <p>Select a branch:</p>
 <pre># list available braches
@@ -485,7 +495,8 @@ with your username and the IP address with your board's IP address.</p>
 <p>Restart server:</p>
 <pre>sudo /etc/init.d/nfs-kernel-server restart</pre>
 <p>
-  Now unpack the lab files so that you get the directory mentioned above:
+  Now unpack the <a href="http://free-electrons.com/doc/training/linux-kernel/linux-kernel-labs.tar.xz">lab files</a> 
+  so that you get the directory mentioned above:
 </p>
 <pre>cd /home/&lt;user&gt;
 wget http://free-electrons.com/doc/training/linux-kernel/linux-kernel-labs.tar.xz
@@ -517,7 +528,16 @@ md 0x81000000</pre>
 </p>
 
 
-<h3>Compiling The Kernel</h3>
+<h3>Compiling &amp; Booting The Kernel (+ DTB)</h3>
+<h4>References</h4>
+<ul>
+    <!-- <li><a href="" target="_blank"></a></li> --> 
+    <li><a href="https://github.com/torvalds/linux/blob/master/Documentation/kbuild/makefiles.txt" target="_blank">Linux Kernel Makefiles</a>, Kernel Documentation.</li>
+    <li><a href="https://events.linuxfoundation.org/sites/events/files/slides/petazzoni-device-tree-dummies.pdf" target="_blank">Device Tree For Dummies</a>, T Petazzoni.</li>
+    <li><a href="https://www.kernel.org/doc/ols/2008/ols2008v2-pages-27-38.pdf" target="_blank">A Symphony of Flavours: Using the device tree to describe embedded hardwarw</a>, G Likely, J Boyer.</li>
+</ul>
+
+<h4>Compiling The Kernel</h4>
 <p>
     This section of the lab book was a little thin. Export the following:
 </p>
@@ -577,6 +597,52 @@ make -j16 V=1</pre>
     <a href="https://events.linuxfoundation.org/sites/events/files/slides/petazzoni-device-tree-dummies.pdf"
        target="_blank">[Ref]</a>. Copy both files to TFTP home directory.
 </p>
+
+<h4>What Are The zImage and DTB Files?</h4>
+<p>
+    So, we have two files: <code>arch/arm/boot/zImage</code> and <code>arch/arm/boot/dts/am335x-boneblack.dtb</code>,
+    but what are they?
+</p>
+<p>
+    The <code>zImage</code> is a compressed kernel image that has a little bit of code in front of 
+    the compressed blob that will makes it bootable and self extracting so that the kernel propper 
+    can be decompressed into RAM and then run.
+</p>
+<p>
+    The <code>am335x-boneblack.dtb</code> is a Linux Device Tree Blob. This is a binary format
+    that the kernel can read and <q>contains the description of the hardware</q> <a href="https://events.linuxfoundation.org/sites/events/files/slides/petazzoni-device-tree-dummies.pdf" target="_blank">[Ref]</a>. This method was adopted 
+    to try and standardise how hardware information was passed to the kernel because in the
+    embedded world there was little standardisation and systems varied considerably <a href="https://www.kernel.org/doc/ols/2008/ols2008v2-pages-27-38.pdf" target="_blank">[Ref]</a>.
+</p>
+<blockquote>
+    <p>
+        In the simplest terms, a device tree is a data structure that
+        describes the hardware configuration. It includes infor-
+        mation about the CPUs, memory banks, buses, and pe-
+        ripherals. The operating system is able to parse the data
+        structure at boot time and use it to make decisions about
+        how to configure the kernel and which device drivers to
+        load.
+    </p>
+    <footer><a href="https://www.kernel.org/doc/ols/2008/ols2008v2-pages-27-38.pdf" target="_blank">
+        A Symphony of Flavours: Using the device tree to describe embedded hardware, G. Likely, J Boyer</a>
+    </footer>
+</blockquote>
+<p>
+    So, this is what the <code>.dtb</code> file is. It is generated by many <code>.dts</code> files,
+    which are text files containing a human readable &quot;map&quot; (tree really) of the system's
+    hardware.
+</p>
+<p>
+    Using DTB's we can somewhat decouple the kernel build from the hardware it is running on, rather
+    than having to do a specific kernel build for every hardware variant out there!
+</p>
+<p>
+    Mostly everything is moving towards using device trees. If <code>CONFIG_OF</code> is defined
+    you know you are in Kernel with device tree and open firmware support enabled.
+</p>
+
+<h4>Booting The Kernel</h4>
 <p>
     Now we can boot the kernel. From UBoot type:
 </p>
@@ -593,6 +659,18 @@ bootz 0x81000000 - 0x82000000</pre>
     If it does not,  you will see a kernel panic saying &quot;<code>Kernel panic - not syncing: No working init found</code>&quot;. If you
     see this, make sure that the directory you shared as <code>/home/&lt;user&gt;/linux-kernel-labs/modules/nfsroot</code> contains the <code>modules\nfsroot</code> folder from the
     lab file.
+</p>
+<p>
+    Based on the previous section we can understand what we have done here. We are booting a 
+    zImage. The first argument is the address of the zImage. The second argument is the hyphen, which specifies the address
+    of the initrd in memory as non-existant, i.e., there is no ramfs, and the third argument is the address of the DTB that UBoot will pass
+    to the Kernel.
+</p>
+<p>
+    The other important evironment variable set is <code>bootargs</code>. This is a string that
+    is passed to the kernel. UBoot will pass this to the kernel. In this case it contains all the
+    information required to tell the kernel to try and mount the root directory over NFS and boot
+    from it.
 </p>
 
 <h3>Writing Modules</h3>
@@ -860,6 +938,34 @@ printk(KERN_ALERT "Goodbye\n");</pre>
 <p></p>
 
 
+</div> <!-- End H2 -->
+
+<h2>Linux Drivers</h2>
+<div>
+<h3>References</h3>
+<ul>
+<li><a href="https://www.kernel.org/doc/Documentation/driver-model/overview.txt" 
+       target="_blank">Linux Device Driver Model Overview</a>, Linux Docs.
+</li>
+<li><a href="http://free-electrons.com/doc/training/linux-kernel/linux-kernel-slides.pdf"
+       target="_blank">Linux Kernel and Driver Development Training Slides</a>, FreeElectrons.com.
+</li>
+</ul>
+
+<h3>Intro</h3>
+<p>
+  The slides do a fantastic job of describing the Linux driver infrastructure. The following image is
+  an annoted rehash of their digrams with some extra added in from the Linux docs...
+</p>
+<p>
+  <img src="##IMG_DIR##/driver_model.png" alt="Diagram of Linux device driver model. bus_type, device_driver, device."/>
+</p>
+<p>
+  This next diagram isn't quite right because the core is involved too, I think, ... so err... when I learn a bit more...
+</p>
+<p>
+<img src="##IMG_DIR##/new_device_flow.png" alt="Sequence of events when device added to Linux system"/>
+</p>
 </div> <!-- End H2 -->
 
 <h2>Work Queues</h2>
