@@ -15,5 +15,5 @@ fi
 echo "Session type is \"$MY_SESSION_TYPE\""
 if [ "$MY_SESSION_TYPE" != "remote" ]; then
    echo "Launching browser..."
-   firefox ../__deployed/index.html
+   firefox ../__deployed/index.html & disown
 fi
