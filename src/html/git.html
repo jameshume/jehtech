@@ -83,6 +83,33 @@ ssh -i /absolute/path/to/key/folder/id_rsa $*</pre>
 
 <h2>Create A Public/Private Keypair And Add To Your Keyring</h2>
 <div>
+    <p>
+        References:
+    </p>
+    <ul><li><a href="https://confluence.atlassian.com/display/BITBUCKET/Set+up+SSH+for+Git" target="_blank">Set up SSH for Git</a>, Atlassian Documentation.</li>
+        <li><a href="https://help.github.com/articles/connecting-to-github-with-ssh/" target="_blank">Connecting to GitHub with SSH</a>, GitHub Help.</li>
+    </ul>
+
+    <p>Check your home directory (if on a corporate network it might not be what you expect).</p>
+    <pre>echo $HOME
+echo ~</pre>
+
+    <p>To create SSH key pair:</p>
+    <pre>ssh-keygen</pre>
+
+    <p>To see your public key type:</p>
+    <pre>cat ~/.ssh/id_rsa.pub</pre>
+
+    <p>To check that SSH is working...</p>
+    <pre>ssh -T git@bitbucket.org
+# or...
+ssh -T git@github.org</pre>
+
+    <p>To see if the key has been added to the client keyring...</p>
+    <pre>ssh-list -l
+# or...
+ssh -vT address-of-server</pre>
+
 	<p>
 		Followed the GitHub instructions to create the private/public RSA key pair. Having obtained
 		this key it can be added to the keyring using the following, but this addition is <em>not</em>
@@ -146,12 +173,14 @@ grepping life a lot easier!
 
 <h2>Cheat Sheet Of Basic Git Commands</h2>
 <div>
+    <!-- ++++++++++++++++++++++++++++++++ -->
     <h3>Creating Git Repos</h3>
     <p>
         To create a repo in the CWD:
     </p>
     <pre>git init</pre>
 
+    <!-- ++++++++++++++++++++++++++++++++ -->
     <h3>Cloning Git Repos</h3>
     <p>
         To clone a repo:
@@ -165,6 +194,166 @@ git clone git://repo_addr [dirname] # Will have r/w access</pre>
         to <code>https://repo_addr</code>.
     </p>
 
+    <!-- ++++++++++++++++++++++++++++++++ -->
+    <h3>Checking Out Repos</h3>
+    <pre>git checkout commit-hash | tag-name | branch-name</pre>
+
+    <!-- ++++++++++++++++++++++++++++++++ -->
+    <h3>Git Branches</h3>
+    <p>
+        A branch is lightweight moveable pointer to a commit and the default branch name
+        is &quot;master&quot;. HEAD points to current branch head, so changes when you change branch.
+    </p>
+
+    <p>
+        To list all the branches in the repo type:
+    </p>
+    <pre>git branch</pre>
+    <p>You can filter the list with the <code>--merged</code> and <code>--no-merged</code> options 
+        to see branches that are not merged back in etc.</p>
+
+    <p>To create and checkout a new branch use:
+    </p>
+    <pre>git branch new-branch-name
+git checkout new-branch-name</pre>
+    <p>The shorthand for the above is:</p>
+    <pre>git checkout <b>-b</b> new-branch-name</pre>
+
+    <p>To &quot;delete&quot; a branch (branch history still exists and is recoverable):</p>
+    <pre>git branch <b>-d</b> branch-name</pre>
+
+    <p>To switch branches use:</p>
+    <pre>git checkout branch-name</pre>
+    <p>Now, HEAD will point to new branch and NOT prev branch.</p>
+    <p>Note that switching branches changes files in your working directory.
+         When you switch branches, Git resets your working directory to look
+         like it did the last time you committed on that branch.</p>
+
+
+    <!-- ++++++++++++++++++++++++++++++++ -->
+    <h3>Adding Files To Your Git Repo</h3>
+    You must add files from your workspace into the Git index so that Git knows what to track...
+    <pre>git add .  # adds all files (tracked or not) in cwd
+git add -u # puts all changed tracked files into staging area (i.e., wont add new files)
+git add -A # does both of the above</pre>
+    <p>
+       Note that if you modify a file <em>after</em> staging, the modifications after the stage
+        will not be committed in this commit unless added again.
+    </p>
+
+    <!-- ++++++++++++++++++++++++++++++++ -->
+    <h3>Committing Files</h3>
+    <p>Each commit is pointer to snapshot plus author/committer details, msg etc and
+        pointer to prev commit (or commits if this is a result of merge).
+        </p>
+    <p>
+        To commit all <em>staged</em> changes:
+    </p>
+    <pre>git commit -m &quot;your msg here&quot;</pre>
+
+    <p>
+        To commit all tracked files, staged or not, use:
+    </p>
+    <pre>git commit <b>-a</b> -m &quot;...&quot;</pre>
+    <p>Any tracked file that is not staged will be automatically staged.</p>
+
+    <p>
+        To ammed the last commit, adding in all currently staged files use:
+    </p>
+    <pre>git commit --amend</pre>
+    <p>
+        This will give you the chance to modify the last commit (launches text editor) and will
+        also add any currently staged files into the last commit. For example:
+    </p>
+    <pre>git commit -m &quot;a commit where I forgot to add a file&quot;
+git add forgotten_file
+git commit --amend</pre>
+
+    <!-- ++++++++++++++++++++++++++++++++ -->
+    <h3>Git Logs: Viewing Your History</h3>
+    <p>
+        To get a summary of changes made with author, date, full commit hash and description:
+    </p>
+    <pre>git log</pre>
+    
+    <p>
+        To get a one-line-per-commit summary (short hash and description):
+    </p>
+    <pre>git log <b>--online</b></pre>
+
+    <p>
+        To get a log between versions/tags/commits/nranches etc:
+    </p>
+    <pre>git log <b>chng..chng</b></pre>
+    <p>
+        where <code>chng</code> can be a tag name, a commit's hash, a branch name etc.
+    </p>
+
+    <p>To limit the log to the last 5 entries:</p>
+    <pre>git log -5</pre>
+
+    <p>To view the differences introduced in each commit:</p>
+    <pre>git log -p</pre>
+  
+    <p>To view the logs for the last two weeks:</p>
+    <pre>git log --since=2.weeks</pre>
+    <p>
+        Use &quot;&lt;number&gt;.&lt;time-period-type&gt;&quot;. So, for example, the time period could also
+        be &quot;days&quot; or &quot;hours&quot;.
+    </p>
+
+    <p>To grep the log for commits that introduces a change to the code that added or removed a
+        search string:
+    </p>
+    <pre>git log -S&lt;search-string&gt;</pre>
+
+    <p>To really pretty-print your logs:</p>
+    <pre>git log --oneline --decorate --graph --all</pre>
+
+    <!-- ++++++++++++++++++++++++++++++++ -->
+    <h3>Tagging Files With Git</h3>
+    <p>
+        Tags are &quot;nice&quot; names by which you can identify snapshots of a repo. For example,
+        you will likely tag releases.
+    </p>
+    <pre>git tag -a &lt;tag-name&gt; -m "Description of tag"
+        ^^
+        -a means create an annotated tag (stores name, date and msg)</pre>
+
+    <p>To list all the available tags in your repo:</p>
+    <pre>git tag</pre>
+
+    <p>To search for tags with names matching a given pattern:</p>
+    <pre>get tag -l &lt;pattern&gt;</pre>
+
+    <!-- ++++++++++++++++++++++++++++++++ -->
+    <h3>Undoing Things</h3>
+    <p>To revert the file in the SVN sense:</p>
+    <pre>git checkout -- filename</pre>
+    <p>To unstage a file:</p>
+    <pre>git reset HEAD filename</pre>
+    <p>To remove a file from repo withOUT deleting it locally:</p>
+    <pre>git rm --cached myfile.name</pre>
+
+    <h4>The CWD (not commited changes)</h4>
+    <p>
+        <b>WARNING:</b> these commands work on the current working directory and not on 
+        committed snapshots, therefore any changes are permanent and cannot be recovered!
+    </p>
+    <p>
+        To undo all uncomitted changes to tracked files use:
+    </p>
+    <pre>git reset --hard</pre>
+    <p>
+        To remove untracked files use:
+    </p>
+    <pre>git clean -f</pre>
+    
+    <h4>Committed changes</h4>
+    <p>
+        To undo a commit use:
+    </p>
+    <pre>git revert commit-id</pre>
 </div>
 
 <h2>Add &amp; Commit A Subset Of Changes: Hunks</h2>
@@ -175,6 +364,9 @@ git clone git://repo_addr [dirname] # Will have r/w access</pre>
         one depended on another, or it was a quick fix for something I noticed on the fly and was
         so simple it wasn't worth creating a branch just for this fix. Either way, I end up with a
         file that contains changes that address multiple bugs/tickets.
+    </p>
+    <p>
+        Note: you can also accomplish the same thing using an interactive rebase.</p>
     </p>
     <p>
         Lets test it out. Create a new repo and add a test file...
@@ -316,64 +508,6 @@ index 312d3cd..67cc02e 100644
 <h2>Basic Git Notes</h2>
 <div>
 	<pre>
-Git's basic structure
-   1. Workspace
-   2. Index
-      Add files from your workspace into the index so that git knows
-      what to track. (git add (-u))
-
-      `git add .` adds all new files in cwd
-      `git add -u" updates tracking for files changed (i.e., wont add new files)
-      `git add -A` does both of the above
-   3. Local repo
-      Commit files in the index to the local repo
-      `git commit -m "your descriptive message"`
-      Still a LOCAL actions
-   4. Remote repo
-      git push (origin master)
-
-
-
-
-SSH
-   https://confluence.atlassian.com/display/BITBUCKET/Set+up+SSH+for+Git
-   https://help.github.com/articles/generating-ssh-keys
-
-   Check your home directory (if on a corporate network it might not be what you expect).
-      echo $HOME
-      echo ~
-
-   To create SSH key pair;
-      ssh-keygen
-
-   To see your public key type
-      cat ~/.ssh/id_rsa.pub
-
-   To check that SSH is working...
-      ssh -T git@bitbucket.org
-      or ssh -T git@github.org
-
-   To see if the key has been added to the client keyring...
-      ssh-list -l
-      or ssh -vT address-of-server
-
-
-
-Files: Tracked ---&gt; staged (git add)  ---&gt; comitted to local (git commit)  ---&gt; commited to remote (git push origin master)
-
-Short status: git status -s
-
-Ignoring files: File globs in .gitignore
-                Blank lines or lines starting with # are ignored.
-                Standard glob patterns work.
-                You can negate a pattern by starting it with an exclamation point (!)
-                Two asterisks to match nested directories; a/**/z
-                Rules accumulate. E.g:
-                   # no .a files
-                   *.a
-                   # but do track lib.a, even though you're ignoring .a files above
-                   !lib.a
-
 List Files In Repo
 
 List files currently being tracked on branch master:
@@ -396,38 +530,8 @@ Diffing
 
    git difftool to use external diff tool
 
-Committing
-   git commit -m "your msg here"
-   git commit -a -m "..." to SKIP staging (Git automatically
-       stage every file that is already tracked before doing the commit)
-   git commit --amend (modify the last commit, e.g change msg etc)
-                       takes your staging area and uses it for the commit
-                       EG
-                          git commit -m 'initial commit'
-                          git add forgotten_file
-                          git commit --amend
 
-View history
-   git log -n - n is integer limiting output to last n entries
-   git log -p shows differences introduced in each commit
-   git log --since=2.weeks
-   git log -Sstring_to_search  shows the commits that introduced a change
-                               to the code that added or removed string
-   git log --oneline --decorate --graph --all
 
-Undoing things
-   To revert the file in the SVN sense:
-      git checkout -- filename
-   To unstage a file:
-      git reset HEAD filename
-   To remove a file from repo withOUT deleting it locally:
-      git rm --cached myfile.name
-
-Branches
-   Branch is another version of the same directory. the default is master.
-   `git checkout -b branchname`
-   `git branch` to see what branch you're on
-   `git checkout master` to switch back to the master branch type
 
 
 Remotes
@@ -451,33 +555,7 @@ Remotes
       Can use git push -u origin master - The -u tells get to remember parameters so next time
                                           can just type "git push".
 
-Branching
-   Each commit is poitner to snapshot plus author/committer details, msg etc and
-   pointer to prev commit (or commits if this is a result of merge).
 
-   Branch is lightweight moveable pointer to a commit.
-
-   Default branch name is "master"
-
-   git branch [branch-name] - create branch pointing to same commit you're currently on.
-                              but does NOT auto change to it.
-
-   git branch - NO arguments just lists the branches (current branch marked with *)
-      filter list with --merged and --no-merged to see branches that not merged back in etc.
-
-   HEAD points to current branch head, so changes when you change branch
-
-   To SWITCH BRANCH use
-      git checkout branch-name
-   Now, HEAD will point to new branch and NOT prev branch
-
-   NOTE: SWITCHING BRANCHES CHANGES FILES IN YOUR WORKING DIRECTORY.
-         When you switch branches, Git resets your working directory to look
-         like it did the last time you committed on that branch!
-
-   git checkout -b branch-name is shorthand for
-      git branch branch-name
-      git checkout branch-name
 
 
 Integrate
