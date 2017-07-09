@@ -505,6 +505,40 @@ index 312d3cd..67cc02e 100644
 
 </div> <!-- END Adding Only Parts Of Giles -->
 
+<h2>Integrating</h2>
+<div>
+    <h3>Fast forward</h3>
+    <p>
+        <img src="##IMG_DIR##/git_fastfwd.png" alt = "Fast forward merge of branches in Git"/>
+    </p>
+    <p>
+        From the master directory you would merge in the new feature. But because the history
+        has not divereged Git can just fast forward the master's HEAD to point to the latest
+        commit.
+    </p>
+    <p>
+        Would be done using something like this:
+    </p>
+    <pre># create a new branch of master
+git checkout master
+git checkout -b new_feature 
+
+# do some development in the new branch and then commit
+git commit -m "Some new development, a fix, whatever"
+
+# Go back to master and merge in the &quot;new_feature&quot; branch...
+git checkout master
+git merge new_feature</pre>
+
+    <h3>Merging</h3>
+    <p>
+        <img src="##IMG_DIR##/git_merge.png" alt = "Merging branches in Git"/>
+    </p>
+
+    <h3>Rebasing</h3>
+    <p></p>
+</div>
+
 <h2>Basic Git Notes</h2>
 <div>
 	<pre>
