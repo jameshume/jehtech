@@ -519,9 +519,9 @@ index 312d3cd..67cc02e 100644
     <p>
         Would be done using something like this:
     </p>
-    <pre># create a new branch of master
+    <pre  class="prettyprint linenums"># create a new branch of master
 git checkout master
-git checkout -b new_feature 
+git checkout -b new_feature
 
 # do some development in the new branch and then commit
 git commit -m "Some new development, a fix, whatever"
@@ -535,11 +535,67 @@ git branch -d new_feature</pre>
 
     <h3>Merging</h3>
     <p>
+        Git will do 3-way merge using the common ancestor.
+        In this case, because the history between the master and feature branches has diverged,
+        a simple fast-forward integration can not be performed. Instead a new commit in the master
+        branch is created that exists soley to identify that a merge has taken place.
+    </p>
+    <p style="float: left;">
         <img src="##IMG_DIR##/git_merge.png" alt = "Merging branches in Git"/>
+    </p>
+    <p>
+        Would be done using something like this:
+    </p>
+    <pre  class="prettyprint linenums"># create a new branch of master
+git checkout master
+git checkout -b new_feature
+
+# do some development in the new branch and then commit
+git commit -m "Some new development, a fix, whatever"
+
+# !! Meanwhile someone else creates extra commits on the master branch !!
+
+# Go back to master and merge in the &quot;new_feature&quot; branch...
+git checkout master
+git merge new_feature
+
+# Cleanup feature branch
+git branch -d new_feature</pre>
+    <p style="clear: both;">
+        A lot of people (including me) like these kinds of integration. Its the typical way merging is done in other
+        revision control systems like SVN, for example. All the history is preserved and it is
+        clear that this commit represents a merge.
+    </p>
+    <p>
+        However, a counter argument is that we might not want to &quot;pollute&quot; our master
+        branch with commits that only represent a merge. The idea is that the master line should
+        show a story where each commit is some extra feature or bug-fix. We shouldn't see a ton
+        of merge-commits (could be a ton in a busy master branch!). We only want to see
+        the story, and that story should course-grained (i.e, for a bug fix only one extra commit
+        rather than the many commits that may have been made in the development branch). This is
+        why a lot of Git users prefer rebasing (see below).
     </p>
 
     <h3>Rebasing</h3>
-    <p></p>
+    <p>The Git world offers something that CVS, SVN, Perforce etc users won't be as familiar 
+       with... rebasing. It gives you a cleaner (no merge commits polluting the project history) 
+       and a more linear project history by taking changes
+       you made in your development branch, possibly combining several dev changes into one single
+       commit on the fly, and &quot;appending&quot; them to another branch as-if the changes
+       we made on that branch.
+    </p>
+    <p style="float:left;">
+        <img src="##IMG_DIR##/git_rebase.png" alt = "Rebase branches in Git"/>
+    </p>
+    <p>The Git commands would look something like this:</p>
+    <pre  class="prettyprint linenums"># Create a new feature branch based on master
+git checkout master
+git checkout -b new_feature
+
+# Do some work on our new feature. Several commits maybe.
+# Now rebase onto master
+git rebase master</pre>
+    <p style="clear: both;"></p>
 </div>
 
 <h2>Basic Git Notes</h2>
@@ -568,9 +624,6 @@ Diffing
    git difftool to use external diff tool
 
 
-
-
-
 Remotes
    git remote : displays name of remote
                 -v shows URLS of each remote
@@ -591,52 +644,6 @@ Remotes
 
       Can use git push -u origin master - The -u tells get to remember parameters so next time
                                           can just type "git push".
-
-
-
-
-Integrate
-   Fast-forward:
-                                    new_fix
-                                    |
-                           master--&gt;|
-                           |        |
-      C0 -----&gt; C1 -----&gt; C2 -----&gt; C3
-
-      git checkout master
-      git checkout -b new_fix
-      // do some work
-      git commit -a -m "issue fixed and tested"
-      git checkout master
-      <b>git merge new_fix</b>
-
-      "Fast forward" because just move master pointer to new_fix.
-      Then you can DELETE the fix branch
-         git branch <b>-d</b> new_fix
-
-
-
-   Basic Merge (development distory diverged)
-                master             new master pointer
-                |                  |
-      C0 --+--&gt;C3-.-.-.-.-.-.-.-.-&gt;C5
-           |                      /
-           +--&gt;C2------&gt;C4 .-.-.-/
-                        |
-                        some_branch
-
-      Do final commit in some_branch then check out the branch you wish to merge
-      into (master above) and run git merge:
-         git checkout master
-         git merge some_branch
-      Git does 3-way merge using common ancestor. Then you can DELETE some_branch.
-
-   Merge conflict
-      New merge commit not performed until you resolve conflict. Conflict file
-      will have conflict markers added to it.
-
-     Use
-        git mergetool
 </pre>
 </div> <!-- END H2 Git Notes -->
 
