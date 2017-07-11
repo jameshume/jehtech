@@ -198,9 +198,10 @@ after merge</panel_attributes>
       <h>119</h>
     </coordinates>
     <panel_attributes>A new merge commit has been created.
-bg=light_gray
 style=wordwrap
-lt=..</panel_attributes>
+
+bg=dark_gray
+fg=white</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -211,7 +212,8 @@ lt=..</panel_attributes>
       <w>119</w>
       <h>85</h>
     </coordinates>
-    <panel_attributes>lt=..</panel_attributes>
+    <panel_attributes>lt=..
+fg=gray</panel_attributes>
     <additional_attributes>50.0;10.0;10.0;30.0</additional_attributes>
   </element>
   <element>
@@ -245,9 +247,10 @@ lt=..</panel_attributes>
       <h>119</h>
     </coordinates>
     <panel_attributes>Edit made to master *after* the new feature branch was created. Therefore cannot do a fast-forward integrate. This has to be a merge.
-bg=light_gray
 style=wordwrap
-lt=..</panel_attributes>
+
+bg=dark_gray
+fg=white</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -258,7 +261,8 @@ lt=..</panel_attributes>
       <w>170</w>
       <h>221</h>
     </coordinates>
-    <panel_attributes>lt=..</panel_attributes>
+    <panel_attributes>lt=..
+fg=gray</panel_attributes>
     <additional_attributes>80.0;10.0;10.0;110.0</additional_attributes>
   </element>
   <element>

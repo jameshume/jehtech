@@ -1,10 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="13.3">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
   <zoom_level>17</zoom_level>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>289</x>
-      <y>272</y>
+      <x>527</x>
+      <y>306</y>
       <w>68</w>
       <h>68</h>
     </coordinates>
@@ -14,8 +15,8 @@
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>391</x>
-      <y>272</y>
+      <x>629</x>
+      <y>306</y>
       <w>68</w>
       <h>68</h>
     </coordinates>
@@ -25,8 +26,8 @@
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>493</x>
-      <y>374</y>
+      <x>731</x>
+      <y>408</y>
       <w>68</w>
       <h>68</h>
     </coordinates>
@@ -36,8 +37,8 @@
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>595</x>
-      <y>374</y>
+      <x>833</x>
+      <y>408</y>
       <w>68</w>
       <h>68</h>
     </coordinates>
@@ -47,8 +48,8 @@
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>697</x>
-      <y>374</y>
+      <x>935</x>
+      <y>408</y>
       <w>68</w>
       <h>68</h>
     </coordinates>
@@ -58,8 +59,8 @@
   <element>
     <id>UMLState</id>
     <coordinates>
-      <x>357</x>
-      <y>136</y>
+      <x>595</x>
+      <y>170</y>
       <w>153</w>
       <h>68</h>
     </coordinates>
@@ -69,41 +70,41 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>340</x>
-      <y>289</y>
-      <w>85</w>
-      <h>51</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;</panel_attributes>
-    <additional_attributes>30.0;10.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>544</x>
-      <y>391</y>
-      <w>85</w>
-      <h>51</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;</panel_attributes>
-    <additional_attributes>30.0;10.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>646</x>
-      <y>391</y>
-      <w>85</w>
-      <h>51</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;</panel_attributes>
-    <additional_attributes>30.0;10.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>425</x>
+      <x>578</x>
       <y>323</y>
+      <w>85</w>
+      <h>51</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>30.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>782</x>
+      <y>425</y>
+      <w>85</w>
+      <h>51</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>30.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>884</x>
+      <y>425</y>
+      <w>85</w>
+      <h>51</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>30.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>663</x>
+      <y>357</y>
       <w>102</w>
       <h>85</h>
     </coordinates>
@@ -113,8 +114,8 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>408</x>
-      <y>187</y>
+      <x>646</x>
+      <y>221</y>
       <w>51</w>
       <h>119</h>
     </coordinates>
@@ -124,8 +125,8 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>0</x>
-      <y>340</y>
+      <x>238</x>
+      <y>374</y>
       <w>884</w>
       <h>51</h>
     </coordinates>
@@ -135,8 +136,8 @@
   <element>
     <id>UMLState</id>
     <coordinates>
-      <x>663</x>
-      <y>136</y>
+      <x>901</x>
+      <y>170</y>
       <w>153</w>
       <h>68</h>
     </coordinates>
@@ -147,8 +148,8 @@ after merge</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>714</x>
-      <y>187</y>
+      <x>952</x>
+      <y>221</y>
       <w>51</w>
       <h>221</h>
     </coordinates>
@@ -158,8 +159,8 @@ after merge</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>17</x>
-      <y>272</y>
+      <x>255</x>
+      <y>306</y>
       <w>170</w>
       <h>68</h>
     </coordinates>
@@ -170,8 +171,8 @@ branch</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>17</x>
-      <y>374</y>
+      <x>255</x>
+      <y>408</y>
       <w>170</w>
       <h>68</h>
     </coordinates>
@@ -182,13 +183,15 @@ branch</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>748</x>
-      <y>221</y>
+      <x>986</x>
+      <y>255</y>
       <w>357</w>
       <h>119</h>
     </coordinates>
     <panel_attributes>No changes to master since branch therefore just move master's HEAD to point to most recent commit.
-bg=light_gray</panel_attributes>
+style=wordwrap
+bg=dark_gray
+fg=white</panel_attributes>
     <additional_attributes/>
   </element>
 </diagram>

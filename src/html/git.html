@@ -575,13 +575,7 @@ git branch -d new_feature</pre>
         rather than the many commits that may have been made in the development branch). This is
         why a lot of Git users prefer rebasing (see below).
     </p>
-
     <h3>Rebasing</h3>
-    <h4>The Vanilla Rebase</h4>
-    <p style="float:left;">
-        <img src="##IMG_DIR##/git_rebase.png" alt = "Rebase branches in Git"/>
-    </p>
-
     <p>The Git world offers something that CVS, SVN, Perforce etc users won't be as familiar
        with... rebasing. It gives you a cleaner (no merge commits polluting the project history)
        and a more linear project history by taking changes
@@ -590,28 +584,52 @@ git branch -d new_feature</pre>
        we made on that branch.
     </p>
 
-    <p>The Git commands would look something like this:</p>
-    <pre  class="prettyprint linenums"># Create a new feature branch based on master
-git checkout master
-git checkout -b new_feature
+    <h4>The Vanilla Rebase</h4>
+    <p>
+        <img src="##IMG_DIR##/git_rebase.png" alt = "Rebase branches in Git"/>
+    </p>
 
-# Do some work on our new feature. Several commits maybe.
+    <p>We have used the following syntax:</p>
+    <pre  class="prettyprint linenums">git rebase new master</pre>
 
-git checkout master
+    <p>Which is equivalent to doing...</p>
+    <pre  class="prettyprint linenums">git checkout master &amp;&amp; \
+git rebase new </pre>
 
-# Some work has also been done on master, which we pull in
+    <p>
+        I like this more vebose command because it makes sure you have the correct branch
+        checked out <em>before</em> you do the rebase. When you use rebase with only the source
+        branch, you are rebasing onto the currently checked-out branch.
+    </p>
 
-# Now do a rebase of new_feature onto master, essentially integrating
-# the changes made in new_feature onto our master branch...
-git rebase new_feature</pre>
+    <p>
+        Can investigate this using this <a href="../downloadables/test_vanilla_rebase.sh" target="_blank">simple little shell script</a>
+        that tries to replicate the above. It has two command line uses: either &quot;<code>test_vanilla_rebase.sh master onto new</code>&quot; 
+        or  &quot;<code>test_vanilla_rebase.sh new onto master</code>&quot;.
+    </p>
+
     <h4 style="clear: both;">Interative Rebasing</h4>
+    <p>
+        <img src="##IMG_DIR##/git_rebase_squash.png" alt = "Interactive rebase of branches in Git with commit squashing"/>
+    </p>
+    <!--
     <p>
         In the example above, 3 commits are added to the master for the one new feature. We might
         like to tidy this up a little and only have one new commit in the master branch that is the
         aggregation of all of the commits done during development. This way, the master branch is kept even neater
-        with only only change (as we probaly don't care to much about the intermidiate steps - the detail
-        - in the main master branch story).
+        with only one change (as we probaly don't care to much about the intermediate development steps - the detail
+        - in the main master branch story... it just wants to capture that a new feature was added, not the
+        nitty gritty detail of its development stages).
     </p>
+    <div>
+        <div class="warning" style="width:auto;">
+            <p>If you delete a line from the rebase listing its contents is lost forever (on the branch you're rebasing into)!</p>
+        </div>
+    </div>
+    -->
+    <p style="clear:both;">
+    </p>
+
 </div>
 
 <h2>Basic Git Notes</h2>
