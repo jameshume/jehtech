@@ -590,17 +590,27 @@ git branch -d new_feature</pre>
     </p>
 
     <p>We have used the following syntax:</p>
-    <pre  class="prettyprint linenums">git rebase new master</pre>
+    <pre  class="prettyprint linenums">git rebase &lt;target-branch&gt; &lt;src-branch&gt;</pre>
 
     <p>Which is equivalent to doing...</p>
-    <pre  class="prettyprint linenums">git checkout master &amp;&amp; \
-git rebase new </pre>
+    <pre  class="prettyprint linenums">git checkout &lt;src-branch&gt; &amp;&amp; \
+git rebase &lt;target-branch&gt; </pre>
 
     <p>
-        I like this more vebose command because it makes sure you have the correct branch
-        checked out <em>before</em> you do the rebase. When you use rebase with only the source
-        branch, you are rebasing onto the currently checked-out branch.
+        I like the first variant because it makes sure you have the correct branch
+        checked out <em>before</em> you do the rebase. When you use rebase with only the &quot;target-branch&quot;
+        branch, you are rebasing currently checked-out branch onto the target.
     </p>
+
+    <div class="box_container">
+        <div class="info">
+            <p>
+                Use <code>git rebase &lt;target-branch&gt;</code> to rebased the <em>current</em> branch onto &quot;target-branch&quot;.
+                <br/>
+                Use <code>git rebase &lt;target-branch&gt; &lt;src-branch&gt;</code> to rebase the &quot;src-branch&quot; onto the &quot;target-branch&quot; by checking out &quot;src-branch&quot; first and then doing the rebase.
+            </p>
+        </div>
+    </div>
 
     <p>
         Can investigate this using this <a href="../downloadables/test_vanilla_rebase.sh" target="_blank">simple little shell script</a>
@@ -610,23 +620,66 @@ git rebase new </pre>
 
     <h4 style="clear: both;">Interative Rebasing</h4>
     <p>
-        <img src="##IMG_DIR##/git_rebase_squash.png" alt = "Interactive rebase of branches in Git with commit squashing"/>
-    </p>
-    <!--
-    <p>
-        In the example above, 3 commits are added to the master for the one new feature. We might
+        In the example above where the new feature is rebased onto the master branch, 
+        3 commits are added to the master for the one new feature. We might
         like to tidy this up a little and only have one new commit in the master branch that is the
         aggregation of all of the commits done during development. This way, the master branch is kept even neater
         with only one change (as we probaly don't care to much about the intermediate development steps - the detail
         - in the main master branch story... it just wants to capture that a new feature was added, not the
         nitty gritty detail of its development stages).
     </p>
+    <p>
+        Ideally we would do this:
+    </p>
+    <p>
+        <img src="##IMG_DIR##/git_rebase_squash.png" alt = "Interactive rebase of branches in Git with commit squashing"/>
+    </p>
+    <p>
+        And this is what we can achieve using <em>interactive rebasing</em> in Git! Whoop whoop...
+    </p>
+    <p>
+        We can do the interactive rebase using:
+    </p>
+    <pre  class="prettyprint linenums">git rebase -i master new</pre>
+    <p>
+        Which, remember, is the same as doing:
+    </p>
+    <pre  class="prettyprint linenums">git checkout new
+git rebase master</pre>
+    <p>
+        When we do this Git will launch an editor that will allow you to pick the commits from
+        new that are going to be replaying on top of master. If we take our <a href="../downloadables/test_vanilla_rebase.sh" target="_blank">simple little shell script</a> and add a &quot;-i&quot; to the rebase command and rebase new onto
+        master interactively we will get the following in a text editor:
+    </p>
+    <pre>pick &lt;hash&gt; First new feature
+pick &lt;hash&gt; 2 new feature
+pick &lt;hash&gt; 3 new feature
+pick &lt;hash&gt; 4 new feature</pre>
+    <p>
+        If we want to combine everything into one commit, simply change the text to the following
+        and save and exit:
+    </p>
+    <pre>pick &lt;hash&gt; First new feature
+<b>squash</b> &lt;hash&gt; 2 new feature
+<b>squash</b> &lt;hash&gt; 3 new feature
+<b>squash</b> &lt;hash&gt; 4 new feature</pre>
+    <p>
+        Or lets say, for example if we want to combine the commits &quot;First new feature&quot; and
+        &quot;2 new feature&quot; as a single commit but leave the others alone we would do:
+    </p>
+    <pre>pick &lt;hash&gt; First new feature
+<b>squash</b> &lt;hash&gt; 2 new feature
+pick &lt;hash&gt; 3 new feature
+pick &lt;hash&gt; 4 new feature</pre>
+    <p>
+        Basically the &quot;squash&quot; command will combine the commit on that line with every
+        commit above it, until it hits a &quot;pick&quot; line.
+    </p>
     <div>
-        <div class="warning" style="width:auto;">
-            <p>If you delete a line from the rebase listing its contents is lost forever (on the branch you're rebasing into)!</p>
+        <div class="warning">
+            <p>If you delete a line from the rebase listing its contents is lost forever (on the branch you're rebasing into - the source branch isn't modified so it still exists but only in your source branch and its a little P in the A to get that one lost commit back onto the target branch)!</p>
         </div>
     </div>
-    -->
     <p style="clear:both;">
     </p>
 

@@ -865,8 +865,9 @@ style=wordwrap</panel_attributes>
 &gt; git rebase master new-feature
 
 **same as...**
-&gt; git checkout new
-&gt; git rebase master
+&gt; git checkout new-feature
+&gt; git rebase master # current checkout
+                                # rebased onto master
 
 halign=left
 bg=none
@@ -968,7 +969,7 @@ group=4</panel_attributes>
     <coordinates>
       <x>963</x>
       <y>342</y>
-      <w>270</w>
+      <w>306</w>
       <h>126</h>
     </coordinates>
     <panel_attributes>**Rebase master onto new-feature...**
@@ -976,7 +977,8 @@ group=4</panel_attributes>
 
 **same as...**
 &gt; git checkout master
-&gt; git rebase new
+&gt; git rebase new-feature # current checkout
+                                        # rebased onto new-feature
 
 halign=left
 bg=none
