@@ -577,25 +577,41 @@ git branch -d new_feature</pre>
     </p>
 
     <h3>Rebasing</h3>
-    <p>The Git world offers something that CVS, SVN, Perforce etc users won't be as familiar 
-       with... rebasing. It gives you a cleaner (no merge commits polluting the project history) 
+    <h4>The Vanilla Rebase</h4>
+    <p style="float:left;">
+        <img src="##IMG_DIR##/git_rebase.png" alt = "Rebase branches in Git"/>
+    </p>
+
+    <p>The Git world offers something that CVS, SVN, Perforce etc users won't be as familiar
+       with... rebasing. It gives you a cleaner (no merge commits polluting the project history)
        and a more linear project history by taking changes
        you made in your development branch, possibly combining several dev changes into one single
        commit on the fly, and &quot;appending&quot; them to another branch as-if the changes
        we made on that branch.
     </p>
-    <p style="float:left;">
-        <img src="##IMG_DIR##/git_rebase.png" alt = "Rebase branches in Git"/>
-    </p>
+
     <p>The Git commands would look something like this:</p>
     <pre  class="prettyprint linenums"># Create a new feature branch based on master
 git checkout master
 git checkout -b new_feature
 
 # Do some work on our new feature. Several commits maybe.
-# Now rebase onto master
-git rebase master</pre>
-    <p style="clear: both;"></p>
+
+git checkout master
+
+# Some work has also been done on master, which we pull in
+
+# Now do a rebase of new_feature onto master, essentially integrating
+# the changes made in new_feature onto our master branch...
+git rebase new_feature</pre>
+    <h4 style="clear: both;">Interative Rebasing</h4>
+    <p>
+        In the example above, 3 commits are added to the master for the one new feature. We might
+        like to tidy this up a little and only have one new commit in the master branch that is the
+        aggregation of all of the commits done during development. This way, the master branch is kept even neater
+        with only only change (as we probaly don't care to much about the intermidiate steps - the detail
+        - in the main master branch story).
+    </p>
 </div>
 
 <h2>Basic Git Notes</h2>

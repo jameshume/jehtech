@@ -66,7 +66,7 @@ function CreatePageContents() {
 					duration: 1000
 				}
 			});
-			newButton = $("<button>Contents</button>");
+			newButton = $("<button id='contents_btn'>Contents</button>");
 			newButton.click(function() {
 				contentsPopup.dialog("open");
 			});

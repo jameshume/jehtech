@@ -17,6 +17,25 @@
 	     url(http://fonts.gstatic.com/s/spinnaker/v8/W7zI5bHqD9Cyn2evfF7Qnz8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
 }
 
+.ui-dialog .ui-dialog-content {
+	padding: 0;
+}
+
+div#page_contents ol {
+	padding-left: 2em;
+}
+
+#contents_btn {
+	margin-left: 1em;
+	vertical-align:middle;
+	border: 1px solid #123b7c;
+	border-radius: 5px;
+}
+
+#contents_btn:hover {
+	background-color: #CAD7E3;
+}
+
 body { 
 	font-family: 'Spinnaker', Arial, Helvetica, sans-serif;
 	font-size:   16px;
