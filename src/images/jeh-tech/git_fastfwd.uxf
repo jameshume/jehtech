@@ -4,8 +4,8 @@
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>527</x>
-      <y>306</y>
+      <x>442</x>
+      <y>272</y>
       <w>68</w>
       <h>68</h>
     </coordinates>
@@ -15,8 +15,8 @@
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>629</x>
-      <y>306</y>
+      <x>544</x>
+      <y>272</y>
       <w>68</w>
       <h>68</h>
     </coordinates>
@@ -26,8 +26,8 @@
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>731</x>
-      <y>408</y>
+      <x>646</x>
+      <y>374</y>
       <w>68</w>
       <h>68</h>
     </coordinates>
@@ -37,8 +37,8 @@
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>833</x>
-      <y>408</y>
+      <x>748</x>
+      <y>374</y>
       <w>68</w>
       <h>68</h>
     </coordinates>
@@ -48,8 +48,8 @@
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>935</x>
-      <y>408</y>
+      <x>850</x>
+      <y>374</y>
       <w>68</w>
       <h>68</h>
     </coordinates>
@@ -59,52 +59,53 @@
   <element>
     <id>UMLState</id>
     <coordinates>
-      <x>595</x>
-      <y>170</y>
-      <w>153</w>
+      <x>493</x>
+      <y>136</y>
+      <w>170</w>
       <h>68</h>
     </coordinates>
-    <panel_attributes>HEAD</panel_attributes>
+    <panel_attributes>master
+HEAD</panel_attributes>
     <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>493</x>
+      <y>289</y>
+      <w>85</w>
+      <h>51</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>30.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>697</x>
+      <y>391</y>
+      <w>85</w>
+      <h>51</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>30.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>799</x>
+      <y>391</y>
+      <w>85</w>
+      <h>51</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>30.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>578</x>
       <y>323</y>
-      <w>85</w>
-      <h>51</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;</panel_attributes>
-    <additional_attributes>30.0;10.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>782</x>
-      <y>425</y>
-      <w>85</w>
-      <h>51</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;</panel_attributes>
-    <additional_attributes>30.0;10.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>884</x>
-      <y>425</y>
-      <w>85</w>
-      <h>51</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;</panel_attributes>
-    <additional_attributes>30.0;10.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>663</x>
-      <y>357</y>
       <w>102</w>
       <h>85</h>
     </coordinates>
@@ -114,8 +115,8 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>646</x>
-      <y>221</y>
+      <x>561</x>
+      <y>187</y>
       <w>51</w>
       <h>119</h>
     </coordinates>
@@ -123,33 +124,22 @@
     <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
   </element>
   <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>238</x>
-      <y>374</y>
-      <w>884</w>
-      <h>51</h>
-    </coordinates>
-    <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;500.0;10.0</additional_attributes>
-  </element>
-  <element>
     <id>UMLState</id>
     <coordinates>
-      <x>901</x>
-      <y>170</y>
-      <w>153</w>
+      <x>799</x>
+      <y>136</y>
+      <w>170</w>
       <h>68</h>
     </coordinates>
-    <panel_attributes>HEAD
-after merge</panel_attributes>
+    <panel_attributes>master HEAD
+after ff merge</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>952</x>
-      <y>221</y>
+      <x>867</x>
+      <y>187</y>
       <w>51</w>
       <h>221</h>
     </coordinates>
@@ -157,41 +147,82 @@ after merge</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
   </element>
   <element>
-    <id>UMLGeneric</id>
-    <coordinates>
-      <x>255</x>
-      <y>306</y>
-      <w>170</w>
-      <h>68</h>
-    </coordinates>
-    <panel_attributes>master
-branch</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLGeneric</id>
-    <coordinates>
-      <x>255</x>
-      <y>408</y>
-      <w>170</w>
-      <h>68</h>
-    </coordinates>
-    <panel_attributes>new feature
-branch</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>986</x>
-      <y>255</y>
+      <x>969</x>
+      <y>221</y>
       <w>357</w>
-      <h>119</h>
+      <h>272</h>
     </coordinates>
-    <panel_attributes>No changes to master since branch therefore just move master's HEAD to point to most recent commit.
+    <panel_attributes>(1) Master branched to new-feature
+(2) new-feature developed, 2 extra commits
+(3) No changes to master since branch, therefore just move master's HEAD to point to most recent commit. This is the
+*fast forward* bit of the merge.
 style=wordwrap
 bg=dark_gray
 fg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>799</x>
+      <y>510</y>
+      <w>170</w>
+      <h>68</h>
+    </coordinates>
+    <panel_attributes>new-feature
+HEAD</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>867</x>
+      <y>425</y>
+      <w>51</w>
+      <h>119</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>612</x>
+      <y>374</y>
+      <w>34</w>
+      <h>34</h>
+    </coordinates>
+    <panel_attributes>1
+fg=none
+bg=dark_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>850</x>
+      <y>442</y>
+      <w>34</w>
+      <h>34</h>
+    </coordinates>
+    <panel_attributes>2
+fg=none
+bg=dark_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>850</x>
+      <y>340</y>
+      <w>34</w>
+      <h>34</h>
+    </coordinates>
+    <panel_attributes>3
+fg=none
+bg=dark_gray</panel_attributes>
     <additional_attributes/>
   </element>
 </diagram>
