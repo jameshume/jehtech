@@ -26,6 +26,7 @@ import zlib
 import shutil
 import pickle
 import codecs
+import pathlib
 
 DEPLOYED_DIR = '../__deployed'
 
@@ -232,6 +233,7 @@ def deploy_site():
 	link_to_root = ""
 	doc = None
 	os.chdir('html')
+	sitemap_list = []
 	for dirname, filename in find_html_files('.'):
 		# If we have changed directory we must regenerate the links page so that the
 		# links are relative to this new directory
@@ -243,6 +245,19 @@ def deploy_site():
 		# Read in the current HTML files contents
 		htmlFileName = os.path.join(dirname, filename)
 		print("Deploying", dirname, filename, htmlFileName)
+
+
+		if fnmatch.fnmatch(filename, '*.html'):
+			## dirty hackery
+			dirs = list(os.path.split(dirname))
+			if len(dirs) > 1:
+				if dirs[0] == ".":
+					dirs = dirs[1:]
+
+			dirs.append(filename)
+			google_sitemap_ref = "http://www.jeh-tech.com/{}".format(pathlib.PurePosixPath(*dirs))
+			sitemap_list.append(google_sitemap_ref)
+
 		htmlFile = codecs.open(htmlFileName, 'r', 'utf-8')
 		#htmlFile = open(htmlFileName, 'r')
 		htmlFileContents = htmlFile.read();
@@ -252,7 +267,7 @@ def deploy_site():
 		deployed_dir = os.path.join('..', DEPLOYED_DIR, dirname)
 		if (dirname != '.'):
 			if not os.path.exists(deployed_dir):
-				print("Creating directory", deployed_dir)
+				print("Creating directory {}".format(deployed_dir))
 				mkdir_p(deployed_dir)
 			newFileName = os.path.join('..', DEPLOYED_DIR, dirname, filename)
 			print("(A) Opening new file {}".format(newFileName))
@@ -272,6 +287,10 @@ def deploy_site():
 		newFile.close()
 	os.chdir('..')
 
+	#
+	# Write out google sitemap as a basic utf-8 text file
+	with codecs.open(os.path.join(DEPLOYED_DIR, "sitemap.txt"), "w", "utf-8") as sitemap_file:
+		sitemap_file.writelines("%s\n" % line for line in sitemap_list)
 
 	#
 	# Now copy across all other important files
