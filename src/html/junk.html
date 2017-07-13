@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>Misc notes</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+
+</head>
+
+<body>
+	<div id="header">
+		-- This is JEHTech --
+	</div>
+
+	<div id="sidebar">
+		<h1 class="title">Links...</h1>
+		<div id="includedContent"></div>
+	</div>
+
+	<h1>poo</h1>
+	<div id="content">
+<div>
+    <a class="magnifier-thumb-wrapper" href="http://en.wikipedia.org/wiki/File:Starry_Night_Over_the_Rhone.jpg">
+        <img id="thumb" src="http://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Starry_Night_Over_the_Rhone.jpg/200px-Starry_Night_Over_the_Rhone.jpg">
+    </a>
+    <div class="magnifier-preview" id="preview" style="width: 500px; height: 500px; border:2px solid black;">
+    	Starry Night Over The Rhone<br>by Vincent van Gogh</div>
+</div>
+
+	<script type="text/javascript">
+var evt = new Event(),
+m = new Magnifier(evt);
+
+console.log(m);
+
+m.attach({
+    thumb: '#thumb',
+    large: 'http://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Starry_Night_Over_the_Rhone.jpg/400px-Starry_Night_Over_the_Rhone.jpg',
+    //largeWrapper: 'preview'
+    mode: 'inside',
+    zoom: 3,
+    zoomable: true
+});
+
+	</script>	
+
+	</div> <!-- END H1 padding div -->
+</body>
+</html>
+
+

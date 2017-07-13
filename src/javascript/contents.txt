@@ -6,3 +6,5 @@ run_prettify.js
 jeh-tech.js
 jeh-tech-canvas.js
 paper-full.min.js
+Event.js
+Magnifier.js
