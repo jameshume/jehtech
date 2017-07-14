@@ -22,10 +22,15 @@
 <div id="content">
 <h1 class="title">Linux Kernel notes</h1>
 <div style="padding-right:10px;">
+<p>
+  How to configure and build the Linux kernel and write device drivers for it (e.g. adding device
+  driver for Wii Nunchuck by going through the FreeElectons tutorials).
+</p>
 
 <h2>Page Contents</h2>
 <div id="page_contents">
 </div>
+
 
 <h2>References / To Read</h2>
 <div>
@@ -246,8 +251,6 @@ config MMU
   Xconfig has a few nice advantages like a GUI which will show you the symbols next to the
   menu descriptions and a beefed up find functionality.
 </p>
-
-</div>
 
 <h3 style="clear:both;">Building The Kernel</h3>
 <p>
@@ -940,12 +943,15 @@ printk(KERN_ALERT "Goodbye\n");</pre>
 
 </div> <!-- End H2 -->
 
-<h2>Linux Drivers</h2>
+<h2>Linux Device Drivers</h2>
 <div>
 <h3>References</h3>
 <ul>
-<li><a href="https://www.kernel.org/doc/Documentation/driver-model/overview.txt" 
+<li><a href="https://www.kernel.org/doc/Documentation/driver-model/overview.txt"
        target="_blank">Linux Device Driver Model Overview</a>, Linux Docs.
+</li>
+<li><a href="https://www.kernel.org/doc/Documentation/driver-model/driver.txt"
+       target="_blank">Device Drivers, Linux Kernel Docs</a>.
 </li>
 <li><a href="http://free-electrons.com/doc/training/linux-kernel/linux-kernel-slides.pdf"
        target="_blank">Linux Kernel and Driver Development Training Slides</a>, FreeElectrons.com.
@@ -961,23 +967,165 @@ printk(KERN_ALERT "Goodbye\n");</pre>
   <img src="##IMG_DIR##/driver_model.png" alt="Diagram of Linux device driver model. bus_type, device_driver, device."/>
 </p>
 <p>
-  This next diagram isn't quite right because the core is involved too, I think, ... so err... when I learn a bit more...
+  <img src="##IMG_DIR##/linux_device_core_structs.png" alt="Class/struct diagram of core Linux device driver structures."/>
 </p>
 <p>
-<img src="##IMG_DIR##/new_device_flow.png" alt="Sequence of events when device added to Linux system"/>
+  So what is the Linux device driver core? It is a central &quot;repository&quot; that tracks all
+  the device busses in the system and their types, all the available drivers and all the devices and
+  marries drivers with devices when they are detected.
 </p>
+<p>
+  <b>Bus types</b> define, surprisingly, a type of bus, for example PCI or I2C. The physicall hardware that
+  manages access to a physical instance of the bus type is called an &quot;<b>adapter driver</b>&quot;. The
+  <b>device</b> structure represents physical devices that are attached to am adapter driver and <b>device_driver</b>s
+  are bound to devices when a device is detected by the system. All devices have a <b>class</b>
+  so that the user can generalise devices by their use.
+</p>
+<p>
+  Having looked through the driver core's code a little it looks like devices will be detected,
+  except hot pluggable devices which must have another route to driver binding, like this. The
+  driver will register the device(s) for which it caters either at system startup or dynamically
+  (when <code>insmod</code> is called to load a driver). This will eventually result in a call
+  to the driver cores <code>device_add()</code>, which will do things like creating the sysfs entries
+  for the device, adding the device to the <code>bus_type</code> via <code>bus_add_devices()</code>,
+  and finally calling <code>bus_probe_device()</code> which will eventually via either the <code>bus_type</code>
+  or directly, call the drivers <code>probe()</code> method. Busses that support hotpluggin devices,
+  such as USB for example, must have another way to alert the core that a device has become
+  available. For now, I'm ending my learning-via-code-base as its probably a bit more depth than I
+  need right now.
+</p>
+
+<h3>Device Attributes</h3>
+<p>
+References:
+</p>
+<ul>
+  <li>
+    <a href="https://www.kernel.org/doc/Documentation/filesystems/sysfs.txt" 
+       target="_blank">Sysfs - The filesystem for exporting kernel objects,</a> Linux Kernel documentation.
+  </li>
+</ul>
+<p>
+  Attributes can be represented in the sysfs filesystem for kobjects, which is useful from a
+  device point of view because it allows the driver to intercept read and writes of these attributes
+  in order to control a device. For example, the Atmel MaxTouch device driver creates several
+  attributes, such as &quot;pause&quot;, which when written to can be used to pause the touch screen
+  device being driven. Or, for example, it could export an attribute that would let the user
+  configure touch sensitivity for example.
+</p>
+<p>
+  Attributes are defined via the <code>device_attribute</code> structure:
+</p>
+<pre class="prettyprint linenums">struct device_attribute {
+   struct attribute attr;
+   ssize_t (*show)(struct device *dev, struct_device_attribute *attr, char *buf);
+   ssize_t (*store)(struct device *dev, struct_device_attribute *attr, char *buf, size_t count);
+};</pre>
+<p>
+  You'd make one of these for each attribute you want to create and then register it using:
+</p>
+<pre>int device_create_file(struct device *, const struct device_attribute *);</pre>
+<p>
+  To make defining these structures easier use:
+</p>
+<pre class="prettyprint linenums">DEVICE_ATTR(myname, mode, showFunc, storeFunc)
+                          ^^^^^^^^^^^^^^^^^^^
+                          Normally you always have a read but may not
+                          want to allow a write, in which case
+                          storeFunc can be NULL.
+</pre>
+<p>
+  It will create and initialise a <code>device_attribute</code> struct for you and give it the name
+  <code>dev_attr_myname</code>, which you can then pass to <code>device_create_file</code>.
+</p>
+<p>
+  The MaxTouch driver has quite a few attributes so stores them in an array of <code>struct attribute</code>,
+  which it then embeds in a <code>struct attribute_group</code>, which can be passed in bulk to
+  <code>sysfs_create_group()</code>:
+</p>
+<pre class="prettyprint linenums">static DEVICE_ATTR(myname1, mode1, showFunc1, storeFunc1);
+...
+static DEVICE_ATTR(mynameN, modeN, showFuncN, storeFuncN);
+
+static struct attribute *mxt_attrs[] = {
+   &amp;dev_attr_myName1.attr,
+   ...
+   &amp;dev_attr_myNameN.attr };
+
+static const struct attribute_group mxt_attr_group = {
+  .attrs = mxt_attrs,
+};
+
+...
+
+// Later during initialisation...
+error = sysfs_create_group(&amp;dev.kobj, &amp;mxt_attr_group);</pre>
 </div> <!-- End H2 -->
 
 <h2>Wait Queues</h2>
 <div>
 <p>
+  References:
+</p>
+<ul>
+  <li><a href="https://lwn.net/Articles/22913/" target="_blank">Driver porting: sleeping and waking up</a>, Corbet on LWN.net.</li>
+</ul>
+<p>
+  The wait queue is a mechanism that lets the kernel keep track of kernel threads that are waiting for
+  some event. The event is programmer defined, so each bit of code can declare its own wake queues,
+  add kthreads to this queue when they should block waiting on a condition and then signal all kthreads
+  waiting on that condition when it is met. The queue, accessed through the wait-queue API, is always
+  accessed atomically so many threads can use the same queue to wait on the same condition(s).
+</p>
+<p>
   <img src="##IMG_DIR##/linux_wait_queues.png" alt="Diagram of Linux Wait Queue structures"/>
 </p>
+<p>
+  <img src="##IMG_DIR##/linux_wait_queues_adding_sequence.png" alt="Diagram of Linux Wait Queue structures, what happens when you initialise them and then add to the wait queue."/>
+</p>
+<p>
+  The basic code structure for waiting on a condition (ripped verbatim, comments added, from the reference) is:
+</p>
+<pre class="prettyprint linenums">// Define the root of the list of kthreads that wish to
+// sleep on whatever condition this queue represents
+DECLARE_WAIT_QUEUE_HEAD(queue);
+
+// The wait_queue_t structure that we will add to the above list. This
+// struct will hold our task details so we can be woken up later on
+// when the condition is met
+DECLARE_WAITQUEUE(wait, current);
+
+while(true) {
+   // Add this task to the wait queue
+   add_wait_queue(&amp;queue, &amp;wait);
+
+   // Tell the scheduler to take us off the runnable queue.
+   set_current_state(TASK_INTERRUPTIBLE);
+
+   // Check for the condition that is set somewhere else...
+   if (condition)
+      break;
+
+   // The conditions wasn't met so allow scheduler to put someone
+   // else on the CPU (won't be use because we've said we dont
+   // want to be on the read queue by setting out state above)
+   schedule();
+
+   // We're awake again which means we either got a signal or
+   // the condition has been met
+   remove_wait_queue(&amp;queue, &amp;wait);
+   if (signal_pending(current))
+      return -ERESTARTSYS;
+}
+set_current_state(TASK_RUNNING);</pre>
 </div> <!-- End H2 -->
 
 
 <h2>Work Queues</h2>
 <div>
+<p>
+  Work queues allow you to request that code be run at some point in the future...
+</p>
 <p>
   <img src="##IMG_DIR##/lin_kern_delayed_work.png" alt="Image of Linux kernel Work Queue structure and construction"/>
 </p>

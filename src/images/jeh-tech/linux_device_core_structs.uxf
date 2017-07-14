@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1150</x>
+      <y>450</y>
+      <w>350</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>*struct device_type*
+/include/linux/device.h/
+--
+*name : char
+
+*uevent : int (*)(struct device *, 
+                         struct kobj_uevent_env)
+*devnode : char* (*)(struct device *, umode_t *,
+			                                 kuid_t *, kgid_t *)
+*release : void (*)(struct device *)
+
+/... and more .../</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>850</x>
+      <y>450</y>
+      <w>210</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>*struct device*
+/include/linux/device.h/
+--
+*parent : struct device
+*kobj : struct kobject
+*type : struct device_type
+*bus : struct bus_type
+*driver : struct device_driver
+*class : struct class
+
+/... lots lots more.../
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1050</x>
+      <y>530</y>
+      <w>120</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>100.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>430</x>
+      <y>450</y>
+      <w>320</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>*struct device_driver*
+/include/linux/device.h/
+--
+*name : char
+*bus : struct bus_type
+*owner : struct module
+
+probe: int (*) (struct device *)
+remove : int (*) (struct device *)
+shutdown: void (*) (struct device *)
+suspend : int (*) (struct device *, pm_message_t);
+resume : int (*) (struct device *)
+
+/... and more.../
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>740</x>
+      <y>530</y>
+      <w>130</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>110.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>610</x>
+      <y>120</y>
+      <w>320</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>*struct bus_type*
+/include/linux/device.h/
+--
+*name : char
+*p : struct subsys_private
+match : int (*)(struct device *, 
+                      struct device_driver *)
+uevent : int (*)(struct device *, 
+                        struct kobj_uevent_env *)
+probe : int (*)(struct device *);
+
+/... and lots lots more.../
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>570</x>
+      <y>280</y>
+      <w>220</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;170.0;10.0;80.0;200.0;80.0;200.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>760</x>
+      <y>280</y>
+      <w>210</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>190.0;170.0;190.0;80.0;10.0;80.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>960</x>
+      <y>350</y>
+      <w>100</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;100.0;10.0;10.0;80.0;10.0;80.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>810</x>
+      <y>710</y>
+      <w>300</w>
+      <h>250</h>
+    </coordinates>
+    <panel_attributes>*struct class*
+/include/linux/device.h/
+--
+*name : char
+*owner : struct module
+*dev_kobj : struct kobject
+
+dev_uevent : int (*)(struct device *, 
+                               struct kobj_uevent_env *)
+devnode : char* (*)(struct device *, 
+                               umode_t *)
+suspend : int (*)(struct device *dev, 
+                          pm_message_t)
+resume : int (*)(struct device *)
+
+/... lots more.../
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>950</x>
+      <y>610</y>
+      <w>30</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1120</x>
+      <y>240</y>
+      <w>320</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+The device driver-model tracks all of the drivers known to the system. The main reason for this tracking is to enable the driver core to match up drivers with new devices. Once drivers are known objects within the system, however, a number of other things become possible. Device drivers can export information and configuration variables that are independent of any specific device.
+bg=dark_gray
+fg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1050</x>
+      <y>380</y>
+      <w>90</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fg=gray</panel_attributes>
+    <additional_attributes>10.0;70.0;70.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1240</x>
+      <y>690</y>
+      <w>320</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+The type of device, "struct device" is embedded in. A class or bus can contain devices of different types like "partitions" and "disks", "mouse" and "event".
+bg=dark_gray
+fg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1340</x>
+      <y>630</y>
+      <w>70</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fg=gray</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1180</x>
+      <y>830</y>
+      <w>320</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+A class is a higher-level view of a device that abstracts out low-level implementation details. Drivers may see a SCSI disk or an ATA disk, but, at the class level, they are all simply disks. Classes allow user space to work with devices based on what they do, rather than how they are connected or how they work.
+bg=dark_gray
+fg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1100</x>
+      <y>850</y>
+      <w>100</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fg=gray</panel_attributes>
+    <additional_attributes>10.0;10.0;80.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>350</x>
+      <y>730</y>
+      <w>320</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+The device driver-model tracks all of the drivers known to the system. The main reason for this tracking is to enable the driver core to match up drivers with new devices.
+bg=dark_gray
+fg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>490</x>
+      <y>660</y>
+      <w>120</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fg=gray</panel_attributes>
+    <additional_attributes>100.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>210</x>
+      <y>170</y>
+      <w>320</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+A bus is a channel between the processor and one or more devices. For the purposes of the device model, all devices are connected via a bus, even if it is an internal, virtual, "platform" bus. Buses can plug into each other. A USB controller is usually a PCI device, for example. The device model represents the actual connections between buses and the devices they control. A bus is represented by the bus_type structure.
+bg=dark_gray
+fg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>520</x>
+      <y>200</y>
+      <w>110</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fg=gray</panel_attributes>
+    <additional_attributes>90.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+</diagram>

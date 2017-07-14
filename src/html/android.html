@@ -373,7 +373,7 @@ logcat # Get the Android log</pre>
 <p>https://www.kernel.org/doc/Documentation/input/multi-touch-protocol.txt</p>
 </div> <!-- END Touch Events -->
 
-<h2>Generating Events Programmatically</h2>
+<h2>Programmatically Generating And Injecting Events In Android</h2>
 <div>
   <p>
     I needed to be able to generate touch events for a project I was working on. These touch
@@ -485,7 +485,7 @@ logcat # Get the Android log</pre>
     but this shows how to do it from your program directly without having to fork these commands.
   </p>
   <p>
-    A little example based on the pocketmagic articles <a href="#ref4">[Ref]</a><a href="#ref5">[Ref]</a>:
+    A little example based (heavily) on the rather good pocketmagic articles <a href="#ref4">[Ref]</a><a href="#ref5">[Ref]</a>:
   </p>
   <pre class="prettyprint linenums">// Copy of <a href="http://lxr.free-electrons.com/source/include/uapi/linux/input.h#L25" target="_blank">struct input_event</a>
 struct uinput_event

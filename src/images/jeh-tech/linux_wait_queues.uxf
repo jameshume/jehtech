@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="14.2">
-  <zoom_level>10</zoom_level>
+  <zoom_level>14</zoom_level>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>360</x>
-      <y>230</y>
-      <w>190</w>
-      <h>170</h>
+      <x>462</x>
+      <y>630</y>
+      <w>266</w>
+      <h>252</h>
     </coordinates>
     <panel_attributes>*wait_queue_t*
+&lt;&lt;include/linux/wait.h&gt;&gt;
 --
 flags :uint
 private: void*
@@ -20,10 +21,10 @@ task_list: list_head</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>370</x>
-      <y>330</y>
-      <w>170</w>
-      <h>60</h>
+      <x>476</x>
+      <y>784</y>
+      <w>238</w>
+      <h>84</h>
     </coordinates>
     <panel_attributes>list_head
 --
@@ -38,10 +39,10 @@ layer=3</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>790</x>
-      <y>330</y>
-      <w>170</w>
-      <h>60</h>
+      <x>1064</x>
+      <y>784</y>
+      <w>238</w>
+      <h>84</h>
     </coordinates>
     <panel_attributes>list_head
 --
@@ -56,12 +57,13 @@ layer=3</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>780</x>
-      <y>230</y>
-      <w>190</w>
-      <h>170</h>
+      <x>1050</x>
+      <y>630</y>
+      <w>266</w>
+      <h>252</h>
     </coordinates>
     <panel_attributes>*wait_queue_t*
+&lt;&lt;include/linux/wait.h&gt;&gt;
 --
 flags :uint
 private: void*
@@ -72,10 +74,10 @@ task_list: list_head</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>740</x>
-      <y>350</y>
-      <w>70</w>
-      <h>30</h>
+      <x>994</x>
+      <y>812</y>
+      <w>98</w>
+      <h>42</h>
     </coordinates>
     <panel_attributes>lt=&lt;..</panel_attributes>
     <additional_attributes>50.0;10.0;10.0;10.0</additional_attributes>
@@ -83,10 +85,10 @@ task_list: list_head</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>470</x>
-      <y>350</y>
-      <w>130</w>
-      <h>30</h>
+      <x>616</x>
+      <y>812</y>
+      <w>182</w>
+      <h>42</h>
     </coordinates>
     <panel_attributes>lt=&lt;..</panel_attributes>
     <additional_attributes>110.0;10.0;10.0;10.0</additional_attributes>
@@ -94,10 +96,10 @@ task_list: list_head</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>470</x>
-      <y>370</y>
-      <w>130</w>
-      <h>30</h>
+      <x>616</x>
+      <y>840</y>
+      <w>182</w>
+      <h>42</h>
     </coordinates>
     <panel_attributes>lt=&lt;..</panel_attributes>
     <additional_attributes>10.0;10.0;110.0;10.0</additional_attributes>
@@ -105,10 +107,10 @@ task_list: list_head</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>740</x>
-      <y>370</y>
-      <w>70</w>
-      <h>30</h>
+      <x>994</x>
+      <y>840</y>
+      <w>98</w>
+      <h>42</h>
     </coordinates>
     <panel_attributes>lt=&lt;..</panel_attributes>
     <additional_attributes>10.0;10.0;50.0;10.0</additional_attributes>
@@ -116,34 +118,35 @@ task_list: list_head</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>70</x>
-      <y>270</y>
-      <w>950</w>
-      <h>170</h>
+      <x>56</x>
+      <y>700</y>
+      <w>1330</w>
+      <h>252</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>890.0;110.0;930.0;110.0;930.0;150.0;10.0;150.0;10.0;10.0;60.0;10.0</additional_attributes>
+    <additional_attributes>890.0;110.0;930.0;110.0;930.0;160.0;10.0;160.0;10.0;10.0;60.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>50</x>
-      <y>250</y>
-      <w>990</w>
-      <h>210</h>
+      <x>42</x>
+      <y>672</y>
+      <w>1358</w>
+      <h>294</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>80.0;10.0;10.0;10.0;10.0;190.0;970.0;190.0;970.0;110.0;910.0;110.0</additional_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0;10.0;190.0;950.0;190.0;950.0;110.0;900.0;110.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>120</x>
-      <y>160</y>
-      <w>190</w>
-      <h>140</h>
+      <x>126</x>
+      <y>532</y>
+      <w>266</w>
+      <h>210</h>
     </coordinates>
     <panel_attributes>*wait_queue_head_t*
+&lt;&lt;include/linux/wait.h&gt;&gt;
 --
 lock: spinlock_t
 task_list: list_head
@@ -153,10 +156,10 @@ bg=light_gray</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>130</x>
-      <y>230</y>
-      <w>170</w>
-      <h>60</h>
+      <x>140</x>
+      <y>644</y>
+      <w>238</w>
+      <h>84</h>
     </coordinates>
     <panel_attributes>list_head
 --
@@ -173,10 +176,10 @@ fg=white</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>290</x>
-      <y>270</y>
-      <w>100</w>
-      <h>130</h>
+      <x>364</x>
+      <y>700</y>
+      <w>140</w>
+      <h>182</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;40.0;10.0;40.0;110.0;80.0;110.0</additional_attributes>
@@ -184,10 +187,10 @@ fg=white</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>290</x>
-      <y>250</y>
-      <w>100</w>
-      <h>130</h>
+      <x>364</x>
+      <y>672</y>
+      <w>140</w>
+      <h>182</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
     <additional_attributes>80.0;110.0;50.0;110.0;50.0;10.0;10.0;10.0</additional_attributes>
@@ -195,10 +198,10 @@ fg=white</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>580</x>
-      <y>330</y>
-      <w>170</w>
-      <h>60</h>
+      <x>770</x>
+      <y>784</y>
+      <w>238</w>
+      <h>84</h>
     </coordinates>
     <panel_attributes>list_head
 --
@@ -213,12 +216,13 @@ layer=3</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>570</x>
-      <y>230</y>
-      <w>190</w>
-      <h>170</h>
+      <x>756</x>
+      <y>630</y>
+      <w>266</w>
+      <h>252</h>
     </coordinates>
     <panel_attributes>*wait_queue_t*
+&lt;&lt;include/linux/wait.h&gt;&gt;
 --
 flags :uint
 private: void*
@@ -227,5 +231,66 @@ task_list: list_head
 lt=..
 fg=gray</panel_attributes>
     <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>196</x>
+      <y>154</y>
+      <w>434</w>
+      <h>224</h>
+    </coordinates>
+    <panel_attributes>The queue head acts like the "anchor" for the linked list of wait_queue_t objects. It is the structure from which the queue will be accessed and defines the first link to the start of the queue as well as a spinlockthat is used to protect against concurrent access.
+
+Can declare statically using:
+    DECLARE_WAIT_QUEUE_HEAD(queue)
+bg=dark_gray
+fg=white
+lw=3
+style=wordwrap
+transparency=0</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>252</x>
+      <y>364</y>
+      <w>196</w>
+      <h>196</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;120.0;120.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>756</x>
+      <y>280</y>
+      <w>434</w>
+      <h>224</h>
+    </coordinates>
+    <panel_attributes>The wait_queue_t object represents a kthread that is waiting on a condition. When the condition is met, all of the kthreads in this list will be "woken up"...
+
+Can declare statically using:
+   DECLARE_WAITQUEUE(wait, current)
+Where "current" is a special macro that resolves to the currently running process.
+bg=dark_gray
+fg=white
+lw=3
+style=wordwrap
+transparency=0</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>714</x>
+      <y>490</y>
+      <w>280</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;100.0;180.0;10.0</additional_attributes>
   </element>
 </diagram>
