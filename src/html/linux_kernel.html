@@ -399,6 +399,19 @@ https://source.android.com/devices/input/touch-devices.html
 <h2>Linux Kernel and Driver Development Training Lab Book</h2>
 <div>
 <p>
+  References:
+    <ul>
+      <li><a href="http://free-electrons.com/doc/training/linux-kernel/linux-kernel-labs.pdf"
+       target="_blank">Linux Kernel and Driver Development Training Lab Book</a> by FreeElectrons.com.
+      </li>
+      <li>
+        <a href="http://free-electrons.com/doc/training/linux-kernel/linux-kernel-slides.pdf" target="_blank">Linux Kernel and Driver Development Training Slides</a>, Free Electrons.
+      </li>
+      <li>
+        <a href="https://raw.githubusercontent.com/CircuitCo/BeagleBone-Black/master/BBB_SRM.pdf" target="_blank">BeagleBone Black System Reference Manual</a>, Rev C.1.
+    </ul>
+</p>
+<p>
     Notes created whilst working through
     <a href="http://free-electrons.com/doc/training/linux-kernel/linux-kernel-labs.pdf"
        target="_blank">Linux Kernel and Driver Development Training Lab Book</a> by FreeElectrons.com, 
@@ -1060,6 +1073,55 @@ static const struct attribute_group mxt_attr_group = {
 
 // Later during initialisation...
 error = sysfs_create_group(&amp;dev.kobj, &amp;mxt_attr_group);</pre>
+
+
+<h3>Pin Multiplexing</h3>
+<p>
+  References:
+    <ul>
+      <li>
+        <a href="http://free-electrons.com/doc/training/linux-kernel/linux-kernel-slides.pdf" target="_blank">Linux Kernel and Driver Development Training Slides</a>, Free Electrons.
+      </li>
+      <li><a href="https://www.kernel.org/doc/Documentation/pinctrl.txt" target="_blank">PINCTRL (PIN CONTROL) subsystem</a>, Linux Docs.
+      </li>
+      <li>
+        <a href="https://www.kernel.org/doc/Documentation/devicetree/bindings/pinctrl/pinctrl-bindings.txt" target="_blank">Pin Control Bindings</a>, Linux Docs.
+      </li>
+      <li>
+        <a href="https://raw.githubusercontent.com/CircuitCo/BeagleBone-Black/master/BBB_SRM.pdf" target="_blank">BeagleBone Black System Reference Manual</a>, Rev C.1.
+    </ul>
+</p>
+<p>
+  Introduced in v3.2:
+</p>
+<blockquote>
+  <p>Hardware modules that control pin multiplexing or configuration parameters
+such as pull-up/down, tri-state, drive-strength etc are designated as pin
+controllers. Each pin controller must be represented as a node in device tree,
+just like any other hardware module.</p>
+<footer><a href="https://www.kernel.org/doc/Documentation/devicetree/bindings/pinctrl/pinctrl-bindings.txt" target="_blank">Pin Control Bindings</a>, Linux Docs.</footer>
+</blockquote>
+<blockquote>
+  <p>The pinmux core takes care of preventing conflicts on pins and calling
+the pin controller driver to execute different settings.</p>
+  <footer><a href="https://www.kernel.org/doc/Documentation/pinctrl.txt" target="_blank">PINCTRL (PIN CONTROL) subsystem</a>, Linux Docs.</footer>
+</blockquote>
+
+<p>
+  For example, the Beagle Bone Black has a limited number of output pins and you can choose what gets output via the P9 header. For example, P9 pin 17 can be used by either the SPI, I2C, UART or PWM components of the SoC <a href="https://raw.githubusercontent.com/CircuitCo/BeagleBone-Black/master/BBB_SRM.pdf" target="_blank">[Ref]</a>.
+</p>
+
+<p>
+  A list of a load of pin control device-tree bindings can be found in the Linux source tree documentation folder under <a href="https://www.kernel.org/doc/Documentation/devicetree/bindings/pinctrl/" target="_blank">devicetree/bindings/pinctrl</a>.
+</p>
+
+<p>
+  From a driver's point of view, it must request a certain pin muxing from the pin control sub system,
+  although <q>generally it is discouraged to let individual drivers get and enable pin
+  control</q>. So, for example, in the Free Electrons Lab book we would assume that out Wii Nunchuck
+  is perminently connected to the system and so our BeagleBone configuration would always be
+  setup to enable the I2C muxing on the P9 connector.
+</p>
 </div> <!-- End H2 -->
 
 <h2>Wait Queues</h2>
@@ -1069,6 +1131,7 @@ error = sysfs_create_group(&amp;dev.kobj, &amp;mxt_attr_group);</pre>
 </p>
 <ul>
   <li><a href="https://lwn.net/Articles/22913/" target="_blank">Driver porting: sleeping and waking up</a>, Corbet on LWN.net.</li>
+  <li><a href="https://stackoverflow.com/a/13116914/1517244" target="_blank">Wait queues vs semaphores in Linux</a>, answer StackOverflow by user Anirudh Ramanathan</li>.
 </ul>
 <p>
   The wait queue is a mechanism that lets the kernel keep track of kernel threads that are waiting for
@@ -1118,6 +1181,17 @@ while(true) {
       return -ERESTARTSYS;
 }
 set_current_state(TASK_RUNNING);</pre>
+<p>
+  One thing that I wondered was why would I use a waitqueue over a sempahore or vice versa. Luckily
+  just typing it int good led me to this answer:
+</p>
+<blockquote>
+  <p>
+    A semaphore is more of a concept, rather than a specific implementation ... The linux semaphore data structure implementation uses a wait-queue. Without a wait queue, you wouldn't know which process demanded the resource first, which could lead to very large wait times for some. The wait-queue <em>ensures fairness</em>, and abates the <em>resource starvation</em> problem. 
+  </p>
+  <footer><a href="https://stackoverflow.com/a/13116914/1517244" target="_blank">Wait queues vs semaphores in Linux</a>, Anirudh Ramanathan</footer>
+</blockquote>
+<p></p>
 </div> <!-- End H2 -->
 
 
