@@ -96,7 +96,7 @@
 </p>
 <p>
   The <code>block</code> directory contains the Linux block I/O layer files which are used to help
-  manage block devices, like your harddisk, for example.
+  manage block devices, like your hard disk, for example.
 </p>
 <p>
   The <code>Documentation</code> directory is very useful! Here you can find many bits of documentation
@@ -113,20 +113,20 @@
   build of the complete set of books fails sometimes - or at least did for me).
 </p>
 <p>
-  To compile your DocBook, return to the root directory of the linux source and run <code>make pdfdocs</code>.
+  To compile your DocBook, return to the root directory of the Linux source and run <code>make pdfdocs</code>.
   The PDF will be build and stored in the DocBooks directory.
 </p>
 <p>
   The <code>drivers</code> directory contains a slew of device drivers organised under their type.
   So, for example, input device drivers (think keyboard, touchpad etc) are found under <code>drivers/input</code> and
-  PCI device drivers under <code>drivers/pci</code>. There may be further hierachical organisation too. For example,
+  PCI device drivers under <code>drivers/pci</code>. There may be further hierarchical organisation too. For example,
   under <code>drivers/input</code> there are further subdirectories for keyboards, touch screens, mice etc.
   Other character device drivers such as <code>/dev/null</code> are found under <code>drivers/char</code>.
 </p>
 <p>
-  The <code>fs</code> directory houses filesystem modules. These support a managery of file systems
+  The <code>fs</code> directory houses file system modules. These support a variety of file systems
   like FAT, NTFS, ext3, ext4 and more. These allow the Linux user to mount Windows file systems,
-  use the Linux filesystems and many more, including Mac.
+  use the Linux file systems and many more, including Mac.
 </p>
 
 <h3 style="clear:both;">Configuring The Kernel</h3>
@@ -173,7 +173,7 @@
   new configuration.
 </p>
 <p>
-  Interestingly, but perhaps unsuprisingly, launching most of the config tools will involve a
+  Interestingly, but perhaps unsurprisingly, launching most of the config tools will involve a
   compilation step on the host machine. You can see the exact steps taken by running the make command
   with the extra option <code>V=1</code>. The make step is required to build the config tool being
   used.
@@ -305,7 +305,7 @@ https://developer.android.com/ndk/guides/standalone_toolchain.html
 |-- usb
 &lt;snip&gt;</pre>
 <p>
-  The different types of busses are listed. Under each bus, the following structure is seen:
+  The different types of buses are listed. Under each bus, the following structure is seen:
 </p>
 <pre>/sys/bus/XXX
 |-- devices
@@ -337,13 +337,13 @@ Input driver model docs:
     Documentation/input/, and in particular input.txt
 
 When driver registers as input device, the following is auto created:
-  /dev/input/eventX (cat this to get dump of linux input events as they happen)
+  /dev/input/eventX (cat this to get dump of Linux input events as they happen)
 As well as sysfs entries.
 
 /proc/bus/input/devices - Where system keeps track of all devices
 
 /sys/class/input/eventX - directory - info about device assoc. with this event
-    cat /sys/class/input/eventX/uevent to get device info such as major and minor numnber etc
+    cat /sys/class/input/eventX/uevent to get device info such as major and minor number etc
 
 getevent and sendevent command:
     system/core/toolbox/(get|send)event.c.
@@ -409,12 +409,17 @@ https://source.android.com/devices/input/touch-devices.html
       </li>
       <li>
         <a href="https://raw.githubusercontent.com/CircuitCo/BeagleBone-Black/master/BBB_SRM.pdf" target="_blank">BeagleBone Black System Reference Manual</a>, Rev C.1.
+      </li>
+      <li><a href="http://www.ti.com/lit/ds/symlink/am3359.pdf" target="_blank">AM335xSitara<sup>TM</sup> Processors Datasheet</a>.
+      </li>
+      <li><a href="http://www.ti.com/lit/ug/spruh73p/spruh73p.pdf" target="_blank">AM335x and AMIC110 Sitara<sup>TM</sup> Processors Technical Reference Manual</a>.
+      </li>
     </ul>
 </p>
 <p>
     Notes created whilst working through
     <a href="http://free-electrons.com/doc/training/linux-kernel/linux-kernel-labs.pdf"
-       target="_blank">Linux Kernel and Driver Development Training Lab Book</a> by FreeElectrons.com, 
+       target="_blank">Linux Kernel and Driver Development Training Lab Book</a> by FreeElectrons.com,
     whilst consulting the <a href="http://free-electrons.com/doc/training/linux-kernel/linux-kernel-slides.pdf" target="_blank">accompanying slides</a>.
 </p>
 <p>
@@ -511,7 +516,7 @@ with your username and the IP address with your board's IP address.</p>
 <p>Restart server:</p>
 <pre>sudo /etc/init.d/nfs-kernel-server restart</pre>
 <p>
-  Now unpack the <a href="http://free-electrons.com/doc/training/linux-kernel/linux-kernel-labs.tar.xz">lab files</a> 
+  Now unpack the <a href="http://free-electrons.com/doc/training/linux-kernel/linux-kernel-labs.tar.xz">lab files</a>
   so that you get the directory mentioned above:
 </p>
 <pre>cd /home/&lt;user&gt;
@@ -547,7 +552,7 @@ md 0x81000000</pre>
 <h3>Compiling &amp; Booting The Kernel (+ DTB)</h3>
 <h4>References</h4>
 <ul>
-    <!-- <li><a href="" target="_blank"></a></li> --> 
+    <!-- <li><a href="" target="_blank"></a></li> -->
     <li><a href="https://github.com/torvalds/linux/blob/master/Documentation/kbuild/makefiles.txt" target="_blank">Linux Kernel Makefiles</a>, Kernel Documentation.</li>
     <li><a href="https://events.linuxfoundation.org/sites/events/files/slides/petazzoni-device-tree-dummies.pdf" target="_blank">Device Tree For Dummies</a>, T Petazzoni.</li>
     <li><a href="https://www.kernel.org/doc/ols/2008/ols2008v2-pages-27-38.pdf" target="_blank">A Symphony of Flavours: Using the device tree to describe embedded hardwarw</a>, G Likely, J Boyer.</li>
@@ -584,7 +589,7 @@ export ARCH=arm</pre>
     The image above shows a <code>[*]</code> next to &quot;NFS client support&quot;. This means that
     the support will be compiled into the kernel image. All of the other options with an <code>[M]</code>
     next to them are compiled as modules. They will not be included in the compiled kernel image
-    but can be loaded seperately as modules later. Modules marked with <code>[ ]</code> are not
+    but can be loaded separately as modules later. Modules marked with <code>[ ]</code> are not
     compiled at all.
 </p>
 <p>
@@ -600,7 +605,7 @@ export ARCH=arm</pre>
 </p>
 <pre># * -jX (optional) sets number of threads used for parallel build.
 # * V=1 (optional) puts the build into verbose mode so that you can
-#   see the toolchain commands being involked.
+#   see the toolchain commands being invoked.
 make -j16 V=1</pre>
 <p>
     The last build message you should see is...
@@ -620,22 +625,21 @@ make -j16 V=1</pre>
     but what are they?
 </p>
 <p>
-    The <code>zImage</code> is a compressed kernel image that has a little bit of code in front of 
-    the compressed blob that will makes it bootable and self extracting so that the kernel propper 
+    The <code>zImage</code> is a compressed kernel image that has a little bit of code in front of
+    the compressed blob that will makes it bootable and self extracting so that the kernel proper
     can be decompressed into RAM and then run.
 </p>
 <p>
     The <code>am335x-boneblack.dtb</code> is a Linux Device Tree Blob. This is a binary format
-    that the kernel can read and <q>contains the description of the hardware</q> <a href="https://events.linuxfoundation.org/sites/events/files/slides/petazzoni-device-tree-dummies.pdf" target="_blank">[Ref]</a>. This method was adopted 
+    that the kernel can read and <q>contains the description of the hardware</q> <a href="https://events.linuxfoundation.org/sites/events/files/slides/petazzoni-device-tree-dummies.pdf" target="_blank">[Ref]</a>. This method was adopted
     to try and standardise how hardware information was passed to the kernel because in the
     embedded world there was little standardisation and systems varied considerably <a href="https://www.kernel.org/doc/ols/2008/ols2008v2-pages-27-38.pdf" target="_blank">[Ref]</a>.
 </p>
 <blockquote>
     <p>
         In the simplest terms, a device tree is a data structure that
-        describes the hardware configuration. It includes infor-
-        mation about the CPUs, memory banks, buses, and pe-
-        ripherals. The operating system is able to parse the data
+        describes the hardware configuration. It includes information about the CPUs,
+        memory banks, buses, and peripherals. The operating system is able to parse the data
         structure at boot time and use it to make decisions about
         how to configure the kernel and which device drivers to
         load.
@@ -677,13 +681,13 @@ bootz 0x81000000 - 0x82000000</pre>
     lab file.
 </p>
 <p>
-    Based on the previous section we can understand what we have done here. We are booting a 
+    Based on the previous section we can understand what we have done here. We are booting a
     zImage. The first argument is the address of the zImage. The second argument is the hyphen, which specifies the address
-    of the initrd in memory as non-existant, i.e., there is no ramfs, and the third argument is the address of the DTB that UBoot will pass
+    of the initrd in memory as non-existent, i.e., there is no ramfs, and the third argument is the address of the DTB that UBoot will pass
     to the Kernel.
 </p>
 <p>
-    The other important evironment variable set is <code>bootargs</code>. This is a string that
+    The other important environment variable set is <code>bootargs</code>. This is a string that
     is passed to the kernel. UBoot will pass this to the kernel. In this case it contains all the
     information required to tell the kernel to try and mount the root directory over NFS and boot
     from it.
@@ -703,7 +707,7 @@ bootz 0x81000000 - 0x82000000</pre>
   hard and grepping the source code for files with &quot;version&quot; in their name brought me to
   <code>&lt;linux-root&gt;/fs/proc/version.c</code>, which shows how to get the Linux version.
   My solution is
-  <a href="https://github.com/jameshume/free-electrons-linux-kernel-labs/tree/master/hello" target="_blank">here on GitHub</a> and 
+  <a href="https://github.com/jameshume/free-electrons-linux-kernel-labs/tree/master/hello" target="_blank">here on GitHub</a> and
   a snapshot is shown below:
 </p>
 <pre class="prettyprint linenums">static int __init hello_init(void)
@@ -940,7 +944,181 @@ printk(KERN_ALERT "Goodbye\n");</pre>
 
 <h4>Device Tree Setup</h4>
 <p>
-  Beagle Bone Black DTS file is in <code>arch/arm/boot/dts/am335x-boneblack.dts</code>.
+  Beagle Bone Black DTS file is in <code>arch/arm/boot/dts/am335x-boneblack.dts</code>. So, I need
+  do two three: First, check that the pinmux puts the I2C bus on the J9 pins, second enable the second I2C bus,
+  and third create a definition for the new device on that bus.
+</p>
+<p>
+  Snapshot of P9 muxing from data sheet:
+</p>
+<p>
+  <img src="##IMG_DIR##/BeagBlackP9.PNG" alt="Snippet of Beagle Bone Black datasheet showing I2C P9 mux settings"/>
+</p>
+<p>
+  The ARM Cortex-A8 memory map can be found in the AM335x Tech Ref Manual<a href="http://www.ti.com/lit/ug/spruh73p/spruh73p.pdf" target="_blank">[Ref]</a> and the pad control registers (0x44E1_0000) and I2C registers (0x4802_A0000) can be found in section 9.2.2 of the same document. 
+  For the register offsets see section 9.3.1. If we look in the <code>am33xx.dtsi</code> file for the
+  our chip we will find that the i2c1 interface is located at that address:
+</p>
+<pre>i2c1: i2c@<b>4802a000</b> {
+  compatible = "ti,omap4-i2c";
+  ...</pre>
+<p>
+  This is the only place where i2c1 is defined in the Beagle Bone Black device tree files.
+</p>
+<p>
+  What we're interested in is the MUX mode as in the image above we can see that we will want either
+  mode 2 or mode 3 as these are the only two modes for which the I2C1 pins are muxed onto the P9
+  connector.
+</p>
+<p>
+  What is a little annoying is that in the above image there are a lot of <em>signal</em> &quot;names&quot;.  These
+  names relfect the pin functionality when used in a particular way (i.e., the signal that will 
+  be output), but there is a specific name for the actual pin. To find this out one has to
+  refer to the AM335x data sheet:
+</p>
+<p>
+  <img src="##IMG_DIR##/bbone_i2c1_pins.png" alt="Snippet of Beagle Bone Black datasheet showing I2C P9 mux settings"/>
+</p>
+<p>
+  To investigate the I2C setup a little further we'll look back at the first I2C bus, I2C0, to see
+  how it is being configured in the DTS files...
+</p>
+<p>
+  The pin mux for the first I2C bus looks like this in <code>arch/arm/boot/dts/am335x-bone-common.dtsi</code>:
+</p>
+<pre>am33xx_pinmux {
+  pinctrl-names = "default";
+  pinctrl-0 = &lt;&amp;clkout2_pin&gt;;
+
+...
+
+  i2c0_pins: pinmux_i2c0_pins {
+      pinctrl-single,pins = &lt;
+        AM33XX_IOPAD(0x988, PIN_INPUT_PULLUP | MUX_MODE0) /* i2c0_sda.i2c0_sda */
+        AM33XX_IOPAD(0x98c, PIN_INPUT_PULLUP | MUX_MODE0) /* i2c0_scl.i2c0_scl */
+      &gt;;
+  };</pre>
+<p>
+  This block of DTS script is defining the pin controller device. It uses the &quot;alternative&quot;
+  binding discussed in the Linux pin control bindings doc <a href="https://www.kernel.org/doc/Documentation/devicetree/bindings/pinctrl/pinctrl-bindings.txt" target="_blank">[Ref]</a>. This means that the pin binding is specified
+  using a &quot;hardware based index and a number of pin configuration values&quot;, which we see
+  specified in the <code>AM3XX_IOPAD()</code> macro.
+</p>
+<p>
+  The node &quot;pinmux_i2c0_pins&quot;, annotated with the label &quot;i2c0_pins&quot; is a
+  a pin configuration child node that a client device (any module whose signals are affected by pin
+  configuration) can reference. So, we would expect the I2C0 config to reference this... and it does:
+</p>
+<pre>&amp;i2c0 {
+  pinctrl-names = "default";
+  pinctrl-0 = &lt;&amp;i2c0_pins&gt;;</pre>
+<p>
+  Now some vocabulary: a <b>client device</b> is <q>any module whose signals are affected by pin configuration</q>
+  <a href="https://www.kernel.org/doc/Documentation/pinctrl.txt" target="_blank">[Ref]</a>. The node
+  i2c0 shown above is a client device as it's signals are affected by how the pinmux controller is
+  configured.
+</p>
+<p>
+  Each client device can have one or more &quot;pin states&quot;, which are assigned contiguous 
+  numbers, starting from zero. So, this client device only has the one &quot;state&quot;.
+</p>
+<p>
+  The field &quot;pinctrl-0&quot; is state number 0. It specifies a list of <em>phandles</em> pointing at pin config nodes,
+  which must be (grand)children of the pin controller device.
+</p>
+<p>
+  The field &quot;pinctrl-names&quot; gives a textual name to this particular state
+  that can be used. Where there &quot;pinctrl-1&quot;...&quot;pintctrl-N&quot; states, the names list
+  would have N+1 members and the first name would name &quot;pinctrl-0&quot;, the second
+  &quot;pinctrl-1&quot; and so on. In this case there is only one state named &quot;default&quot;.
+</p>
+<p>
+  Back to the node labelled &quot;i2c0_pins&quot; in the pin controller device... what does the child node &quot;pinctrl-single,pins&quot;
+  mean? Well, <q>the contents of each of those ... child nodes is defined entirely by the binding for the 
+  individual pin controller device. There exists no common standard for this content&quot; 
+  <a href= "https://www.kernel.org/doc/Documentation/devicetree/bindings/pinctrl/pinctrl-bindings.txt"
+     target="_blank">[Ref]</a>. There is some clue however... it seems that there does seem to be
+  some kind of, at least de-facto, naming convention. Where we see &quot;pinctrl-single,pins&quot;,
+  the part before the comma generally is the driver name. So we know (also helps that the lab book
+  tells us) that the pinctrl-single driver is being used and a quick search leads us to 
+  <a href="http://elixir.free-electrons.com/linux/latest/source/drivers/pinctrl/pinctrl-single.c"
+     target="_blank"><code>drivers/pinctrl/pinctrl-single.c</code></a>. 
+</p>
+<p>
+  If we look at the driver we can see that it is described as a <q>one-register-per-pin type device tree based pinctrl driver</q>,
+  and that in the function <code>pcs_parse_one_pinctrl_entry()</code> it parses the device tree 
+  looking for device nodes with the name &quot;pinctrl-single,pins&quot;. The telling part of the
+  function is:
+</p>
+<pre>/* Index plus one value cell */
+offset = pinctrl_spec.args[0];
+vals[found].reg = pcs->base + offset;
+vals[found].val = pinctrl_spec.args[1];</pre>
+<p>
+  The &quot;pinctrl-single,pins&quot; property is a list of offsets and value &quot;tuples&quot;,
+  which agrees with what we noted about the pin binding being specified
+  using a &quot;hardware based index and a number of pin configuration values&quot;.
+</p>
+<p>
+  In the AM335x, each configurable pin has its own configuration register for pull-up/down control and for the 
+  assignment to a given module: okay good, matches the pinctrol-single driver's description.  
+  Section 9.3 of the TRM, table 9-10, lists the memory-mapped registers for the control module. From this we can see that
+  registers 0x988 and 0x98C are labelled conf_i2c0_sda and conf_i2c0_scl respectively, which is
+  what we would expect for the I2C0 interface.
+</p>
+<p>
+  Great, i2c0 looks good, which gives us confidence to construct something for i2c1. We have already
+  looked up the pin names for i2c1: &quot;spi0_cs0&quot; and &quot;spi0_d1&quot; (we're using mode 2), 
+  so we need to look these up in the same table. The table gives us the respective offsets 0x95C and 0x958, so we can 
+  construct our addition to the DTSI file...
+</p>
+<p>
+  The pin controller and i2c bus/devices ar defined in <code>am335x-bone-common.dtsi</code> and <code>am335x-boneblack.dts</code>. 
+  So, as the lab book instructs I will put my definitions in a new <code>am335x-customboneblack.dts</code> file where I can define the extension
+  to the pin controller and a new i2c1 bus node and its nunchuck device node:
+</p>
+<pre>am33xx_pinmux {
+  i2c1_pins: pinmux_i2c1_pins {
+      pinctrl-single,pins = &lt;
+        AM33XX_IOPAD(0x958, PIN_INPUT_PULLUP | MUX_MODE2) /* i2c1_sda */
+        AM33XX_IOPAD(0x95c, PIN_INPUT_PULLUP | MUX_MODE2) /* i2c1_scl */
+      &gt;;
+  };
+};
+
+&amp;i2c1 {
+  pinctrl-names = "default";
+  pinctrl-0 = &lt;&amp;i2c1_pins&gt;;
+
+  status=&quot;okay&quot;;
+  clock-frequency = &lt;100000&gt;;
+
+  wii_nunchuck {
+    compatible = "nintendo,nunchuk";
+    reg = &lt;0x52&gt;;
+  };
+};</pre>
+<p>
+  One last question is where does the make system get information about what DTB to construct for
+  our target. The file <code>arch/arm/boot/dts/Makefile</code> lists which DTBs should be
+  generated at build time <a href="http://free-electrons.com/pub/conferences/2013/elce/petazzoni-device-tree-dummies/petazzoni-device-tree-dummies.pdf" target="_blank">[Ref]</a>. In this file we can see the
+  Linux make target <code>dtb-$(CONFIG_SOC_AM33XX)</code>, which lists <code>am335x-boneblack.dtb</code>
+  as a target. This is a classic kbuild definition. If <code>CONFIG_SOC_AM33XX</code> is defined then
+  this target will be built, otherwise it is ignored.
+  Once build the precise build command used are saved in <code>arch/arm/boot/dts/.am335x-boneblack.dtb.cmd</code>.
+</p>
+<p>
+  I'm copying <code>am335x-boneblack.dts</code> to <code>am335x-boneblack-wiinunchuck.dts</code> and
+  adding its DTB as a dependency for the <code>dtb-$(CONFIG_SOC_AM33XX)</code> target.
+</p>
+<p>
+  Can build it using:
+</p>
+<pre>make dtbs</pre>
+<p>
+  This outputs the file <code>arch/arm/boot/dts/am335x-boneblack-wiinunchuck.dtb</code>. This needs 
+  to be copied to the tftp directory on the host and the UBoot boot command changed to download this
+  rather than the &quot;stock&quot; DTB file.
 </p>
 
 <h4>The Linux I2C Core</h4>
@@ -961,6 +1139,60 @@ printk(KERN_ALERT "Goodbye\n");</pre>
 
 </div> <!-- End H2 -->
 
+<h2>The Linux Device Tree</h2>
+<div>
+  <p>
+    References:
+  </p>
+  <ul>
+    <li><a href="http://elinux/Device_Tree_Usage" target="_blank">Device Tree Usage</a>, ELinux.org</li>
+    <li><a href="https://events.linuxfoundation.org/sites/events/files/slides/petazzoni-device-tree-dummies.pdf"
+           target="_blank">Linux Device Tree For Dummies</a> Thomas Petazzoni.</li>
+    <li><a href="https://www.kernel.org/doc/ols/2008/ols2008v2-pages-27-38.pdf" target="_blank">
+        A Symphony of Flavours: Using the device tree to describe embedded hardware</a>, G. Likely, J Boyer</li>
+    <li><a href="http://elinux.org/Device_Tree_presentations_papers_articles"
+           target="_blank">Device Tree presentations papers articles</a>.
+    </li>
+    <li><a href="https://git.kernel.org/pub/scm/utils/dtc/dtc.git/plain/Documentation/manual.txt?id=HEAD"
+           target="_blank">Device Tree Compiler Manual</a>.
+    </li>
+  </ul>
+  <p>
+    Linux uses device trees to avoid having to recompile the kernel for every single variation
+    of a board, for example. So, on one architecture, say for example 64-bit Arm, we don't have
+    to recompile the kernel for every possible combination of 64-bit Arm chip and its peripherals.
+    Instead, a device tree is stored somewhere, for example an EPROM, and can be passed to the
+    kernel at boot time so that the same binary kernel image can run on multiple platforms and
+    the platforms themselves tell the kernel binary what they &quot;look&quot; like.
+  </p>
+  <p>
+    The following is a good explanation of what a device tree is:
+  </p>
+  <blockquote>
+    <p>
+        In the simplest terms, a device tree is a data structure that
+        describes the hardware configuration. It includes information about the CPUs, memory banks, buses,
+        and peripherals. The operating system is able to parse the data
+        structure at boot time and use it to make decisions about
+        how to configure the kernel and which device drivers to
+        load.
+    </p>
+    <footer><a href="https://www.kernel.org/doc/ols/2008/ols2008v2-pages-27-38.pdf" target="_blank">
+        A Symphony of Flavours: Using the device tree to describe embedded hardware, G. Likely, J Boyer</a>
+    </footer>
+</blockquote>
+  <p>
+    The following image gives a basic, high-level introduction to the device tree file syntax...
+  </p>
+  <p>
+    <img src="##IMG_DIR##/linux_dts_file_format.png" alt="Picture descibing file format of Linux Device Tree"/>
+  </p>
+  <p>
+    Device tree files can also import other device tree files and also C header files so that it is
+    easy and less error prone to share named quantities between kernel code and the device tree.
+  </p>
+</div>
+
 <h2>Linux Device Drivers</h2>
 <div>
 <h3>References</h3>
@@ -979,7 +1211,7 @@ printk(KERN_ALERT "Goodbye\n");</pre>
 <h3>Intro</h3>
 <p>
   The slides do a fantastic job of describing the Linux driver infrastructure. The following image is
-  an annoted rehash of their digrams with some extra added in from the Linux docs...
+  an annotated rehash of their diagrams with some extra added in from the Linux docs...
 </p>
 <p>
   <img src="##IMG_DIR##/driver_model.png" alt="Diagram of Linux device driver model. bus_type, device_driver, device."/>
@@ -993,7 +1225,7 @@ printk(KERN_ALERT "Goodbye\n");</pre>
   marries drivers with devices when they are detected.
 </p>
 <p>
-  <b>Bus types</b> define, surprisingly, a type of bus, for example PCI or I2C. The physicall hardware that
+  <b>Bus types</b> define, surprisingly, a type of bus, for example PCI or I2C. The physical hardware that
   manages access to a physical instance of the bus type is called an &quot;<b>adapter driver</b>&quot;. The
   <b>device</b> structure represents physical devices that are attached to am adapter driver and <b>device_driver</b>s
   are bound to devices when a device is detected by the system. All devices have a <b>class</b>
@@ -1002,12 +1234,12 @@ printk(KERN_ALERT "Goodbye\n");</pre>
 <p>
   Having looked through the driver core's code a little it looks like devices will be detected,
   except hot pluggable devices which must have another route to driver binding, like this. The
-  driver will register the device(s) for which it caters either at system startup or dynamically
+  driver will register the device(s) for which it caters either at system start-up or dynamically
   (when <code>insmod</code> is called to load a driver). This will eventually result in a call
   to the driver cores <code>device_add()</code>, which will do things like creating the sysfs entries
   for the device, adding the device to the <code>bus_type</code> via <code>bus_add_devices()</code>,
   and finally calling <code>bus_probe_device()</code> which will eventually via either the <code>bus_type</code>
-  or directly, call the drivers <code>probe()</code> method. Busses that support hotpluggin devices,
+  or directly, call the drivers <code>probe()</code> method. Buses that support hot-plug devices,
   such as USB for example, must have another way to alert the core that a device has become
   available. For now, I'm ending my learning-via-code-base as its probably a bit more depth than I
   need right now.
@@ -1019,12 +1251,12 @@ References:
 </p>
 <ul>
   <li>
-    <a href="https://www.kernel.org/doc/Documentation/filesystems/sysfs.txt" 
-       target="_blank">Sysfs - The filesystem for exporting kernel objects,</a> Linux Kernel documentation.
+    <a href="https://www.kernel.org/doc/Documentation/filesystems/sysfs.txt"
+       target="_blank">Sysfs - The file system for exporting kernel objects,</a> Linux Kernel documentation.
   </li>
 </ul>
 <p>
-  Attributes can be represented in the sysfs filesystem for kobjects, which is useful from a
+  Attributes can be represented in the sysfs file system for kobjects, which is useful from a
   device point of view because it allows the driver to intercept read and writes of these attributes
   in order to control a device. For example, the Atmel MaxTouch device driver creates several
   attributes, such as &quot;pause&quot;, which when written to can be used to pause the touch screen
@@ -1106,6 +1338,7 @@ controllers. Each pin controller must be represented as a node in device tree,
 just like any other hardware module.</p>
 <footer><a href="https://www.kernel.org/doc/Documentation/devicetree/bindings/pinctrl/pinctrl-bindings.txt" target="_blank">Pin Control Bindings</a>, Linux Docs.</footer>
 </blockquote>
+<p></p>
 <blockquote>
   <p>The pinmux core takes care of preventing conflicts on pins and calling
 the pin controller driver to execute different settings.</p>
@@ -1124,7 +1357,7 @@ the pin controller driver to execute different settings.</p>
   From a driver's point of view, it must request a certain pin muxing from the pin control sub system,
   although <q>generally it is discouraged to let individual drivers get and enable pin
   control</q>. So, for example, in the Free Electrons Lab book we would assume that out Wii Nunchuck
-  is perminently connected to the system and so our BeagleBone configuration would always be
+  is permanently connected to the system and so our BeagleBone configuration would always be
   setup to enable the I2C muxing on the P9 connector.
 </p>
 </div> <!-- End H2 -->
@@ -1187,12 +1420,12 @@ while(true) {
 }
 set_current_state(TASK_RUNNING);</pre>
 <p>
-  One thing that I wondered was why would I use a waitqueue over a sempahore or vice versa. Luckily
+  One thing that I wondered was why would I use a waitqueue over a semaphore or vice versa. Luckily
   just typing it int good led me to this answer:
 </p>
 <blockquote>
   <p>
-    A semaphore is more of a concept, rather than a specific implementation ... The linux semaphore data structure implementation uses a wait-queue. Without a wait queue, you wouldn't know which process demanded the resource first, which could lead to very large wait times for some. The wait-queue <em>ensures fairness</em>, and abates the <em>resource starvation</em> problem. 
+    A semaphore is more of a concept, rather than a specific implementation ... The Linux semaphore data structure implementation uses a wait-queue. Without a wait queue, you wouldn't know which process demanded the resource first, which could lead to very large wait times for some. The wait-queue <em>ensures fairness</em>, and abates the <em>resource starvation</em> problem.
   </p>
   <footer><a href="https://stackoverflow.com/a/13116914/1517244" target="_blank">Wait queues vs semaphores in Linux</a>, Anirudh Ramanathan</footer>
 </blockquote>
