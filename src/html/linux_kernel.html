@@ -269,6 +269,19 @@ https://serverfault.com/questions/568395/what-is-creating-the-generated-autoconf
 </p>
 
 <pre>
+# From kernel README
+    "make ${PLATFORM}_defconfig"
+                        Create a ./.config file by using the default
+                        symbol values from
+                        arch/$ARCH/configs/${PLATFORM}_defconfig.
+                        Use "make help" to get a list of all available
+                        platforms of your architecture.
+
+# See also scripts/kconfig/Makefile:
+%_defconfig: $(obj)/conf
+        $(Q)$< --defconfig=arch/$(SRCARCH)/configs/$@ $(Kconfig)
+</pre>
+
 https://devtalk.nvidia.com/default/topic/906942/failed-to-compile-kernel-module-gcc-cannot-recognize-aarch64-option-mgeneral-regs-only-/
 
 https://developer.android.com/ndk/guides/standalone_toolchain.html

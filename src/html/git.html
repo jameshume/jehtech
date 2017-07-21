@@ -692,6 +692,42 @@ pick &lt;hash&gt; 4 new feature</pre>
 
 </div>
 
+<h2>Patches</h2>
+<div>
+    <h3>Generating Patch Files</h3>
+    <p>
+        A patch file represents one single commit diff. Create using:
+    </p>
+    <pre>git format-patch (branch-name|since) -o dir_to_store_patches</pre>
+    <p>
+        This will create a set of files in the directory &quot;dir-to-store-patches&quot;
+        with the following naming convention:
+    </p>
+    <pre>xxx-commit_msg.patch
+^^^ ^^^^^^^^^^
+^^^ The commit message for the commit that this patch represents
+^^^ withs spaces replaced by underscores.
+^^^
+The commit number</pre>
+    <p>
+        If you substitute you branch name in the format-patch command line it will
+        generate patches for every commit since the start of the branch.
+    </p>
+    <p>
+        If you specifiy a commit number in the format-patch command line, instead of a branch name,
+        you will get the patches for every single commit in the current branch since that commit.
+    </p>
+
+    <h3>Applying Patch Files</h3>
+    <p>
+        To apply a patch to the currently checked out branch use:
+    </p>
+    <pre>git am < patch-file</pre>
+    <p>
+        This will create a new commit from the patch file.
+    </p>
+</div>
+
 <h2>Basic Git Notes</h2>
 <div>
 	<pre>

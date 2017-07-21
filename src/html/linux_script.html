@@ -1326,6 +1326,15 @@ sed '$!N;s/\n/ /'</pre>
        # Ctrl+a, r -   Toggle the current window's line-wrap setting.
        # Ctrl-a, *   - List users connected to your screen session.</pre>
 
+      <h3>Name Your Session</h3>
+      <p>
+        By default screen just assigns your session a name that is rather non-descriptive.
+        To give it a more meaningful name, use the <code>-S</code> option:
+      </p>
+      <pre>&gt; screen -S jehtech
+&gt; screen -ls
+9240.jehtech    (07/21/17 08:35:01)     (Attached)</pre>
+
       <h3>View Available Screens</h3>
       <p>
         If you detach a screen session you can see a list of available sessions using:
