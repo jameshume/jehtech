@@ -1383,6 +1383,8 @@ the pin controller driver to execute different settings.</p>
 <ul>
   <li><a href="https://lwn.net/Articles/22913/" target="_blank">Driver porting: sleeping and waking up</a>, Corbet on LWN.net.</li>
   <li><a href="https://stackoverflow.com/a/13116914/1517244" target="_blank">Wait queues vs semaphores in Linux</a>, answer StackOverflow by user Anirudh Ramanathan</li>.
+  <li><a href="https://github.com/jameshume/MessingWithLinux/blob/master/kernel_timers/kernel_timers_play.c"
+         target="_blank">My little toy example</a>. Wait queues and timers.</li>
 </ul>
 <p>
   The wait queue is a mechanism that lets the kernel keep track of kernel threads that are waiting for
@@ -1416,14 +1418,14 @@ while(true) {
    // Tell the scheduler to take us off the runnable queue.
    set_current_state(TASK_INTERRUPTIBLE);
 
-   // Check for the condition that is set somewhere else...
-   if (condition)
-      break;
-
    // The conditions wasn't met so allow scheduler to put someone
    // else on the CPU (won't be use because we've said we dont
    // want to be on the read queue by setting out state above)
    schedule();
+
+   // Check for the condition that is set somewhere else...
+   if (condition)
+      break;
 
    // We're awake again which means we either got a signal or
    // the condition has been met
@@ -1433,8 +1435,18 @@ while(true) {
 }
 set_current_state(TASK_RUNNING);</pre>
 <p>
+  There's one small thing to note in the above example vs the reference... I had to move where the
+  condition was checked. I think their logic was a little wrong because if you don't check after
+  the schedule, you'll always do one more wait that you need to!
+</p>
+<p>
   One thing that I wondered was why would I use a waitqueue over a semaphore or vice versa. Luckily
   just typing it int good led me to this answer:
+</p>
+<p>
+  One or two examples I came across use something called <code>interruptable_sleep_on()</code>, but
+  apparently this is deprecated since 2.6 because it is prone to race conditions 
+  <a href="http://nixforums.org/about101771.html" target="_blank">[Ref]</a>.
 </p>
 <blockquote>
   <p>
@@ -1442,7 +1454,10 @@ set_current_state(TASK_RUNNING);</pre>
   </p>
   <footer><a href="https://stackoverflow.com/a/13116914/1517244" target="_blank">Wait queues vs semaphores in Linux</a>, Anirudh Ramanathan</footer>
 </blockquote>
-<p></p>
+
+<p>Or, instead of using macros to initialisee static variables, you can use:</p>
+<pre>init_waitqueue_head(&amp;waitq_head);
+init_waitqueue_entry(&amp;waitq_entry, current);</pre>
 </div> <!-- End H2 -->
 
 
@@ -1455,6 +1470,83 @@ set_current_state(TASK_RUNNING);</pre>
   <img src="##IMG_DIR##/lin_kern_delayed_work.png" alt="Image of Linux kernel Work Queue structure and construction"/>
 </p>
 </div> <!-- End H2 -->
+
+<h2>TO DO</h2>
+<h3>Jiffies</h3>
+<pre>
+Defined in http://elixir.free-electrons.com/linux/latest/source/include/linux/jiffies.h
+
+See functions like  time_after(a,b) or time_in_rance(a,b,c) to deal with timer wrapping.
+</pre>
+
+<h3>Kernel Threads</h3>
+<pre>
+See: http://elixir.free-electrons.com/linux/v4.8/source/kernel/kthread.c
+
+struct task_struct *kthread_create(int (*threadfn)(void *data), void *data, const char *namefmt, ...);
+struct task_struct *kthread_run(int (*threadfn)(void *data), void *data, const char *namefmt, ...);
+int kthread_stop(struct task_struct *thread);
+/**
+ * kthread_stop - stop a thread created by kthread_create().
+ * @k: thread created by kthread_create().
+ *
+ * Sets kthread_should_stop() for @k to return true, wakes it, and
+ * waits for it to exit. This can also be called after kthread_create()
+ * instead of calling wake_up_process(): the thread will exit without
+ * calling threadfn().
+ *
+ * If threadfn() may call do_exit() itself, the caller must ensure
+ * task_struct can't go away.
+ *
+ * Returns the result of threadfn(), or %-EINTR if wake_up_process()
+ * was never called.
+ */
+ </pre>
+
+<h3>Kernel Semaphores</h3>
+
+<h3>Kernel Times</h3>
+<p>To schedule a recurring short task that executes in <b>interrupt context</b> and on the CPU
+that create the timer.</p>
+<pre>
+Refernce: http://www.makelinux.net/ldd3/chp-7-sect-4
+
+void timed_function(unsigned long tmrdata)
+{
+    struct my_data *data = (struct my_data *)tmrdata;
+    /* Code to generate the key press */
+    /* Atomically access the direction */
+    if (I should still be running)
+    {
+        /* Atomically access configured delay */
+        timer.expires += + msecs_to_jiffies(10);
+        add_timer(&amp;data->something.timer);
+    }
+}
+
+struct timer_list timer;
+init_timer(&amp;timer);
+timer.data = (unsigned long)&amp;mxt_data;
+timer.function = volume_key_press_generator_thread;
+timer.expires = jiffies + msecs_to_jiffies(10);
+
+-------
+See also del_timer() to remove timer from queue and del_timer_sync()
+-------
+
+https://github.com/jameshume/MessingWithLinux/blob/master/kernel_timers/kernel_timers_play.c
+</pre>
+
+<h3>Build On Ubuntu</h3>
+<p>ref: https://www.cyberciti.biz/tips/build-linux-kernel-module-against-installed-kernel-source-tree.html</p>
+
+<p>Wanted this to quickly test and play with some driver stuff that didn't require any actual
+hardware... just get familiar with some API</p>
+<pre>$ uname -r
+4.4.0-83-generic
+</pre>
+
+
 
 </div>
 </div>
