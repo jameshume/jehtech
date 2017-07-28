@@ -1,0 +1,648 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLHierarchy</id>
+    <coordinates>
+      <x>270</x>
+      <y>380</y>
+      <w>250</w>
+      <h>270</h>
+    </coordinates>
+    <panel_attributes>type=Package
+/
+	src
+		my_prog.c
+		my_prog.h
+		Makefile
+		untracked_file1.c
+		untracked_file1.h
+	.git</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>270</x>
+      <y>350</y>
+      <w>250</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Work Space</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLHierarchy</id>
+    <coordinates>
+      <x>700</x>
+      <y>380</y>
+      <w>250</w>
+      <h>270</h>
+    </coordinates>
+    <panel_attributes>type=Package
+/
+	src
+		my_prog.c
+		my_prog.h
+		Makefile
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>700</x>
+      <y>350</y>
+      <w>250</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Index</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLHierarchy</id>
+    <coordinates>
+      <x>1130</x>
+      <y>380</y>
+      <w>250</w>
+      <h>270</h>
+    </coordinates>
+    <panel_attributes>type=Package
+/
+	src
+		my_prog.c
+		my_prog.h
+		Makefile
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1130</x>
+      <y>350</y>
+      <w>250</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>.git Repository</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>480</x>
+      <y>370</y>
+      <w>210</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>
+group=1</panel_attributes>
+    <additional_attributes>10.0;20.0;190.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>660</x>
+      <y>350</y>
+      <w>30</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>
+group=1</panel_attributes>
+    <additional_attributes>10.0;40.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>660</x>
+      <y>420</y>
+      <w>30</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>
+group=1</panel_attributes>
+    <additional_attributes>10.0;40.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>480</x>
+      <y>410</y>
+      <w>210</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>*Stage file(s)*
+group=1</panel_attributes>
+    <additional_attributes>10.0;20.0;190.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>480</x>
+      <y>380</y>
+      <w>30</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>
+group=1</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>660</x>
+      <y>350</y>
+      <w>60</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>
+group=1</panel_attributes>
+    <additional_attributes>40.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>660</x>
+      <y>400</y>
+      <w>60</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>
+group=1</panel_attributes>
+    <additional_attributes>40.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>910</x>
+      <y>460</y>
+      <w>210</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>group=2</panel_attributes>
+    <additional_attributes>10.0;10.0;190.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1090</x>
+      <y>430</y>
+      <w>30</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>
+group=2</panel_attributes>
+    <additional_attributes>10.0;40.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1090</x>
+      <y>500</y>
+      <w>30</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>
+group=2</panel_attributes>
+    <additional_attributes>10.0;40.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>910</x>
+      <y>490</y>
+      <w>210</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>*Commit file(s)*
+/(only files in the index can/
+/be committed to the /
+/repository)/
+group=2</panel_attributes>
+    <additional_attributes>10.0;20.0;190.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>910</x>
+      <y>460</y>
+      <w>30</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>
+group=2</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1090</x>
+      <y>430</y>
+      <w>60</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>
+group=2</panel_attributes>
+    <additional_attributes>40.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1090</x>
+      <y>480</y>
+      <w>60</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>
+group=2</panel_attributes>
+    <additional_attributes>40.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1400</x>
+      <y>410</y>
+      <w>350</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>*Clone .git repository*
+/(compressed meta data and the object database/
+/is downloaded to your local machine)/</panel_attributes>
+    <additional_attributes>10.0;20.0;330.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1400</x>
+      <y>390</y>
+      <w>30</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;40.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1400</x>
+      <y>460</y>
+      <w>30</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;40.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1400</x>
+      <y>450</y>
+      <w>350</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;20.0;330.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1720</x>
+      <y>420</y>
+      <w>30</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1370</x>
+      <y>440</y>
+      <w>60</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>40.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1370</x>
+      <y>390</y>
+      <w>60</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>40.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>1450</x>
+      <y>410</y>
+      <w>20</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>1a
+fg=none
+bg=dark_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>350</x>
+      <y>450</y>
+      <w>560</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=..
+*tracked files*
+/Git will "watch" these/
+/files and alert you/
+/when you change /
+/them./
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>520</x>
+      <y>410</y>
+      <w>20</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>2
+fg=none
+bg=dark_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>940</x>
+      <y>490</y>
+      <w>20</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>3
+fg=none
+bg=dark_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>260</x>
+      <y>300</y>
+      <w>1130</w>
+      <h>360</h>
+    </coordinates>
+    <panel_attributes>lt=..
+All of this exists on your local machine. </panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>350</x>
+      <y>540</y>
+      <w>560</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=..
+*UNtracked files*
+/Git knows they're/
+/untracked. It wont let/
+/you commit these!/
+bg=gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>370</x>
+      <y>250</y>
+      <w>920</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-
+The head of the compressed repo is "expanded" into your work space</panel_attributes>
+    <additional_attributes>10.0;100.0;10.0;20.0;900.0;20.0;900.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>580</x>
+      <y>250</y>
+      <w>20</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>1b
+fg=none
+bg=dark_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>300</x>
+      <y>610</y>
+      <w>90</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>330</x>
+      <y>630</y>
+      <w>960</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+The .git directory is your local git repository.</panel_attributes>
+    <additional_attributes>940.0;20.0;940.0;70.0;10.0;70.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1370</x>
+      <y>510</y>
+      <w>350</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>*Push to remote*
+</panel_attributes>
+    <additional_attributes>10.0;20.0;330.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1690</x>
+      <y>490</y>
+      <w>30</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;40.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1690</x>
+      <y>560</y>
+      <w>30</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;40.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1370</x>
+      <y>550</y>
+      <w>350</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;20.0;330.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1370</x>
+      <y>520</y>
+      <w>30</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1690</x>
+      <y>490</y>
+      <w>60</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>40.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1690</x>
+      <y>540</y>
+      <w>60</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>40.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>1470</x>
+      <y>510</y>
+      <w>20</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>4
+fg=none
+bg=dark_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1380</x>
+      <y>690</y>
+      <w>300</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>The .git repository is like a set of snapshots of your file system.
+
+Each snapshot is saved as the set of entire-files, not file diffs. Where a file is the same between commits, it just refers back to the previous snapshot, rather than replicating the file.
+fg=white
+bg=dark_gray
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1300</x>
+      <y>580</y>
+      <w>100</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fg=gray</panel_attributes>
+    <additional_attributes>10.0;10.0;80.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>0</x>
+      <y>690</y>
+      <w>300</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>The working directory is your scratch pad. If you have told Git about a set of files they are said to be "tracked" and  Git will "watch" them and know when you have changed them.
+
+Files you have not told Git about are said to be "untracked". Git will tell you they are untraced if you do a "git status", but otherwise doesn't care about these files...
+fg=white
+bg=dark_gray
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>210</x>
+      <y>570</y>
+      <w>110</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fg=gray</panel_attributes>
+    <additional_attributes>90.0;10.0;10.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1090</x>
+      <y>30</y>
+      <w>370</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>Unlike other source control tools, like SVN, before you can commit your changes you have to "stage" them first (also known as "adding them to the index").
+
+The "index" is a staging area. It is a snapshot of the part of your work space that you wish to commit to the repository.
+
+Note that this means you can have a file in your index that is different from your workspace if, for example, you add the file to your index and then change it.
+fg=white
+bg=dark_gray
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>900</x>
+      <y>210</y>
+      <w>210</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fg=gray</panel_attributes>
+    <additional_attributes>190.0;10.0;10.0;200.0</additional_attributes>
+  </element>
+</diagram>
