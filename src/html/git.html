@@ -625,7 +625,7 @@ git rebase &lt;target-branch&gt; </pre>
         or  &quot;<code>test_vanilla_rebase.sh new onto master</code>&quot;.
     </p>
 
-    <h4 style="clear: both;">Interative Rebasing</h4>
+    <h4 style="clear: both;">Interative Rebasing: Squashing Commits</h4>
     <p>
         In the example above where the new feature is rebased onto the master branch, 
         3 commits are added to the master for the one new feature. We might
@@ -689,6 +689,14 @@ pick &lt;hash&gt; 4 new feature</pre>
     </div>
     <p style="clear:both;">
     </p>
+
+    <h4 style="clear: both;">Interative Rebasing: Editing Commits</h4>
+
+    <h4 style="clear: both;">Interative Rebasing: Modify Your Own Branch</h4>
+    <p>
+    	Start it with the last commit you want to retain as-is:
+    </p>
+    <pre>git rebase -i &lt;after-this-commit&gt;</pre>
 
 </div>
 
