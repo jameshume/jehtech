@@ -158,8 +158,8 @@
             <img src="##IMG_DIR##/add_vbox_additions_iso.png" alt="Image showing how to add a CD ISO to VM on VirtualBox"/>
          </p>
          <p>Now power up the VM. It will be
-            mounted on <tt>/media/&lt;user name&gt;/VBOXADDITIONS_x.x.x_xxxxx</tt>.
-            Change dir into that folder and <tt>sudo run VBoxLinuxAdditions.run</tt>.
+            mounted on <code>/media/&lt;user name&gt;/VBOXADDITIONS_x.x.x_xxxxx</code>.
+            Change dir into that folder and <code>sudo sh VBoxLinuxAdditions.run</code>.
             Reboot.
          </p>
          <h3>Adding A Shared Directory Between Host and Guest</h3>
@@ -173,14 +173,14 @@
          <p>Once you have created this share and select the auto-mount option,
             you may still not be able to access it. If you get a <em>permission denied</em>
             error then it is probably because your user account is not part
-            of the <tt>vboxsf</tt> group and does not have permissions to access
+            of the <code>vboxsf</code> group and does not have permissions to access
             shared folders.
          </p>
          <p>
-            To fix, open a terminal window and type &quot;<tt>sudo usermod -G vboxsf -a &lt;user name&gt;</tt>&quot;.
+            To fix, open a terminal window and type &quot;<code>sudo usermod -G vboxsf -a &lt;user name&gt;</code>&quot;.
             Then log off, log on again. Now you should be able to acccess the
-            shared directory, found under <tt>/media/sf_&lt;share dir name&gt;</tt>,
-            which from the above example would be <tt>/media/s_virtual_transfer</tt>.
+            shared directory, found under <code>/media/sf_&lt;share dir name&gt;</code>,
+            which from the above example would be <code>/media/s_virtual_transfer</code>.
          </p>
       </div> <!-- END H2: Run ubuntu on vb -->
 
@@ -283,11 +283,11 @@ apt-get dir::cache=$MYBASE install package</pre>
 			</p>
 			<h3>Access from Linux</h3>
 			<p>
-				Config file is <tt>/boot/GRUB/GRUB.cfg</tt> - do <b>not</b> edit this directly. It is
+				Config file is <code>/boot/GRUB/GRUB.cfg</code> - do <b>not</b> edit this directly. It is
 				a generated file.
 			</p>
 			<p>
-				Instead edit <tt>/etc/default/GRUB</tt> and regenerate the above CFG using <tt>sudo update-GRUB</tt>.
+				Instead edit <code>/etc/default/GRUB</code> and regenerate the above CFG using <code>sudo update-GRUB</code>.
 			</p>
 		</div>
 
@@ -382,8 +382,8 @@ apt-get dir::cache=$MYBASE install package</pre>
 				</footer>
 		 	</blockquote>
 			<p>
-				Therefore when you write commands such as &quot;<tt>JEHTECH=1234 some-command</tt>&quot; the
-				enironment variable &quot;<tt>JEHTECH</tt>&quot; would be set only in the sub-shell that
+				Therefore when you write commands such as &quot;<code>JEHTECH=1234 some-command</code>&quot; the
+				enironment variable &quot;<code>JEHTECH</code>&quot; would be set only in the sub-shell that
 				the command is executed in and won't affect the existing shell (unless
 				the command is a built-in or function, then it will!).
 			</p>
@@ -399,15 +399,15 @@ HELLO</pre>
 				<b>before</b> the command is executed, the following is happening.
 			</p>
 			<ol>
-				<li>The variable assignment <tt>JAMES="BYE BYE"</tt> is saved. So the line being processed is now just <tt>echo "$JAMES"</tt>
+				<li>The variable assignment <code>JAMES="BYE BYE"</code> is saved. So the line being processed is now just <code>echo "$JAMES"</code>
 				</li>
-				<li>Now variable expansion occurs. The value of <tt>$JAMES</tt> is still &quot;HELLO&quot; because that is the value
+				<li>Now variable expansion occurs. The value of <code>$JAMES</code> is still &quot;HELLO&quot; because that is the value
 				    of the variable in the current shell. The new assignment that happens as part of our simple command has not
-					 taken effect yet! The command to be executed is therefore now <tt>echo HELLO</tt>.
+					 taken effect yet! The command to be executed is therefore now <code>echo HELLO</code>.
 				</li>
 				<li>To execute this command a new subshell is created in which it. As part of that new subshell, the
-				variable assignment <tt>JAMES="BYE BYE"</tt> is added to the new sub shell. But the command being
-				executed in the subshell is <tt>echo HELLO</tt>, and that's why we see the output we do.
+				variable assignment <code>JAMES="BYE BYE"</code> is added to the new sub shell. But the command being
+				executed in the subshell is <code>echo HELLO</code>, and that's why we see the output we do.
 				</li>
 			</ol>
 		</div>
@@ -415,9 +415,9 @@ HELLO</pre>
 		<h2>Word Splitting</h2>
 		<div>
 			<p>
-				The bash shell variable <tt>$IFS</tt> is a list of delimeters that
+				The bash shell variable <code>$IFS</code> is a list of delimeters that
 				the shell will use to split words on. I like to think of it as
-				the delimeter list I'd supply to the C function <tt>strtok()</tt>.
+				the delimeter list I'd supply to the C function <code>strtok()</code>.
 				Once a word has been tokenized the shell does not see it as one &quot;block&quot;
 				but as many seperate tokens/parameters.
 			</p>
@@ -446,19 +446,19 @@ HELLO</pre>
 a b c d e#f</pre>
 			<p>
 				Our original string had many spaces between the &quot;d&quot; and &quot;e&quot; but
-				the <tt>echo</tt> output does not. What has happened here is that parmeter expansion
+				the <code>echo</code> output does not. What has happened here is that parmeter expansion
 				occured (this occurs <b>before</b> the entire command line is evaluated).
 			</p>
 			<p>
-				The bash shell had to substitute the value of <tt>$JEHTECH</tt> and when
+				The bash shell had to substitute the value of <code>$JEHTECH</code> and when
 				it does this is splits or tokenises the resulting expansion based on the
-				delimeters in <tt>$IFS</tt>. The default value for <tt>$IFS</tt> is <tt>&lt;space&gt;&lt;tab&gt;&lt;newline&gt;</tt>,
+				delimeters in <code>$IFS</code>. The default value for <code>$IFS</code> is <code>&lt;space&gt;&lt;tab&gt;&lt;newline&gt;</code>,
 				so any of the characters in any consecutive order are &quot;deleted&quot; and used as a
 				seperator between words. The result is that bash finds the tokens
 				&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, and &quot;e#f&quot;.
 			</p>
 			<p>
-				Notice the difference when we enclose the variable <tt>$JEHTECH</tt> in
+				Notice the difference when we enclose the variable <code>$JEHTECH</code> in
 				quotes:
 			</p>
 			<pre class="prettyprint linenums">~$ echo "$JEHTECH"
@@ -500,12 +500,12 @@ drwxr-xr-x 2 jehtech jehtech 4096 Aug 12 10:36 jeh tech/
 
 ~$ rmdir jeh\ tech/</pre>
 			<p>
-				Note how the command <tt>ll -d $MYDIR</tt> fails, but
-				<tt>ll -d &quot;$MYDIR&quot;</tt> does what is expected!
+				Note how the command <code>ll -d $MYDIR</code> fails, but
+				<code>ll -d &quot;$MYDIR&quot;</code> does what is expected!
 			</p>
 			<p>
-				We can play with the value of <tt>$IFS</tt> to further split the
-				characters in our example variable <tt>$JEHTECH</tt> on the &quot;#&quot;
+				We can play with the value of <code>$IFS</code> to further split the
+				characters in our example variable <code>$JEHTECH</code> on the &quot;#&quot;
 				character too:
 			</p>
 
@@ -514,7 +514,7 @@ drwxr-xr-x 2 jehtech jehtech 4096 Aug 12 10:36 jeh tech/
 				I wanted to be able to check the IPython version in a shell script to
 				let the user know if it needed upgrading and to offer to do the upgrade
 				automatically. I knew I could spit the string onto multiple lines
-				using <tt>tr</tt> and then parse it in a <tt>for</tt> loop, but a quick
+				using <code>tr</code> and then parse it in a <code>for</code> loop, but a quick
 				bit of googling and StackOverflow came to the rescue again
 				<a href="http://stackoverflow.com/questions/918886/how-do-i-split-a-string-on-a-delimiter-in-bash"
 				   target="_blank">[3]</a>.
@@ -525,7 +525,7 @@ if [ ${pyVerInfo[0]} -ne 3 ]; then
 fi</pre>
 			<p>
 				This cool little snippet splits the string up using a full-stop as the
-				delimeter and saves it as an array to the variable <tt>pyVerInfo</tt>.
+				delimeter and saves it as an array to the variable <code>pyVerInfo</code>.
 			</p>
 		</div>
 
@@ -533,7 +533,7 @@ fi</pre>
       <div>
          <p>
             If you know that your shell script will require root permissions
-            and must be run with <tt>sudo</tt>, you can cause the script to
+            and must be run with <code>sudo</code>, you can cause the script to
             output a useful error message and abort if it isn't run as such,
             rather than a bunch of commands just failing. To do this you can
             check the user's effective user ID
@@ -547,13 +547,13 @@ then
    exit 1
 fi</pre>
          <p>
-            Instead of <tt>$(id -u)</tt> you could also use <tt>$EUID</tt> and
+            Instead of <code>$(id -u)</code> you could also use <code>$EUID</code> and
             you can be more consise using:
          </p>
          <pre class="prettyprint linenums">[ "$(id -u)" -ne 0 ] &amp;&amp; { echo "### ERROR: You must run this script as root"; exit 1; }</pre>
          <p>
-            Where the <tt>{...}</tt> braces group the commands but executes them
-            in the current shell context. If you used <tt>(...)</tt> braces then
+            Where the <code>{...}</code> braces group the commands but executes them
+            in the current shell context. If you used <code>(...)</code> braces then
             the group commands would be executed in a sub-shell.
          </p>
       </div> <!-- END: H2 -->
@@ -581,8 +581,8 @@ fi</pre>
          </p>
          <pre>PS1='\[\e[0;33m\]\u@\h:\w\$ \[\e[0m\]'</pre>
          <p>
-            Note that the &quot;<tt>\[</tt>&quot; and &quot;<tt>\]</tt>&quot;
-            surrounding the &quot;<tt>\e...</tt>&quot; constructs
+            Note that the &quot;<code>\[</code>&quot; and &quot;<code>\]</code>&quot;
+            surrounding the &quot;<code>\e...</code>&quot; constructs
             are very important as otherwise the size of the prompt is
             miscalculated and when cycling through command history the display
             messes up
@@ -590,21 +590,21 @@ fi</pre>
             target="_blank">[1]</a>.
          </p>
          <p>
-            Add this to your <tt>~/.bashrc</tt> file to make it permanent.
+            Add this to your <code>~/.bashrc</code> file to make it permanent.
          </p>
          <p>
             I really dislike it when the cwd printed in the prompt begins
             to get too long and take up most of the terminal line. What I
             wanted was for the cwd to collapse a little when this happended.
-            To do this I set my <tt>PS1</tt> environment variable as follows
+            To do this I set my <code>PS1</code> environment variable as follows
             and used the (hacky) Python script, also shown below.
          </p>
          <p>
-            Set <tt>PS1</tt> as follows:
+            Set <code>PS1</code> as follows:
          </p>
          <pre>PS1="\[\e[0;33m\]\$(python ~/ps1.py)\$ \[\e[m\]"</pre>
          <p>
-            Then created the file <tt>ps1.py</tt> in my home directory:
+            Then created the file <code>ps1.py</code> in my home directory:
          </p>
          <pre class="prettyprint linenums lang-python">import os
 
@@ -630,14 +630,14 @@ else:
       <h2>Modify Any PATH-like Variable And Variable Dereferencing</h2>
       <div>
          <p>
-            Modifying a <tt>PATH</tt>-like variable (eg. <tt>PATH</tt>,
-            <tt>LD_LIBRARY_PATH</tt>, <tt>PYTHONPATH</tt> etc is obviously easy.
+            Modifying a <code>PATH</code>-like variable (eg. <code>PATH</code>,
+            <code>LD_LIBRARY_PATH</code>, <code>PYTHONPATH</code> etc is obviously easy.
             What I found was I often wanted to script it and only modify a path
             if what I wanted to add wasn't already listed. Also, sometimes I
-            wanted to remove a path from a <tt>PATH</tt>-like variable.
+            wanted to remove a path from a <code>PATH</code>-like variable.
          </p>
          <p>
-            Accomplishing this required the use of functions and the <tt>eval</tt>
+            Accomplishing this required the use of functions and the <code>eval</code>
             statement to dereference a variable twice, i.e. to use one variable
             as a &quot;reference&quot; to another. There are also the little
             corner cases when adding to a path... if it's empty then don't
@@ -653,12 +653,12 @@ $ JEH_TECH="This is JEH-Tech.com"
 $ eval echo \$$jtRef
 This is JEH-Tech.com</pre>
          <p>
-            Works quite well. <tt>eval</tt>'s parameters are evaluated by the
-            shell and passed to <tt>eval</tt>. Thus, <tt>echo \$$jtRef</tt> gets parsed
-            by the shell as <tt>echo $JEH_TECH</tt>, which is passed to <tt>eval</tt>.
-            Eval then re-evalulates this string which <tt>echo</tt>es the value
-            of the variable <tt>JEH_TECH</tt>. Thus we have essentially
-            dereferenced <tt>jtRef</tt>. <b>Note however that eval is a potentially massive security whole!!</b>
+            Works quite well. <code>eval</code>'s parameters are evaluated by the
+            shell and passed to <code>eval</code>. Thus, <code>echo \$$jtRef</code> gets parsed
+            by the shell as <code>echo $JEH_TECH</code>, which is passed to <code>eval</code>.
+            Eval then re-evalulates this string which <code>echo</code>es the value
+            of the variable <code>JEH_TECH</code>. Thus we have essentially
+            dereferenced <code>jtRef</code>. <b>Note however that eval is a potentially massive security whole!!</b>
          </p>
          <p>
             However, in Bash, there is a much easier syntax
@@ -670,7 +670,7 @@ This is JEH-Tech.com</pre>
 This is JEH-Tech.com</pre>
          <p>
             In Bash, the variable expansion mechanism
-            <tt>${!<em>varName</em>}</tt> does the dereferencing much more
+            <code>${!<em>varName</em>}</code> does the dereferencing much more
             elegantly for us...
          </p>
 
@@ -678,26 +678,26 @@ This is JEH-Tech.com</pre>
          <div>
             <p>
                To split up the path variable, i.e, do the equivalent of a
-               <tt>split()</tt> function in bash, I used a combination of
-               <tt>tr</tt> and <tt>sed</tt>.
+               <code>split()</code> function in bash, I used a combination of
+               <code>tr</code> and <code>sed</code>.
             </p>
             <p>
                Why do the split? Two reasons. Firstly, grep would match
-               the first occurrence of a string. So if <tt>PATH=/aaa/bbb</tt>
-               and I wish to add <tt>/aaa</tt>, <tt>grep</tt>ing for it before
+               the first occurrence of a string. So if <code>PATH=/aaa/bbb</code>
+               and I wish to add <code>/aaa</code>, <code>grep</code>ing for it before
                adding it to the path (so I don't clutter it with duplicates)
                won't work: I can't use word boundaries in the regexp because the
-               <tt>/</tt> appears to count as a word boundary and grepping for
+               <code>/</code> appears to count as a word boundary and grepping for
                possible colons becomes tedious. Secondly, sed works on a line by
                line basis.
             </p>
             <p>
-               So, my solution is this... use <tt>tr</tt> to break the path
+               So, my solution is this... use <code>tr</code> to break the path
                string across many lines, one line per path element, and then
-               use <tt>sed</tt> to blank out the matching path, and then use
-               <tt>tr</tt> to re-collapse it all back into one string (removing
+               use <code>sed</code> to blank out the matching path, and then use
+               <code>tr</code> to re-collapse it all back into one string (removing
                the duplicate newline resulting from the blank line created by
-               <tt>sed</tt>
+               <code>sed</code>
             </p>
             <p>
                For example, removing a path element has the following script
@@ -708,20 +708,20 @@ This is JEH-Tech.com</pre>
                The snipped works as follows...
 
                <ol>
-                  <li><tt>echo -e "${!varname}"</tt> echoes the value of the
-                      variable referenced by <tt>varname</tt> to stdout, which
-                      is piped into <tt>tr</tt>.
+                  <li><code>echo -e "${!varname}"</code> echoes the value of the
+                      variable referenced by <code>varname</code> to stdout, which
+                      is piped into <code>tr</code>.
                   </li>
-                  <li><tt>tr ":" "\n"</tt> replaces all colons in the path
+                  <li><code>tr ":" "\n"</code> replaces all colons in the path
                       string with newlines so that sed can work line by line
                   </li>
-                  <li><tt>sed -e "s@^$path_2_del\$@@g"</tt> blanks out the line
+                  <li><code>sed -e "s@^$path_2_del\$@@g"</code> blanks out the line
                       (deletes the line but not the trailing newline) that
                       matches <em>the entire</em> path and no more. The use of
-                      the <tt>@</tt> is because if we used a forward slash we'd
+                      the <code>@</code> is because if we used a forward slash we'd
                       have to go to the trouble of escapre the path seperators.
                   </li>
-                  <li><tt>tr -s "\n" ":" | sed -e 's/:$//'</tt> staples the
+                  <li><code>tr -s "\n" ":" | sed -e 's/:$//'</code> staples the
                       lines back into one string and removes any trailing colon
                       that may have been left.
                   </li>
@@ -740,10 +740,10 @@ s/:$//g</pre>
          <div>
             <p>
                I made the following script to accomplish addition and removal of
-               elements from <tt>PATH</tt>-like variables. Quite possibly could be
+               elements from <code>PATH</code>-like variables. Quite possibly could be
                more elegant so any suggestions welcome :) Above each use of the
-               <tt>${!<em>varName</em>}</tt> syntax is a commented-out equivalent
-               using <tt>eval</tt>.
+               <code>${!<em>varName</em>}</code> syntax is a commented-out equivalent
+               using <code>eval</code>.
             </p>
             <pre class="prettyprint linenums">#
 # Expects 2 arguments. The name of the variable to have a path element
@@ -813,7 +813,7 @@ function remove_from_path() {
          <p>
             Regular expressions and group captures spring to mind and as it turns out
             that Bash (and some other more modern shells) can so this using the
-            new test built-in: <tt>[[...]]</tt>.
+            new test built-in: <code>[[...]]</code>.
          </p>
          <p>
             Thanks to the following references:
@@ -841,7 +841,7 @@ do
 done</pre>
 
          <p>From the Bash manual: <q>... parenthesized subexpressions ... are
-            saved in the array variable <tt><b>BASH_REMATCH</b></tt> ...  index 0 is
+            saved in the array variable <code><b>BASH_REMATCH</b></code> ...  index 0 is
             [the match of] the entire regular expression ... index n is the
             [match of] the nth parenthesized subexpression.</q>
          </p>
@@ -903,7 +903,7 @@ done</pre>
          <a name="ExecAlternative"><h3>Find --exec alternative when you want to exec a script function</h3></a>
          <p>
             For when you want to do an operation on a set of files but can't
-            use &quot;<tt>find ... -exec ...</tt>&quot; because you want to
+            use &quot;<code>find ... -exec ...</code>&quot; because you want to
             call a script function, for example...
          </p>
          <pre class="prettyprint linenums">find path ..options.. -print |
@@ -916,11 +916,11 @@ done</pre>
          <h4>Piping Output To Read</h4>
          <p>
             The builtin
-            <tt><a href="http://linuxcommand.org/lc3_man_pages/readh.html" target="_blank">read</a></tt>
+            <code><a href="http://linuxcommand.org/lc3_man_pages/readh.html" target="_blank">read</a></code>
             is very useful for
             <a href="http://stackoverflow.com/questions/226703/how-do-i-prompt-for-input-in-a-linux-shell-script/27875395#2787539"
                target="_blank">reading in user input</a>,
-            or for reading and processing the output of a command like <tt>find</tt> line by line. For example:
+            or for reading and processing the output of a command like <code>find</code> line by line. For example:
          </p>
          <pre class="prettyprint linenums">for dir in "list of dirs ":
 do
@@ -933,10 +933,10 @@ do
 done</pre>
          <p>
             One thing that might catch you out is that variables inside the
-            <tt>while</tt> loop
+            <code>while</code> loop
             <a href="http://mywiki.wooledge.org/BashFAQ/024"
                target="_blank">disappear after the loop terminates</a>. The
-            summary is that the <tt>while</tt> loop is executed in a
+            summary is that the <code>while</code> loop is executed in a
             sub shell, so will have a new variable and context.
          </p>
          <h4>Reading Files Line By Line</h4>
@@ -970,7 +970,7 @@ done</pre>
          </p>
          <pre>set -e</pre>
          <p>
-            You can cancel it by using <tt>+e</tt>
+            You can cancel it by using <code>+e</code>
          </p>
 
          <h3>Echo Each Command Before Execution</h3>
@@ -980,15 +980,15 @@ done</pre>
       <h2>Debug .so Loading Using LD_DEBUG</h2>
       <div>
          <p>
-            If a program is complaining that it cannot find a library you can always try setting <tt>export LD_DEBUG=libs</tt>
-            before running that program (or <tt>export LD_DEBUG=help</tt> to get help). You'll get debug output describing libraries being searched for and
-            loaded. You can also set <tt>export LD_DEBUG=all</tt> for an absolute shed-load of debug info, which might be too much, but at least
+            If a program is complaining that it cannot find a library you can always try setting <code>export LD_DEBUG=libs</code>
+            before running that program (or <code>export LD_DEBUG=help</code> to get help). You'll get debug output describing libraries being searched for and
+            loaded. You can also set <code>export LD_DEBUG=all</code> for an absolute shed-load of debug info, which might be too much, but at least
             you'll be able to see where the loader is searching for libraries and what, if anything, it finds. To clear the
-            loader debug output just set <tt>export LD_DEBUG=</tt>.
+            loader debug output just set <code>export LD_DEBUG=</code>.
          </p>
          <p>
             Annoyingly on QNX (I know it's POSIX-like and not Linux) it appears
-            you need to set <tt>DL_DEBUG</tt> (Note &quot;DL&quot;,
+            you need to set <code>DL_DEBUG</code> (Note &quot;DL&quot;,
             not &quot;LD&quot;)...
          </p>
       </div>  <!-- END: H2: Debug .so Loading Using LD_DEBUG -->

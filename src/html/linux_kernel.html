@@ -77,6 +77,14 @@
   </ol>
 </div>
 
+<h2>Generally Useful Links</h2>
+<div>
+<ul>
+  <li><a href="https://www.cs.bham.ac.uk/~exr/lectures/opsys/13_14/docs/kernelAPI/" target="_blank">The Linux Kernel API</a>
+  </li>
+</ul>
+</div>
+
 <h2>Configure &amp; Build the Linux Kernel</h2>
 <div>
 <h3>Downloading The Kernel Source &amp; A Look At Its Structure</h3>
@@ -1479,6 +1487,11 @@ Defined in http://elixir.free-electrons.com/linux/latest/source/include/linux/ji
 See functions like  time_after(a,b) or time_in_rance(a,b,c) to deal with timer wrapping.
 </pre>
 
+<h3>Sleeping</h3>
+<pre>
+https://www.kernel.org/doc/Documentation/timers/timers-howto.txt
+</pre>
+
 <h3>Kernel Threads</h3>
 <pre>
 See: http://elixir.free-electrons.com/linux/v4.8/source/kernel/kthread.c
@@ -1504,6 +1517,17 @@ int kthread_stop(struct task_struct *thread);
  </pre>
 
 <h3>Kernel Semaphores</h3>
+<pre>http://cs.unc.edu/~blate/courses/comp530H_F14/pdf/Sync_Schedulie.pdf
+http://www.makelinux.net/ldd3/chp-5-sect-3
+    if (down_interruptible(&amp;dev->sem))
+        return -ERESTARTSYS;
+
+Quote verbatim:
+Note the check on the return value of down_interruptible; if it returns nonzero, the operation was interrupted. The usual thing to do in this situation is to return -ERESTARTSYS. Upon seeing this return code, the higher layers of the kernel will either restart the call from the beginning or return the error to the user. If you return -ERESTARTSYS, you must first undo any user-visible changes that might have been made, so that the right thing happens when the system call is retried. If you cannot undo things in this manner, you should return -EINTR instead.
+
+#include &lt;linux/semaphore.h&gt;
+
+</pre>
 
 <h3>Kernel Times</h3>
 <p>To schedule a recurring short task that executes in <b>interrupt context</b> and on the CPU

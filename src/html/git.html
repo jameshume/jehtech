@@ -127,6 +127,32 @@ ssh -vT address-of-server</pre>
 	<pre>IdentityFile ~/.ssh/some_key_name</pre>
 </div> <!-- END: Create A Public/Private Keypair -->
 
+<h2>Git Workspace v.s. Index v.s. Repository</h2>
+<div>
+    <p>
+        <img src="##IMG_DIR##/git_workspace_index_repo.png" alt="Diagram of Git worspace vs index vs respository"/>
+    </p>
+</div>
+
+<h2>Git Parlance</h2>
+<div>
+    <p>Two terms <a href="https://www.kernel.org/pub/software/scm/git/docs/#_identifier_terminology" target="_blank">[Ref]</a>
+    you might see in the documentation are &quot;<b>commit-ish</b>&quot; and
+    &quot;<b>tree-ish</b>&quot;.
+    </p>
+    <p>&quot;Commit-ish&quot; means an identifier that references a commit object in the repo. For
+        example a tag is an identifer that references a commit, as is the sha1 hash for that commit.
+    </p>
+    <p>&quot;Tree-ish&quot; means an identified that references part of the repo's tree. Again, a 
+    tag can be &quot;tree-ish&quot; because it references a commit, from which we can access
+    the files and folders that the commit is a snapshot of.
+    </p>
+    <p>
+        The Git Book on the internals of Git (Git Objects) has a good explanation of
+        how Git repos are organised <a href="https://git-scm.com/book/en/v2/Git-Internals-Git-Objects" target="_blank">[Ref]</a>.
+    </p>
+</div>
+
 <h2>Configuring Git</h2>
 <div>
 <p>
@@ -185,8 +211,8 @@ grepping life a lot easier!
     <p>
         To clone a repo:
     </p>
-    <pre>git clone https://repo_addr [dirname] # Will have ro access
-git clone git://repo_addr [dirname] # Will have r/w access</pre>
+    <pre>git clone https://repo_addr [dirname]
+git clone git://repo_addr [dirname]</pre>
     <p>
         This pulls down data for the repo into dirname, if provided, or to an automatically decided
         dirname in the CWD otherwise. Note you get the <em>entire repo</em> including <em>all the history</em>
@@ -328,32 +354,68 @@ git commit --amend</pre>
 
     <!-- ++++++++++++++++++++++++++++++++ -->
     <h3>Undoing Things</h3>
-    <p>To revert the file in the SVN sense:</p>
+    <p><b>Revert unstanged changes:</b></p>
+    <p>Kinda like reverting a file in the SVN sense</p>
     <pre>git checkout -- filename</pre>
-    <p>To unstage a file:</p>
-    <pre>git reset HEAD filename</pre>
-    <p>To remove a file from repo withOUT deleting it locally:</p>
+    <p>
+        By refering to the diagram describing the working directory vs the index
+        we can understand what this is doing. We have modified a local file but
+        not staged the changes yet. By checking out the file we're just overwriting
+        the changes in the working directory, which Git, because we haven't
+        staged these changes, knows nothing about.
+    </p>
+
+    <p><b>To unstage a file:</b></p>
+    <pre>git reset HEAD -- filename</pre>
+    <p>This resets the index entry for &quot;filename&quot; to its state at
+        HEAD, therefore removing it from the index. Note this changes the
+        <em>index entry</em>, which is distinct from your working directory.
+        The file in the working directory is not touched.
+    </p>
+
+    <p><b>To remove a file from repo withOUT deleting it locally:</b></p>
     <pre>git rm --cached myfile.name</pre>
 
-    <h4>The CWD (not commited changes)</h4>
     <p>
-        <b>WARNING:</b> these commands work on the current working directory and not on 
-        committed snapshots, therefore any changes are permanent and cannot be recovered!
-    </p>
-    <p>
-        To undo all uncomitted changes to tracked files use:
+        <b>To undo all uncomitted changes to tracked files:</b>
     </p>
     <pre>git reset --hard</pre>
+    <p>The option <code>--hard</code> resets the index and the working tree.</p>
+
     <p>
-        To remove untracked files use:
+        <b>To remove untracked files use:</b>
     </p>
     <pre>git clean -f</pre>
-    
-    <h4>Committed changes</h4>
+
     <p>
-        To undo a commit use:
+        <b>To undo a commit use:</b>
     </p>
     <pre>git revert commit-id</pre>
+
+    <!-- ++++++++++++++++++++++++++++++++ -->
+    <h3>Listing Files In The Git Repo</h3>
+    <p>To list files currently being tracked on branch master:
+    </p>
+    <pre>git ls-tree -r master [--name-only]</pre>
+    <p>
+        The above will list all files and directories in master, recursively,
+        that are being tracked. Each line output is for one file and consists
+        of the file's latest comment hash and the file path. If
+        <code>--name-only</code> is used then the commit hash is ommitted.
+    </p>
+    </p>
+    <p>
+        To do the same, but list on the current branch:
+    </p>
+    <pre>git ls-tree -r HEAD --name-only</pre>
+
+    <!-- ++++++++++++++++++++++++++++++++ -->
+    <h3>Diffing With Git</h3>
+    <pre>git diff: What you have changed but NOT staged
+git diff --staged: What will go into next commit
+git diff --cached: Synonym for --staged
+git difftool:      To use external diff tool</pre>
+
 </div>
 
 <h2>Branches And Commits (v.s. SVN-like SCMs)</h2>
@@ -700,6 +762,34 @@ pick &lt;hash&gt; 4 new feature</pre>
 
 </div>
 
+<h2>Modifying Git History!</h2>
+<div>
+<p>
+    The following notes should be used with a ton of caution! You might even
+    consider making temporary backups before starting this work!
+</p>
+<div class="box_container">
+<div class="warning">
+    <p>The notes in this section cover commands that can completely obliterate
+    files from your repository. Use with absolute <b>caution</b>! Make backups first!
+    </p>
+</div>
+</div>
+<p></p>
+<h3>Git Filter Branch</h3>
+<p>
+http://schacon.github.io/git/git-filter-branch.html
+</p>
+<p>
+    Eek! This little fella lets you do a batch modification of many commits!
+</p>
+</div>
+
+<h2>Hunting Down Bugs: Git Bisect</h2>
+<div>
+<p>TODO</p>
+</div>
+
 <h2>Patches</h2>
 <div>
     <h3>Generating Patch Files</h3>
@@ -736,32 +826,104 @@ The commit number</pre>
     </p>
 </div>
 
+<h2>Git Tips and Tricks</h2>
+<div>
+    <p>Many thanks to my colleague Kris Dunning for these...</p>
+
+    <h3>Checking for white-space</h3>
+    <p>To check for white-space alone:</p>
+    <pre>git diff --check</pre>
+    <p>To check for white-space and tabs in indents:</p>
+    <pre>git -c core.whitespace=tab-in-indent diff --check</pre>
+
+    <h3>Adding an Alias</h3>
+    <p>This can be useful when you want to make a shorthand command for something
+    you do frequently, or for long commands that are hard to remember.</p>
+    <p>For instance, the white-space and tabs in indent check above can be reduced to:</p>
+    <pre>git whitespace</pre>
+    <p>By adding the alias:</p>
+    <pre>git config --global alias.whitespace 'git -c core.whitespace=tab-in-indent diff --check'</pre>
+
+    <h3>Useful Aliases</h3>
+    <b>Whitespace Check: &quot;git whitespace&quot;</b>
+    <p>As above:</p>
+    <pre>git config --global alias.whitespace 'git -c core.whitespace=tab-in-indent diff --check'</pre>
+    <b>Status short cut: "git st"</b>
+    <pre>git config --global alias.st status</pre>
+    <b>Gitk Visualisation Window: &quot;git visual&quot;</b>
+    <pre>git config --global alias.visual '!gitk --all HEAD &amp;'</pre>
+    <b>Git log with graph: &quot;git lg&quot;</b>
+    <pre>git config --global alias.lg &quot;log --graph --oneline --decorate&quot;</pre>
+    <p>With colour <a href="https://coderwall.com/p/euwpig/a-better-git-log" target="_blank">[Ref]</a>...</p>
+    <pre>git config --global alias.lg &quot;log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit&quot;</pre>
+</div>
+
+<h2>Stashes</h2>
+<div>
+    <p>
+        Stashes are for when you don't want to commit your current work, want
+        to get on with something else, but don't, obviously, want to loose the
+        current work in progress.
+    </p>
+    <p>
+        A stash is basically a <em>snapshot of your <b><u>un</u></b>committed
+        changes</em>. This is different to a patch, which is a <em>snapshot of
+        you committed changes</em>. Also, unlike a patch, you can not push a
+        stash to a remote.
+    </p>
+    <p>
+        <img src="##IMG_DIR##/git_stash.png" alt="Picture describing the Git stash processes/usage"/>
+    </p>
+    <p>
+        Interestingly you can do more than one stash and then re-apply them 
+        seperately. Use <code>stash list</code> to see a list of stashes. To
+        apply a specific stash use something like <code>git stash apply stash@{1}</code>,
+        which would re-apply the penultimate stash (the smaller the number
+        the more recent the stash).
+    </p>
+    <p>
+        Although you can't push a stash to a remote, you can carry it over to
+        another branch using <code>git stash branch-name</code>. This will
+        switch you to &quot;branch-name&quot; and apply the stash to that
+        branch. Sweet!
+    </p>
+</div>
+
+<h2>Hooks</h2>
+<div>
+    <p>Look at the <code>.sample</code> files in the repo's &quot;hooks&quot;
+    directory in the repo root. Rename a sample without the <code>.sample</code>
+    extensions to &quot;activate&quot; it.</p>
+    <p>Could use this as a way to auto-backup you git repo to a shared server,
+    for example, or run pre-commit checks like syntax checking, linting etc.
+    </p>
+    <p>
+        For example, in my repo dir under <code>.git/hooks</code> I see the following
+        files:
+    </p>
+    <pre>-rwxr-xr-x 1 jh 1049089  478 Jul 28 10:27 applypatch-msg.sample*
+-rwxr-xr-x 1 jh 1049089  896 Jul 28 10:27 commit-msg.sample*
+-rwxr-xr-x 1 jh 1049089  189 Jul 28 10:27 post-update.sample*
+-rwxr-xr-x 1 jh 1049089  424 Jul 28 10:27 pre-applypatch.sample*
+-rwxr-xr-x 1 jh 1049089 1642 Jul 28 10:27 pre-commit.sample*
+-rwxr-xr-x 1 jh 1049089 1348 Jul 28 10:27 pre-push.sample*
+-rwxr-xr-x 1 jh 1049089 4951 Jul 28 10:27 pre-rebase.sample*
+-rwxr-xr-x 1 jh 1049089  544 Jul 28 10:27 pre-receive.sample*
+-rwxr-xr-x 1 jh 1049089 1239 Jul 28 10:27 prepare-commit-msg.sample*
+-rwxr-xr-x 1 jh 1049089 3610 Jul 28 10:27 update.sample*</pre>
+    <p>
+        If we look at <code>pre-commit.sample</code> we can read that
+        it is <q>an example hook script to verify what is about to be
+        comitted</q>. We could, if we wanted to, run a linting tool or
+        style checked from this script and deny the commit if it didn't meet
+        our coding standards.
+    </p>
+
+</div>
+
 <h2>Basic Git Notes</h2>
 <div>
 	<pre>
-List Files In Repo
-
-List files currently being tracked on branch master:
-    git ls-tree -r master --name-only
-
-List files currnetly being tracked on current pranch
-    git ls-tree -r HEAD --name-only
-
-`--name-only` hids the git commit hash number and a couple other columns.
-You don't appear to need to specify the `--full-tree` option.
-
-
-Diffing
-   git diff: What you have changed but NOT staged
-   git diff --staged: What will go into next commit
-   git diff --cached: synonym
-
-   NOTE: If you modify a file AFTER staging, the modifications after the stage
-         willl not be committed in this commit unless added again.
-
-   git difftool to use external diff tool
-
-
 Remotes
    git remote : displays name of remote
                 -v shows URLS of each remote
