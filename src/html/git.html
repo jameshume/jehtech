@@ -689,6 +689,18 @@ git rebase &lt;target-branch&gt; </pre>
 
     <h4 style="clear: both;">Interative Rebasing: Squashing Commits</h4>
     <p>
+        The following notes should be used with a ton of caution! You might even
+        consider making temporary backups before starting this work!
+    </p>
+    <div class="box_container">
+    <div class="warning">
+        <p>The notes in this section cover commands that can completely obliterate
+        files from your repository. Use with absolute <b>caution</b>! Make backups first!
+        </p>
+    </div>
+    </div>
+
+    <p>
         In the example above where the new feature is rebased onto the master branch, 
         3 commits are added to the master for the one new feature. We might
         like to tidy this up a little and only have one new commit in the master branch that is the
@@ -753,40 +765,191 @@ pick &lt;hash&gt; 4 new feature</pre>
     </p>
 
     <h4 style="clear: both;">Interative Rebasing: Editing Commits</h4>
-
-    <h4 style="clear: both;">Interative Rebasing: Modify Your Own Branch</h4>
     <p>
-    	Start it with the last commit you want to retain as-is:
+        The following notes should be used with a ton of caution! You might even
+        consider making temporary backups before starting this work!
     </p>
-    <pre>git rebase -i &lt;after-this-commit&gt;</pre>
-
-</div>
-
-<h2>Modifying Git History!</h2>
-<div>
-<p>
-    The following notes should be used with a ton of caution! You might even
-    consider making temporary backups before starting this work!
-</p>
-<div class="box_container">
-<div class="warning">
-    <p>The notes in this section cover commands that can completely obliterate
-    files from your repository. Use with absolute <b>caution</b>! Make backups first!
+    <div class="box_container">
+    <div class="warning">
+        <p>The notes in this section cover commands that can completely obliterate
+        files from your repository. Use with absolute <b>caution</b>! Make backups first!
+        </p>
+    </div>
+    </div>
+    <p>
+        Lets say we <a href="../downloadables/test_ammend.sh" target="_blank">run this script to setup a sandbox repo</a>
+        in which to have a little play. We would end up with the following commit log:
     </p>
-</div>
-</div>
-<p></p>
-<h3>Git Filter Branch</h3>
-<p>
-http://schacon.github.io/git/git-filter-branch.html
-</p>
-<p>
-    Eek! This little fella lets you do a batch modification of many commits!
-</p>
+    <pre>de5fcb1 Third commit about something
+466318b Second commit about something, with an error... oops
+fca8f1a First commit about something</pre>
+    <p>
+        We have traced our problem to the second commit and now we want to
+        ammend it. Maybe it was something simple like changing the commit
+        message or the author. But maybe it is something more complicated like
+        a code change that will be required. Either was it doesn't matter.
+        We can rebase our own branch like so:
+    </p>
+    <pre>git rebase -i HEAD~2
+              ^^^^^^
+              Rebase starting after the second commit before HEAD.
+              In this case it is that same as typinh
+                 git rebase -i fca8f1a</pre>
+    <p>
+        Note that with this command we cannot change the first commit. If we
+        wanted to do that we could use the option <code>--root</code>, but I'm
+        leaving that one out as I can't see myself ever using it.
+    </p>
+    <p>
+        So let's rebase. Git will launch our editor and give us the following:
+    </p>
+    <pre>pick 466318b Second commit about something, with an error... oops
+pick de5fcb1 Third commit about something</pre>
+    <p>
+        Change the first &quot;pick&quot; to &quot;edit&quot;, and exit the
+        editor saving changes. Observe the Git message:
+    </p>
+    <pre>warning: stopped at 466318b... Second commit about something, with an error... oops</pre>
+    <p>
+        Git is replaying the history of our branch. It's as-if it rewound the branch
+        to its state at commit fca8f1a (the first commit) and then applied the
+        changes made in commit 466318b (the second commit), but before 
+        commiting those changes, it is giving us a chance to make further changes.
+        Any changes we make will be written as part of this commit, as-if we
+        had actually made them back in time when we actually did the second commit!
+    </p>
+    <p>
+        We're now in a kind-of &quot;temporary world&quot; where we can edit
+        this commit before it is applied. If we cat the file we see:
+    </p>
+    <pre>First line
+Second line with an error</pre>
+    <p>
+        So we know that the change for the commit we are &quot;paused&quot;
+        on has been applied.
+    </p>
+    <p>
+        If we look at the log, we also see our log message:
+    </p>
+    <pre>$ git log --oneline
+466318b Second commit about something, with an error... oops
+fca8f1a First commit about something</pre>
+    <p>
+        So, we can see Git has &quot;paused&quot; the rebase on this commit.
+        Although the commit message is in the log, it hasn't actually &quot;gone
+        through&quot; yet! We have this time to modify the file or the log
+        message as we see fit.
+    </p>
+    <p>
+        Let's edit the file to remove our error and change the second line
+        from &quot;Second line with an error&quot; to just
+        &quot;Second line&quot;. To do this you must <code>git add</code> the
+        file and then do a <code>git commit --amend</code> as follows:
+    </p>
+    <pre>git add file.txt
+git commit --amend</pre>
+    <p>Git launches our text editor. In the editor we see our commit message
+    which we can now change to just &quot;Second correct commit&quot; and save.
+    </p>
+    <p>
+        Now you <b>must remember to do <code>git rebase --continue</code></b> to
+        make the changes permanent.
+    </p>
+    <p>
+        UH OH! We get a conflict:
+    </p>
+    <pre>First line
+<<<<<<< HEAD
+Second line
+=======
+Second line with an error
+Third line
+>>>>>>> de5fcb1... Third commit about something</pre>
+    <p>Ah, the change we made conflicts with the change made in the final commit
+    on our branch. At this point the rebase has again &quot;paused&quot;,
+    but this time the branch is in the state it would be when the third commit
+    had been done. But as we have seen, Git cannot replay this commit automatically
+    for us because a conflict has been introduced.
+    </p>
+    <p>This is quite easy to fix. We just edit the file so it looks like this and
+    save:</p>
+    <pre>First line
+Second line
+Third line</pre>
+
+    <p>Having resolved the conflict we need to <code>git add file.txt</code>,
+    commit it and then
+     <b>remember to run <code>git rebase --continue</code></b>.
+    </p>
+    <p>
+        At this point we are told that our rebase has been successfull. If we cat
+        our file we see the contents are as we have modified them to be and the log
+        reflects this:
+    </p>
+    <pre>caeb871 Third commit about something
+2867a5a Second CORRECT commit
+fca8f1a First commit about something</pre>
+    <p>
+        You'll notice that the second and third commits now have diffent
+        commit hashes. This is to be expected as the file contents have
+        changed. Any files that we had been branched from any of the changed
+        files, will be updated correctly to &quot;point&quot; back to the
+        equivalent modified file.
+    </p>
+
+    <h3>Git Filter Branch</h3>
+    <p>
+        The following notes should be used with a ton of caution! You might even
+        consider making temporary backups before starting this work!
+    </p>
+    <div class="box_container">
+    <div class="warning">
+        <p>The notes in this section cover commands that can completely obliterate
+        files from your repository. Use with absolute <b>caution</b>! Make backups first!
+        </p>
+    </div>
+    </div>
+    <p>
+    http://schacon.github.io/git/git-filter-branch.html
+    </p>
+    <p>
+        Eek! This little fella lets you do a batch modification of many commits!
+    </p>
+
+    <h3>Cherry Picking</h3>
+    <p>
+        When you want to take a single commit from one branch and apply it to
+        another. Note, this is different from merging or rebasing because you
+        are taking one specific commit and not a range of commits. Notice also
+        that because this isn't a merge you will loose the ability to track
+        where these changes came from as it will look like you just made these
+        edits yourself!
+    </p>
+    <pre>git checkout branch-to-apply-commit-to
+git cherry-pick [-e] [-x] &lt;commit-ish&gt;</pre>
+    <p>Note: this does the commit for you!</p>
+    </p>
+    <p>Use the <code>-e</code> flag to edit the commit message prior to
+      comitting.</p>
+    <p>The <code>-x</code> flag can be useful, because as said, you loose
+        the ability to track where these changes came from: This flag
+        will append a line that says &quot;(cherry picked from commit ...)&quot;
+        to your commit message.</p>
 </div>
 
 <h2>Hunting Down Bugs: Git Bisect</h2>
 <div>
+    <p>
+        The following notes should be used with a ton of caution! You might even
+        consider making temporary backups before starting this work!
+    </p>
+    <div class="box_container">
+    <div class="warning">
+        <p>The notes in this section cover commands that can completely obliterate
+        files from your repository. Use with absolute <b>caution</b>! Make backups first!
+        </p>
+    </div>
+    </div>
 <p>TODO</p>
 </div>
 
@@ -828,7 +991,7 @@ The commit number</pre>
 
 <h2>Git Tips and Tricks</h2>
 <div>
-    <p>Many thanks to my colleague Kris Dunning for these...</p>
+    <p>Many thanks to my colleague Kris Dunning for these. I've added a few over time but he kicked it off...</p>
 
     <h3>Checking for white-space</h3>
     <p>To check for white-space alone:</p>
@@ -856,6 +1019,16 @@ The commit number</pre>
     <pre>git config --global alias.lg &quot;log --graph --oneline --decorate&quot;</pre>
     <p>With colour <a href="https://coderwall.com/p/euwpig/a-better-git-log" target="_blank">[Ref]</a>...</p>
     <pre>git config --global alias.lg &quot;log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit&quot;</pre>
+
+    <h3>Logs</h3>
+    <p>To see all the commits that have been for a specific branch that was branched off &quot;parent-branch-name&quot;:</p>
+    <pre># From the branch that was branched from &quot;parent-branch-name&quot;
+git log --no-merges parent-branch-name..
+                                      ^^
+                                      These 2 dots are important!</pre>
+    <p>The flag <code>--no-merges</code> tells Git not to print commits
+    with more than one parent and will make the log stop at the point the
+    branch is merged back to the parent branch.</p>
 </div>
 
 <h2>Stashes</h2>
