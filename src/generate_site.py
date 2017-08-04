@@ -27,8 +27,47 @@ import shutil
 import pickle
 import codecs
 import pathlib
+import watermark
 
 DEPLOYED_DIR = '../__deployed'
+
+def CopyImagesDir(srcDir, destDir):
+	# Recurse through the image directory. Files in the first level do not get
+	# watermarked, everything else, minus a few exceptions (the icons directory
+	# and some specific files) will get watermarked as they're copied over -
+	# original images not modified...
+
+	if not os.path.exists(destDir):
+		os.makedirs(destDir)
+
+	first = True # Make destDir and copy over the first layer of files
+	for root, dirs, files in os.walk(srcDir):
+		print "ROOT", root
+		commonLen = len(os.path.commonprefix([srcDir, root]))
+		relativeRoot = root[commonLen:]
+		if len(relativeRoot) and relativeRoot[0] in ["/", "\\"]:
+			relativeRoot = relativeRoot[1:]
+		print "DESDIR", destDir
+		print "RELROOT", relativeRoot, "==>", os.path.join(destDir, relativeRoot)
+
+		for currdir in dirs:
+			destD = os.path.join(destDir, relativeRoot, currdir)
+			if not os.path.exists(destD):
+				print "CREATING", destD
+				os.makedirs(destD)
+
+		for file in files:
+			# copy and watermark
+			if first:
+				# just copy file
+				print "COPY" , os.path.join(root, file), "==>", os.path.join(destDir, relativeRoot, file)
+				shutil.copy(os.path.join(root, file), os.path.join(destDir, relativeRoot, file))
+			else:
+				# create a watermarked copy
+				print "WATERMARK" , os.path.join(root, file), "==>", os.path.join(destDir, relativeRoot, file)
+				WatermarkImage(os.path.join(root, file), os.path.join(destDir, relativeRoot, file))
+
+		first = False
 
 def GenerateRunningCheckSum(data, value):
 	return zlib.adler32(data, value) & 0xffffffff
@@ -302,15 +341,19 @@ def deploy_site():
 
 	for filename in nonHtmlFiles:
 		if os.path.exists(filename):
-			target = os.path.join(DEPLOYED_DIR, filename)
-			if os.path.isdir(filename):
-				print("Copying directory", filename, "to", target)
-				shutil.copytree(filename, target)
-			elif os.path.isfile(filename):
-				print("Copying file", filename, "to", target)
-				shutil.copy(filename, target)
+			if filename == 'images':
+				target = os.path.join(DEPLOYED_DIR, filename)
+				CopyImagesDir(filename, target)
 			else:
-				raise Exception('### WARNING: {} not copied!'.format(filename))
+				target = os.path.join(DEPLOYED_DIR, filename)
+				if os.path.isdir(filename):
+					print("Copying directory", filename, "to", target)
+					shutil.copytree(filename, target)
+				elif os.path.isfile(filename):
+					print("Copying file", filename, "to", target)
+					shutil.copy(filename, target)
+				else:
+					raise Exception('### WARNING: {} not copied!'.format(filename))
 		else:
 			raise Exception('### WARNING: {} does not exist!'.format(filename))
 
