@@ -55,7 +55,19 @@
   <li><a href="https://source.android.com/security/selinux/concepts"
          target="_blank">SELinux concepts</a>, Android Docs.
   </li>
+  <li><a href="https://github.com/mairin/selinux-coloring-book/blob/master/PDF/en/selinux-coloring-book_A4-Stapled.pdf"
+         target="_blank">SE Linux Colouring Booko</a>, RedHat.
+  </li>
+  <li><a href="https://doc.coker.com.au/computers/se-linux-saves/"
+         target="_blank">SE Linux Saves</a>: Examples where SE Linux prevent exploits.
+  </li>
 </ul>
+
+<h3>To Read</h3>
+<pre>
+https://www.systutorials.com/docs/linux/man/1-audit2why/
+</pre>
+
 <h3>Linux without the SE</h3>
 <p>
   The Linux kernel controls that access that a process has to resources. In the standard Linux
@@ -146,17 +158,60 @@
   Whenever a process accesses a file (this could be disk-based, a socket or shared memory, for example)
   or some other resource, this is intercepted in the kernel by SELinux. It will check all of the
   rules in the security policy and if the rules allow it access is granted, otherwise it is denied.
-  The same is true when a user attempts to start a process. This is shown below:
+  The same is true when a user attempts to start a process. Note though that it runs after the
+  built in Linux DAC. If the DAC blocks it SELinux won't even get a look in.
 </p>
 
-<h3>Security Contents</h3>
+<h3>The SELinux Parlance</h3>
+<p>
+    Cribbed almost verbatim from:
+</p>
+<ul>
+<li><a href="https://www.digitalocean.com/community/tutorials/an-introduction-to-selinux-on-centos-7-part-1-basic-concepts"
+       target="_blank"></a>
+</li>
+</ul>
+<p>
+<table>
+  <thead><tr><td>Term</td><td>Meaning</td></tr></thead>
+  <tbody>
+    <tr><td>User</td><td>Linux users mapped 1-to-1 to SELinux users.</td></tr>
+    <tr><td>Roles</td><td>Gateway between user and process. Roles defines which users can access which processes.</td></tr>
+    <tr><td>Subject</td><td>Person, process, or device. Anything that can affect an object.</td></tr>
+    <tr><td>Object</td><td>Anything that can be acted upon. E.g. file.</td></tr>
+    <tr><td>Permissions</td><td>Actions that a subject can perform on an object are the subject's permissions.</td></tr>
+    <tr><td>Domain</td><td>Domains are for Subjects. Security context associated with a process: it tells the process what it can and can't do.</td></tr>
+    <tr><td>Type</td><td>Types are for Objects: </td>Dictates the objects purpose.</tr>
+    <tr><td>Policy</td><td>Set of rules used to make access control decisions.</td></tr>
+    <tr><td>Type Enforcement (TE)</td><td>Where a process running within a particular domain can perform only certain operations on certain types of objects.</td></tr>
+  </tbody>
+</p>
+
+<h3>Modes</h3>
+<p>
+    SELinux can be run in one of three modes:
+</p>
+<ol>
+  <li>Enforcing: Policy is actively enforced.</li>
+  <li>Permissive: Policy is not enforcedm but violations are still logged. Good for debug.</li>
+  <li>Disabled: Not running :(</li>
+</ol>
+<p>
+  You can check what mode you're in by running either of the commands <code>getenforce</code>
+  or <code>sestatus</code>.
+</p>
+
+<h3>Security Contexts</h3>
 <p>
   All processes and files have a <em>security context</em>. A security context defines the security settings
-  applied to a subject (user, resource etc). I guess the entire set of security contexts applied to everything
-  ina system constitutes the security policy.
+  applied to a subject (person, process, or device). I guess the entire set of security contexts applied to everything
+  in a system constitutes the security policy.
 </p>
 <p>
-  The SELinux <em>security context</em> is applied via a label associated with every user, process and resource.
+  <b>Security context:</b> security settings applied to a person, process or device (aka &quot;object&quot;).
+</p>
+<p>
+  The SELinux <em>security context</em> (aka &quot;(security) label&quot;) is applied via a <em>label</em> associated with every user, process and resource.
   To put it another way, we can say that the rights of a process depend on it's security context. A security
   context is defined as follows:
 </p>
@@ -185,7 +240,25 @@
              target="_blank">The SELinux Notebook</a>
   </footer>
 </blockquote>
-<p></p>
+<p>
+    So... we label all of our resources and all of our subjects and then define rules which 
+    say which subjects can do what with which objects.
+</p>
+
+<h2>Get SELinux Running On Ubuntu?</h2>
+<div>
+<h3>References</h3>
+<ul>
+  <li>https://wiki.debian.org/SELinux/Setup</li>
+</ul> 
+<h3>The SELinux Ubuntu Setup</h3>
+<p>Okay, to do this I am going to follow the debian tutorial as the Ubuntu one points to it.
+</p>
+<p>
+</p>
+</div>
+
+
 </div> <!-- End padding right div -->
 </div> <!-- End content div -->
 </body>
