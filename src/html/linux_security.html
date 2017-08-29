@@ -254,7 +254,99 @@ https://www.systutorials.com/docs/linux/man/1-audit2why/
 <h3>The SELinux Ubuntu Setup</h3>
 <p>Okay, to do this I am going to follow the debian tutorial as the Ubuntu one points to it.
 </p>
+<p>Following the instructions went pretty well. I now have SELinux running in permissive mode
+   on my desktop:
+</p>
+<pre>
+sudo apt-get install selinux-basics selinux-policy-default auditd
+sudo cp ~/Downloads/_load_selinux_policy /usr/share/initramfs-tools/scripts/init-bottom
+update-initramfs -u
+sudo update-initramfs -u
+selinux-activate 
+sudo selinux-activate 
+sudo reboot now
+sudo check-selinux-installation 
+sudo audit2why -al
+</pre>
 <p>
+    The last command <code>audit2what -al</code> outputs a shed load of denial messages. Unfortunately
+    that's where the first references Debian setup tutorial ends. 
+</p>
+<p>
+    In an earlier paragraph we talked about Linux users being mapped 1-to-1 onto SELinux users.
+    Let's see what this new setup has configured for us...
+</p>
+<pre><b>~$ sudo semanage login -l</b>
+
+Login Name           SELinux User         MLS/MCS Range        Service
+
+__default__          unconfined_u         SystemLow-SystemHigh *
+root                 unconfined_u         SystemLow-SystemHigh *
+system_u             system_u             SystemLow-SystemHigh *</pre>
+<p>
+    We can also see what roles exist:
+</p>
+<pre><b>~$ seinfo -r</b>
+
+Roles: 14
+   auditadm_r
+   dbadm_r
+   guest_r
+   staff_r
+   user_r
+   logadm_r
+   object_r
+   secadm_r
+   sysadm_r
+   system_r
+   webadm_r
+   xguest_r
+   nx_server_r
+   unconfined_r</pre>
+<p>
+    We can also see the security contexts in terns of rolls and types that users a labelled with:
+</p>
+<pre><b>~$ id -Z</b>
+unconfined_u:unconfined_r:unconfined_t:SystemLow-SystemHigh</pre>
+<p>
+    Remember when we said a security context looked like &quot;<code>user:role:type:level</code>&quot;?
+    Well, here is the only security context in our system. The user <code>unconfined_u</code>
+    has the roll <code>unconfined_r</code>, with a type <code>unconfined_t</code>.
+</p>
+<p>
+    So, have our files been labelled as the tutorial claimed? Lets see...
+</p>
+<pre><b>~$ ls -lZ</b>
+total 84
+drwxrwxr-x.  3 jh   jh   unconfined_u:object_r:user_home_t:SystemLow 4096 Feb  3  2017 Android
+drwxrwxr-x.  3 jh   jh   unconfined_u:object_r:user_home_t:SystemLow 4096 Feb  3  2017 AndroidStudioProjects
+drwxrwxr-x.  2 jh   jh   unconfined_u:object_r:user_home_t:SystemLow 4096 May 16 19:57 bin
+drwxr-xr-x. 10 jh   jh   unconfined_u:object_r:user_home_t:SystemLow 4096 Aug 29 17:34 Desktop
+drwxr-xr-x.  4 jh   jh   unconfined_u:object_r:user_home_t:SystemLow 4096 May  1 18:31 Documents
+...</pre>
+<p>
+    Here we see that, for example, the directory <code>Android</code> has a security context
+    <code>unconfined_u:object_r:user_home_t:SystemLow</code>. This means that, if we are using
+    type enforcement (TE), any user that has the type <code>user_home_t</code> or is, in fact,
+    the user <code>unconfined_u</code> can access the directory.
+</p>
+<p>
+    But where is all of this defined? Well, it appears the SELinux policy is compiled and exists
+    in binary trees, which are compiled from source trees 
+    <a href="https://www.centos.org/docs/5/html/Deployment_Guide-en-US/rhlcommon-chapter-0001.html" target="_blank">[Ref]</a>.
+    Doing a little grep we find this:
+</p>
+<pre><b>~$ grep -R user_home_t /etc/selinux/default/</b>
+...
+/etc/selinux/default/contexts/files/file_contexts.homedirs:/home/[^/]*/.+   unconfined_u:object_r:user_home_t:s0
+/etc/selinux/default/contexts/files/file_contexts.homedirs:/root/.+ unconfined_u:object_r:user_home_t:s0
+...</pre>
+<p>
+    So, the file <code>file_contexts.homedirs</code> is defining a rule that matches all direct
+    subdirectories of <code>/home</code> and labels them with the security context 
+    <code>unconfined_u:object_r:user_home_t:s0</code>. Presumably this was compiled into a binary
+    policy tree, which was applied to create the default labelling of the file system when I first
+    setup SELinux, following the Debian tutorial referenced.
 </p>
 </div>
 
