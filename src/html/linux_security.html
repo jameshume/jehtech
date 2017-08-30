@@ -168,12 +168,14 @@ https://www.systutorials.com/docs/linux/man/1-audit2why/
 </p>
 <ul>
 <li><a href="https://www.digitalocean.com/community/tutorials/an-introduction-to-selinux-on-centos-7-part-1-basic-concepts"
-       target="_blank"></a>
+       target="_blank">Intro To SELinux On Centos 7</a>.
 </li>
 </ul>
 <p>
 <table>
-  <thead><tr><td>Term</td><td>Meaning</td></tr></thead>
+  <thead>
+    <tr><td>Term</td><td>Meaning</td></tr>
+  </thead>
   <tbody>
     <tr><td>User</td><td>Linux users mapped 1-to-1 to SELinux users.</td></tr>
     <tr><td>Roles</td><td>Gateway between user and process. Roles defines which users can access which processes.</td></tr>
@@ -181,10 +183,11 @@ https://www.systutorials.com/docs/linux/man/1-audit2why/
     <tr><td>Object</td><td>Anything that can be acted upon. E.g. file.</td></tr>
     <tr><td>Permissions</td><td>Actions that a subject can perform on an object are the subject's permissions.</td></tr>
     <tr><td>Domain</td><td>Domains are for Subjects. Security context associated with a process: it tells the process what it can and can't do.</td></tr>
-    <tr><td>Type</td><td>Types are for Objects: </td>Dictates the objects purpose.</tr>
+    <tr><td>Type</td><td>Types are for Objects: Dictates the objects purpose.</td></tr>
     <tr><td>Policy</td><td>Set of rules used to make access control decisions.</td></tr>
     <tr><td>Type Enforcement (TE)</td><td>Where a process running within a particular domain can perform only certain operations on certain types of objects.</td></tr>
   </tbody>
+</table>
 </p>
 
 <h3>Modes</h3>
@@ -241,7 +244,7 @@ https://www.systutorials.com/docs/linux/man/1-audit2why/
   </footer>
 </blockquote>
 <p>
-    So... we label all of our resources and all of our subjects and then define rules which 
+    So... we label all of our resources and all of our subjects and then define rules which
     say which subjects can do what with which objects.
 </p>
 
@@ -250,7 +253,10 @@ https://www.systutorials.com/docs/linux/man/1-audit2why/
 <h3>References</h3>
 <ul>
   <li>https://wiki.debian.org/SELinux/Setup</li>
-</ul> 
+  <li>https://www.centos.org/docs/5/html/Deployment_Guide-en-US/rhlcommon-chapter-0001.html</li>
+  <li><a href="https://www.amazon.co.uk/Android-Security-Internals-Depth-Architecture/dp/1593275811/ref=sr_1_1?ie=UTF8&qid=1504079575&sr=8-1&keywords=android+security+internals" target="_blank">Android Security Internals</a>, chapter 12.
+  </li>
+</ul>
 <h3>The SELinux Ubuntu Setup</h3>
 <p>Okay, to do this I am going to follow the debian tutorial as the Ubuntu one points to it.
 </p>
@@ -262,15 +268,15 @@ sudo apt-get install selinux-basics selinux-policy-default auditd
 sudo cp ~/Downloads/_load_selinux_policy /usr/share/initramfs-tools/scripts/init-bottom
 update-initramfs -u
 sudo update-initramfs -u
-selinux-activate 
-sudo selinux-activate 
+selinux-activate
+sudo selinux-activate
 sudo reboot now
-sudo check-selinux-installation 
+sudo check-selinux-installation
 sudo audit2why -al
 </pre>
 <p>
     The last command <code>audit2what -al</code> outputs a shed load of denial messages. Unfortunately
-    that's where the first references Debian setup tutorial ends. 
+    that's where the first references Debian setup tutorial ends.
 </p>
 <p>
     In an earlier paragraph we talked about Linux users being mapped 1-to-1 onto SELinux users.
@@ -332,8 +338,9 @@ drwxr-xr-x.  4 jh   jh   unconfined_u:object_r:user_home_t:SystemLow 4096 May  1
 </p>
 <p>
     But where is all of this defined? Well, it appears the SELinux policy is compiled and exists
-    in binary trees, which are compiled from source trees 
+    in binary trees, which are compiled from source trees
     <a href="https://www.centos.org/docs/5/html/Deployment_Guide-en-US/rhlcommon-chapter-0001.html" target="_blank">[Ref]</a>.
+    Binary policy files are used for performance reasons <a href="https://www.amazon.co.uk/Android-Security-Internals-Depth-Architecture/dp/1593275811/ref=sr_1_1?ie=UTF8&qid=1504079575&sr=8-1&keywords=android+security+internals" target="_blank">[Ref]</a>.
     Doing a little grep we find this:
 </p>
 <pre><b>~$ grep -R user_home_t /etc/selinux/default/</b>
@@ -343,7 +350,7 @@ drwxr-xr-x.  4 jh   jh   unconfined_u:object_r:user_home_t:SystemLow 4096 May  1
 ...</pre>
 <p>
     So, the file <code>file_contexts.homedirs</code> is defining a rule that matches all direct
-    subdirectories of <code>/home</code> and labels them with the security context 
+    subdirectories of <code>/home</code> and labels them with the security context
     <code>unconfined_u:object_r:user_home_t:s0</code>. Presumably this was compiled into a binary
     policy tree, which was applied to create the default labelling of the file system when I first
     setup SELinux, following the Debian tutorial referenced.
