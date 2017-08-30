@@ -1,0 +1,114 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>PHP Programm Language Notes | JEHTech</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+
+<!-- START CONTENT -->
+<h1 class="title">PHP Programm Language Notes</h1>
+<p>
+	PHP (recursive acronym for PHP: Hypertext Preprocessor) is a general-purpose
+	scripting language that is especially suited for web development. These are
+	just some quick notes on various bits and bobs.
+</p>
+
+<div style="padding-right:10px;">
+<h2>Page Contents</h2>
+<div id="page_contents">
+</div>
+
+<h2>Autoloading Classes</h2>
+<div>
+<p>
+	Lets say you have a PHP file called <code>jehtech.class.php</code> in which
+	the class <code>jehtech</code> is defined. Rather than including it in
+	every script PHP can dynamically load it using a search pattern you
+	sepecify in the <code>autoload()</code> function.
+</p>
+<pre>function my_autoload($class_name)
+{
+   $php_file_name = $class_name . '.class.php';
+   $php_file_location = ...; // Find the file
+   ...
+
+   if (is_readable($php_file_location))
+   {
+      include_once $php_file_location;
+   }
+}
+...
+...
+spl_autoload_register('my_autoload'); // <--- You could use an anonymous func here
+</pre>
+<p>
+	If your directory structure, for example, mirrored the name space you
+	could split the class name on the namespace seperator (<code>'\'</code>)
+	and locate it that way.
+</p>
+</div> <!-- END H2: Autoloading Classes -->
+
+<h2>Stream Filters</h2>
+<div>
+<p>
+	I know everyone frowns on using printf style debugging, but I still
+	like it. What I had is debug output that has no indentation because
+	it is harder to read. So here is a tiny little debug class that
+	is a stream filter that you can associate with any PHP resource.
+	When you print to it it will insert left-padding at the indent
+	you are currently at.
+</p>
+<blockquote>
+	<p>
+		A filter is a final piece of code which may perform operations on data as it is being read from or written to a stream. Any number of filters may be stacked onto a stream.
+	</p>
+	<footer>-- <a href="http://php.net/manual/en/stream.filters.php" target="_blank">PHP Docs</a>.
+	</footer>
+</blockquote>
+<pre>see: https://stackoverflow.com/questions/27103269/what-is-a-bucket-brigade
+
+class debug_filter extends \php_user_filter {
+  function filter($in, $out, &amp;$consumed, $closing)
+  {
+    while ($bucket = stream_bucket_make_writeable($in)) {
+      $consumed += $bucket->datalen;
+      stream_bucket_append($out, $bucket);
+      $space_bucket = stream_bucket_new($this->stream, "    ");
+      stream_bucket_prepend($out, $space_bucket);
+    }
+    return PSFS_PASS_ON;
+  }
+}
+
+...
+...
+
+stream_filter_register("debug_filter", "\Tests\System\debug_filter")
+
+...
+...
+
+stream_filter_append(STDOUT, "debug_filter");</pre>
+</div> <!-- END H2: Stream Filters -->
+
+</div> <!-- END H1 padding div -->
+</div> <!-- END CONTENT -->
+
+</body>
+</html>

@@ -149,9 +149,17 @@ fastboot flash boot boot.img
 fastboot flash recovery recovery.img
 fastboot reboot</pre>
 
-
-
+  <h3>Kill Emulators</h3>
+  <pre>adb -s emulator-xxxx emu kill</pre>
 </div> <!-- END Where is the SDK -->
+
+<h2>Android Shell Utils Cheet Sheet</h2>
+<div>
+  <p>To <b>broadcast</b> an event:</p>
+  <pre>am broadcast -a android.intent.action.BOOT_COMPLETED -p com.mypackage.name</pre>
+  <p>Without the <code>-p</code> option to direct the broadcast to your specific
+     package you might find it reboots your system...</p>
+</div>
 
 <h2>TODO</h2>
 <div>
@@ -250,7 +258,8 @@ adb pull /data/local/tmp/boot.img boot.img</pre>
 </p>
 <pre>adb pull /dev/block/sde36 boot.img</pre>
 <p>Note you can only do this with partitions that are not in use, such as the boot or
-   recovery partition. For everything else install a TWRP recover image (see below).</p>
+   recovery partition. For everything else install a TWRP recover image (see below).
+</p>
 <p>
     Once you have your boot image you can then use the
     <a href="https://github.com/xiaolu/mkbootimg_tools" target="_blank">mkbootimg_tools</a>
@@ -329,14 +338,14 @@ __android_log_print(ANDROID_LOG_DEBUG, "LOG_TAG", "printf like syntax", ...);</p
   When we say a bootloader is <em>locked</em>, it means that it will not flash/boot updates unless
   they are digitally signed by its vendor. <b>Warning:</b> unlocking your bootloader completely
   eliminates your device's security - its like not password protecting your desktop's BIOS!
-  </p>
-  <blockquote>
-    <p>
-    Bootloader integrity is always verified using a hardware root of trust. For verifying boot and recovery partitions, the bootloader has a fixed OEM key available to it. It always attempts to verify the boot partition using the OEM key first and try other possible keys only if this verification fails.
-    </p>
-    <footer>-- <a href="https://source.android.com/security/verifiedboot/verified-boot" target="_blank">Verified Boot, Android Docs</a>.</footer>
-</blockquote>
+</p>
+<blockquote>
   <p>
+  Bootloader integrity is always verified using a hardware root of trust. For verifying boot and recovery partitions, the bootloader has a fixed OEM key available to it. It always attempts to verify the boot partition using the OEM key first and try other possible keys only if this verification fails.
+  </p>
+  <footer>-- <a href="https://source.android.com/security/verifiedboot/verified-boot" target="_blank">Verified Boot, Android Docs</a>.</footer>
+</blockquote>
+<p>
   When a bootload is <em>unlocked</em>, it will let you flash/boot any ROMs of your choosing,
   signed or not!
 </p>
@@ -529,11 +538,11 @@ sendInputEvent(fd, EV_SYN, SYN_REPORT, 1);</pre>
     </p>
     <pre class="prettyprint linenums">public class MainActivity extends AppCompatActivity {
 
-    private static final Map<Integer, String> mMotionEventMap;
+    private static final Map&lt;Integer, String&gt; mMotionEventMap;
     static {
         /* Action event map, not including deprecated values and also not including
          * *_MASK and *_SHIFT constants because these are only needed with getAction() */
-        Map<Integer, String> mMEMInitialiser = new HashMap<Integer, String>();
+        Map&lt;Integer, String&gt; mMEMInitialiser = new HashMap&lt;Integer, String&gt;();
         mMEMInitialiser.put(MotionEvent.ACTION_BUTTON_PRESS,   "ACTION_BUTTON_PRESS");
         mMEMInitialiser.put(MotionEvent.ACTION_BUTTON_RELEASE, "ACTION_BUTTON_RELEASE");
         mMEMInitialiser.put(MotionEvent.ACTION_CANCEL,         "ACTION_CANCEL");
@@ -580,11 +589,13 @@ sendInputEvent(fd, EV_SYN, SYN_REPORT, 1);</pre>
        Jan 2017) the most cross-device compatible and mult-touch capable interface for interpretting
        touch events.
     </p>
-    <p>The function <code>getAction()</code> is (almost) <em>deprecated</em> by the looks of things:
-    <q>You should always use the method <code>getActionMasked()</code> (or better yet, the compatability version
-       <code>MotionEventCompat.getActionMasked()</code>) to retrieve the action of a <code>MotionEvent</code>. Unlike the
-       older <code>getAction()</code> method, <code>getActionMasked()</code> is designed to work with multiple pointers.
-    </q> -- <a href="https://developer.android.com/training/gestures/multi.html" target="_blank">[Ref]</a>.
+    <p>
+      The function <code>getAction()</code> is (almost) <em>deprecated</em> by the looks of things:
+      <q>You should always use the method <code>getActionMasked()</code> (or better yet, the compatability version
+         <code>MotionEventCompat.getActionMasked()</code>) to retrieve the action of a <code>MotionEvent</code>. Unlike the
+         older <code>getAction()</code> method, <code>getActionMasked()</code> is designed to work with multiple pointers.
+      </q> -- <a href="https://developer.android.com/training/gestures/multi.html" target="_blank">[Ref]</a>.
+    </p>
 </div> <!-- END MotionEvents DIV -->
 
 <h2>NDK Applications And PThreads</h2>
@@ -595,6 +606,7 @@ sendInputEvent(fd, EV_SYN, SYN_REPORT, 1);</pre>
         target="_blank">Bionic C library</a> already. Note, however,
      that it does not give a full <code>pthread</code> implementation. Notably things like
      <code>pthread_cancel</code> are not supported.
+  </p>
 </div>
 
 <h2>Intent and Broadcast Receiver</h2>
@@ -854,11 +866,11 @@ chmod a+x ~/bin/repo</pre>
     the source tree <a href="http://elinux.org/Android_Build_System#Helper_macros_and_functions" target="_blank">[Ref]</a>:
 
     <table>
-        <tr><td><code>croot</code></td><td>change directory to the top of the tree<td></tr>
-        <tr><td><code>cgrep <i>&lt;pattern&gt;</i></code></td><td>grep on all local C/C++ files<td></tr>
-        <tr><td><code>jgrep <i>&lt;pattern&gt;</i></code></td><td>grep on all local Java files<td></tr>
-        <tr><td><code>resgrep <i>&lt;pattern&gt;</i></code></td><td>grep on all local res/*.xml files<td></tr>
-        <tr><td><code>godir <i>&lt;filename&gt;</i></code></td><td>go to the directory containing a file<td></tr>
+        <tr><td><code>croot</code></td><td>change directory to the top of the tree</td></tr>
+        <tr><td><code>cgrep <i>&lt;pattern&gt;</i></code></td><td>grep on all local C/C++ files</td></tr>
+        <tr><td><code>jgrep <i>&lt;pattern&gt;</i></code></td><td>grep on all local Java files</td></tr>
+        <tr><td><code>resgrep <i>&lt;pattern&gt;</i></code></td><td>grep on all local res/*.xml files</td></tr>
+        <tr><td><code>godir <i>&lt;filename&gt;</i></code></td><td>go to the directory containing a file</td></tr>
     </table>
 </p>
 
@@ -887,7 +899,8 @@ make bootimage</pre>
   <h3>Useful Links &amp; Reference</h3>
   <p>
     <ul>
-      <li><a href="https://source.android.com/devices/input/overview" target="_blank">Android Docs: Input Overview</a></li>
+      <li><a href="https://source.android.com/devices/input/overview" target="_blank">Android Docs: Input Overview</a>
+      </li>
     </ul>
   </p>
   <h3>A 30,000 Foot View</h3>
@@ -1185,7 +1198,8 @@ The LocalServerSocket constructor
 <div>
   <h3>References</h3>
   <ul>
-    <li><a href="https://source.android.com/security/selinux/concepts" target="_blank">SELinux concepts</a>, Android docs.</li>
+    <li><a href="https://source.android.com/security/selinux/concepts" target="_blank">SELinux concepts</a>, Android docs.
+    </li>
   </ul>
 
   <h3>Intro</h3>
@@ -1198,6 +1212,7 @@ The LocalServerSocket constructor
 </div>
 
 <h2>Kernel Panics</h2>
+<div>
 <pre>cat /proc/last_kmsg          # device must have CONFIG_ANDROID_RAM enabled in /proc. (newer than deprecated apanic)
 cat /proc/last_mcrash             # ???
 
@@ -1213,6 +1228,20 @@ https://stackoverflow.com/questions/18118807/linux-apanic-mechanism-and-differen
 http://elinux.org/Android_Kernel_Features#RAM_CONSOLE
 
 https://source.android.com/devices/tech/debug/</pre>
+</div> <!-- END H2: Kernel Panics -->
+
+<h2>Firmware</h2>
+<div>
+<p>
+  Firmware files will be found in <code>/etc/firmware</code>. When a driver does
+  a <code>request_firmware()</code> call, the OS will look there for the
+  filename supplied.
+</p>
+<p>
+  See the <a href="linux_kernel.html#How-Drivers-Request-Firmware">Linux notes</a>
+  for further information on how drivers request firmware files from userspace.
+</p>
+</div>
 
 </div> <!-- END PADDING DIV -->
 </body>

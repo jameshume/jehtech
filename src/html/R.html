@@ -38,6 +38,9 @@
 			<li><a href="http://shop.oreilly.com/product/9781593273842.do"
 					target="_blank">The Art Of R Programming</a>.
 			</li>
+			<li><a href="http://www.harding.edu/fmccown/r/"
+			       target="_blank">Producing Simple Graphs with R</a>, by Frank McCown
+			</li>
 		</ul>
 	</div>
 
@@ -1978,7 +1981,8 @@ Manipulating Data with dplyr
 FIRST, you must load the data into a 'data frame table' 
    data_df_tbl &lt; tbl_df(data_df)
 
-dplyr supplies five 'verbs' that cover most fundamental data manipulation tasks: select(), filter(), arrange(), mutate(), 
+dplyr supplies five 'verbs' that cover most fundamental data manipulation tasks: select(), filter(), arrange(), mutate(), 
+
 and summarize().
 
 dplyr also doesn't print all teh data. to see it all use View() (best done in R Studio)
@@ -2066,7 +2070,8 @@ Some special functions:
 
 quantiles
 ----------
-| We need to know the value of 'count' that splits the data into the top 1% and bottom 99% of packages based on total 
+| We need to know the value of 'count' that splits the data into the top 1% and bottom 99% of packages based on total 
+
 downloads. In statistics, this is called the
 | 0.99, or 99%, sample quantile. Use quantile(pack_sum$count, probs = 0.99) to determine this number.
 

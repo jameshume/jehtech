@@ -42,13 +42,17 @@ def CopyImagesDir(srcDir, destDir):
 
 	first = True # Make destDir and copy over the first layer of files
 	for root, dirs, files in os.walk(srcDir):
-		print "ROOT", root
 		commonLen = len(os.path.commonprefix([srcDir, root]))
 		relativeRoot = root[commonLen:]
 		if len(relativeRoot) and relativeRoot[0] in ["/", "\\"]:
 			relativeRoot = relativeRoot[1:]
-		print "DESDIR", destDir
-		print "RELROOT", relativeRoot, "==>", os.path.join(destDir, relativeRoot)
+
+		no_watermark_filename = os.path.join(root, "no_watermark.txt")
+		no_watermark_imgs = []
+		if os.path.isfile(no_watermark_filename):
+			with open(no_watermark_filename) as fh:
+				no_watermark_imgs = [x.strip() for x in fh.readlines()]
+				print no_watermark_imgs
 
 		for currdir in dirs:
 			destD = os.path.join(destDir, relativeRoot, currdir)
@@ -58,14 +62,15 @@ def CopyImagesDir(srcDir, destDir):
 
 		for file in files:
 			# copy and watermark
-			if first:
+			file_extension = os.path.splitext(file)[1]
+			if first or file_extension.lower() not in [".png", ".jpg"] or file in no_watermark_imgs:
 				# just copy file
 				print "COPY" , os.path.join(root, file), "==>", os.path.join(destDir, relativeRoot, file)
 				shutil.copy(os.path.join(root, file), os.path.join(destDir, relativeRoot, file))
 			else:
 				# create a watermarked copy
 				print "WATERMARK" , os.path.join(root, file), "==>", os.path.join(destDir, relativeRoot, file)
-				WatermarkImage(os.path.join(root, file), os.path.join(destDir, relativeRoot, file))
+				watermark.WatermarkImage(os.path.join(root, file), os.path.join(destDir, relativeRoot, file))
 
 		first = False
 

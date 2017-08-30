@@ -136,6 +136,22 @@ Enter password: password-you-chose-during-install</pre>
 
     <p>Worth noting that <tt>GRANT OPTION</tt> is not covered in a normal grant all command. It has to be specifically and explicitly added to a user's permissions.</p>
 
+<h2>Dump and Restore A Database</h2>
+<div>
+<p>To dump and restore the database schema and all data:</p>
+<pre>
+mysqldump --databases &lt;db-name&gt; --result-file=filename.sql -u root -p&lt;root_password&gt;
+mysql -u root -p&lt;root_password&gt; &lt;database_name&gt; < filename.sql
+</pre>
+<p>To dump just the schema:</p>
+<pre>
+mysqldump --databases &lt;db-name&gt; --result-file=filename.sql -u root -p&lt;root_password&gt; <b>--no-data</b>
+or just
+mysqldump -u root -p&lt;password&gt; --no-data &lt;db-name&gt;
+</pre>
+</div>
+
+
 	 <h2>Describing Tables &amp; Information Schemas</h2>
 	 <p>The easist way to get information about a specific table is to see the SQL that would be required to generate it. To do this you would type the following...</p>
 	 <pre class="prettyprint linenums lang-sql">SHOW CREATE TABLE &lt;table name&gt;</pre>

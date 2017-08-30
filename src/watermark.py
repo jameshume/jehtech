@@ -1,7 +1,9 @@
 from PIL import Image, ImageDraw, ImageFont
 
 def WatermarkImage(ipFilename, opFilename):
-	base = Image.open(ipFilename).convert('RGBA')
+	base = Image.open(ipFilename)
+	origMode = base.mode
+	base = base.convert('RGBA')
 	txt = Image.new('RGBA', base.size, (255,255,255,0))
 
 	fnt = ImageFont.truetype('arial.ttf', 16)
@@ -13,7 +15,7 @@ def WatermarkImage(ipFilename, opFilename):
 	margin = 5.0
 	x = int(round(float(width)/2.0 - (float(textwidth) + 2.0*margin) / 2.0))
 	y = int(round(float(height)/2.0 - (float(textheight) + 2.0*margin) / 2.0))
-	txtalpha=110
+	txtalpha=130
 	txtfill=(22,72,153,txtalpha)
 	d.text((x, y), "(c) www.jeh-tech.com", font=fnt, fill=txtfill)
 
@@ -27,4 +29,8 @@ def WatermarkImage(ipFilename, opFilename):
 	d.line([(x+margin+textwidth,y+textheight+margin),(width, height)], width=lwidth, fill=linefill)
 
 	out = Image.alpha_composite(base, txt)
-	out.save(opFilename)
+
+	if origMode not in ('RGBA', 'LA'):
+		out = out.convert("RGB")
+	out.save(opFilename, quality=95)
+

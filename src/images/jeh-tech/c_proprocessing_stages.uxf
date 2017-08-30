@@ -4,21 +4,21 @@
   <element>
     <id>UMLState</id>
     <coordinates>
-      <x>620</x>
-      <y>150</y>
+      <x>680</x>
+      <y>80</y>
       <w>120</w>
-      <h>60</h>
+      <h>70</h>
     </coordinates>
-    <panel_attributes>style=wordwrap
-valign=center
-More args in replacement list?</panel_attributes>
+    <panel_attributes>More args in replacement list?
+style=wordwrap
+valign=center</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLSpecialState</id>
     <coordinates>
-      <x>660</x>
-      <y>250</y>
+      <x>720</x>
+      <y>180</y>
       <w>40</w>
       <h>40</h>
     </coordinates>
@@ -28,19 +28,19 @@ More args in replacement list?</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>670</x>
-      <y>200</y>
+      <x>730</x>
+      <y>140</y>
       <w>30</w>
-      <h>70</h>
+      <h>60</h>
     </coordinates>
     <panel_attributes>lt=-&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;40.0</additional_attributes>
   </element>
   <element>
     <id>UMLState</id>
     <coordinates>
-      <x>770</x>
-      <y>240</y>
+      <x>830</x>
+      <y>170</y>
       <w>120</w>
       <h>60</h>
     </coordinates>
@@ -52,8 +52,8 @@ Arg preceeded by #?</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>690</x>
-      <y>250</y>
+      <x>750</x>
+      <y>180</y>
       <w>100</w>
       <h>40</h>
     </coordinates>
@@ -64,8 +64,8 @@ yes</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>670</x>
-      <y>100</y>
+      <x>730</x>
+      <y>30</y>
       <w>30</w>
       <h>70</h>
     </coordinates>
@@ -75,8 +75,8 @@ yes</panel_attributes>
   <element>
     <id>UMLSpecialState</id>
     <coordinates>
-      <x>810</x>
-      <y>340</y>
+      <x>870</x>
+      <y>270</y>
       <w>40</w>
       <h>40</h>
     </coordinates>
@@ -86,8 +86,8 @@ yes</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>820</x>
-      <y>290</y>
+      <x>880</x>
+      <y>220</y>
       <w>30</w>
       <h>70</h>
     </coordinates>
@@ -98,8 +98,8 @@ yes</panel_attributes>
   <element>
     <id>UMLState</id>
     <coordinates>
-      <x>920</x>
-      <y>330</y>
+      <x>980</x>
+      <y>260</y>
       <w>270</w>
       <h>60</h>
     </coordinates>
@@ -112,8 +112,8 @@ strip(escape(collapse_wspace(str(arg)))</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>840</x>
-      <y>340</y>
+      <x>900</x>
+      <y>270</y>
       <w>100</w>
       <h>40</h>
     </coordinates>
@@ -124,8 +124,8 @@ yes</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>730</x>
-      <y>170</y>
+      <x>790</x>
+      <y>100</y>
       <w>530</w>
       <h>210</h>
     </coordinates>
@@ -135,8 +135,8 @@ yes</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>820</x>
-      <y>370</y>
+      <x>880</x>
+      <y>300</y>
       <w>40</w>
       <h>70</h>
     </coordinates>
@@ -147,21 +147,21 @@ no</panel_attributes>
   <element>
     <id>UMLState</id>
     <coordinates>
-      <x>770</x>
-      <y>420</y>
+      <x>830</x>
+      <y>350</y>
       <w>120</w>
       <h>60</h>
     </coordinates>
-    <panel_attributes>style=wordwrap
-valign=center
-Arg preceeded or followed by ##?</panel_attributes>
+    <panel_attributes>Arg preceeded or followed by ##?
+style=wordwrap
+valign=center</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>820</x>
-      <y>550</y>
+      <x>880</x>
+      <y>480</y>
       <w>40</w>
       <h>70</h>
     </coordinates>
@@ -172,8 +172,8 @@ no</panel_attributes>
   <element>
     <id>UMLSpecialState</id>
     <coordinates>
-      <x>810</x>
-      <y>520</y>
+      <x>870</x>
+      <y>450</y>
       <w>40</w>
       <h>40</h>
     </coordinates>
@@ -183,8 +183,8 @@ no</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>820</x>
-      <y>470</y>
+      <x>880</x>
+      <y>400</y>
       <w>30</w>
       <h>70</h>
     </coordinates>
@@ -195,8 +195,8 @@ no</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>840</x>
-      <y>520</y>
+      <x>900</x>
+      <y>450</y>
       <w>100</w>
       <h>40</h>
     </coordinates>
@@ -207,8 +207,8 @@ yes</panel_attributes>
   <element>
     <id>UMLState</id>
     <coordinates>
-      <x>920</x>
-      <y>510</y>
+      <x>980</x>
+      <y>440</y>
       <w>270</w>
       <h>60</h>
     </coordinates>
@@ -220,8 +220,8 @@ Replace ##'s and arg with preprocessing token sequence</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>730</x>
-      <y>170</y>
+      <x>790</x>
+      <y>100</y>
       <w>530</w>
       <h>390</h>
     </coordinates>
@@ -231,15 +231,12 @@ Replace ##'s and arg with preprocessing token sequence</panel_attributes>
   <element>
     <id>UMLState</id>
     <coordinates>
-      <x>710</x>
-      <y>600</y>
-      <w>260</w>
-      <h>140</h>
+      <x>830</x>
+      <y>530</y>
+      <w>120</w>
+      <h>120</h>
     </coordinates>
     <panel_attributes>Replace arg with preprocessing token sequence with all macros contain within expanded first.
-
-If nested replacements encounter name of macro being replaced,
-it is not replaced to *avoid recursion*.
 style=wordwrap
 valign=center</panel_attributes>
     <additional_attributes/>
@@ -247,19 +244,19 @@ valign=center</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>730</x>
-      <y>170</y>
+      <x>790</x>
+      <y>100</y>
       <w>530</w>
       <h>540</h>
     </coordinates>
     <panel_attributes>lt=-&gt;</panel_attributes>
-    <additional_attributes>240.0;520.0;510.0;520.0;510.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>160.0;520.0;510.0;520.0;510.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>670</x>
-      <y>280</y>
+      <x>730</x>
+      <y>210</y>
       <w>40</w>
       <h>520</h>
     </coordinates>
@@ -270,21 +267,21 @@ no</panel_attributes>
   <element>
     <id>UMLState</id>
     <coordinates>
-      <x>580</x>
-      <y>780</y>
+      <x>640</x>
+      <y>710</y>
       <w>220</w>
       <h>100</h>
     </coordinates>
-    <panel_attributes>style=wordwrap
-valign=center
-Rescan for more macro names and replace (but *not* replacing the name of this macro if encountered to **avoid recursion**)</panel_attributes>
+    <panel_attributes>Rescan for more macro names and replace (but *not* replacing the name of this macro if encountered to *avoid recursion*)
+style=wordwrap
+valign=center</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>670</x>
-      <y>870</y>
+      <x>730</x>
+      <y>800</y>
       <w>30</w>
       <h>60</h>
     </coordinates>
@@ -295,8 +292,8 @@ Rescan for more macro names and replace (but *not* replacing the name of this ma
   <element>
     <id>UMLSpecialState</id>
     <coordinates>
-      <x>670</x>
-      <y>90</y>
+      <x>730</x>
+      <y>20</y>
       <w>20</w>
       <h>20</h>
     </coordinates>
@@ -307,8 +304,8 @@ Rescan for more macro names and replace (but *not* replacing the name of this ma
   <element>
     <id>UMLSpecialState</id>
     <coordinates>
-      <x>670</x>
-      <y>910</y>
+      <x>730</x>
+      <y>840</y>
       <w>20</w>
       <h>20</h>
     </coordinates>
@@ -318,8 +315,8 @@ Rescan for more macro names and replace (but *not* replacing the name of this ma
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1090</x>
-      <y>880</y>
+      <x>1150</x>
+      <y>820</y>
       <w>150</w>
       <h>30</h>
     </coordinates>
