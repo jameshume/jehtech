@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta http-eqéuiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
 	<meta charset="UTF-8">                                              <!-- HTML 5 -->
 	<title>MPEG notes</title>
 	<!-- META_INSERT -->
@@ -1139,6 +1139,15 @@ if (adaption_field_contains_pcr) {
         <p>
         	The parameter <tt>acodec</tt> sets the output audio codec to be used.
         </p>
+
+        <p>
+        	To <b>cut out a section</b> of a video and drop audio, use the following:
+        </p>
+        <pre>ffmpeg -ss 00:00:20 -i [INPUT FILE] -c copy -an -t 00:00:10 [OUTPUT_FILE]
+# -ss 00:00:20 - Start 20 seconds in to the video. format is HH:MM:SS
+# -c - copy the video i.e don't decode/encode
+# -an - drop audio
+# -t 00:00:10 - Copy 10 seconds</pre>
 
         <h3>ffprobe</h3>
         <p>

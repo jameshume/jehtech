@@ -1238,8 +1238,20 @@ https://source.android.com/devices/tech/debug/</pre>
   filename supplied.
 </p>
 <p>
+  To really see where your system is looking, have a look at <code>system/core/init/devices.c</code>.
+  In Marshmallow the following snippet is useful:
+</p>
+<pre>static const char *firmware_dirs[] = { "/etc/firmware",
+                                       "/vendor/firmware",
+                                       "/firmware/image" };</pre>
+<p>
+  So, in actual fact it appears that Android looks in several places... yay.
+</p>
+<p>
   See the <a href="linux_kernel.html#How-Drivers-Request-Firmware">Linux notes</a>
   for further information on how drivers request firmware files from userspace.
+</p>
+<p>
 </p>
 </div>
 

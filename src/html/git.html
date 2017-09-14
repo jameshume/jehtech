@@ -359,6 +359,10 @@ git commit --amend</pre>
     <p>To search for tags with names matching a given pattern:</p>
     <pre>get tag -l &lt;pattern&gt;</pre>
 
+    <p>An important point to note is that <b><code>git push</code> does NOT transfer tags to remote servers!</b>
+    You must do this explicity using <code>git push origin &lt;tagname&gt;</code>
+    </p>
+
     <!-- ++++++++++++++++++++++++++++++++ -->
     <h3>Undoing Things</h3>
     <p><b>Revert unstanged changes:</b></p>
@@ -423,6 +427,13 @@ git diff --staged: What will go into next commit
 git diff --cached: Synonym for --staged
 git difftool:      To use external diff tool</pre>
 
+</div>
+
+<h2>What is HEAD?</h2>
+<div>
+<pre>TODO:
+https://stackoverflow.com/questions/5772192/how-can-i-reconcile-detached-head-with-master-origin
+https://git-scm.com/book/tr/v2/Git-Internals-Git-References</pre>
 </div>
 
 <h2>Branches And Commits (v.s. SVN-like SCMs)</h2>
@@ -990,7 +1001,7 @@ The commit number</pre>
     <p>
         To apply a patch to the currently checked out branch use:
     </p>
-    <pre>git am < patch-file</pre>
+    <pre>git am &lt; patch-file</pre>
     <p>
         This will create a new commit from the patch file.
     </p>
@@ -1025,7 +1036,7 @@ The commit number</pre>
     <b>Git log with graph: &quot;git lg&quot;</b>
     <pre>git config --global alias.lg &quot;log --graph --oneline --decorate&quot;</pre>
     <p>With colour <a href="https://coderwall.com/p/euwpig/a-better-git-log" target="_blank">[Ref]</a>...</p>
-    <pre>git config --global alias.lg &quot;log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit&quot;</pre>
+    <pre>git config --global alias.lg &quot;log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset' --abbrev-commit&quot;</pre>
 
     <h3>Logs</h3>
     <p>To see all the commits that have been for a specific branch that was branched off &quot;parent-branch-name&quot;:</p>
@@ -1099,6 +1110,12 @@ git log --no-merges parent-branch-name..
         our coding standards.
     </p>
 
+</div>
+
+<h2>Adding Git Branch To Linux Prompt</h2>
+<div>
+<pre>https://coderwall.com/p/fasnya/add-git-branch-name-to-bash-prompt
+https://stackoverflow.com/questions/5379986/why-doesnt-my-bash-prompt-update</pre>
 </div>
 
 <h2>Basic Git Notes</h2>

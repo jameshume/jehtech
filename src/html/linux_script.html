@@ -578,8 +578,9 @@ fi</pre>
         <pre>cut -d: -f1 /etc/group</pre>
       </div> <!-- END: H2 -->
 
-      <h2>Linux Prompt With Colours</h2>
+      <h2>Modifying The Linux Shell's Command Prompt</h2>
       <div>
+         <h3>Adding Colour To The Linux Prompt</h3>
          <p>
             To set prompt to be yellow:
          </p>
@@ -596,6 +597,7 @@ fi</pre>
          <p>
             Add this to your <code>~/.bashrc</code> file to make it permanent.
          </p>
+         <h3>Collapsing The Path Displayed In The Linux Prompt</h3>
          <p>
             I really dislike it when the cwd printed in the prompt begins
             to get too long and take up most of the terminal line. What I
@@ -607,6 +609,12 @@ fi</pre>
             Set <code>PS1</code> as follows:
          </p>
          <pre>PS1="\[\e[0;33m\]\$(python ~/ps1.py)\$ \[\e[m\]"</pre>
+         <p>
+          NOTE the backslash in front of <code>$(python ...)</code>. This
+          prevents the python script from being run and the output evaluated
+          immediately: you want the script to be run each time PS1 is itself
+          evaluated, not just one when setting the value of PS1.
+         </p>
          <p>
             Then created the file <code>ps1.py</code> in my home directory:
          </p>
@@ -629,6 +637,45 @@ if len(l) &gt; 4:
    print pref + os.path.join(*ll)
 else:
    print pref + os.path.join(*l)</pre>
+
+         <h3>Adding Current Git Banch To The Linux Prompt</h3>
+         <p>
+          <b>References:</b>
+         </p>
+         <ul>
+           <li><a href="https://coderwall.com/p/fasnya/add-git-branch-name-to-bash-prompt"
+                  target_"_blank">Add git branch name to bash prompt</a>, Eranga Bandara.
+           </li>
+           <li><a href="https://serverfault.com/questions/4889/what-are-some-informative-and-useful-shell-prompts-bash-csh-ksh-etc"
+                  target_"_blank">What are some informative and useful shell prompts?</a> Stack Overflow.
+           </li>
+         </ul>
+         <p>Slight mod from Bandara's example to strip starting whitespace, add some colour, and detevt SVN repos too...</p>
+         <pre class="prettyprint linenums lang-python">parse_git_branch() {
+   git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/' | sed -e 's/^\s*//g'
+}
+
+parse_svn_branch() {
+   svn info 2> /dev/null | grep "Relative URL" | sed -e "s/Relative URL:\s*//g"
+}
+
+parse_repo() {
+   git_branch="$(parse_git_branch)"
+   if [ ! -z "$git_branch" ]
+   then
+      echo -e "\nGIT: $git_branch"
+   fi
+
+   svn_branch="$(parse_svn_branch)"
+   if [ ! -z "$svn_branch" ]
+   then
+      echo -e "\nSVN: ($svn_branch)"
+   fi
+
+   echo ""
+}
+
+PS1="\[\e[0;33m\]\$(parse_repo)\[\e[0m\]\n[\w]\n\u@\h\$ "</pre>
       </div> <!-- END H2: Linux Prompt With Colours -->
 
       <h2>Modify Any PATH-like Variable And Variable Dereferencing</h2>

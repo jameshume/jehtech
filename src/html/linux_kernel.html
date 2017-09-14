@@ -75,6 +75,7 @@
     <li>http://elinux.org/Debugging_by_printing</li>
     <li>http://www.makelinux.net/ldd3/chp-11-sect-5</li>
     <li>http://www.linuxfromscratch.org/lfs/downloads/stable/LFS-BOOK-8.0.pdf</li>
+    <li>http://www.linuxinternals.org/blog/2014/05/07/spinlock-implementation-in-linux-kernel/</li>
   </ol>
 </div>
 
@@ -919,7 +920,16 @@ module_param_string(who_param, who_param_buf, MAX_WHO_SIZE, 0644);</pre>
   Recompile the module and then load it by typing, for example:
 </p>
 <pre class="prettyprint linenums">insmod hello_version.ko who_param=JEHTech</pre>
-
+<p>
+  If you want to see the parameters with which a module was loaded you can use
+  this for a list of patameters:
+</p>
+<pre>ls /sys/module/&lt;modul's name&gt;/parameters</pre>
+<p>
+  To find out what the parameter's value is, cat the file with the parameter's
+  name you're interested in.
+</p>
+<p>
 <h4>Adding Time Information</h4>
 <p>
   See <code><a href="http://elixir.free-electrons.com/linux/latest/source/include/linux/timekeeping.h#L18" target="_blank">include/linux/timekeeping.h</a></code>.
