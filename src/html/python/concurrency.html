@@ -1,0 +1,242 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>Concurrency In Python | JEHTech</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+	<script> 
+		$(function(){
+			AddLinkToTeleTypeText({
+			});
+		});
+	</script>
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">Concurrency In Python</h1>
+<h2>Page Contents</h2>
+<div id="page_contents">
+</div>
+
+<h2>References</h2>
+<div>
+	<ul>
+		<li><a href="https://docs.python.org/3/library/concurrency.html" target="_blank">Concurrent Execution</a>, Python Standard Library Documentation.</li>
+		<li><a href="https://pymotw.com/2/threading/" target="_blank">Threading – Manage concurrent threads</a>, PyMOTW.</li>
+	</ul>
+</div>
+
+<h2>An Introduction To Concurrency</h2>
+<div>
+	<p>When a program can interleave statements from multiple workflows we can say the program is concurrent. This can be done via processes and threads. The main difference between the two is that a process has its own address space and cannot access the memory of other processes directly. A thread, on the otherhand, runs <i>within</i> a process. It can access the entire address space of the process it belongs to.
+	</p>
+	<p>Here I will mostly talk about threads...</p>
+	<h3>Correctness Properties</h3>
+	<p>
+		<b>Safety</b>. We want our programs to be <b>safe</b> so that having multiple threads try to access shared resources etc does not cause errors and that all our threads can run continuously:
+		<ul>
+			<li><b>Mutual exclusion</b> - critical sections must not overlap.</li>
+			<li><b>Deadlock</b> - occurs when no process can make usefull progress.
+				<ul>
+					<li><b>Deadly embrace</b> - progress is mutually dependent, so for example, process A is waiting on a resource held by process B, but process B is waiting on a different resource held by process A.</li>
+					<li><b>Livelock</b> - every process is computing without progressing meaningfully.</li>
+				</ul>
+			</li>
+		</ul>
+	</p>
+	<p>
+		<b>Liveness</b>. We out programs to produce something useful! I.e, each process is allocated the resources it needs to do its job:
+		<ul>
+			<li><b>Starvation</b> - occurs when some requests never get dealt with.</li>
+			<li><b>Fairness</b> - contention for resource is resolved fairly</li>
+
+	</p>
+
+	<h3>What Is A &quot;Critical Region&quot;</h3>
+	<p>
+		A critical region is a section of code which must only be executed by one thread at any one time.
+		Lets take, for example, a shared counter. Let's say that there are N threads, each of which 
+		increments the counter when some event occurs. The pseudo code that increments the counter is:
+	</p>
+	<pre>var = counter value
+var = var + 1
+counter value = var</pre>
+    <p> Without any protection it is quite possible to get this interleaving:</p>
+    <pre>Counter value is 5
+Thread A: var = 5
+Thread B: var = 5
+Thread B: var = var + 1 = 6
+Thread B: counter value = 6
+Thread A: var = var + 1 = 6
+Thread A: counter value = 6
+Counter value is 6 (oops!)</pre>
+    <p> The value of the counter at the end of this sequence is wrong. It should have been incremented
+    	twice, once by thread A and once by thread B, giving it a new value of 7. As it stands it ends up being 6!</p>
+    <p> Clearly from the point just before a thread reads the counter to just after it stores the incremented value, a thread must not be interrupted by another thread that is also trying to increment the counter. If we make our pseudo code this:
+    </p>
+    <pre>ENTER CRITICAL REGION
+var = counter value
+var = var + 1
+counter value = var
+LEAVE CRITICAL REGION</pre>
+   	<p>The the malfunctioning interleaving we saw above cannot happed because we have placed this &quot;guard&quot; around the access to the counter. This guard stops more than 1 thread being in this section of code at once. Thus, our previous sequence would now look like this:
+   </p>
+   <pre>Counter value is 5
+Thread A: Enters critical region
+Thread B: Tries to enter critical region but cannot. Blocks!
+Thread A: var = var + 1 = 6
+Thread A: counter value = 6
+Thread A: Leaves critical region
+Thread B: Unblocks and enters critical region
+Thread B: var = 6
+Thread B: var = var + 1 = 7
+Thread B: counter value = 7
+Thread B: Leaves critical region
+Counter value is 7 (yay!)</pre>
+	<p>So, how do we define critical regions in Pyhon? We use Locks, Recursive Locks, Semaphores, and Condition Objects,
+	which we will come to later....</p>
+
+	<h3>The Advantages Of Threads</h3>
+	<p>
+		So, why use threads? Because sometimes programs are waiting doing nothing, so by having more threads, whilst one thread is waiting on say an internet query, the other thread can be getting on doing useful work. Esessntially you can get more
+		work done. It can be more efficient to have multiple threads in one process rather than many processes.
+ 	</p>
+ 	<p>
+ 		So... to give myself some structure writing this and to revise a little I looked back at my uni notes which were for Java and made almost 15 years ago now! The principles haven't changed and rather than always looking up the docs and coding as I go I though writing this would cement it in my head for Python. So here goes...
+ 	</p>
+</div>
+
+<h2>Create A Thread</h2>
+<div>
+	<p>The Python Standard Library provides the class <code>Thread</code>, which can either have a callable
+		passed into the constructor or the class itself can be subclassed (only override <code>__init__()</code> and <code>run()</code>.
+	</p>
+	<h3>Passing A Callable To The Thead Constructor</h3>
+	<p>Create a thread by passing a callable (usually a functionm) to the <code>Thread</code> constructor as
+	demonstrated below.</p>
+	<pre>from threading import Thread
+
+def my_thread(arg1):
+   print("Have arg1 = {}".format(arg1))
+   for i in range(10):
+       print(i)
+
+threads = []
+for i in range(5):
+   thread = Thread(
+      target = my_thread, 
+      name = "my_thread_{}".format(i), args=(5-i,))
+   threads.append(thread)
+   thread.start()
+
+for thread in threads:
+   print(
+      "Waiting for thread {} with name '{}'".format(
+         thread.ident, thread.name))
+   thread.join() # Block until this thread has finished</pre>
+
+   <p>
+      The above example starts 5 threads, which don't do anything particularly interesting except print out the argument they were passed and then a sequence of 10 numbers. The output should be enough to convince you that the seperate flows of execution are running concurrently however.
+   </p>
+   <p>
+   	  To <code>Thread</code> we can pass an <code>args</code> option which has to be a tuple. Each member
+   	  of that tuple is passed as an argument to the callable <code>my_thread</code>. The <code>Thread</code>
+   	  is told to run the function <code>my_thread</code> through the use of the <code>target</code> keyword.
+   </p>
+   <p>
+   	  The thread's <code>name</code> keyword argument isn't used by the thread, but it can be retrieved
+   	  using the <code>thread.name</code> property. You can set it to anything you like and it does not
+   	  have to be unique.
+   </p>
+   <p>
+   	  Once each thread is created it is immediately started using <code>thread.start()</code>. As soon
+   	  as this call completes the thread is active and can be scheduled at any time.
+   </p>
+   <p>
+   	  Once a thread is active it is given a unqiue identified, which we print out in the &quot;Waiting for thread...&quot;
+   	  message using the property <code>thread.ident</code>. Note, that although the identified is unique, as soon as a thread dies it's <code>ident</code> may be reused by new threads.
+   </p>
+
+   <h3>Subclassing Thread</h3>
+   <p>
+   	   If you subclass <code>Thread</code> you must override the <code>run()</code> method
+   	   and optionally the constructor.
+   </p>
+   <pre>from threading import Thread
+
+class MyThread(Thread):
+  def __init__(self, arg1):
+     super(MyThread, self).__init__()
+     self._arg1 = arg1
+
+  def run(self):
+     print("Have arg1 = {}".format(self._arg1))
+     for i in range(10):
+        print(i)
+
+threads = []
+for i in range(5):
+   thread = MyThread(5-i)
+   threads.append(thread)
+   thread.start()
+
+for thread in threads:
+   print(
+      "Waiting for thread {} with name '{}'".format(
+         thread.ident, thread.name))
+   thread.join() # Block until this thread has finished</pre>
+
+   <p>I dont think there is much difference between giving <code>Thread</code> a <code>target</code>
+   	and just sublassing it. The later just has a more object oriented feel about it I guess.
+   </p>
+
+   <h3>Waiting For A Thread To End</h3>
+   <p>
+   		In the above examples you will have seen the command <code>thread.join()</code>. The <code>join()</code>
+   		method is part of the <code>Thread</code> object and causes the calling thread of execution to block
+   		until the thread has terminated.
+   </p>
+</div> <!-- END H2 DIV -->
+
+<h2>Create A Semaphore</h2>
+<div>
+</div> <!-- END H2 DIV -->
+
+<h2>Create A (Recursive) Lock</h2>
+<div>
+</div> <!-- END H2 DIV -->
+
+<h2>The Bounded Buffer Problem: Asynchronous Message Passing</h2>
+<div>
+</div> <!-- END H2 DIV -->
+
+<h2>The Dining Philosophers Problem: Sharing Resources</h2>
+<div>
+</div> <!-- END H2 DIV -->
+
+<h2>The Readers And Writers Problem: Conditional Forms Of Mutual Exclusion</h2>
+<div>
+</div> <!-- END H2 DIV -->
+
+<h2>The Handshaking Problem: Synchronous Message Passing</h2>
+<div>
+</div> <!-- END H2 DIV -->
+
+</div> <!-- End content div -->
+</body>
+</html>
+
+
