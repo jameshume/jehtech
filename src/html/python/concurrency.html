@@ -127,7 +127,7 @@ Counter value is 7 (yay!)</pre>
 	<h3>Passing A Callable To The Thead Constructor</h3>
 	<p>Create a thread by passing a callable (usually a functionm) to the <code>Thread</code> constructor as
 	demonstrated below.</p>
-	<pre>from threading import Thread
+	<pre class="prettyprint linenums">from threading import Thread
 
 def my_thread(arg1):
    print("Have arg1 = {}".format(arg1))
@@ -175,7 +175,7 @@ for thread in threads:
    	   If you subclass <code>Thread</code> you must override the <code>run()</code> method
    	   and optionally the constructor.
    </p>
-   <pre>from threading import Thread
+   <pre class="prettyprint linenums">from threading import Thread
 
 class MyThread(Thread):
   def __init__(self, arg1):
@@ -213,14 +213,175 @@ for thread in threads:
 
 <h2>Create A Semaphore</h2>
 <div>
+	<p>
+		The following snippet creates a semaphore with an initial value of 2. This means
+		that up to 2 threads can be in the critical section that this semaphore can 
+		establish at any one time. If a 3rd thread were to try and enter it would block
+		until 1 or more of the existing threads had left the CR.
+	</p>
+	<pre class="prettyprint linenums">num_resources = 2
+my_sem = threading.Semaphore(num_resources)</pre>
+    <p>
+    	To use the semaphore to define a critical region you can do this:
+    </p>
+    <pre class="prettyprint linenums">with my_sem:
+    # do something critical 
+# get to here and you're outside the with block and therefore
+# no longer in the critical region</pre>
+    <p>
+    	This is a nice and safe way of using a semaphore. At the start of the <code>with</code>
+    	block, the semaphore will have its <code>acquire()</code> function called automatically
+    	for you. Then the code in the <code>with</code> block is executed. When the <code>with</code>
+    	block is exited, for any reason, be it exception or otherwise, the semaphore will have
+    	its <code>release()</code> method called.
+    </p>
+    <p>
+    	You can, of course, call the <code>acquire()</code> and <code>release()</code> methods
+    	yourself. You might do it like this:
+    </p>
+    <pre class="prettyprint linenums">my_sem.aqcuire()
+try:
+    # do some work
+finally:
+    my_sem.release()</pre>
+    <p>
+    	Notice that we have used a <code>try</code> block to ensure that no matter 
+    	what happens, the semaphore will be released, whether you return from
+    	within the <code>try</code> block or throw an exception etc.
+    </p>
+    <p>
+    	Sometimes you will write things like this:
+    </p>
+    <pre class="prettyprint linenums">my_sem.acquire()
+if some condition:
+    my_sem.release()
+    return some error
+# do critical work
+my_sem.release()</pre>
+	<p>
+		This is quite error prone because you have to remember to release the
+		semaphore wherever you end the normal flow of execution. You are much
+		much much better off using a <code>with</code> block, or failing that
+		the <code>try/finally</code> block structures shown above.
+	</p>
 </div> <!-- END H2 DIV -->
 
 <h2>Create A (Recursive) Lock</h2>
 <div>
+	<p>
+		A lock is like a sempahore with an initial value of 1. It is effectively a mutex. It allows
+		one and only one thread access to the resource or critical section that it defines.
+	</p>
+	<p>
+		You create a lock as follows:
+	</p>
+	<pre class="prettyprint linenums">my_lock = threading.Lock() #< Created unlocked</pre>
+	<p>
+		Just like the semaphore the lock has methods <code>acquire()</code> and <code>release()</code>.
+		The lock can also be used with the <code>with</code> block in the same way.
+	</p>
+	<p>
+		A thread cannot re-take a lock that it has already aquired. If it tries to it will block:
+	</p>
+	<pre class="prettyprint linenums">my_lock.acquire()
+my_lock.acquire() #< This WILL block!</pre>
+	<p>
+		If you want a thread to be able to take a lock and then, take it again before releasing
+		it - this is called <em>recursive locking</em> then you need to use an <code>RLock</code>:
+	</p>
+	<pre class="prettyprint linenums">my_rlock = threading.RLock()
+my_rlock.acquire()
+my_rlock.acquire() #< Will NOT block</pre>
 </div> <!-- END H2 DIV -->
+
+<h2></h2>
+<div>
+
+</div>
 
 <h2>The Bounded Buffer Problem: Asynchronous Message Passing</h2>
 <div>
+	<p>
+		In this scenario there a thread that is create a load of data. It could be
+		a thread on your server, accepting client connections, reading data from
+		the client and handling the higher level protocol, and then passing the
+		the received data on to another thread in your application that will 
+		process the data.
+	</p>
+	<p>
+		The thread getting the data that is getting pumped into your program's
+		analysis algorithm thread is called the <em>producer</em>. The algorithm
+		thread is said be be the <em>consumer</em> because it is <em>consuming</em>
+		the data.
+	</p>
+	<p>
+		If we didn't have a queue in between these two threads they would have to
+		operate in lock-step. The producer would get data over the network. It would
+		then have to wait for the analysis (consumer) thread to be available so it
+		could pass the data through to it. If the analysis thread was busy it would
+		have to wait and so it could miss some incoming data. The same for the
+		analysis thread. It will have to wait until data is available. If there is
+		a sudden load on the network and there is a large delay in receiving data,
+		the analysis thread will sit idle until suddenly a glut of data is received.
+	</p>
+	<p>
+		What we want to do is to <em>decouple</em> these two threads so that if 
+		the producer is busy, there is still enough data available to occupy the
+		consumer. If the consumer is busy, the producer has somewhere to stash
+		the data quickly so it can get back to its task. This is done by placing
+		a <em>buffer</em> between the two processes.
+	</p>
+	<p>
+		We need to make sure of two things. The consumer must not read from and
+		empty buffer (underflow) and the producer must not write to a full
+		buffer (overflow).
+	</p>
+	<p>
+		Now, in Python, the standard library already gives us such a thread
+		safe buffer. It is found in <code>collections.deque</code>: <q>Deques support 
+		thread-safe, memory efficient appends and pops from either side of the deque 
+		with approximately the same O(1) performance in either direction</q>.
+	</p>
+	<p>
+		Although, therefore, we would never implment this ourselves, it is a 
+		nice exercise to try and implement this ourselves so that we can
+		learn about and practice using the <code>threading</code> library.
+	</p>
+	<p>
+		This can be implemented using this pseudo code:
+	</p>
+	<pre>put_data:
+    spaces.acquire()
+    write value into queue
+    elements.release()
+
+get_data:
+    elements.acquire()
+    read value from queue
+    spaces.release()</pre>
+    <p>
+    	But, in Python we can use <em>condition variables</em>. Here I replicate,
+    	with added comments, the example from the Python docs. We can see that
+    	only the one condition variable is required, rather than a pair of
+    	semaphores, which makes the implementation a little cleaner.
+    </p>
+    <pre class="prettyprint linenums">
+# Consume one item
+cv.acquire()                      #< Lock is aquired
+while not an_item_is_available(): #< Therefore this executes in the CR
+    cv.wait()                     #< Lock is released and thread sleeps
+                                  #  until cv.notify[All]() is called.
+# When cw.wait() unblocks it reaquires the lock so at this point
+# we are back inside the CR
+get_an_available_item()
+cv.release()
+
+# Produce one item
+cv.acquire()
+make_an_item_available()
+cv.notify()
+cv.release()
+    </pre>
 </div> <!-- END H2 DIV -->
 
 <h2>The Dining Philosophers Problem: Sharing Resources</h2>
