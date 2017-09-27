@@ -7,7 +7,7 @@
 	<!-- META_INSERT -->
 	<!-- CSS_INSERT -->
 	<!-- JAVASCRIPT_INSERT -->
-	<script> 
+	<script>
 		$(function(){
 			/* Turn all tt elements with functon names in them into the text with a link to the manual */
 			$("tt").each(function() {
@@ -20,7 +20,7 @@
 					}
 			});
 		});
-	</script> 
+	</script>
 </head>
 
 <body>
@@ -103,7 +103,7 @@
 		<h3>Run PyLint</h3>
 		<p>
 			Generally you can run pylint on a directory. But note that directory and subdirectories
-			you want to check must have the <tt>__init__.py</tt> file in them, even if it is just 
+			you want to check must have the <tt>__init__.py</tt> file in them, even if it is just
 			empty.
 		</p>
 		<p>
@@ -112,6 +112,11 @@
 		<pre  class="prettyprint linenums">find . -name '*.py' | xargs pylint --rcfile=pylint_config_filename</pre>
 		<p>
 			Use the <code>-rn</code> option to suppress the summary tables at the end of the pylint output.
+		</p>
+		<p>
+			Usefully you can also use PyLint with PyEnchant to add spell checking to your
+			comments, which can be pretty useful. To configure the dictionary to use
+			just look up the <code>[SPELLING]</code> section in the PyLint RC file!
 		</p>
 
 		<h3>Message Format</h3>
@@ -178,7 +183,7 @@ C:293, 4: Invalid method name "im_an_error" (invalid-name)</pre>
 		</p>
 		<p>
 			To supress an error message for a specifc line of code, or for a block of code (put comment on first line of block start),
-			use <tt>#pylint: disable=...</tt> 
+			use <tt>#pylint: disable=...</tt>
 		</p>
 
 		<h3>Longer/Different Allowed Function/Variable/etc Names</h3>
@@ -190,7 +195,7 @@ C:293, 4: Invalid method name "im_an_error" (invalid-name)</pre>
 		</p>
 		<p>
 			In your rcfile navigate to the section <tt>[BASIC]</tt>. Here you can edit the regular
-			expressions that are used to validate things like functions names. E.g., I sometimes 
+			expressions that are used to validate things like functions names. E.g., I sometimes
 			change:
 		</p>
 		<pre>function-rgx=[a-z_][a-z0-9_]{2,30}</pre>
@@ -199,6 +204,14 @@ C:293, 4: Invalid method name "im_an_error" (invalid-name)</pre>
 		</p>
 		<pre>function-rgx=[a-z_][a-z0-9_]{2,<b><u>40</u></b>}</pre>
 
+		<h3>Supress Warnings For Unused Function Arguments</h3>
+		<p>
+			Often you'll be defining something like a callback or implementing an interface etc
+			but won't need to use all the function arguments. By default PyLint will bitch
+			about this, but to get it to ignore the variable just prefix the variable
+			name with either &quot;dummy&quot; or &quot;_&quot;.
+		</p>
+
 		<h3>Use PyLint To Count LOC</h3>
 		<p>
 			Thanks to the author of, and comments made, for the following
@@ -206,15 +219,15 @@ C:293, 4: Invalid method name "im_an_error" (invalid-name)</pre>
 				StackOverflow post</a>.
 		</p>
 		<p>
-			Although LOC is not a good metric in the sense that many lines of bad code is still bad, to get a reasonable 
-			count of the lines of code (LOC) for all Python files contained in the current folder and all subfolders, 
+			Although LOC is not a good metric in the sense that many lines of bad code is still bad, to get a reasonable
+			count of the lines of code (LOC) for all Python files contained in the current folder and all subfolders,
 			use the following command.
 		</p>
 		<pre class="prettyprint linenums">find . -name '*.py' | xargs pylint 2&gt;&amp;1 | grep 'Raw metrics' -A 14</pre>
 		<p>
-			<tt>xargs</tt> takes the output of <tt>find</tt> and uses it to construct a parameter list that is 
+			<tt>xargs</tt> takes the output of <tt>find</tt> and uses it to construct a parameter list that is
 			passed to <tt>pylint</tt>. I.e. we get <tt>pylint</tt> to parse all files under our source tree. This output is
-			passed to <tt>grep</tt> which searches for the &quot;Raw Metrics&quot; table heading and then outputs it along 
+			passed to <tt>grep</tt> which searches for the &quot;Raw Metrics&quot; table heading and then outputs it along
 			with the next 14 lines (due to the <tt>-A 14</tt> option).
 		</p>
 </div>
@@ -228,7 +241,7 @@ C:293, 4: Invalid method name "im_an_error" (invalid-name)</pre>
 		To configure it with the equivalent of a pylint rcfile just create the file <tt>tox.ini</tt>
 		or <tt>setup.cfg</tt> (I prefer the former as the latter is a little too generic) in the
 		directory that you run flake8 from. This avoids having to use a global config file - you
-		can have one per project this way. All the command line options that you would configure 
+		can have one per project this way. All the command line options that you would configure
 		flake8 with become INI file style settings. For example, if you ran:
 	</p>
 	<pre class="prettyprint linenums">flake8 --ignore=E221 --max-line-length==100</pre>
@@ -244,7 +257,7 @@ max-line-length = 100</pre>
 <h2>Installing Python Libraries From Wheel Files</h2>
 <div>
 	<p>
-		<a href="http://pythonwheels.com/" target="_blank">Python wheels</a> 
+		<a href="http://pythonwheels.com/" target="_blank">Python wheels</a>
 		<q>are the new standard of python distribution</q>. First make sure you have wheels
 		installed:
 	</p>
@@ -271,13 +284,13 @@ max-line-length = 100</pre>
 	<pre>python version 2.7 required, which was not found in the registry</pre>
 	<p>
 		The answer on how to overcome this is found in this
-		<a href="http://stackoverflow.com/questions/17872234/how-to-add-python-to-windows-registry" target="_blank">SO thread</a>, 
+		<a href="http://stackoverflow.com/questions/17872234/how-to-add-python-to-windows-registry" target="_blank">SO thread</a>,
 		credits to the answer's author!
 	</p>
 	<p>
-		To summarise, Windows Python Installer created <tt>[HKEY_LOCAL_MACHINE\SOFTWARE\Python]</tt> 
+		To summarise, Windows Python Installer created <tt>[HKEY_LOCAL_MACHINE\SOFTWARE\Python]</tt>
 		and all the subkeys therein, but not <tt>[HKEY_CURRENT_USER\SOFTWARE\Python]</tt>. Oops!
-		Easiest way to evercome this is to load <tt>regedit.exe</tt> and natigate to the 
+		Easiest way to evercome this is to load <tt>regedit.exe</tt> and natigate to the
 		<tt>[HKEY_LOCAL_MACHINE\SOFTWARE\Python]</tt>. Righ click on this entry and export it to
 		a file of your choosing. Then edit the file to replace all occurrences of <tt>HKEY_LOCAL_MACHINE</tt>
 		with <tt>HKEY_CURRENT_USER</tt>. Save it and double click it to install the Python info
@@ -314,12 +327,12 @@ max-line-length = 100</pre>
 <h2>Python functions gotcha: default argument values - default value evaluated only once!</h2>
 <div>
 	<p>
-		Ooh this one is interesting and is not at all how I intuitively imagined default values. 
+		Ooh this one is interesting and is not at all how I intuitively imagined default values.
 		I assumed that when a function parameter has a default value, that on <em>every</em>
 		call to the function, the parameter is initialised with the default value. This is
-		<em>not</em> the case, as I found <a href="http://docs.python-guide.org/en/latest/writing/gotchas/" target="_blank">[Ref]</a>! 
-		The default value is evaluated only once and acts like a static variable in a 
-		C function after that! The following example is taken from the 
+		<em>not</em> the case, as I found <a href="http://docs.python-guide.org/en/latest/writing/gotchas/" target="_blank">[Ref]</a>!
+		The default value is evaluated only once and acts like a static variable in a
+		C function after that! The following example is taken from the
 		<a href="https://docs.python.org/3/tutorial/controlflow.html#default-argument-values" target="_blank">Python docs on functions</a>:
 	</p>
 	<pre class="prettyprint linenums">def f(a, L=[]):
@@ -366,7 +379,7 @@ print f(2)
 		values are output when we call <code>f(2)</code> with the same parameter value.
 	</p>
 	<p>
-		We can go to the <a href="https://docs.python.org/2/reference/executionmodel.html#naming-and-binding" target="_blank">Python docs</a> 
+		We can go to the <a href="https://docs.python.org/2/reference/executionmodel.html#naming-and-binding" target="_blank">Python docs</a>
 		for further information:
 	</p>
 	<blockquote>
@@ -381,7 +394,7 @@ print f(2)
 			</ul>
 		</p>
 		<p>
-			... When a name is used in a code block, it is <b>resolved using the nearest enclosing scope</b>. 
+			... When a name is used in a code block, it is <b>resolved using the nearest enclosing scope</b>.
 			The set of all such scopes visible to a code block is called the block’s environment ...
 	    </p>
 	    <p>
@@ -398,7 +411,7 @@ print f(2)
 	<p>
 		This is the same example as you find in many classic examples <a href="http://docs.python-guide.org/en/latest/writing/gotchas/"
 		target="_blank">[Ref]</a>, replicated here:
-	</p> 
+	</p>
 	<pre class="prettyprint linenums">def create_multipliers():
    return [lambda x : i * x for i in range(5)]
 
@@ -423,13 +436,13 @@ for multiplier in create_multipliers():
 	</p>
 	<pre class="prettyprint linenums">[lambda1, lambda2, lambda3, lambda4]</pre>
 	<p>
-		Each <code>lambdaX</code> has not yet been evaluated, so by the time this list has been 
+		Each <code>lambdaX</code> has not yet been evaluated, so by the time this list has been
 		create, the variable <code>i</code> has the value 4. Later, when any of the lambda functions
 		are called, <code>i</code> is evaluated so Python searches down the scope chain until it
 		finds the first <code>i</code>, which it does and in this case it has the value 4!
 	</p>
 	<p>
-		Note, that this is a little different in C++. In C++ (C++11 or greater) however, you 
+		Note, that this is a little different in C++. In C++ (C++11 or greater) however, you
 		would have to pass x by reference to get the same result. If we transliterate the first
 		example to C++ we get:
 	</p>
@@ -438,8 +451,8 @@ for multiplier in create_multipliers():
 int main(int argc, char* argv[])
 {
 	int x = 1;
-	auto myLambda = [x](int y) { 
-		return x * y; 
+	auto myLambda = [x](int y) {
+		return x * y;
 	};
 	std::cout &lt;&lt; myLambda(2) &lt;&lt; "\n";
 	x = 10;
@@ -452,8 +465,8 @@ int main(int argc, char* argv[])
 	<p>
 		To get the behaviour of Python we have to do the following:
 	</p>
-	<pre class="prettyprint linenums">auto myLambda = [<b><u>&amp;</u></b>x](int y) { 
-		return x * y; 
+	<pre class="prettyprint linenums">auto myLambda = [<b><u>&amp;</u></b>x](int y) {
+		return x * y;
 	};</pre>
 	<p>
 		Note the ampersand added before <code>x</code> so that the outer scope is passed
@@ -466,11 +479,11 @@ int main(int argc, char* argv[])
 <h2>Infinite recursion in <tt>__setattr__()</tt> &amp; <tt>__getattr__()</tt> in Python</h2>
 <div>
 		<h3>The recursion problem</h3>
-		<p>In most, if not all, of the little tutorials I used to learn about 
+		<p>In most, if not all, of the little tutorials I used to learn about
 			<tt>__setattr__()</tt> and <tt>__getattr__()</tt>
-			seemed either to treat them independently, in otherwords, the example classes had one or the other 
-			defined but not both, or used both but had very simple use cases. Then as I started to play with them, in 
-			my newbie-to-python state, I did the following (abstracted out into a test case). This also 
+			seemed either to treat them independently, in otherwords, the example classes had one or the other
+			defined but not both, or used both but had very simple use cases. Then as I started to play with them, in
+			my newbie-to-python state, I did the following (abstracted out into a test case). This also
 			serves as a little Python <tt>__setattr__</tt> example and a Python <tt>__getattr__</tt> example...
 		</p>
 		<pre class="prettyprint linenums">class Test(object):
@@ -482,7 +495,7 @@ int main(int argc, char* argv[])
 		if self._somePrivate == 2:
 			pass
 		return "Test attribute"
-	
+
 	def __setattr__(self, name, val):
 		print "# SETTING %s" % (name)
 		if self._somePrivate == 2:
@@ -492,7 +505,7 @@ int main(int argc, char* argv[])
 t = Test()
 print t.someAttr</pre>
 		<p>Running this causes a the maximum recursion depth to be reached:</p>
-		<pre class="prettyprint linenums">$ python test1.py 
+		<pre class="prettyprint linenums">$ python test1.py
 # SETTING _somePrivate
 # GETTING _somePrivate
 ...&lt;snip&gt;...
@@ -511,7 +524,7 @@ Traceback (most recent call last):
     if self._somePrivate == 2:
 RuntimeError: maximum recursion depth exceeded</pre>
 
-		<p>As I had read up on the subject it was clear that one can't set an attribute in 
+		<p>As I had read up on the subject it was clear that one can't set an attribute in
 			<tt>__setattr__()</tt> because that would just cause <tt>__setattr__()</tt> to
 			be called again resulting in infinite recursion (until the stack blows up!). The solution (in &quot;new&quot;
 			style classes which derive from object) is to call the parent's <tt>__setattr__()</tt> method. As for <tt>__getattr__()</tt>, from the documentation it was also clear
@@ -527,7 +540,7 @@ RuntimeError: maximum recursion depth exceeded</pre>
 		if self._somePrivate == 2:
 			pass
 		return "Test attribute"
-	
+
 t = Test2()
 print t.someAttr</pre>
 		<p>... the above test program works as expected and outputs the following.</p>
@@ -541,24 +554,24 @@ Test attribute</pre>
 		<pre class="prettyprint linenums">	def __setattr__(self, name, val):
 		<b>if self._somePrivate == 2: # -- Oops --</b></pre>
 		<p>This means that <tt>__getattr__()</tt> must be called to resolve <tt>self._somePrivate</tt>
-			because <em>the variable does not yet exist</em> and therefore cannot be &quot;...found through the normal mechanism...&quot;. 
+			because <em>the variable does not yet exist</em> and therefore cannot be &quot;...found through the normal mechanism...&quot;.
 		   And here is the flaw... my initial assumpton was that this would work because <tt>__getattr__()</tt>
 			is only called if the attribute can't otherwise be found, and I thought it would be found.
 		</p>
 		<p>
-		   But of course, it cannot be found, so <tt>__getattr__()</tt> also has to be called. Then, <tt>__getattr__()</tt> tries to access the variable <tt>self._somePrivate</tt> and because it 
+		   But of course, it cannot be found, so <tt>__getattr__()</tt> also has to be called. Then, <tt>__getattr__()</tt> tries to access the variable <tt>self._somePrivate</tt> and because it
 			still does not exist, <tt>__getattr__()</tt> is called again, and again, and so on... resulting in the infinite recursion seen.
 		</p>
 		<p>And from this we can understand why the second example worked. Because there is no <tt>__setattr__()</tt> defined in the second test
 			class, the method does not try to read the variable first (as my little example did) and so <tt>__getattr__()</tt> need never be
-			called. Therefore the variable is created successfull upon class initialisation and any subsequent queries on the variable 
+			called. Therefore the variable is created successfull upon class initialisation and any subsequent queries on the variable
 			will be found using the normal mechanism. Even if the second example had defined <tt>__setattr__()</tt>, as long as it did not
 			try to read <tt>self._somePrivate</tt>, it would have been okay.
 		</p>
 		<p>So the moral of this little story was, if implementing either of these magic methods, be careful which
 			variables you access as part of the get/set logic!
 		</p>
-		<p>I needed to do this however, so what can be done to resolve this. The solution is to define the constructor 
+		<p>I needed to do this however, so what can be done to resolve this. The solution is to define the constructor
 			as follows, using exactly the same type of set we used in <tt>__setattr__()</tt> to avoid the recursion problem:
 		</p>
 		<pre class="prettyprint linenums"> class Test(object):
@@ -567,12 +580,12 @@ Test attribute</pre>
 		<p>Now the example works again... yay!</p>
 		<h3>Setting the value of a class instance array</h3>
 		<p>Another thing I had been doing was to set an element of an array in the <tt>__setattr__()</tt> function and
-			a kind chappy on StackOverflow 
+			a kind chappy on StackOverflow
 			<a target="_blank" href="http://stackoverflow.com/questions/28189061/why-does-setattr-not-recurse-when-setting-member-array-variable-elements/28189312#28189312">
 			answered my question</a> which I'll duplicate below. In the example below the line <tt>self._someAttr = 1</tt>
 			behaves as I'd have expected by getting <tt>__setattr__()</tt> to recurse, only the once, back into itself. What
 			I didn't understand was why the line <tt>self._rowData[Test.tableInfo[self._tableName][name]] = val</tt> didn't
-			do the same. I was thinking that to set the array we'd call <tt>__setattr__()</tt> again, but it doesn't. The 
+			do the same. I was thinking that to set the array we'd call <tt>__setattr__()</tt> again, but it doesn't. The
 			test example is shown below.
 		</p>
 		<pre class="prettyprint linenums">class Test(object):
@@ -610,7 +623,7 @@ print t.col2
 t.col1 = 999
 print t.col1</pre>
 		<p>It produces the following output...</p>
-		<pre class="prettyprint linenums">$ python test.py 
+		<pre class="prettyprint linenums">$ python test.py
 # SETTING _rowData
 # GETTING col1
 123
@@ -625,10 +638,10 @@ Table column name found
 			we'd have to call <tt>__setattr__()</tt> again to set this. As the SO user <a href="http://stackoverflow.com/users/542190/filmor" target="_blank">
 			&quot;filmor&quot;</a> explained, the following happens:
 		</p>
-		<p><tt>self._rowData[bla] = val</tt> gets resolved to <tt>self.__getattr__("_rowData")[bla] = val</tt>. So we get the array (it already 
+		<p><tt>self._rowData[bla] = val</tt> gets resolved to <tt>self.__getattr__("_rowData")[bla] = val</tt>. So we get the array (it already
 			exists so is found by the normal mechanisms and not via another call to <tt>__getattr__()</tt>. But then
 			to set an array value <tt>__setitem__()</tt> is used an <em>not</em> <tt>__setattr__()</tt>. So, the expression resolves to
-			<tt>self.__getattribute__("_rowData").__setitem__(bla, val)</tt> and there is therefore no further <tt>__setattr__()</tt> 
+			<tt>self.__getattribute__("_rowData").__setitem__(bla, val)</tt> and there is therefore no further <tt>__setattr__()</tt>
 			called. Simples!
 		</p>
 </div>
@@ -641,8 +654,8 @@ Table column name found
 		<p>
 		<blockquote>
 			<p>
-				Concatenating immutable sequences always results in a new object. This means that building up a 
-				sequence by repeated concatenation will have a quadratic runtime cost in the total sequence 
+				Concatenating immutable sequences always results in a new object. This means that building up a
+				sequence by repeated concatenation will have a quadratic runtime cost in the total sequence
 				length. To get a linear runtime cost ... build a list and use .join()
 			</p>
 			<footer>
@@ -650,7 +663,7 @@ Table column name found
 			</footer>
 		</blockquote>
 		<p>
-			Interesting... I've been building up SQL strings using concatenation. Is using a 
+			Interesting... I've been building up SQL strings using concatenation. Is using a
 			join really better? Lets have a look... In my simple test below I create a large list of strings and
 			concatenate them using string concatenation in <tt>test1</tt> and list.join() in <tt>test2</tt>.
 		</p>
@@ -664,12 +677,12 @@ def test2(stringList):
 
 if __name__ == '__main__':
 	import timeit
-	print(timeit.timeit("test1(map(lambda x: str(x), range(0,1000)))", 
+	print(timeit.timeit("test1(map(lambda x: str(x), range(0,1000)))",
 	                    setup="from __main__ import test1", number=10000))
-	print(timeit.timeit("test2(map(lambda x: str(x), range(0,1000)))", 
+	print(timeit.timeit("test2(map(lambda x: str(x), range(0,1000)))",
 	                    setup="from __main__ import test2", number=10000))</pre>
 		<p>
-			All the &quot;<tt>map(lambda x: str(x), range(0,1000)</tt>&quot; expression does is to create a list of 1000 
+			All the &quot;<tt>map(lambda x: str(x), range(0,1000)</tt>&quot; expression does is to create a list of 1000
 			strings to concatenate so that each test function is concatentating a list of the same strings.
 		</p>
 		<p>
@@ -709,7 +722,7 @@ worksheet = workbook.sheet_by_name('my-worksheet-name')</pre>
    ...</pre>
 		<p>
 			Deal with dates using <tt>xldate_as_tuple</tt>. It will convert an Excel date into
-			a tuple (year, month, day, hour, minute, nearest_second). When using this function 
+			a tuple (year, month, day, hour, minute, nearest_second). When using this function
 			remember to use the datemode <tt>workbook.datemode</tt>
 			to use the correct date/time zone settings used in the spreadsheet.
 		</p>
@@ -735,7 +748,7 @@ pandas.read_excel(xlsxFileName, worksheetName, header=excel_header_row_number)</
 	</p>
 	<p>
 		That's basically one for loop with a few tracking variables... O(n) operation. But,
-		for loops aren't really very Pythonic in many ways and half to point of having a 
+		for loops aren't really very Pythonic in many ways and half to point of having a
 		vectorized library like <a href="python/numpy.html">numpy</a> is that we avoid that
 		tedium.
 	</p>
@@ -748,26 +761,26 @@ closestIndex     = findClosestIndex(array_to_search, value_to_find_closest_to)</
 		equivalent to the following.
 	</p>
 	<pre class="prettyprint linenums">def findClosestIndex(vec, val):
-   # Pre: vec is a numpy.array, val is a numeric datatype 
-   vecIndicies = np.arange(len(vec)) 
+   # Pre: vec is a numpy.array, val is a numeric datatype
+   vecIndicies = np.arange(len(vec))
 
    # produces the distance of each array value from &quot;val&quot;.
    distanceFromVal = abs(vec-val)
 
    # the smallest distance found.
-   minDistance = min(distanceFromVal) 
+   minDistance = min(distanceFromVal)
 
-   # Produce a boolean index to the distance array selecting only those distances 
-   # that are equal to the minimum. 
-   vecIndiciesFilter = distanceFromVal == minDistance 
+   # Produce a boolean index to the distance array selecting only those distances
+   # that are equal to the minimum.
+   vecIndiciesFilter = distanceFromVal == minDistance
 
-   # vecIndicies[vecIndiciesFilter] is an array where each element is the index 
+   # vecIndicies[vecIndiciesFilter] is an array where each element is the index
    # of an element in vec which equals val.
    return vecIndicies[vecIndiciesFilter][0]  </pre>
 
 	<p>
 		The line <tt>vecIndicies = np.arange(len(vec))</tt> produces an array that
-		is exactly the same size as the array <tt>vec</tt> where <tt>vecIndicies[i] 
+		is exactly the same size as the array <tt>vec</tt> where <tt>vecIndicies[i]
 		== i</tt>.
 	</p>
 	<p>
@@ -781,7 +794,7 @@ closestIndex     = findClosestIndex(array_to_search, value_to_find_closest_to)</
 	</p>
 	<p>
 		The next line produces an array <tt>vecIndiciesFilter</tt> where each
-		element, <tt>vecIndiciesFilter[i]</tt>, is <tt>True</tt> if 
+		element, <tt>vecIndiciesFilter[i]</tt>, is <tt>True</tt> if
 		<tt>distanceFromVal[i] == minDistance</tt>
 	</p>
 	<p>
@@ -834,19 +847,36 @@ for dir, file in YieldFiles("/some/dir", "*.txt")
 	</p>
 	<pre class="prettyprint linenums">if os.path.exists(cacheDir):
    shutil.rmtree(cacheDir) # Recursively delete dir and contents
-   os.makedirs(cacheDir)   # Recreate dir (recursively if 
+   os.makedirs(cacheDir)   # Recreate dir (recursively if
                            # intermediete dirs dont exist)</pre>
 	<p>
-		However, you may sometimes 
+		However, you may sometimes
 		<a href="http://stackoverflow.com/questions/1213706/what-user-do-python-scripts-run-as-in-windows"
 		   target="_blank">run into problems on windows</a> when deleting files
 		or directories. This is normally a <em>permissions</em> issue. Also,
 		although this seems silly, you won't be able to delete a directory
-		if your <em>current working directory </em> is set to that directory or 
+		if your <em>current working directory </em> is set to that directory or
 		one of its children.
 </div>
 
+<h2>Handling Signals</h2>
+<p>
+	Handling signals in Python can be done like so:
+</p>
+<div>
+	<pre>import signal
+
+# Somewhere in your initialisation
+signal.signal(signal.SIGINT, signal_handler)
+
+def signal_handler(signal, frame):
+   # Clean up etc
+   sys.exit(1)
+</div>
+
+
 <hr>
+
 <pre>
 TODO
 Stat and os.walk in opposite direction
@@ -874,7 +904,7 @@ Get Hostname
 
 python get environment variable
 import os
-os.environ['A_VARIABLE'] = '1' 
+os.environ['A_VARIABLE'] = '1'
 print os.environ['A_VARIABLE']   ## Key must exist!
 
 To not care if key exists use

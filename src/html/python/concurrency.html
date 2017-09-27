@@ -7,7 +7,7 @@
 	<!-- META_INSERT -->
 	<!-- CSS_INSERT -->
 	<!-- JAVASCRIPT_INSERT -->
-	<script> 
+	<script>
 		$(function(){
 			AddLinkToTeleTypeText({
 			});
@@ -62,20 +62,20 @@
 		<ul>
 			<li><b>Starvation</b> - occurs when some requests never get dealt with.</li>
 			<li><b>Fairness</b> - contention for resource is resolved fairly</li>
-
+    </ul>
 	</p>
 
 	<h3>What Is A &quot;Critical Region&quot;</h3>
 	<p>
 		A critical region is a section of code which must only be executed by one thread at any one time.
-		Lets take, for example, a shared counter. Let's say that there are N threads, each of which 
+		Lets take, for example, a shared counter. Let's say that there are N threads, each of which
 		increments the counter when some event occurs. The pseudo code that increments the counter is:
 	</p>
-	<pre>var = counter value
+	<pre class="prettyprint linenums lang-python">var = counter value
 var = var + 1
 counter value = var</pre>
     <p> Without any protection it is quite possible to get this interleaving:</p>
-    <pre>Counter value is 5
+    <pre class="prettyprint linenums lang-python">Counter value is 5
 Thread A: var = 5
 Thread B: var = 5
 Thread B: var = var + 1 = 6
@@ -87,14 +87,14 @@ Counter value is 6 (oops!)</pre>
     	twice, once by thread A and once by thread B, giving it a new value of 7. As it stands it ends up being 6!</p>
     <p> Clearly from the point just before a thread reads the counter to just after it stores the incremented value, a thread must not be interrupted by another thread that is also trying to increment the counter. If we make our pseudo code this:
     </p>
-    <pre>ENTER CRITICAL REGION
+    <pre class="prettyprint linenums lang-python">ENTER CRITICAL REGION
 var = counter value
 var = var + 1
 counter value = var
 LEAVE CRITICAL REGION</pre>
    	<p>The the malfunctioning interleaving we saw above cannot happed because we have placed this &quot;guard&quot; around the access to the counter. This guard stops more than 1 thread being in this section of code at once. Thus, our previous sequence would now look like this:
    </p>
-   <pre>Counter value is 5
+   <pre class="prettyprint linenums lang-python">Counter value is 5
 Thread A: Enters critical region
 Thread B: Tries to enter critical region but cannot. Blocks!
 Thread A: var = var + 1 = 6
@@ -127,7 +127,7 @@ Counter value is 7 (yay!)</pre>
 	<h3>Passing A Callable To The Thead Constructor</h3>
 	<p>Create a thread by passing a callable (usually a functionm) to the <code>Thread</code> constructor as
 	demonstrated below.</p>
-	<pre>from threading import Thread
+	<pre class="prettyprint linenums lang-python">from threading import Thread
 
 def my_thread(arg1):
    print("Have arg1 = {}".format(arg1))
@@ -137,7 +137,7 @@ def my_thread(arg1):
 threads = []
 for i in range(5):
    thread = Thread(
-      target = my_thread, 
+      target = my_thread,
       name = "my_thread_{}".format(i), args=(5-i,))
    threads.append(thread)
    thread.start()
@@ -175,7 +175,7 @@ for thread in threads:
    	   If you subclass <code>Thread</code> you must override the <code>run()</code> method
    	   and optionally the constructor.
    </p>
-   <pre>from threading import Thread
+   <pre class="prettyprint linenums lang-python">from threading import Thread
 
 class MyThread(Thread):
   def __init__(self, arg1):
