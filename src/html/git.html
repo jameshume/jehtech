@@ -35,11 +35,19 @@
 <h2>References</h2>
 <div>
 <ol>
-	<li><a href="http://git-scm.com/doc" target="_blank">GIT SCM</a>.</li>
-	<li><a href="https://progit2.s3.amazonaws.com/en/2015-08-09-23511/progit-en.661.pdf"
-		   target="_blank">Pro Git</a> eBook.</li>
+    <li><a href="http://git-scm.com/doc" target="_blank">GIT SCM</a>.</li>
+    <li><a href="https://progit2.s3.amazonaws.com/en/2015-08-09-23511/progit-en.661.pdf"
+        target="_blank">Pro Git</a> eBook.
+    </li>
     <li><a href="https://www.amazon.co.uk/gp/product/B00QFIA5OC/ref=oh_aui_d_detailpage_o00_?ie=UTF8&psc=1"
-           target-"_blank">Ry's Git Tutorial</a>, Ryan Hodson.</li>
+           target-"_blank">Ry's Git Tutorial</a>, Ryan Hodson.
+    </li>
+    <li><a href="https://git-scm.com/book/en/v1/Git-Basics-Undoing-Things" target="_blank">Git Basics - Undoing Things</a>, Git Docs.
+    </li>
+    <li><a href="https://www.atlassian.com/git/tutorials/undoing-changes" target="_blank">Undoing Changes</a>, Atlassian Git Tutorial Page.
+    </li>
+    <li><a href="https://stackoverflow.com/questions/927358/how-to-undo-the-last-commits-in-git" target="_blank">How to undo the last commits in Git?</a>, SO Thread.
+    </li>
 </ol>
 </div>
 
@@ -134,25 +142,6 @@ ssh -vT address-of-server</pre>
     </p>
 </div>
 
-<h2>Git Parlance</h2>
-<div>
-    <p>Two terms <a href="https://www.kernel.org/pub/software/scm/git/docs/#_identifier_terminology" target="_blank">[Ref]</a>
-    you might see in the documentation are &quot;<b>commit-ish</b>&quot; and
-    &quot;<b>tree-ish</b>&quot;.
-    </p>
-    <p>&quot;Commit-ish&quot; means an identifier that references a commit object in the repo. For
-        example a tag is an identifer that references a commit, as is the sha1 hash for that commit.
-    </p>
-    <p>&quot;Tree-ish&quot; means an identified that references part of the repo's tree. Again, a 
-    tag can be &quot;tree-ish&quot; because it references a commit, from which we can access
-    the files and folders that the commit is a snapshot of.
-    </p>
-    <p>
-        The Git Book on the internals of Git (Git Objects) has a good explanation of
-        how Git repos are organised <a href="https://git-scm.com/book/en/v2/Git-Internals-Git-Objects" target="_blank">[Ref]</a>.
-    </p>
-</div>
-
 <h2>Configuring Git</h2>
 <div>
 <p>
@@ -222,6 +211,12 @@ git clone git://repo_addr [dirname]</pre>
 
     <!-- ++++++++++++++++++++++++++++++++ -->
     <h3>Checking Out Repos</h3>
+    <p></p>
+    <blockquote>
+        <p>
+        Checking out a commit makes the entire working directory match that commit. This can be used to view an old state of your project without altering your current state in any way. Checking out a file lets you see an old version of that particular file, leaving the rest of your working directory untouched.</p>
+        <footer><a href="https://www.atlassian.com/git/tutorials/undoing-changes" target="_blank">Undoing Changes</a>, Atlassian Git Tutorial Page.</footer>
+    </blockquote>
     <pre>git checkout commit-hash | tag-name | branch-name</pre>
 
     <!-- ++++++++++++++++++++++++++++++++ -->
@@ -235,7 +230,7 @@ git clone git://repo_addr [dirname]</pre>
         To list all the branches in the repo type:
     </p>
     <pre>git branch</pre>
-    <p>You can filter the list with the <code>--merged</code> and <code>--no-merged</code> options 
+    <p>You can filter the list with the <code>--merged</code> and <code>--no-merged</code> options
         to see branches that are not merged back in etc.</p>
 
     <p>To create and checkout a new branch use:
@@ -301,7 +296,7 @@ git commit --amend</pre>
         To get a summary of changes made with author, date, full commit hash and description:
     </p>
     <pre>git log</pre>
-    
+
     <p>
         To get a one-line-per-commit summary (short hash and description):
     </p>
@@ -365,6 +360,11 @@ git commit --amend</pre>
 
     <!-- ++++++++++++++++++++++++++++++++ -->
     <h3>Undoing Things</h3>
+    <p>
+        This section remains a little cheat sheety in style. I'm going to
+        expand on it in a later section...
+    </p>
+
     <p><b>Revert unstanged changes:</b></p>
     <p>Kinda like reverting a file in the SVN sense</p>
     <pre>git checkout -- filename</pre>
@@ -384,14 +384,25 @@ git commit --amend</pre>
         The file in the working directory is not touched.
     </p>
 
-    <p><b>To remove a file from repo withOUT deleting it locally:</b></p>
-    <pre>git rm --cached myfile.name</pre>
-
     <p>
         <b>To undo all uncomitted changes to tracked files:</b>
     </p>
     <pre>git reset --hard</pre>
-    <p>The option <code>--hard</code> resets the index and the working tree.</p>
+    <p>The option <code>--hard</code> resets (to the most recent commit) the index and the working tree.</p>
+
+    <p><b>A Note About Reset:</b></p>
+    <p>A <code>git reset</code> actually alters your history and can only work
+        backwards from the current commit. By altering the history you could
+        potentially loose history. Also once a change is pushed to a shared
+        repository, resetting the change afterwards can become troublesome!
+    </p>
+    <blockquote>
+        <p>If git revert is a &quot;safe&quot; way to undo changes, you can <b>think of git reset as the dangerous method</b>. When you undo with git reset(and the commits are no longer referenced by any ref or the reflog), there is no way to retrieve the original copy — <b>it is a permanent undo</b>. Care must be taken when using this tool, as it’s one of the only Git commands that <b>has the potential to lose your work</b>.</p>
+        <footer><a href="https://www.atlassian.com/git/tutorials/undoing-changes" target="_blank">Undoing Changes</a>, Atlassian Git Tutorial Page (emphasis mine).</footer>
+    </blockquote>
+
+    <p><b>To remove a file from repo withOUT deleting it locally:</b></p>
+    <pre>git rm --cached myfile.name</pre>
 
     <p>
         <b>To remove untracked files use:</b>
@@ -402,6 +413,11 @@ git commit --amend</pre>
         <b>To undo a commit use:</b>
     </p>
     <pre>git revert commit-id</pre>
+    <blockquote>
+        <p>The <code>git revert</code> command undoes a committed snapshot. But, instead of removing the commit from the project history, it <b>figures out how to undo the changes</b> introduced by the commit and <b>appends a new commit with the resulting content</b>. This prevents Git from losing history, which is important for the integrity of your revision history and for reliable collaboration.</p>
+        <footer><a href="https://www.atlassian.com/git/tutorials/undoing-changes" target="_blank">Undoing Changes</a>, Atlassian Git Tutorial Page (emphasis mine).</footer>
+    </blockquote>
+    <p></p>
 
     <!-- ++++++++++++++++++++++++++++++++ -->
     <h3>Listing Files In The Git Repo</h3>
@@ -426,15 +442,63 @@ git commit --amend</pre>
 git diff --staged: What will go into next commit
 git diff --cached: Synonym for --staged
 git difftool:      To use external diff tool</pre>
-
 </div>
 
-<h2>What is HEAD?</h2>
+
+<h2>Git Parlance &amp; Internal Structure</h2>
 <div>
-<pre>TODO:
-https://stackoverflow.com/questions/5772192/how-can-i-reconcile-detached-head-with-master-origin
-https://git-scm.com/book/tr/v2/Git-Internals-Git-References</pre>
+    <h3>What Are Commits And How Do They Store Snapshots?</h3>
+    <p>
+        The Git Book on the internals of Git (Git Objects) has a good explanation of
+        how Git repos are organised <a href="https://git-scm.com/book/en/v2/Git-Internals-Git-Objects" target="_blank">[Ref]</a>
+        <a href="https://git-scm.com/book/en/v1/Git-Branching-What-a-Branch-Is" target="_blank">[Ref]</a>.
+    </p>
+    <p>
+        To summarise a little:
+    </p>
+    <ol>
+        <li><b>Commit</b> - stores meta data (author, committer, comment) and pointer to the <em>top level</em>
+            tree snapshot as well as the previous commit (or commits if a merge commit). The commit object
+            itself is identified by a sha1 pointer. Note that we said &quot;top level&quot;: the commit is
+            a snapshot of your entire repo.
+        </li>
+        <li><b>Tree</b> - corresponds to a directory - collection of pointers (pair of sha1 hash and file name)
+            to file blobs and trees.
+        </li>
+        <li><b>Block</b> - a binary blob representing a file with an associated sha1 hash.
+        </li>
+    </ol>
+    <p>
+        <img src="##IMG_DIR##/git_objects.png" alt="Diagram of GIT commits, trees and blobs"/>
+    </p>
+
+    <h3>Commit-ish &amp; Tree-ish?!</h3>
+    <p>Two terms you might see in the documentation are &quot;<b>commit-ish</b>&quot; and
+    &quot;<b>tree-ish</b>&quot; <a href="https://www.kernel.org/pub/software/scm/git/docs/#_identifier_terminology" target="_blank">[Ref]</a>.
+    </p>
+    <p><b>&quot;Commit-ish&quot;</b> means an identifier that references a commit object in the repo. For
+        example a tag is an identifer that references a commit, as is the sha1 hash for that commit.
+    </p>
+    <p><b>&quot;Tree-ish&quot;</b> means an identified that references part of the repo's tree. Again, a
+    tag can be &quot;tree-ish&quot; because it references a commit, from which we can access
+    the files and folders that the commit is a snapshot of.
+    </p>
+
+    <h3>What is HEAD?</h3>
+    <pre>TODO:
+    https://stackoverflow.com/questions/5772192/how-can-i-reconcile-detached-head-with-master-origin
+    https://git-scm.com/book/tr/v2/Git-Internals-Git-References</pre>
+    <p>
+    </p>
+    <blockquote>
+        <p>The HEAD file is a symbolic reference to the branch you’re currently on. By symbolic reference, we mean that unlike a normal reference, it doesn’t generally contain a SHA-1 value but rather a pointer to another reference</p>
+        <footer>
+            <a href="https://git-scm.com/book/tr/v2/Git-Internals-Git-References" target="_blank">Git Internals - Git References</a>, Git Docs.
+        </footer>
+    </blockquote>
+    <p></p>
 </div>
+
 
 <h2>Branches And Commits (v.s. SVN-like SCMs)</h2>
 <div>
@@ -701,7 +765,7 @@ git rebase &lt;target-branch&gt; </pre>
 
     <p>
         Can investigate this using this <a href="../downloadables/test_vanilla_rebase.sh" target="_blank">simple little shell script</a>
-        that tries to replicate the above. It has two command line uses: either &quot;<code>test_vanilla_rebase.sh master onto new</code>&quot; 
+        that tries to replicate the above. It has two command line uses: either &quot;<code>test_vanilla_rebase.sh master onto new</code>&quot;
         or  &quot;<code>test_vanilla_rebase.sh new onto master</code>&quot;.
     </p>
 
@@ -719,7 +783,7 @@ git rebase &lt;target-branch&gt; </pre>
     </div>
 
     <p>
-        In the example above where the new feature is rebased onto the master branch, 
+        In the example above where the new feature is rebased onto the master branch,
         3 commits are added to the master for the one new feature. We might
         like to tidy this up a little and only have one new commit in the master branch that is the
         aggregation of all of the commits done during development. This way, the master branch is kept even neater
@@ -831,7 +895,7 @@ pick de5fcb1 Third commit about something</pre>
     <p>
         Git is replaying the history of our branch. It's as-if it rewound the branch
         to its state at commit fca8f1a (the first commit) and then applied the
-        changes made in commit 466318b (the second commit), but before 
+        changes made in commit 466318b (the second commit), but before
         commiting those changes, it is giving us a chance to make further changes.
         Any changes we make will be written as part of this commit, as-if we
         had actually made them back in time when we actually did the second commit!
@@ -1066,7 +1130,7 @@ git log --no-merges parent-branch-name..
         <img src="##IMG_DIR##/git_stash.png" alt="Picture describing the Git stash processes/usage"/>
     </p>
     <p>
-        Interestingly you can do more than one stash and then re-apply them 
+        Interestingly you can do more than one stash and then re-apply them
         seperately. Use <code>stash list</code> to see a list of stashes. To
         apply a specific stash use something like <code>git stash apply stash@{1}</code>,
         which would re-apply the penultimate stash (the smaller the number
