@@ -499,6 +499,90 @@ git difftool:      To use external diff tool</pre>
     <p></p>
 </div>
 
+<h2>Revert &amp; Reset</h2>
+<div>
+    <p>
+        As we have seen in previous quotes above, <code>revert</code> is a safer version of
+        <code>reset</code>. The former creates a new commit which represents the changes needed to
+        to revert the former HEAD to a previous commit. It does not change any of the previous
+        commits.
+    </p>
+    <p>
+        A <code>reset</code> on the other hand has the potention to obiliterate information.
+    </p>
+    <h3>Resetting The Index (aka. The Staging Area)</h3>
+    <p>
+        One of the cheat-sheet snippets we saw earlier was <code>git reset HEAD -- filename</code>,
+        which unstaged a file. From the Git help we get the following explanation:
+    </p>
+    <blockquote>
+        <p><code>git reset [-q] [&lt;tree-ish&gt;] [--] &lt;paths&gt;...</code>
+        </p>
+        <p>This form resets the index entries for all &lt;paths&gt; to their state at &lt;tree-ish&gt;. 
+           (It does not affect the working tree or the current branch.)
+        </p>
+        <p>This means that git reset &lt;paths&gt; is the opposite of git add &lt;paths&gt;.
+        </p>
+        <footer>Output of &quot;git reset --help&quot;</footer>
+    </blockquote>
+    <p>
+        The effect can be visualised as shown in the diagram below:
+    </p>
+    <p>
+        <img src="##IMG_DIR##/git_reset_form1.png" alt="Diagram showing effect of git reset HEAD -- filename"/>
+    </p>
+
+    <h3>Moving Your Branch HEAD Around &amp; Maybe Modify The Working Tree + Index</h3>
+    <p>Another form of the <code>git reset</code> command can be used to move the HEAD of the
+        current branch around. In all forms the HEAD of the branch is moved to a specific
+        commit. What happens to the index and woking tree depends on the mode in which it is
+        used...
+    </p>
+    <blockquote>
+        <p><code>git reset [&lt;mode&gt;] [&lt;commit&gt;]</code>
+        </p>
+        <p>This form resets the current branch head to &lt;commit&gt; and possibly updates the index 
+            (resetting it to the tree of &lt;commit&gt;) and the working tree depending on &lt;mode&gt;. 
+            If &lt;mode&gt; is omitted, defaults to "--mixed". The &lt;mode&gt; must be one of the following:
+        </p>
+        <ul>
+            <li><p><code>--soft</code>:</p>
+                <p>Does not touch the index file or the working tree at all (but resets the head to &lt;commit&gt;, just like all modes do). This leaves all your changed files "Changes to be committed", as git status would put it.</p>
+            </li>
+
+
+           <li><p><code>--mixed</code></p>
+               <p>Resets the index but not the working tree (i.e., the changed files are preserved but not marked for commit) and reports what has not been updated. This is the default action.</p>
+               <p>If <code>-N</code> is specified, removed paths are marked as intent-to-add.</p>
+           </li>
+           <li><p><code>--hard</code></p>
+               <p>Resets the index and working tree. Any changes to tracked files in the working tree since &lt;commit&gt; are discarded.</p>
+           </li>
+           <li><p><code>--merge</code></p>
+               <p>Resets the index and updates the files in the working tree that are different between &lt;commit&gt; and HEAD, but keeps those which are different between the index and working tree (i.e. which have changes which have not been added). If a file that is different between &lt;commit&gt; and the index has unstaged changes, reset is aborted.</p>
+               <p>In other words, <code>--merge</code> does something like a <code>git read-tree -u -m &lt;commit&gt;</code>, but carries forward unmerged index entries.</p>
+           </li>
+           <li><p><code>--keep</code></p>
+               <p>Resets index entries and updates files in the working tree that are different between &lt;commit&gt; and HEAD. If a file that is different between &lt;commit&gt; and HEAD has local changes, reset is aborted.</p>
+           </li>
+       </ul>
+       <footer>Output of &quot;git reset --help&quot;</footer>
+    </blockquote>
+    <p></p>
+    <h3>Soft Reset: Move HEAD, Touch Nothing!</h3>
+    <p>
+    </p>
+
+    <h3>Mixed Reset: Move HEAD, Touch Only The Index</h3>
+    <p>
+        <img src="##IMG_DIR##/git_reset_mixed.png" alt="Diagram of a git reset --mixed command"/>
+    </p>
+
+    <h3>Hard Reset: Move HEAD, Touch The Index And The Working Tree</h3>
+    <p>
+    </p>
+
+</div>
 
 <h2>Branches And Commits (v.s. SVN-like SCMs)</h2>
 <div>

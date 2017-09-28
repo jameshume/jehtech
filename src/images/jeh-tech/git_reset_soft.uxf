@@ -1,0 +1,688 @@
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="13.3">
+  <zoom_level>8</zoom_level>
+  <element>
+    <id>UMLHierarchy</id>
+    <coordinates>
+      <x>1480</x>
+      <y>40</y>
+      <w>136</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>type=Package
+root
+	file1
+	dirA
+		file3
+		file4</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>1008</x>
+      <y>64</y>
+      <w>64</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>commit
+abef540
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1136</x>
+      <y>80</y>
+      <w>80</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>Tree
+valign=center
+halign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1392</x>
+      <y>48</y>
+      <w>80</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>Blob
+valign=center
+halign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1392</x>
+      <y>96</y>
+      <w>80</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>Blob
+valign=center
+halign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1064</x>
+      <y>88</y>
+      <w>88</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>90.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1208</x>
+      <y>56</y>
+      <w>80</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>80.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1344</x>
+      <y>56</y>
+      <w>64</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>60.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1344</x>
+      <y>56</y>
+      <w>64</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>60.0;70.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>968</x>
+      <y>24</y>
+      <w>688</w>
+      <h>440</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>1008</x>
+      <y>280</y>
+      <w>64</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>commit
+afb937e
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>936</x>
+      <y>88</y>
+      <w>88</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>90.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1032</x>
+      <y>120</y>
+      <w>24</w>
+      <h>176</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;200.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1272</x>
+      <y>48</y>
+      <w>80</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>Tree
+valign=center
+halign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLHierarchy</id>
+    <coordinates>
+      <x>1480</x>
+      <y>240</y>
+      <w>136</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>type=Package
+root
+	file1
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1136</x>
+      <y>296</y>
+      <w>80</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>Tree
+valign=center
+halign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1272</x>
+      <y>296</y>
+      <w>80</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>Blob
+valign=center
+halign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1208</x>
+      <y>304</y>
+      <w>80</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>80.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1120</x>
+      <y>240</y>
+      <w>360</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1064</x>
+      <y>304</y>
+      <w>88</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>90.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1208</x>
+      <y>88</y>
+      <w>80</w>
+      <h>224</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>80.0;260.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1120</x>
+      <y>40</y>
+      <w>360</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>968</x>
+      <y>0</y>
+      <w>128</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>halign=left
+*Repository/master*
+bg=black
+fg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>528</x>
+      <y>24</y>
+      <w>288</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>528</x>
+      <y>0</y>
+      <w>56</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>halign=left
+*Index*
+bg=black
+fg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>544</x>
+      <y>72</y>
+      <w>64</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>commit
+abef540
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>192</x>
+      <y>24</y>
+      <w>288</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>192</x>
+      <y>0</y>
+      <w>96</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>halign=left
+*Working Tree*
+bg=black
+fg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>208</x>
+      <y>72</y>
+      <w>64</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>commit
+abef540
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLHierarchy</id>
+    <coordinates>
+      <x>320</x>
+      <y>80</y>
+      <w>144</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>type=Package
+root
+	*file1 VER 2*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>288</x>
+      <y>80</y>
+      <w>24</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lw=10
+group=1</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>272</x>
+      <y>96</y>
+      <w>56</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lw=10
+group=1</panel_attributes>
+    <additional_attributes>50.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>528</x>
+      <y>384</y>
+      <w>288</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>528</x>
+      <y>360</y>
+      <w>56</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>halign=left
+*Index*
+bg=black
+fg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>192</x>
+      <y>384</y>
+      <w>288</w>
+      <h>288</h>
+    </coordinates>
+    <panel_attributes>
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>192</x>
+      <y>360</y>
+      <w>96</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>halign=left
+*Working Tree*
+bg=black
+fg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>208</x>
+      <y>432</y>
+      <w>64</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>commit
+abef540
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLHierarchy</id>
+    <coordinates>
+      <x>320</x>
+      <y>440</y>
+      <w>144</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>type=Package
+root
+	*file1 VER 2*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>272</x>
+      <y>456</y>
+      <w>56</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lw=10
+group=2</panel_attributes>
+    <additional_attributes>50.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>288</x>
+      <y>440</y>
+      <w>24</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lw=10
+group=2</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>560</x>
+      <y>232</y>
+      <w>192</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>We could do...
+
+git reset --mixed abef540
+
+Resets the INDEX but leaves the working tree untouched.
+lw=2
+
+bg=orange
+fg=black</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>624</x>
+      <y>80</y>
+      <w>24</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lw=10
+group=3</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>608</x>
+      <y>96</y>
+      <w>56</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lw=10
+group=3</panel_attributes>
+    <additional_attributes>50.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLHierarchy</id>
+    <coordinates>
+      <x>656</x>
+      <y>80</y>
+      <w>144</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>type=Package
+root
+	*file1 VER 2*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>864</x>
+      <y>80</y>
+      <w>80</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>HEAD
+bg=black
+fg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>536</x>
+      <y>432</y>
+      <w>64</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>commit
+abef540
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>560</x>
+      <y>696</y>
+      <w>192</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>git reset --soft afb937e
+
+Does nothing other than move HEAD.
+lw=2
+
+bg=blue
+fg=black</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>608</x>
+      <y>464</y>
+      <w>56</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lw=10</panel_attributes>
+    <additional_attributes>50.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>608</x>
+      <y>448</y>
+      <w>56</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lw=10</panel_attributes>
+    <additional_attributes>50.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLHierarchy</id>
+    <coordinates>
+      <x>672</x>
+      <y>392</y>
+      <w>136</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>type=Package
+root
+	file1
+	dirA
+		file3
+		file4</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>272</x>
+      <y>520</y>
+      <w>56</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lw=10</panel_attributes>
+    <additional_attributes>50.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>272</x>
+      <y>536</y>
+      <w>56</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lw=10</panel_attributes>
+    <additional_attributes>50.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLHierarchy</id>
+    <coordinates>
+      <x>320</x>
+      <y>520</y>
+      <w>144</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>type=Package
+root
+	*file1 VER 2*
+	dirA
+		file3
+		file4</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>776</x>
+      <y>552</y>
+      <w>192</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>A "git status" would show the tracked file, "file1", as being modified but uncommitted.
+bg=orange
+fg=black</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
