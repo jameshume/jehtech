@@ -13,6 +13,8 @@ else:
 
 DB_FILENAME = 'deployment_db.bin'
 DEPLOYED_DIR = os.path.join('..','__deployed')
+FTP_ADDRESS="000kwjq.wcomhost.com"
+FTP_USER_ID="ftp3286307"
 
 def GenerateCheckSum(data):
 	return zlib.adler32(data) & 0xffffffff
@@ -122,9 +124,6 @@ class MyFTP(object):
 		finally:
 			self._ftp.cwd(saveDir)
 
-
-	
-
 	def putFile(self, localFilename):
 		# need to figure out if the directory exists and if not create it and any parent
 		# directories necessary
@@ -213,16 +212,16 @@ class MyFTP(object):
 ftpWasSuccessfull = True
 ftp = None
 try:
-	ftp = ftplib.FTP('ftp.jeh-tech.com', 'jhume', sys.argv[1]) 
+	ftp = ftplib.FTP(FTP_ADDRESS, FTP_USER_ID, sys.argv[1]) 
 	ftp.set_debuglevel(0)
 
 	myftp = MyFTP(ftp)
 
-	dirlist = ftp.nlst()
-	if 'html' not in dirlist:
-		ftp.mkd('html')
+	#dirlist = ftp.nlst()
+	#if 'html' not in dirlist:
+	#	ftp.mkd('html')
 	
-	ftp.cwd('html')
+	ftp.cwd('htdocs')
 	
 	for filename in newFiles:
 		assert(os.path.isfile(filename))
