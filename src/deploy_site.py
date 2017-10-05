@@ -2,7 +2,7 @@ from __future__ import division
 import os
 import zlib
 import pickle
-import string 
+import string
 import path_record
 import traceback
 import sys
@@ -85,11 +85,11 @@ print("\nAttempting to FTP into server")
 
 def ConvertPcLocalToHostLocal(filename):
 	# drop the __depolyed front. then need to figure out whether the directory tree exists. if it does copy, otherwise create directory tree and then copy!
-	return os.path.split(filename)[1] 
+	return os.path.split(filename)[1]
 
 
 class MyFTP(object):
-	""" Mostly to put random files. the ftplib functions don't appear to do things 
+	""" Mostly to put random files. the ftplib functions don't appear to do things
 	    like recursive directory creation and also to avoid having to do continual
 		 directory listings from the server and therefore save a little upload time
 		 I am going to cache directories seen and made so far on mass uploads """
@@ -101,7 +101,7 @@ class MyFTP(object):
 	def mkd_recursive(self, path):
 		if type(path) == str:
 			path = self._pr.pathExplode(path)
-		
+
 		if len(path) < 1:
 			return
 
@@ -116,8 +116,8 @@ class MyFTP(object):
 			partialLen = len(partial)
 			if partialLen > 0:
 				self._ftp.cwd('/' + '/'.join(partial))
-	
-			
+
+
 			for pathEl in path[partialLen:]:
 				self._ftp.mkd(pathEl)
 				self._ftp.cwd(pathEl)
@@ -186,7 +186,7 @@ class MyFTP(object):
 			if dirChanged:
 				print("Restoring saved dir {}".format(saveDir))
 				self._ftp.cwd(saveDir)
-	
+
 		saveDir = None
 		if len(dirElements) > 0:
 			targetDir = "/".join(dirElements)
@@ -194,13 +194,13 @@ class MyFTP(object):
 			self._ftp.cwd(targetDir)
 		else:
 			targetDir = "."
-	
+
 		if istext(localFilename):
 			print('   STOR TEXT {} to dir {} from {} as {}'.format(pathElements[-1], targetDir, localFilename, 'ascii'))
 			print('   - STOR {}'.format(pathElements[-1]))
 			# For some reason in Python 3 the FTP library needs to read back bytes
 			# not str but doesn't seem to be for all files... didnt bother to get
-			# to the bottom of this! 
+			# to the bottom of this!
 			self._ftp.storlines('STOR {}'.format(pathElements[-1]), open(localFilename, 'rb'))
 		else:
 			print('   STOR BIN {} to dir {} from {} as {}'.format(pathElements[-1], targetDir, localFilename, 'binary'))
@@ -212,7 +212,7 @@ class MyFTP(object):
 ftpWasSuccessfull = True
 ftp = None
 try:
-	ftp = ftplib.FTP(FTP_ADDRESS, FTP_USER_ID, sys.argv[1]) 
+	ftp = ftplib.FTP(FTP_ADDRESS, FTP_USER_ID, sys.argv[1])
 	ftp.set_debuglevel(0)
 
 	myftp = MyFTP(ftp)
@@ -220,9 +220,9 @@ try:
 	#dirlist = ftp.nlst()
 	#if 'html' not in dirlist:
 	#	ftp.mkd('html')
-	
+
 	ftp.cwd('htdocs')
-	
+
 	for filename in newFiles:
 		assert(os.path.isfile(filename))
 		myftp.putFile(filename)
