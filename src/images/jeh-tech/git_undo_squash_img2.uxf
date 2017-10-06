@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>470</x>
+      <y>430</y>
+      <w>40</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>46-49</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>470</x>
+      <y>510</y>
+      <w>40</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>45</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>480</x>
+      <y>460</y>
+      <w>30</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>330</x>
+      <y>430</y>
+      <w>90</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>HEAD</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>420</x>
+      <y>430</y>
+      <w>50</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>customelement=
+// Parameters drawLine(x1, y1, x2, y2) 
+drawLine(10, 10, 10, height-10) // left edge
+drawLine(10, 10, width-25, 10) // top long edge
+drawLine(10, height-10, width-25, height-10) // bottom long edge
+
+drawLine(width-25,0,width-25,10)  // upper arrow lip
+drawLine(width-25,height-10,width-25,height) // lower arrow lip
+
+drawLine(width-25,0,width-10,height/2)  // upper diag
+drawLine(width-25,height,width-10,height/2) // lower diag</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>480</x>
+      <y>620</y>
+      <w>30</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>470</x>
+      <y>590</y>
+      <w>40</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>44</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>480</x>
+      <y>540</y>
+      <w>30</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+</diagram>

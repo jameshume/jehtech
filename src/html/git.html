@@ -56,7 +56,8 @@
     <pre>https://stackoverflow.com/questions/35941566/delete-remote-branch-via-git
 https://stackoverflow.com/questions/1889559/git-diff-to-ignore-m
 https://stackoverflow.com/questions/1822849/what-are-these-ms-that-keep-showing-up-in-my-files-in-emacs
-https://stackoverflow.com/questions/1510798/trying-to-fix-line-endings-with-git-filter-branch-but-having-no-luck/1511273</pre>
+https://stackoverflow.com/questions/1510798/trying-to-fix-line-endings-with-git-filter-branch-but-having-no-luck/1511273
+https://stackoverflow.com/questions/20106712/what-are-the-differences-between-git-remote-prune-git-prune-git-fetch-prune</pre>
 </div>
 
 <h2>Where Git Finds Your SSH File</h2>
@@ -1071,6 +1072,31 @@ fca8f1a First commit about something</pre>
         equivalent modified file.
     </p>
 
+    <h3>Undoing A Rebase</h3>
+    <p>
+        So, here's a mistake I made doing a rebase to squash some commits on my branch. It's a nice example
+        of using <code>git reset --hard</code> and <code>git reflog</code>. I had the following set of commits,
+        which I've labeled #44 through #49. I wanted to keep commit #45 and squash #46 to #49:
+    </p>
+    <p>
+        <img src="##IMG_DIR##/git_undo_squash_img1.png" alt="Image for part 1 of description of how to undo a git rebase where files were squashed"/>
+    </p>
+    <p>
+        I.e., I wanted to end up with the following:
+    </p>
+    <p>
+        <img src="##IMG_DIR##/git_undo_squash_img2.png" alt="Image for part 1 of description of how to undo a git rebase where files were squashed"/>
+    </p>
+    <p>
+        But, I was a little careless with my rebase, and ended up with this:
+    </p>
+    <p>
+        <img src="##IMG_DIR##/git_undo_squash_img3.png" alt="Image for part 1 of description of how to undo a git rebase where files were squashed"/>
+    </p>
+    <p>
+        <img src="##IMG_DIR##/git_undo_squash_img4.png" alt="Image for part 1 of description of how to undo a git rebase where files were squashed"/>
+    </p>
+
     <h3>Git Filter Branch</h3>
     <p>
         The following notes should be used with a ton of caution! You might even
@@ -1109,6 +1135,7 @@ git cherry-pick [-e] [-x] &lt;commit-ish&gt;</pre>
         the ability to track where these changes came from: This flag
         will append a line that says &quot;(cherry picked from commit ...)&quot;
         to your commit message.</p>
+
 </div>
 
 <h2>Hunting Down Bugs: Git Bisect</h2>
