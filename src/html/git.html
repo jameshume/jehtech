@@ -1097,6 +1097,53 @@ fca8f1a First commit about something</pre>
         <img src="##IMG_DIR##/git_undo_squash_img4.png" alt="Image for part 1 of description of how to undo a git rebase where files were squashed"/>
     </p>
 
+    <h3>Using Rebase To Edit A Commit</h3>
+    <p>
+    	Let's create a silly little repository:
+    </p>
+    <pre>&gt; mkdir deleteme
+&gt; cd deleteme
+&gt; git init
+&gt; echo "First commit line" > test.txt
+&gt; git add -A
+&gt; git commit -m "First commit"
+&gt; echo "First line of second" >> test.txt
+&gt; echo "Second line of second" >> test.txt
+&gt; git add -u
+&gt; git commit -m "Second commit"
+&gt; git log --oneline
+5156c89 Second commit
+e310460 First commit</pre>
+	<p>
+		Great, so we have two commits. The reflog looks like this:
+	</p>
+	<pre>&gt; git reflog
+5156c89 HEAD@{0}: commit: Second commit
+e310460 HEAD@{1}: commit (initial): First commit</pre>
+	<p>
+		So, when we made our first commit, HEAD was set to point to it. When we made our second commit, HEAD was
+		moved to point to that. What we'd expect...
+	</p>
+	<p>
+		Let's edit the second commit. We do this by starting a rebase from <code>e310460</code>.
+	</p>
+	<pre>git rebase -i e310460</pre>
+	<p>The editor will pop up and allow us to change &quot;pick&quot; to &quot;edit&quot; for commit <code>5156c89</code>. When we save and exit the rebase starts:
+	</p>
+	<pre>&gt; git rebase -i e310460
+warning: Stopped at 5156c89... Second commit</pre>
+	<p>The reflog now looks like this:</p>
+	<pre>&gt; git reflog
+5156c89 HEAD@{0}: rebase -i: fast-forward
+e310460 HEAD@{1}: rebase -i (start): checkout e310460
+5156c89 HEAD@{2}: commit: Second commit
+e310460 HEAD@{3}: commit (initial): First commit</pre>
+	<p>The log looks like this:</p>
+	<pre>&gt; git log --oneline
+5156c89 Second commit
+e310460 First commit</pre>
+	<p>Okay, so we are now on the second commit. It appears in the log, but we are editing this commit. We can see what the rebase has tried to do by looking at the reflog, where we can see it intially checked out out the first commit
+
     <h3>Git Filter Branch</h3>
     <p>
         The following notes should be used with a ton of caution! You might even
