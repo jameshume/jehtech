@@ -250,8 +250,83 @@
 	TODO
 	</p>
 
-</div>		
-	
+</div>
+
+<h2>Fix FP</h2>
+<div>
+	<p>
+		Fixed precision floating point we represent a floating-point number using $f$
+		bits for the fractional component and $i$ bits for the integer component,
+		to make an $N$ bit fixed floating-point number. So
+		for example if we used 4 bits for the integer component and 4 bits for the
+		fractional component we'd write:
+
+		$$
+			i_3 \  i_2 \  i_1 \  i_0 \cdot f_{-1} \  f_{-2} \  f_{-3} \  f_{-4}
+		$$
+
+		The &quot;dot&quot; is &quot;imaginary&quot; in the sense that we just represent this
+		as a series of bits. To the computer it's just an integer but we are "prentending" it
+		is a floating point number.
+
+		The <b>unsigned</b> floating point number above has the value defined by the following, as far
+		as we're concerned.
+
+		$$
+			i_3*2^3 + i_2*2^2  + i_1*2^1 + i_0*2^0 + f_{-1}*2^{-1} + f_{-2}*2^{-2} + f_{-3}*2^{-3} + f_{-4}*2^{-4}
+		$$
+
+		However, as far as the computer is concerned this is just an integer with the value,
+
+		$$
+			x_{i_3}*2^7 + x_{i_2}*2^6  + x_{i_1}*2^5 + x_{i_0}*2^4 + x_{f_{-1}}*2^3 + x_{f_{-2}}*2^2 + x_{f_{-3}}*2^1 + x_{f_{-4}}*2^0
+		$$
+
+		So, we get from the computer's idea of the value to our &quot;imagined&quot; decimal by dividing by $2^{4}$.
+		More generally, if there are $f$ fractional bits, we are dividing by $2^{f}$.
+	</p>
+	<p>
+		Thus, to generically go from the computer's idea of an $N = i+f$ bit integer to our
+		decimal value, we do this:
+
+		$$
+			U(i, f) = \frac{1}{2^f}\Sigma{n=0}{N-1}2^nx_n
+		$$
+
+		Note that this is for an <b>unsigned</b> type because the ${N-1}_{\text{th}}$ bit does not
+		denote the sign of the value - the value is always +ve.
+	</p>
+	<p>
+		So, what about negative numbers? Two's complement! To the computer a signed N bit integer
+		will have the following value.
+
+		$$
+		\text{value} = -2^{N-1}x_{N-1} + \Sigma_{0}^{N-2} 2^nx_n
+		$$
+
+		This formula, describing how two's complement works also tells us why we often see two's complement shown
+		as a circle. When the most significant bit is set we are at the most negative number. As we add 1
+		we get less negative numbers until all bits are set and we have -1. Adding another 1 and we
+		get zero (the addition overflows so the left-most bit which would have made us negative is lost)
+		and so on...
+	</p>
+	<p>
+		So, if we are using $f$ bits for the fractional component we do the following to get the fractinal value.
+
+		$$
+		S(i, f) = \frac{1}{2^f}\left(-2^{N-1}x_{N-1} + \Sigma_{0}^{N-2} 2^nx_n\right)
+		$$
+	</p>
+	<p>
+		Using the fact that we are just dividing by $2^f$ we can easily determine the ranges
+		of $U(i, f)$ and $S(i, f)$.
+	</p>
+	<p>
+		An unsigned number ranges from $0$ to $2^{N-1}$, so $U(i, f)$ must range from
+		$0$ to $\frac{2^{N-1}}{2^f}$.
+	</p>
+</div>
+
 	</div> <!-- END H1 padding div -->
 	</div>
 </body>
