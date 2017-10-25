@@ -46,6 +46,150 @@
 </div>
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h2>Matricies And Simultaneous Linear Equations</h2>
+<div>
+<p>
+    The set of linear equations:
+    
+    $$ a_{11}x_1 + a_{12}x_2 + ... + a_{1n}x_n = b_1\\
+       a_{21}x_1 + a_{22}x_2 + ... + a_{2n}x_n = b_2\\
+       ... \\
+       a_{m1}x_1 + a_{m2}x_2 + ... + a_{mn}x_n = b_m
+    $$
+
+    Can be represented in matrix form:
+
+    $$
+     \begin{bmatrix}
+        a_{11} & a_{12} & \cdots & a_{1n} \\
+        a_{21} & a_{22} & \cdots & a_{2n} \\
+        \vdots & \vdots & \ddots & \vdots \\
+        a_{m1} & a_{m2} & \cdots & a_{mn} \\
+     \end{bmatrix}
+
+     \begin{bmatrix}
+        x_1 \\
+        x_2 \\
+        \vdots \\
+        x_n \\
+     \end{bmatrix}
+
+     =
+
+     \begin{bmatrix}
+        b_1 \\
+        b_2 \\
+        \vdots \\
+        b_m \\
+    \end{bmatrix}
+    $$
+
+    Any vector $\vec x$, where $A\vec x = \vec b$, is a solution to the set of simultaneous
+    linear equations. How can we solve this from the matrix. We create an <b>augmented or patitioned matrix</b>:
+
+    $$
+        \left[
+            \begin{array}{cccc|c}
+                1a_{11} & a_{12} & \cdots & a_{1n} & b_1\\
+                a_{21} & a_{22} & \cdots & a_{2n} & b_2 \\
+                \vdots & \vdots & \ddots & \vdots & \vdots \\
+                a_{m1} & a_{m2} & \cdots & a_{mn} & b_m\\
+            \end{array}
+        \right] 
+    $$
+
+    Next this matrix must be converted to <b>row echelon form</b>. This is where each row has
+    the same or less zeros to the right than the row below. For example, the following matrix is
+    in row echelon form:
+
+    $$
+     \begin{bmatrix}
+        1 & 2 & 3 & 4 \\
+        0 & 1 & 2 & 3 \\
+        0 & 0 & 0 & 1 \\
+        0 & 0 & 0 & 2 \\
+     \end{bmatrix}
+    $$
+
+    But, this next one is not:
+     \begin{bmatrix}
+        1 & 2 & 3 & 4 \\
+        0 & 0 & 0 & 1 \\
+        0 & 0 & 0 & 2 \\
+        0 & 1 & 2 & 3 \\
+     \end{bmatrix}
+
+
+    We go from a matrix to the equivalent in row-echelon form using <b>elementary row operations</b>:
+</p>
+<ol>
+    <li>Row interchange: $R_i \leftrightarrow R_j$</li>
+    <li>Row scaling: $R_i \rightarrow kR_i$</li>
+    <li>Row addition: $R_i \rightarrow R_i + kR_j$</li>
+</ol>
+<p>
+    We can do this in python using the <code>sympy</code> package and the <code>rref()</code> function:
+</p>
+<pre class="prettyprint linenums">from sympy import Matrix, init_printing
+
+init_printing(use_unicode=True)
+
+system = Matrix(( (3, 6, -2, 11), (1, 2, 1, 32), (1, -1, 1, 1) ))
+system
+system.rref()[0]</pre>
+<p>
+    Which outputs:
+</p>
+<pre>⎡1  0  0  -17/3⎤
+⎢              ⎥
+⎢0  1  0  31/3 ⎥
+⎢              ⎥
+⎣0  0  1   17  ⎦</pre>
+<p>
+    To then apply this to our augmented matrix we could do something like the following. Lets
+    say we have a set of 3 simultaneous equations with 3 unknowns:
+
+    $$
+        3x + 6y - 2z = 11 \\
+        x + 2y + z = 32 ||
+        x - y + z = 1
+    $$
+
+    We'd make an augmented matrix like so:
+
+    $$
+        \left[
+            \begin{array}{ccc|c}
+                3 & 6 & -2 & 11\\
+                1 & 2 & 1 & 32\\
+                1 & -1 & 1 & 1
+            \end{array}
+        \right] 
+    $$
+
+    To solve this using Python we do:
+</p>
+<pre class="prettyprint linenums">from sympy import Matrix, solve_linear_system, init_printing
+from sympy.abc import x, y, z
+
+init_printing(use_unicode=True)
+
+system = Matrix(( (3, 6, -2, 11), (1, 2, 1, 32), (1, -1, 1, 1) ))
+system
+
+solve_linear_system(system, x, y, z)</pre>
+<p>
+    Which will give the following output:
+</p>
+<pre>⎡3  6   -2  11⎤
+⎢             ⎥
+⎢1  2   1   32⎥
+⎢             ⎥
+⎣1  -1  1   1 ⎦
+{x: -17/3, y: 31/3, z: 17}</pre>
+</div>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h2>Orthogonal Vectors and Linear Independence</h2>
 <div>
 	<div style="float:right; border: 1px solid gray; padding: 10px; margin:10px;">
@@ -142,6 +286,52 @@
 		voilà, we know know <b>why</b> the dot product of two orthogonal 2D vectors is
 		zero. I'm happy to take it on faith that this extrapolates into n dimensions :)
 	</p>
+    <p>
+        Another way of looking at this is to consider the law of cosines: $C^2 = A^2 + B^2 - 2AB\cos(c)$:
+    </p>    
+    <p>
+        <img src="##IMG_DIR##/law_of_cosines_1.png" alt="Law of cosines"/>
+    </p>
+        Here $A$ and $V$ represent the magnitude of the vectors $\vec x$, $\|\vec x\|$, and $\vec y$, $\|\vec y\|$. $C$ represents
+        the magnitude of the vector $\|\vec x - \vec y\|$. Thus, we have this:
+    </p>
+    <p>
+        <img src="##IMG_DIR##/law_of_cosines_2.png" alt="Law of cosines"/>
+    </p>
+    <p>
+        I.e., $\|\vec x - \vec y\|^2 = \|\vec x\|^2 + \|\vec y\|^2 - 2\|\vec x\|\|\vec y\|\cos(\theta_c)$.
+    </p>
+    <p>
+        When the angle between the vectors is 90 degrees, $\cos(90) = 0$ and so that part of the
+        equation dissapears to give us $\|\vec x - \vec y\|^2 = \|\vec x\|^2 + \|\vec y\|^2$.
+        Now...
+
+        $$
+        \|\vec x - \vec y\|^2 = \|\vec x\|^2 + \|\vec y\|^2 \\
+        \therefore \|\vec x\|^2 + \|\vec y\|^2 - \|\vec x - \vec y\|^2 = 0
+        $$
+
+        Recall that $\|\vec v\| = \sqrt{v_1^2 + v_2^2 + ... + v_n^2}$ and that therefore $\|\vec v\|^2 = v_1^2 + v_2^2 + ... + v_n^2$ .
+    </p>
+    <p>
+        Based, on this we can say that...
+
+        $$
+            \begin{align}
+            \|\vec x - \vec y\|^2 &= (x_1 - y_1)^2 + (x_2 - y_2)^2 + ... + (x_n - y_n)^2 \\
+                                  &= x_1^2 - 2x_1y_1 + y_1^2 + x_2^2 - 2x_2y_2 + y_2^2 + ... + x_n^2 - 2x_ny_n + y_n^2
+            \end{align}
+        $$
+
+        Now, all of the $x_i^2$ and $y_i^2$ terms above will be cancelled out by the $\|\vec x\|^2$ and $\|\vec y\|^2$ terms,
+        leaving us with...
+
+        $$
+        \|\vec x\|^2 + \|\vec y\|^2 - \|\vec x - \vec y\|^2 = 2x_1y_1 + 2x_2y_2 + ... + 2x_ny_n = 0
+        $$
+
+        Which is just twice the dot product when the vectors are at 90 degrees - or just the dot product because we can divide through by 2.
+    </p>
 </div>
 
 <h2>Orthogonal Matrices</h2>
