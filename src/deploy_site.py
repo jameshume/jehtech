@@ -21,11 +21,8 @@ def GenerateCheckSum(data):
 
 def istext(filename):
 	base = os.path.basename(filename)
-	print("BASE='{}'".format(base))
 	dotIdx = base.rfind(".")
 	ext = base[dotIdx+1:].strip().lower()
-	print("EXT='{}'".format(ext))
-	print("TEXT? = {}".format(ext in ['html', 'htm', 'txt', 'ipynb', 'js', 'css']))
 	return ext in ['html', 'htm', 'txt', 'ipynb']
 
 fileCRC = {}

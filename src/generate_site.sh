@@ -1,4 +1,4 @@
-python generate_site.py
+python generate_site.py $1
 
 
 # From: https://unix.stackexchange.com/questions/9605/how-can-i-detect-if-the-shell-is-controlled-from-ssh

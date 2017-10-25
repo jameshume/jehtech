@@ -346,7 +346,7 @@ def deploy_site():
 
 	for filename in nonHtmlFiles:
 		if os.path.exists(filename):
-			if filename == 'images':
+			if filename == 'images' and sys.argv[1] != "no_images":
 				target = os.path.join(DEPLOYED_DIR, filename)
 				CopyImagesDir(filename, target)
 			else:
