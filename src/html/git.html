@@ -48,8 +48,11 @@
     </li>
     <li><a href="https://stackoverflow.com/questions/927358/how-to-undo-the-last-commits-in-git" target="_blank">How to undo the last commits in Git?</a>, SO Thread.
     </li>
+    <li><b>Awesome page... just found this and it looks great:</b> <a href="https://onlywei.github.io/explain-git-with-d3/" target"_blank">Visualizing Git Concepts with D3</a>. Visit this page, it is really cool!</li>
 </ol>
 </div>
+
+
 
 <h2>To Read / To Do</h2>
 <div>
@@ -1094,7 +1097,19 @@ fca8f1a First commit about something</pre>
         <img src="##IMG_DIR##/git_undo_squash_img3.png" alt="Image for part 1 of description of how to undo a git rebase where files were squashed"/>
     </p>
     <p>
+        Instead of doing a <code>git rebase -i 4<b>5</b></code> I had done a <code>git rebase -i 4<b>4</b></code>, thus including commit 45 in my squash. As the figure above shows, HEAD now points to my newly created commit that squashes up commits 45 through 49. If I look at the log, I can no longer see individual commits 45 through 49. So, where have they gone and can I get them back?
+    </p>
+    <p>
+        The answer is yes. As long as I have not executed a <code>git prune</code> command, the individual commit chain still exists and is shown above by the grayed out commit nodes. These nodes still exist in the Git repo, its just that there is no &quot;handle&quot; or &quot;named pointer&quot;, if you will, that we can use to refer to them by. So, how the, can we refer to them in order to tell Git that we want them back? Answer: <code>git reflog</code>.
+    </p>
+    <p>
+        &quot;Reflog&quot; is short for &quot;reference log&quot; and it <q>records when the tips of branches were updated in the local repository</q> [<a href="https://git-scm.com/docs/git-reflog" target="_blank">Ref</a>]. Great, so this log should contain the history that describes when our branch HEAD moved from commit 49 to commit 45-49. This means we can do a hard reset to make both our working tree, index and HEAD pointer &quot;go back&quot; to commit 49 with all the commit history associated with it, as shown below.
+    </p>
+    <p>
         <img src="##IMG_DIR##/git_undo_squash_img4.png" alt="Image for part 1 of description of how to undo a git rebase where files were squashed"/>
+    </p>
+    <p>
+        Now our repository looks exactly as it did before we started messing around with rebasing. From here I could continue to do the correct rebase... all is well. Phew!
     </p>
 
     <h3>Using Rebase To Edit A Commit</h3>
