@@ -1101,14 +1101,15 @@ fca8f1a First commit about something</pre>
     <p>
     	Let's create a silly little repository:
     </p>
+	<img src="##IMG_DIR##/git_rebase_to_edit_commit_1.png" alt="Depiction of a Git repository with 2 commits"/ style="float:right;">
     <pre>&gt; mkdir deleteme
 &gt; cd deleteme
 &gt; git init
-&gt; echo "First commit line" > test.txt
+&gt; echo "First commit line" &gt; test.txt
 &gt; git add -A
 &gt; git commit -m "First commit"
-&gt; echo "First line of second" >> test.txt
-&gt; echo "Second line of second" >> test.txt
+&gt; echo "First line of second" &gt;gt; test.txt
+&gt; echo "Second line of second" &gt;gt; test.txt
 &gt; git add -u
 &gt; git commit -m "Second commit"
 &gt; git log --oneline
