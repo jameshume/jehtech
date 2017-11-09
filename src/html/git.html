@@ -1360,8 +1360,9 @@ git log --no-merges parent-branch-name..
 
 <h2>Adding Git Branch To Linux Prompt</h2>
 <div>
-<pre>https://coderwall.com/p/fasnya/add-git-branch-name-to-bash-prompt
-https://stackoverflow.com/questions/5379986/why-doesnt-my-bash-prompt-update</pre>
+<p>
+    See <a href="linux_script.html#Adding-Current-Git-Or-Svn-Branch-To-The-Linux-Prompt">this section of the Linux shell page</a>.
+</p>
 </div>
 
 <h2>Basic Git Notes</h2>
@@ -1388,8 +1389,22 @@ Remotes
       Can use git push -u origin master - The -u tells get to remember parameters so next time
                                           can just type "git push".
 </pre>
-</div> <!-- END H2 Git Notes -->
+</div>
 
+<h2>When Git Auto-Complete Shows Deleted Branches</h2>
+<div>
+    <p>
+        Found the answer on <a href="https://stackoverflow.com/questions/17933401/how-do-i-remove-deleted-branch-names-from-autocomplete" target="_blank">this SO thread</a>.
+    </p>
+    <p>
+        If, when using Git auto-complete, Git displays branches that you have deleted
+        it is likely that they are remote branches, i.e., origin/xxx. Use <code>git branch -a</code>
+        to see if they exist. To get rid of ones that have been deleted on the
+        remote use <code>git fetch --prune origin</code>.
+    </p>
+</div>
+
+</div> <!-- END H2 Git Notes -->
 </div>
 </body>
 </html>
