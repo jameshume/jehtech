@@ -30,6 +30,7 @@
 <h2>References / useful Links</h2>
 <div>
 <ul>
+    <li><a href="https://www.gnu.org/software/make/manual/html_node/index.html" target="_blank">GNU Make Manual</a>.</li>
 	<li><a href="http://www.lateralt.net/files/auug97.pdf" target="_blank">Recursive Make Considered Harmful</a>, Peter Miller, 1998.
 	</li>
 	<li><a href="http://make.mad-scientist.net/papers/advanced-auto-dependency-generation/" target="_blank">Auto-Dependency Generation</a>,  Paul D. Smith, 2017.
@@ -152,6 +153,84 @@ prequisite_7:
 		</li>
 	</ul>
 </div> <!-- END: Makefile Basics -->
+
+<h2>Makefile Automatic Variables</h2>
+<div>
+    <p>
+        This is just a summary of some of the more commonly used automatic variables. You can
+        <a href="https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html" target="_blank">find a complete list here</a>.
+        The automatic variables do not have very user-friendly names so I have a few memory pegs I try to use to recall what they all mean...
+    </p>
+    <table>
+        <thead>
+            <tr>
+                <td>Variable</td>
+                <td>Meaning</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>$@</code></td>
+                <td>The file name of the target of the rule. Remember a rule looks like <code>target: prerequisites</code>. I like to remember this by thinking of the <code>@</code> symbol as looking like a dart board or some kind of target. If the rule has multiple target <code>$@</code> refers to whatever target caused the rule to be run.</td>
+            </tr>
+            <tr>
+                <td><code>$&lt;</code></td>
+                <td>The name of the first prerequisite. Memory peg: The shevron looks like it &quot;points&quot; to a target, so think prerequisite.</td>
+            </tr>
+            <tr>
+                <td><code>$?</code></td>
+                <td>The names of all the prerequisites that are newer than the target. Memory peg: It's a question... what prerequisite is newer?</td>
+            </tr>
+            <tr>
+                <td><code>$^</code></td>
+                <td>The names of all the prerequisites. Memory peg: it's pointing up, so all of the above prerequisite.</td>
+            </tr>
+        </tbody>
+    </table>
+    <p></p>
+</div> <!-- END: Makefile Automatic Variables -->
+
+<h2>Makefile Pattern Rules</h2>
+<div>
+    <p>
+        In the example makefile in the introduction section, each target was explicitly written
+        down. This would be fine for a small project, but if you have more than
+        a few source files, listing each one independently will soon get tedious and error prone.
+        Most of the time we just want to say &quot;and object file is generated from a c/c++ source
+        file with the same file base name&quot;. And luckily we can... to say this we would
+        write something like the following.
+    </p>
+    <pre class="prettyprint linenums">%.o: %.cpp
+&lt;tab&gt;   ...Commands...
+
+my-target: fileA.o fileB.o ... fileZ.o</pre>
+    <p>
+        In the above example, Make knows that to build <code>my-target</code> it must build the
+        object files <code>fileA.o</code> through <code>fileZ.o</code>. So, how does it construct
+        these objects? It looks through all of the rules it has encountered so far and tries to
+        match each <code>file?.o</code> with a target. It finds <code>%.o</code>, where <code>%</code>
+        is a <em>wild card</em>. The <code>%</code> matches the portion <code>file?</code> of the
+        prerequisite (this portion is called the <em>stem</em>), so Make can use this rule to 
+        construct the object file.
+    </p>
+    <p>
+        Lets take <code>fileA.o</code> as an example. Make will search for the file. If the file is
+        as new or newer than the target it knows that this prerequisite does not need to be rebuilt.
+        However, if it does, Make searches for a rule that will tell it how to build the prerequisite.
+    </p>
+    <p>
+        Make finds the rule <code>%.o: %.c; commands</code>: <code>fileA.o</code> matches
+        <code>%.o</code>, where the <code>%</code> matches <code>fileA</code>. The prerequisite
+        for this rule specified <code>%.c</code>, which substituting in the match will become
+        <code>fileA.c</code>. As long as <code>fileA.c</code> is just a file and not generated
+        by some other tool, Make will find no rule to create this file, so if the file doesn't
+        exist, then Make reports an error, otherwise it will rebuild <code>fileA.c</code> if it
+        is newer than the target <code>fileA.o</code>.
+    </p>
+    <p>
+        If two or more rules match Make will prefer more specific rules over more generic ones.
+    </p>
+</div> <!-- END: Makefile Pattern Rules -->
 
 </div> <!-- END H1 padding div -->
 </div>
