@@ -1365,30 +1365,26 @@ git log --no-merges parent-branch-name..
 </p>
 </div>
 
-<h2>Basic Git Notes</h2>
+<h2>Dealing With Conflicts</h2>
 <div>
-	<pre>
-Remotes
-   git remote : displays name of remote
-                -v shows URLS of each remote
+    <p>REF: http://tedfelix.com/software/git-conflict-resolution.html</p>
+    <pre>##  Note that this is backwards from what you might expect,
+## "theirs" is the one we are currently on!!
+##
+## From the man page:
+##
+## Note that during git rebase and git pull --rebase, ours and theirs may appear swapped;
+## --ours gives the version from the branch the changes are rebased onto, while --theirs
+## gives the version from the branch that holds your work that is being rebased.
+##
+## This is because rebase is used in a workflow that treats the history at the remote as
+## the shared canonical one, and treats the work done on the branch you are rebasing as the
+## third-party work to be integrated, and you are temporarily assuming the role of the keeper
+## of the canonical history during the rebase. As the keeper of the canonical history, you
+## need to view the history from the remote as ours (i.e. "our shared canonical history"),
+## while what you did on your side branch as theirs (i.e. "one contributor’s work on top of it").
 
-   git remote add [shortname] [url]
-
-   Fetch and pull
-      git fetch [remote-name]. Gets modifications from remote
-
-      Cloned repos have been automatically saved as the remote "origin" by default.
-
-      git pull = git fetch + merge
-
-   Push to remotes
-      git push [remote-name] [branch-name]
-      For example, if the name of the remote it "origin" and the local branch name is "master"...
-         git push origin master
-
-      Can use git push -u origin master - The -u tells get to remember parameters so next time
-                                          can just type "git push".
-</pre>
+git checkout --(theirs|ours) mergetool.txt</pre>
 </div>
 
 <h2>When Git Auto-Complete Shows Deleted Branches</h2>

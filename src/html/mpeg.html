@@ -1149,6 +1149,11 @@ if (adaption_field_contains_pcr) {
 # -an - drop audio
 # -t 00:00:10 - Copy 10 seconds</pre>
 
+        <p>
+            To <b>compress</b> your video or <b>change its size</b> try the following:
+        </p>
+        <pre>ffmpeg -i &lt;inputfilename&gt; -s 640x480 -b:v 512k &lt;outputfilename&gt;</pre>
+
         <h3>ffprobe</h3>
         <p>
             To get information on your video file you can also use <a href="https://ffmpeg.org/ffprobe.html" target="_blank"><code>ffprobe</code></a>. To extract
