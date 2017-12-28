@@ -75,15 +75,6 @@
 	</ul>
 </div>
 
-<h2>Useful Links</h2>
-<div>
-	<ol>
-		<li><a href="https://www.dabapps.com/blog/introduction-to-pip-and-virtualenv-python/"
-			target="_blank">A non-magical introduction to Pip and Virtualenv for Python beginners</a> by Jamie Matthews.
-		</li>
-	</ol>
-</div>
-
 <h2>Python Debugger: Winpdb</h2>
 <div>
 	<p>A really quite cute Python debugger, easy to use and GUI driver, is <a href="http://winpdb.org/download/" target="_blank">Winpdb</a>:
@@ -95,10 +86,65 @@
 
 <h2>Virtual Environments</h2>
 <div>
-	<p>
-	http://docs.python-guide.org/en/latest/dev/virtualenvs/
-	</p>
-</div>
+	<p>References:<p>
+	<ol>
+		<li><a href="https://www.dabapps.com/blog/introduction-to-pip-and-virtualenv-python/"
+			target="_blank">A non-magical introduction to Pip and Virtualenv for Python beginners</a> by Jamie Matthews.
+		</li>
+		<li><a href="http://docs.python-guide.org/en/latest/dev/virtualenvs/" target="_blank">Pipenv & Virtual Environments</a>, Hitchhier's Guide to Python.</li>
+	</ol>
+
+	<h3>VirtualEnv</h3>
+	<div>
+		<pre><b># Install</b>
+pip install virtualenv
+
+<b># Create project virtual env</b>
+cd my_project_folder
+# Note, to create a venv for Python 3 include &quot;-p python3&quot;...
+virtualenv [-p python3] my_project # virtualenv my_project will create a folder in the current
+                                   # directory which will contain everything you need for this
+                                   # private environment
+
+<b># Use the venv</b>
+source my_project/bin/activate
+
+<b># Install packages as usual</b>
+pip install &lt;package-name&gt;
+
+<b># When finished...</b>
+deactivate
+
+<b># Delete a venv</b>
+rm -fr my_project
+
+<b># Snapshot of current state:</b>
+pip freeze > requirements.txt
+
+<b># Load snapshot</b>
+pip install -r requirements.txt
+		</pre>
+	</div>
+
+	<h3>AutoEnv</h3>
+	<div>
+		<p>
+			<a href="https://github.com/kennethreitz/autoenv" target="_blank">On GitHub.</a>
+		</p>
+		<p>You can supplement VirtualEnv with something called AutoEnv. It is a little utility that
+			will monitor you change-directory commands. When you <code>cd</code> into a directory
+			that contains a <code>.env</code> file it will try to source that file. So, if inside that
+			file you have the line <code>source my_project/bin/activate</code>, when you change into
+			that directory, it will automatically activate your project for you. Happy days!
+		</p>
+	</div>
+
+	<h3>DirEnv</h3>
+	<div>
+		<p>The author of AutoEnv actually recommends trying this above AutoEnv. TODO.
+		</p>
+	</div>
+</div> <!-- END Virtual Environments -->
 
 <h2>PyLint: Linting Python Code</h2>
 <div>
