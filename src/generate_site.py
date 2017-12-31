@@ -52,12 +52,12 @@ def CopyImagesDir(srcDir, destDir):
 		if os.path.isfile(no_watermark_filename):
 			with open(no_watermark_filename) as fh:
 				no_watermark_imgs = [x.strip() for x in fh.readlines()]
-				print no_watermark_imgs
+				print(no_watermark_imgs)
 
 		for currdir in dirs:
 			destD = os.path.join(destDir, relativeRoot, currdir)
 			if not os.path.exists(destD):
-				print "CREATING", destD
+				print("CREATING", destD)
 				os.makedirs(destD)
 
 		for file in files:
@@ -65,11 +65,11 @@ def CopyImagesDir(srcDir, destDir):
 			file_extension = os.path.splitext(file)[1]
 			if first or file_extension.lower() not in [".png", ".jpg"] or file in no_watermark_imgs:
 				# just copy file
-				print "COPY" , os.path.join(root, file), "==>", os.path.join(destDir, relativeRoot, file)
+				print("COPY" , os.path.join(root, file), "==>", os.path.join(destDir, relativeRoot, file))
 				shutil.copy(os.path.join(root, file), os.path.join(destDir, relativeRoot, file))
 			else:
 				# create a watermarked copy
-				print "WATERMARK" , os.path.join(root, file), "==>", os.path.join(destDir, relativeRoot, file)
+				print("WATERMARK" , os.path.join(root, file), "==>", os.path.join(destDir, relativeRoot, file))
 				watermark.WatermarkImage(os.path.join(root, file), os.path.join(destDir, relativeRoot, file))
 
 		first = False

@@ -29,20 +29,160 @@
 
 <h2>Installing On Ubuntu</h2>
 <pre>
-http://www.pyimagesearch.com/2016/10/24/ubuntu-16-04-how-to-install-opencv
-https://github.com/CognitiveRobotics/object_tracking_2D/blob/master/README.md
-https://www.linuxhint.com/how-to-install-opencv-on-ubuntu/
-
-cmake  -D CMAKE_INSTALL_PREFIX=/usr/local -D OPENCV_EXTRA_MODULES_PATH=~/opencv_play/opencv_contrib-3.3.0/modules -DWITH_LIBV4L=ON -D PYTHON_EXECUTABLE=~/.virtualenvs/cv/bin/python ..
-
-https://stackoverflow.com/questions/41200201/opencv-unable-to-stop-the-stream-inappropriate-ioctl-for-device
-https://github.com/opencv/opencv/issues/8902
-https://stackoverflow.com/questions/17283619/installing-opencv-with-gstreamer-and-ffmpeg-support-in-ubuntu-13-04-64bits
-
-
-cmake -D CMAKE_INSTALL_PREFIX=/usr/local -D OPENCV_EXTRA_MODULES_PATH=~/opencv_play/opencv_contrib-3.3.0/modules PYTHON_EXECUTABLE=~/.virtualenvs/cv/bin/python -D WITH_TBB=ON -D BUILD_NEW_PYTHON_SUPPORT=ON -D WITH_V4L=ON -D INSTALL_C_EXAMPLES=ON -D INSTALL_PYTHON_EXAMPLES=ON -D BUILD_EXAMPLES=ON -D OPENCV_BUILD_3RDPARTY_LIBS=ON -D WITH_FFMPEG=ON -D WITH_GTK=ON -D WITH_OPENEXR=ON -D WITH_OPENNI=ON -D WITH_PNG=ON -D WITH_TBB=ON -D WITH_XINE=ON -D WITH_GSTREAMER=ON ..
-
 </pre>
+
+<h2>Basics Of Images</h2>
+<div>
+    <h3>Read/Write An Image</h3>
+    <p>
+        References:
+    </p>
+    <ul>
+        <li><a href="https://docs.opencv.org/3.0-beta/doc/py_tutorials/py_gui/py_image_display/py_image_display.html" target="_blank">Getting Started with Images</a>, OpenCV docs.</li>
+        <li><a href="https://stackoverflow.com/questions/15072736/extracting-a-region-from-an-image-using-slicing-in-python-opencv/15074748#15074748" target="_blank">Extracting a region from an image using slicing in Python, OpenCV</a>. StackOverflow.com</li>
+    </ul>
+    <pre class="prettyprint linenums">import cv2 
+myImage = cv2.imread('/path/to/img', ?)  # ? is cv2.IMREAD_COLOR - Load colour but NO transparency
+                                         #      cv2.IMREAD_GRAYSCALE - Greyscales image
+                                         #      cv2.IMREAD_UNCHANGED - Load colour and transperency
+print(type(myImage))                     # Prints &lt;class 'numpy.ndarray'&gt;
+cv2.imshow('A Window Title', myImage)    # Displays an image in the specified window.
+key = cv2.waitKey(delay=0) &amp; 0xFF        # Param delay waits in milliseconds, 0 forever.
+                                         # Returns ASCII code of key pressed.
+                                         # And with 0xFF required for 64-bit machines
+cv2.imwrite('/path/to/img/cpy', myImage) # Write a copy of the image
+cv2.destroyAllWindows()                  # Destroys all of the opened HighGUI windows.</pre>
+    
+    <p>Note that OpenCV uses BGR (Blue, Green, Red) so, if you load a colour image the array 
+       dimensions will be (width, heigh, channel), where channel 0 is blue, 1 is green and 2 is red.
+    </p>
+
+    <p>
+        You can plot images in Matplotlib too, but because OpenCV use BGR and not RGB, you
+        have to convert images so that they will display correctly. The following is a copy of
+        the code from the referenced SO thread with a few modifications:
+    </p>
+
+    <pre class="prettyprint linenums">import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Open your image - an array of width x height x 3-channels
+img = cv2.imread('/path/to/img')
+
+# Split out the colour components into their own width x height arrays
+b,g,r = cv2.split(img)
+
+# Create a new array that orders the components as RGB
+img2 = cv2.merge([r,g,b])
+
+# Create a visual comparison of how a raw OpenCV image array (BGR) would plot vs
+# how the RGB image array plots in Matplotlib.
+plt.subplot(121);plt.imshow(img)  # expect distorted color
+plt.subplot(122);plt.imshow(img2) # expect true color
+plt.show()
+
+# Show the difference whe OpenCV displays the image...
+cv2.imshow('bgr image',img)  # expect true color
+cv2.imshow('rgb image',img2) # expect distorted color
+cv2.waitKey(0)
+cv2.destroyAllWindows()</pre>
+
+    <p>The above is demonstrates how the image arrays are stored. However, it is a lot quicker
+        and neater to use <code>cv2.cvtColor()</code> to change colour spaces. As suggested on the
+        referenced SO thread:
+    </p>
+    <pre class="prettyprint linenums">img2 = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)</pre>
+    <p>
+        Prefer the above :)
+    </p>
+
+    <h3>Colour Spaces</h3>
+    <p>
+        You can convert between colour spaces using <code>cv2.cvtColor</code>:
+    </p>
+    <pre class="prettyprint linenums">
+cv2.cvtColor(img, cv2.COLOR_BGR2RGB)   # Go from BGR to RGB
+cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # Go from BGR to grayscale
+cv2.cvtColor(img, cv2.COLOR_BGR2HSV)   # Go from BGR to HSV
+cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb) # Go from BGR to luma-chroma (TCC)</pre>
+    <p>There are an absolute ton of conversions available to and from BGR, see the OpenCV 
+    docs for all of them!</p>
+</div> <!-- End Basics Of Images -->
+
+<h2>Image Segmentation</h2>
+<div>
+    <p>
+        References:
+    </p>
+    <ul>
+        <li><a href="https://uk.mathworks.com/discovery/image-segmentation.html" target="_blank">Segmentation methods in image processing and analysis</a>, MathWorks.</li>
+    </ul>
+    <p>
+        Image segmentation involves grouping the pixels of an image into meaningful sets. For
+        example, lets say we want to count coins on a table. We can take an arial picture of the
+        table and then segment the image into pixels that are part of a coin and those that are not.
+        Then by &quot;globbing&quot; the pixels forming coins, we can count the number of coins.
+    </p>
+    
+    <h3>Thresholding Methods</h3>
+        <p>
+            Thresholding involves converting a grayscale image into a binary (black &amp; white image).
+            This is done by selecting a value. All pixel intensities below this value are made black
+            and everything else white.
+        </p>
+        <p>
+            B&amp;W is useful for a couple of reasons. Firstly it cheap it terms of storage and
+            the complexity of computation over each pixel. Secondly, to detect boundaries etc of
+            objects it can be useful to use B&amp;W and then use algorithms like connected-components
+            to group pixels into objects so that we can say, count or label them.
+        </p>
+        <p>
+            The most basic thresholding we can do is to pick a pixel intensity ourself and just
+            threshold on it. A very simple way of doing this is shown below (don't ever do it like
+            this!)
+        </p>
+        <pre class="prettyprint linenums">import cv2 
+import matplotlib.pyplot as pl
+
+# Read in the image as gray scale
+myImage = cv2.imread('rare-coins.jpg', cv2.IMREAD_GRAYSCALE)
+
+# myImage is just a numpy array so we can use all the numpy maths/logic/array-indexing.
+# We create a mask to select all white pixels and make anything non-white black.
+blackPixels = myImage < 255
+whitePixels = ~blackPixels
+
+# Display the gray scale image
+fig, axs = pl.subplots(ncols=2)
+axs[0].axis('off') # Hide axis ticks
+axs[0].imshow(cv2.cvtColor(myImage, cv2.COLOR_GRAY2RGB))
+
+# Apply our masks and binarise the image before displaying the result
+myImage[blackPixels] = 0
+myImage[whitePixels] = 255
+axs[1].axis('off')  # Hide axis ticks
+axs[1].imshow(cv2.cvtColor(myImage, cv2.COLOR_GRAY2RGB))
+
+fig.show()
+pl.show()</pre>
+    <p> The result of this is pretty ugly, but here it is. On the left is the original image and
+        on the right the thresholded image.
+    </p>
+    <p><img src="##IMG_DIR##/opencv_binarise.png" alt="comparison of gray scale and binarized image"/>
+    </p>
+    <p>
+        This pretty niave method can be done much more succinctly using OpenCV's function <code>cv2.threshold()</code> to replace the masking and setting we did using the numpy indexing:
+    </p>
+    <pre># All pixels with intensity &lt;=254 are made black, the rest white.
+ret, myImage = cv2.threshold(myImage, 254, 255, cv2.THRESH_BINARY)
+axs[1].axis('off')
+axs[1].imshow(cv2.cvtColor(myImage, cv2.COLOR_GRAY2RGB))</pre>
+    <p>
+        The <code>cv2.threshold()</code> function has various threholding options like <code>cv2.THRESH_BINARY</code>.
+    </p>
+
+</div> <!-- Image Segmentation -->
 
 
 </div> <!-- End padding div -->
