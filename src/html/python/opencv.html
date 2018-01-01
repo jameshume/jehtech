@@ -7,6 +7,16 @@
 	<!-- META_INSERT -->
 	<!-- CSS_INSERT -->
 	<!-- JAVASCRIPT_INSERT -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>  
+	<script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+          tex2jax: {
+              inlineMath: [['$','$'], ['\\(','\\)']]
+          },
+          displayAlign: "left",
+          displayIndent: "2em"
+      });
+	</script>
 </head>
 
 <body>
@@ -23,13 +33,34 @@
 <h1 class="title">Python OpenCV</h1>
 <div style="padding-right:10px;">
 
+<p>
+Notes and code examples using Python with OpenCV. Note, most of this stuff can be found by going
+through OpenCV's own tutorials... they're just my notes to help solidify things in my head by
+writing them out...
+</p>
+
 <h2>Page Contents</h2>
 <div id="page_contents">
 </div>
 
 <h2>Installing On Ubuntu</h2>
-<pre>
-</pre>
+<p>
+    OpenCV 3 does not include money-to-own algorithms such as SIFT and SURF and these now come
+    in a seperate package that can be optionally compiled in. Note, if you use these optional 
+    algorithms you can probably only do so for research purposes. In any product you'll likely need
+    to pay royalties. In OpenCV 2, however, SIFT and SURF, in particular are &quot;baked in&quot;.
+</p>
+<p>
+    Different projects may also have different dependencies and you may not want to have one 
+    global OpenCV library &quot;to rule them all&quot;, so to speak. So, this little sections will
+    show you how to create a Python environment into which you can &quot;install&quot; your specific
+    OpenCV build and other required Python libraries in such a way that it is &quot;sandboxed&quot;
+    and won't interfere with the systems global Python configuration.
+</p>
+<p>
+    TODO...
+</p>
+
 
 <h2>Basics Of Images</h2>
 <div>
@@ -116,7 +147,14 @@ cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb) # Go from BGR to luma-chroma (TCC)</pre>
         References:
     </p>
     <ul>
-        <li><a href="https://uk.mathworks.com/discovery/image-segmentation.html" target="_blank">Segmentation methods in image processing and analysis</a>, MathWorks.</li>
+        <li><a href="https://docs.opencv.org/3.3.1/d7/d4d/tutorial_py_thresholding.html" target="_blank">Image Thresholding</a>, OpenCV docs.
+        </li>
+        <li><a href="https://uk.mathworks.com/discovery/image-segmentation.html" target="_blank">Segmentation methods in image processing and analysis</a>, MathWorks.
+        </li>
+        <li><a href="http://www.cse.msu.edu/~stockman/Book/2002/Chapters/ch3.pdf" target="_blank">Chapter 3: Binary Image Analysis</a>, Computer Vision by Linda Shapiro and Geoarge Stockman.
+        </li>
+        <li><a href="http://www.ece.uvic.ca/~aalbu/computer%20vision%202009/Lecture%209.%20Segmentation-Thresholding.pdf" target="_blank">Image segmentation</a>.
+        </li>
     </ul>
     <p>
         Image segmentation involves grouping the pixels of an image into meaningful sets. For
@@ -131,6 +169,11 @@ cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb) # Go from BGR to luma-chroma (TCC)</pre>
             This is done by selecting a value. All pixel intensities below this value are made black
             and everything else white.
         </p>
+        <p>The assumptions are that intensity values are different in different regions, thus allowing
+        us to distinguish objects by intensity, and that within each region the intensity values are similar,
+        thus allowing us to &quot;map&quot; the extent of an object.
+        </p>
+        <h4>Simple Thresholding</h4>
         <p>
             B&amp;W is useful for a couple of reasons. Firstly it cheap it terms of storage and
             the complexity of computation over each pixel. Secondly, to detect boundaries etc of
@@ -174,16 +217,244 @@ pl.show()</pre>
     <p>
         This pretty niave method can be done much more succinctly using OpenCV's function <code>cv2.threshold()</code> to replace the masking and setting we did using the numpy indexing:
     </p>
-    <pre># All pixels with intensity &lt;=254 are made black, the rest white.
-ret, myImage = cv2.threshold(myImage, 254, 255, cv2.THRESH_BINARY)
+    <pre class="prettyprint linenums"># All pixels with intensity &lt;=254 are made black, the rest white.
+ret, myImage = <b>cv2.threshold</b>(myImage, 254, 255, <b>cv2.THRESH_BINARY</b>)
 axs[1].axis('off')
 axs[1].imshow(cv2.cvtColor(myImage, cv2.COLOR_GRAY2RGB))</pre>
     <p>
         The <code>cv2.threshold()</code> function has various threholding options like <code>cv2.THRESH_BINARY</code>.
     </p>
-
+    <p>
+        But, choosing an intensity to threshold on, as done above, is extremely manual. The intensity
+        that was good for the coins, for example, may not be good for a nature scene where we want 
+        to seperate the birds from the sky. We'd have to manualy examine each image to decide on
+        an approriate threshold which is resource intensive. Or, perhaps we are seperating animals from their
+        environment: where one animal is in shade and another not, a single threshold value may
+        allow us only to dected one and not the other in the same image!
+    </p>
+    <h4>Local or Dynamic Thresholding</h4>
+    <p>
+        The problem with simple thresholding is that the same intensity value is used both within one image and possible required
+        adjustment, not only within that single image, but across all the images we wish to anaylse.
+    </p>
+    <p>
+        Dynamic thresholding solves this problem by allowing the threshold value to vary within an 
+        image based on some algorithmic properties, thus meaning the human, resource intensive element
+        can be removed.
+    </p>
+    <p>
+        Some dynamic thresholding methods include:
+    </p>
+    <ul>
+        <li>P-tile thresholding,</li>
+        <li>Optimal thresholding,</li>
+        <li>Mixture modelling,</li>
+        <li>Adaptive thresholding,</li>
+        <li>Clustering: K-means &amp; Otsu’s method.</li>
+    </ul>
+    <p>
+        In OpenCV, to perform dynamic thresholding we use the <code>cv2.adaptiveThreshold()</code>
+        method. Often when thresholding it is useful to apply some kind of blur or smoothing filter
+        to the image to reduce noise. See <code>cv2.medianBlur()</code> or <code>cv2.GaussianBlur()</code>
+        for example.
+    </p>
+    <p>
+        The Python API is:
+    </p>
+    <pre class="prettyprint linenums">cv2.adaptiveThreshold(src, maxValue, adaptiveMethod, thresholdType, blockSize, C[, dst])</pre>
+    <p>Where the more important params are:
+    </p>
+    <table>
+        <tr><td><code>maxValue</code></td>
+            <td>is the intensity given to pixels for which the local threshold condition is satisfied.</td>
+        </tr>
+        <tr><td><code>adaptiveMethod</code></td>
+            <td>is the thresholding algorithm to use, either <code>ADAPTIVE_THRESH_MEAN_C</code> or <code>ADAPTIVE_THRESH_GAUSSIAN_</code>.
+            </td>
+        </tr>
+        <tr><td><code>thresholdType</code></td>
+            <td>is the threshold type, either <code>THRESH_BINARY</code> or <code>THRESH_BINARY_INV</code>.</td>
+        </tr>
+        <tr><td><code>blockSize</code></td>
+            <td>is the size of a pixel neighborhood that is used to calculate a threshold.</td>
+        </tr>
+    </table>
+    <p>
+        TODO, some more examples and explanations...
+    </p>
 </div> <!-- Image Segmentation -->
 
+<h2>Image Gradients</h2>
+<div>
+    <p>References:</p>
+    <ul>
+        <li><a href="http://www.cs.umd.edu/~djacobs/CMSC426/ImageGradients.pdf" target="_blank">Image Gradients</a>, David Jacobs, Univeristy of Maryland. 
+        </li>
+        <li><a href="http://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_imgproc/py_gradients/py_gradients.html" target="_blank">Image Gradients</a>, OpenCV-Python Tutorials.
+        </li>
+        <li><a href="https://en.wikipedia.org/wiki/Sobel_operator" target="_blank">Sobel Operator</a>, Wikipedia.
+        </li>
+    </ul>
+    <p>
+        David Jacobs notes introduce the subject perfectly:
+    </p>
+    <blockquote>
+        <p>The gradient of an image measures how it is changing.  It provides two pieces of information.  The magnitude of the gradient tells us how quickly the image is changing, while the direction of the gradient tells us the direction in which the image is changing most rapidly.</p>
+    <footer>-- <a href="http://www.cs.umd.edu/~djacobs/CMSC426/ImageGradients.pdf" target="_blank">Image Gradients</a>, David Jacobs, Univeristy of Maryland. </footer>
+    </blockquote>
+    <p>
+    	Sobel kernels are used to calculate the differential of the image are:
+    </p>
+    <p style="float: left;">
+    	$$ 
+    	    G_x = \left[
+			\begin{matrix}
+		    1 & 0 & -1 \\
+		    2 & 0 & -2 \\
+		    1 & 0 & -1 \\
+		    \end{matrix} \right]
+	    $$
+	</p>
+	<p style="float: left;">
+    	$$ 
+    	    G_y = \left[
+			\begin{matrix}
+		    1 & 2 & 1 \\
+		    0 & 0 & 0 \\
+		    -1 & -2 & -1 \\
+		    \end{matrix} \right]
+	    $$
+    </p>
+    <p style="clear: both;">So we could plug some numbers in and see what the vertical edge kernel does...</p>
+    <p>
+    	<img src="##IMG_DIR##/opencv_sobel.png" src="Look at sobel filter"/>
+    </p>
+    <p>
+    	We can see that it has detected and emphasised edges in the image and set to zero areas of the image that
+    	do not change. We can also see that there is a change in sign depending on which way the gradient goes.
+    	So that's an intuitive look at what the gradient calculation is doing and how it could even be used
+    	as an edge detector.
+    </p>
+    <p>
+    	To calculate the gradient magnitude and direction for each pixel we use the following formulas:
+
+    	$$
+    		G = \sqrt{G_x^2 + G_y^2}
+    	$$
+
+    	$$
+    		\Theta = \arctan\left(\frac{G_y}{G_x}\right)
+    	$$
+
+    	We can see this in the image above too. What we can see there, in the magnitude grid that the
+    	edge detection has essensitally found the edge around the square.
+    </p>
+    <p>
+    	TODO: Don't understand the angle grid... should have the middle edges I'd have
+    	thought... need to understand better :'(
+    </p>
+</div> <!-- Image Gradients -->
+
+<h2>Edge Detection</h2>
+<div>
+    <p>References:</p>
+    <ul>
+        <li><a href="http://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_imgproc/py_canny/py_canny.html" target="_blank">Canny Edge Detection</a>, OpenCV-Python Tutorials.
+        </li>
+        <li><a href="http://www.bogotobogo.com/python/OpenCV_Python/python_opencv3_Image_Gradient_Sobel_Laplacian_Derivatives_Edge_Detection.php" target="_blank">Image Edge Detection: Sobel and Laplacian</a>, K Hong.
+        </li>
+    </ul>
+
+    <h3>Tips</h3>
+    <p>
+        Once again, taking a blur of the image, try <code>cv2.GaussianBlur()</code>, can help
+        reduce noise and improve the performance of the algorithms.
+    </p>
+
+    <h3>Canny Edge Detection</h3>
+    <p>Use the function <code>cv2.Canny()</code>. It uses the following very high level process...</p>
+    <pre>Gaussian filter
+v
+Find intensity gradients
+v
+Apply non-maximum suppression
+v
+Apply double threshold to determine potential edges
+v
+Track edge by hysteresis</pre>
+
+    <h3>Sobel Edge Detection</h3>
+    <p>Use the function <code>cv2.Sobel()</code>.</p>
+
+    <h3>Laplacian Edge Detection</h3>
+    <p>use the function <code>cv2.Laplacian()</code>.</p>
+
+    <h3>Comparing Canny vs Sobel vs Laplacian</h3>
+    <p>The following snippet, construction based heavily on the references, tries to compare the
+    different techniques...</p>
+    <pre class="prettyprint linenums">import cv2
+import numpy as np
+from matplotlib import pyplot as plt
+
+orignalImg = cv2.cvtColor(cv2.imread('hyundai-verna.jpg',), cv2.COLOR_BGR2GRAY)
+gaussImg = cv2.GaussianBlur(orignalImg, (5, 5), 0)
+
+fig, axs = plt.subplots(nrows = 3, ncols=2)
+imgList = [(axs[0][0], "Original", orignalImg),
+           (axs[0][1], "Blurred", gaussImg),
+           (axs[1][0], "Lapacian", cv2.Laplacian(gaussImg, cv2.CV_64F)),
+           (axs[1][1], "Sobel X", cv2.Sobel(gaussImg, cv2.CV_64F, dx=1, dy=0, ksize=5)),
+           (axs[2][0], "Sobel Y", cv2.Sobel(gaussImg, cv2.CV_64F, dx=0, dy=1, ksize=5)),
+           (axs[2][1], "Canny", cv2.Canny(gaussImg, 10, 70))]
+for ax, descr, img in imgList:
+    ax.imshow(img, cmap = 'gray')
+    ax.axis('off')
+    ax.set_title(descr)
+
+fig.show()
+plt.show()</pre>
+    <p>It outputs the following...</p>
+    <p><img src="##IMG_DIR##/opencv_edge_detection.png" alt="Comparison of sobel, laplacian and canny edge detection in opencv"/>
+
+    <h3>Contours</h3>
+    <p>
+        References:
+    </p>
+    <ul>
+        <li><a href="https://docs.opencv.org/3.1.0/d4/d73/tutorial_py_contours_begin.html" target="_blank">Contours: Getting Started</a>, OpenCV Docs.
+        </li>
+    </ul>
+    <pre class="prettyprint linenums">import numpy as np
+import cv2
+from matplotlib import pyplot as plt
+
+im = cv2.imread('hyundai-verna.jpg')
+imBlank = np.ones(im.shape)
+imGray = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
+imThresh, contours, hierarchy = \
+    cv2.findContours(
+        cv2.threshold(imGray, 125, 255, 0)[1], 
+        cv2.RETR_TREE, 
+        cv2.CHAIN_APPROX_SIMPLE)
+cv2.drawContours(imBlank, contours, -1, (0,0,0), 1)
+
+fig, axs = plt.subplots(nrows = 2, ncols=2)
+axs[0][0].imshow(im, cmap = 'gray'),       axs[0][0].axis('off')
+axs[0][1].imshow(imGray, cmap = 'gray'),   axs[0][1].axis('off')
+axs[1][0].imshow(imThresh, cmap = 'gray'), axs[1][0].axis('off')
+axs[1][1].imshow(imBlank, cmap = 'gray'),  axs[1][1].axis('off')
+
+fig.show()
+plt.show()</pre>
+    <p>
+        Outputs the following:
+    </p>
+    <p>
+        <img src="##IMG_DIR##/opencv_contours.png" alt="Example of contours in opencv"/>
+    </p>
+</div>
+
+<p></p>
 
 </div> <!-- End padding div -->
 </div> <!-- End content div -->
