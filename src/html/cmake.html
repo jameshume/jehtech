@@ -30,11 +30,31 @@
 <h2>References / useful Links</h2>
 <div>
 <ul>
-
+	<li>https://github.com/onqtam/awesome-cmake</li>
+	<li>https://www.jetbrains.com/help/clion/quick-cmake-tutorial.html</li>
+    <li>https://cgold.readthedocs.io/en/latest/overview.html</li>
+    <li>https://github.com/toeb/moderncmake/blob/master/Modern%20CMake.pdf</li>
+    <li>https://stackoverflow.com/questions/8934295/add-source-in-a-subdirectory-to-a-cmake-project</li>
+    <li>https://stackoverflow.com/questions/17653738/recursive-cmake-search-for-header-and-source-files</li>
+    <li>https://github.com/ruslo/sugar/wiki/Collecting-sources</li>
+    <li>https://crascit.com/2015/02/02/cmake-target-dependencies/</li>
+    <li>http://floooh.github.io/2016/01/12/cmake-dependency-juggling.html</li>
+    <li>http://crascit.com/2016/01/31/enhanced-source-file-handling-with-target_sources/</li>
+    <li>https://cmake.org/pipermail/cmake/2016-May/063400.html</li>
 </ul>
 </div> <!-- END References / useful Links -->
 
 
+<h2>Misc</h2>
+<div>
+<p>
+    Dumpy out all variables and their values:
+</p>
+<pre>get_cmake_property(_variableNames VARIABLES)
+foreach (_variableName ${_variableNames})
+    message(STATUS "${_variableName}=${${_variableName}}")
+endforeach()</pre>
+</div> <!-- End Misc -->
 
 </div> <!-- END H1 padding div -->
 </div>
