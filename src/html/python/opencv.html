@@ -7,7 +7,7 @@
 	<!-- META_INSERT -->
 	<!-- CSS_INSERT -->
 	<!-- JAVASCRIPT_INSERT -->
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>  
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
 	<script type="text/x-mathjax-config">
       MathJax.Hub.Config({
           tex2jax: {
@@ -43,15 +43,21 @@ writing them out...
 <div id="page_contents">
 </div>
 
+<h2>Todo / To Read</h2>
+<pre>https://stackoverflow.com/questions/28935983/preprocessing-image-for-tesseract-ocr-with-opencv
+https://www.pyimagesearch.com/2017/07/17/credit-card-ocr-with-opencv-and-python/
+http://citeseerx.ist.psu.edu/viewdoc/download;jsessionid=E6122958EB8D16F13E0EEC460D6207E5?doi=10.1.1.308.445&rep=rep1&type=pdf
+</pre>
+
 <h2>Installing On Ubuntu</h2>
 <p>
     OpenCV 3 does not include money-to-own algorithms such as SIFT and SURF and these now come
-    in a seperate package that can be optionally compiled in. Note, if you use these optional 
+    in a seperate package that can be optionally compiled in. Note, if you use these optional
     algorithms you can probably only do so for research purposes. In any product you'll likely need
     to pay royalties. In OpenCV 2, however, SIFT and SURF, in particular are &quot;baked in&quot;.
 </p>
 <p>
-    Different projects may also have different dependencies and you may not want to have one 
+    Different projects may also have different dependencies and you may not want to have one
     global OpenCV library &quot;to rule them all&quot;, so to speak. So, this little sections will
     show you how to create a Python environment into which you can &quot;install&quot; your specific
     OpenCV build and other required Python libraries in such a way that it is &quot;sandboxed&quot;
@@ -72,7 +78,7 @@ writing them out...
         <li><a href="https://docs.opencv.org/3.0-beta/doc/py_tutorials/py_gui/py_image_display/py_image_display.html" target="_blank">Getting Started with Images</a>, OpenCV docs.</li>
         <li><a href="https://stackoverflow.com/questions/15072736/extracting-a-region-from-an-image-using-slicing-in-python-opencv/15074748#15074748" target="_blank">Extracting a region from an image using slicing in Python, OpenCV</a>. StackOverflow.com</li>
     </ul>
-    <pre class="prettyprint linenums">import cv2 
+    <pre class="prettyprint linenums">import cv2
 myImage = cv2.imread('/path/to/img', ?)  # ? is cv2.IMREAD_COLOR - Load colour but NO transparency
                                          #      cv2.IMREAD_GRAYSCALE - Greyscales image
                                          #      cv2.IMREAD_UNCHANGED - Load colour and transperency
@@ -83,8 +89,8 @@ key = cv2.waitKey(delay=0) &amp; 0xFF        # Param delay waits in milliseconds
                                          # And with 0xFF required for 64-bit machines
 cv2.imwrite('/path/to/img/cpy', myImage) # Write a copy of the image
 cv2.destroyAllWindows()                  # Destroys all of the opened HighGUI windows.</pre>
-    
-    <p>Note that OpenCV uses BGR (Blue, Green, Red) so, if you load a colour image the array 
+
+    <p>Note that OpenCV uses BGR (Blue, Green, Red) so, if you load a colour image the array
        dimensions will be (width, heigh, channel), where channel 0 is blue, 1 is green and 2 is red.
     </p>
 
@@ -137,7 +143,7 @@ cv2.cvtColor(img, cv2.COLOR_BGR2RGB)   # Go from BGR to RGB
 cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # Go from BGR to grayscale
 cv2.cvtColor(img, cv2.COLOR_BGR2HSV)   # Go from BGR to HSV
 cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb) # Go from BGR to luma-chroma (TCC)</pre>
-    <p>There are an absolute ton of conversions available to and from BGR, see the OpenCV 
+    <p>There are an absolute ton of conversions available to and from BGR, see the OpenCV
     docs for all of them!</p>
 </div> <!-- End Basics Of Images -->
 
@@ -162,7 +168,7 @@ cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb) # Go from BGR to luma-chroma (TCC)</pre>
         table and then segment the image into pixels that are part of a coin and those that are not.
         Then by &quot;globbing&quot; the pixels forming coins, we can count the number of coins.
     </p>
-    
+
     <h3>Thresholding Methods</h3>
         <p>
             Thresholding involves converting a grayscale image into a binary (black &amp; white image).
@@ -185,7 +191,7 @@ cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb) # Go from BGR to luma-chroma (TCC)</pre>
             threshold on it. A very simple way of doing this is shown below (don't ever do it like
             this!)
         </p>
-        <pre class="prettyprint linenums">import cv2 
+        <pre class="prettyprint linenums">import cv2
 import matplotlib.pyplot as pl
 
 # Read in the image as gray scale
@@ -226,7 +232,7 @@ axs[1].imshow(cv2.cvtColor(myImage, cv2.COLOR_GRAY2RGB))</pre>
     </p>
     <p>
         But, choosing an intensity to threshold on, as done above, is extremely manual. The intensity
-        that was good for the coins, for example, may not be good for a nature scene where we want 
+        that was good for the coins, for example, may not be good for a nature scene where we want
         to seperate the birds from the sky. We'd have to manualy examine each image to decide on
         an approriate threshold which is resource intensive. Or, perhaps we are seperating animals from their
         environment: where one animal is in shade and another not, a single threshold value may
@@ -238,7 +244,7 @@ axs[1].imshow(cv2.cvtColor(myImage, cv2.COLOR_GRAY2RGB))</pre>
         adjustment, not only within that single image, but across all the images we wish to anaylse.
     </p>
     <p>
-        Dynamic thresholding solves this problem by allowing the threshold value to vary within an 
+        Dynamic thresholding solves this problem by allowing the threshold value to vary within an
         image based on some algorithmic properties, thus meaning the human, resource intensive element
         can be removed.
     </p>
@@ -288,7 +294,7 @@ axs[1].imshow(cv2.cvtColor(myImage, cv2.COLOR_GRAY2RGB))</pre>
 <div>
     <p>References:</p>
     <ul>
-        <li><a href="http://www.cs.umd.edu/~djacobs/CMSC426/ImageGradients.pdf" target="_blank">Image Gradients</a>, David Jacobs, Univeristy of Maryland. 
+        <li><a href="http://www.cs.umd.edu/~djacobs/CMSC426/ImageGradients.pdf" target="_blank">Image Gradients</a>, David Jacobs, Univeristy of Maryland.
         </li>
         <li><a href="http://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_imgproc/py_gradients/py_gradients.html" target="_blank">Image Gradients</a>, OpenCV-Python Tutorials.
         </li>
@@ -306,7 +312,7 @@ axs[1].imshow(cv2.cvtColor(myImage, cv2.COLOR_GRAY2RGB))</pre>
     	Sobel kernels are used to calculate the differential of the image are:
     </p>
     <p style="float: left;">
-    	$$ 
+    	$$
     	    G_x = \left[
 			\begin{matrix}
 		    1 & 0 & -1 \\
@@ -316,7 +322,7 @@ axs[1].imshow(cv2.cvtColor(myImage, cv2.COLOR_GRAY2RGB))</pre>
 	    $$
 	</p>
 	<p style="float: left;">
-    	$$ 
+    	$$
     	    G_y = \left[
 			\begin{matrix}
 		    1 & 2 & 1 \\
@@ -433,8 +439,8 @@ imBlank = np.ones(im.shape)
 imGray = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
 imThresh, contours, hierarchy = \
     cv2.findContours(
-        cv2.threshold(imGray, 125, 255, 0)[1], 
-        cv2.RETR_TREE, 
+        cv2.threshold(imGray, 125, 255, 0)[1],
+        cv2.RETR_TREE,
         cv2.CHAIN_APPROX_SIMPLE)
 cv2.drawContours(imBlank, contours, -1, (0,0,0), 1)
 

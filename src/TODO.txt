@@ -1,0 +1,27 @@
+PHASE UNWRAPPING:
+------------------
+https://dsp.stackexchange.com/questions/28221/the-need-for-phase-wrapping?newreg=2b6d61b0d88e421db8ce3a2b496d7c61
+
+https://www.ljmu.ac.uk/~/media/files/ljmu/about-us/faculties-and-schools/tae/geri/onedimensionalphaseunwrapping_finalpdf.pdf?la=en
+
+https://en.wikipedia.org/wiki/Atan2
+
+
+
+WAVELETS?
+---------
+https://georgemdallas.wordpress.com/2014/05/14/wavelets-4-dummies-signal-processing-fourier-transforms-and-heisenberg/
+
+DSP
+----
+http://www.dspcsp.com/
+http://www.dspguide.com/pdfbook.htm
+ College Algebra
+    Trigonometry
+    Calculus (single and multi-variable)
+    Differential Equations (inc. Laplace Transform)
+    Multiple Applied Mathematics topics:
+        Complex-Variables
+        Matrix Theory (Linear Algebra)
+        Probability, Random Variables
+        Numerical Methods

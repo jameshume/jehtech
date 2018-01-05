@@ -66,6 +66,10 @@
 	<p>
 		The above puts a vertical coloured column at column 80. You can have multiple vertical lines using a comma seperated list.
 	</p>
+    <p>
+        To change the colour of the column use the following:
+    </p>
+    <pre>hi ColorColumn ctermbg=lightgrey guibg=lightgrey</pre>
 
 	<h3>Spell Checking</h3>
 	<p>
@@ -86,7 +90,7 @@
 
 	<h3><a name="pathogen.vim"/>Pathogen.Vim</h3>
 	<p>
-		<a target="_blank" href="https://github.com/tpope/vim-pathogen">Pathogen.vim</a>, as the website says, 
+		<a target="_blank" href="https://github.com/tpope/vim-pathogen">Pathogen.vim</a>, as the website says,
 		&quot;...makes it super easy to install plugins and runtime files in their own private directories...&quot;.
 		To install just run the following (on your Linux box) and it will run straight out of the box.
 	</p>
@@ -101,7 +105,7 @@ filetype plugin indent on</pre>
 	</p>
     <p>
         <b>On Windows</b> just replace <tt>~/.vim</tt> with <tt>%userprofile%\vimfiles</tt>. This is the Windows
-        equivalent of the linux <tt>~/.vim</tt> folder. 
+        equivalent of the linux <tt>~/.vim</tt> folder.
     </p>
     <p>
         To check if Pathogen and any bundles have been loaded use <tt>:scriptnames</tt> and
@@ -113,9 +117,9 @@ filetype plugin indent on</pre>
 		 Thank you Munen Alain M. Lafon for the article <a href="http://blog.dispatched.ch/2009/05/24/vim-as-python-ide/" target="_blank">VIM as Python IDE</a>,
 		 which the following is taken from. Loved this Vim plugin... it seems to work with everything from C to Python to SQL.
 	 </p><p>
-		 Install <a target="_blank" href="http://sourceforge.net/projects/ctags/files/ctags/">Exuberant Ctags</a> 
+		 Install <a target="_blank" href="http://sourceforge.net/projects/ctags/files/ctags/">Exuberant Ctags</a>
 		 (the CTags which was distributed with my system was out of date so check this). I installed CTags 5.8 and it worked fine.
-		 To do this download the <tt>.tar.tgz</tt> file to a folder of your choice. Change directory to that folder and run the following 
+		 To do this download the <tt>.tar.tgz</tt> file to a folder of your choice. Change directory to that folder and run the following
 		 (modifying CTags version if there is a mroe up to date one!).
 	 </p>
 	 <pre>tar xzvf ctags-5.8.tar.gz
@@ -136,7 +140,7 @@ cp ./ctags.1 /usr/local/share/man/man1/ctags.1  &amp;&amp;  chmod 644 /usr/local
 		<tt>~/.vim</tt> directory so that <tt>taglist.vim</tt> goes into your <tt>~/.vim/plugin</tt> directory and
 		<tt>taglist.txt</tt> does into your <tt>~/.vim/doc</tt> directory.
 	</p><p>
-		Now to get a code navigation pane on the LHS of your Vim window enter the vim command 
+		Now to get a code navigation pane on the LHS of your Vim window enter the vim command
 		<tt><a target="_blank" href="http://vim-taglist.sourceforge.net/manual.html#:TlistOpen">:TlistOpen</a></tt> and
 		there you go! Proper IDE style code navigation pane...
 	</p>
@@ -151,7 +155,7 @@ cp ./ctags.1 /usr/local/share/man/man1/ctags.1  &amp;&amp;  chmod 644 /usr/local
 
     <h2>Make Linux Vim Key Shortcuts Behave Like Windows</h2>
     <p>I use Vim a lot on Windows and like the cut/copy/paste key shortcuts. Wanted to replicate on my Linux box.
-       The following <a href="http://superuser.com/questions/10588/how-to-make-cut-copy-paste-in-gvim-on-ubuntu-work-with-ctrlx-ctrlc-ctrlv#10604" target="_blank">tip</a> by 
+       The following <a href="http://superuser.com/questions/10588/how-to-make-cut-copy-paste-in-gvim-on-ubuntu-work-with-ctrlx-ctrlc-ctrlv#10604" target="_blank">tip</a> by
        <a href="http://superuser.com/users/1695/ludwig-weinzierl" target="_blanK">Ludwig Weinzierl</a>
        did the trick nicely...
     </p>
@@ -161,9 +165,9 @@ behave mswin</pre>
 
     <h2>My .vimrc file</h2>
     <h3>How I Like It</h3>
-    <p>This is the contents of my .vimrc file. I often forget where it is on my Windows system so 
-       <a name="edit_vimrc" href="http://vim.wikia.com/wiki/Open_vimrc_file" target="_blank">this wiki article</a> very useful. 
-       In brief... you can easily edit .(g)vimrc 
+    <p>This is the contents of my .vimrc file. I often forget where it is on my Windows system so
+       <a name="edit_vimrc" href="http://vim.wikia.com/wiki/Open_vimrc_file" target="_blank">this wiki article</a> very useful.
+       In brief... you can easily edit .(g)vimrc
        files from within Vim using the following.</p>
        <pre>:e $MYVIMRC
 :e $MYGVIMRC</pre>
@@ -171,14 +175,15 @@ behave mswin</pre>
        If one doesn't exist create it in your home directory...</p>
     <p> And this is my current file...</p>
     <pre>set <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#'hlsearch'">hlsearch</a>          -- Heighlight all search patterns matches
-set <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#'incsearch'">incsearch</a>         -- Move cursor to matched string, while typing 
+set <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#'incsearch'">incsearch</a>         -- Move cursor to matched string, while typing
 set <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#'autoindent'">autoindent</a>        -- keep the indent of the previous line
 set <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#'noexpandtab'">noexpandtab</a>       -- tabs are never replaced by spaces
 set <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#'tabstop'">tabstop</a>=3         -- how many columns a tab counts for
 set <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#'shiftwidth'">shiftwidth</a>=3      -- columnsindented by the reindent operations
 set <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#'list'">list</a>              -- turn on special character display
 set <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#'listchars'">listchars</a>=tab:\|\ -- make only tabs replaced by a pipe and space
-set <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#'colorcolumn'">colorcolumn=80</a>              -- Highlight 80th column as guide 
+set <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#'colorcolumn'">colorcolumn=80</a>              -- Highlight 80th column as guide
+hi ColorColumn ctermbg=lightgrey guibg=lightgrey
 
 execute pathogen#infect()
 <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/syntax.html#:syntax">syntax</a> on
@@ -186,7 +191,9 @@ execute pathogen#infect()
 
 source $VIMRUNTIME/<a target="_blank" href="http://vim.cybermirror.org/runtime/mswin.vim">mswin.vim</a>
 <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/gui.html#:behave">behave</a> mswin
- 
+
+set number
+set mouse=a
 set spell spelllang=en_gb
 set guifont=consolas:h12
 colorscheme despacio
@@ -209,7 +216,7 @@ set <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#
 	<p>
 	 	Strangely I found when editing <a href="yorick.html">Yorick</a> script files (a <tt>.i</tt> extension)
 		the tab settings in my <tt>.vimrc</tt> file were being ignored (or superceeded). Thank you to this
-		<a href="http://stackoverflow.com/questions/305574/can-i-stop-settings-in-vimrc-from-being-overwritten-by-plugins" target="_blank">SO question</a> 
+		<a href="http://stackoverflow.com/questions/305574/can-i-stop-settings-in-vimrc-from-being-overwritten-by-plugins" target="_blank">SO question</a>
 		for helping out!
 	</p>
 	<p>
@@ -226,7 +233,7 @@ set <a target="_blank" href="http://vimdoc.sourceforge.net/htmldoc/options.html#
  24: /usr/share/vim/vim73/syntax/progress.vim
 	</pre>
 	<p>Doing a <tt>grep</tt> I then found in <tt>progress.vim</tt>, the line &quot;<tt>/usr/share/vim/vim73/syntax/progress.vim:set expandtab</tt>&quot;.
-	So that's the culprit. This could also have been achieved using the command 
+	So that's the culprit. This could also have been achieved using the command
 	<tt>:verbose set expandtab <b>?</b></tt>, where
 	the question mark is very important! This will report where the value was last set, and indeed, I did see...
 	</p>
