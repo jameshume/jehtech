@@ -49,6 +49,7 @@
     <li><a href="https://stackoverflow.com/questions/927358/how-to-undo-the-last-commits-in-git" target="_blank">How to undo the last commits in Git?</a>, SO Thread.
     </li>
     <li><b>Awesome page... just found this and it looks great:</b> <a href="https://onlywei.github.io/explain-git-with-d3/" target"_blank">Visualizing Git Concepts with D3</a>. Visit this page, it is really cool!</li>
+    <li><a href="https://github.com/loranallensmith/git-scenarios" target="_blank">Common Git Scenarios</a>.</li>
 </ol>
 </div>
 
@@ -346,8 +347,8 @@ git commit --amend</pre>
     <pre>git log --name-status</pre>
 
     <p>To show the log with abbreviated pathnames and a diffstat of changed files:</p>
-    <pre>git log --stat</pre>
-
+    <pre>git log --stat [-M]</pre>
+    <p>Add the <code>-M</code> option to detect and show moves.</p>
 
     <!-- ++++++++++++++++++++++++++++++++ -->
     <h3>Tagging Files With Git</h3>
@@ -453,6 +454,17 @@ git commit --amend</pre>
 git diff --staged: What will go into next commit
 git diff --cached: Synonym for --staged
 git difftool:      To use external diff tool</pre>
+
+    <p>To view only the names of files changed between two commits:</p>
+    <pre>git diff 99f6eae 0544f6a --name-only</pre>
+
+    <p>To produce a diff between commits but only for a subset of files,
+    for example do:</p>
+    <pre>diffstart=99f6eae
+diffend=0544f6a
+wanted=$(git diff $diffstart $diffend --name-only  | grep -v "\(xls\|tsv\)$")
+git diff $diffstart $diffend --full-index  -- $wanted</pre>
+<p></p>
 </div>
 
 
@@ -1398,6 +1410,11 @@ git checkout --(theirs|ours) mergetool.txt</pre>
         to see if they exist. To get rid of ones that have been deleted on the
         remote use <code>git fetch --prune origin</code>.
     </p>
+</div>
+
+<h2>Git and Line Endings</h2>
+<div>
+<pre>https://help.github.com/articles/dealing-with-line-endings/</pre>
 </div>
 
 </div> <!-- END H2 Git Notes -->

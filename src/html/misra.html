@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>MISRA | JEHTech</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">CMake</h1>
+<div style="padding-right:10px;">
+
+<h2>Page Contents</h2>
+<div id="page_contents">
+</div>
+
+<h2>References / useful Links</h2>
+<div>
+<ul>
+	<li>https://critical.eschertech.com/2010/03/03/how-unsafe-is-pointer-arithmetic/</li>
+</ul>
+</div> <!-- END References / useful Links -->
+
+<h2>Pointer Manipulation</h2>
+<div>
+    <h3>MISRA C:2004</h3>
+    <p><blockquote>
+            <p>Rule 17.1 (required): Pointer arithmetic shall only be applied to pointers that address
+               an array or array element.</p>
+        </blockquote>
+    </p>
+
+    <p><blockquote>
+            <p>Rule 17.2 (required): Pointer subtraction shall only be applied to pointers that address
+               elements of the same array.</p>
+        </blockquote>
+    </p>
+
+    <p><blockquote>
+            <p>Rule 17.3 (required): &gt;, &gt;=, &lt;, &lt;= shall not be applied to objects of
+               pointer type, except where they point to the same array</p>
+        </blockquote>
+    </p>
+
+    <p><blockquote>
+            <p>Rule 17.4 (required): Array indexing shall be the only allowed form of pointer
+               arithmetic.</p>
+        </blockquote>
+    </p>
+
+    <p><blockquote>
+            <p>Rule 17.5 (advisory): The declaration of objects shall contain no more than 2 levels of
+               pointer indirection.</p>
+        </blockquote>
+    </p>
+
+    <h3>MISRA C++:2008</h3>
+    <p><blockquote>
+            <p>Rule 5-0-15 (required): Array indexing shall be the only allowed form of pointer
+               arithmetic ... [except that] the increment/decrement operators may be used on
+               iterators implemented by pointers to an array.</p>
+        </blockquote>
+    </p>
+
+    <p><blockquote>
+            <p>Rule 5-0-17 (required): Subtraction between pointers shall only be applied to pointers
+               that address elements of the same array.</p>
+        </blockquote>
+    </p>
+
+    <p><blockquote>
+            <p>Rule 5-0-18 (required): &gt;, &gt;=, &lt;, &lt;= shall not be applied to objects of
+               pointer type, except where they point to the same array.</p>
+        </blockquote>
+    </p>
+
+    <p><blockquote>
+            <p>Rule 5-0-19 (required): The declaration of objects shall contain no more than 2 levels
+               of pointer indirection.</p>
+        </blockquote>
+    </p>
+</div> <!-- Pointer manipulation -->
+
+
+</div> <!-- END H1 padding div -->
+</div>
+</body>
+</html>
+
+

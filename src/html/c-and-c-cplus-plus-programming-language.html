@@ -110,6 +110,8 @@
                 <li>https://github.com/Kitware/KWStyle</li>
                 <li>http://www.suodenjoki.dk/us/archive/2010/cpp-checkstyle.htm</li>
                 <li>https://stackoverflow.com/questions/5195990/using-boostaccumulators-how-can-i-reset-a-rolling-window-size-does-it-keep-e</li>
+                <li>https://eli.thegreenplace.net/2014/variadic-templates-in-c/</li>
+                <li>https://stackoverflow.com/questions/24371868/why-must-a-short-be-converted-to-an-int-before-arithmetic-operations-in-c-and-c</li>
 			</ul>
 		</div>
 
@@ -719,7 +721,7 @@ const int cx = x;</pre>
 
 			<h3>Static &amp; Reinterpret Casts</h3>
 			<p>
-				A static cast converts betwen related types, but will not allow you
+				A static cast converts betwen <b>related types</b>, but will not allow you
 				to convert between unrelated types. For example, a static cast
 				will not cast away constness or volatility.
 			</p>
@@ -731,7 +733,7 @@ const int cx = x;</pre>
 				emmit code to do the cast, just not the type checking code.
 			</p>
 			<p>
-				Reinterpret casts are even more unsafe...
+				Reinterpret casts are even more unsafe and let you convert between unrelated types...
 			</p>
 			<blockquote>
 				<p>
@@ -742,7 +744,19 @@ const int cx = x;</pre>
 				</p>
 				<footer>-- cppreference.com</footer>
 			</blockquote>
-			<p></p>
+			<p>Stroustrup explains this in more detail
+                <a href="http://www.stroustrup.com/bs_faq2.html#static-cast" target="_blank">here</a>.
+                He says that the <q>idea is that conversions allowed by static_cast are somewhat
+                less likely to lead to errors than those that require reinterpret_cast</q>, and
+                gives the following example:
+            </p>
+            <pre class="prettyprint linenums">int a = 7;
+double* p1 = (double*) &amp;a;                  // ok (but a is not a double)
+double* p2 = static_cast&lt;double*&gt;(&amp;a);      // error
+double* p2 = reinterpret_cast&lt;double*&gt;(&amp;a); // ok: I really mean it</pre>
+            <p>Todo:</p>
+            <pre>https://stackoverflow.com/questions/14623266/why-cant-i-reinterpret-cast-uint-to-int</pre>
+            <p></p>
 		</div>
 
 		<h2>IOStreams</h2>
