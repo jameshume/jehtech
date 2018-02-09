@@ -12,6 +12,14 @@ WAVELETS?
 ---------
 https://georgemdallas.wordpress.com/2014/05/14/wavelets-4-dummies-signal-processing-fourier-transforms-and-heisenberg/
 
+SIGNALS AND SYSTEMS:
+----------------------
+https://www.youtube.com/watch?v=YBMGMF-DAVU&list=PL5D4A7494C03A0227
+https://www.youtube.com/watch?v=WHHVsmOE21M
+https://www.youtube.com/watch?v=MSKYeWfsNO0
+https://www.researchgate.net/post/How_do_you_calculate_the_signal-to-noise_ratio_of_a_signal_recorded_in_csv_file
+
+
 DSP
 ----
 http://www.dspcsp.com/

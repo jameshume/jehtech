@@ -112,6 +112,7 @@
                 <li>https://stackoverflow.com/questions/5195990/using-boostaccumulators-how-can-i-reset-a-rolling-window-size-does-it-keep-e</li>
                 <li>https://eli.thegreenplace.net/2014/variadic-templates-in-c/</li>
                 <li>https://stackoverflow.com/questions/24371868/why-must-a-short-be-converted-to-an-int-before-arithmetic-operations-in-c-and-c</li>
+                <li>https://stackoverflow.com/questions/490773/how-is-the-c-exception-handling-runtime-implemented</li>
 			</ul>
 		</div>
 
@@ -699,7 +700,7 @@ const int cx = x;</pre>
 			<h3>Casts Are More Than Treating One Type As Another!</h3>
 			<p>
 				Interestingly a cast may do more than just &quot;switching&quot; types. The compiler
-				may have to generate extra code to achieve this!
+				may have to <em>generate extra code</em> to achieve this!
 			</p>
 			<p>
 				<blockquote>
@@ -712,12 +713,26 @@ const int cx = x;</pre>
 					<footer>--<a href="http://www.aristeia.com/EC3E/3E_item27.pdf" target="_blank">Effective  C++,  Third  Edition</a>, Scott Meyers.</footer>
 				</blockquote>
 			</p>
-			<p>
-				This chapter is particularly illumiating. It explains why <code>dynamic_cast</code>s
-				can be &quot;expensive&quot; - many compilers will do string compares on class names
-				to perform the RTTI. I guess they might store a type variable behind the scenes
-				that the compiler generate code to check against. (Need to reed up on this lol)
-			</p>
+            <p>
+                The referenced chapter is particularly illuminating. It explains why <code>dynamic_cast</code>s
+                can be &quot;expensive&quot; - many compilers will do string compares on class names
+                to perform the RTTI. I guess they might store a type variable behind the scenes
+                that the compiler generate code to check against. (Need to reed up on this lol)
+            </p>
+            <p>
+                For example, let's use <a href="godbolt.org">godbolt.org</a> to examine what happens when we cast from
+                an integer to a double:
+            </p>
+            <p>
+                <img src="##IMG_DIR##/godbolt_screenshot_cast_int_to_double.png" alt="A screenshot of godbold.org to look at csasting an integer to a double"/>
+            </p>
+            <p>
+                Although we have turned off optimizations (we have to otherwise the entire bit of code in the example gets optimized away)
+                we can see what the compiler has had to do to cast the <code>int</code> to a <code>double</code>: it has had to
+                emit the instructions <code>vmov</code> and <code>vcvt.f64.s32</code> to accomplish the cast. The latter
+                command is what converts between an integer and a double and the former puts the integer in an appropriate register.
+                Thus our cast has resulted in extra machine instructions.
+            </p>
 
 			<h3>Static &amp; Reinterpret Casts</h3>
 			<p>
