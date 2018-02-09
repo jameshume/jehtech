@@ -1,3 +1,11 @@
+MATHS:
+--------
+https://ocw.mit.edu/courses/mathematics/18-01-single-variable-calculus-fall-2006/index.htm
+https://ocw.mit.edu/courses/mathematics/18-02-multivariable-calculus-spring-2006/index.htm
+https://ocw.mit.edu/courses/mathematics/18-03sc-differential-equations-fall-2011/
+https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-302-feedback-systems-spring-2007/syllabus/
+
+
 PHASE UNWRAPPING:
 ------------------
 https://dsp.stackexchange.com/questions/28221/the-need-for-phase-wrapping?newreg=2b6d61b0d88e421db8ce3a2b496d7c61
