@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
+    <coordinates>
+      <x>950</x>
+      <y>90</y>
+      <w>476</w>
+      <h>953</h>
+    </coordinates>
+    <panel_attributes>title:Middleware Mixin
+Start
+Middleware is called
+If
+	[process_request()\implemented]
+	Process the HTTP request\and store the response
+
+	[not implemented]
+EndIf
+
+If
+	[no response]
+	call chained\get_response()
+
+	[else]
+EndIf
+
+If
+	[process_response()\implemented]
+	Take whatever respone\has been made and\process it in some way
+
+	[else]
+
+Return the \repesponse
+End
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
+    <coordinates>
+      <x>340</x>
+      <y>90</y>
+      <w>476</w>
+      <h>953</h>
+    </coordinates>
+    <panel_attributes>title:Middleware Mixin
+Start
+Middleware is called
+If
+	[process_request()\implemented]
+	Process the HTTP request\and store the response
+
+	[not implemented]
+EndIf
+
+If
+	[no response]
+	call chained\get_response()
+
+	[else]
+EndIf
+
+If
+	[process_response()\implemented]
+	Take whatever respone\has been made and\process it in some way
+
+	[else]
+
+Return the \repesponse
+End
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>620</x>
+      <y>120</y>
+      <w>460</w>
+      <h>480</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+lw=2</panel_attributes>
+    <additional_attributes>10.0;10.0;270.0;10.0;270.0;460.0;440.0;460.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>620</x>
+      <y>580</y>
+      <w>460</w>
+      <h>460</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+lw=2</panel_attributes>
+    <additional_attributes>440.0;10.0;270.0;10.0;270.0;440.0;10.0;440.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLInterface</id>
+    <coordinates>
+      <x>1450</x>
+      <y>550</y>
+      <w>240</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>BaseHander._middleware_chain</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1230</x>
+      <y>120</y>
+      <w>350</w>
+      <h>470</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>10.0;10.0;270.0;10.0;270.0;450.0;330.0;450.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>210</x>
+      <y>120</y>
+      <w>260</w>
+      <h>470</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>10.0;10.0;70.0;10.0;70.0;450.0;240.0;450.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>120</y>
+      <w>220</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>BaseHandler._get_response()
+&lt;&lt;django.core.handlers.base&gt;&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>210</x>
+      <y>140</y>
+      <w>260</w>
+      <h>480</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+lw=2</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;10.0;50.0;460.0;240.0;460.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1230</x>
+      <y>1010</y>
+      <w>290</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>270.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+</diagram>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLSequenceAllInOne</id>
+    <coordinates>
+      <x>0</x>
+      <y>0</y>
+      <w>3100</w>
+      <h>1470</h>
+    </coordinates>
+    <panel_attributes>title=Django WSGI Handling
+autoTick=false
+obj=WSGI Server~a 
+obj=django.core.wsgi~b
+obj=django.core.handlers.wsgi.WSGIHandler &lt;&lt;object&gt;&gt;~c
+obj=django.core.handlers.wsgi.WSGIRequest &lt;&lt;object&gt;&gt;~d
+obj=Middleware~e
+
+
+tick=
+a.a1-&gt;b.b1 :get_wsgi_application()
+
+tick=
+b.b2-&gt;c.a2 :WSGIHandler object created
+
+tick=
+c.c3-&gt;gate :load middleware (from MIDDLEWARE in settings.py). This looks up settings.MIDDLEWARE and creates a chain of callables. Each middleware has its functions, where available, for process_view(), process_template_response() and process_exception() added to a list of handlers. The last middleware in settings.MIDDLEWARE is used as the start of the chain. The middle ware is given the handler BaseHandler._get_response(), which returns an HttpResponse object for the given HttpRequest.
+
+tick=
+c.c4-&gt;b.b3
+
+tick=
+b.b4-&gt;a.a2
+
+tick=
+a.a3-&gt;c.c5 :object called with environ and start_response callback
+
+tick=
+c.c6.&gt;gate :send request_started signal
+
+tick=
+c.c7-&gt;d.d1 : create WSGIRequest object with environ
+
+tick=
+d.d2-&gt;c.c8
+
+tick=
+c-&gt;c + :via self.get_response(WSGIReqest object), call self._middleware_chain(WSGIReqest object) which is a variable set to base._get_rsponse() - each middle ware is a callable that will call that class' process_request(WSGIReqest) || get_response(WSGIReqest) [This is _get_response from core.handlers.base] || process_response(WSGIReqest) :\n     def __call__(self, request):\n        response = None\n        if hasattr(self, 'process_request'):\n            response = self.process_request(request)\n        if not response:\n            response = self.get_response(request)\n        if hasattr(self, 'process_response'):\n            response = self.process_response(request, response)\n        return response
+
+tick=
+
+tick=
+c.c9-&gt;gate : get_resolver()
+
+tick=
+c.c10-&gt;gate : call each middleware callable (resolves to __call__ shown for the view middle wares. If there is a respone break -i.e. first view middle ware to return a response ends the chain - if no response contruct the exception explanation. then render and return the response
+
+tick=
+e.e222-&gt;c.c2210 + :return HttpResponse object 
+
+
+
+
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

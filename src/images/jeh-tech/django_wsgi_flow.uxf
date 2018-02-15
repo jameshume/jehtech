@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>5</zoom_level>
+  <element>
+    <id>UMLSequenceAllInOne</id>
+    <coordinates>
+      <x>55</x>
+      <y>190</y>
+      <w>755</w>
+      <h>360</h>
+    </coordinates>
+    <panel_attributes>title=Django WSGI Handling
+autoTick=false
+obj=WSGI Server~a 
+obj=django.core.wsgi~b
+obj=django.core.handlers.WSGIHandler &lt;&lt;object&gt;&gt;~c
+obj=django.core.handlers.WSGIRequest &lt;&lt;object&gt;&gt;~d
+
+
+tick=
+a.a1-&gt;b.b1 :get_wsgi_application()
+
+tick=
+b.b2-&gt;c.a2 :WSGIHandler object created
+
+tick=
+c.c3-&gt;gate :load middleware (from MIDDLEWARE in settings.py). This looks up settings.MIDDLEWARE and creates list of middleware functions: each middleware has its functions, where available, for process_view(), process_template_response() and process_exception(). These are added to a list of handlers.
+
+tick=
+c.c4-&gt;b.b3
+
+tick=
+b.b4-&gt;a.a2
+
+tick=
+a.a3-&gt;c.c5 :object called with environ and start_response callback
+
+tick=
+c.c6.&gt;gate :send request_started signal
+
+tick=
+c.c7-&gt;d.d1 : create WSGIRequest object with environ
+
+tick=
+d.d2-&gt;c.c8
+
+tick=
+c-&gt;c + : self.get_response()
+
+tick=
+
+tick=
+c.c9-&gt;a.a : start_response()
+
+tick=
+c-&gt;a : return reponse body
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

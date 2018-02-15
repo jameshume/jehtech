@@ -1,0 +1,641 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>9</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1314</x>
+      <y>180</y>
+      <w>387</w>
+      <h>315</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+*View : object*
+django.views.generic.base
+--
++ as_view(cls, **initkwargs) : @classonlymethod
++ dispatch(self, request, *args, **kwargs)
++ http_method_not_allowed(self, request, *args, **kwargs)
++ options(self, request, *args, **kwargs)
+--
+Static:
+   + http_method_names (static)
+Class:
+   + request
+   + args
+   + kwargs
+--
+All subclasses of view must override functions with the same name as the various HTTP method names get, post, put, patch, delete, head, options and trace. The Django route for this view will call the class' dispatch() method with the HTTP method name. Displatch() uses this name to resolve to a function with that name and calls that function.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1962</x>
+      <y>297</y>
+      <w>369</w>
+      <h>162</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+*TemplateResponseMixin : object*
+/django.views.generic.base/
+--
++render_to_response(self, context, **response_kwargs)
++get_template_names(self)
+--
+Static:
+   + template_name = None
+   + template_engine = None
+   + response_class = TemplateResponse
+   + content_type = None</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>450</x>
+      <y>630</y>
+      <w>270</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+*ContextMixin : object*
+/django.views.generic.base/
+--
+def get_context_data(self, **kwargs)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>45</x>
+      <y>801</y>
+      <w>270</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+*TemplateView*
+/django.views.generic.base/
+--
++get(self, request, *args, **kwargs)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>171</x>
+      <y>486</y>
+      <w>1350</w>
+      <h>333</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>1480.0;10.0;1480.0;100.0;10.0;100.0;10.0;350.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>0</x>
+      <y>144</y>
+      <w>2160</w>
+      <h>702</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>2380.0;350.0;2380.0;480.0;2100.0;480.0;2100.0;10.0;20.0;10.0;10.0;760.0;50.0;760.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>171</x>
+      <y>693</y>
+      <w>414</w>
+      <h>81</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>440.0;10.0;440.0;70.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1494</x>
+      <y>486</y>
+      <w>252</w>
+      <h>162</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0;260.0;100.0;260.0;160.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2142</x>
+      <y>225</y>
+      <w>27</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2016</x>
+      <y>180</y>
+      <w>270</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+*TemplateRepose*
+/django.template.response/
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>450</x>
+      <y>819</y>
+      <w>288</w>
+      <h>270</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+*FormMixin*
+/django.views.generic.edit/
+--
+get_initial(self)
+get_prefix(self)
+get_form_class(self)
+get_form(self, form_class=None)
+get_form_kwargs(self)
+get_success_url(self)
+form_valid(self, form)
+form_invalid(self, form)
+get_context_data(self, **kwargs) override
+
+--
+Static:
+   + initial = {}
+   + form_class = None
+   + success_url = None
+   + prefix = None
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>558</x>
+      <y>693</y>
+      <w>27</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>459</x>
+      <y>1143</y>
+      <w>252</w>
+      <h>135</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+*ModelFormMixin*
+/django.views.generic.edit/
+--
++ get_form_class(self) override
++ get_form_kwargs(self) override
++ get_success_url(self) override
++ form_valid(self, form) override
+--
+Staitic:
+   + fields = None</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>576</x>
+      <y>1080</y>
+      <w>27</w>
+      <h>81</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>63</x>
+      <y>999</y>
+      <w>252</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+*SingleObjectMixin*
+/django.views.generic.detail/
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>180</x>
+      <y>1044</y>
+      <w>423</w>
+      <h>117</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0;450.0;80.0;450.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1026</x>
+      <y>630</y>
+      <w>270</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+*ProcessFormView*
+/django.views.generic.edit/
+--
++ get(self, request, *args, **kwargs)
++ post(self, request, *args, **kwargs)
++ def put(self, *args, **kwargs)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1152</x>
+      <y>486</y>
+      <w>369</w>
+      <h>162</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>390.0;10.0;390.0;100.0;10.0;100.0;10.0;160.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1287</x>
+      <y>828</y>
+      <w>270</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+*BaseFormView*
+/django.views.generic.edit/
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1152</x>
+      <y>711</y>
+      <w>279</w>
+      <h>135</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-
+fg=blue</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0;290.0;80.0;290.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1557</x>
+      <y>999</y>
+      <w>270</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+*FormView*
+/django.views.generic.edit/
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1413</x>
+      <y>873</y>
+      <w>297</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0;310.0;70.0;310.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1683</x>
+      <y>450</y>
+      <w>477</w>
+      <h>567</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>510.0;10.0;510.0;540.0;10.0;540.0;10.0;610.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1053</x>
+      <y>1359</y>
+      <w>270</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+*BaseCreateView*
+/django.views.generic.edit/
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>576</x>
+      <y>1269</y>
+      <w>576</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0;620.0;60.0;620.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1152</x>
+      <y>711</y>
+      <w>27</w>
+      <h>666</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-
+fg=blue</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;720.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1053</x>
+      <y>1503</y>
+      <w>270</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+*CreateView*
+/django.views.generic.edit/
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1179</x>
+      <y>1404</y>
+      <w>27</w>
+      <h>117</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1179</x>
+      <y>1404</y>
+      <w>360</w>
+      <h>117</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>380.0;10.0;380.0;60.0;10.0;60.0;10.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>558</x>
+      <y>1494</y>
+      <w>270</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+*BaseUpdateView*
+/django.views.generic.edit/
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>576</x>
+      <y>1269</y>
+      <w>135</w>
+      <h>243</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0;130.0;60.0;130.0;250.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>774</x>
+      <y>711</y>
+      <w>405</w>
+      <h>801</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-
+fg=blue</panel_attributes>
+    <additional_attributes>430.0;10.0;430.0;620.0;10.0;620.0;10.0;870.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>549</x>
+      <y>1647</y>
+      <w>270</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+*UpdateView*
+/django.views.generic.edit/
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>684</x>
+      <y>1539</y>
+      <w>27</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>765</x>
+      <y>1404</y>
+      <w>774</w>
+      <h>261</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>840.0;10.0;840.0;220.0;10.0;220.0;10.0;270.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1728</x>
+      <y>1359</y>
+      <w>270</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+*DeletionMixin*
+/django.views.generic.edit/
+--
+delete(self, request, *args, **kwargs)
+post(self, request, *args, **kwargs)
+get_success_url(self)
+--
+Static:
+   + success_url = None
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1890</x>
+      <y>1512</y>
+      <w>270</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+*BaseDeleteView*
+/django.views.generic.edit/
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1854</x>
+      <y>1404</y>
+      <w>180</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0;180.0;60.0;180.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2079</x>
+      <y>1359</y>
+      <w>270</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+*BaseDetailView*
+/django.views.generic.detail/
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2007</x>
+      <y>1404</y>
+      <w>225</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>230.0;10.0;230.0;60.0;10.0;60.0;10.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1890</x>
+      <y>1638</y>
+      <w>270</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+*DeleteView*
+/django.views.generic.edit/
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2007</x>
+      <y>1548</y>
+      <w>27</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1512</x>
+      <y>1404</y>
+      <w>522</w>
+      <h>252</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;220.0;560.0;220.0;560.0;260.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1386</x>
+      <y>1359</y>
+      <w>270</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+*SingleObjectTemplateResponseMixin*
+/django.views.generic.detail/
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1593</x>
+      <y>630</y>
+      <w>270</w>
+      <h>234</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+*RedirectView*
+/django.views.generic.base/
+--
++ get_redirect_url(self, *args, **kwargs)
++ get(self, request, *args, **kwargs)
++ head(self, request, *args, **kwargs)
++ post(self, request, *args, **kwargs)
++ options(self, request, *args, **kwargs)
++ delete(self, request, *args, **kwargs)
++ put(self, request, *args, **kwargs)
++ patch(self, request, *args, **kwargs)
+--
+Static:
+   + permanent = False
+   + url = None
+   + pattern_name = None
+   + query_string = False
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

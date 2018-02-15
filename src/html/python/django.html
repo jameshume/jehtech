@@ -98,8 +98,236 @@
             <pre>python manage.py runserver <i>ip-address</i>:<i>port</i></pre>
         </div> <!-- END H2: Create A Django Project -->
 
-        <h2>Database Migrations</h2>
+        <h2>Middleware &amp; How HTTP Requests Get To A View</h2>
         <div>
+            <p>
+                WSGI stands for Web Server Gateway Interface and is a specification of how a 
+                webserver can call a Python framework with an HTTP request and get a response.
+            </p>
+            <p>
+                A WSGI compantible framework will implement a callable object that receives as
+                parameters the HTTPRequest object and a callback, which it uses to send the HTTP
+                response headers to the server. The function must then return the HTTP reponse
+                body as a list of strings.
+            </p>
+            <p>
+                The start of the processes, clipped in places, is shown below (I took this from the
+                Django 1.11 source code).
+            </p>
+            <p>
+                <img src="##IMG_DIR##/django_wsgi_flow_1.png" alt="DJango WSGI flow"/>
+            </p>
+            <p>
+                This doesn't yet show how requests get to a view. That'll come. For now, note that 
+                the server will call a core django function, <code>get_wsgi_application()</code>
+                that returns a callable object. This object is called and passed a dictionary
+                of CGI-like parametrs (key, value pairs) and a callback function. For example the
+                dictionary on my machine, when I printed it out, looked something like this:
+            </p>
+            <pre>&lt;class 'dict'&gt;
+{'&lt;snip&gt;
+ 'DJANGO_SETTINGS_MODULE': 'crossfit.settings', 
+ 'TZ': 'UTC',
+ 'SERVER_NAME': 'localhost',
+ 'GATEWAY_INTERFACE': 'CGI/1.1',
+ 'SERVER_PORT': '8000',
+ &lt;snip&gt;
+ 'REQUEST_METHOD': 'GET',
+ &lt;snip&gt; }</pre>
+            <p>
+                The parameters will create an
+                HTTPRequest object, and the callback will be used by Django to send the server 
+                the HTTP headers that will form the reponse. The called object finally must return
+                the HTTP response body as a list of strings.
+            </p>
+            <p>
+                See <a href="https://www.python.org/dev/peps/pep-3333/" target="_blank">PEP 3333 -- Python Web Server Gateway Interface</a>.
+            </p>
+            <p>
+                When <code>get_wsgi_application()</code> is called it returns a callable object.
+                The function creates a new instance of a <code>WSGIHandler</code> object. As part
+                of its construction the Django middleware is loaded by consulting the
+                list of strings, defined by the variable <code>MIDDLEWARE</code> in the 
+                <code>settings.py</code> file of your Django project.
+            </p>
+            <p>
+                The <code>WSGIHandler</code>, which is a child of <code>django.core.handlers.base.BaseHandler</code>
+                loads the middleware using the <code>BaseHandler</code>. It examimes each middleware 
+                object in <code>MIDDLEWARE</code>.
+            </p>
+            <p>
+                Each middleware object can implement some or all of the the functions
+            </p>
+            <p>
+                <ol>
+                    <li><code>process_view()</code></li>
+                    <li><code>process_template_response()</code></li>
+                    <li><code>process_exception()</code></li>
+                </ol>
+            </p>
+            <p>
+                If a middleware object implements a function above, that function is added to
+                a list of middleware functions of that type that the handler object caches.
+            </p>
+            <p>
+                The middleware objects must, in addition to the above, form a chain. 
+                The first middleware object created will
+                point to <code>BaseHandler._get_response()</code>, so it will
+                call <code>BaseHandler._get_response</code>. The second middleware object points
+                to the first middle ware and so on. 
+                Only a reference to the last middleware object therefore needs to be remembered. 
+                In this way,
+                later on, when the middleware chain is executed, the <code>MIDDLEWARE</code> list
+                is essentially executed in reverse order and the very last thing to execute is
+                <code>BaseHandler._get_response</code>. 
+            </p>
+            <p>
+                For example, the default <code>MIDDLEWARE</code> that Django spits out for me is this:
+            </p>
+            <pre>MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]</pre>
+            <p>
+                This means that the following middleware chain is formed:
+            </p>
+            <p>
+                <img src="##IMG_DIR##/django_middleware_chain.png"/>
+            </p>
+            <p>
+                So that is how the Django middleware is loaded. That was the arrow in the above
+                diagram which went to &quot;nowhere&quot;... it was too much to fit that process
+                into the diagram, but thats what was happening :)
+            </p>
+            <p>
+                Okay, so, we've loaded the middleware and created the <code>WSGIHandler</code>
+                object, which is returned to the WSGI server, for it to call with the 
+                CGI-like variables (environment) and the <code>start_response</code> callback
+                function.
+            </p>
+            <p>
+                The big bit is how the HTTP response is generated through the call from
+                <code>WSGIHandler</code> to its base class function <code>get_response()</code>.
+                Here the fun starts...
+            </p>
+            <p>The WSGI server calls the WSGIHandler object. One of the first things it does is
+                to send a Django-framework signal. Then it 
+                takes the dictionary passed to it and converts it into a <code>WSGIRequst</code>
+                object. This class mostly seems to extract more important dictionary key/value 
+                pairs and presents them as object properties. For example, it might parse a GET
+                request's query string and handle cookies etc.
+            </p>
+            <p>
+                The meaty bit is the next bit where the respone is processed by calling the base
+                class method <code>get_response()</code>.
+            </p>
+            <p>
+                The first thing it does it to call the middleware chain. This means the last
+                module defined in the settings <code>MIDDLEWARE</code> list is called, I.e., all
+                middleware is a callable of some kind.
+            </p>
+            <p>
+                It seems all the middleware include the <code>MiddlewareMixin</code> class which is
+                what defines the <code>__call__()</code> function for the middleware object. This
+                is found in <code>django.utils.deprecation</code>, so I guess they must be wanting
+                to get rid of this pretty soon. Anyway, when a middlware is called it implements
+                the following logic:
+            </p>
+            <p>
+                <img src="##IMG_DIR##/django_middleware_mixin_logic.png"/>
+            </p>
+            <p>
+                Given the above, it is then unsuprising that when adding a few prints into the
+                relevant funtions we see the following output when requesting a page:
+            </p>
+            <pre>SecurityMiddleware
+    Calling process_request SecurityMiddleware
+    Calling get_response SecurityMiddleware
+SessionMiddleware
+    Calling process_request SessionMiddleware
+    Calling get_response SessionMiddleware
+CommonMiddleware
+    Calling process_request CommonMiddleware
+    Calling get_response CommonMiddleware
+CsrfViewMiddleware
+    Calling process_request CsrfViewMiddleware
+    Calling get_response CsrfViewMiddleware
+AuthenticationMiddleware
+    Calling process_request AuthenticationMiddleware
+    Calling get_response AuthenticationMiddleware
+MessageMiddleware
+    Calling process_request MessageMiddleware
+    Calling get_response MessageMiddleware
+XFrameOptionsMiddleware
+    Calling get_response XFrameOptionsMiddleware
+_GET_RESPONSE CALLED
+NO MIDDLE WARE RESPONSE
+VIEW view() function called
+Request obj is &lt;WSGIRequest: GET '/gym-users/'&gt;
+View dispatch(), method is &quot;get&quot;
+    Calling process_response XFrameOptionsMiddleware
+    Calling process_response MessageMiddleware
+    Calling process_response CsrfViewMiddleware
+    Calling process_response CommonMiddleware
+    Calling process_response SessionMiddleware
+    Calling process_response SecurityMiddleware</pre>
+            <p>
+                An important point is that if any middleware created a
+                response in their <code>process_request()</code> method they would break the chain.
+                This would presumably be if, for example, the security middleware detected some kind
+                of security issue and didn't want the processing of this HTTP request to continue.
+                Thus we can say that each middle ware, as well as potentially sanitizing the
+                request object can also function as a <em>gateway</em>, either allowing the request
+                to continue or not as it deems fit.
+            </p>
+            <p>
+                By passing what the various middleware objects are doing (I haven't looked at them
+                in detail, I'm interested in the view processing here), lets continue. Finally,
+                after all the middlewares have processed the request and found nothing 
+                illegal/dangerous the last part of the chain <code>_get_response()</code> is called.
+            </p>
+            <p>
+                It is now that a <code>resolver</code> is created. This is what compares the HTTP
+                request URL with all of the configured <code>urlpatterns</code>. Once a match is 
+                found a match object continaing a callback, the callback's arguments and keyword
+                arguments is returned. The callback is in fact the view associated with the <code>url(...)</code>
+                that the URL matched the HTTP request URL. So, if it was a FBV then it is a function 
+                and if it is a CBV it is a class object that is callable.
+            </p>
+            <p>
+                Every middleware object in the <code>_view_middleware</code> list mentioned earlier
+                is now called in order and passed the url-match callback and arguments. The first
+                one to return an <code>HTTPResonse</code> object &quot;wins&quot; - that is the reponse
+                that will be used and no views will be called.
+            </p>
+            <p>
+                Assuming non of the middleware caused a fuss, our view will now be called. For a
+                FBV this is easy enough to see how - it just calls the function we wrote. For a CBV,
+                however, we generall don't implement any specific entry point for our class. To understand
+                how, then, our class is called we must remember we passed it to the <code>url</code>
+                function using <code>ourClass.as_view()</code>. The function <code>as_view()</code>
+                is part of the <code>django.views.generic.base.View</code>. It is a Django class method so
+                can only be called on the class definition and not on a class instance. It
+                wraps the class inside a closure that returns a function that accepts the HTTPRequest
+                object and arguments. It is this function that encloses and instance of the view class
+                that is then called via its <CODE>dispatch()</CODE> with the <code>WSGIRequest</code>
+                object as its first parameter.
+            </p>
+            <p>
+                The <code>dispatch()</code> method is quite simple &quot;router&quot; that takes
+                the HTTP request method, converts it to lower case, and then tries to call that method
+                on the class. Therefore if it was a GET request, it will call the view's <code>get()</code>
+                method. If it was a POST request it calls the view's <code>post()</code> method and
+                so on...
+            </p>
+            <p>
+                <img src="##IMG_DIR##/django_views_uml.png"/>
+            </p>
         </div>
 	</div> <!-- End content div -->
 </body>
