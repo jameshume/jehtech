@@ -20,25 +20,15 @@ mjAPI.config({
 mjAPI.start();
 
 var filename = "C:\\Users\\jh\\Documents\\GIT\\jehtech\\src\\html\\mathsy_stuff\\math_revision.html"
-var html = fs.readFile(filename, (err, data) => {
-    var document = new JSDOM(data).window.document;
-    console.log("Rendering:", filename);
+const input = fs.readFileSync(filename);
 
-    mjAPI.typeset({
-        html: document.body.innerHTML,
-        singleDollars: true,
-        renderer: "CommonHTML",
-        inputs: ["TeX"],
-        //xmlns:"svg",
-        svg:true
-      },
-      function (result) {
-        console.log(result);
-        if (!result.errors) {
-          console.log("FINE");
-          console.log(result.html);
-          console.log(result.svg);
-        }
-        else {console.log("ERRORS"); }
-    });
+var mjpage = require('mathjax-node-page');
+mjpage(input, {format: ["TeX"]}, {svg: true}, function(output) {
+    console.log(output); // resulting HTML string
 });
+
+process.exit(); // TEST
+
+// https://a3nm.net/blog/selfhost_mathjax.html
+//<p><span class="math-tex">\(x = {-b \pm \sqrt{b^2-4ac} \over 2a}\)</span></p>
+/// node C:\Users\jh\node_modules\mathjax-node-page\bin\mjpage < "html\mathsy_stuff\math_revision.html" > wow.html

@@ -6,8 +6,9 @@
 	<title>Guassian Curve Notes</title>
 	<!-- META_INSERT -->
 	<!-- CSS_INSERT -->
-	<!-- JAVASCRIPT_INSERT -->	
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>  
+	<!-- JAVASCRIPT_INSERT -->
+	<!--
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
 	<script type="text/x-mathjax-config">
       MathJax.Hub.Config({
           tex2jax: {
@@ -17,7 +18,8 @@
           displayIndent: "2em"
       });
 	</script>
-	<script> 
+	-->
+	<script>
 		$(function(){
 			mpld3.draw_figure("exp_curve", exp_curve);
 			mpld3.draw_figure("basic_gauss", basic_gauss);
@@ -25,7 +27,7 @@
 			mpld3.draw_figure("inverted_parabola", inverted_parabola);
 			mpld3.draw_figure("final_gauss", final_gauss);
 		});
-	</script>   
+	</script>
 </head>
 
 <body>
@@ -64,7 +66,7 @@
 			<p>
 				The exponential will just tend to infinity. Note that it hits a $y$-value of 1 when $x$ is zero. Note that the
 				guassian above hits a value of 1 at the some point. So, what if we made the input to the exponential function
-				a series of $x$ values that increased up towards zero and then decreased in a mirror image fashion? The input to our 
+				a series of $x$ values that increased up towards zero and then decreased in a mirror image fashion? The input to our
 				exponention could be defined as $-|x|$, ie., we'd plot
 
 				$$e^{-|x|}$$
@@ -73,23 +75,23 @@
 			</p>
 			<div id="two_mirrored_exp_curve"></div>
 			<p>
-				The green curve is the exponential. The blue is the input we've given the exponential function. Now the $x$-range 
+				The green curve is the exponential. The blue is the input we've given the exponential function. Now the $x$-range
 				is always negative, and taking the exponent of the negative number produces a small number which exponentially increases
 				to 1 when as $x$ approaches 0. That's why we see a graph increasing from zero to one and then decreasing in the mirror image...
 			</p>
 			<p>
-				It's beginning to look a little like a gaussian but the peak is somewhat discontinuous right at the top... it ends 
+				It's beginning to look a little like a gaussian but the peak is somewhat discontinuous right at the top... it ends
 				in a pin head as $x$ increases linearly towards zero.
 			</p>
 			<p>
 				To smooth this pin head out we need to exponentially increase in the middle of the curve on either side of centre
-				but as we apprach center we want to decrease our rate of increase. In other words as x approaches zero the input 
+				but as we apprach center we want to decrease our rate of increase. In other words as x approaches zero the input
 				to the exp function needs to increase less than linearly, to the point where the rate of increase at $x=0$ is zero
 				and we smoothly accellerate in and out of this point.
 			</p>
 			<p>
 				We've transformed our input to the exponential function from a basic $x$ series to something that helps produce
-				a steeple-like curve. Can we transform this further so that for each element in the $x$ series the distance 
+				a steeple-like curve. Can we transform this further so that for each element in the $x$ series the distance
 				between each pair of values decreacreases towards zero as $x$ approaches zero?
 			</p>
 			<p>
@@ -99,7 +101,7 @@
 			<p>
 				It's clear to see that for values of $x$ closer to zero the rate of increase in $y$ is far less.
 				Thus at large absolute values of $x$ the rate of increase in $y$ is large and as we get closer to
-				$x =  0$ the rate of increase in $y$ approaches zero. So, the $y$ values can become our input to 
+				$x =  0$ the rate of increase in $y$ approaches zero. So, the $y$ values can become our input to
 				the exponential function as they still have this property of symmetry about zero and being all
 				negative. They also have the extra property we're looking for... the smoothness at $x = 0$.
 			</p>
@@ -115,7 +117,7 @@
 			<h3>Some Properties Of This Curve</h3>
 			<p>
 			The <a href="http://mathworld.wolfram.com/GaussianIntegral.html" target="_blank">integral of the above function</a>, $e^{-x^2}$, is
-			$\sqrt\pi$. Therefore, if we divide the function by $\sqrt\pi$ we get a curve under which the area is 1, and doing this gives us 
+			$\sqrt\pi$. Therefore, if we divide the function by $\sqrt\pi$ we get a curve under which the area is 1, and doing this gives us
 			something that almost looks like the Guassian probability function!
 
 			$$P(x) = \frac{1}{\sqrt\pi} \cdot e^{-x^2}$$

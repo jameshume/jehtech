@@ -7,6 +7,7 @@
 	<!-- META_INSERT -->
 	<link rel="stylesheet" href="../jeh-monolith.css" type="text/css" />
 	<script src="../jeh-monolith.js"></script>
+  <!--
 	<script type="text/x-mathjax-config">
 		MathJax.Hub.Config({
 			tex2jax: {
@@ -21,7 +22,7 @@
 		ul li .MathJax {font-size: 3em;}
 	</style>
 
-	<script> 
+	<script>
 	MathJax.Hub.Queue(function () {
 		$("#dialog").dialog("close")
 	});
@@ -41,13 +42,13 @@
       });
 	});
   </script>
-
+  -->
   <style type="text/css">
       .noborder {
          border: 0px;
       }
 
-      table.dataDefTable tr > td:first-child { 
+      table.dataDefTable tr > td:first-child {
          font-weight: bold;
       }
 
@@ -75,6 +76,7 @@
    -- This is JEHTech --
 </div>
 
+<!--
 <div id="dialog" title="Page still rendering...">
 	<table style="width: 100%; margin: 0px; padding: 0px; border: 0px;">
 		<tr>
@@ -87,6 +89,7 @@
 		</tr>
 	</table>
 </div>
+-->
 
 <div id="sidebar">
    <h1 class="title">Links...</h1>
@@ -148,23 +151,23 @@
           </td>
       <tr>
           <td>Random Variable</td>
-          <td>The numerical outcome of a random experiment. <em>Discrete</em> if it 
+          <td>The numerical outcome of a random experiment. <em>Discrete</em> if it
                can take on more than a countable number of values. <em>Continuous </em>
                if it can take any value over an uncountable range.
            </td>
       </tr>
       <tr>
           <td>I.D.D.</td>
-          <td>A sequence or other collection of random variables is independent 
-             and <b>identically distributed (i.i.d.)</b> if each random variable 
-             has the same probability distribution as the others and all are 
+          <td>A sequence or other collection of random variables is independent
+             and <b>identically distributed (i.i.d.)</b> if each random variable
+             has the same probability distribution as the others and all are
              mutually independent.
           </td>
       </tr>
       <tr><td>Qualitative Data</td>
-          <td>Data where there is no measurable difference (in a quantitative 
+          <td>Data where there is no measurable difference (in a quantitative
               sense) between two values (that makes sense). For example, the colour of a car.
-              The car can be &quot;nice&quot; or &quot;sporty&quot;, but we 
+              The car can be &quot;nice&quot; or &quot;sporty&quot;, but we
               can't define the the difference in terms of a number like 4.83,
               for example.
            </td>
@@ -184,7 +187,7 @@
 
    <h4>Populations and samples...</h4>
    <p>It is always worth keeping in mind that <b>probability is a measure
-      describing the likelihood of an event from the <u>population</u></b>. 
+      describing the likelihood of an event from the <u>population</u></b>.
       It is <em>not</em> &quot;in&quot; the data set (or sample)
       obtained... a sample is user to <em>infer</em> a probability about a
       population parameter.
@@ -192,7 +195,7 @@
    <table class="dataDefTable noborder">
       <tr><td>Population</td>
           <td>The complete set of items of interest.
-             Size is very large, denoted <i>N</i>, possibly infinite. 
+             Size is very large, denoted <i>N</i>, possibly infinite.
              Population is the entire pool from which a statistical sample is draw.
           </td>
       </tr>
@@ -208,7 +211,7 @@
           </td>
       </tr>
       <tr><td>Parameter</td>
-          <td>Numeric measure describing a characteristic of the 
+          <td>Numeric measure describing a characteristic of the
               <i>population</i>.
           </td>
       </tr>
@@ -219,7 +222,7 @@
       </tr>
       <tr><td>Inference</td>
           <td>The process of making conclusions about the propulation from noisy
-              data that was drawn from it. Involves formulating conclusions using data 
+              data that was drawn from it. Involves formulating conclusions using data
               and quantifying the uncertainty associated with those conclusions.
           </td>
       </tr>
@@ -261,8 +264,8 @@
           </td>
           <tr><td>Probability Density Function (PDF)</td>
               <td>Only associated with <em>continuous</em> random variables.
-                  The area between two limits corresponds to the probabilty that the random 
-                  variable lies within those limits. A single point has 
+                  The area between two limits corresponds to the probabilty that the random
+                  variable lies within those limits. A single point has
                   a zero probability. Also note that the
                   function <b>descibes the population</b>.
               </td>
@@ -272,7 +275,7 @@
               </td>
           </tr>
           <tr><td>Quantile</td>
-              <td>The $\alpha^{th}$ quantile of a distribution, $F$, is the point 
+              <td>The $\alpha^{th}$ quantile of a distribution, $F$, is the point
                   $x_\alpha$ such that $F(x_\alpha) = \alpha$.
               </td>
           </tr>
@@ -289,7 +292,7 @@
    </p>
    <p>
       So I wondered this. Take a dice roll. The population is the complete set of possible items <tt>{1, 2, 3, 4, 5, 6}</tt>.
-      The sample space is the set of all possible outcomes, also <tt>{1, 2, 3, 4, 5, 6}</tt>. So here sample space and 
+      The sample space is the set of all possible outcomes, also <tt>{1, 2, 3, 4, 5, 6}</tt>. So here sample space and
       population appear to be the same thing, so when are they not and what are the distinguishing factors between the two??
    </p>
    <p>
@@ -299,17 +302,17 @@
       <q>...For many experiments, there may be more than one plausible sample space available, depending on what result is of interest to the experimenter. For example, when drawing a card from a standard deck of fifty-two playing cards, one possibility for the sample space could be the various ranks (Ace through King), while another could be the suits (clubs, diamonds, hearts, or spades)...</q>
    </p>
    <p>
-      Ah ha! So my population is the set of all cards <tt>{1_heart, 2_heart, ..., 
-      ace_heart, 1_club, ...}</tt> but the sample space may be, if we are looking 
+      Ah ha! So my population is the set of all cards <tt>{1_heart, 2_heart, ...,
+      ace_heart, 1_club, ...}</tt> but the sample space may be, if we are looking
       for the suits, just <tt>{heart, club, diamond, spade}</tt>. So the population and
-      sample space are different here. In this case the sample space consists of cards 
-      separated into groups of suites. I.e. the popultation has been split into 4 
+      sample space are different here. In this case the sample space consists of cards
+      separated into groups of suites. I.e. the popultation has been split into 4
       groups because there are 4 events of interest. These events cover the sample space.
    </p>
    <p>
-      In summary the population is the set of items I'm looking at. The sample space may or may not be 
+      In summary the population is the set of items I'm looking at. The sample space may or may not be
       the population... that depends on what question about the population is being asked and how
-      the items in the population are grouped per event. 
+      the items in the population are grouped per event.
    </p>
 
    <h3><a name="classicprob">Classic Probability</a></h3>
@@ -330,13 +333,13 @@
    </p>
    <p>
       An example of the use of classical probability might be a simple bag of
-      marbles. There are 3 blue marbles, 2 red, and 1 yellow. 
+      marbles. There are 3 blue marbles, 2 red, and 1 yellow.
    </p>
    <p>
       If my experiment is to draw out 1 marble then the set of basic outcomes
-      is 
-      <tt>{B<sub>1</sub>, B<sub>2</sub>, B<sub>3</sub>, 
-           R<sub>1</sub>, R<sub>2</sub>, Y<sub>1</sub>}</tt>. 
+      is
+      <tt>{B<sub>1</sub>, B<sub>2</sub>, B<sub>3</sub>,
+           R<sub>1</sub>, R<sub>2</sub>, Y<sub>1</sub>}</tt>.
       This is also the population!
       Also, note that the sample space isn't
       <tt>{B, R, Y}</tt> because we can differentiate between similar coloured
@@ -346,7 +349,7 @@
       So, what is the probability of picking out a red. Well, here $N = 6$ and
       $N_A = 2$ because there are 2 red marbles in the sack. Therefore the
       probability is:
-      
+
       $$
          P(red) = \frac{2}{6} = \frac{1}{3}
       $$
@@ -355,7 +358,7 @@
    <p>
       What if my experiment is to draw 2 marbles from the sack? Now the set
       of all possible basic outcomes, if the order of draw was important
-      would be a 
+      would be a
       <a href="math_revision.html#combinations_permutations">permutation</a>.
       This means that if I draw, for example, R<sub>1</sub> then B<sub>2</sub>,
       I would consider it to be a distinctly different outcomes to drawing
@@ -408,7 +411,7 @@
    </p>
    <p>
    So, if my question is what is the probability of drawing a red <em>then</em> a yellow
-      marble, my event space is the set 
+      marble, my event space is the set
       <tt>{R<sub>1</sub>Y<sub>1</sub>, R<sub>2</sub>Y<sub>1</sub>}</tt>.<br/>
       Thus, if we say event A is &quot;draw a red then a yellow marble&quot;,
 
@@ -418,7 +421,7 @@
    </p>
 
    <p>
-      What if we don't care about the order. What is the probability of 
+      What if we don't care about the order. What is the probability of
       drawing a red <em>and</em> a yellow? I.e. we consider RY and YR to be
       the same event...
    </p>
@@ -435,14 +438,14 @@
          P(A) =  \frac{N_A}{N} = \frac{4}{30} = \frac{2}{15}
       $$
    </p>
-   
+
    <p>
       We are essentially now
       dealing with <a href="math_revision.html#combinations_permutations">combinations</a>.
    </p>
    <p>
       Therefore in the above table, where we see things like...
-   </p> 
+   </p>
    <table class="allborders">
       <tr><td>Selection 1</td>    <td>Selection 2</td></tr>
       <tr><td>B<sub>1</sub></td>  <td>B<sub>2</sub></td></tr>
@@ -493,7 +496,7 @@
       $$
    </p>
    <p>
-      And, again, that is how many selections (not included the ones we've deleted using a strikethrough font) 
+      And, again, that is how many selections (not included the ones we've deleted using a strikethrough font)
       we have in the above table (thankfully!).
    </p>
    <p>
@@ -504,7 +507,7 @@
       <tt>{R<sub>1</sub>Y<sub>1</sub>, R<sub>2</sub>Y<sub>1</sub>
          <del>Y<sub>1</sub>R<sub>1</sub>, Y<sub>1</sub>R<sub>2</sub></del>}</tt><br/>
       because I not longer care about order-of-draw...
-      
+
       Thus, if we say event A is &quot;draw a red and a yellow marble&quot;,
       $$
          P(A) =  \frac{N_A}{N} = \frac{2}{15}
@@ -512,7 +515,7 @@
    </p>
    <p>
    		We have noted that in clasical probability that the various outcomes <em>are equally likely</em>.
-   		This means that from my bag of marbles am am equally likely to pick any marble. But what if this 
+   		This means that from my bag of marbles am am equally likely to pick any marble. But what if this
    		was not the case? What if the blue marbles are very heavy and sink to the bottom of the sack whilst
    		the other marbles tend to rest on top of the blue marbles. We could hardly say that I am as likely
    		to pick a blue as I am a red in this case. In this cas we <em>cannot</em> use classical probability
@@ -521,7 +524,7 @@
 
    <h3>Relative Frequency Probability</h3>
    <p>
-      Here the probability of an 
+      Here the probability of an
       event occuring is is the limit of the proportion of times an event occurs in
       a large number of trials. Why the limit? Well, the limit would mean we tested
       the entire popultation. Usually, however, we just pick a very large <i>n</i>
@@ -545,7 +548,7 @@
    </p>
    <p>
       If the coin was entirely fair then we would expect an equal probability
-      of getting a head or a tail. Frequentist theory states that as the sample 
+      of getting a head or a tail. Frequentist theory states that as the sample
       size gets bigger, i.e., as we do more and more coin flips, if the coin
       is fair the probabilities will tend towards 50%. So if we did 1,000,000
       samples, for example, we might expect...
@@ -617,7 +620,7 @@
    <p>
       Why is this? Let's think of this from the relative frequency point of
       view. We know that $P(A) = n_a/n$ and that $P(B) = n_b/n$ for the sample
-      and as n tends to infinity for the population. 
+      and as n tends to infinity for the population.
     </p>
     <p>
       For every basic outcome in the set A, we can
@@ -636,14 +639,14 @@
       So, what if the events are <em>not</em> independent? Then it is no longer true
       that the count of combination of all possible outcomes is $n_a \times n_b$.
       Why is this? This is because the events that can be in both A and B
-      now represent a much smaller portion of sample space. The probability 
-      that A and B occur is now the solid-gray shaded area of the 
+      now represent a much smaller portion of sample space. The probability
+      that A and B occur is now the solid-gray shaded area of the
       <a href="#two_dependent_venn">Venn diagram for dependent events</a>.
    </p>
    <p>
       Think if it this way. For A and B to both occur, at least one must have
       occurred, so now the only possible choices from the other event are
-      in the overlapping region, not in the entire event space. Keep reading 
+      in the overlapping region, not in the entire event space. Keep reading
       the next section on condition probability to find out more
       about why this is an indicator of independence.
    </p>
@@ -651,8 +654,8 @@
       <table class="allborders">
       <tr><td></td>              <td>$A$</td>                  <td>$\overline A$</td>                  <td></td></tr>
       <tr><td>$B$</td>           <td>$A \cap B$</td>           <td>$\overline A \cap B$</td>           <td>$\Sigma = P(B)$</td></tr>
-      <tr><td>$\overline B$</td> <td>$A \cap \overline B$</td> <td>$\overline A \cap \overline B$</td> <td>$\Sigma = P(\overline B)$</td></tr>             
-      <tr><td></td>              <td>$\Sigma = P(A)$</td>      <td>$\Sigma = P(\overline A)$</td>      <td>$\Sigma = 1$</td></tr>             
+      <tr><td>$\overline B$</td> <td>$A \cap \overline B$</td> <td>$\overline A \cap \overline B$</td> <td>$\Sigma = P(\overline B)$</td></tr>
+      <tr><td></td>              <td>$\Sigma = P(A)$</td>      <td>$\Sigma = P(\overline A)$</td>      <td>$\Sigma = 1$</td></tr>
       </table>
    </p>
 
@@ -660,7 +663,7 @@
    <p>
       If I live with my partner it seems intuitively correct to say that the
       probability of myself getting a cold would be heightend if my partner
-      caught a cold. Thus there is an intutive difference between the 
+      caught a cold. Thus there is an intutive difference between the
       probability I will catch a cold and the probability that I will catch
       a cold, given my partner has already caught one.
    </p>
@@ -694,7 +697,7 @@
    </p>
    <p>
       This makes intuitive sense. If B has occurred then the number of outcomes
-      to &quot;choose&quot; from is represented by the circle for B in the 
+      to &quot;choose&quot; from is represented by the circle for B in the
       Venn diagram below. The number of of outcomes that can belong to event
       A, given that we know event B has occurred, is the intersection.
       Therefore, our sample space is really now all the outcomes for event B,
@@ -725,12 +728,12 @@
       $P(A | B)$ the <b>posterior</b> probability.
    </p>
    <p>
-      <q>...A posterior probability is the probability of assigning observations 
-         to groups given the data. A prior probability is the probability that 
-         an observation will fall into a group before you collect the data. For 
-         example, if you are classifying the buyers of a specific car, you might 
-         already know that 60% of purchasers are male and 40% are female. If you 
-         know or can estimate these probabilities, a discriminant analysis can 
+      <q>...A posterior probability is the probability of assigning observations
+         to groups given the data. A prior probability is the probability that
+         an observation will fall into a group before you collect the data. For
+         example, if you are classifying the buyers of a specific car, you might
+         already know that 60% of purchasers are male and 40% are female. If you
+         know or can estimate these probabilities, a discriminant analysis can
          use these prior probabilities in calculating the posterior probabilities.
       </q><br/>
       <i>-- <a href="http://support.minitab.com/en-us/minitab/17/topic-library/modeling-statistics/multivariate/discriminant-analysis/what-are-posterior-and-prior-probabilities/" target="_blank">Minitab support</a></i>
@@ -739,7 +742,7 @@
       From the definitions so far we can also see that
 
       $$
-         P(A | B) + P(\overline A | B) = 1 
+         P(A | B) + P(\overline A | B) = 1
       $$
 
       But that the following does not (necessarily) equal 1,
@@ -761,7 +764,7 @@
    <p>
       Any clinical test is normally judged by it's sensitivity and specificity.
       Sensitivity is the probability that the test reports infection if the
-      patient has Influenza (i.e true positives). 
+      patient has Influenza (i.e true positives).
       Sepcificity is the probability that the test
       reports the all-clear if the patient does not have Influenza (i.e., true
       negatives).
@@ -787,7 +790,7 @@
 
       But a clinitian wants to know the probabilities the other way around. The
       clinician will ask &quot;if my patient has the flu, what is the probability
-      that the test will call a positive?&quot; I.e., the clinician wants to 
+      that the test will call a positive?&quot; I.e., the clinician wants to
       know $P(Flu | +)$
    </p>
    <p>
@@ -817,7 +820,7 @@
       $$
       \begin{align}
       P(+) &= P(+ \cap Flu) + P(+ \cap \overline{Flu}) \\
-              &= 0.045 + ? 
+              &= 0.045 + ?
       \end{align}
       $$
 
@@ -838,7 +841,7 @@
       $$
    </p>
 
-   
+
 
 
    <h3>Sensitivity v.s. Specificity</h3>
@@ -881,43 +884,43 @@
       By re-arranging the above we can arrive at the following:
 
       $$
-         P(A | B) = \frac{P(B | A)P(A)}{P(B)},\ \ \ P(B | A) = \frac{P(A | B)P(B)}{P(A)} 
+         P(A | B) = \frac{P(B | A)P(A)}{P(B)},\ \ \ P(B | A) = \frac{P(A | B)P(B)}{P(A)}
       $$
    </p>
    <p>
-      Because we know that $P(B) = P(A \cap B) + P(\overline A \cap B)$ we 
+      Because we know that $P(B) = P(A \cap B) + P(\overline A \cap B)$ we
       could also write:
-  
+
       $$
-         P(A | B) = \frac{P(B | A)P(A)}{P(A \cap B) + P(\overline A \cap B)} 
+         P(A | B) = \frac{P(B | A)P(A)}{P(A \cap B) + P(\overline A \cap B)}
       $$
- 
+
       An because we know $P(A \cap B) = P(B | A)P(A)$ and  $P(\overline A \cap B) = P(\overline B | A)P(A)$,
       we can re-write this as:
 
       $$
-         P(A | B) = \frac{P(B | A)P(A)}{P(B | A)P(A) + P(\overline B | A)P(A)} 
+         P(A | B) = \frac{P(B | A)P(A)}{P(B | A)P(A) + P(\overline B | A)P(A)}
       $$
    </p>
 
    <p>
-      Remember that we called $P(x)$ the <em>prior</em> probability. The prior is the 
+      Remember that we called $P(x)$ the <em>prior</em> probability. The prior is the
       probability distribution that represents your uncertainty over the random variable
       X. The <em>posterior</em> is the distribution representing your uncertainty after
-      you have observed events that are related to or influence your event-of-interest: It is 
+      you have observed events that are related to or influence your event-of-interest: It is
       a conditional distribution, conditioning on the observed data. Bayes' theorem has
       given us a way to relate the two.
    </p>
    <p>
-      <img src="##IMG_DIR##/bayes_rule_flow_chart.PNG" 
+      <img src="##IMG_DIR##/bayes_rule_flow_chart.PNG"
            alt="Flow diagram of Bayes Rule converting prior probability to posterior">
    </p>
 
 
-  
+
       <h4>Alternative Statement</h4>
       <p>
-         This can sometimes be usefull re-stated as follows. If all events $E_i$ are 
+         This can sometimes be usefull re-stated as follows. If all events $E_i$ are
          mutually exclusive and exhaustive and we have some other event A then we can
          write:
 
@@ -926,7 +929,7 @@
          $$
 
          And because in this case,
-      
+
          $$
          \begin{align}
             P(A) &= P(A \cap E_1) + P(A \cap E_2) + \cdots + P(A \cap E_n) \\
@@ -935,11 +938,11 @@
          $$
 
          We can say:
-   
+
          $$
             P(E_i | A) = \frac{P(A | E_i)P(E_i)}{P(A | E_1)P(E_1) + P(A | E_2)P(E_2) + \cdots + P(A | E_n)P(E_n)}
          $$
-   
+
          The advantage of this expression is that the probabilities involves are sometimes
          more readily available.
       </p>
@@ -949,7 +952,7 @@
    <h3>General Definitions</h3>
    <p>
       The <b>Probability Mass Function (PMF)</b> is another name for the <b>Probability
-      Distribution Function (PDF)</b>, $P(x)$, of a discrete random variable X 
+      Distribution Function (PDF)</b>, $P(x)$, of a discrete random variable X
       expresses the probability that $X$ takes the value $x$. I.e,
 
       $$
@@ -967,7 +970,7 @@
       The <b>Cumulative Mass Function (CMF)</b> or <b>Cumulative Probability Function (CPF)</b>,
       $F(x_0)$, for a random variable $X$,
       gives the probability that X does not exceed the value $x_0$:
-   
+
       $$ F(x_0) = P(X \le x_0) = \sum_{x \le x_0} P(x)$$
 
       The CMF has the following properties:
@@ -981,7 +984,7 @@
    <p>
       <a name="def_expected_value">
       <b>Expected value</b> defined as:
-      
+
       $$
       E(X) = \mu = \sum_x xP(x)
       $$
@@ -997,9 +1000,9 @@
       $$
    </p>
    <p>
-      <b>Variance</b>, $\sigma^2$ is the average squared distance from the mean and is 
-      defined as follows. The square is taken so that distances don't cancel 
-      eachother out (i.e, a negative distance and positive distance could 
+      <b>Variance</b>, $\sigma^2$ is the average squared distance from the mean and is
+      defined as follows. The square is taken so that distances don't cancel
+      eachother out (i.e, a negative distance and positive distance could
       result is a very small average distance, which is not what we want).
 
       $$
@@ -1018,7 +1021,7 @@
          &= \sum_x x^2P(x) - 2\mu\sum xP(x) + \mu^2\sum P(x) \\
          &= E[X^2] - 2\mu E[X] + E[X]^2 \\
          &= E[X^2] - 2E[X]^2 + E[X]^2 \text{  , (because } \mu == E[X]\text{ and } \therefore \mu E[X] == E[X]^2 \text{)}\\
-         &= E[X^2] - E[X]^2 
+         &= E[X^2] - E[X]^2
       \end{align}
       $$
 
@@ -1114,9 +1117,9 @@
       Of course, the dice does not have a face value of 4.75, but over many many rolls this would be the average score.
       The variance and standard deviation are calculated in the same way using the above formulas.
    </p>
-   
+
    <h4><a name="linear_functions_of_x">Linear Functions Of X</a></h4>
-   
+
    <p>
       The expected value and variance of a linear function of $X$ is another fairly useful result and
       we will use it to get some very important results in <a href="#SamplingDistributions">the section
@@ -1239,14 +1242,14 @@
    </p>
    <p>
       Note that there are only 2 colours of ball in our bag... this is because
-      we are talking about an experiement where there are only two outcomes, 
+      we are talking about an experiement where there are only two outcomes,
       labeled &quot;success&quot; and &quot;failure&quot;. We could view
       selecting a blue as &quot;success&quot; and a red as &quot;failure&quot;,
       or vice versa.
    </p>
    <p>
    So... selecting a blue and a red ball. Sounds like $P(\text{blue}\ \cap\ \text{red})$ right?
-      Well, almost, but <em>not quite</em>. Take a look at the sample space below, 
+      Well, almost, but <em>not quite</em>. Take a look at the sample space below,
       out of which, the events of interested are highlighted in a light blue colour.
    </p>
    <p>
@@ -1262,31 +1265,31 @@
           <td>$B_z$</td>
           <td>$R_x$</td>
           <td>$R_y$</td></tr>
-      <tr><td>$B_x$</td> 
+      <tr><td>$B_x$</td>
           <td>$B_x B_x$</td>
           <td>$B_x B_y$</td>
           <td>$B_x B_z$</td>
           <td class="selcell">$B_x R_x$</td>
           <td class="selcell">$B_x R_y$</td></tr>
-      <tr><td>$B_y$</td> 
+      <tr><td>$B_y$</td>
           <td>$B_y B_x$</td>
           <td>$B_y B_y$</td>
           <td>$B_y B_z$</td>
           <td class="selcell">$B_y R_x$</td>
           <td class="selcell">$B_y R_y$</td></tr>
-      <tr><td>$B_z$</td> 
+      <tr><td>$B_z$</td>
           <td>$B_z B_x$</td>
           <td>$B_z B_y$</td>
           <td>$B_z B_z$</td>
           <td class="selcell">$B_z R_x$</td>
           <td class="selcell">$B_z R_y$</td></tr>
-      <tr><td>$R_x$</td> 
+      <tr><td>$R_x$</td>
           <td class="selcell">$R_x B_x$</td>
           <td class="selcell">$R_x B_y$</td>
           <td class="selcell">$R_x B_z$</td>
           <td>$R_x R_x$</td>
           <td>$R_x R_y$</td></tr>
-      <tr><td>$R_y$</td> 
+      <tr><td>$R_y$</td>
           <td class="selcell">$R_y B_x$</td>
           <td class="selcell">$R_y B_y$</td>
           <td class="selcell">$R_y B_z$</td>
@@ -1316,39 +1319,39 @@
       So the two expressions are clearly not the same thing. To clear up my
       confusion I asked the guys at Maths Exchange, and got the following
       <a href="http://math.stackexchange.com/questions/1705507/binomial-distribution-p-mboxblue-cap-mboxred-ne-p-mboxpick-a-blue-a"
-         target="_blank">awesome answer</a> from a very nice chap named 
+         target="_blank">awesome answer</a> from a very nice chap named
       <a href="http://math.stackexchange.com/users/6622/joriki" target="_blank">Joriki</a>.
       Im quoting it (almost) verbatim because it was just so good!
    </p>
    <div style="border-left: 3px solid lightblue; padding-left: 10px;">
       <p>This confusion can be resolved by careful attention to definitions and notation.
       </p>
-      <p>Where you write $P(B\cap R)$, you call the events $B$ and $R$ 
-         &quot;a blue&quot; and &quot;a red&quot; respectively. Implicitly 
-         you're referring to two different draws (if you were referring to a 
-         single draw, you'd have $P(B\cap R)=0$), but you're not 
+      <p>Where you write $P(B\cap R)$, you call the events $B$ and $R$
+         &quot;a blue&quot; and &quot;a red&quot; respectively. Implicitly
+         you're referring to two different draws (if you were referring to a
+         single draw, you'd have $P(B\cap R)=0$), but you're not
          distinguishing the events accordingly, and this leads to confusion.
       </p>
       <p>
-         The events you are interested are $B_1$, a blue ball is drawn on 
-         the first draw, $R_1$, a red ball is drawn on the first draw, 
-         $B_2$, a blue ball is drawn on the second draw, and $R_2$, a red 
-         ball is drawn on the second draw. We have $P(B_1)=P(B_2)=\frac35$ 
+         The events you are interested are $B_1$, a blue ball is drawn on
+         the first draw, $R_1$, a red ball is drawn on the first draw,
+         $B_2$, a blue ball is drawn on the second draw, and $R_2$, a red
+         ball is drawn on the second draw. We have $P(B_1)=P(B_2)=\frac35$
          and $P(R_1)=P(R_2)=\frac25$.
       </p>
-      <p>You want to know $P((B_1\cap R_2)\cup(B_2\cap R_1))$. Since the 
+      <p>You want to know $P((B_1\cap R_2)\cup(B_2\cap R_1))$. Since the
          events $B_1\cap R_2$ and $B_2\cap R_1$ are mutually exclusive, this is
 
          $$P((B_1\cap R_2)\cup(B_2\cap R_1))=P(B_1\cap R_2)+P(B_2\cap R_1)\;,$$
 
-         and since the first and second draws are independent, this is 
+         and since the first and second draws are independent, this is
 
          $$
          \begin{align}
          P(B_1\cap R_2)+P(B_2\cap R_1) &= P(B_1)P(R_2)+P(B_2)P(R_1) \\
          &= 2\cdot\frac35\cdot\frac25 \\
          &= 2\cdot P(B)P(R) \\
-         &= 2\cdot p^1\cdot (1-p)^1 
+         &= 2\cdot p^1\cdot (1-p)^1
          \end{align}
          $$
       </p>
@@ -1360,9 +1363,9 @@
    </p>
    <p>
       So, having understood this, we can see that to get the total probability
-      of $m$ successess (1 blue ball) out of $n$ trials (2 selections), in 
+      of $m$ successess (1 blue ball) out of $n$ trials (2 selections), in
       the case where events are
-      independent, we are concerned with the number of 
+      independent, we are concerned with the number of
       <a href="math_revision.html#combinations_permutations">combintations</a> in
       which the events can occur.
    </p>
@@ -1391,11 +1394,11 @@
       $$
    </p>
    <p>
-      Let's do this to exhaustion... let's imagine another bag. It doesn't 
+      Let's do this to exhaustion... let's imagine another bag. It doesn't
       matter how many blue and red balls are in there, just so long as I can
       select 3 blue balls and 1 red. $P(\text{blue}) = p$ and $P(\text{red}) = (1-p)$.
       Once we've made this selection of 3 blues, 1 red, the question is,
-      how many ways were there of getting to this outcome. Now let's check 
+      how many ways were there of getting to this outcome. Now let's check
       our understanding of using combinations (esp. vs. permutations) to get this...
    </p>
    <p>
@@ -1434,11 +1437,11 @@
       P(x)= \frac{n!}{x!(n-x)!} \cdot p^x \cdot (1-p)^{(n-x)}
       $$
 
-      Where $x = 0, 1, \dots, n$, meanding that this is the probability of 
+      Where $x = 0, 1, \dots, n$, meanding that this is the probability of
       $x$ successes out of $n$ trials.
    </p>
    <p>
-      Recalling that 
+      Recalling that
       $$
       E(X) = \mu = \sum_x xP(x)
       $$
@@ -1448,11 +1451,11 @@
 
       $$
       \begin{align}
-      E(X) = \mu &= \sum_{x=0}^{x\le n} x \cdot \left(\frac{n!}{x!(n-x)!} \cdot p^x \cdot (1-p)^{(n-x)}\right) 
+      E(X) = \mu &= \sum_{x=0}^{x\le n} x \cdot \left(\frac{n!}{x!(n-x)!} \cdot p^x \cdot (1-p)^{(n-x)}\right)
       \end{align}
       $$
-      
-      And... the rest of the proof gets a little complicated... 
+
+      And... the rest of the proof gets a little complicated...
       <a href="http://www.math.ubc.ca/~feldman/m302/binomial.pdf"
          target="_blank">this PDF by Joel Feldman gives the derivation</a>, which
       I found by doing a quick google. Liked the explanation.
@@ -1500,10 +1503,10 @@ for p in pLst:
    dist = binom(n, p)
    ax.plot(x, dist.pmf(x),linestyle='steps-mid')
 
-ax.legend(['$p={}$'.format(p) for p in pLst], 
-          ncol = 3, 
-          prop=fontP, 
-          bbox_to_anchor=[0.5, 1.0], 
+ax.legend(['$p={}$'.format(p) for p in pLst],
+          ncol = 3,
+          prop=fontP,
+          bbox_to_anchor=[0.5, 1.0],
           loc='upper center')
 fig.show()
 fig.savefig('binomial_distrib.png', format='png')</pre>
@@ -1515,17 +1518,17 @@ fig.savefig('binomial_distrib.png', format='png')</pre>
    <h3>Poisson Distribution</h3>
    <p>
       Didn't like the starting explanation in [1] so had a look on Wikipedia and
-      found a link to the 
+      found a link to the
       <a href="http://www.umass.edu/wsp/resources/poisson/index.html"
          target="_blank">UMass Amherst Uni's stats page on the Poisson distribution</a>
       which I though was really well written. That is the main reference here.
    </p>
    <p>
       Poisson distribution gives the probability of an event occuring some
-      number of times in a <em>specific interval</em>. This could be time, distance, 
-      whatever. What matters is that the <em>interval is specific and fixed</em>. 
+      number of times in a <em>specific interval</em>. This could be time, distance,
+      whatever. What matters is that the <em>interval is specific and fixed</em>.
      <p>
-   <p>The example used 
+   <p>The example used
       on the UMass Amherst is letters received in a day. The interval here is
       one day. The poisson distribution will then tell you the probability of
       getting a certain number of letters in one day, the <em>interval</em>. Other
@@ -1534,10 +1537,10 @@ fig.savefig('binomial_distrib.png', format='png')</pre>
    </p>
    <p>
       The interval is one component. The other is an already observed average
-      rate per interval, or expected number of successes in an interval, $\lambda$. 
-      For example, we might have observed we get on average 5 
-      letters per day ($\lambda=5$), or that 1003 planes land at our airport 
-      ($\lambda=1003$) per day or that there are 4 linux server crashes per year 
+      rate per interval, or expected number of successes in an interval, $\lambda$.
+      For example, we might have observed we get on average 5
+      letters per day ($\lambda=5$), or that 1003 planes land at our airport
+      ($\lambda=1003$) per day or that there are 4 linux server crashes per year
       ($\lambda=4$) etc...
    </p>
    <p>
@@ -1547,7 +1550,7 @@ fig.savefig('binomial_distrib.png', format='png')</pre>
    <ul>
       <li>The #occurrences can be counted as an integer</li>
       <li>The average #occurrences is known</li>
-      <li>The probability of the occurence of an event is constant for all 
+      <li>The probability of the occurence of an event is constant for all
           subintervals. E.g., if we divided the day into minutes, the probability
           of receiving a letter in any minute of the day is the same as for any
           other minute.</li>
@@ -1555,7 +1558,7 @@ fig.savefig('binomial_distrib.png', format='png')</pre>
       <li>Occurrences are independent</li>
    </ul>
    <p>
-      The distribution is defined as follows, where $\lambda$ is the expected 
+      The distribution is defined as follows, where $\lambda$ is the expected
       number of events per interval.
 
       $$
@@ -1593,10 +1596,10 @@ fig, ax = pl.subplots()
 for numSuccesses in expectedNumberOfSuccessesLst:
    ax.plot(x, poisson.pmf(x, numSuccesses),linestyle='steps-mid')
 
-ax.legend(['$\lambda={}$'.format(n) for n in expectedNumberOfSuccessesLst], 
-          ncol = 3, 
-          prop=fontP, 
-          bbox_to_anchor=[0.5, 1.0], 
+ax.legend(['$\lambda={}$'.format(n) for n in expectedNumberOfSuccessesLst],
+          ncol = 3,
+          prop=fontP,
+          bbox_to_anchor=[0.5, 1.0],
           loc='upper center')
 fig.show()
 pl.show()
@@ -1605,15 +1608,15 @@ fig.savefig('poisson_distrib.png', format='png')</pre>
       <img src="##IMG_DIR##/poisson_distrib.png"/>
    </p>
    <p>
-      Lets take a little example. Looking at the 
-      <a href="https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/463045/rrcgb2014-01.pdf" 
-         target="_blank">UK government report on road casualties in 2014</a>, 
+      Lets take a little example. Looking at the
+      <a href="https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/463045/rrcgb2014-01.pdf"
+         target="_blank">UK government report on road casualties in 2014</a>,
       there were a reported 194,477 casualties in 2014. This gives us an
-      average of 532.8137 (4dp) casualties per day! 
+      average of 532.8137 (4dp) casualties per day!
       So, we could ask some questions...
    </p>
    <p>
-      What is the probability that <em>no</em> accidents occur on any given 
+      What is the probability that <em>no</em> accidents occur on any given
       day? Recalling that...
 
       $$
@@ -1635,25 +1638,25 @@ fig.savefig('poisson_distrib.png', format='png')</pre>
    </p>
    <p>
       Of course, we could critisize this analysis as not taking into account
-      seaons, or weather conditions etc etc. In winter, for example, when the 
-      roads are icy one might expect the probability of an accident to be 
+      seaons, or weather conditions etc etc. In winter, for example, when the
+      roads are icy one might expect the probability of an accident to be
       greater, but for the purposes of a little example, I've kept it simple.
    </p>
    <p>
       We might also ask, what is the probability that the number of casualties
-      is less than, say, 300? 
+      is less than, say, 300?
       $$
       P(X \lt 300) = \sum_{x=0}^{299} P(X = x)
       $$
 
-      Eek! Don't really want to be calculating this by hand so let's use 
+      Eek! Don't really want to be calculating this by hand so let's use
       Python's SciPi package:
    </p>
    <pre class="prettyprint linenums">from scipy.stats import poisson
 print poisson.cdf(299, 194477.0/365)</pre>
-   <p>This outputs $2.24102710469e-28$ which is still pretty unlikely!. 
+   <p>This outputs $2.24102710469e-28$ which is still pretty unlikely!.
       For $X \lt 400$ we get $9.60741455596e-10$, for $X \lt 500$
-      we get $0.0783182362497$. So we can imagine that the distribution is 
+      we get $0.0783182362497$. So we can imagine that the distribution is
       really quite steep:
    </p>
    <pre class="prettyprint linenums">import matplotlib.pyplot as pl
@@ -1672,11 +1675,11 @@ fig.savefig('poisson_road_fatilities_distrib.png', format='png')</pre>
 
    <h3>Joint Distributions</h3>
    <p>
-      When one thing is likely to vary in dependence on another thing. For 
+      When one thing is likely to vary in dependence on another thing. For
       example, the likely longevity of my milk will correspond to some extent
       to the temperature of my fridge: there is a <em>relationship between
       these two variables so it is important that any model produced includes
-      the effect of this relationship</em>. We need to define our 
+      the effect of this relationship</em>. We need to define our
       probabilities that random variables <em>simultaneously</em> take some
       values.
    </p>
@@ -1785,7 +1788,7 @@ fig.savefig('poisson_road_fatilities_distrib.png', format='png')</pre>
       Strongly positive indicates a good <em>linear</em> relationship and near zero indicates no
       relationship. Note that if two random variables are <b>statistically
       independent</b>, the covariance between them is (near) zero. But, if
-      the covariance is (near) zero it does not necessarily mean there is 
+      the covariance is (near) zero it does not necessarily mean there is
       no relationship, it might just not be <em>linear</em>.
    </p>
    <p>
@@ -1832,9 +1835,9 @@ fig.savefig('poisson_road_fatilities_distrib.png', format='png')</pre>
       Call our PDF $f(x)$... Then the total area under the curve $f(x)$ is 1.
       I.e.,
       $$
-         \int_{-\infty}^{\infty} f(x) \mathrm dx = 1.0 
+         \int_{-\infty}^{\infty} f(x) \mathrm dx = 1.0
       $$
-      
+
       The probability that $X$ takes a value between two limits is...
       $$
          P(x_1 \lt X \lt x_2) = \int_{x_1}^{x_2} f(x) \mathrm dx
@@ -1845,18 +1848,18 @@ fig.savefig('poisson_road_fatilities_distrib.png', format='png')</pre>
          CDF(x_0) = \int_{min(X)}^{x_0} f(x) \mathrm dx
       $$
 
-      We can judge whether a distribution is a valid PDF using the above 
+      We can judge whether a distribution is a valid PDF using the above
       definitions.
    </p>
    <h3>Uniform Distribution</h3>
    <p>
       The uniform distribution is one where the probability that $X$ takes
-      a value in a fixed size interval is the same regardless of where the 
-      interval &quot;starts&quot; (as long as the interval is contained 
+      a value in a fixed size interval is the same regardless of where the
+      interval &quot;starts&quot; (as long as the interval is contained
       entirely within the range for which $X$ is non-zero). I.e,
 
       $$
-      f(x) = 
+      f(x) =
       \begin{cases}
          \frac{1}{x_u - x_l}, &x_l \le X \le x_u\\[2ex]
          0, &\text{otherwise}
@@ -1886,12 +1889,12 @@ fig.savefig('poisson_road_fatilities_distrib.png', format='png')</pre>
       $$
          X \sim N(\mu, \sigma^2)
       $$
-      There is no simple algebraic expression for the cummulative distribution 
+      There is no simple algebraic expression for the cummulative distribution
       function. Can't really say I fancy the idea of integrating the above
-      function! There are 
-      <a href="https://en.wikipedia.org/wiki/Normal_distribution#Numerical_approximations_for_the_normal_CDF" 
+      function! There are
+      <a href="https://en.wikipedia.org/wiki/Normal_distribution#Numerical_approximations_for_the_normal_CDF"
          target="_blank">many numerical approximations</a>.
-      Computer could do it for us, but another way is to <em>convert 
+      Computer could do it for us, but another way is to <em>convert
       every normal distribution to the standard normal distribution</em>.
    </p>
    <p>
@@ -1902,12 +1905,12 @@ fig.savefig('poisson_road_fatilities_distrib.png', format='png')</pre>
          Z \sim N(0, 1)
       $$
 
-      And 
+      And
 
       $$
          Z = \frac{X - \mu}{\sigma}
       $$
-  
+
       In English we can say that the <b>z-score/value is the number of standard deviations
       $X$ is away from the (population) mean $\mu$</b>.
     </p>
@@ -1918,7 +1921,7 @@ fig.savefig('poisson_road_fatilities_distrib.png', format='png')</pre>
          P\left( \frac{a - \mu}{\sigma} \lt Z \lt \frac{b - \mu}{\sigma}\right)
       $$
 
-      For which we can consult a 
+      For which we can consult a
       <a href="https://en.wikipedia.org/wiki/Standard_normal_table"
          target="_blank">standard normal table</a>.
    </p>
@@ -1932,7 +1935,7 @@ fig.savefig('poisson_road_fatilities_distrib.png', format='png')</pre>
    <h4>Percentiles</h4>
    <p>
       <a href="https://en.wikipedia.org/wiki/Percentile"
-         target="_blank">Wikipedia defines a percentile</a> as a measure 
+         target="_blank">Wikipedia defines a percentile</a> as a measure
       giving the value below which a given percentage of obersvations fall. If
       an observation is AT the x<sup>th</sup> percentile then it has the value, V,
       at which x% of the scores can be found. If it is IN this percentile then
@@ -1947,7 +1950,7 @@ fig.savefig('poisson_road_fatilities_distrib.png', format='png')</pre>
       In the standard normal distribution...
    </p>
    <ol>
-      <li>90<sup>th</sup> percentile is at z=1.28. (This is because 
+      <li>90<sup>th</sup> percentile is at z=1.28. (This is because
           $P(z &lt; 1.28) = 90%$).</li>
       <li>95<sup>th</sup> percentile is at z=1.645. (This is because
           $P(z &lt; 1.645) = 95%$).</li>
@@ -1963,8 +1966,8 @@ fig.savefig('poisson_road_fatilities_distrib.png', format='png')</pre>
       values $\mu$ and $\sigma$ have been the mean and standard deviation of the
       <b>population</b>. However, generally it is pretty impossible to gather
       information about an entire population: this can be due to the cost that
-      would be involved, or perhaps that time that such an endevour would take, 
-      for example. It might also be undesirable to analyse an entire population 
+      would be involved, or perhaps that time that such an endevour would take,
+      for example. It might also be undesirable to analyse an entire population
       if, for example, analysis involved destruction of the samples taken!
    </p>
    <p>
@@ -1972,7 +1975,7 @@ fig.savefig('poisson_road_fatilities_distrib.png', format='png')</pre>
       a <b>sample</b> from the population and then <b>use the sample statistics
          to make <em>inferences</em> about the population statistics</b>. The image below
       shows three samples that have been taken from a population. Each sample
-      set can, and will most probably, have a different shape, mean, and 
+      set can, and will most probably, have a different shape, mean, and
       variance!
    </p>
    <p>
@@ -1992,11 +1995,11 @@ numSampleSets = 4
 numSamplesPerSet = 10
 
 # Limit individual plots, otherwise the first plot takes forever and is rubbish
-doShowIndividualSamples = (numSampleSets &lt;= 8) and (numSamplesPerSet &lt;= 50) 
+doShowIndividualSamples = (numSampleSets &lt;= 8) and (numSamplesPerSet &lt;= 50)
 
-# Create a numSampleSets (rows) x numSamplesPerSet (cols) array where we use 
+# Create a numSampleSets (rows) x numSamplesPerSet (cols) array where we use
 # each row as a sample.
-randomSamples = np.random.randn(numSampleSets, numSamplesPerSet) 
+randomSamples = np.random.randn(numSampleSets, numSamplesPerSet)
 
 # Take the mean of the rows, i.e. the mean of each sample set
 means = randomSamples.mean(axis=1)
@@ -2014,7 +2017,7 @@ if doShowIndividualSamples:
          thisAx.axhline(y=means[idx], color="red", linewidth=2)
          thisAx.set_title("Sample set #{}".format(idx))
          thisAx.grid()
- 
+
 xticks = np.arange(numSampleSets, dtype='float64')
 fig2, ax2 = pl.subplots(nrows=2)
 ax2[0].bar(xticks, means)
@@ -2022,7 +2025,7 @@ ax2[0].grid()
 ax2[0].set_title("Distribution of {} sample means (n={})".format(numSampleSets, numSamplesPerSet))
 ax2[0].set_ylabel("Mean value")
 ax2[0].set_xlabel("Sample set #")
- 
+
 ax2[1].hist(means, 50)
 ax2[1].grid()
 ax2[1].set_title("Histogram of {} sample means (n={})".format(numSampleSets, numSamplesPerSet))
@@ -2052,14 +2055,14 @@ pl.show()</pre>
          distribution (same applies for variance).
    </p>
    <p>
-      But, we want to use the sample statistics to infer the population statistics. 
-      How can we do this if the sample mean (and variance) can vary from sample to 
+      But, we want to use the sample statistics to infer the population statistics.
+      How can we do this if the sample mean (and variance) can vary from sample to
       sample? There are a few key statistical theories that will help us out...
    </p>
 
-   
+
    <h3><a name="iid">Independent and Identically Distributed (I.I.D.) Random Variables</a></h3>
-   
+
    <p>
       <a href="https://en.wikipedia.org/wiki/Independent_and_identically_distributed_random_variables"
 			target="_blank">Wikipedia</a> says that <q>...a sequence or other collection of random variables is <b>independent and identically distributed (I.I.D.)</b> if <b>each random variable has the same probability distribution as the others</b> and all are <b>mutually independent</b>...</q>
@@ -2103,7 +2106,7 @@ for idx, ssize in enumerate(maxSampleSizes):
 
 fig.show(); pl.show()</pre>
    <p>
-   Explain the code a little... <tt>np.random.randn(ssize)</tt> generates a 
+   Explain the code a little... <tt>np.random.randn(ssize)</tt> generates a
    numpy array with <tt>ssize</tt> elements. Each element is a &quot;draw&quot; from
    the standard normal distribution. The function <tt>cumsum()</tt> then
    produces an array of <tt>ssize</tt> elements where the second element is
@@ -2127,25 +2130,25 @@ fig.show(); pl.show()</pre>
       population mean.
    </p>
 
-   
+
    <h3><a name="SamplingDistributions">Sampling Distribution Of The Sample Mean</a></h3>
    <p>
-      We've established that between samples, the mean and variance of the 
+      We've established that between samples, the mean and variance of the
       samples, well... varies! This implies that we can make a <b>distribution
       of sample means</b>.
    </p>
    <p>
-      The <b>&quot;sampling distribution of the sample mean&quot;</b> (a bit of a mouthful!) 
+      The <b>&quot;sampling distribution of the sample mean&quot;</b> (a bit of a mouthful!)
       is the probability
       distribution of the sample means obtained from all possible samples
-      of the same number of observations. 
+      of the same number of observations.
     </p>
     <p>That's a bit of a mounthful! What it
       means is that if we took, from the population, the exhaustive set of all
       distinct samples of size $n$, and then took the mean of each sample, we could
       figure out what the propability is that any sample of size $n$ has a
       specific mean. Thus we build up the probability distribution of sample
-      means, where the sample size is $n$. We will see that this probability distribution 
+      means, where the sample size is $n$. We will see that this probability distribution
       is centered around the mean of all the sample means and that
       it also has a normal distribution (see LLN and CLT).
    </p>
@@ -2165,7 +2168,7 @@ fig.show(); pl.show()</pre>
       But as we have seem if I test 50 devices each day for 10 days, each of my
       10 sample sets will have a different mean accuracy. On the first day, the
       mean accuracy of 50 devices might be 95%, on the second day, the mean of
-      the next 50 devices might be 96.53% and so on. 
+      the next 50 devices might be 96.53% and so on.
    </p>
    <p>
       The sample mean has a distribution. As we can take many samples from
@@ -2174,14 +2177,14 @@ fig.show(); pl.show()</pre>
    </p>
    <p>
       Now, I can ask, on any given day, &quot;what is the probability that the
-      mean accuracy of my 50 devices is, say 95%?&quot;. This is the sampling distribution 
+      mean accuracy of my 50 devices is, say 95%?&quot;. This is the sampling distribution
       of the sample mean: the probability
-      distribution of the sample means (mean accuracy of a sample of devices) obtained 
-      from all possible samples (theoretical: we can't actually measure all possible samples!) 
+      distribution of the sample means (mean accuracy of a sample of devices) obtained
+      from all possible samples (theoretical: we can't actually measure all possible samples!)
       of the same number of observations (50 in this case).
    </p>
    <p>
-      The law of large numbers gives us a little clue as to how variable the 
+      The law of large numbers gives us a little clue as to how variable the
       sample means will be... we know that if the sample size is large then
       the sample mean tends towards the population mean as has a much narrower
       variance about the population mean. So, 50 samples is better than 10.
@@ -2193,12 +2196,12 @@ fig.show(); pl.show()</pre>
    <p>
       Continuing with the example of distance measurement devices. We could
       say each device in our sample set is represented by random variables
-      $A_1, A_2, ..., A_{50}$ (we samples 50 devices each day). 
+      $A_1, A_2, ..., A_{50}$ (we samples 50 devices each day).
       We can generalise this to $m$ devices in the
-      sample set. 
-      
-      Using our definition of <a href="#def_expected_value">expected value</a> 
-      we can define the <b>sample mean</b> as the random variable $\overline A_i$, 
+      sample set.
+
+      Using our definition of <a href="#def_expected_value">expected value</a>
+      we can define the <b>sample mean</b> as the random variable $\overline A_i$,
       for the  i<sup>th</sup> sample set of, and is defined as follows.
 
       $$
@@ -2207,14 +2210,14 @@ fig.show(); pl.show()</pre>
 
     </p>
     <p>
-      Now we can calculate the <em>expected value of the sample mean</em>, $E(\overline X)$ 
+      Now we can calculate the <em>expected value of the sample mean</em>, $E(\overline X)$
       (the mean of the sample means).
     </p>
     <p>
       Imagine that
       we take $n$ samples, where each sample is a set of $m$ devices from our
       population. If we represent the mean of each sample as the random variables
-      $\overline X_1, \overline X_2, \cdots, \overline X_n$, then the expected 
+      $\overline X_1, \overline X_2, \cdots, \overline X_n$, then the expected
       value of the distribution of sample means
       is the mean expected value of the samples...
 
@@ -2230,9 +2233,9 @@ fig.show(); pl.show()</pre>
       E(\overline X) = \frac{1}{n}\left[E(\overline X_1) + E(\overline X_2) + \cdots + E(\overline X_n)\right]
       $$
 
-      The <a href="#law_of_large_numbers">law of large numbers</a> also tells us 
+      The <a href="#law_of_large_numbers">law of large numbers</a> also tells us
       that if the size of each sample
-      is sufficiently large, it's sample mean, $\overline{X_i}$ will tend 
+      is sufficiently large, it's sample mean, $\overline{X_i}$ will tend
       towards the population mean, $\mu$. So, if $m$ is large enough we can say...
 
       $$
@@ -2241,11 +2244,11 @@ fig.show(); pl.show()</pre>
       &= \frac{n\mu}{n}\\
       &= \mu
       \end{align}
-      $$for the 
+      $$for the
 
       This means that the <b>mean of &quot;the sample distribution of sample means&quot;
       is the population mean</b> when the size of each sample ($m$) is sufficiently
-   large. Put another way, <b> the distribution of samples means in centred 
+   large. Put another way, <b> the distribution of samples means in centred
       around the population mean</b>.
    </p>
    <p>
@@ -2264,7 +2267,7 @@ fig.show(); pl.show()</pre>
       \text{Var}(\overline X) = \sigma_{\overline X}^2 = S^2 = \frac{\sigma^2}{n}
       $$
 
-      We can see that <b>variance of the sampling distribution decreases as sample size 
+      We can see that <b>variance of the sampling distribution decreases as sample size
          increases.</b> Therefore the larger the sample the more accurately we can
       infer population statistics.
    </p>
@@ -2300,7 +2303,7 @@ fig.show(); pl.show()</pre>
       is also normally distributed.
    </p>
    <p>
-      A histogram of the sample means gives a better picture of the 
+      A histogram of the sample means gives a better picture of the
       distribution of sample means from the 4 sample sets. Diagrams have been
       drawn using the <a href="#SamplingDistributionPythonExample">previous python example</a>.
    </p>
@@ -2339,8 +2342,8 @@ fig.show(); pl.show()</pre>
       Also of great interest in the above is that as the number of samples
       taken increases the distribution of sample means appears to become more
       and more gaussian in shape!. What is always true, and even more important is that <b>the
-      sampling distribution becomes concentrated closer to the population mean 
-      as the sample size increases</b>, as we have seen in the maths earlier. 
+      sampling distribution becomes concentrated closer to the population mean
+      as the sample size increases</b>, as we have seen in the maths earlier.
       The example above also doesn't
       proove it... its just anecdotal evidence. We could also notice that
       <b>as #samples increases the variance of the sample mean decreases</b>,
@@ -2355,11 +2358,11 @@ fig.show(); pl.show()</pre>
    </p>
    <p>
       We must also remember to differentiate between the <b>sample variance, $\sigma_{\overline X}^2$</b>
-      and the <b>population variance, $\sigma^2$</b>. 
-      We do not know the population variance. We know the sample mean. 
+      and the <b>population variance, $\sigma^2$</b>.
+      We do not know the population variance. We know the sample mean.
       The population variance is fixed. The sample variance,
       as seen, will vary between samples.
-   </p> 
+   </p>
    <p>
       Also remember that the samples were drawn from a population that is
       normally distributed. So the sampling distribution was also normally
@@ -2455,7 +2458,7 @@ pl.show()</pre>
    <p>
       A confidence interval is a range of values which we are X% certain contain
       an unknown population parameter (e.g. the population mean), based
-      on information we obtain from a sample. In other words, we can <em>infer 
+      on information we obtain from a sample. In other words, we can <em>infer
       from our sample something about an <b>unknown</b> population parameter</em>.
    </p>
 
@@ -2467,8 +2470,8 @@ pl.show()</pre>
 
    <p>
       Remember that I don't want to test all of the sensors I've produced
-      because this will kill the manufacturing time and significantly raise 
-      the cost per unit. So I've decide to test, let's say, 50 sensors. 
+      because this will kill the manufacturing time and significantly raise
+      the cost per unit. So I've decide to test, let's say, 50 sensors.
    </p>
 
    <p>
@@ -2545,8 +2548,8 @@ ax.fill_between(x, 0, y
                , interpolate = True
                , facecolor   = 'lightblue')
 
-ax.annotate(r'$E(\overline{X}) = \mu$', 
-            xy=(expected_sample_mean, 0), 
+ax.annotate(r'$E(\overline{X}) = \mu$',
+            xy=(expected_sample_mean, 0),
             xytext=(expected_sample_mean-2*var_of_expected_sample_mean, 0.02),
             bbox=dict(fc="w"),
             fontsize='large',
@@ -2561,8 +2564,8 @@ ax.annotate(''
                        )
       )
 
-ax.annotate(r'$\sigma_{\overline{X}} = \frac{\sigma}{\sqrt{n}}$', 
-            xy=(expected_sample_mean + std_of_expected_sample_mean/2, max_y/2), 
+ax.annotate(r'$\sigma_{\overline{X}} = \frac{\sigma}{\sqrt{n}}$',
+            xy=(expected_sample_mean + std_of_expected_sample_mean/2, max_y/2),
             xytext=(expected_sample_mean + 2*std_of_expected_sample_mean, 3*max_y/4),
             fontsize='large',
             bbox=dict(fc="w"),
@@ -2570,15 +2573,15 @@ ax.annotate(r'$\sigma_{\overline{X}} = \frac{\sigma}{\sqrt{n}}$',
 
 
 ax.axvline(x=population_mean, color='black', lw=2)
-ax.annotate('Population mean, $\\mu$,\nis unknown!', 
-            xy=(population_mean, max_y/2), 
+ax.annotate('Population mean, $\\mu$,\nis unknown!',
+            xy=(population_mean, max_y/2),
             xytext=(x[0], 3*max_y/4),
             bbox=dict(fc="w"),
             arrowprops=dict(facecolor='black', shrink=0.05, connectionstyle="arc3,rad=0.2", fc="w"))
 
 ax.axvline(x=sample_mean, color='black', lw=2)
-ax.annotate('Sample mean, $\\overline{{x}}$,\nis {}'.format(sample_mean), 
-            xy=(sample_mean, max_y/2), 
+ax.annotate('Sample mean, $\\overline{{x}}$,\nis {}'.format(sample_mean),
+            xy=(sample_mean, max_y/2),
             xytext=(sample_mean + 2*std_of_expected_sample_mean, max_y/4),
             bbox=dict(fc="w"),
             arrowprops=dict(facecolor='black', shrink=0.05, connectionstyle="arc3,rad=0.2", fc="w"))
@@ -2592,7 +2595,7 @@ pl.show()</pre>
       this distribution of sample means, but we don't know where. <em>This is
          the parameter that we want to infer!</em>
       The single sample's mean and variance are all we have at the moment so
-      somehow we need to move from these statistics to an assertion about 
+      somehow we need to move from these statistics to an assertion about
       the population mean.
    </p>
    <p>
@@ -2605,7 +2608,7 @@ pl.show()</pre>
       We know $\overline X$ is somwhere near $E(\overline X)$ and will lie in
       an interval that spans the distance $E(\overline X) \pm \text{interval}$.
       But how big is this interval? To be certain that it contains our sample
-      mean it would have to be infinitely wide! So we can't be certain. But, we 
+      mean it would have to be infinitely wide! So we can't be certain. But, we
       could be pretty certain. We could, for example, say we'd be satisfied if
       we were 95% certain that $\overline X \in E(\overline X) \pm \text{interval}$...
       In other words we are asking the following question, what is...
@@ -2639,7 +2642,7 @@ import scipy.stats
 
 z = np.linspace(-4, 4, 500)
 y = scipy.stats.norm.pdf(z)
-x_95p = scipy.stats.norm.ppf(0.975) #.025 in each tail gives 0.05 for 95% conf 
+x_95p = scipy.stats.norm.ppf(0.975) #.025 in each tail gives 0.05 for 95% conf
 x95_mid = scipy.stats.norm.ppf(0.9875)
 
 fig, ax = pl.subplots()
@@ -2687,7 +2690,7 @@ ax.set_xticks([])
 ax.set_yticks([])
 ax.set_title("95% confidence interval ~ N(0,1)")
 pl.show() </pre>
-   
+
 
    <p>
       And we previously saw how to do this:
@@ -2696,7 +2699,7 @@ pl.show() </pre>
          Z = \frac{\overline X - \mu}{\frac{\sigma}{\sqrt n}}
       $$
 
-      Apply this to the interval 
+      Apply this to the interval
 
       $$
          P(E(\overline X) - \text{interval/2} \lt \overline X \lt  E(\overline X) + \text{interval/2}) = 0.95
@@ -2707,7 +2710,7 @@ pl.show() </pre>
       $$
       \begin{align}
          0.95 &= P(-\text{normalised interval/2} \lt Z \lt \text{normalised interval/2}) \\
-         &= P(-\text{normalised interval/2} \lt \frac{\overline X - \mu}{\frac{\sigma}{\sqrt n}} \lt \text{normalised interval/2}) 
+         &= P(-\text{normalised interval/2} \lt \frac{\overline X - \mu}{\frac{\sigma}{\sqrt n}} \lt \text{normalised interval/2})
       \end{align}
       $$
 
@@ -2717,7 +2720,7 @@ pl.show() </pre>
 
       $$
       \begin{align}
-      0.95 &= P(-1.96 \lt \frac{\overline X - \mu}{\frac{\sigma}{\sqrt n}} \lt 1.96) 
+      0.95 &= P(-1.96 \lt \frac{\overline X - \mu}{\frac{\sigma}{\sqrt n}} \lt 1.96)
       \end{align}
       $$
 
@@ -2736,7 +2739,7 @@ pl.show() </pre>
       And... oh! I know my sample mean. Lets say it was 99.5cm... then I have
       $$
       \begin{align}
-      0.95 &= P(99.5 - 1.96\cdot \frac{\sigma}{\sqrt n} \lt \mu \lt 99.5 + 1.96\cdot \frac{\sigma}{\sqrt n} ) 
+      0.95 &= P(99.5 - 1.96\cdot \frac{\sigma}{\sqrt n} \lt \mu \lt 99.5 + 1.96\cdot \frac{\sigma}{\sqrt n} )
       \end{align}
       $$
 
@@ -2760,7 +2763,7 @@ pl.show() </pre>
       $$
 
       Well this is great, we now know that the population mean is somewhere
-      in the interval $99.5 \pm 1.96\cdot \frac{0.5}{\sqrt{50}}$ with a 
+      in the interval $99.5 \pm 1.96\cdot \frac{0.5}{\sqrt{50}}$ with a
       95% confidence! I.e. we are 95% confident that the population
       mean lies somewhere between 99.35cm and 99.64cm. So we can conclude that
       our production process is producing instruments that slightly underestimate
@@ -2768,7 +2771,7 @@ pl.show() </pre>
    </p>
    <p>
       Quite a few assumptions and estimates have been made here. I assumed that
-      I could estimate the population standard deviation with my sample's 
+      I could estimate the population standard deviation with my sample's
       standard deviation. This could be okay for large sample sizes from an
       even larger population, but when this is not the case, this assumption
       breaks down. Something called the &quot;Student-t&quot; distribution will

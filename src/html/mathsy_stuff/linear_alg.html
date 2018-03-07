@@ -6,8 +6,9 @@
 	<title>Linear Algebra</title>
 	<!-- META_INSERT -->
 	<!-- CSS_INSERT -->
-	<!-- JAVASCRIPT_INSERT -->	
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>  
+	<!-- JAVASCRIPT_INSERT -->
+    <!--
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
 	<script type="text/x-mathjax-config">
       MathJax.Hub.Config({
           tex2jax: {
@@ -17,6 +18,7 @@
           displayIndent: "2em"
       });
 	</script>
+    -->
 </head>
 
 <body>
@@ -35,9 +37,9 @@
 <p>
 	Notes on some linear algebra topics. Sometimes I find things are just stated
 	as being obvious, for example, <q>the dot product of two orthogonal vectors
-	is zero</q>. Well... why is this? The result was a pretty simple but 
+	is zero</q>. Well... why is this? The result was a pretty simple but
 	nonetheless it took a little while to think it through properly.
-	Hence, these notes... they're my musings on the &quot;why&quot;, even if the 
+	Hence, these notes... they're my musings on the &quot;why&quot;, even if the
 	&quot;why&quot; might be obvious to the rest of the world!
 </p>
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -50,7 +52,7 @@
 <div>
 <p>
     The set of linear equations:
-    
+
     $$ a_{11}x_1 + a_{12}x_2 + ... + a_{1n}x_n = b_1\\
        a_{21}x_1 + a_{22}x_2 + ... + a_{2n}x_n = b_2\\
        ... \\
@@ -95,7 +97,7 @@
                 \vdots & \vdots & \ddots & \vdots & \vdots \\
                 a_{m1} & a_{m2} & \cdots & a_{mn} & b_m\\
             \end{array}
-        \right] 
+        \right]
     $$
 
     Next this matrix must be converted to <b>row echelon form</b>. This is where each row has
@@ -164,7 +166,7 @@ system.rref()[0]</pre>
                 1 & 2 & 1 & 32\\
                 1 & -1 & 1 & 1
             \end{array}
-        \right] 
+        \right]
     $$
 
     To solve this using Python we do:
@@ -199,16 +201,16 @@ solve_linear_system(system, x, y, z)</pre>
 	</div>
 	<p>
 		<b>Orthogonal vectors</b> are vectors that are perpendicular to each other.
-		In a standard 2D or 3D graph, this means that 
+		In a standard 2D or 3D graph, this means that
 		they are at right angles to each other and we can visualise them
-		as seen in Figure 1: $\vec x$ is at 90 degrees to both $\vec y$ and $\vec z$. 
-		$\vec y$ is at 90 degrees to $\vec x$ and $\vec z$, and $\vec z$ is at 
+		as seen in Figure 1: $\vec x$ is at 90 degrees to both $\vec y$ and $\vec z$.
+		$\vec y$ is at 90 degrees to $\vec x$ and $\vec z$, and $\vec z$ is at
 		90 degrees to $\vec y$ and $\vec z$.
 	</p>
 	<p>
 		In any set of any vectors, $[\vec{a_1}, ..., \vec{a_n}]$, the vectors are
-		said to be linearly <b>linearly independent</b> if every vector in the set 
-		is orthogonal to every other vector in the set. 
+		said to be linearly <b>linearly independent</b> if every vector in the set
+		is orthogonal to every other vector in the set.
 	</p>
 	<p>
 		So, how do we tell if one vector is orthogonal to another? The answer is
@@ -218,7 +220,7 @@ solve_linear_system(system, x, y, z)</pre>
 	</p>
 	<p>
 		We know when two <b>vectors are orthogonal when their dot product is
-		zero: $x \cdot y = 0 \implies$ x and y are orthogonal</b>. 
+		zero: $x \cdot y = 0 \implies$ x and y are orthogonal</b>.
 	</p>
 	<p>But why is this the case? Lets imagine any two aribtrary vectors, each
 		on the circumference of a unit circle (so we know that they have the
@@ -232,7 +234,7 @@ solve_linear_system(system, x, y, z)</pre>
 		<br/>
 		Figure 2
 	</div>
-	
+
 	<p>
 		$$
 		\begin{align}
@@ -282,13 +284,13 @@ solve_linear_system(system, x, y, z)</pre>
 		$$
 
 		Therefore, any vector in 2D space that is $[a, b]$ will become
-		$[-b, a]$ and therefore the dot product becomes $-ab + ab = 0$. And 
+		$[-b, a]$ and therefore the dot product becomes $-ab + ab = 0$. And
 		voilà, we know know <b>why</b> the dot product of two orthogonal 2D vectors is
 		zero. I'm happy to take it on faith that this extrapolates into n dimensions :)
 	</p>
     <p>
         Another way of looking at this is to consider the law of cosines: $C^2 = A^2 + B^2 - 2AB\cos(c)$:
-    </p>    
+    </p>
     <p>
         <img src="##IMG_DIR##/law_of_cosines_1.png" alt="Law of cosines"/>
     </p>
@@ -342,7 +344,7 @@ solve_linear_system(system, x, y, z)</pre>
 	</p>
 
 	$$
-		AA^T = 
+		AA^T =
 		\begin{pmatrix}
 		a & c \\
 		b & d \\
@@ -351,7 +353,7 @@ solve_linear_system(system, x, y, z)</pre>
 		a & b \\
 		c & d \\
 		\end{pmatrix}
-		= 
+		=
 		\begin{pmatrix}
 		aa + cc & ab + cd \\
 		ab + cd & bb + dd \\
@@ -369,7 +371,7 @@ solve_linear_system(system, x, y, z)</pre>
 		a matrix of two <em>row vectors</em> $\vec v_1 = [x_1, y_1]$, $\vec v_2 = [x_2, y_2]$.
 
 		$$
-			A = 
+			A =
 			\begin{pmatrix}
 			\vec v_1 \\
 			\vec v_2 \\
@@ -381,7 +383,7 @@ solve_linear_system(system, x, y, z)</pre>
 		$$
 
 		$$
-		\therefore AA^T = 
+		\therefore AA^T =
 		\begin{pmatrix}
 		x_1 & y_1 \\
 		x_2 & y_2 \\
@@ -390,22 +392,22 @@ solve_linear_system(system, x, y, z)</pre>
 		x_1 & x_2 \\
 		y_1 & y_2 \\
 		\end{pmatrix}
-		= 
+		=
 		\begin{pmatrix}
 		x_1^2 + y_1^2 & x_1x_2 + y_1y_2 \\
 		x_1x_2 + y_1y_2 & x_2^2 + y_2^2 \\
 		\end{pmatrix}
 		$$
 
-		If our vectors $\vec v_1$ and $\vec v_2$ are orthogonal, 
-		then the component $x_1x_2 + y_1y_2$ must be zero. This would give us the first 
+		If our vectors $\vec v_1$ and $\vec v_2$ are orthogonal,
+		then the component $x_1x_2 + y_1y_2$ must be zero. This would give us the first
 		part of the identify matrix pattern we're looking for.
 	</p>
 	<p>
 		The other part of the identity matrix would imply that we would have
 		to have $x_1^2 + y_1^2 = 1$ and $x_2^2 + y_2^2 = 1$... which are just the
 		formulas for the square of the length of a vector.
-		Therefore, if our two vectors are normal (i.e, have a length of 1), we 
+		Therefore, if our two vectors are normal (i.e, have a length of 1), we
 		have our identity matrix.
 	</p>
 	<p>
@@ -413,7 +415,7 @@ solve_linear_system(system, x, y, z)</pre>
 		matrix A!...
 
 	$$
-		A^TA = 
+		A^TA =
 		\begin{pmatrix}
 		x_1 & x_2 \\
 		y_1 & y_2 \\
@@ -422,7 +424,7 @@ solve_linear_system(system, x, y, z)</pre>
 		x_1 & y_1 \\
 		x_2 & y_2 \\
 		\end{pmatrix}
-		= 
+		=
 		\begin{pmatrix}
 		x_1^2 + x_2^2 & x_1y_1 + x_2y_2 \\
 		x_1y_1 + x_2y_2 & y_1^2 + y_2^2 \\
@@ -431,14 +433,14 @@ solve_linear_system(system, x, y, z)</pre>
 
 		Oops, we can see that we didn't get the identity matrix!! But, perhaps we
 		can see why. If $A$ was a matrix of row vectors then $A^T$ is a matrix
-		of column vectors. So for $AA^T$ we were multiplying a matrix of row vectors 
-		with a matrix of column vectors, which would, in part, give us the dot 
+		of column vectors. So for $AA^T$ we were multiplying a matrix of row vectors
+		with a matrix of column vectors, which would, in part, give us the dot
 		products as we saw. So if we want to do $A^TA$ it would follow that for
 		this to work $A$ now was to be a matrix of column vectors because
 		we get back to our original ($A^T$ would become a mtrix of row vectors):
-	
+
 	$$
-		A^TA = 
+		A^TA =
 		\begin{pmatrix}
 		x_1 & y_1 \\
 		x_2 & y_2 \\
@@ -447,7 +449,7 @@ solve_linear_system(system, x, y, z)</pre>
 		x_1 & x_2 \\
 		y_1 & y_2 \\
 		\end{pmatrix}
-		= 
+		=
 		\begin{pmatrix}
 		x_1^2 + y_1^2 & x_1x_2 + y_1y_2 \\
 		x_1x_2 + y_1y_2 & x_2^2 + y_2^2 \\
@@ -455,15 +457,15 @@ solve_linear_system(system, x, y, z)</pre>
 	$$
 
 	</p>
-	
+
 	<p>
-		So we can say that if we have <b>matrix who's rows are orthogonal vectors 
+		So we can say that if we have <b>matrix who's rows are orthogonal vectors
 			and who's columns are also orthogonal vectors, then we have
 		an orthogonal matrix</b>!
 	</p>
 	<p>
 		Okay, thats great n' all, but <b>why should we care? Why Are orthogonal
-		matricies useful?</b>. It turns our that orthogonal matricies 
+		matricies useful?</b>. It turns our that orthogonal matricies
 		<a href="https://www.khanacademy.org/math/linear-algebra/alternate_bases/orthonormal_basis/v/lin-alg-orthogonal-matrices-preserve-angles-and-lengths" target="_blank">preserve
 		angles and lengths</a> of vectors. This can be useful in graphics to rotate
 		vectors but keep the shape they construct, or in numerical analysis

@@ -28,6 +28,7 @@ import pickle
 import codecs
 import pathlib
 import watermark
+import platform
 
 DEPLOYED_DIR = '../__deployed'
 
@@ -325,10 +326,20 @@ def deploy_site():
 		htmlFileContents = prog_css.sub('<link rel="stylesheet" href="{}{}jeh-monolith.css" type="text/css" />'.format(link_to_root, "" if link_to_root == "" else '/'), htmlFileContents)
 		htmlFileContents = prog_js.sub('<script src="{}{}jeh-monolith.js"></script>'.format(link_to_root, "" if link_to_root == "" else '/'), htmlFileContents)
 		htmlFileContents = prog_img.sub('{}{}images/jeh-tech'.format(link_to_root, "" if link_to_root == "" else '/'), htmlFileContents)
-		#newFile = open(newFileName, 'w')
+
 		newFile = codecs.open(newFileName, 'w', 'utf-8')
 		newFile.write(htmlFileContents)
 		newFile.close()
+
+		if filename in ['math_revision.html', 'linear_alg.html', 'gaussians.html', 'stats.html']:
+			if platform.system() == 'Windows':
+				shutil.copyfile(newFileName, newFileName + ".TMP")
+				cmd = 'node C:\\Users\\jh\\node_modules\\mathjax-node-page\\bin\\mjpage --dollars true < "{}" > {}'.format(newFileName + ".TMP", newFileName)
+				print("### EXEC {}".format(cmd))
+				subprocess.call(cmd, shell=True)
+				os.remove(newFileName + ".TMP")
+			else:
+				print("### WARNING: Need to implement node-page call on linux")
 	os.chdir('..')
 
 	#

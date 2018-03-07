@@ -130,6 +130,33 @@
               <td><code>chmod [ugo]+[rwx] file</code> or <code>chmod -R [ugo]+[rwx] dir</code></td>
             </tr>
         </table>
+        <p>Other little bits:</p>
+        <table>
+            <tr>
+              <td>Get size of dir/file</td>
+              <td><code>du -sh[c] dir</code>.<br/>The <code>-c</code> option produces a grand total.</td>
+            </tr>
+            <tr>
+              <td>List packages:</td>
+              <td><code>dpkg -l</code></td>
+            </tr>
+            <tr>
+              <td>Package ver:</td>
+              <td><code>dpkg -s &lt;packagename&gt;</code></td>
+            </tr>
+            <tr>
+              <td>Install package:</td>
+              <td><code>apt-get install &lt;packagename&gt;[=&lt;versionno&gt;]</code></td>
+            </tr>
+            <tr>
+              <td>Check what process has a file open:</td>
+              <td><code>lsof /path/to/file</code></td>
+            </tr>
+            <tr>
+              <td>Switch Java vers:</td>
+              <td><code>alternatives --config java</code></td>
+            </tr>
+        </table>
         <p></p>
       </div>
 
