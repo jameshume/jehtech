@@ -267,6 +267,10 @@ sudo apt-get install bcmwl-kernel-source</pre>
                 From your SSH session, if you launch a GUI application should now magically appear
                 on your desktop :)
             </p>
+            <p>
+                If, for some reason, it does not, check the XMing log. If you see
+                that your IP has been rejected with a message like &quot;<code>AUDIT: Thu Mar 15 15:28:10 2018: 7452 C:\Program Files (x86)\Xming\Xming.exe: client 4 rejected from IP 192.168.1.208</code>&quot;, add your client IP to the file <code>X0.hosts</code> in the XMing installation directory.
+            </p>
       </div>
 
       <h2>Fix Putty Linux Terminal Session Function Keys And Keypad</h2>
