@@ -1417,6 +1417,52 @@ git checkout --(theirs|ours) mergetool.txt</pre>
 <pre>https://help.github.com/articles/dealing-with-line-endings/</pre>
 </div>
 
+<h2>Submodules</h2>
+<div>
+    <p>References:</p>
+    <ul>
+        <li><a href="https://git-scm.com/book/en/v2/Git-Tools-Submodules" target="_blank">The official &quot;Git Tools - Submodules&quot;</a>.</li>
+        <li><a href="http://www.speirs.org/blog/2009/5/11/understanding-git-submodules.html" target="_blank">Understanding Git Submodules</a>, Fraser Speirs.</li>
+        <li><a href="https://www.atlassian.com/blog/git/git-submodules-workflows-tips" target="_blank">Git submodules: core concept, workflows, and tips, Nicola Paolucci</a></li>
+    </ul>
+    <p>
+        The Git docs say the following:
+    </p>
+    <blockquote>
+        <p>Submodules allow you to keep a Git repository as a subdirectory of another Git repository.
+            This lets you clone another repository into your project and keep your commits separate.
+        </p>
+        <footer><a href="https://git-scm.com/book/en/v2/Git-Tools-Submodules" target="_blank">-- Git SCM</a></footer>
+    </blockquote>
+    <p>
+        However...
+    </p>
+    <blockquote>
+        <p>Git submodules are locked to a specific revision and don't automatically track the external project's HEAD.</p>
+        <footer>--<a href="http://www.speirs.org/blog/2009/5/11/understanding-git-submodules.html" target="_blank">Understanding Git Submodules</a>, Fraser Speirs.</footer>
+    </blockquote>
+    <p>
+        To clone a project with submodules do:
+    </p>
+    <pre>git clone https://the-project
+git submodule init   # You only get submodule directories but not code so run
+git submodule update # these to get the data!</pre>
+    <p>Or...</p>
+    <pre>git clone <b>--recurse-submodules</b> https://the-project</pre>
+    <p>As the submodule is a repository-in-a-repository you can check out any branch of the
+    submodule independently of the branch of you main repository that is checked out.</p>
+    <p>
+        To merge or rebase in remote changes to the submodule do:
+    </p>
+    <pre>git submodule update --remote (--merge|--rebase)</pre>
+    <p>
+        When pushing from a repository with submodules be sure to use:
+    </p>
+    <pre>git push --recurse-submodules=check # Or...
+git push --recurse-submodules=on-demand</pre>
+    <p></p>
+</div>
+
 </div> <!-- END H2 Git Notes -->
 </div>
 </body>
