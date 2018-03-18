@@ -20,7 +20,7 @@
 </div>
 
 <div id="content">
-<h1 class="title">Time In Python</h1>
+<h1 class="title">Dates And Time In Python</h1>
 <div style="padding-right:10px;">
 
 <h2>Page Contents</h2>
@@ -28,16 +28,39 @@
 </div>
 
 <h2>References</h2>
+<div>
 <ul>
    <li><a href="https://www.w3.org/TR/timezone/" target="_blank">Working with Time Zones</a>, WC3.</li>
    <li><a href="http://www.allanstime.com/Publications/DWA/Science_Timekeeping/TheScienceOfTimekeeping.pdf"
    	      target="_blank">The Science of Timekeeping</a>, HP.</li>
+   <li><a href="https://julien.danjou.info/blog/2015/python-and-timezones" target="_blank">Timezones and Python </a>,  
+   	   Julien Danjou.</li>
+   <li><a href="http://lucumr.pocoo.org/2011/7/15/eppur-si-muove/" target="_blank">Dealing with Timezones in Python</a>, 
+   	   Armin Ronacher.</li>
 </ul>
+</div>
 
+<h2>Introduction</h2>
+<div>
+	<p>
+		The referenced article, &quot;The Science Of Timekeeping&quot;, gives a really nice introduction
+		to time and the history of how we measure time. Combined with the reference WC3 article we can get
+		an idea of how our concept of time originated from observable phenomena like sunrise and sunset,
+		the seasons etc, and how now it is based on more abstract standards like the <q>the transition between
+		the two hyperfine levels of the ground state of the cesium-133 atom</q>.
+	</p>
+	<p>
+		All of this is important for us to realise that there is no really universal definition of time that is
+		the same all over the world, except for something called UTC.
+	</p>
+	<p>
+		Countries have their own timezones, not all of which differ in a regular pattern, where daylight saving
+		time (DST) may be active or not depending on the time of year, and worse, there are crazy things like 
+		leap days end even leap seconds!
+	</p>
 	<blockquote>
 		<p>
-			In 1884, at the International Meridian
-			Conference, the Greenwich observatory was accepted as source of the
+			In 1884, ... the Greenwich observatory was accepted as source of the
 			world’s standard time ...
 		</p><p>
 			... GMT has evolved to UTC ... GMT was based on mean solar time. UTC is based on a
@@ -53,7 +76,90 @@
    	           target="_blank">The Science of Timekeeping</a>, HP.
 		</footer>
 	</blockquote>
+	<p>
+		&quot;Computerphile&quot; gives a really good summary:
+	</p>
+	<iframe width="560" height="315" src="https://www.youtube.com/embed/-5wpm-gesOY" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+	<p></p>
 </div>
+
+<h2>Using Dates &amp; Times in Python</h2>
+<div>
+	<p>The referenced articles by Julien Danjou and Armin Ronacher both make the following very poinient point: Python 
+	   <code>datetime</code> objects, by default are <em>not</em> timezone aware!. This can be read directly from
+	   the Python docs, but wasn't something I'd taken enough notice of until reading those articles!
+	</p>
+	<blockquote>
+		<p>
+			An aware object has sufficient knowledge of applicable algorithmic and political time adjustments, such as 
+			time zone and daylight saving time information, to locate itself relative to other aware objects. An aware
+			object is used to <em>represent a specific moment in time that is not open to interpretation</em>.
+		</p>
+		<p>...</p>
+		<p>For applications requiring aware objects, datetime and time objects have an optional time zone information 
+		   attribute, <code>tzinfo</code>, that can be set to an instance of a subclass of the abstract tzinfo class. 
+		   These <code>tzinfo</code> 
+		   objects capture information about the offset from UTC time, the time zone name, and whether Daylight Saving 
+		   Time is in effect.
+		</p>
+		<footer>
+			-- <a href="https://docs.python.org/3/library/datetime.html" target="_blank">Python docs</a>. (Emphasis mine).
+		</footer>
+	</blockquote>
+	<p>
+		Thus, when using dates/time in Python <b>always use aware objects</b> so that there is no ambiguity in
+		what time is being represented and <b>always store time in UTC</b>: An aware current UTC datetime can 
+		be obtained by calling <code>datetime.now(pytz.utc)</code>. Why do we want to do this? As Danjou points
+		out, without this the <code>datetime</code> object will have no timezone information, so later on in the
+		code, can we be sure it is representing a time in UTC? There would be no way to tell! He suggests
+		treating any <code>datetime</code> without a timezone as a bug!
+	</p>
+	<div class="box_container">
+		<div class="warning">
+			<p>Never use unware <code>datetime</code> objects. Always make sure you get timezone aware objects
+			and even better objects using UTC with the timezone information set to UTC: 
+			<code>datetime.now(pytz.utc)</code>!</p>
+		</div>
+	</div>
+	<p>
+		As Danjou recommends, as well as using aware <code>datetime</code> objects you should also
+		store and retreive dates/times in 
+		<a href="https://en.wikipedia.org/wiki/ISO_8601" target="_blank">ISO 8601</a> format by using <code>datetime.datetime.isoformat()</code>.
+	</p>
+	<div class="box_container">
+		<div class="info">
+			<p>To store and retreive date/time use ISO 8601 format, supported by the Python <code>iso8601</code> 
+			package.</p>
+		</div>
+	</div>
+	<p></p>
+</div>
+
+<h2>Examples</h2>
+<div>
+	<h3>Get The Current Time as UTC</h3>
+	<pre>&gt;&gt;&gt; import datetime
+&gt;&gt;&gt; import pytz		
+&gt;&gt;&gt; datetime.datetime.now(pytz.utc)
+datetime.datetime(2018, 3, 18, 12, 36, 52, 315868, tzinfo=&lt;UTC&gt;)</pre>
+
+	<h3>Output Current Time In ISO 8601 Format</h3>
+	<pre>&gt;&gt;&gt; import datetime
+&gt;&gt;&gt; import pytz		
+&gt;&gt;&gt; datetime.datetime.now(pytz.utc).isoformat()
+'2018-03-18T12:41:07.591469+00:00'</pre>
+
+	<h3>Input Current Time In ISO 8601 Format</h3>
+	<pre>&gt;&gt;&gt; import datetime
+&gt;&gt;&gt; import pytz		
+&gt;&gt;&gt; a = datetime.datetime.now(pytz.utc).isoformat()
+&gt;&gt;&gt; a
+'2018-03-18T12:41:07.591469+00:00'
+&gt;&gt;&gt; iso8601.parse_date(a)
+datetime.datetime(2018, 3, 18, 12, 44, 19, 461444, tzinfo=datetime.timezone(datetime.timedelta(0), '+00:00'))</pre>
+</div>
+
+</div> <!-- End padding div -->
 </div> <!-- End content div -->
 
 </body>

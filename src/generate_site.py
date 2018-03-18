@@ -253,6 +253,16 @@ def create_references(contents):
 	if not end_found:
 	    raise Exception("Could not find end of reference section")
 
+
+def getMathjaxNodePageBinPath():
+	cmd = "node -e \"console.log(require.resolve('mathjax-node-page'))\""
+	result = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+	modpath = result.stdout.readlines()[0].strip().decode("utf-8") 
+	basepath = os.path.split(os.path.split(modpath)[0])[0]
+	exepath = os.path.join(basepath, 'bin', 'mjpage')
+	return exepath
+
+
 def deploy_site():
 	# Delete any existing deployment and begin creating a new one...
 	if os.path.isdir(DEPLOYED_DIR):
@@ -332,9 +342,10 @@ def deploy_site():
 		newFile.close()
 
 		if filename in ['math_revision.html', 'linear_alg.html', 'gaussians.html', 'stats.html']:
+			mathjaxPageExe = getMathjaxNodePageBinPath()
 			if platform.system() == 'Windows':
 				shutil.copyfile(newFileName, newFileName + ".TMP")
-				cmd = 'node C:\\Users\\jh\\node_modules\\mathjax-node-page\\bin\\mjpage --dollars true < "{}" > {}'.format(newFileName + ".TMP", newFileName)
+				cmd = 'node {} --dollars true < "{}" > {}'.format(mathjaxPageExe, newFileName + ".TMP", newFileName)
 				print("### EXEC {}".format(cmd))
 				subprocess.call(cmd, shell=True)
 				os.remove(newFileName + ".TMP")
