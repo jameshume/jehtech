@@ -59,7 +59,7 @@
 		</ul>
 	</p>
 	<p>
-		<b>Liveness</b>. We out programs to produce something useful! I.e, each process is allocated the resources it needs to do its job:
+		<b>Liveness</b>. We want our programs to produce something useful! I.e, each process is allocated the resources it needs to do its job:
 		<ul>
 			<li><b>Starvation</b> - occurs when some requests never get dealt with.</li>
 			<li><b>Fairness</b> - contention for resource is resolved fairly</li>
@@ -227,7 +227,7 @@ my_sem = threading.Semaphore(num_resources)</pre>
     	To use the semaphore to define a critical region you can do this:
     </p>
     <pre class="prettyprint linenums">with my_sem:
-    # do something critical 
+    # do something critical
 # get to here and you're outside the with block and therefore
 # no longer in the critical region</pre>
     <p>
@@ -294,25 +294,21 @@ my_lock.acquire() #< This WILL block!</pre>
 	<pre class="prettyprint linenums">my_rlock = threading.RLock()
 my_rlock.acquire()
 my_rlock.acquire() #< Will NOT block</pre>
+<p></p>
 </div> <!-- END H2 DIV -->
-
-<h2></h2>
-<div>
-
-</div>
 
 <h2>The Bounded Buffer Problem: Asynchronous Message Passing</h2>
 <div>
 	<p>
-		In this scenario there a thread that is create a load of data. It could be
+		In this scenario there a is thread that creates a load of data. It could be
 		a thread on your server, accepting client connections, reading data from
-		the client and handling the higher level protocol, and then passing the
-		the received data on to another thread in your application that will 
+		the client and then passing the
+		the received data on to another thread in your application that will
 		process the data.
 	</p>
 	<p>
 		The thread getting the data that is getting pumped into your program's
-		analysis algorithm thread is called the <em>producer</em>. The algorithm
+		analysis algorithm is called the <em>producer</em>. The algorithm
 		thread is said be be the <em>consumer</em> because it is <em>consuming</em>
 		the data.
 	</p>
@@ -327,7 +323,7 @@ my_rlock.acquire() #< Will NOT block</pre>
 		the analysis thread will sit idle until suddenly a glut of data is received.
 	</p>
 	<p>
-		What we want to do is to <em>decouple</em> these two threads so that if 
+		What we want to do is to <em>decouple</em> these two threads so that if
 		the producer is busy, there is still enough data available to occupy the
 		consumer. If the consumer is busy, the producer has somewhere to stash
 		the data quickly so it can get back to its task. This is done by placing
@@ -340,45 +336,98 @@ my_rlock.acquire() #< Will NOT block</pre>
 	</p>
 	<p>
 		Now, in Python, the standard library already gives us such a thread
-		safe buffer. It is found in <code>collections.deque</code>: <q>Deques support 
-		thread-safe, memory efficient appends and pops from either side of the deque 
-		with approximately the same O(1) performance in either direction</q>.
+		safe buffer. It is found in <code>collections.deque</code>: <q>Deques support
+		thread-safe, memory efficient appends and pops from either side of the deque
+		with approximately the same <code>O(1)</code> performance in either direction</q>.
 	</p>
 	<p>
-		Although, therefore, we would never implment this ourselves, it is a 
-		nice exercise to try and implement this ourselves so that we can
+		Although, therefore, we would never implement this ourselves, it is a
+		nice exercise to try so that we can
 		learn about and practice using the <code>threading</code> library.
 	</p>
 	<p>
-		This can be implemented using this pseudo code:
+		This can be implemented using this two semaphores. See the following pseudo code:
 	</p>
-	<pre>put_data:
-    spaces.acquire()
+	<pre class="prettyprint linenums">put_data:
+    spaces.acquire()   # Decrements the semaphore. If there are no spaces,
+                       # will block until one becomes available
     write value into queue
-    elements.release()
+    elements.release() # Increments the semaphore. May unblock any process
+                       # waiting for elements.
 
 get_data:
-    elements.acquire()
+    elements.acquire() # Decrements the semaphore. If there are no elements
+                       # will block until one becomes available
     read value from queue
-    spaces.release()</pre>
+    spaces.release()   # Increments the semaphore, May unblock any process
+                       # waiting for a space to become available.</pre>
+
+    <p>
+        Lets try implementing this. TODO - this is UNTESTED code...
+    </p>
+    <pre class="prettyprint linenums">import threading
+
+class MyQueue(object):
+    def __init__(self, size):
+        self._size = size
+        self._q = [None] * self._size
+        self._start = 0;
+        self._end = 0;
+        self._elements = threading.Semaphore(0)
+        self._spaces = threading.Semaphore(self._size)
+        self._cr = threading.Lock()
+
+    def enqueue(self, item):
+        # Wait for a space to become available
+        self._spaces.acquire()
+
+        # Enter a critical region. We require this because if there are
+        # multiple writers we could have multiple threads executing this logic
+        # so we must enforce mutual exclusion.
+        with self._cr:
+            self._q[self._end] = item
+            self._end = (self._end + 1) % self._size
+
+        # Signal anyone waiting for an element to become available...
+        self._elements.release()
+
+    def dequeue(self):
+        item = None
+        # Wait for an element to be available in the buffer
+        self._elements.acquire()
+
+        # Enter a critical region. We require this because if there are
+        # multiple readers we could have multiple threads executing this logic
+        # so we must enforce mutual exclusion.
+        with self._cr:
+            item = self._q[self._start]
+            self._start = (self._start + 1) % self._size
+
+        # Signal anyone waiting for a space to become available...
+        self._spaces.release()
+        return item</pre>
+
     <p>
     	But, in Python we can use <em>condition variables</em>. Here I replicate,
     	with added comments, the example from the Python docs. We can see that
     	only the one condition variable is required, rather than a pair of
     	semaphores, which makes the implementation a little cleaner.
     </p>
-    <pre class="prettyprint linenums">
-# Consume one item
-cv.acquire()                      #< Lock is aquired
+    <pre class="prettyprint linenums"> import threading
+# Somewhere create a condition variable
+cv = threading.Condition()
+
+# Consume one item in one thread
+cv.acquire()                      #< Lock is acquired
 while not an_item_is_available(): #< Therefore this executes in the CR
     cv.wait()                     #< Lock is released and thread sleeps
                                   #  until cv.notify[All]() is called.
-# When cw.wait() unblocks it reaquires the lock so at this point
+# When cw.wait() unblocks it re-acquires the lock so at this point
 # we are back inside the CR
 get_an_available_item()
 cv.release()
 
-# Produce one item
+# Produce one item in another thread
 cv.acquire()
 make_an_item_available()
 cv.notify()
@@ -388,6 +437,19 @@ cv.release()
 
 <h2>The Dining Philosophers Problem: Sharing Resources</h2>
 <div>
+    <p>
+        N philosophers sit around a table with N-1 forks available. To eat, each philosopher must
+        pick up two forks, on to their left and one to their right. They pick up both forks to eat
+        and once finished put down both forks and think for a while before eating again.
+    </p>
+    <p>
+        We must make sure that <em>no philosopher starves</em>! Dead philosophers are bad! We'd
+        also like to make things fair... one fat philosopher who gobbles up 99% of the food will
+        upset the others!
+    </p>
+    <p>
+        This problem demonstrates the concepts of <em>deadlock</em> and possible <em>livelock</em>.
+    </p>
 </div> <!-- END H2 DIV -->
 
 <h2>The Readers And Writers Problem: Conditional Forms Of Mutual Exclusion</h2>
@@ -395,6 +457,18 @@ cv.release()
 </div> <!-- END H2 DIV -->
 
 <h2>The Handshaking Problem: Synchronous Message Passing</h2>
+<div>
+</div> <!-- END H2 DIV -->
+
+<h2>Readers/Writers Problem</h2>
+<div>
+</div> <!-- END H2 DIV -->
+
+<h2>Cigarette Smokers Problem</h2>
+<div>
+</div> <!-- END H2 DIV -->
+
+<h2>Sleeping Barbers Problem</h2>
 <div>
 </div> <!-- END H2 DIV -->
 

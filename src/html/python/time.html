@@ -138,25 +138,27 @@
 <h2>Examples</h2>
 <div>
 	<h3>Get The Current Time as UTC</h3>
-	<pre>&gt;&gt;&gt; import datetime
-&gt;&gt;&gt; import pytz		
+	<pre class="prettyprint linenums">&gt;&gt;&gt; import datetime
+&gt;&gt;&gt; import pytz
 &gt;&gt;&gt; datetime.datetime.now(pytz.utc)
 datetime.datetime(2018, 3, 18, 12, 36, 52, 315868, tzinfo=&lt;UTC&gt;)</pre>
 
 	<h3>Output Current Time In ISO 8601 Format</h3>
-	<pre>&gt;&gt;&gt; import datetime
-&gt;&gt;&gt; import pytz		
+	<pre class="prettyprint linenums">&gt;&gt;&gt; import datetime
+&gt;&gt;&gt; import pytz
 &gt;&gt;&gt; datetime.datetime.now(pytz.utc).isoformat()
 '2018-03-18T12:41:07.591469+00:00'</pre>
 
 	<h3>Input Current Time In ISO 8601 Format</h3>
-	<pre>&gt;&gt;&gt; import datetime
-&gt;&gt;&gt; import pytz		
+	<pre class="prettyprint linenums">&gt;&gt;&gt; import datetime
+&gt;&gt;&gt; import pytz
+&gt;&gt;&gt; import iso8601
 &gt;&gt;&gt; a = datetime.datetime.now(pytz.utc).isoformat()
 &gt;&gt;&gt; a
-'2018-03-18T12:41:07.591469+00:00'
+'2018-03-19T07:53:48.225000+00:00'
 &gt;&gt;&gt; iso8601.parse_date(a)
-datetime.datetime(2018, 3, 18, 12, 44, 19, 461444, tzinfo=datetime.timezone(datetime.timedelta(0), '+00:00'))</pre>
+datetime.datetime(2018, 3, 19, 7, 53, 48, 225000, tzinfo=&lt;FixedOffset '+00:00' datetime.timedelta(0)&gt;)</pre>
+<p></p>
 </div>
 
 </div> <!-- End padding div -->
