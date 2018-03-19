@@ -1,0 +1,1 @@
+HTML_SOURCES += $(wildcard $(BASE_DIR)/src/html/python/*.html)
