@@ -1093,7 +1093,9 @@ while(itr != itrEnd)
 {
     if (delete_condition)
     {
-        it = v.erase(it);
+        it = v.erase(it); # erase invalidates the iterator passed to it and
+                          # returns a new iterator that is correctly set to the
+                          # element following the last removed element or end()
     }
     else
     {
