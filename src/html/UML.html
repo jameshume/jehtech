@@ -1,0 +1,135 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>Unified Modelling Language (UML) Notes | JEHTech</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">Unified Modelling Language (UML) Notes</h1>
+<div style="padding-right:10px;">
+
+<h2>Page Contents</h2>
+<div id="page_contents">
+</div>
+
+<h2>References</h2>
+<div>
+<ul>
+	<li><a href="https://www.uml-diagrams.org/class-diagrams-overview.html#domain-model-diagram" target="_blank">UML Class and Object Diagrams Overview</a>, uml-diagrams.org.</li>
+	<li><a href="https://www.uml-diagrams.org/association.html" target="_blank">UML Association</a>, uml-diagrams.org.</li>
+	<li><a href="https://www.uml-diagrams.org/aggregation.html" target="_blank">UML Aggregation</a>, uml-diagrams.org.</li>
+	<li><a href="https://www.visual-paradigm.com/guide/uml-unified-modeling-language/uml-aggregation-vs-composition/" target="_blank">UML Association vs Aggregation vs Composition</a>, visual-paradigm.com.</li>
+	<li><a href="https://accu.org/index.php/journals/551" target="_blank">UML Relationships and Associations, Aggregation and Composition</a>.</li>
+	<li><a href="https://www.omg.org/spec/UML/2.5/" target="_blank">Unified Modeling Language Specification Version 2.5</a>, Overload Journal #30 - Feb 1999.</li>
+</ul>
+</div>
+
+<h2>Class Diagrams</h2>
+<div>
+	<h3>Class As A Model</h3>
+	<p>
+		A <em>class</em> is something that <em>groups objects with similar characteristics</em>. For
+		example, the class <code>Animal</code> groups dogs, cats, giraffes etc. into the group
+		labelled &quot;animal&quot;. I.e it is a <em>model</em>.
+	</p>
+	<p>
+		A class defines the abstract idea or concept of the group it represents. The class
+		<code>Animal</code>, for example, defines the idea of an animal. This idea is a
+		<em>model</em>, which means that it does not capture absolutely everything possible about
+		an animal. It <em>only captures characteristics relevant to the domain in which it is
+		being used</em>. For example, for a kennel, it might only need to capture an ID, name and
+		owner. For a veterinary surgery it would need to capture even more detailed characteristics
+		like blood type. This is what is mean by &quot;domain&quot;: the context in which the class
+		is being used.
+	</p>
+	<p>
+		A class is an <em>abstraction</em>. For example, all the characteristics of a real animal are not
+		represented in the model, only those required. The other real-world characteristics are
+		<em>abstracted away</em>. The kennel, for instance, doesn't need to know the blood type of
+		the animal, so does not represent that in its model of an animal. The surgery, however,
+		does so would not abstract it away. Thus the level of abstraction depends on the domain.
+	</p>
+	<p>
+		One other bit of modelling jargon is the <em>&quot;intent&quot; of a class</em>. This is the
+		definition of class membership. For example, in the veterinary surgery, <code>Animal</code>
+		represents the set of animals that are registered with the surgery, not the the set of
+		all animals.
+	</p>
+	<p>
+		What I have called &quot;characteristics&quot; are referred to as &quot;<em>attributes</em>&quot;
+		in UML. As well as its name, an attribute has a type, multiplicity and may also have
+		additional properties such as <code>{readOnly}</code> etc.
+	</p>
+	<p>
+		This is what the UML spec has to say about modelling:
+	</p>
+	<blockquote>
+		<p>... A model is always a model of something. The thing being modeled can generically be considered a system within some
+domain of discourse. The model then makes some statements of interest about that system, abstracting from all the
+details of the system that could possibly be described ... </p>
+		<footer><a href="http://www.omg.org/spec/UML/2.5" target="_blank">Unified Modeling Language Version 2.5</a>.</footer>
+	</blockquote>
+	<p></p>
+
+	<h3>Associations</h3>
+	<h4>Unary</h4>
+	<h4>Binary</h4>
+	<h4>Ternary and Association Classes</h4>
+	<h4>Aggregation</h4>
+	<blockquote>
+		<p>
+		... Sometimes a Property is used to model circumstances in which one instance is used to group together a set of instances;
+this is called aggregation ...
+		</p>
+		<p>
+			<table>
+				<tr><td>none</td>  <td>Indicates that the Property has no aggregation semantics.</td>
+				</tr>
+				<tr><td>shared</td><td>Indicates that the Property has shared aggregation semantics.
+					                   Precise semantics of shared aggregation varies by application
+					                   area and modeler.</td>
+				</tr>
+				<tr><td>composite</td><td>Indicates that the Property is aggregated compositely,
+					                      i.e., the composite object has responsibility for
+					                      the existence and storage of the composed objects.</td>
+				</tr>
+			</table>
+		</p>
+		<p>
+			Composite aggregation is a strong form of aggregation that requires a part object be
+			included in at most one composite object at a time. If a composite object is deleted,
+			all of its part instances that are objects are deleted with it.
+		</p>
+		<p>
+			NOTE. A part object may (where otherwise allowed) be removed from a composite object before
+			the composite object is deleted, and thus not be deleted as part of the composite object.
+		</p>
+		<footer>
+			<a href="http://www.omg.org/spec/UML/2.5" target="_blank">Unified Modeling Language Version 2.5</a>, section 9.5.3.
+		</footer>
+	</blockquote>
+	<p></p>
+	<h4>Inheritance, Constraints &amp; Generalisation Sets</h4>
+</div> <!-- END H2 Class Diagrams -->
+
+</div> <!-- END H1 padding div -->
+</div>
+</body>
+</html>
+
+
