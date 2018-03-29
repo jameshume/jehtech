@@ -144,6 +144,39 @@
 			<li><a href="https://godbolt.org" target="_blank">https://godbolt.org</a></li>
 		</ul>
 
+        <h2>Compilation Flags (GCC)</h2>
+        <div>
+            <p>
+                Useful flags, mostly warning-enablers, to add to builds...
+            </p>
+            <table>
+                <tr><td><code>-Wall</code></td><td>Enables lots of warnings, but not everything.</td></tr>
+                <tr><td><code>-Wextra</code></td><td>Enables some extra warning flags that are not enabled by -Wall.</td></tr>
+                <tr><td><code>-Wshadow</code></td><td>Warn whenever a local variable or type declaration shadows another variable, parameter, type, class member etc.</td></tr>
+                <tr><td><code>-Werror</code></td><td>Converts all warnings to errors.</td></tr>
+                <tr><td><code>-Wfloat-equal</code></td><td>Warn if floating-point values are used in equality comparisons. .</td></tr>
+                <tr><td><code>-Wcast-align</code></td><td></td></tr>
+                <tr><td><code>-Wpointer-arith</code></td><td></td></tr>
+                <tr><td><code>-Wmisleading-indentation</code></td><td>Warn when the indentation of the code does not reflect the block structure.</td></tr>
+                <tr><td><code>-Wuninitialized</code></td><td></td></tr>
+                <tr><td><code>-pedantic</code></td><td>Requires Strict ISO C[++] and reject forbidden language extensions.</td></tr>
+                <tr><td><code>-pedantic-errors</code></td><td>Turns -pedantic warnings into errors.</td></tr>
+                <tr><td><code>-Wconversion</code></td><td>Warn for implicit conversions that may alter a value.</td></tr>
+                <tr><td><code>-Wsign-conversion</code></td><td>Warn for implicit conversions that may change the sign of an integer value.</td></tr>
+                <tr><td><code>-g</code></td><td>For debug information.</td></tr>
+                <tr><td><code>-rdynamic</code></td><td></td></tr>
+                <tr><td><code>-Wno-long-long</code></td><td>Do NOT warn if long long type is used.</td></tr>
+                <tr><td><code>-O[s0-?]</code></td><td>Optimize for space or speed.</td></tr>
+                <tr><td><code>-E</code></td><td>Produces only the preprocessor output.</td></tr>
+                <tr><td><code>-S</code></td><td>Produces only the assembly code. Combine this with <code>-fverbose-asm</code> to add informative comments to the assembly output.</td></tr>
+                <tr><td><code>-fPIC</code></td><td>For shared libraries produce position independent code.</td></tr>
+                <tr><td><code>-D</code></td><td>Define macro on the command line.</td></tr>
+                <tr><td><code>-fcheck-pointer-bounds</code></td><td>Enable Pointer Bounds Checker instrumentation. Each memory reference is instrumented with checks of the pointer used for memory access against bounds associated with that pointer. </td></tr>
+                <tr><td><code>-Wdouble-promotion</code></td><td>Give a warning when a value of type float is implicitly promoted to double.</td></tr>
+            </table>
+            <p></p>
+        </div>
+
 		<h2>Debugging</h2>
 		<div>
 			<h3>Instrumenting Functions</h3>
