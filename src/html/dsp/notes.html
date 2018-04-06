@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+    <meta charset="UTF-8">                                              <!-- HTML 5 -->
+    <title>DSP Notes</title>
+    <!-- META_INSERT -->
+    <!-- CSS_INSERT -->
+    <!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+    -- This is JEHTech --
+</div>
+
+<div id="sidebar">
+    <h1 class="title">Links...</h1>
+    <div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">DSP Notes</h1>
+<div style="padding-right:10px;">
+<!-- ******************************************************************************************- -->
+
+<h2>Page Contents</h2>
+<div id="page_contents">
+</div>
+
+<h2>References</h2>
+<div>
+	<p>None</p>
+</div>
+
+<h2>Blah</h2>
+<div>
+<p>
+	Digital means:
+	<ul>
+		<li>Discrete time</li>
+		<li>Discrete amplitude</li>
+	</ul>
+</p>
+
+<p>
+	Analogue and digital signals can carry the same information under certain conditions. Answered by
+	Harry Nyquist and Claude Shannon. Under appropriate &quot;slowness&quot; conditions for $x(t)$ we
+	have the Sampling Theorem:
+
+	$$
+	x(t) = \sum_{n=-\infty}^{\infty} x[n] \mathrm{sinc}\left(\frac{t - nT_s}{T_s}\right)
+	$$
+
+	We can build the continuous time signal from the discrete time sequence. Take copies of the $\mathrm{sinc}()$
+	function at each sample location scaled by the amplitude of the sample and sum them to get back the
+	original function.
+
+	The conditions under which you can do this are determined by the Fourier transform. Once we know
+	the &quot;speed&quot; of the signal we can choose a sampling interval that will allow the above
+	theorem to work - this is the <em>Nyquist</em> rate.
+</p>
+<p>
+	Discrete time signal is a sequence of <em>complex</em> numbers denoted $x[n]$ where the square
+	brackets are used to indicate its discrete nature. The index n just provides an ordering for
+	samples which are taken at a steady interval, the sampling period. The sequence is two-sided in
+	that it goes from minus infinity to plus infinity.
+</p>
+<p>
+	The delta signal: $\delta[n]$. TODO INSERT GRAPH
+</p>
+<p>
+	The unit step signal: $\text{u}[n]$. TODO INSERT GRAPH
+</p>
+<p>
+	The exponential signal: $x[n] = |n|^nu[n], |a| < 1$. TODO INSERT GRAPH.
+	E.g. describes newtons law of cooling or capacitor discharge.
+</p>
+<p>
+	The sinusoidal signal: $\sin(\omega_0 n + \theta)$. Angles in radians.
+</p>
+<p>
+	There are 4 signal classes:
+</p>
+<ul>
+	<li>finite length - only N samples.  Range of index is 0 to N-1.</li>
+	<li>infinite length - index N ranges over entire range of integers. abstract. good for theoems.  They have <em>infinite</em> energy.</li>
+	<li>periodic - data repeats every N samples. Represent with a tild on top. Same info as a finite-length of length N. They have <em>infinite</em> energy.</li>
+	<li>finite support - infinite length with on a finite number of non zero samples. Eg unit step.</li>
+</ul>
+<p>
+	Elementary operations include scaling, sum, product. These can be applied to any discrete signal.
+	Shift-by-k can be applied to infinite signals, but when applying to discrete time signals we need
+	to state what happens when we go beyond the index range N, i.e., how we embed it into an
+	infinite length sequence. Can embed into a finite-support sequence by putting zeros on the
+	left and right. Or we could use a periodic extension, whereby the shift becomes circular.
+	<em>The periodic extension is the natural way to interpret the shift of a finite-length signal</em>.
+</p>
+<p>
+	Energy of signal defined by the following.
+
+	$$E_x = \sum_{n = -\infty}^{\infty} |x[n]|^2$$
+</p>
+<p>
+	Power is the rate of energy production defined as follows.
+	$$P_x = \lim_{N\to\infty} \frac{1}{2N+1} \sum_{n=-N}^{N} |x[n]|^2$$
+</p>
+<!-- https://www.khanacademy.org/math/precalculus/imaginary-and-complex-numbers -->
+</div>
+
+<!-- ******************************************************************************************- -->
+</div> <!-- End main padding dic -->
+</div> <!-- End content div -->
+</body>
+</html>
+
+

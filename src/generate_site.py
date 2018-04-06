@@ -341,7 +341,7 @@ def deploy_site():
 		newFile.write(htmlFileContents)
 		newFile.close()
 
-		if filename in ['math_revision.html', 'linear_alg.html', 'gaussians.html', 'stats.html']:
+		if filename in ['math_revision.html', 'linear_alg.html', 'gaussians.html', 'stats.html', 'notes.html']:
 			mathjaxPageExe = getMathjaxNodePageBinPath()
 			if platform.system() == 'Windows':
 				shutil.copyfile(newFileName, newFileName + ".TMP")

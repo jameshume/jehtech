@@ -7,7 +7,7 @@
 	<!-- META_INSERT -->
 	<!-- CSS_INSERT -->
 	<!-- JAVASCRIPT_INSERT -->
-	<script> 
+	<script>
 		$(function(){
 			AddLinkToTeleTypeText({
 				"ndarray"  : "http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html",
@@ -51,13 +51,13 @@
 <h2>Preamble...</h2>
 <div>
 			<p>
-				<a href="http://www.numpy.org/" target="_blank">Numpy</a> &quot;...is the fundamental package for 
+				<a href="http://www.numpy.org/" target="_blank">Numpy</a> &quot;...is the fundamental package for
 				scientific computing with Python...&quot;. Good for fast maths... mostly due to vectorization (batch operation
 				on datasets without needing loops) implemented in the compiled modules underneath the Python interface, which,
-				where possible, will take advantage of hardware vectorization. A lot of the more complex underlying modules 
+				where possible, will take advantage of hardware vectorization. A lot of the more complex underlying modules
 				for things like linear algebra, matrix operations etc, are build using the help of
 				oftware libraries, available under BSD style licences, such as <a href="http://www.netlib.org/blas/" target="_blank">BLAS</a>
-				and derivatives like <a href="http://www.netlib.org/lapack/" target="_blank">LAPACK</a>. 
+				and derivatives like <a href="http://www.netlib.org/lapack/" target="_blank">LAPACK</a>.
 			</p>
 <pre class="prettyprint linenums lang-python">
 import numpy as np
@@ -68,10 +68,13 @@ import numpy as np
 		<div>
 			<ul>
 				<li>
-					<a href="http://shop.oreilly.com/product/0636920023784.do" target="_blank">Python for Data Analysis</a>, Wes McKinney, O'Reilly Media 
+					<a href="http://shop.oreilly.com/product/0636920023784.do" target="_blank">Python for Data Analysis</a>, Wes McKinney, O'Reilly Media
 				</li>
 				<li>
-					<a href="https://www.packtpub.com/big-data-and-business-intelligence/numpy-beginner%E2%80%99s-guide-second-edition" target="_blank">NumPy Beginner's Guide</a>, Ivan Idris, Packt Publishing 
+					<a href="https://www.packtpub.com/big-data-and-business-intelligence/numpy-beginner%E2%80%99s-guide-second-edition" target="_blank">NumPy Beginner's Guide</a>, Ivan Idris, Packt Publishing
+				</li>
+				<li>
+					<a href="http://www.scipy-lectures.org/intro/numpy/index.html" target="_blank">NumPy: creating and manipulating numerical data</a>, scipy-lectures.org.
 				</li>
 			</ul>
 		</div>
@@ -80,9 +83,9 @@ import numpy as np
 		<div>
 			<h3>Intro</h3>
 			<p>
-			The Python NumPy array object is <tt>ndarray</tt>. 
-			Create it using any iterable via, typically, the function <tt>np.array()</tt>. 
-			The most basic properties are <tt>dtype</tt> giving the underlying machine datatype, <tt>shape</tt>giving the length of each dimension and 
+			The Python NumPy array object is <tt>ndarray</tt>.
+			Create it using any iterable via, typically, the function <tt>np.array()</tt>.
+			The most basic properties are <tt>dtype</tt> giving the underlying machine datatype, <tt>shape</tt>giving the length of each dimension and
 			<tt>ndim</tt> giving the number of dimensions...
 			</p>
 <pre class="prettyprint linenums lang-python">
@@ -114,7 +117,7 @@ array([[1,2],
 				<tt>b</tt> would contain an independent copy of the slice data. But in the example below we see that modifying <tt>b</tt>
 				changes the data in <tt>a</tt>! Thus NumPy array slices are more like <em>views into an array</em>
 			</p>
-			
+
 <pre class="prettyprint linenums lang-python">
 &gt;&gt;&gt; a = np.array([1,2,3,4,5,6])
 <b>&gt;&gt;&gt; b = a[2:4] #&lt;&lt; 'b' will be a VIEW into 'a'</b>
@@ -134,7 +137,7 @@ array([111, 111])
 
 <pre class="prettyprint linenums lang-python">
 &gt;&gt;&gt; a = np.array([1,2,3,4,5,6])
-<b>&gt;&gt;&gt; b = a[2:4].copy() #&lt;&lt; Here we take a COPY</b> 
+<b>&gt;&gt;&gt; b = a[2:4].copy() #&lt;&lt; Here we take a COPY</b>
 &gt;&gt;&gt; b
 array([3, 4])
 &gt;&gt;&gt; b[:] = 111
@@ -157,7 +160,7 @@ array([111, 111])
 &gt;&gt;&gt; a
 array([999, 999, 111, 111,   5,   6])
 
-<b>&gt;&gt;&gt; c[:] = 0 #&lt;&lt; Modifying 'c' here will not change 'a'</b> 
+<b>&gt;&gt;&gt; c[:] = 0 #&lt;&lt; Modifying 'c' here will not change 'a'</b>
 &gt;&gt;&gt; c
 array([0, 0])
 
@@ -231,7 +234,7 @@ array([[85, 56, 77, 88, 66, 54],
 </pre>
 			<p>In the above <tt>b[mask_rows]</tt> is equivalent to <tt>b[mask_rows, :]</tt>. Also note that the
 				mask must also be a NumPy array, it cannot be, for example, a plain list... that won't work
-				as you expect! 
+				as you expect!
 			</p>
 
 			<h3>Index With Integers - Fancy Indexing</h3>
@@ -252,7 +255,7 @@ array([ 10, 5])
 </pre>
 			<h3>Condition Logic</h3>
 			<p>
-				The NumPy <tt>np.where()</tt> is the vectorized verions of the ternary &quot;<tt>x if cond else y</tt>&quot; 
+				The NumPy <tt>np.where()</tt> is the vectorized verions of the ternary &quot;<tt>x if cond else y</tt>&quot;
 				operator.
 			</p>
 			<p>
@@ -286,21 +289,21 @@ array([[1, 4],
 array([[2, 4],
        [2, 4]])</pre>
 			<p>
-				This is summarised very will in &quot;Python For Data Analysis&quot; as 
+				This is summarised very will in &quot;Python For Data Analysis&quot; as
 				follows.
 			</p>
 			<p><div class="box_container"><div class="info">
 				<p>
 					Two [Python NumPy] arrays are compatible for broadcasting if for each trailing dimension (that is, starting
 					from the end), the axis lengths match or if either of the lengths is 1. Broadcasting
-					is then performed over the missing and / or length 1 dimensions 
+					is then performed over the missing and / or length 1 dimensions
 					<a href="http://shop.oreilly.com/product/0636920023784.do" target="_blank">[1]</a>.
 				</p>
 			</div></div></p>
 
 			<h3>Stacking, Concatenating</h3>
 			<p>
-				Remember that a 3D array is indexed as [depth][row][col] because 
+				Remember that a 3D array is indexed as [depth][row][col] because
 				Python is row-major (i.e. fastest increasing index on the right).
 			</p>
 			<pre>&gt;&gt;&gt; a = np.arange(8).reshape((2,2,2))
@@ -341,9 +344,9 @@ array([[[0, 1, 0, 1],
 
 			<h3>Statistics (and how axis numbering works)</h3>
 			<p>
-			There are a few <a target="blank" href="http://docs.scipy.org/doc/numpy/reference/routines.statistics.html">statistical measures</a> 
-			that can be efficiently made across an array including the <tt>mean()</tt>, <tt>std()</tt>, <tt>var()</tt> 
-			and their not-a-number-ignoring equivalents <tt>nanmean()</tt>, <tt>nanstd()</tt>, <tt>nanvar()</tt>. 
+			There are a few <a target="blank" href="http://docs.scipy.org/doc/numpy/reference/routines.statistics.html">statistical measures</a>
+			that can be efficiently made across an array including the <tt>mean()</tt>, <tt>std()</tt>, <tt>var()</tt>
+			and their not-a-number-ignoring equivalents <tt>nanmean()</tt>, <tt>nanstd()</tt>, <tt>nanvar()</tt>.
 			These can be computed along any array &quot;axis&quot; or for the entire array...
 			</p>
 			<p>I was a little surprised with how Python's NumPy labeled the axes... for 2D arrays here's how it works:
@@ -363,7 +366,7 @@ array([ 0.5,  2.5])
 <img src="##IMG_DIR##/python/2d_array.png" style="float: left; width:202px; height: 189">
 
 			<p style="clear:both;">
-				Because we index the 2D array as <tt>array[row][col]</tt> it makes sense to me that the column-axis 
+				Because we index the 2D array as <tt>array[row][col]</tt> it makes sense to me that the column-axis
 				number is <tt>0</tt> and the row-axis number is <tt>1</tt>.
 			</p>
 			<p>For 3D arrays it works like this...</p>
@@ -388,12 +391,12 @@ array([[ 0.5,  2.5],
 </pre>
 <img src="##IMG_DIR##/python/3d_array.png" style="float: left; width:303px; height: 282">
 			<p style="clear:both;">
-				Note: The call <tt>b.mean(xxx)</tt> is the same as <tt>b.mean(axis=xxx)</tt>. 
+				Note: The call <tt>b.mean(xxx)</tt> is the same as <tt>b.mean(axis=xxx)</tt>.
 			</p>
 			<p>
-				The 3D array above is indexed as <tt>[depth][row][col]</tt> as Python is row-major (i.e. 
-				fastest increasing index on the right). 
-			<p> I had expected that the axes would numbered from zero, zero being the 
+				The 3D array above is indexed as <tt>[depth][row][col]</tt> as Python is row-major (i.e.
+				fastest increasing index on the right).
+			<p> I had expected that the axes would numbered from zero, zero being the
 				fastest increasing index (i.e., col). The next fastest increasing index (i.e, row) is numbered <tt>1</tt> and so on. Therefore,
 				in this case axis <tt>0</tt> would be column, axis  <tt>1</tt> would be row and axis  <tt>2</tt> would be depth.
 			</p>
@@ -403,7 +406,7 @@ array([[ 0.5,  2.5],
 			axis to be labeled zero. This is how the axis numbering really works and this is what is shown in the image above.
 			</p>
 			<p>Thus, a 1D array has only rows so the row-axis is labeled <tt>0</tt>. A 2D array has a new dimension, columns. So increment the row column label
-				so that it is now labeled <tt>1</tt>. The new dimension (axis), column, is now labeled <tt>0</tt>. A 3D array adds yet another dimension, depth. So increment 
+				so that it is now labeled <tt>1</tt>. The new dimension (axis), column, is now labeled <tt>0</tt>. A 3D array adds yet another dimension, depth. So increment
 				the labels of the existing axes so that row now becomes <tt>2</tt>, column <tt>1</tt>, and the new axis <tt>0</tt>.
 			</div> <!-- End of H2 children containing div -->
 	</div>
