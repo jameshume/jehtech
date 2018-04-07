@@ -349,7 +349,7 @@
        </p>
 </div>
 
-<h2>Complex Numbers</h2>
+<h2>Imaginary &amp; Complex Numbers</h2>
 <div>
   <pre>
     https://www.maths.ox.ac.uk/system/files/attachments/complex%20%281%29.pdf
@@ -362,6 +362,90 @@
     http://greenteapress.com/thinkdsp/thinkdsp.pdf
     http://web.eecs.umich.edu/~aey/eecs206/lectures/phasor.pdf
   </pre>
+  <h3>Intro</h3>
+  <p>
+    The definition of a imaginary number, $i$, is $i^2 = -1$, which is also often seen written as $i = \sqrt{-1}$. It's called &quot;imaginary&quot;
+    because the square root of -1 doesn't exist in real terms: there is no real number that when multiplied by itself is negative. Thus, the
+    set of real numbers has been &quot;extended&quot;. Sometimes $j$ is used instead of $i$ to denote an imaginary number.
+  </p>
+  <p>
+    A complex number is one that has a real and imaginary part, even if the real part is zero. Thus real numbers are a subset of complex numbers.
+  </p>
+
+  <h3>Rectangular Form</h3>
+  <p>
+    In <em>rectangular form</em> we write complex numbers like this: $z = a + bi$, where $a$ and $b$ are real numbers.
+    If $z = a + bi$ then it we can write $\mathrm{Re}(z) = a$ and $\mathrm{Im}(z) = b$.
+  </p>
+  <p>
+    The representation of a complex number as $z = a + bi$ is called <em>rectangular form</em>.
+  </p>
+  <p>
+    A complex number can be viewed graphically on an <em>argand</em> diagram, which is a little like a Cartesian diagram, except
+    the horizontal axis is the real component and the vertical axis is the imaginary component of the complex number:
+  </p>
+  <p>
+    <img src="##IMG_DIR##/argand-diagram.png" alt="argand diagram of complex numnbers"/>
+  </p>
+
+  <table>
+    <tr><td>Add</td>
+        <td>$$ z_1 + z_2 \\
+               = (a_1 + b_1i) + (a_2 + b_2i) \\
+               = (a_1 + a_2) + (b_1 + b_2)i
+            $$
+        </td>
+    </tr>
+    <tr><td>Subtract</td>
+        <td>$$ z_1 - z_2 \\
+               = (a_1 + b_1i) - (a_2 + b_2i) \\
+               = (a_1 - a_2) + (b_1 - b_2)i
+            $$
+        </td>
+    </tr>
+    <tr><td>Multiply</td>
+        <td>$$ z_1 z_2 \\
+               = (a_1 + b_1i)(a_2 + b_2i) \\
+               = a_1a_2 + a_1b_2i + a_2b_1i - b_1b_2
+            $$
+        </td>
+    </tr>
+    <tr><td>Divide</td>
+        <td>Need complex conjugates for this. See below...
+            $$ z_1 \div z_2 \\
+               = \frac{(a_1 + b_1i)}{(a_2 + b_2i)} \\
+               = \frac{(a_1 + b_1i)}{(a_2 + b_2i)}  \frac{(a_2 - b_2i)}{(a_2 + b_2i)} \\
+               = \frac{(a_1 + b_1i)(a_2 - b_2i)}{a_2^2 + b_2^2} \\
+               = \frac{a_1a_2 + a_1b_2i + a_2b_1i - b_1b_2}{|z_2|^2}
+            $$
+        </td>
+    </tr>
+  </table>
+  <p>
+    Complex conjugates. The <em>complex conjugate</em> of $z = a + bi$ is defined as
+    $\bar z = z^* = a - bi$ (where $\bar z$ and $z^*$ are just two different notations
+    that mean the same thing). The can be visualised as shown below:
+  </p>
+  <p>
+    <img src="##IMG_DIR##/complex-conjugate.png" alt="complex conjugate argand diagram"/>
+  </p>
+  <p>
+    The next thing to talk about is the <em>magnitude</em> of a complex number. In the above
+    diagrams we can see that the vector forms a right-angled triangle with the horizontal axis.
+    The magnitude is the length of the vector and this is defined as follows:
+
+    $$
+      |z| = \sqrt{\mathrm{Re}(z)^2 + \mathrm{Im}(z)^2}
+    $$
+  </p>
+
+  <h3>Polar Form</h3>
+  <p>Complex numbers can also be written in <em>polar form</em> by specifying magnitude (distance
+    from the origin) and angle...
+  </p>
+  <p>
+    <img src="##IMG_DIR##'/polar-form.png" alt="diagram of complex number in polar form"/>
+  </p>
 </div>
 
 <a name="combinations_permutations"></a>
