@@ -3,6 +3,7 @@ import os
 import re
 import subprocess
 import codecs
+import platform
 
 SRC_FILE = sys.argv[1]
 DST_FILE = sys.argv[2]
@@ -40,7 +41,7 @@ htmlFile.close()
 #htmlFileContents = prog_img.sub('{}{}images/jeh-tech'.format(link_to_root, "" if link_to_root == "" else '/'), htmlFileContents)
 newFileName = DST_FILE
 targetDir = os.path.split(newFileName)[0]
-if os.path.isdir(targetDir):
+if not os.path.isdir(targetDir):
 	print("Creating {}".format(targetDir))
 	os.makedirs(targetDir)
 
