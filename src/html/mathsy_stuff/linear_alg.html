@@ -7,18 +7,6 @@
 	<!-- META_INSERT -->
 	<!-- CSS_INSERT -->
 	<!-- JAVASCRIPT_INSERT -->
-    <!--
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
-	<script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-          tex2jax: {
-              inlineMath: [['$','$'], ['\\(','\\)']]
-          },
-          displayAlign: "left",
-          displayIndent: "2em"
-      });
-	</script>
-    -->
 </head>
 
 <body>
@@ -48,7 +36,177 @@
 </div>
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h2>Matricies And Simultaneous Linear Equations</h2>
+<h2>Vector Stuff</h2>
+<div>
+<h3>Linear Combinations</h3>
+<p>
+    A linear combination of vectors is one that only uses the addition and scalar multiplication
+    of those variables. So, given two vectors, $\vec a$ and $\vec b$ the following are linear
+    combinations:
+    $$
+        0\vec a + 0\vec b \\
+        5\vec a - 2.5\vec b \\
+        -123\vec a + \pi\vec b
+    $$
+    This can be generalise to say that for any set of vectors
+    $\{\vec{v_1}, \vec{v_2}, \ldots, \vec{v_n}\} \text{ for } \vec{v_1}, \vec{v_2}, \ldots, \vec{v_n} \in \mathbb{R}^m$
+    that a linear combination of those vectors is $c_1\vec{v_1} + c_2\vec{v_2} + \cdots + c_n\vec{v_n} \text{ for } c_i \in \mathbb{R}$.
+</p>
+
+<h3>Spans</h3>
+<p>
+    <img style="float:right;" src="##IMG_DIR##/span.png" alt="graph showing span of two vectors in 2D space"/>
+    The <em>set of all linear combinations</em> of a set of vectors $\{\vec{v_1}, \vec{v_2}, \ldots, \vec{v_n}\}$ is called the <em>span</em> of those vectors:
+
+    $$
+        \mathrm{span}(\vec{v_1}, \vec{v_2}, \ldots, \vec{v_n}) = \{c_1\vec{v_1} + c_2\vec{v_2} + \cdots + c_n\vec{v_n} \;|\; c_i \in \mathbb{R}\}
+    $$
+
+    In the graph to the right there are two vectors $\vec a$ and $\vec b$. The dotted blue lines show
+    all the possible scalings of the vectors. The vectors span those lines. The green lines show
+    two particular scalings of $\vec a$ added to all the possible scalings of $\vec b$. One can
+    use this to imagine that if we added all the possible scalings of $\vec a$ to all the possible
+    scalings of $\vec b$ we would reach every coordinate in $\mathbb{R}^2$. Thus, we can say that
+    the set of vectors $\{\vec a, \vec b\}$ spans $\mathbb{R}^2$, or $\mathrm{span}(\vec a, \vec b) = \mathbb{R}^2$.
+</p>
+<p>
+    From this we may be tempted to say that any set of two, 2d, vectors spans $\mathbb{R}^2$ but we
+    would be wrong. Take for example $\vec a$ and $\vec b = -\alpha\vec a$. These two variables are
+    <a href="https://en.wikipedia.org/wiki/Collinearity" target="_blank">co-linear</a>. Because
+    they span the same line, no combination of them can ever move off that line. Therefore they
+    do <em>not</em> span $\mathbb{R}^2$.
+</p>
+<p>
+    Lets write the above out a little more thoroughly...
+
+    $$
+        \vec a =
+        \begin{bmatrix}
+          a_1 \\
+          a_2
+        \end{bmatrix}
+
+        , \vec b =
+        \begin{bmatrix}
+          -\alpha a_1 \\
+          -\alpha a_2
+        \end{bmatrix}
+
+    $$
+
+    The span of these vectors is, by our above definition:
+
+    $$
+    \mathrm{span}(\vec a, \vec b) =
+    \left\{
+        c_1
+        \begin{bmatrix}
+          a_1 \\
+          a_2
+        \end{bmatrix}
+
+        + c_2
+        \begin{bmatrix}
+          -\alpha a_1 \\
+          -\alpha a_2
+        \end{bmatrix}
+
+        \mid c_i \in \mathbb{R}
+    \right\}
+    $$
+
+    Which we can re-write as:
+
+    $$
+    \begin{align}
+    \mathrm{span}(\vec a, \vec b) &=
+    \left\{
+        c_1
+        \begin{bmatrix}
+          a_1 \\
+          a_2
+        \end{bmatrix}
+
+        -\alpha c_2
+        \begin{bmatrix}
+          a_1 \\
+          a_2
+        \end{bmatrix}
+
+        \mid c_i \in \mathbb{R}
+    \right\} \\
+
+    &=
+    \left\{
+        (c_1 -\alpha c_2)
+        \begin{bmatrix}
+          a_1 \\
+          a_2
+        \end{bmatrix}
+        \mid c_i \in \mathbb{R}
+    \right\} \\
+    \end{align}
+    $$
+
+    ... which we can clearly see is just the set of all scaled vectors of $\vec a$. Plainly,
+    any co-linear set of 2d vectors will not span $\mathbb{R}^2$.
+</p>
+
+<h3 style="clear:both;">Linear Independence</h3>
+<p>
+    We saw above that the set of vectors $\{\vec a, -\alpha\vec a\}$ are co-linear and thus did
+    not span $\mathbb{R}^2$. The reason for this is that they are linealy <em>dependent</em>, which
+    means that <em>one or more vectors in the set are just linear combinations of other vectors
+    in the set</em>.
+</p>
+<p>
+    For example, the set of vectors $\{[1, 0], [0, 1], [2, 3]\}$ spans $\mathbb{R}^2$, but $[2, 3]$ is
+    redundant because we can remove it from the set of vectors and still have a set that spans $\mathbb{R}^2$.
+    In other words, it adds no new information or directionality to our set.
+</p>
+<p>
+    A set of vectors will be said to be linearly <em>dependent</em> when:
+
+    $$
+        c_1v_1 + \cdots + c_nv_n = \vec 0 \mid \exists \{c_i | c_i \ne 0 \}
+    $$
+
+    Sure, this is a definition, but why does this mean that the set is linearly <em>dependent</em>?
+</p>
+<div>
+    <img style="float:left; margin-right:10px; margin-bottom:10px;" src="##IMG_DIR##/linearly-independent-1.png" alt="Picture of linearly indpendent vectors"/>
+    <p>
+        Think of vectors in a $\mathbb{R}^2$. For any two vectors that are not co-linear, there is
+        no combination of those two vectors that can get you back to the origin unless they are both
+        scaled by zero. The image to the left is trying to demonstrate that. If we scale $\vec a$, no matter
+        how small we make that scaling, we cannot find a scaling of $\vec b$ that when added to $\vec a$
+        will get us back to the origin. Thus we cannot find a linear combination $c_av_a + c_bv_b = \vec 0$ where
+        $c_a$ and/or $c_b$ does not equal zero.
+    </p>
+    <p>
+        This shows that neither vector is a linear combination of the other, because if it where, we could
+        use a non-zero scaling of one, added to the other, to get us back to the origin.
+    </p>
+    <p>
+        We can also show that two vectors are linearly independent when their dot product is zero. This
+        is covered in a latter section.
+    </p>
+</div>
+
+<h3 style="clear:both">Linear Subspace</h3>
+<p>
+    If $V$ is a set of vectors in $\mathbb{R}^n$, then $V$ is a <em>subspace</em> of $\mathbb{R}^n$
+    if and only if:
+</p>
+<ol>
+    <li><b>$V$ contains the zero vector</b>: $\vec 0 \in V$</li>
+    <li><b>$V$ is closed under scalar multiplication</b>: $\vec x \in V, \alpha \in \mathbb{R} \implies \alpha\vec x \in V$</li>
+    <li><b>$V$ is closed under addition</b>: $\vec a \in V, \vec b \in V \implies \vec a + \vec b \in V$</li>
+</ol>
+</div> <!-- END H2 -->
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<h2 style="clear:both;">Matricies And Simultaneous Linear Equations</h2>
 <div>
 <p>
     The set of linear equations:
@@ -153,7 +311,7 @@ system.rref()[0]</pre>
 
     $$
         3x + 6y - 2z = 11 \\
-        x + 2y + z = 32 ||
+        x + 2y + z = 32 \\
         x - y + z = 1
     $$
 
