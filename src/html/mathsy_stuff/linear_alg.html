@@ -203,6 +203,226 @@
     <li><b>$V$ is closed under scalar multiplication</b>: $\vec x \in V, \alpha \in \mathbb{R} \implies \alpha\vec x \in V$</li>
     <li><b>$V$ is closed under addition</b>: $\vec a \in V, \vec b \in V \implies \vec a + \vec b \in V$</li>
 </ol>
+<p>
+    What these rules mean is that, using linear operations, you can't do anything to &quot;break&quot; out
+    of the subspace using vectors from that subspace. Hence &quot;closed&quot;.
+</p>
+<p>
+    Surprising, at least for me, was that the zero vector is actually a subspace of $\mathbb{R}^n$ because the set $\{\vec 0\}$
+    obeys all of the above rules.
+</p>
+<p>
+    A very useful thing is that a <em>span is always a valid subspace</em>. Take, for example,
+    $V = \mathrm{span}(v_1, v_2, v_3)$. We can show that it is a valid subspace by checking that it
+    objects the above 3 rules.
+</p>
+<p>
+    First, does it contain the zero vector? Recall that a span is the set of all linear combinations
+    of the span vectors. So we know that the following linear combination is valid, and hence the
+    span contains the zero vector.
+
+    $$
+        0\vec v_1 + 0\vec v_2 + 0\vec v_3 = \vec 0
+    $$
+
+    Second, is it closed under scalar multiplication? Because the span is the set of <em>all</em>
+    linear combinations, for any set of scalars $\{a_1, a_2, a_3\}$...
+
+    $$
+        a_1\vec v_1 + a_2\vec v_2 + a_3\vec v_3 = \vec x
+    $$
+
+    ... must also be in the subspace, by definition of a subspace!
+</p>
+<p>
+    Third, is it closed under vector addition? Well, yes, the same argument as made above would
+    apply.
+</p>
+<p>
+    Interestingly, using the same method as above, we can see that even something trivial,
+    like the $\mathrm{span}([a_1, a_2])$, which is just a line, is a subspace of $\mathbb{R}^2$.
+</p>
+
+<h3 style="clear:both">Basis Of A Subspace</h3>
+<p>
+    Recall,
+
+    $$
+    V = \mathrm{span}(\vec v_1, \ldots, \vec v_n)
+    $$
+
+    $V$ is a subspace of $\mathbb{R}^n$ (where each vector $\vec v_i \in \mathbb{R}^n$). We also
+    know that a span is the set of all possible linear combinations of these vectors.
+</p>
+<p>
+    If we choose a subset of $V$, $S$, where all the vectors in $S$ are linearly <em>independent</em>
+    then we say that $S$ is a <em>basis</em> for $V$.
+</p>
+<p>
+    $S$ acts as a &quot;minimal&quot; set of vectors required to span $V$. I.e., if you added any
+    other vector to $S$ it is superfluous, because it would be a linear combination of the vectors
+    already in $S$. You don't add any new information.
+</p>
+<p>
+    A subspace can have an infinite number of basis, but there are <em>standard basis</em>. For
+    example in $\mathbb{R}^2$ the standard basis is $\{[1, 0], [0, 1]\}$
+</p>
+
+<h3>Orthogonal Vectors and Linear Independence</h3>
+<div style="float:right; border: 1px solid gray; padding: 10px; margin:10px;">
+    <img src="##IMG_DIR##/3d_vectors_at_right_angles.png" alt="Image showing 3 perpendicular vectors" />
+    <br>
+    <i>Figure 1</i>
+</div>
+<p>
+    <b>Orthogonal vectors</b> are vectors that are perpendicular to each other.
+    In a standard 2D or 3D graph, this means that
+    they are at right angles to each other and we can visualise them
+    as seen in Figure 1: $\vec x$ is at 90 degrees to both $\vec y$ and $\vec z$.
+    $\vec y$ is at 90 degrees to $\vec x$ and $\vec z$, and $\vec z$ is at
+    90 degrees to $\vec y$ and $\vec z$.
+</p>
+<p>
+    In any set of any vectors, $[\vec{a_1}, ..., \vec{a_n}]$, the vectors are
+    said to be linearly <b>linearly independent</b> if every vector in the set
+    is orthogonal to every other vector in the set.
+</p>
+<p>
+    So, how do we tell if one vector is orthogonal to another? The answer is
+    the <b>dot product</b> which is defined as follows.
+
+    $$x \cdot y = \sum_1^n {x_i y_i}$$
+</p>
+<p>
+    We know when two <b>vectors are orthogonal when their dot product is
+    zero: $x \cdot y = 0 \implies$ x and y are orthogonal</b>.
+</p>
+<p>But why is this the case? Lets imagine any two aribtrary vectors, each
+    on the circumference of a unit circle (so we know that they have the
+    same length and are therefore a proper rotation of a vector around the
+    centre of the circle). This is shown in figure 2. From the figure, we
+    know the following:
+</p>
+
+<div style="float:right; border:1px solid gray; margin:10px; padding:10px;">
+    <img src="##IMG_DIR##/rotate_vector.png" alt="Picture showing a vector being rotated"/>
+    <br/>
+    Figure 2
+</div>
+
+<p>
+    $$
+    \begin{align}
+    x_1 &= r \cos{\theta_1}& y_1 &= r \sin{\theta_1} \\
+    x_2 &= r \cos({\theta_1 + \theta_n}) & y_2 &= r \sin({\theta_1 + \theta_n})
+    \end{align}
+    $$
+
+    The vector $x_2$ is the vector $x_1$ rotated by $\theta_n$ degrees.
+    We can use the following
+    <a href="math_revision.html#sum_and_product_trig_formulas" target="_blank"> trig identities</a>:
+
+    $$
+    \begin{align}
+    \sin(a \pm b)& = \sin(a)\cos(b) \pm \cos(a)\sin(b) \\
+    \cos(a \pm b)& = \cos(a)\cos(b) \mp \sin(a)\sin(b)
+    \end{align}
+    $$
+
+    Substitute these into the formauls above, we get the following.
+
+    $$
+    \begin{align}
+    x_2 &= r\cos\theta_1\cos\theta_n - r\sin\theta_1\sin\theta_n \\
+    y_2 &= r\sin\theta_1\cos\theta_n + r\cos\theta_1\sin\theta_n \\
+    \end{align}
+    $$
+
+    Which means that...
+
+    $$
+    \begin{align}
+    x_2 &= x_1\cos\theta_n - y_1\sin\theta_n \\
+    y_2 &= y_1\cos\theta_n + x_1\sin\theta_n
+    \end{align}
+    $$
+
+    For a 90 degree rotation $\theta_n = 90^\circ$ we know that $\cos\theta_n = 0$
+    and $\sin\theta_n = 1$. Substiuting these values into the above equations
+    we can clearly see that...
+
+    $$
+    \begin{align}
+    x_2 &= -y_1 \\
+    y_2 &= x_1
+    \end{align}
+    $$
+
+    Therefore, any vector in 2D space that is $[a, b]$ will become
+    $[-b, a]$ and therefore the dot product becomes $-ab + ab = 0$. And
+    voilà, we know know <b>why</b> the dot product of two orthogonal 2D vectors is
+    zero. I'm happy to take it on faith that this extrapolates into n dimensions :)
+</p>
+<p>
+    Another way of looking at this is to consider the law of cosines: $C^2 = A^2 + B^2 - 2AB\cos(c)$:
+</p>
+<p>
+    <img src="##IMG_DIR##/law_of_cosines_1.png" alt="Law of cosines"/>
+</p>
+    Here $A$ and $V$ represent the magnitude of the vectors $\vec x$, $\|\vec x\|$, and $\vec y$, $\|\vec y\|$. $C$ represents
+    the magnitude of the vector $\|\vec x - \vec y\|$. Thus, we have this:
+</p>
+<p>
+    <img src="##IMG_DIR##/law_of_cosines_2.png" alt="Law of cosines"/>
+</p>
+<p>
+    I.e., $\|\vec x - \vec y\|^2 = \|\vec x\|^2 + \|\vec y\|^2 - 2\|\vec x\|\|\vec y\|\cos(\theta_c)$.
+</p>
+<p>
+    When the angle between the vectors is 90 degrees, $\cos(90) = 0$ and so that part of the
+    equation dissapears to give us $\|\vec x - \vec y\|^2 = \|\vec x\|^2 + \|\vec y\|^2$.
+    Now...
+
+    $$
+    \|\vec x - \vec y\|^2 = \|\vec x\|^2 + \|\vec y\|^2 \\
+    \therefore \|\vec x\|^2 + \|\vec y\|^2 - \|\vec x - \vec y\|^2 = 0
+    $$
+
+    Recall that $\|\vec v\| = \sqrt{v_1^2 + v_2^2 + ... + v_n^2}$ and that therefore $\|\vec v\|^2 = v_1^2 + v_2^2 + ... + v_n^2$ .
+</p>
+<p>
+    Based, on this we can say that...
+
+    $$
+        \begin{align}
+        \|\vec x - \vec y\|^2 &= (x_1 - y_1)^2 + (x_2 - y_2)^2 + ... + (x_n - y_n)^2 \\
+                              &= x_1^2 - 2x_1y_1 + y_1^2 + x_2^2 - 2x_2y_2 + y_2^2 + ... + x_n^2 - 2x_ny_n + y_n^2
+        \end{align}
+    $$
+
+    Now, all of the $x_i^2$ and $y_i^2$ terms above will be cancelled out by the $\|\vec x\|^2$ and $\|\vec y\|^2$ terms,
+    leaving us with...
+
+    $$
+    \|\vec x\|^2 + \|\vec y\|^2 - \|\vec x - \vec y\|^2 = 2x_1y_1 + 2x_2y_2 + ... + 2x_ny_n = 0
+    $$
+
+    Which is just twice the dot product when the vectors are at 90 degrees - or just the dot product because we can divide through by 2.
+</p>
+
+
+<h3 style="clear:both">Vector Spaces</h3>
+<p>
+    References:
+</p>
+<ul>
+    <li><a href="https://math.stackexchange.com/questions/2454364/what-isnt-a-vector-space" target="_blank">What isn't a vector space?</a>, Mathematics Stack Exchange.</li>
+    <li><a href="http://www.math.unm.edu/~loring/links/linear_s06/notVector.pdf" target="_blank">Things that are/aren't vector spaces</a>, Dept. of Mathematics and Statistics,University of New Mexico.</li>
+    <li><a href="https://en.wikipedia.org/wiki/Vector_space" target="_blank">Vector space</a>, Wikipedia.</li>
+</ul>
+<p>
+    TODO
+</p>
 </div> <!-- END H2 -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -350,150 +570,6 @@ solve_linear_system(system, x, y, z)</pre>
 </div>
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h2>Orthogonal Vectors and Linear Independence</h2>
-<div>
-	<div style="float:right; border: 1px solid gray; padding: 10px; margin:10px;">
-		<img src="##IMG_DIR##/3d_vectors_at_right_angles.png" alt="Image showing 3 perpendicular vectors" />
-		<br>
-		<i>Figure 1</i>
-	</div>
-	<p>
-		<b>Orthogonal vectors</b> are vectors that are perpendicular to each other.
-		In a standard 2D or 3D graph, this means that
-		they are at right angles to each other and we can visualise them
-		as seen in Figure 1: $\vec x$ is at 90 degrees to both $\vec y$ and $\vec z$.
-		$\vec y$ is at 90 degrees to $\vec x$ and $\vec z$, and $\vec z$ is at
-		90 degrees to $\vec y$ and $\vec z$.
-	</p>
-	<p>
-		In any set of any vectors, $[\vec{a_1}, ..., \vec{a_n}]$, the vectors are
-		said to be linearly <b>linearly independent</b> if every vector in the set
-		is orthogonal to every other vector in the set.
-	</p>
-	<p>
-		So, how do we tell if one vector is orthogonal to another? The answer is
-		the <b>dot product</b> which is defined as follows.
-
-		$$x \cdot y = \sum_1^n {x_i y_i}$$
-	</p>
-	<p>
-		We know when two <b>vectors are orthogonal when their dot product is
-		zero: $x \cdot y = 0 \implies$ x and y are orthogonal</b>.
-	</p>
-	<p>But why is this the case? Lets imagine any two aribtrary vectors, each
-		on the circumference of a unit circle (so we know that they have the
-		same length and are therefore a proper rotation of a vector around the
-		centre of the circle). This is shown in figure 2. From the figure, we
-		know the following:
-	</p>
-
-	<div style="float:right; border:1px solid gray; margin:10px; padding:10px;">
-		<img src="##IMG_DIR##/rotate_vector.png" alt="Picture showing a vector being rotated"/>
-		<br/>
-		Figure 2
-	</div>
-
-	<p>
-		$$
-		\begin{align}
-		x_1 &= r \cos{\theta_1}& y_1 &= r \sin{\theta_1} \\
-		x_2 &= r \cos({\theta_1 + \theta_n}) & y_2 &= r \sin({\theta_1 + \theta_n})
-		\end{align}
-		$$
-
-		The vector $x_2$ is the vector $x_1$ rotated by $\theta_n$ degrees.
-		We can use the following
-		<a href="math_revision.html#sum_and_product_trig_formulas" target="_blank"> trig identities</a>:
-
-		$$
-		\begin{align}
-		\sin(a \pm b)& = \sin(a)\cos(b) \pm \cos(a)\sin(b) \\
-		\cos(a \pm b)& = \cos(a)\cos(b) \mp \sin(a)\sin(b)
-		\end{align}
-		$$
-
-		Substitute these into the formauls above, we get the following.
-
-		$$
-		\begin{align}
-		x_2 &= r\cos\theta_1\cos\theta_n - r\sin\theta_1\sin\theta_n \\
-		y_2 &= r\sin\theta_1\cos\theta_n + r\cos\theta_1\sin\theta_n \\
-		\end{align}
-		$$
-
-		Which means that...
-
-		$$
-		\begin{align}
-		x_2 &= x_1\cos\theta_n - y_1\sin\theta_n \\
-		y_2 &= y_1\cos\theta_n + x_1\sin\theta_n
-		\end{align}
-		$$
-
-		For a 90 degree rotation $\theta_n = 90^\circ$ we know that $\cos\theta_n = 0$
-		and $\sin\theta_n = 1$. Substiuting these values into the above equations
-		we can clearly see that...
-
-		$$
-		\begin{align}
-		x_2 &= -y_1 \\
-		y_2 &= x_1
-		\end{align}
-		$$
-
-		Therefore, any vector in 2D space that is $[a, b]$ will become
-		$[-b, a]$ and therefore the dot product becomes $-ab + ab = 0$. And
-		voilà, we know know <b>why</b> the dot product of two orthogonal 2D vectors is
-		zero. I'm happy to take it on faith that this extrapolates into n dimensions :)
-	</p>
-    <p>
-        Another way of looking at this is to consider the law of cosines: $C^2 = A^2 + B^2 - 2AB\cos(c)$:
-    </p>
-    <p>
-        <img src="##IMG_DIR##/law_of_cosines_1.png" alt="Law of cosines"/>
-    </p>
-        Here $A$ and $V$ represent the magnitude of the vectors $\vec x$, $\|\vec x\|$, and $\vec y$, $\|\vec y\|$. $C$ represents
-        the magnitude of the vector $\|\vec x - \vec y\|$. Thus, we have this:
-    </p>
-    <p>
-        <img src="##IMG_DIR##/law_of_cosines_2.png" alt="Law of cosines"/>
-    </p>
-    <p>
-        I.e., $\|\vec x - \vec y\|^2 = \|\vec x\|^2 + \|\vec y\|^2 - 2\|\vec x\|\|\vec y\|\cos(\theta_c)$.
-    </p>
-    <p>
-        When the angle between the vectors is 90 degrees, $\cos(90) = 0$ and so that part of the
-        equation dissapears to give us $\|\vec x - \vec y\|^2 = \|\vec x\|^2 + \|\vec y\|^2$.
-        Now...
-
-        $$
-        \|\vec x - \vec y\|^2 = \|\vec x\|^2 + \|\vec y\|^2 \\
-        \therefore \|\vec x\|^2 + \|\vec y\|^2 - \|\vec x - \vec y\|^2 = 0
-        $$
-
-        Recall that $\|\vec v\| = \sqrt{v_1^2 + v_2^2 + ... + v_n^2}$ and that therefore $\|\vec v\|^2 = v_1^2 + v_2^2 + ... + v_n^2$ .
-    </p>
-    <p>
-        Based, on this we can say that...
-
-        $$
-            \begin{align}
-            \|\vec x - \vec y\|^2 &= (x_1 - y_1)^2 + (x_2 - y_2)^2 + ... + (x_n - y_n)^2 \\
-                                  &= x_1^2 - 2x_1y_1 + y_1^2 + x_2^2 - 2x_2y_2 + y_2^2 + ... + x_n^2 - 2x_ny_n + y_n^2
-            \end{align}
-        $$
-
-        Now, all of the $x_i^2$ and $y_i^2$ terms above will be cancelled out by the $\|\vec x\|^2$ and $\|\vec y\|^2$ terms,
-        leaving us with...
-
-        $$
-        \|\vec x\|^2 + \|\vec y\|^2 - \|\vec x - \vec y\|^2 = 2x_1y_1 + 2x_2y_2 + ... + 2x_ny_n = 0
-        $$
-
-        Which is just twice the dot product when the vectors are at 90 degrees - or just the dot product because we can divide through by 2.
-    </p>
-</div>
-
 <h2>Orthogonal Matrices</h2>
 <div>
 	<p>
