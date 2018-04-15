@@ -77,7 +77,7 @@
     </tr>
     <tr><td>6</td>
         <td>Closed under scalar multiply:</td>
-        <td>$\c\vec u \in V$</td>
+        <td>$c\vec u \in V$</td>
     </tr>
     <tr><td>7</td>
         <td>Distributive:</td>
@@ -85,7 +85,7 @@
     </tr>
     <tr><td>8</td>
         <td>Distributive:</td>
-        <td>$(c + d)\vec u = c\vec u + d\vec u</td>
+        <td>$(c + d)\vec u = c\vec u + d\vec u$</td>
     </tr>
     <tr><td>9</td>
         <td>Distributive:</td>
@@ -96,6 +96,43 @@
         <td>$1 \vec u = \vec u$</td>
     </tr>
 </table>
+<p></p>
+
+<h4>Functions Spaces</h4>
+<p>
+    First let's properly define a function. If $X$ and $Y$ are sets and we have $x \in X$ and $y \in Y$,
+    we can form a set $F$ that consists of <em>ordered</em> pairs $(x_i, y_j)$. If it is the case that
+    $(x_1, y_1) \in F \cap (x_1, y_2) \in F \implies y_1 == y_2$, then $F$ is a function and
+    we write $y = F(x)$. This is called being &quot;single valued&quot;, i.e., each input to the
+    function is unambiguous. Note, $F(x)$ is not a function, it is the value <em>returned</em> by
+    the function: $F$ is the function that defines the mapping from elements in $X$ (the <em>domain</em>)
+    to the elements in $Y$ (the <em>range</em>).
+</p>
+<p>
+    One example of a vector space is the set of real-valued functions of a real variable, defined
+    on the domain $[a \le x \le b]$. I.e., we're talking about $\{f_1, f_2, \ldots, f_n\}$ where
+    each $f_i$ is a function. In other words, $f_i : \mathbb{R} \rightarrow \mathbb{R}$ with the
+    aforementioned restriction on the domain.
+</p>
+<p>
+    We've said that a vector is any element in a vector space, but usually we thing of this in
+    terms of, say, $[x, y] \in \mathbb{R}^2$. We can also however, given the above, think of functions
+    as vectors: the function-as-a-vector being the &quot;vector&quot; of ordered pairs that make
+    up the mapping between domain and range. So in this case the set of function is still like a
+    set of vectors and with scalar multiplication and vector addition defined appropriately the
+    rules for a vector space still hold!
+</p>
+
+<h4>What Isn't A Vector Space</h4>
+<p>
+    It sounded a lot like everything was a vector space to me! So I did a quick bit of googling
+    and found the paper
+    &quot;<a href="http://www.math.unm.edu/~loring/links/linear_s06/notVector.pdf" target="_blank">Things that are/aren't vector spaces</a>&quot;.
+    It does a really good example of showing how in maths we might build up a model of something and expect it
+    to behave &quot;normally&quot; (i.e., obeys the vector space axioms), but in fact doesn't, in which
+    case it becomes a lot harder to reason about them. This is why vectors spaces are nice... we can
+    reason about them using logic and operations we are very familiar with and feel intuitive.
+</p>
 
 <h3>Linear Combinations</h3>
 <p>
@@ -332,7 +369,7 @@
     defines into a linear combination of basic building blocks, i.e. the basis vectors.
 </p>
 <p>
-    TODO discuss the canonical vectors in R2 and R3. [1,0], [0,1]... but we could also have [1, 0], [1,1.]
+    TODO discuss the canonical vectors in R2 and R3. $[1,0]$, $[0,1]$... but we could also have $[1,0]$, $[1,1]$.
 </p>
 <p>
     TODO unique coefficients. implied by the linear independence
@@ -343,6 +380,64 @@
 <p>
     Orthonormal are good because we can find the coefficient in the new basis easily: $\alpha_k = \vec w_k \dot x$
 </p>
+
+<h3>The Dot Product</h3>
+<div>
+    <p>
+        The dot product is one definition for a vector multiplication that results in a scalar.
+        Given two equal-length vectors vectors, the dot product looks like this:
+        $$
+            \begin{bmatrix}
+              a_1 \\
+              a_2 \\
+              \vdots \\
+              a_n
+            \end{bmatrix}
+
+            \cdot
+
+            \begin{bmatrix}
+              b_1 \\
+              b_2 \\
+              \vdots \\
+              b_n
+            \end{bmatrix}
+
+            = a_1b_1 + a_2b_2 + \cdots + a_nb_n
+        $$
+
+        Written more succinctly we have:
+
+        $$
+            x \cdot y = \sum_1^n {x_i y_i}
+        $$
+
+        The dot product is important because it will keep popping up in many places. Some particular
+        uses are to calculate the length of a vector and to show that two vectors are linearly
+        independent. The operation has the following properties:
+    </p>
+    <table>
+        <tr><td>Commutative:</td>
+            <td>$\vec v \cdot \vec w = \vec w \cdot \vec v$</td>
+        </tr>
+        <tr><td>Distributive:</td>
+            <td>$(\vec v + \vec w) \cdot \vec x = \vec v \cdot \vec x + \vec w \cdot \vec x$</td>
+        </tr>
+        <tr><td>Associative</td>
+            <td>$(c\vec v) \cdot \vec w = c(\vec v \cdot \vec w)$</td>
+        </tr>
+        <tr><td>Cauchy-Schwartz Inequality</td>
+            <td>$\vec x \cdot \vec y \le |\vec x \cdot \vec y| \le \|\vec x\| \|\vec y\|$<br/>
+                $|\vec x \cdot \vec y| = \|\vec x\| \|\vec y\| \implies \vec x = c \vec y$,
+                where $c$ is non-zero.
+            </td>
+        </tr>
+        <tr><td>Vector Triangle Inequality</td>
+            <td>$\|\vec x + \vec y\| \le \|\vec x\| + \|\vec y\|$</td>
+        </tr>
+    </table>
+    <p></p>
+</div>
 
 <h3>Orthogonal Vectors and Linear Independence</h3>
 <div style="float:right; border: 1px solid gray; padding: 10px; margin:10px;">
