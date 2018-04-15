@@ -38,6 +38,65 @@
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h2>Vector Stuff</h2>
 <div>
+<h3 style="clear:both">Vector Spaces</h3>
+<p>
+    References:
+</p>
+<ul>
+    <li><a href="https://math.stackexchange.com/questions/2454364/what-isnt-a-vector-space" target="_blank">What isn't a vector space?</a>, Mathematics Stack Exchange.</li>
+    <li><a href="http://www.math.unm.edu/~loring/links/linear_s06/notVector.pdf" target="_blank">Things that are/aren't vector spaces</a>, Dept. of Mathematics and Statistics,University of New Mexico.</li>
+    <li><a href="http://www.physics.miami.edu/~nearing/mathmethods/vector_spaces.pdf" target="_blank">Vector Spaces</a>, physics.miami.edu.</li>
+    <li><a href="https://en.wikipedia.org/wiki/Vector_space" target="_blank">Vector space</a>, Wikipedia.</li>
+</ul>
+<p>
+    A vector is an element of a <em>vector space</em>. A <em>vector space</em>, also known as a
+    <em>linear space</em>, $V$, is a set which has addition and scalar multiplication defined
+    for it and satisfies the following for any vectors $\vec u$, $\vec v$, and $\vec w$ and scalars
+    $c$ and $d$:
+</p>
+<table>
+    <tr><td>1</td>
+        <td>Closed under addition:</td>
+        <td>$\vec u + \vec v \in V$</td>
+    </tr>
+    <tr><td>2</td>
+        <td>Communative:</td>
+        <td>$\vec u + \vec v = \vec v + \vec u$</td>
+    </tr>
+    <tr><td>3</td>
+        <td>Associative:</td>
+        <td>$(\vec u + \vec v) + \vec w = \vec u + (\vec v + \vec w)$</td>
+    </tr>
+    <tr><td>4</td>
+        <td>Additive identity:</td>
+        <td>$\vec 0 \in U, \text{i.e.,} \vec u + \vec 0 = \vec u$</td>
+    </tr>
+    <tr><td>5</td>
+        <td>Inverse:</td>
+        <td>$\forall \vec u \in V, \exists -\vec u | \vec u + (-\vec u) = \vec 0$</td>
+    </tr>
+    <tr><td>6</td>
+        <td>Closed under scalar multiply:</td>
+        <td>$\c\vec u \in V$</td>
+    </tr>
+    <tr><td>7</td>
+        <td>Distributive:</td>
+        <td>$c(\vec u + \vec v) = c\vec u + c\vec v$</td>
+    </tr>
+    <tr><td>8</td>
+        <td>Distributive:</td>
+        <td>$(c + d)\vec u = c\vec u + d\vec u</td>
+    </tr>
+    <tr><td>9</td>
+        <td>Distributive:</td>
+        <td>$c(d\vec u) = (cd)\vec u$</td>
+    </tr>
+    <tr><td>10</td>
+        <td>Multiply identity:</td>
+        <td>$1 \vec u = \vec u$</td>
+    </tr>
+</table>
+
 <h3>Linear Combinations</h3>
 <p>
     A linear combination of vectors is one that only uses the addition and scalar multiplication
@@ -255,7 +314,8 @@
     know that a span is the set of all possible linear combinations of these vectors.
 </p>
 <p>
-    If we choose a subset of $V$, $S$, where all the vectors in $S$ are linearly <em>independent</em>
+    If we choose a subset of $V$, $S$, where all the vectors in $S$ are linearly <em>independent</em>,
+    an we can write any vector in $V$ as a linear combination of vectors in $S$,
     then we say that $S$ is a <em>basis</em> for $V$.
 </p>
 <p>
@@ -266,6 +326,22 @@
 <p>
     A subspace can have an infinite number of basis, but there are <em>standard basis</em>. For
     example in $\mathbb{R}^2$ the standard basis is $\{[1, 0], [0, 1]\}$
+</p>
+<p>
+    A basis is a good thing because we can break down any element in the space that the basis
+    defines into a linear combination of basic building blocks, i.e. the basis vectors.
+</p>
+<p>
+    TODO discuss the canonical vectors in R2 and R3. [1,0], [0,1]... but we could also have [1, 0], [1,1.]
+</p>
+<p>
+    TODO unique coefficients. implied by the linear independence
+</p>
+<p>
+    TODO most important basis are othogonal and orthonormal.
+</p>
+<p>
+    Orthonormal are good because we can find the coefficient in the new basis easily: $\alpha_k = \vec w_k \dot x$
 </p>
 
 <h3>Orthogonal Vectors and Linear Independence</h3>
@@ -410,19 +486,6 @@
     Which is just twice the dot product when the vectors are at 90 degrees - or just the dot product because we can divide through by 2.
 </p>
 
-
-<h3 style="clear:both">Vector Spaces</h3>
-<p>
-    References:
-</p>
-<ul>
-    <li><a href="https://math.stackexchange.com/questions/2454364/what-isnt-a-vector-space" target="_blank">What isn't a vector space?</a>, Mathematics Stack Exchange.</li>
-    <li><a href="http://www.math.unm.edu/~loring/links/linear_s06/notVector.pdf" target="_blank">Things that are/aren't vector spaces</a>, Dept. of Mathematics and Statistics,University of New Mexico.</li>
-    <li><a href="https://en.wikipedia.org/wiki/Vector_space" target="_blank">Vector space</a>, Wikipedia.</li>
-</ul>
-<p>
-    TODO
-</p>
 </div> <!-- END H2 -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
