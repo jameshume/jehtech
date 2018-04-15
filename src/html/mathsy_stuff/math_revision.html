@@ -351,17 +351,6 @@
 
 <h2>Imaginary &amp; Complex Numbers</h2>
 <div>
-  <pre>
-    https://www.maths.ox.ac.uk/system/files/attachments/complex%20%281%29.pdf
-    https://ocw.mit.edu/courses/mathematics/18-03sc-differential-equations-fall-2011/unit-i-first-order-differential-equations/complex-arithmetic-and-exponentials/MIT18_03SCF11_s6_5text.pdf
-    https://www.pearsonschoolsandfecolleges.co.uk/Secondary/Mathematics/16plus/EdexcelModularMathematicsforASandALevel/Resources/FurtherPureMathematics2/03%20Ch%2003_018-065.pdf
-    http://faculty.uml.edu/cbyrne/SP1text.pdf
-    http://www-math.mit.edu/~gs/papers/newsigproc.pdf
-    http://www.ling.upenn.edu/courses/ling525/Moore1978Part1.pdf
-    http://www.ling.upenn.edu/courses/ling525/Moore1978Part2.pdf
-    http://greenteapress.com/thinkdsp/thinkdsp.pdf
-    http://web.eecs.umich.edu/~aey/eecs206/lectures/phasor.pdf
-  </pre>
   <h3>Intro</h3>
   <p>
     The definition of a imaginary number, $i$, is $i^2 = -1$, which is also often seen written as $i = \sqrt{-1}$. It's called &quot;imaginary&quot;
@@ -445,6 +434,53 @@
   </p>
   <p>
     <img src="##IMG_DIR##/polar-form.png" alt="diagram of complex number in polar form"/>
+  </p>
+  <p>
+    $$
+      \mathrm{Arg}(z) = \theta \\
+      |z| = r = \sqrt{a^2 + b^2}
+    $$
+  </p>
+  <p>
+    How do we go from rectangular form ($z = a + bi$) to polar form ($(r, \theta)$)?
+    Recall $\tan(\theta) = \frac{a}{b}$ and that therefore $\theta = \tan^-1(\frac{a}{b})$.
+    We already know row to calculate $r$.
+  </p>
+  
+  <h3>Exponential Form</h3>
+  <p>
+    From polar form we go to exponential form.
+
+    $$
+      \cos(\theta) = \frac{a}{r} \\
+      \therefore r\cos(\theta) = a \\
+      \\
+      \sin(\theta) = \frac{b}{r} \\
+      \therefore r\sin(\theta) = b
+    $$
+
+    This means that we can re-write $z = a + bi$ as
+
+    $$
+    \begin{align}
+      z &= r\cos(\theta) + r\sin(\theta)i \\
+        &= r[\cos(\theta) + i\sin(\theta)]
+    \end{align}
+    $$
+
+    And using Euler's amazing formula $e^{i\theta} = \cos(\theta) + i\sin(\theta)$,
+    we can write...
+
+    $$
+      z = r e^{i\theta}
+    $$
+
+    This is the <em>exponential form</em>. It is especially useful if you want to do
+    division of complex numbers.
+  </p>
+  <p>
+    We can go back from exponential form to rectangular form using the same two
+    formulas we saw above: $r\cos(\theta) = a$ and $r\sin(\theta) = b$.
   </p>
 </div>
 
