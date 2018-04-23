@@ -139,8 +139,20 @@ pl.show()
 <!-- https://www.khanacademy.org/math/precalculus/imaginary-and-complex-numbers -->
 </div>
 
-<h2>FFT</h2>
+<h2>DFT/FFT</h2>
 <div>
+	<p>
+		$$
+		\text{binResolution} = \frac{f_\text{sample}}{\text{# FFT points}}
+		$$
+
+		$$
+		\begin{align}
+		\mathrm{binStartFreq}(n) &= n * \text{binResolution} \\
+                                 &= n \frac{f_\text{sample}}{\text{# FFT points}}
+		\end{align}
+		$$
+	</p>
 	<pre>http://www.tedknowlton.com/resume/FFT_Bin_Interp.html
 https://electronics.stackexchange.com/questions/12407/what-is-the-relation-between-fft-length-and-frequency-resolution
 </pre>

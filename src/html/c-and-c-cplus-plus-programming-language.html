@@ -815,6 +815,7 @@ double* p2 = reinterpret_cast&lt;double*&gt;(&amp;a); // ok: I really mean it</p
             <p></p>
 		</div>
 
+        <!-- *********************************************************************************** -->
 		<h2>IOStreams</h2>
 		<div>
 			<h3>Output Stream Manipulators</h3>
@@ -890,8 +891,27 @@ double* p2 = reinterpret_cast&lt;double*&gt;(&amp;a); // ok: I really mean it</p
 			<p>
 				Quietly go into a safe, do-nothing, mode upon error.
 			</p>
+            <h3>Read/Write Containers to Files</h3>
+            <pre class="prettyprint linenums">template &lt;typename T&gt;
+void VectorFromFile(const std::string &amp;filename, std::vector&lt;T&gt; &amp;v)
+{
+    std::copy(
+        std::istream_iterator&lt;T&gt;(std::ifstream(filename.c_str())),
+        std::istream_iterator&lt;T&gt;(),
+        std::back_inserter(v));
+}
+
+template &lt;typename T&gt;
+void VectorToFile(const std::string &amp;filename, const std::vector&lt;T&gt; &amp;v)
+{
+    std::copy(
+        v.begin(),
+        v.end(),
+        std::ostream_iterator&lt;T&gt;(std::ofstream(filename.c_str()), "\n"));
+}</pre>
 		</div> <!-- END IOSTREAMS -->
 
+        <!-- *********************************************************************************** -->
 		<h2>Google Test (On Windows)</h2>
 		<div>
 			<p>
@@ -901,7 +921,7 @@ double* p2 = reinterpret_cast&lt;double*&gt;(&amp;a); // ok: I really mean it</p
 			<ol>
 				<li>Download and install CMake and make sure you select the option to put CMake on the path</li>
 				<li>Pick a root directory and clone the CMake git repo there. I'm gonna use <code>C:\Users\jehtech\googletest_msvc</code>.
-				    Therefore from the git command prompt naviage to <code>/c/users/jehtech/googletest_msvc</code> and type 
+				    Therefore from the git command prompt naviage to <code>/c/users/jehtech/googletest_msvc</code> and type
 				    <code>git clone git@github.com:google/googletest.git</code>. This will create the subdirectory <code>googletest</code>.
 				</li>
 				<li><b>Absolutely ignore the existing MSVC project files in <code>C:\Users\jehtech\googletest_msvc\googletest\googletest\msvc</code>!!</b>
@@ -931,6 +951,7 @@ Severity	Code	Description	Project	File	Line	Suppression State
 Error	C2181	illegal else without matching if	test_mpeg	c:\users\james\documents\git\mpeg_ts_messing\gtest\src\gtest_binary_buffer.cpp	12</pre>
 		</div> <!-- END GTEST -->
 
+        <!-- *********************************************************************************** -->
 		<h2>Smart Pointers</h2>
 		<div> 
 			<p> Defined in &lt;memory&gt; 
@@ -1195,7 +1216,7 @@ myVector.erase(
 			<p>
 				We can look at this a little more closely by just looking at what <code>remove()</code> does...
 			</p>
-<pre>#include &lt;iostream&gt;
+<pre class="prettyprint linenums">#include &lt;iostream&gt;
 #include &lt;vector&gt;
 #include &lt;string&gt;
 #include &lt;algorithm&gt;
@@ -1242,7 +1263,7 @@ int main(int argc, char *argv[])
  * After erase:     4 10  5 10  6
  *                                 ^
  */</pre>
-
+<p></p>
 
 		</div> <!-- END H2: vectors -->
 	</div> <!-- END H1 padding div -->
