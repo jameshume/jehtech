@@ -28,7 +28,8 @@
 	is zero</q>. Well... why is this? The result was a pretty simple but
 	nonetheless it took a little while to think it through properly.
 	Hence, these notes... they're my musings on the &quot;why&quot;, even if the
-	&quot;why&quot; might be obvious to the rest of the world!
+	&quot;why&quot; might be obvious to the rest of the world! It also degraded
+    into just notes too, without the musings :'(...
 </p>
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h2>Page Contents</h2>
@@ -584,8 +585,9 @@
 </div> <!-- END H2 -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h2 style="clear:both;">Matricies And Simultaneous Linear Equations</h2>
+<h2 style="clear:both;">Matricies</h2>
 <div>
+<h3 style="clear:both;">Matricies And Simultaneous Linear Equations</h3>
 <p>
     The set of linear equations:
 
@@ -650,13 +652,15 @@
     $$
 
     But, this next one is not:
+
+    $$
      \begin{bmatrix}
         1 & 2 & 3 & 4 \\
         0 & 0 & 0 & 1 \\
         0 & 0 & 0 & 2 \\
         0 & 1 & 2 & 3 \\
      \end{bmatrix}
-
+    $$
 
     We go from a matrix to the equivalent in row-echelon form using <b>elementary row operations</b>:
 </p>
@@ -725,11 +729,92 @@ solve_linear_system(system, x, y, z)</pre>
 ⎢             ⎥
 ⎣1  -1  1   1 ⎦
 {x: -17/3, y: 31/3, z: 17}</pre>
-</div>
 
-<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<h2>Orthogonal Matrices</h2>
-<div>
+<h3>Matrix / Vector Multiplication</h3>
+    <p>
+        Matrix/vector multiplication is pretty straight forward:
+        $$
+            \begin{bmatrix}
+            a & c \\
+            b & d \\
+            \end{bmatrix}
+            \begin{bmatrix}
+                    2 \\ 4
+            \end{bmatrix}
+                    =
+                    \begin{bmatrix}
+                     2a + 4c \\ 2b + 4d
+            \end{bmatrix}
+        $$
+    </p>
+    <p>
+        But having said that, I'd never really thought of it as shown below until watching some
+        stuff on Khan Academy:
+    </p>
+    <p>
+        $$
+            \begin{bmatrix}
+                \color{red}a & \color{blue}c \\
+              \color{red}b & \color{blue}d \\
+            \end{bmatrix}
+            \begin{bmatrix}
+                2 \\ 4
+            \end{bmatrix}
+            =
+            2 \begin{bmatrix}
+                \color{red}a \\ \color{red}b
+            \end{bmatrix}
+            +
+            4 \begin{bmatrix}
+                \color{blue}c \\ \color{blue}d
+            \end{bmatrix}
+        $$
+    </p>
+    <p>
+        We can think of it as the linear combination of the column vectors of the matrix where
+        the coefficients are the members of the vector, where the first column vector is multiplied
+        by the first element, the second column vector by the second element and so on.
+    </p>
+    <p>
+        So, for any mxn matrix, $A$, and vector $\vec v \in \mathbb{R}^n$ we can say that,
+
+        $$
+            A\vec v =
+            \begin{bmatrix}
+              \uparrow & \uparrow & & \uparrow\\
+              \vdots & \vdots & & \vdots\\
+              \vec{c_1} & \vec{c_2} & \cdots & \vec{c_n}\\
+              \vdots & \vdots & & \vdots\\
+              \downarrow & \downarrow & & \downarrow
+            \end{bmatrix}
+
+            \begin{bmatrix}
+               {v_1} \\
+               {v_2} \\
+               \vdots \\
+               {v_n}
+            \end{bmatrix}
+
+            = v_1\vec{c_1} + v_2\vec{c_2} + \cdots + v_n\vec{c_n}
+        $$
+    </p>
+
+<h3>Null Space Of A Matrix</h3>
+    <p>
+        For an mxn vector $A$, the nullspace of the matrix $A$, $N(A)$ is defined as follows:
+
+        $$
+            N(A) = \{\vec x \in \mathbb{R}^n \shortmid A\vec x = \vec 0 \}
+        $$
+
+        The null space of a matrix is a valid subspace of $\mathbb{R}^n$.
+    </p>
+    <p>
+        It can also be shown that $N(A) = N(\mathrm{RREF}(A))$, where $\mathrm{RREF}$ is the
+        reduced row echelon form.
+    </p>
+
+<h3>Orthogonal Matrices</h3>
 	<p>
 		So, onto orthogonal matrices. A <b>matrix is orthogonal if $AA^T = A^TA = I$</b>.
 		If we take a general matrix and multiply it by it's transpose we get...
@@ -862,19 +947,15 @@ solve_linear_system(system, x, y, z)</pre>
 		angles and lengths</a> of vectors. This can be useful in graphics to rotate
 		vectors but keep the shape they construct, or in numerical analysis
 		because <a href="http://www.math.utah.edu/~pa/6610/20130916.pdf" target="_blank">they do not amplify errors</a>.
-</div>
 
-<h2>Determinants</h2>
-<div>
+<h3>Determinants</h3>
 	<p>
 		This is one of the better YouTube tutorials I've found that explains the <i>concepts</i> and not just the
 		mechanics behind determinants, byt <a href="https://www.youtube.com/channel/UCYO_jab_esuFRV4b17AJtAw" target="blank">3BlueBrown</a> (awesome!).
 	</p>
 	<iframe width="560" height="315" src="https://www.youtube.com/embed/Ip3X9LOh2dk?rel=0" frameborder="0" allowfullscreen></iframe>
-</div>
 
-<h2>Eigenvectors and Eigenvalues</h2>
-<div>
+<h3>Eigenvectors and Eigenvalues</h3>
 	<p>
 		<a href="http://math.stackexchange.com/questions/23312/what-is-the-importance-of-eigenvalues-eigenvectors" target="_blank">Stackoverflow thread: What is the importance of eigenvalues and eigenvectors</a>.
 	</p>
@@ -888,6 +969,54 @@ solve_linear_system(system, x, y, z)</pre>
 		</footer>
 	</blockquote>
 	<p></p>
+</div>
+
+<h2>Linear Transformations</h2>
+<div>
+    <h3>Functions</h3>
+    <p>
+        Normally a function is a <em>mapping</em> between two sets: from a <em>domain</em> to a <em>range</em>, which is
+        a subset of the function's <em>co-domain</em>. I.e., the co-domain is the set of all possible things the
+        function could map onto and the range is the subset of the co-domain containing the things the
+        function actually maps to.
+    </p>
+    <p>
+        The usual function notation looks like this: $f(x) = x^2$. Note that $f$ is the function,
+        not $f(x)$, which is the value output by the function, $f$, when $x$ is input. There are
+        other notations we use to denote functions.
+    </p>
+    <p>
+        For example the function $f(x) = x^2$ can be described as a <em>mapping</em> from the
+        set of all real numbers to the set of all real numbers.
+
+        $$
+            f: \mathbb{R} \rightarrow \mathbb{R}
+        $$
+
+        It can also be defined using this notation:
+
+        $$
+            f: x \mapsto x^2
+        $$
+    </p>
+    <p>
+        A function is not, however, a simple mapping between two sets. For a mapping to be a function
+        the following must be true: $f(x) = y_1 \and f(x) = y_2 \implies y_1 = y_2$. In other words
+        one item in the domain cannot map to more than one item in the range, but two distinct
+        items in the domain can map to the same item in the range.
+    </p>
+
+    <h3>Vector Values Functions</h3>
+    <p>
+        Functions that map to $\mathbb{R}$ are called scalar values functions, or specifically in
+        this case, real valued functions.
+    </p>
+    <p>
+        If the co-domain of a function is in $\mathbb{R}^m$, where $m > 1$, then we say that the function
+        is <em>vector valued</em>.
+    </p>
+
+
 </div>
 
 <h2>PCA</h2>
