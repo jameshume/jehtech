@@ -1016,6 +1016,25 @@ solve_linear_system(system, x, y, z)</pre>
         is <em>vector valued</em>.
     </p>
 
+    <h3>Linear Transformations</h3>
+    <p>
+        Vector valued functions are <em>transformations</em>. Linear transformations are a particular
+        type of transformation that obeys thee following rules. If $T: \mathbb{R}^n \mapsto \mathbb{R}^m$ and
+        $\vec a, \vecb \in \mathbb{R}^n$ then:
+    </p>
+    <ol>
+        <li>$T(\vec a + \vec b) = T(\vec a) + T(\vec b)$</li>
+        <li>$T(\alpha \vec a) = \alpha T(\vec a) \midbar \alpha \in \mathbb{R}$</li>
+        <li>$T(\vec 0) = \vec 0$</li>
+    </ol>
+    <p>
+        In other words, the origin must remain fixed and all lines must remain lines.
+    </p>
+    <p>
+        Matricies are used to do the linear transformations so the function $T$ will generally
+        be defined as $T(\vec v) = A\vec v$, where $A$ is the <em>transformation matrix</em>. 2D
+        vectors transform 2D space, 3D vectors transform 3D space and so on...
+    </p>
 
 </div>
 
