@@ -1,11 +1,7 @@
 ifeq ($(OS),Windows_NT)
-define create_os_path
-$(subst /,\\,$(1))
-endef
+   RMDIR := rmdir /S /Q
 else
-define create_os_path
-$(1)
-endef
+   RMDIR := rm -fr
 endif
 
 DEPLOYMENT_DIR := __test
@@ -20,5 +16,9 @@ OBJS := $(patsubst $(BASE_DIR)/src/html/%,$(BASE_DIR)/__test/%,$(SRCS))
 .PHONY: all
 all: $(OBJS)
 
-$(BASE_DIR)/__test/%.html: $(BASE_DIR)/src/html/%.html
-	python $(BASE_DIR)/generate_html.py "$<" "$@"
+.PHONY: clean
+clean:
+	$(RMDIR) $(DEPLOYMENT_DIR)
+
+$(BASE_DIR)/__test/%.html: $(BASE_DIR)/src/html/%.html $(BASE_DIR)/src/html/_links.html
+	python $(BASE_DIR)/generate_html.py "$<" "$@" "$(BASE_DIR)/src/html/_links.html"

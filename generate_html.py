@@ -4,9 +4,11 @@ import re
 import subprocess
 import codecs
 import platform
+import shutil
 
 SRC_FILE = sys.argv[1]
 DST_FILE = sys.argv[2]
+ROOT_DIR = sys.argv[3]
 
 print("Generating {} from {}".format(DST_FILE, SRC_FILE))
 
@@ -33,12 +35,26 @@ htmlFile = codecs.open(SRC_FILE, 'r', 'utf-8')
 htmlFileContents = htmlFile.read();
 htmlFile.close()
 
+# Open and read in the links file
+linksFile = codecs.open(os.path.join(ROOT_DIR, "_links.html"), 'r', 'utf-8')
+linksHtml = linksFile.read();
+linksFile.close()
+
 # Copy the contents of the curr html to it's deployed file but add in the
 # links page
-#htmlFileContents = prog.sub(r'\1' + linksHtml, htmlFileContents)
-#htmlFileContents = prog_css.sub('<link rel="stylesheet" href="{}{}jeh-monolith.css" type="text/css" />'.format(link_to_root, "" if link_to_root == "" else '/'), htmlFileContents)
+htmlFileContents = prog.sub(r'\1' + linksHtml, htmlFileContents)
+
+# Insert a link to the CSS file. If we are in a subdir the link needs to
+# adjusted to a relative path.
+link_to_root = ""
+htmlFileContents = 
+	prog_css.sub(
+		'<link rel="stylesheet" href="{}{}jeh-monolith.css" type="text/css" />'.format(
+			link_to_root, "" if link_to_root == "" else '/'), 
+		htmlFileContents)
 #htmlFileContents = prog_js.sub('<script src="{}{}jeh-monolith.js"></script>'.format(link_to_root, "" if link_to_root == "" else '/'), htmlFileContents)
 #htmlFileContents = prog_img.sub('{}{}images/jeh-tech'.format(link_to_root, "" if link_to_root == "" else '/'), htmlFileContents)
+
 newFileName = DST_FILE
 targetDir = os.path.split(newFileName)[0]
 if not os.path.isdir(targetDir):
