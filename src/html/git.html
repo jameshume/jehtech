@@ -123,7 +123,13 @@ echo ~</pre>
     <p>To check that SSH is working...</p>
     <pre>ssh -T git@bitbucket.org
 # or...
-ssh -T git@github.org</pre>
+ssh -T git@github.com</pre>
+
+    <p>
+        If you see an error message saying &quot;Could not open a connection to your authentication agent&quot;
+        make sure that your ssh agent is running. If it isn't run <code>eval `ssh-agent -s`</code>
+        to start it [<a href="https://stackoverflow.com/questions/17846529/could-not-open-a-connection-to-your-authentication-agent" target="_blank">Ref</a>].
+    </p>
 
     <p>To see if the key has been added to the client keyring...</p>
     <pre>ssh-list -l

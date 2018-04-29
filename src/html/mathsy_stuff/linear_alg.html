@@ -249,6 +249,7 @@
     any co-linear set of 2d vectors will not span $\mathbb{R}^2$.
 </p>
 
+<a name="linear-independence"></a>
 <h3 style="clear:both;">Linear Independence</h3>
 <p>
     We saw above that the set of vectors $\{\vec a, -\alpha\vec a\}$ are co-linear and thus did
@@ -265,7 +266,13 @@
     A set of vectors will be said to be linearly <em>dependent</em> when:
 
     $$
-        c_1v_1 + \cdots + c_nv_n = \vec 0 \mid \exists \{c_i | c_i \ne 0 \}
+        c_1\vec{v_1} + \cdots + c_n\vec{v_n} = \vec 0 \mid \exists \{c_i \mid c_i \ne 0 \}
+    $$
+
+    Thus a set of vectors is linearly <b>independent</b> when the following is met:
+
+    $$
+        c_1\vec{v_1} + \cdots + c_n\vec{v_n} = \vec 0 \mid \forall \{c_i \mid c_i = 0 \}
     $$
 
     Sure, this is a definition, but why does this mean that the set is linearly <em>dependent</em>?
@@ -587,6 +594,7 @@
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h2 style="clear:both;">Matricies</h2>
 <div>
+<a name="matrix-row-echelon"></a>
 <h3 style="clear:both;">Matricies And Simultaneous Linear Equations</h3>
 <p>
     The set of linear equations:
@@ -730,6 +738,7 @@ solve_linear_system(system, x, y, z)</pre>
 ⎣1  -1  1   1 ⎦
 {x: -17/3, y: 31/3, z: 17}</pre>
 
+<a name="matrix-vector-multiplication"></a>
 <h3>Matrix / Vector Multiplication</h3>
     <p>
         Matrix/vector multiplication is pretty straight forward:
@@ -812,6 +821,52 @@ solve_linear_system(system, x, y, z)</pre>
     <p>
         It can also be shown that $N(A) = N(\mathrm{RREF}(A))$, where $\mathrm{RREF}$ is the
         reduced row echelon form.
+    </p>
+    <p>
+        The nullspace of a matrix can be related to the linear independence of it's column
+        vectors. Using the above definition of nullspace,  we can write:
+
+          $$
+            A\vec v =
+            \begin{bmatrix}
+              \uparrow & \uparrow & & \uparrow\\
+              \vdots & \vdots & & \vdots\\
+              \vec{a_1} & \vec{a_2} & \cdots & \vec{a_n}\\
+              \vdots & \vdots & & \vdots\\
+              \downarrow & \downarrow & & \downarrow
+            \end{bmatrix}
+
+            \begin{bmatrix}
+               {x_1} \\
+               {x_2} \\
+               \vdots \\
+               {x_n}
+            \end{bmatrix}
+
+            = \begin{bmatrix}
+               0_1 \\
+               0_2 \\
+               \vdots \\
+               0_m
+            \end{bmatrix}
+        $$
+
+        Recalling how we can write out <a href="#matrix-vector-multiplication">vector/scalar multipication</a>,
+        we get,
+
+        $$
+            x_1\vec{a_1} + x_2\vec{a_2} + \cdots + x_n\vec{a_n} = \vec 0
+        $$
+
+        Recall from the section on <a href="#linear-independence">linear independence</a> that the above set of vectors
+        is said to be linearly <em>dependent</em> when:
+
+        $$
+            x_1\vec{a_1} + x_2\vec{a_2} + \cdots + x_n\vec{a_n} = \vec 0 \mid \forall \{c_i \mid c_i = 0 \}
+        $$
+
+        Given that our nullspace is the set of all vectors that satisfy the above, <em>by definition</em>,
+        then we can say that <b>the column vectors of a matrix A are LI if and only if $N(A) = {\vec 0}$</b>.
     </p>
 
 <h3>Orthogonal Matrices</h3>
@@ -981,6 +1036,9 @@ solve_linear_system(system, x, y, z)</pre>
         function actually maps to.
     </p>
     <p>
+        <img src="##IMG_DIR##/codomain-vs-range.png" alt="co-domain vs range"/>
+    </p>
+    <p>
         The usual function notation looks like this: $f(x) = x^2$. Note that $f$ is the function,
         not $f(x)$, which is the value output by the function, $f$, when $x$ is input. There are
         other notations we use to denote functions.
@@ -1001,39 +1059,170 @@ solve_linear_system(system, x, y, z)</pre>
     </p>
     <p>
         A function is not, however, a simple mapping between two sets. For a mapping to be a function
-        the following must be true: $f(x) = y_1 \and f(x) = y_2 \implies y_1 = y_2$. In other words
+        the following must be true: $f(x) = y_1 \cap f(x) = y_2 \implies y_1 = y_2$. In other words
         one item in the domain cannot map to more than one item in the range, but two distinct
         items in the domain can map to the same item in the range.
     </p>
+    <p>
+        <img src="##IMG_DIR##/function-vs-mapping.png" alt="a function vs a mapping"/>
+    </p>
 
-    <h3>Vector Values Functions</h3>
+    <h3>Vector Valued Functions</h3>
     <p>
         Functions that map to $\mathbb{R}$ are called scalar values functions, or specifically in
         this case, real valued functions.
     </p>
     <p>
         If the co-domain of a function is in $\mathbb{R}^m$, where $m > 1$, then we say that the function
-        is <em>vector valued</em>.
+        is <em>vector valued</em>. Functions, where the domain is in $\mathbb{R}^m$ are called
+        <em>transformations</em>.
+    </p>
+    <p>
+        A vector values function could like something like this, for example:
+
+        $$
+        f\left(
+           \begin{bmatrix}
+              x_1 \\
+              x_2 \\
+              x_3
+           \end{bmatrix}
+        \right)
+        =
+        \begin{bmatrix}
+           2\pi x_1 + \frac{5}{2}x_3\\
+           4x_2
+        \end{bmatrix}
+        $$
+
+        It could look like anything... th epoint is because $f$ operates on a vector, we
+        call it a <em>transformation</em>.
     </p>
 
     <h3>Linear Transformations</h3>
     <p>
         Vector valued functions are <em>transformations</em>. Linear transformations are a particular
         type of transformation that obeys thee following rules. If $T: \mathbb{R}^n \mapsto \mathbb{R}^m$ and
-        $\vec a, \vecb \in \mathbb{R}^n$ then:
+        $\vec a, \vec b \in \mathbb{R}^n$ then:
     </p>
     <ol>
         <li>$T(\vec a + \vec b) = T(\vec a) + T(\vec b)$</li>
-        <li>$T(\alpha \vec a) = \alpha T(\vec a) \midbar \alpha \in \mathbb{R}$</li>
+        <li>$T(\alpha \vec a) = \alpha T(\vec a) \mid \alpha \in \mathbb{R}$</li>
         <li>$T(\vec 0) = \vec 0$</li>
     </ol>
     <p>
         In other words, the origin must remain fixed and all lines must remain lines.
     </p>
     <p>
-        Matricies are used to do the linear transformations so the function $T$ will generally
+        Matrices are used to do the linear transformations so the function $T$ will generally
         be defined as $T(\vec v) = A\vec v$, where $A$ is the <em>transformation matrix</em>. 2D
         vectors transform 2D space, 3D vectors transform 3D space and so on...
+    </p>
+    <p>
+        Interestingly <em>the column vectors of the transformation vector $A$, tell us what
+        happens to the canonical basis vectors in that space</em>, and from this we can work out
+        how <em>any</em> vector would be transformed.
+    </p>
+    <p>
+        <img src="##IMG_DIR##/linear-transform-2d-canonical-vectors.png" alt="Graph showing the linear transformation of the canonical vectors for R^2"/>
+    </p>
+    <p>
+        We have seen that in cartesian space, $\mathbb{R}^2$, for any coordinate, $(x, y)$, the
+        numbers $x$ and $y$ are the coefficients of the canonical basis vectors...
+
+        $$
+        \begin{bmatrix}
+           x \\ y
+        \end{bmatrix}
+        =
+        x \begin{bmatrix}
+           1 \\ 0
+        \end{bmatrix}
+        + y \begin{bmatrix}
+           0 \\ 1
+        \end{bmatrix}
+        $$
+
+        Lets say our transformation matrix has the following properties:
+
+        $$
+        T : \begin{bmatrix} 1 \\ 0 \end{bmatrix} \mapsto \begin{bmatrix} a \\ b \end{bmatrix} \\
+        T : \begin{bmatrix} 0 \\ 1 \end{bmatrix} \mapsto \begin{bmatrix} c \\ d \end{bmatrix}
+        $$
+
+        Well, we've seen we can re-write any vector as a combination of the above basis vectors, so
+        we can write:
+
+        $$
+        \begin{align}
+        T\left(\begin{bmatrix} x \\ y \end{bmatrix}\right) &\mapsto T\left(x \begin{bmatrix} 1 \\ 0 \end{bmatrix} + y \begin{bmatrix} 0 \\ 1 \end{bmatrix}\right)\\
+        & \mapsto xT\left(\begin{bmatrix} 1 \\ 0 \end{bmatrix}\right) + yT\left(\begin{bmatrix} 0 \\ 1 \end{bmatrix}\right) \\
+        & \mapsto \begin{bmatrix} \color{red}ax + \color{blue}by \\ \color{red}cx + \color{blue}dy \end{bmatrix}
+        \end{align}
+        $$
+
+        Which looks suspiciously like a matrix, vector product. If we describe the transformation, $T$ as follows:
+
+        $$
+        T = \begin{bmatrix}  \color{red}a & \color{blue}b \\ \color{red}c & \color{blue}d  \end{bmatrix}
+        $$
+
+        Then...
+
+        $$
+            T\left(\begin{bmatrix} x \\ y \end{bmatrix}\right) 
+            = 
+            \begin{bmatrix} \color{red}a & \color{blue}b \\ \color{red}c & \color{blue}d  \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix}
+            =
+            \begin{bmatrix} \color{red}ax + \color{blue}by \\ \color{red}cx + \color{blue}dy \end{bmatrix}
+        $$
+
+        An so we can see that the first column vector of $T$ shows us where the first canonical basis vector $[1, 0]$ maps to
+        and the second column vector of $T$ shows us where the second canonical basis vector $[0, 1]$ maps to... woop!
+        In other words, just to be clear...
+
+        $$
+        T = \begin{bmatrix}  \color{red}a & \color{blue}b \\ \color{red}c & \color{blue}d  \end{bmatrix} =
+        \begin{bmatrix}
+           T\left(
+              \begin{bmatrix} 1 \\ 0 \end{bmatrix}
+           \right) &
+           T\left(
+              \begin{bmatrix} 0 \\ 1 \end{bmatrix}
+           \right)
+
+        \end{bmatrix}
+        $$
+
+        We can also note that this the same as taking he transform of each of the column vectors of the identity matrix!
+    </p>
+    <p>
+        We can see this more &quot;solidly&quot; in the sketch below...
+    </p>
+    <p>
+        <img src="##IMG_DIR##/linear-transform-2d-canonical-vectors-2.png" alt="Graph showing the linear transformation of the canonical vectors for R^2"/>
+    </p>
+    <p>
+        We can see how one coordinate can be represented using the canonical Cartesian coordinates, but also coordinates in
+        our transformed space. Thus the same &quot;point&quot; can be represented using different coordinates
+        (coefficients of the basis vectors) for different transform spaces.
+    </p>
+    <p>
+        Another important point is that it can be shown that <em>all matrix-vector products are linear transformations</em>!
+    </p>
+    <p>
+        Linear transformations also have these important properties, if we take two transformations
+        $S \mathbb{R}^n \mapsto \mathbb{R}^m$ and $T \mathbb{R}^n \mapsto \mathbb{R}^m$, where
+        $S$ has the transformation matrix $A$ and $T$ has the transformation matrix $B$:
+    </p>
+    <ul>
+        <li>Transformation addition: $(S+T)(\vec x) = S(\vec x) + T(\vec x) = (A+B)\vec x$.
+        </li>
+        <li>Scalar multiplication: $(cS)(\vec x) = cS(\vec x) = (cA)\vec x$.
+        </li>
+    </ul>
+    <p>
+        <img src="##IMG_DIR##/linear-transform-rotate.png" alt="Graph showing a linear transformation doing rotations"/>
     </p>
 
 </div>
