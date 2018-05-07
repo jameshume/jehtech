@@ -53,12 +53,12 @@ def CopyImagesDir(srcDir, destDir):
 		if os.path.isfile(no_watermark_filename):
 			with open(no_watermark_filename) as fh:
 				no_watermark_imgs = [x.strip() for x in fh.readlines()]
-				print(no_watermark_imgs)
+				#print(no_watermark_imgs)
 
 		for currdir in dirs:
 			destD = os.path.join(destDir, relativeRoot, currdir)
 			if not os.path.exists(destD):
-				print("CREATING", destD)
+				#print("CREATING", destD)
 				os.makedirs(destD)
 
 		for file in files:
@@ -66,11 +66,11 @@ def CopyImagesDir(srcDir, destDir):
 			file_extension = os.path.splitext(file)[1]
 			if first or file_extension.lower() not in [".png", ".jpg"] or file in no_watermark_imgs:
 				# just copy file
-				print("COPY" , os.path.join(root, file), "==>", os.path.join(destDir, relativeRoot, file))
+				#print("COPY" , os.path.join(root, file), "==>", os.path.join(destDir, relativeRoot, file))
 				shutil.copy(os.path.join(root, file), os.path.join(destDir, relativeRoot, file))
 			else:
 				# create a watermarked copy
-				print("WATERMARK" , os.path.join(root, file), "==>", os.path.join(destDir, relativeRoot, file))
+				#print("WATERMARK" , os.path.join(root, file), "==>", os.path.join(destDir, relativeRoot, file))
 				watermark.WatermarkImage(os.path.join(root, file), os.path.join(destDir, relativeRoot, file))
 
 		first = False
@@ -79,7 +79,7 @@ def GenerateRunningCheckSum(data, value):
 	return zlib.adler32(data, value) & 0xffffffff
 
 def combine_files(base_dir, dest_file, is_debug=False):
-	print("COMBINING", base_dir, dest_file)
+	#print("COMBINING", base_dir, dest_file)
 	un_minimised_temp_aggregate_file = os.path.join(base_dir, "un_minimised_temp_aggregate.file")
 	minimised_aggregate_file = os.path.join(base_dir, "minimised_aggregate.file")
 	indexFileName     = os.path.join(base_dir, "contents.txt")
@@ -96,14 +96,15 @@ def combine_files(base_dir, dest_file, is_debug=False):
 	foundPrevRunningCRC = False
 	prevRunningCRC = 0
 	if os.path.isfile(indexInfoFilename):
-		print("Loading {}".format(indexInfoFilename))
+		#print("Loading {}".format(indexInfoFilename))
 		prevRunningCRC = pickle.load(open(indexInfoFilename, 'rb'))
 		foundPrevRunningCRC = True
 
 	# Only regenerate the unminimsed combination of all the JS files if need be
 	regenerated = False
 	if os.path.isfile(un_minimised_temp_aggregate_file) and foundPrevRunningCRC and (prevRunningCRC == runningCRC):
-		print('The contents of "{}" has not changed. Skipping regeneration step.'.format(base_dir))
+		#print('The contents of "{}" has not changed. Skipping regeneration step.'.format(base_dir))
+		pass
 	else:
 		print('The contents of "{}" has changed. Regenerating...'.format(base_dir))
 		regenerated = True
@@ -263,18 +264,19 @@ def getMathjaxNodePageBinPath():
 	return exepath
 
 
-def deploy_site():
+def deploy_site(specificFile, generateImages):
 	# Delete any existing deployment and begin creating a new one...
-	if os.path.isdir(DEPLOYED_DIR):
-		shutil.rmtree(DEPLOYED_DIR)
-	os.mkdir(DEPLOYED_DIR)
+	if specificFile is None:
+		if os.path.isdir(DEPLOYED_DIR):
+			shutil.rmtree(DEPLOYED_DIR)
+		os.mkdir(DEPLOYED_DIR)
 
-	# Combine javascript and CSS files into monoliths
-	monoJsFilename  = os.path.join(DEPLOYED_DIR, 'jeh-monolith.js')
-	combine_files("./javascript", monoJsFilename)
+		# Combine javascript and CSS files into monoliths
+		monoJsFilename  = os.path.join(DEPLOYED_DIR, 'jeh-monolith.js')
+		combine_files("./javascript", monoJsFilename)
 
-	monoCssFilename = os.path.join(DEPLOYED_DIR, 'jeh-monolith.css')
-	combine_files("./css", monoCssFilename)
+		monoCssFilename = os.path.join(DEPLOYED_DIR, 'jeh-monolith.css')
+		combine_files("./css", monoCssFilename)
 
 	# Regex to put in the links into all the HTML pages
 	prog = re.compile('(<\s*div\s+id\s*=\s*"includedContent"\s*>)', re.IGNORECASE)
@@ -289,7 +291,12 @@ def deploy_site():
 	doc = None
 	os.chdir('html')
 	sitemap_list = []
-	for dirname, filename in find_html_files('.'):
+
+	file_list = find_html_files('.') if specificFile is None else [os.path.split(specificFile)]
+	print(file_list)
+
+	for dirname, filename in file_list:
+		print ("Processing {}".format(os.path.join(dirname, filename)))
 		# If we have changed directory we must regenerate the links page so that the
 		# links are relative to this new directory
 		if dirname != last_dirname:
@@ -299,7 +306,7 @@ def deploy_site():
 
 		# Read in the current HTML files contents
 		htmlFileName = os.path.join(dirname, filename)
-		print("Deploying", dirname, filename, htmlFileName)
+		#print("Deploying", dirname, filename, htmlFileName)
 
 
 		if fnmatch.fnmatch(filename, '*.html'):
@@ -322,13 +329,14 @@ def deploy_site():
 		deployed_dir = os.path.join('..', DEPLOYED_DIR, dirname)
 		if (dirname != '.'):
 			if not os.path.exists(deployed_dir):
-				print("Creating directory {}".format(deployed_dir))
-				mkdir_p(deployed_dir)
+				#print("Creating directory {}".format(deployed_dir))
+				if specificFile is None:
+					mkdir_p(deployed_dir)
 			newFileName = os.path.join('..', DEPLOYED_DIR, dirname, filename)
-			print("(A) Opening new file {}".format(newFileName))
+			#print("(A) Opening new file {}".format(newFileName))
 		else:
 			newFileName = os.path.join('..', DEPLOYED_DIR, filename)
-			print("(B) Opening new file {}".format(newFileName))
+			#print("(B) Opening new file {}".format(newFileName))
 
 		# Copy the contents of the curr html to it's deployed file but add in the
 		# links page
@@ -346,48 +354,58 @@ def deploy_site():
 			if platform.system() == 'Windows':
 				shutil.copyfile(newFileName, newFileName + ".TMP")
 				cmd = 'node {} --dollars true < "{}" > {}'.format(mathjaxPageExe, newFileName + ".TMP", newFileName)
-				print("### EXEC {}".format(cmd))
+				#print("### EXEC {}".format(cmd))
+				print("   Parsing mathjax...")
 				subprocess.call(cmd, shell=True)
 				os.remove(newFileName + ".TMP")
 			else:
 				print("### WARNING: Need to implement node-page call on linux")
 	os.chdir('..')
 
-	#
-	# Write out google sitemap as a basic utf-8 text file
-	with codecs.open(os.path.join(DEPLOYED_DIR, "sitemap.txt"), "w", "utf-8") as sitemap_file:
-		sitemap_file.writelines("%s\n" % line for line in sitemap_list)
+	if specificFile is None:
+		#
+		# Write out google sitemap as a basic utf-8 text file
+		with codecs.open(os.path.join(DEPLOYED_DIR, "sitemap.txt"), "w", "utf-8") as sitemap_file:
+			sitemap_file.writelines("%s\n" % line for line in sitemap_list)
 
-	#
-	# Now copy across all other important files
-	nonHtmlFiles = [ #'reCaptchaSecret.txt',
-	                 'robots.txt',
-	                 'downloadables',
-	                 'images',
-	                 'fonts']
+		#
+		# Now copy across all other important files
+		nonHtmlFiles = [ #'reCaptchaSecret.txt',
+	                 	'robots.txt',
+	                 	'downloadables',
+	                 	'images',
+	                 	'fonts']
 
-	for filename in nonHtmlFiles:
-		if os.path.exists(filename):
-			if filename == 'images' and (len(sys.argv) == 0 or sys.argv[1] != "no_images"):
-				target = os.path.join(DEPLOYED_DIR, filename)
-				CopyImagesDir(filename, target)
-			else:
-				target = os.path.join(DEPLOYED_DIR, filename)
-				if os.path.isdir(filename):
-					print("Copying directory", filename, "to", target)
-					shutil.copytree(filename, target)
-				elif os.path.isfile(filename):
-					print("Copying file", filename, "to", target)
-					shutil.copy(filename, target)
+		for filename in nonHtmlFiles:
+			if os.path.exists(filename):
+				if filename == 'images' and generateImages:
+					target = os.path.join(DEPLOYED_DIR, filename)
+					CopyImagesDir(filename, target)
 				else:
-					raise Exception('### WARNING: {} not copied!'.format(filename))
-		else:
-			raise Exception('### WARNING: {} does not exist!'.format(filename))
+					target = os.path.join(DEPLOYED_DIR, filename)
+					if os.path.isdir(filename):
+						#print("Copying directory", filename, "to", target)
+						shutil.copytree(filename, target)
+					elif os.path.isfile(filename):
+						#print("Copying file", filename, "to", target)
+						shutil.copy(filename, target)
+					else:
+						raise Exception('### WARNING: {} not copied!'.format(filename))
+			else:
+				raise Exception('### WARNING: {} does not exist!'.format(filename))
 
-try:
-	deploy_site()
-except:
-	#if os.path.isdir(DEPLOYED_DIR):
-	#	shutil.rmtree(DEPLOYED_DIR)
-	raise
-	pass
+
+if __name__ == "__main__":
+	import argparse
+	try:
+
+		parser = argparse.ArgumentParser(description="Generate JEH-Tech Website")
+		parser.add_argument("-n", "--no_images", action="store_const", const=True)
+		parser.add_argument("-f", "--file", action = "store")
+		args = parser.parse_args()
+		deploy_site(args.file, not args.no_images)
+	except:
+		#if os.path.isdir(DEPLOYED_DIR):
+		#	shutil.rmtree(DEPLOYED_DIR)
+		raise
+		pass

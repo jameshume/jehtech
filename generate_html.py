@@ -67,6 +67,7 @@ newFile.write(htmlFileContents)
 newFile.close()
 
 # Post process the HTML file to pre-render any MathJax
+# TODO: Use https://github.com/nexe/nexe???
 if platform.system() == 'Windows':
 	mathjaxPageExe = getMathjaxNodePageBinPath()
 	shutil.copyfile(newFileName, newFileName + ".TMP")
