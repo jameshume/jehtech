@@ -102,7 +102,7 @@ pl.subplots_adjust(bottom=.5)
 ax.grid()
 fig.savefig(r'pandas_landreg.png')
 </pre>
-	<p> 
+	<p>
 	This will output the following:<br/>
 		<img src="##IMG_DIR##/python/pandas_landreg.png" alt="Pandas plot of UK langregistry prices">
 	</p>
@@ -120,6 +120,8 @@ fig.savefig(r'pandas_landreg.png')
 
             <h3>From A CSV File</h3>
             <pre class="prettyprint linenums lang-python">df = <a href="https://pandas.pydata.org/pandas-docs/stable/generated/pandas.read_csv.html" target="_blank">pandas.read_csv</a>(filename, header=None, skipinitialspace=True)</pre>
+            <p>The field <code>header</code>, if left out, will default to trying to infer if there is a header. <code>None</code> means
+            no header and an integer or list of integers gives the row(s) which contain the header</p>.
 
             <h3>From Microsoft Excel File</h3>
             <p>Also really easy:</p>
@@ -137,6 +139,12 @@ fig.savefig(r'pandas_landreg.png')
             <pre class="prettyprint linenums lang-python">DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 df.datetime_column = pd.to_datetime(dfAssayInf.datetime_column, format=DATETIME_FORMAT, errors='raise')</pre>
         </div> <!-- End H2 Read in files -->
+
+        <h2>Manually Create Data Frame</h2>
+        <div>
+            <p>To create an <em>empty</em> data frame:</p>
+            <pre>df = pd.DataFrame(index=range(numRows),columns=range(numCols))</pre>
+        </div>
 
         <h2>Cleaning Data</h2>
         <div>
