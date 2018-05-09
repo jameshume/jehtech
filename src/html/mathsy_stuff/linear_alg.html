@@ -31,6 +31,10 @@
 	&quot;why&quot; might be obvious to the rest of the world! It also degraded
     into just notes too, without the musings :'(...
 </p>
+<p>
+    A lot of these notes are now just based on the amazing <a href="https://www.khanacademy.org/math/linear-algebra" target="_blank">Khan Academy linear algebra tutorials</a>.
+</p>
+
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h2>Page Contents</h2>
 <div id="page_contents">
@@ -396,7 +400,7 @@
     </p>
     <p>
         The dot product is one definition for a vector multiplication that results in a scalar.
-        Given two equal-length vectors vectors, the dot product looks like this:
+        Given two equal-length vectors, the dot product looks like this:
         $$
             \begin{bmatrix}
               a_1 \\
@@ -447,20 +451,62 @@
             <td>$\|\vec x + \vec y\| \le \|\vec x\| + \|\vec y\|$</td>
         </tr>
     </table>
-    <p></p>
+    <p style="float:left;">
+        <img src="##IMG_DIR##/angle-between-vectors-dot-prod.png" alt="Dot product defines the angle between vectors"/>
+    </p>
+    <p>
+        The dot product also defines <em>the angle between vectors</em>. Take two unit vectors $\hat a$ and $\hat b$.
+        We can calculate:
+
+        $$
+            \text{angle between}\ \hat a\ \text{and}\ \hat b = \theta = \theta_a - \theta_b
+        $$
+
+        We know that:
+
+        $$
+            \cos(\theta_a) = a_x \;\text{and}\; \sin(\theta_a) = a_y \\
+            \cos(\theta_b) = b_x \;\text{and}\; \sin(\theta_b) = b_y \\
+
+        $$
+
+        And we know that:
+
+        $$
+            \cos(\theta) = \cos(\theta_a - \theta_b) = \cos(\theta_a)\cos(\theta_b) + \sin(\theta_a)\sin(\theta_b)
+        $$
+
+        Therefore, by substitution:
+
+        $$
+        \begin{align}
+            \cos(\theta) &= a_xb_x + a_yb_y \\
+            &= a \cdot b
+        \end{align}
+        $$
+
+        Thus, <b>$\cos(\theta) = a \cdot b$ describes the angle between <em>unit</em> vectors</b>. If the vectors are not unit
+        vectors then the angle is defined, in general, by:
+
+        $$
+            \cos(\theta) = \frac{1}{\|\vec a\|\|\vec b\|} \vec a \cdot \vec b
+        $$
+    </p>
+    <p style="clear:both;"></p>
 </div>
 
-<h3>Unit Length Vector</h3>
+<a name="unit-vectors"></a>
+<h3>Unit Length Vectors</h3>
 <div>
 	<p>
-		A unit vector is a vector that has a length of 1. If $\vec u$ is a vector then we
-		defined its length as:
+		A unit vector is a vector that has a length of 1. If $\hat u$ is a vector (notice the special symbol used) 
+        then we defined its length as:
 
 		$$
-		\mathrm{length}(\vec u) = \|\vec u\| = \sqrt{u_1^2 + u_2^2 + \cdots + u_n^2}
+		\mathrm{length}(\hat u) = \|\hat u\| = \sqrt{u_1^2 + u_2^2 + \cdots + u_n^2}
 		$$
 
-		Thus if a vector is a unit vector then $\|\vec u\| = 1$.
+		Thus if a vector is a unit vector then $\|\hat u\| = 1$.
 	</p>
 	<p>
 		Interesting we can also write $\|\vec u\|^2 = u \dot u$.
@@ -470,7 +516,7 @@
 		need the sum $u_1^2 + u_2^2 + \cdots + u_n^2$ to also be 1! How do we acheive this if $\|\vec u\| \ne 1$? We do the following:
 
 		$$
-			\|\vec{u'}\| = \frac{1}{\|\vec u\|}\vec u
+			\|\hat{u}\| = \frac{1}{\|\vec u\|}\vec u
 		$$
 
 		Assuming of course $\|\vec u\| \ne 0.
@@ -624,7 +670,7 @@
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <!--
 -->
-<h2 style="clear:both;">Matricies</h2>
+<h2 style="clear:both;">Matrices</h2>
 <div>
 <a name="matrix-row-echelon"></a>
 <h3 style="clear:both;">Matricies And Simultaneous Linear Equations</h3>
@@ -634,6 +680,7 @@
 <ul>
     <li><a href="https://people.ohio.edu/just/M3200S18/supplements/LALect18np.pdf" target="_blank">Lecture 18: The Rank of a Matrix and Consistency of Linear Systems</a>, Ohio University.</li>
     <li><a href="http://linear.ups.edu/html/section-TSS.html" target="_blank">Types of Solution Sets</a>.</li>
+    <li><a href="https://people.math.osu.edu/husen.1/teaching/au2011/568/row_echelon_solutions.pdf" target="_blank">Row Echelon Form and Number of Solutions</a>.</li>
 </ul>
 <p>
     The set of linear equations:
@@ -717,7 +764,7 @@
     <li>Row addition: $R_i \rightarrow R_i + kR_j$</li>
 </ol>
 <p>
-    And woop, woop, even more important than echelon form is <b>reduced row-echelon form (rref)</b>. The is when:
+    And woop, woop, even more important than echelon form is <b>reduced row-echelon form (rref)</b>. This is when:
 </p>
 <ol>
     <li>If a row has all zeros then it is below all rows with a non-zero entry.</li>
@@ -731,17 +778,37 @@
     which are <em>dependent</em>.
 </p>
 <p>
-    <em>Pivot columns represent variables that are dependent</em>. 
-    Recall that the column vector containing a pivot is all-zeros except 
-    for the pivot. So if element <em>j</em> in a row of a rref matrix is a pivot, then in our 
+    The <em>free</em> variable is one that you have control over, i.e. you can choose and manipulate its value.
+    The <em>dependent</em> one depends on the values of the other variables in the experiment or is constant.
+</p>
+<p>
+    <em>Pivot columns represent variables that are dependent</em>. Why?
+    Recall that the column vector containing a pivot is all-zeros except
+    for the pivot. So if element <em>j</em> in a row of a rref matrix is a pivot, then in our
     system of equations $x_j$ only
-    appears in this one equations in our rref matrix. Thus its value must be determined as this is
+    appears in this one equations in our rref matrix. Thus, its value must be determined as this is
     the only place it occurs. It must either be a constant or a combination of other variables.
 </p>
-
+<p>
+    If we have an augmented matrix $[A | b]$:
+</p>
+<ol>
+    <li><em>No Solution</em>. If  the  last  (augmented)  column  of  $[A|b]$  (ie. the column which contains
+        $b$) contains a pivot entry.
+    </li>
+    <li><em>Exactly One Solution</em>. If the last (augmented) column of $[A|b]$ (ie. the column which contains
+        $b$) does not contain a pivot entry and all of the columns of the coefficient part (ie. the columns
+        of $A$) do contain a pivot entry.
+    </li>
+    <li><em>Infinitely Many Solutions</em>. If the last (augmented) column of $[A|b]$ (ie. the column which contains
+        $b$) does not contain a pivot entry and at least one of the columns of the coefficient part
+        (ie.  the columns of $A$) also does not contain a pivot entry.
+    </li>
+</ol>
+<hr style="width:75%"/>
 <div>
     <p>
-        We can do this in python using the <code>sympy</code> package and the <code>rref()</code> function:
+        We can find the reduced row echelon form of a matrix in python using the <code>sympy</code> package and the <code>rref()</code> function:
     </p>
     <pre class="prettyprint linenums">from sympy import Matrix, init_printing
 
@@ -1289,6 +1356,63 @@ solve_linear_system(system, x, y, z)</pre>
     <p>
         <img src="##IMG_DIR##/linear-transform-rotate.png" alt="Graph showing a linear transformation doing rotations"/>
     </p>
+
+<h3>Projections</h3>
+<p style="float:left;">
+    <img src="##IMG_DIR##/projection.png" alt="Vector projections"/>
+</p>
+<p>
+    The graph to the left shows a vector $\vec x$ and its <em>projection</em> onto the line $L$, defined by the vector $\vec v$.
+    The projection of $\vec x$ onto $L$ describes <em>how much of $\vec x$ goes in the direction of $L$</em>.
+</p>
+<p>
+    We write &quot;the projection of $\vec x$ onto $L$ like so:
+
+    $$
+        \textrm{Proj}_L(\vec x)
+    $$
+
+    The projection is found by dropping a line, perpendicular to $L$ from the top of $\vec x$. Where this line
+    hits $L$ is the end of the vector that describes the projection. This is shown on the graph by the
+    smaller green vector labelled $\vec x - \textrm{Proj}_L$.
+</p>
+<p style="clear:both;">
+    Because $\vec x - \textrm{Proj}_L(\vec x)$ is perpendicular to $L$ we can say the following (recall perpendicular vector's dot product is zero):
+
+    $$
+    (\vec x - \textrm{Proj}_L(\vec x)) \cdot \vec v = 0,\ \text{where}\ \vec v\ \text{is a defining vector of the line L} \\
+    \therefore (\vec x - c\vec v) \cdot \vec v = 0, \text{because}\ c\vec v \in L\ \text{and}\ \textrm{Proj}_L(\vec x) \in L\ \text{it means, for some}\ c,\ c\vec v = \textrm{Proj}_L(\vec x) \\
+    \therefore c = \frac{\vec v \cdot \vec x}{\|\vec v\|^2}
+    $$
+
+    Thus the projection is defined as:
+
+    $$
+    \textrm{Proj}_L(\vec x) = \frac{\vec v \cdot \vec x}{\|\vec v\|^2} \vec v,\ \text{such that}\ \vec v \in L
+    $$
+
+    And if $\vec v$ is a unit vector $\hat v$, then this simplifies to:
+
+    $$
+    \textrm{Proj}_L(\vec x) = (\hat v \cdot \vec x) \hat v
+    $$
+
+    And we have seen in a <a href="#unit-vectors">previous section</a> how to make an vector a unit vector. Whoopdi do!
+</p>
+<p>
+    Turns out that <b>projection is a linear transform</b>! To calculate the matrix that describes the projection transform,
+    apply the projection to each of the column vectors of the identity matrix where the column vectors of $I$ are the same
+    length as the vector over which the projection is applied. So, for example, vectors in $\mathbb{R}^n$ to get the transformation
+    matrix $A$ for a projection onto a line defined by the vector $\hat u$:
+
+    $$
+    A = \begin{bmatrix}
+        \textrm{Proj}_L(I_{\text{col 1}}) & \textrm{Proj}_L(I_{\text{col 2}}) & \cdots & \textrm{Proj}_L(I_{\text{col n}})
+    \end{bmatrix}
+    $$
+</p>
+
+<p style="clear:both;"></p>
 
 </div>
 

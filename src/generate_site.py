@@ -293,8 +293,6 @@ def deploy_site(specificFile, generateImages):
 	sitemap_list = []
 
 	file_list = find_html_files('.') if specificFile is None else [os.path.split(specificFile)]
-	print(file_list)
-
 	for dirname, filename in file_list:
 		print ("Processing {}".format(os.path.join(dirname, filename)))
 		# If we have changed directory we must regenerate the links page so that the
