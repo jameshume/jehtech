@@ -619,10 +619,19 @@
 </div> <!-- END H2 -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<!--
+-->
 <h2 style="clear:both;">Matricies</h2>
 <div>
 <a name="matrix-row-echelon"></a>
 <h3 style="clear:both;">Matricies And Simultaneous Linear Equations</h3>
+<p>
+    References:
+</p>
+<ul>
+    <li><a href="https://people.ohio.edu/just/M3200S18/supplements/LALect18np.pdf" target="_blank">Lecture 18: The Rank of a Matrix and Consistency of Linear Systems</a>, Ohio University.</li>
+    <li><a href="http://linear.ups.edu/html/section-TSS.html" target="_blank">Types of Solution Sets</a>.</li>
+</ul>
 <p>
     The set of linear equations:
 
@@ -705,48 +714,72 @@
     <li>Row addition: $R_i \rightarrow R_i + kR_j$</li>
 </ol>
 <p>
-    We can do this in python using the <code>sympy</code> package and the <code>rref()</code> function:
+    And woop, woop, even more important than echelon form is <b>reduced row-echelon form (rref)</b>. The is when:
 </p>
-<pre class="prettyprint linenums">from sympy import Matrix, init_printing
+<ol>
+    <li>If a row has all zeros then it is below all rows with a non-zero entry.</li>
+    <li>The left most entry in each row is 1 - it is called the <em>pivot</em>.</li>
+    <li>The left most non-zero entry in each row is the only non-zero in that column.</li>
+    <li>Each row has more zeros to the left of the pivit than the row above.</li>
+</ol>
+<p>
+    So why do we give a damn above rref if we have row-echelon form? Well, one reason is it lets us
+    figure out if a set of linear equations has a solution and which variables are <em>free</em> and
+    which are <em>dependent</em>.
+</p>
+<p>
+    <em>Pivot columns represent variables that are dependent</em>. 
+    Recall that the column vector containing a pivot is all-zeros except 
+    for the pivot. So if element <em>j</em> in a row of a rref matrix is a pivot, then in our 
+    system of equations $x_j$ only
+    appears in this one equations in our rref matrix. Thus its value must be determined as this is
+    the only place it occurs. It must either be a constant or a combination of other variables.
+</p>
+
+<div>
+    <p>
+        We can do this in python using the <code>sympy</code> package and the <code>rref()</code> function:
+    </p>
+    <pre class="prettyprint linenums">from sympy import Matrix, init_printing
 
 init_printing(use_unicode=True)
 
 system = Matrix(( (3, 6, -2, 11), (1, 2, 1, 32), (1, -1, 1, 1) ))
 system
 system.rref()[0]</pre>
-<p>
-    Which outputs:
-</p>
-<pre>⎡1  0  0  -17/3⎤
+    <p>
+        Which outputs:
+    </p>
+    <pre>⎡1  0  0  -17/3⎤
 ⎢              ⎥
 ⎢0  1  0  31/3 ⎥
 ⎢              ⎥
 ⎣0  0  1   17  ⎦</pre>
-<p>
-    To then apply this to our augmented matrix we could do something like the following. Lets
-    say we have a set of 3 simultaneous equations with 3 unknowns:
+    <p>
+        To then apply this to our augmented matrix we could do something like the following. Lets
+        say we have a set of 3 simultaneous equations with 3 unknowns:
 
-    $$
-        3x + 6y - 2z = 11 \\
-        x + 2y + z = 32 \\
-        x - y + z = 1
-    $$
+        $$
+            3x + 6y - 2z = 11 \\
+            x + 2y + z = 32 \\
+            x - y + z = 1
+        $$
 
-    We'd make an augmented matrix like so:
+        We'd make an augmented matrix like so:
 
-    $$
-        \left[
-            \begin{array}{ccc|c}
-                3 & 6 & -2 & 11\\
-                1 & 2 & 1 & 32\\
-                1 & -1 & 1 & 1
-            \end{array}
-        \right]
-    $$
+        $$
+            \left[
+                \begin{array}{ccc|c}
+                    3 & 6 & -2 & 11\\
+                    1 & 2 & 1 & 32\\
+                    1 & -1 & 1 & 1
+                \end{array}
+            \right]
+        $$
 
-    To solve this using Python we do:
-</p>
-<pre class="prettyprint linenums">from sympy import Matrix, solve_linear_system, init_printing
+        To solve this using Python we do:
+    </p>
+    <pre class="prettyprint linenums">from sympy import Matrix, solve_linear_system, init_printing
 from sympy.abc import x, y, z
 
 init_printing(use_unicode=True)
@@ -755,15 +788,17 @@ system = Matrix(( (3, 6, -2, 11), (1, 2, 1, 32), (1, -1, 1, 1) ))
 system
 
 solve_linear_system(system, x, y, z)</pre>
-<p>
-    Which will give the following output:
-</p>
-<pre>⎡3  6   -2  11⎤
+    <p>
+        Which will give the following output:
+    </p>
+    <pre>⎡3  6   -2  11⎤
 ⎢             ⎥
 ⎢1  2   1   32⎥
 ⎢             ⎥
 ⎣1  -1  1   1 ⎦
 {x: -17/3, y: 31/3, z: 17}</pre>
+</div>
+
 
 <a name="matrix-vector-multiplication"></a>
 <h3>Matrix / Vector Multiplication</h3>
