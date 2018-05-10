@@ -672,6 +672,68 @@
 -->
 <h2 style="clear:both;">Matrices</h2>
 <div>
+
+<h3>Properties</h3>
+<p>
+    Khan Academy has great articles. This is another good <a href="http://math.mit.edu/~dyatlov/54summer10/matalg.pdf" target+"_blank">reference from MIT</a>.
+</p>
+<h4>Scalar Multiplication</h4>
+<ol>
+    <li>Associative: $(cd)A=c(dA)$</li>
+    <li>Distributive: $c(A + B)=cA + cB$ and $(c + d)A = cA + dA$</li>
+    <li>Identity: $1A = A$</li>
+    <li>Zero: $0A = O$</li>
+    <li>Closure:  $cA$ is a matrix of the same dimensions as $A$.</li>
+</ol>
+<p>
+    Note that scalar multiplication is <b><em>not</em> commutative: $\color{red}{cA \ne Ac}$!</b>
+</p>
+
+<h4>Matrix Addition</h4>
+<ol>
+    <li>Commutative: $A+B=B+A$</li>
+    <li>Associative: $A+(B+C)=(A+B)+C$</li>
+    <li>Zero: For any matrix $A$, there is a unique matrix $O$ such that $A+O=A$</li>
+    <li>Inverse: $\forall A,\ \exists! −A\ \mid\ A+(−A)=O$</li>
+    <li>Closure: $A+B$, is a matrix of the same dimensions as $A$ and $B$.</li>
+</ol>
+
+<h4>Matrix Multiplication</h4>
+<ol>
+    <li>Associative: $(AB)C=A(BC)$</li>
+    <li>Distributive: $A(B+C)=AB+AC$</li>
+    <li>Identity: $IA=A$</li>
+    <li>Zero: $OA=O$</li>
+    <li>Inverse: Only if $A$ is a <em>square</em> matrix, then $A^{-1}$ is its inverse and $AA^{-1} = A^{-1}A = I$. Note that <em>not all matrices are invertible</em>.</li>
+    <li>Dimension: If $A$ is an $m \times n$ matrix and $B$ is an $n \times k$ matrix then $AB$ is an $m \times k$ matrix.</li>
+</ol>
+<p>
+    Note that matrix multiplication is <b><em>not</em> commutative: $\color{red}{AB \ne BA}$!</b>
+</p>
+<p>
+    Be careful: the equation $AB = 0$ does not necessarily mean that $A = 0$ or $B = 0$ and for
+    a general matrix $A$, $AB = AC \nRightarrow B = C$, unless $A$ is invertible.
+</p>
+
+<h4>Matrix Transpose</h4>
+<ol>
+    <li>Associative:$(rA)^T = rA^T$</li>
+    <li>Distributive (into addition): $(A + B)^T = A^T + B^T$</li>
+    <li>Distributive (into mult): $(AB)^{T} = B^{T}A^{T}\ \color{red}{\blacktriangleleft \text{Note the reversal of terms}}$</li>
+    <li>Identity: $I^T = I$</li>
+    <li>Inverse: $(A^T)^T = A$</li>
+</ol>
+
+<h4>Matrix Inverse</h4>
+<ol>
+    <li>Associative (self with inverse): $AA^{−1} = A^{−1}A = I$</li>
+    <li>Distributive (into scalar mult): $(rA)^{−1} = r^{−1}A^{−1},\ r \ne 0$</li>
+    <li>Distributive (into mult): $(AB)^{-1} = B^{-1}A^{-1}\ \color{red}{\blacktriangleleft \text{Note the reversal of terms}}$</li>
+    <li>Identity: $I^{-1} = I$</li>
+    <li>Name?: $(A^{-1})^{-1} = A$</li>
+    <li>Name?: $(A^T)^{-1} = (A^{-1})^T$</li>
+</ol>
+
 <a name="matrix-row-echelon"></a>
 <h3 style="clear:both;">Matricies And Simultaneous Linear Equations</h3>
 <p>

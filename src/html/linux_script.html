@@ -1127,6 +1127,56 @@ done</pre>
 !$              # Shorthand for above</pre>
       </div>
 
+      <h2>Systemd &amp; D-bus</h2>
+      <div>
+        <pre>
+http://mirror.linux.org.au/pub/linux.conf.au/2014/Friday/104-D-Bus_in_the_kernel_-_Lennart_Poettering.mp4
+
+d-bus - IPC system for Linux
+  Better than pipes etc...
+    Method Call Transactions - call method on another service and get an answer
+    Signals - Send messages to notify rest of system
+    Properties - Can notify others about changes in properties. makes it language -like OO
+    Broadcasting
+    Discovery - which services, what's available
+    Introspection - can look at the service and find its signals, properties etc.
+    Policy - security
+    Activation - System runs with minimal resource usage. At boot up you don't have to start all the services - delay until they're needed
+    Synchronisation - Discovery via names, and names can be used as mutexes
+    Time-safe Marshalling - FIFOs make no requirement as to what's transferred but d-bus is more strict - must define a binary presentation of your objects you're sending.
+    Security - you can query the identity of everyone on the system
+    Monitoring
+    Exposes APIs not streams
+    File Descriptor Passing - pass resources across security boundaries
+    Language agnostic
+    High-level error concept
+
+Limitations
+  Can send huge amounts of data. So can use it for control but not payload (e.g. sound server control but not audio)
+  A little inefficient.
+  Credentials on can send/recv are limited
+  No implicit time-stamping
+  Only available in late boot
+
+kdbus - Like a re-implementation of d-bus that solves:
+    Suitable for large data, zero-copy, optionally reusable
+    More efficient that classic d-bus
+    Better, more comprehensive credentials - uid pid, gid, selinux etc etc
+    Implicit time-stamping
+    Always available from earliest boot to latest shut down
+    Race-free exit-on-idle for bus activated services
+
+  Character bus in /dev
+  You can memory map the file descriptor to set up a memory arena where kernel drops messages
+
+
+http://0pointer.net/blog/the-new-sd-bus-api-of-systemd.html
+https://www.linux.com/learn/here-we-go-again-another-linux-init-intro-systemd
+https://www.linux.com/learn/understanding-and-using-systemd
+https://www.linux.com/blog/learn/intro-to-linux/2018/5/writing-systemd-services-fun-and-profit
+https://learn.adafruit.com/running-programs-automatically-on-your-tiny-computer/systemd-writing-and-enabling-a-service</pre>
+      </div>
+
 	  <h2>Sed</h2>
 	  <div>
 		<h3>Intro</h3>
