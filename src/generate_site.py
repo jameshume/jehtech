@@ -343,6 +343,8 @@ def deploy_site(specificFile, generateImages):
 		htmlFileContents = prog_js.sub('<script src="{}{}jeh-monolith.js"></script>'.format(link_to_root, "" if link_to_root == "" else '/'), htmlFileContents)
 		htmlFileContents = prog_img.sub('{}{}images/jeh-tech'.format(link_to_root, "" if link_to_root == "" else '/'), htmlFileContents)
 
+
+		#print("Opening {} from {}".format(newFileName, os.getcwd()))
 		newFile = codecs.open(newFileName, 'w', 'utf-8')
 		newFile.write(htmlFileContents)
 		newFile.close()

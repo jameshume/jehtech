@@ -23,8 +23,23 @@
 <h1 class="title">Linux Security</h1>
 <div style="padding-right:10px;">
 
+<h2>Page Contents</h2>
+<div id="page_contents">
+</div>
+
+<h2>General References</h2>
+<p>
+  I found the following series of articles on the <a href="https://blog.vigilcode.com/" target="_blank">Vigil Code blog</a> to be really useful:
+</p>
+<ol>
+  <li><a href="https://blog.vigilcode.com/2011/04/ubuntu-server-initial-security-quick-secure-setup-part-i/" target="_blank">Ubuntu Server Initial Security – Quick Secure Setup Part I</a></li>
+  <li><a href="https://blog.vigilcode.com/2011/05/ufw-with-fail2ban-quick-secure-setup-part-ii/" target="_blank">UFW with Fail2ban – Quick Secure Setup Part II</a></li>
+  <li><a href="https://blog.vigilcode.com/2011/06/using-apparmor-quick-secure-setup-part-iii/" target="_blank">Using AppArmor – Quick Secure Setup Part III</a>.</li>
+</ol>
+
 <a id="SELinux"></a>
 <h2>Security-Enhanced (SE) Linux</h2>
+<div>
 <h3>References</h3>
 <ul>
   <li><a href="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Security-Enhanced_Linux/index.html"
@@ -357,7 +372,7 @@ drwxr-xr-x.  4 jh   jh   unconfined_u:object_r:user_home_t:SystemLow 4096 May  1
 </p>
 </div>
 
-<h2>Other LSMs</h2>
+<h2>Other Linux Security Modules (LSMs)</h2>
 <div>
   <pre>SMACK: https://en.wikipedia.org/wiki/Smack_(software)
 TOMOYO
@@ -365,10 +380,231 @@ AppArmor
 Yama</pre>
 </div>
 
+<a id="UFW"></a>
+<h2>Uncomplicated Firewall (UFW)</h2>
+<div>
+<h3>References</h3>
+<ul>
+  <li><a href="https://wiki.debian.org/Uncomplicated%20Firewall%20%28ufw%29" target="_blank">Uncomplicated Firewall</a>, Debian Wiki.</li>
+  <li><a href="https://wiki.ubuntu.com/UncomplicatedFirewall" target="_blank">Uncomplicated Firewall</a>, Ubuntu Wiki.</li>
+</ul>
+
+<h3>About</h3>
+  <p>
+    UFW is a nice front end to the more complicated iptables firewall. It really is nice and user friendly.
+    IPTables always looked to complicated to learn to me because I'm not a hard-core system administrator. I
+    just want an easy to use firewall that will do a good job.
+  </p>
+  <p>
+    UFW is described as:
+  </p>
+  <blockquote>
+    <p>... iptables provide a complete firewall solution that is both highly configurable and highly flexible ...</p>
+    <p>... Becoming proficient in iptables takes time, and ... can be a daunting task ...</p>
+    <p>... the Uncomplicated Firewall (ufw) is a ... particularly well-suited for host-based firewalls. ufw provides ... a command-line interface for manipulating the firewall. ufw aims to provide an easy to use interface for people unfamiliar with firewall concepts, while at the same time simplifies complicated iptables commands to help an administrator who knows what he or she is doing ...</p>
+    <footer>
+      -- <a href="https://wiki.ubuntu.com/UncomplicatedFirewall" target="_blank">UncomplicatedFirewall</a>, Ubuntu Wiki.
+    </footer>
+  </blockquote>
+  <p></p>
+
+<h3>Installing And First Super Restrictive Setup</h3>
+  <p>Could not be easier:</p>
+  <pre>sudo apt-get install --yes ufw
+sudo ufw enable
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow ssh
+sudo ufw limit ssh/tcp
+sudo ufw status verbose</pre>
+  <p>
+    This installs UFW and sets it up to deny all incoming traffic except for SSH connections but allow all outgoing traffic.
+  </p>
+
+<h3>UFW Commands</h3>
+  <p>
+    The man page and the above links will tell you pretty much everything you need to know about UFW, but here is a quick cheat sheet and a little view into some of the more complicated command line options.
+  </p>
+  <p>
+    <table>
+      <tr>
+        <td>Status:</td>
+        <td><code>ufw status verbose</code></td>
+      </tr>
+      <tr>
+        <td>Enable Firewall:</td>
+        <td><code>ufw enable</code></td>
+      </tr>
+      <tr>
+        <td>Deny All Incoming:</td>
+        <td><code>ufw deny incoming</code></td>
+      </tr>
+      <tr>
+        <td>Allow All Outgoing:</td>
+        <td><code>uft default allow outgoing</code></td>
+      </tr>
+      <tr>
+        <td>Allow SSH Incoming:</td>
+        <td><code>ufw allow ssh</code></td>
+      </tr>
+      <tr>
+        <td>Rate Limit (SSH):</td>
+        <td><code>ufw limit ssh/tcp</code></td>
+      </tr>
+      <tr>
+        <td>Allow Protocol/Port Range:</td>
+        <td><code>ufw allow 1234:4321/(ip|udp|tcp)</code></td>
+      </tr>
+      <tr>
+        <td>Allow Specific IP Incoming:</td>
+        <td><code>ufw allow x.x.x.x</code></td>
+      </tr>
+      <tr>
+        <td>Delete Rules:</td>
+        <td><code>ufw delete (allow|deny) ...</code></td>
+      </tr>
+      <tr>
+        <td>See Apps:</td>
+        <td><code>ufw app list</code></td>
+      </tr>
+      <tr>
+        <td>Get App Info::</td>
+        <td><code>ufw app info app-name</code></td>
+      </tr>
+    </table>
+  </p>
+  <p>
+    A little note on how to read some of the more complicated command lines. When you see something
+    like this:
+  </p>
+  <pre>ufw deny proto tcp to any port 80</pre>
+  <p>
+    Read it as &quot;<code>ufw, deny proto tcp to any, port 80</code>&quot;. I.e., do not read it as
+    denying tcp &quot;to any port&quot;. It is denying tcp to any address on the host using port 80.
+    The reason it reads like this is that on a <a href="https://en.wikipedia.org/wiki/Multihoming" target="_blank">mulihomed </a>
+    you might only want to ban on a specific IP, so you might write <code>ufw deny proto tcp to xxx.xxx.xxx.xxx port 80</code>,
+    for example.
+  </p>
+
+  <h3>UFW Apps</h3>
+  <p>
+    When you see commands like &quot;<code>ufw allow OpenSSH</code>&quot;, the &quot;<code>OpenSSH</code>&quot;
+    bit is an &quot;app&quot;, which is just a name which UFW maps to a title, description, port and
+    protocol.
+  </p>
+  <p>
+    The app definitions reside in <code>/etc/ufw/applications.d</code>. Let's say I have a server
+    that I have build called JEHServ and I would like to be able to write something like:
+    &quot;<code>ufw allow JEHServ</code>&quot;. To accomplish this create the file
+    <code>/etc/ufw/applications.d/jeh-serv</code> with the following contents:
+  </p>
+  <pre>title = JEHTech server, a silly example
+description=A really long description about JEHTech server
+ports=12345/tcp|4321|99,105:110/udp</pre>
+  <p>
+    The only &quot;complicated bit&quot; is the <code>ports</code>. For the ports you can use
+    a pipe delimited sequency of port numbers, ranges and protocols as shown.
+  </p>
+  <p>
+    After creating this file you will need to force UFW to re-read it. Type
+    <code>ufw reload</code>.
+  </p>
+
+</div>
+
+<a id="fail2ban"></a>
+<h2>Fail2Ban</h2>
+<div>
+  <h3>References</h3>
+  <ul>
+    <li><a href="http://www.fail2ban.org/wiki/index.php/MANUAL_0_8" target="_blank">Fail2Ban Manual</a>, Fail2Ban Wiki.</li>
+    <li><a href="https://www.fail2ban.org/wiki/index.php/Commands" target="_blank">Fail2Ban Command Cheat Sheet</a>, Fail2Ban Wiki.</li>
+    <li><a href="https://www.digitalocean.com/community/tutorials/how-to-protect-ssh-with-fail2ban-on-ubuntu-14-04" target="_blank">How To Protect SSH with Fail2Ban on Ubuntu 14.04 </a>, DigitalOcean.</li>
+    <li><a href="https://www.the-art-of-web.com/system/fail2ban-log/" target="_blank">System: Monitoring the fail2ban log</a>, The Art Of Web.</li>
+    <li><a href="https://blog.vigilcode.com/2011/05/ufw-with-fail2ban-quick-secure-setup-part-ii/" target="_blank">UFW with Fail2ban – Quick Secure Setup Part II</a>, Vigil Code blog.</li>
+    <li><a href="http://johnny.chadda.se/using-fail2ban-with-nginx-and-ufw/" target="_blank">Using Fail2ban with Nginx and UFW</a>, Johnny Chadda in Technology, August 4, 2014</li>
+  </ul>
+
+  <h3>Intro</h3>
+  <p>
+    Fail2Ban is a log parser that monitors a set of logs for messages that look &quot;suspicious&quot;, and then uses those messages
+    to ban IP addresses (i.e., add a firewall rule to block that IP). So if a server prints out an error message that contains the
+    client IP address, Fail2Ban can be configured to detect that message, extract the host IP and add a firewall rule to block that
+    IP, if for example, the message is logged more than 10 times in 1 second. The ban usually is not permanent.
+  </p>
+
+  <h3>Cheat Sheet</h3>
+  <p>
+    <table>
+      <tr>
+        <td>Get status:</td>
+        <td><code>sudo fail2ban status</code></td>
+      </tr>
+      <tr>
+        <td>View logs:</td>
+        <td><code>sudo cat /var/log/fail2ban.log</code></td>
+      </tr>
+      <tr>
+        <td>Start/stop/reload/get status:</td>
+        <td><code>fail2ban-client start|stop|reload|status [jail-name]</code></td>
+      </tr>
+      <tr>
+        <td>Un-ban an IP</td>
+        <td><code>sudo fail2ban-client set jail-name unbanip ip-address</code></td>
+      </tr>
+    </table>
+  </p>
+
+  <h3>Jails, Filters &amp; Actions</h3>
+  <p>
+    Jails define the conditions that will lead an IP address to be banned by associating a
+    <em>filter</em> with an <em>action</em>.
+  </p>
+  <p>
+    The filter is just a set of regular expressions which are used to extract the IP address
+    out of log messages. The action is self explanatory: usually adds a rule to the firewall but
+    can do anything like send emails etc.
+  </p>
+  <p>
+    Jails are found in <code>/etc/fail2ban/jail.conf</code>. Don't modify this file! Put new changes
+    in <code>/etc/fail2ban/jail.local</code>. Any settings in this file override those in the
+    <code>.conf</code> file. You do <em>not</em> need to copy the <code>.conf</code> file... just
+    insert the <em>changes</em> you wish to make into the <code>.local</code> file. Think of it as an
+    inheritance relationship. The <code>.local</code> file inherits everything from the <code>.conf</code>
+    file and then applies specific overrides and extensions. An alternative way to specify a jail is
+    to add it, in its own file, to <code>/etc/fail2ban/jail.d/</code>.
+  </p>
+  <p>
+    Actions are found in <code>/etc/fail2ban/action.d/</code>. Filters are found in <code>/etc/fail2ban/filter.d/</code>.
+    The default action for everything is to ban an IP address. The default firewall being used is
+    iptables. Note: if you are using UFW you will have to reconfigure Fail2Ban to use UFW.
+  </p>
+  <p>
+    Note, that to begin with <em>all</em> jails are disabled by default. You should only enable
+    the jails that are required for you system. For example, a basic system with only an SSH server
+    running, might only have this in <code>/etc/fail2ban/jail.local</code>:
+  </p>
+  <pre>[sshd]
+enabled = true
+
+[sshd-ddos]
+enabled = true</pre>
+  <p>
+    Because these settings override or add to the existing settings in <code>jail.conf</code>, thats
+    all we need to specify for SSH... all the other settings like the filter and actions have already
+    been defined: the jail only needs enabling.
+  </p>
+  <p>
+    TODO: Finish off the notes!!
+  </p>
+</div>
+
+
 <h2>Other Security</h2>
 <div>
   <pre>Seccomp - for system call filtering</pre>
 </div>
+
 
 </div> <!-- End padding right div -->
 </div> <!-- End content div -->
