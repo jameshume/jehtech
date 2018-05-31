@@ -594,15 +594,80 @@ enabled = true</pre>
     all we need to specify for SSH... all the other settings like the filter and actions have already
     been defined: the jail only needs enabling.
   </p>
+
+  <h3>Working With UFW</h3>
   <p>
-    TODO: Finish off the notes!!
+    By default, Fail2Ban will use iptables to block IP addresses. What I found was that, at least on
+    Debian (9.4), that it still worked, i.e., IP addresses were still banned, but the ban status
+    did not show up when executing a <code>ufw status</code> command. To get it working with UFW
+    all you need to do is add the following to your <code>/etc/fail2ban/jail.local</code> file:
   </p>
+  <pre>[DEFAULT]
+banaction = ufw
+action=ufw</pre>
+  <p>
+    This works by overriding the default ban action because of the file <code>/etc/fail2ban/action.d/ufw.conf</code>
+    that is nicely provided for us :)
+  </p>
+
+
+  <h3>Define Your Own Ban</h3>
+  <p>
+    Lets say I have a service that I have created that dumps error messages to a log file. Define
+    the service in <code>/etc/fail2ban/jail.local</code>:
+  </p>
+  <pre>[my-silly-server]
+enabled = true
+port = 1234
+logpath = /var/log/my-silly-server-log
+bantime = ...
+findtime = ...
+maxretry = ...
+</pre>
+  <p>
+    This tells Fail2Ban to create and enable a jail called &quot;my-silly-server&quot; for a
+    service listening to port 1234 that writes to the log file <code>/var/log/my-silly-server-log</code>.
+  </p>
+  <p>
+    Other configuration options like <code>bantime</code>, <code>findtime</code> and <code>maxretry</code>
+    can also be specified. The value for <code>maxretry</code> specifies the number of failures that have to
+    occur in the last <code>findtime</code> seconds in order to ban the IP. The parameter <code>bantime</code>
+    dictates how many seconds the ban is in place for.
+  </p>
+  <p>
+    However, what this doesn't tell Fail2Ban is what log messages it should scan for. To do that you
+    must add a <code>.conf</code> file with the same name as the jail to the directory <code>/etc/fail2ban/filter.d</code>.
+    So in this case the file would be <code>/etc/fail2ban/filter.d/my-silly-server.conf</code>. That file must contain
+    the following:
+  </p>
+  <pre>[Definition]
+failregex = Some error from &lt;HOST&gt;
+            The client &lt;HOST&gt; sent yet another regex-defined error</pre>
+  <p>The <a href="https://fail2ban.readthedocs.io/en/latest/filters.html" target="_blank">Developing Filters</a>
+  section of the Fail2Ban docs contains much more detailed information.
+  </p>
+  <p>
+    In the above, <code>failregex</code>, defines the regular expressions that Fail2Ban will match against
+    each line of the log file specified. The &quot;<code>&lt;HOST&gt;</code>&quot; part of the expression
+    is a special Fail2Ban regex that will match any IP address or host name. This will be used in the
+    ban action. Thus, in the above, should the log contain &quot;Some error from 1.2.3.4:4321&quot;,
+    or &quot;The client 1.2.3.4 sent yet another regex-defined error&quot;, then the
+    IP address <code>1.2.3.4</code> will be blocked by adding a rule to the firewall in use.
+  </p>
+
 </div>
 
-
-<h2>Other Security</h2>
+<h2>SECure COMPuting - Seccomp</h2>
 <div>
-  <pre>Seccomp - for system call filtering</pre>
+  <p></p>
+  <blockquote>
+    <p>
+      The idea behind seccomp is to restrict the system calls that can be made from a process ... The Linux kernel has a few hundred system calls, but most of them are not needed by any given process ...
+    </p>
+    <footer><a href="https://lwn.net/Articles/656307/" target="_blank">A seccomp overview</a>, lwn.net</footer>
+  </blockquote>
+  <p>
+  </p>
 </div>
 
 

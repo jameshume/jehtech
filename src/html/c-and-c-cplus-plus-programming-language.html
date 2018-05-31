@@ -132,7 +132,9 @@
                 <li>https://stackoverflow.com/questions/1393443/setjmp-longjmp-and-local-variables</li>
                 <li>https://hackerboss.com/overriding-system-functions-for-fun-and-profit/</li>
                 <li>https://github.com/angrave/SystemProgramming/wiki/Signals,-Part-2:-Pending-Signals-and-Signal-Masks</li>
-                <li>https://en.wikipedia.org/wiki/Cscope</li>
+                <li>https://www.gnu.org/software/global/</li>
+                <li>https://github.com/jsfaint/gen_tags.vim</li>
+                <li>https://github.com/universal-ctags/ctags</li>
 			</ul>
 		</div>
 
@@ -209,6 +211,83 @@ void __cyg_profile_func_exit (void *, void *) __attribute__((no_instrument_funct
     -v \
     path/to/binary &lt;args for binary&gt;</pre>
 		</div>
+
+        <h2>Tagging Your Source Code: GNU Global</h2>
+        <div>
+            <h3>References</h3>
+            <ul>
+                <li><a href="https://www.gnu.org/software/global/" target="_blank">GNU GLOBAL Source Code Tagging System</a>, Offical GNU Global Page.</li>
+            </ul>
+
+            <h3>Install</h3>
+            <p>
+                Check for the most recent version and use commands like this:
+            </p>
+            <pre>mkdir deleteme
+pushd deleteme/
+wget http://tamacom.com/global/global-6.6.2.tar.gz
+tar xvf global-6.6.2.tar.gz
+cd global-6.6.2/
+./configure
+make all
+sudo make install
+popd
+rm -fr deleteme</pre>
+
+            <h3>Cheat Sheet</h3>
+            <p>All the <code>global</code> commands must be run from within your project directory structure. I.e., from the root directory or a subdirectory.</p>
+            <table>
+                <tr>
+                  <td>Build Index:</td>
+                  <td><code>gtags</code><br/>Must be run from project ROOT! Requires considerable disk space!</td>
+                </tr>
+                <tr>
+                  <td>Find something:</td>
+                  <td><code>global &quot;<i>posix regular expr</i>&quot;</code></td>
+                </tr>
+                <tr>
+                  <td>Find references:</td>
+                  <td><code>global -r ...</code></td>
+                </tr>
+                <tr>
+                  <td>Include details:</td>
+                  <td><code>global -x ...</code></td>
+                </tr>
+                <tr>
+                  <td>Find lines matching pattern:</td>
+                  <td><code>global -g &quot;<i>posix regular expr</i>&quot;</code></td>
+                </tr>
+                <tr>
+                  <td>Only search CWD:</td>
+                  <td><code>global -l ...</code></td>
+                </tr>
+                <tr>
+                  <td>Invert match:</td>
+                  <td><code>global -V ...</code></td>
+                </tr>
+                <tr>
+                  <td>Case insensitive matches:</td>
+                  <td><code>global -i ...</code> (<em>not</em> default!)</td>
+                </tr>
+                <tr>
+                  <td>Definitions:</td>
+                  <td><code>global -d ...</code></td>
+                </tr>
+                <tr>
+                  <td>Auto complete:</td>
+                  <td><code>global -c ...</code></td>
+                </tr>
+                <tr>
+                  <td>Update tag files incrementally:</td>
+                  <td><code>global -u</code> (can be done from any dir)</td>
+                </tr>
+                <tr>
+                  <td>Update gtags for specific file:</td>
+                  <td><code>gtags --file <i>file</i></code></td>
+                </tr>
+            </table>
+            <p></p>
+        </div>
 
 		<h2>Preprocessor Stringization</h2>
 		<div>
