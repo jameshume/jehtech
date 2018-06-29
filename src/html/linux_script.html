@@ -258,10 +258,6 @@
               <td><code>sudo systemctl is-active|is-enabled|is-failed &lt;servicename&gt;</code></td>
             </tr>
             <tr>
-              <td>View journal entries:</td>
-              <td><code>sudo journalctl [-kb] [-u &lt;unit name&gt;]</code>, <code>-b</code> for current boot messages, <code>-k</code> for kernel messages.</td>
-            </tr>
-            <tr>
               <td>Show unit file:</td>
               <td><code>systemctl cat &lt;servicename&gt;</code></td>
             </tr>
@@ -272,6 +268,32 @@
             <tr>
               <td>Find system service files:</td>
               <td><code>ls /lib/systemd/system/</code></td>
+            </tr>
+            <tr>
+                <td colspan="2"><hr/></td>
+            </tr>
+            <tr>
+              <td>View journal entries:</td>
+              <td><code>sudo journalctl [-kb] [-u &lt;unit name&gt;]</code>, <code>-b</code> for current boot messages, <code>-k</code> for kernel messages.</td>
+            </tr>
+            <tr>
+              <td>Logs since boot:</td>
+              <td><code>journalctl -b N</code>.<br/>N = 0: this boot, N = -1: last boot etc.<br/>Edit <code>/etc/systemd/journald.conf</code> and under <code>[Journal]</code> set <code>storage=persistent</code> to keep logs across boots.</td>
+            </tr>
+            <tr>
+              <td>Logs since date:</td>
+              <td><code>journalctl --since "YYYY-MM-DD HH:MM:SS"</code><br/>
+                  <code>journalctl --since yesterday</code><br/>
+                  <code>journalctl --since HH:MM --until "X hours ago"</code>
+              </td>
+            </tr>
+            <tr>
+              <td>Filter by service:</td>
+              <td><code>journalctl -u &lt;service-name:&gt;.service</code></td>
+            </tr>
+            <tr>
+              <td>Kernel messages:</td>
+              <td><code>journalctl -k</code></td>
             </tr>
           </table>
         </p>
@@ -421,6 +443,10 @@
 
         <p></p>
 
+      <h2>Writing UDev Rules</h2>
+      <div>
+      	<p>http://www.reactivated.net/writing_udev_rules.html</p>
+      </div>
 
       <h2>Running Ubuntu On VirtualBox</h2>
       <div>
@@ -442,8 +468,8 @@
          <p>
             <img src="##IMG_DIR##/install_guest_additions_from_menu.png" alt="Image showing how to install guest additions on VirtualBox from VirtualBox menu"/>
          </p>
-         <p>If that fails for whatever reason you can install and download the
-            latest guest additions ISO from the VirtualBox webstite. You can then
+         <p>If that fails for whatever reason you can install and <a href="https://download.virtualbox.org/virtualbox" target="_blank">download the
+            latest guest additions ISO from the VirtualBox webstite</a>. You can then
             add the CD to the VM's media as shown below (whilst the VM is powered
             off).
          </p>
@@ -1722,8 +1748,10 @@ sed '$!N;s/\n/ /'</pre>
                        When in copy mode these keys are useful...
                           - B|b, E|e       - move the cursor WORD by WORD
                           - Ctrl+b, Crel+f - scroll the display up/down a full screen.
-       # Ctrl+a, r -   Toggle the current window's line-wrap setting.
-       # Ctrl-a, *   - List users connected to your screen session.</pre>
+       # Ctrl+a, r   -   Toggle the current window's line-wrap setting.
+       # Ctrl+a, *   - List users connected to your screen session.
+       # Ctrl+a, w   - List all windows.
+       # Ctrl+a, :   - Enter command mode.</pre>
 
       <h3>Name Your Session</h3>
       <p>
