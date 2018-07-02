@@ -378,6 +378,30 @@
         <p>
           <table>
             <tr>
+              <td>Network Manager Client:</td>
+              <td>
+                <table>
+                    <tr><td>Wifi status:</td>
+                        <td><code>nmcli r wifi</code></td>
+                    </tr>
+                    <tr><td>Turn wifi on/off:</td>
+                        <td><code>nmcli r wifi off|on</code></td>
+                    </tr>
+                    <tr><td>List wifi devices:</td>
+                        <td><code>nmcli d wifi list</code></td>
+                    </tr>
+                    <tr><td>Connect to wifi networkL</td>
+                        <td><code>nmcli --ask con up &lt;network-name&gt;</code>, or<br>
+                            <code>nmcli device wifi connect &lt;network-name&lt; password &lt;password&gt;</code>
+                        </td>
+                    </tr>
+                    <tr><td>Show connections:</td>
+                        <td><code>nmcli con show</code></td>
+                    </tr>
+                </table>
+              </td>
+          </tr>
+          <tr>
               <td>nmap:</td>
               <td>
                 <table>

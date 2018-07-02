@@ -7,3 +7,4 @@ __test
 *.data
 *.*#
 src/reCaptureSecret.txt
+node_modules
