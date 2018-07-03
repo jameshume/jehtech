@@ -733,7 +733,7 @@
 </ol>
 
 <a name="matrix-row-echelon"></a>
-<h3 style="clear:both;">Matricies And Simultaneous Linear Equations</h3>
+<h3 style="clear:both;">Matricies, Simultaneous Linear Equations And Reduced Row Echelon Form</h3>
 <p>
     References:
 </p>
@@ -793,7 +793,7 @@
     $$
 
     Next this matrix must be converted to <b>row echelon form</b>. This is where each row has
-    the same or less zeros to the right than the row below. For example, the following matrix is
+    the same or less zeros to the left than the row below. For example, the following matrix is
     in row echelon form:
 
     $$
@@ -833,9 +833,12 @@
     <li>Each row has more zeros to the left of the pivit than the row above.</li>
 </ol>
 <p>
-    So why do we give a damn above rref if we have row-echelon form? Well, one reason is it lets us
+    Some important terms are <em>pivot position</em> and <em>pivot column</em>. The position is the location of a leading 1, which meets the above criteria, and the column is a column that contains a pivot position.
+</p>
+<p>
+    So why do we give a damn above RREF if we have row-echelon form? Well, one reason is it lets us
     figure out if a set of linear equations has a solution and which variables are <em>free</em> and
-    which are <em>dependent</em>.
+    which are <em>dependent</em>. The reason for this is that the RREF of every matrix is <em>unique</em> (whereas merely row reducing a matrix can have many resulting forms).
 </p>
 <p>
     The <em>free</em> variable is one that you have control over, i.e. you can choose and manipulate its value.
@@ -846,11 +849,12 @@
     Recall that the column vector containing a pivot is all-zeros except
     for the pivot. So if element <em>j</em> in a row of a rref matrix is a pivot, then in our
     system of equations $x_j$ only
-    appears in this one equations in our rref matrix. Thus, its value must be determined as this is
+    appears in this one equations in our RREF matrix. Thus, its value must be determined as this is
     the only place it occurs. It must either be a constant or a combination of other variables.
 </p>
+
 <p>
-    If we have an augmented matrix $[A | b]$:
+    <a name="RREF_meaning"></a>If we have an augmented matrix $[A | b]$:
 </p>
 <ol>
     <li><em>No Solution</em>. If  the  last  (augmented)  column  of  $[A|b]$  (ie. the column which contains
@@ -1221,11 +1225,12 @@ solve_linear_system(system, x, y, z)</pre>
 <h2>Linear Transformations</h2>
 <div>
     <h3>Functions</h3>
+    <h4>Scalar Functions</h4>
     <p>
         Normally a function is a <em>mapping</em> between two sets: from a <em>domain</em> to a <em>range</em>, which is
         a subset of the function's <em>co-domain</em>. I.e., the co-domain is the set of all possible things the
         function could map onto and the range is the subset of the co-domain containing the things the
-        function actually maps to.
+        function actually maps to. If we have two sets, $X$ and $Y$, we say that if $f$ is a function, then it associates alements of $X$ with elements of $Y$. I.e., $f$ is a <em>mapping</em> between $X$ and $Y$, and we write $f: X \mapsto Y$.
     </p>
     <p>
         <img src="##IMG_DIR##/codomain-vs-range.png" alt="co-domain vs range"/>
@@ -1259,7 +1264,7 @@ solve_linear_system(system, x, y, z)</pre>
         <img src="##IMG_DIR##/function-vs-mapping.png" alt="a function vs a mapping"/>
     </p>
 
-    <h3>Vector Valued Functions</h3>
+    <h4>Vector Valued Functions</h4>
     <p>
         Functions that map to $\mathbb{R}$ are called scalar values functions, or specifically in
         this case, real valued functions.
@@ -1290,6 +1295,39 @@ solve_linear_system(system, x, y, z)</pre>
         It could look like anything... th epoint is because $f$ operates on a vector, we
         call it a <em>transformation</em>.
     </p>
+
+    <h4>Surjective (Onto) Functions</h4>
+    <p>
+        A surjective, or onto, function provides a mapping from the domain to
+        <em>every</em> element of the co-domain. I.e., the range <em>is</em> the
+        co-domain, or the image of the function is the co-domain. If $f: X \mapsto Y$ and $f$ is surjective, then $\mathrm{Im}(f) = Y$.
+
+        $$
+            \forall y \in Y, \exists \text{ at least one } x \mid f(x) = y
+        $$
+    </p>
+
+    <h4>Injective (One-To-One) Functions</h4>
+    <p>
+        An injective, or one-to-one, function provides a mapping to every element
+        of the co-domain such that no two elements from the domain can map to the
+        same value in the co-domain. Note that not all domain members need to be
+        mapped however.
+
+        $$
+            \forall y \in Y, \exists \text{ at most one } x \mid f(x) = y
+        $$
+    </p>
+
+    <h4>Bijective (One-To-One And Onto)</h4>
+    <p>
+        A function is bijective (one-to-one and onto) when it is both surjective (onto) and injective (one-to-one).
+
+        $$
+            \forall y \in Y, \exists \text{ exactly one } x \mid f(x) = y
+        $$
+    </p>
+
 
     <h3>Linear Transformations</h3>
     <p>
