@@ -334,6 +334,14 @@
               <td><code>ufw allow x.x.x.x</code></td>
             </tr>
             <tr>
+              <td>Allow SSH from IP range:</td>
+              <td><code>ufw allow proto tcp from 192.1.1.0/24 port 22</code></td>
+            </tr>
+            <tr>
+              <td>Show Numbered Rules:</td>
+              <td><code>ufw status numbered</code></td>
+            </tr>
+            <tr>
               <td>Delete Rules:</td>
               <td><code>ufw delete (allow|deny) ...</code></td>
             </tr>

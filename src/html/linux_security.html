@@ -460,6 +460,14 @@ sudo ufw status verbose</pre>
         <td><code>ufw allow x.x.x.x</code></td>
       </tr>
       <tr>
+        <td>Allow SSH from IP range:</td>
+        <td><code>ufw allow proto tcp from 192.1.1.0/24 port 22</code></td>
+      </tr>
+      <tr>
+        <td>Show Numbered Rules:</td>
+        <td><code>ufw status numbered</code></td>
+      </tr>
+      <tr>
         <td>Delete Rules:</td>
         <td><code>ufw delete (allow|deny) ...</code></td>
       </tr>
@@ -668,6 +676,73 @@ failregex = Some error from &lt;HOST&gt;
   </blockquote>
   <p>
   </p>
+</div>
+
+
+<h2>Secure Shell (SSH)</h2>
+<div>
+  <p>
+    Installing the SSH client is very simple:
+  </p>
+  <pre>sudo apt-get install ssh</pre>
+  <p>
+    Once installed use <code>sudo systemctl status ssh</code> to get the status of the SSH daemon. To start/stop the daemon use <code>sudo systemctl start/stop ssh</code>.
+  </p>
+  <p>
+    For security, root access via SSH is sometimes disabled and password authentication is always disabled (prefer public/private keys). You can also run the SSH daemon on
+    a non standard port. Especially useful is to <a href="#fail2ban">setup Fail2Ban</a> to monitor system log files for suspicious SSH activity (see above).
+  </p>
+  <p>
+    The SSH daemon configuration file is located at <code>/etc/ssh/sshd_config</code>. To disable root loging grep for the line containing &quot;<code>PermitRootLogin</code>&quot;
+    and make sure it reads:
+  </p>
+  <pre>PermitRootLogin no</pre>
+  <p>
+    To disable password authentication grep for the line containing &quot;<code>PasswordAuthentication</code>&quot; and make sure it reads:
+  </p>
+  <pre>PasswordAuthentication no</pre>
+  <p>
+    You should also disable PAM:
+  </p>
+  <pre>UsePAM no</pre>
+  <p>
+  	You may also want to use <code>LogLevel VERBOSE</code>, so that the key fingerprint of SSH keys used for login are recorded.
+  </p>
+  <p>
+    Once you have made the changes you want type:
+  </p>
+  <pre>sudo systemctrl restart ssh</pre>
+  <p>
+    To setup a new public/private key pair with, at the time of writing, some furture proofing in the key length, use the following:
+  </p>
+  <pre>ssh-keygen -t rsa -b 3072 -C "A meaningful description" -f file-name-for-your-key-pair</pre>
+  <p>
+    Make sure you enter a secure password for your key. I.e., use upper and lower case as well as numbers at the very least with a reasonable length. Two new files will have
+    been created in the directory from which your ran the <code>ssh-keygen</code> command: <code>file-name-for-your-key-pair</code> and <code>file-name-for-your-key-pair.pub</code>.
+    Move these to a <em>secure</em> location and keep the private key secret! The minute this key is compromised, so is your server.
+  </p>
+  <p>
+    You can have as many key pairs as you like, probably for each user of your system. You will then need to add these to your SSH server's allowed list. Note,
+    never do this as root. To add a key to the SSH servers allowed list do:
+  </p>
+  <pre>cat file-name-for-your-key-pair.pub >> ~/.ssh/authorized_keys</pre>
+  <p>
+    If the <code>.ssh</code> directory does not exist you can create it using <code>mkdir ~/.ssh &amp;&amp; chmod 700 ~/.ssh</code>. If the <code>authorized_keys</code> file
+    did not exist make sure to has <code>600</code> permissions. Lastly move your key file into the <code>~/.ssh</code> directory.
+  </p>
+  <p>
+    One thing you might notice is that the key file is in the user's local directory. This can be fine if you want users to be able to dictate who can login to the system,
+    but can also be a massive security hole! To overcome this you can edit <code>/etc/ssh/sshd_config</code> and make sure the key <code>AuthorizedKeyFile</code> reads as:
+  </p>
+  <pre>AuthorizedKeysFile /etc/ssh/authorized-keys/%u</pre>
+  <p>
+    Where the &quot;<code>%u</code>&quot; expands during connection setup to the user-name of the user trying to log in.
+  </p>
+  <p>
+    To use a specific key to log into the SSH server use:
+  </p>
+  <pre>ssh -i /path/to/private-key user-name@server_ip</pre>
+  <p></p>
 </div>
 
 
