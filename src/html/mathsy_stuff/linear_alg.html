@@ -299,8 +299,13 @@
         We can also show that two vectors are linearly independent when their dot product is zero. This
         is covered in a latter section.
     </p>
+    <p>
+        Another way of thinking about LI is that there is only one solution to
+        the equation $A\vec x = \vec 0$.
+    </p>
 </div>
 
+<a href="linear-subspace"></a>
 <h3 style="clear:both">Linear Subspace</h3>
 <p>
     If $V$ is a set of vectors in $\mathbb{R}^n$, then $V$ is a <em>subspace</em> of $\mathbb{R}^n$
@@ -1004,19 +1009,31 @@ solve_linear_system(system, x, y, z)</pre>
         $$
     </p>
 
+<a name="null-space"></a>
 <h3>Null Space Of A Matrix</h3>
     <p>
         For an mxn vector $A$, the nullspace of the matrix $A$, $N(A)$ is defined as follows:
 
         $$
-            N(A) = \{\vec x \in \mathbb{R}^n \shortmid A\vec x = \vec 0 \}
+            N(A) = \{\vec x \in \mathbb{R}^n \mid A\vec x = \vec 0 \}
         $$
 
-        The null space of a matrix is a valid subspace of $\mathbb{R}^n$.
+        In words, the <em>null space of a matrix is the set of all solutions
+        that result in the zero vector</em>. We can get this set by using the
+        normal reduction to RREF to solve the above ($[A\mid\vec 0] \longrightarrow [R \mid \vec 0]$).
     </p>
     <p>
-        It can also be shown that $N(A) = N(\mathrm{RREF}(A))$, where $\mathrm{RREF}$ is the
-        reduced row echelon form.
+        <em>The null space of a matrix is a valid subspace of $\mathbb{R}^n$</em> because
+        it satisfies the following conditions, as we saw in the 
+        <a href="#linear-subspace">section on subspaces</a>.
+    </p>
+    <ol>
+        <li><b>$N(A)$ contains the zero vector</b>: $\vec 0 \in N(A)$</li>
+        <li><b>$N(A)$ is closed under scalar multiplication</b>: $\vec x \in N(A), \alpha \in \mathbb{R} \implies \alpha\vec x \in N(A)$</li>
+        <li><b>$N(A)$ is closed under addition</b>: $\vec a \in N(A), \vec b \in N(A) \implies \vec a + \vec b \in N(A)$</li>
+    </ol>
+    <p>
+        It can also be shown that $N(A) = N(\mathrm{RREF}(A))$, where $\mathrm{RREF}$ is the <a href="#matrix-row-echelon">reduced row echelon form</a>.
     </p>
     <p>
         The nullspace of a matrix can be related to the linear independence of it's column
@@ -1058,12 +1075,52 @@ solve_linear_system(system, x, y, z)</pre>
         is said to be linearly <em>dependent</em> when:
 
         $$
-            x_1\vec{a_1} + x_2\vec{a_2} + \cdots + x_n\vec{a_n} = \vec 0 \mid \forall \{c_i \mid c_i = 0 \}
+            x_1\vec{a_1} + x_2\vec{a_2} + \cdots + x_n\vec{a_n} = \vec 0,\ \forall \{x_i \mid x_i = 0 \}
         $$
 
         Given that our nullspace is the set of all vectors that satisfy the above, <em>by definition</em>,
         then we can say that <b>the column vectors of a matrix A are LI if and only if $N(A) = {\vec 0}$</b>.
     </p>
+    <p>
+        To <em>find</em> the null space of a matrix $A$, augment it with the xero vector and convert it to RREF. Then the solution set is the null space. So,
+        if there are only pivots, the null space only contains the zero vector
+    </p>
+
+<h3>Column Space Of A Matrix</h3>
+<p>
+    The columns space of a matrix is the set of all linear combinations
+    of its column vectors, which is the span of the column vectors:
+
+    $$
+        \mathrm{C}(A) = \mathrm{span}(A)
+    $$
+
+    The column space of A is a valid subspace.
+</p>
+<p>
+    For the system of equations $A\vec x = \vec b$, $\mathrm{C}(a)$ is
+    , therefore, the set of all values that $A\vec x$ can be.
+</p>
+<p>
+    Therefore, if $A\vec x = \vec{b_1}$ and $\vec{b_1} \notin \mathrm{C}(A)$,
+    then we know that no solution exists, a conversely, if it is then we know 
+    that at least one solution exists.
+</p>
+<p>
+    The set of vectors in the column space of may or may not be linearly independent. When reduced to being LI then we have a <em>basis for the
+    column space of the matrix</em>.
+</p>
+<p>
+    We saw the following in the <a href="#null-space">section of null spaces</a>: It can be shown that the column vectors of a matrix $A$ are LI if and only if $N(A) = {\vec 0}$. So we can figure out if we have a basis by looking at $A$'s
+    null space. Recall that $\mathrm{N}(A) = \mathrm{N}(\mathrm{RREF}(A))$ and
+    that the column vectors of a matrix A are LI if and only if $N(A) = {\vec 0}$!
+</p>
+
+<h3>Rank Of A Matrix</h3>
+<pre>
+https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
+https://math.stackexchange.com/questions/21131/physical-meaning-of-the-null-space-of-a-matrix
+</pre>
 
 <h3>Orthogonal Matrices</h3>
 	<p>
@@ -1224,6 +1281,7 @@ solve_linear_system(system, x, y, z)</pre>
 
 <h2>Linear Transformations</h2>
 <div>
+    <a name="functions"></a>
     <h3>Functions</h3>
     <h4>Scalar Functions</h4>
     <p>
@@ -1493,10 +1551,56 @@ solve_linear_system(system, x, y, z)</pre>
 
     <h4>Inverse Transformations</h4>
     <p>
-        We saw in the section on functions that an invertible function has to be
+        We saw in the <a href="#functions">section on functions</a> that an invertible function has to be
         bijective (one-to-one and onto). As a transform is just a vector valued
-        function, the same condition for invertibility exists.
+        function, the same condition for invertibility exists. Recall that:
+
+        $$
+            \mathrm{f}: X \Rightarrow Y \Leftrightarrow \color{red}{\forall y \in Y}, \color{blue}{\exists! x \in X} \mid \mathrm{f}(x) = y
+        $$
+
+        Where the red inidcates that the range is the domain (mapping is surjective or onto) and the blue
+        indicates that the mapping is unqiue (injective or onto-to-one).
     </p>
+    <p>
+        We want to understand under what conditions our standard linear transform,
+        $T: \mathbb{R}^n \rightarrow \mathbb{R}^m,\ \mathrm{T}(\vec x) = A \vec x$, is invertible.
+        i.e. when is it both injective (ont-to-one) and surjective (onto)?
+    </p>
+    <p>
+        Start with <em>surjective (onto)</em>... we are looking at $\mathrm{T}(\vec x) = \vec b$,
+        i.e., $A\vec x = \vec b$...
+    </p>
+    <p>
+        We can write $A\vec x$ as its column vectors multiplied by the elements of $\vec b$:
+
+        $$
+            A\vec x = \vec{a_1}x_1 + \vec{a_2}x_2 + \cdots + \vec{a_n}x_n
+        $$
+
+        Remember that a surjective, or onto, function provides a mapping from the domain to every 
+        element of the co-domain. Thus for our transform to be surjective (onto) <em>the set of the above
+        linear combinations must span $\mathbb{R}^m$</em>.
+    </p>
+    <p>
+        This means that for $T$ to be sujective (onto) <em>the column vectors of $A$ have to span
+        $\mathbb{R}^m$, i.e., the column space of $A$ must span $\mathbb{R}^m$.</em> Thus, the
+        challenge becomes finding this out, because if it is true we are half way there to showing
+        that the transform is invertible.
+    </p>
+    <p>
+        For the column space to span $\mathbb{R}^m$ (i.e. $\mathrm{C}(A) = \mathrm{R}^m$) we would
+        need the solution to $A\vec x = \vec b$ to have infinitely many solutions. We saw in the
+        <a href="#matrix-row-echelon">section of RREF</a> that when an augmented matrix is
+        reduced to RREF we can determine the number of solutions by looking at where the pivots
+        are.
+    </p> 
+    <p>To recap, when a matrix is in RREF:</p>
+    <ul>
+        <li>Free variables mean many solutions, $\therefore \mathrm{C}(A) = \mathrm{R}^m$, which is what we want!</li>
+        <li>No free variables means a unique solution, $\therefore \mathrm{C}(A) \ne \mathrm{R}^m$.</li>
+        <li>Pivot or function in the the augmented column means no solution or restricted solution set respectively and $\therefore \mathrm{C}(A) \ne \mathrm{R}^m$.</li>
+    </ul>
 
 <h3>Projections</h3>
 <p style="float:left;">
