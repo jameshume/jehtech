@@ -355,6 +355,11 @@
     Interestingly, using the same method as above, we can see that even something trivial,
     like the $\mathrm{span}([a_1, a_2])$, which is just a line, is a subspace of $\mathbb{R}^2$.
 </p>
+<p>
+    It can also be shown that <em>any subspace basis will have the same number of elements</em>. We say that the <b>dimension of a subspace</b> is the number of
+    elements in a basis for the subspace. So, for example, if we had a
+    basis for our subspace consisting of 13 vectors, the dimension of the subspce would be lucky 13.
+</p>
 
 <h3 style="clear:both">Basis Of A Subspace</h3>
 <p>
@@ -857,6 +862,12 @@
     appears in this one equations in our RREF matrix. Thus, its value must be determined as this is
     the only place it occurs. It must either be a constant or a combination of other variables.
 </p>
+<p>
+    Because column vectors containing a pivot are all-zeros except
+    for the pivot, the <b>set of pivot columns must also be LI</b> (see later).
+    You can always represent the free columns as linear combinations of the
+    pivot columns.
+</p>
 
 <p>
     <a name="RREF_meaning"></a>If we have an augmented matrix $[A | b]$:
@@ -1012,10 +1023,10 @@ solve_linear_system(system, x, y, z)</pre>
 <a name="null-space"></a>
 <h3>Null Space Of A Matrix</h3>
     <p>
-        For an mxn vector $A$, the nullspace of the matrix $A$, $N(A)$ is defined as follows:
+        For an mxn vector $A$, the nullspace of the nxm matrix $A$, $N(A)$ is defined as follows:
 
         $$
-            N(A) = \{\vec x \in \mathbb{R}^n \mid A\vec x = \vec 0 \}
+            N(A) = \{\vec x \in \mathbb{R}^m \mid A\vec x = \vec 0 \}
         $$
 
         In words, the <em>null space of a matrix is the set of all solutions
@@ -1082,8 +1093,30 @@ solve_linear_system(system, x, y, z)</pre>
         then we can say that <b>the column vectors of a matrix A are LI if and only if $N(A) = {\vec 0}$</b>.
     </p>
     <p>
-        To <em>find</em> the null space of a matrix $A$, augment it with the xero vector and convert it to RREF. Then the solution set is the null space. So,
-        if there are only pivots, the null space only contains the zero vector
+        To <em>find</em> the null space of a matrix $A$, augment it with the zero vector and convert it to RREF. Then the solution set is the null space. So,
+        if there are only pivots, the null space only contains the zero vector because there is only one solution (which therefore must be 0).
+    </p>
+
+<pre>
+TODO:
+https://math.stackexchange.com/questions/21131/physical-meaning-of-the-null-space-of-a-matrix
+</pre>
+
+
+<h3>Nullity Of A Matrix</h3>
+    <p>
+        We saw in the subspace section that the dimension of a subspace is the number of elements in a basis for that subspace. The dimension of 
+        the null space is called the <b>&quot;nullity&quot;</b>:
+    </p>
+    <p>
+        In the null space you will always have <em>as many vectors as you have free variables in the RREF of the matrix</em>. So the <em>nullity is the number of free variables in the RREF of the matrix with which this null space is associated</em>:
+
+        $$
+        \begin{align}
+        \mathrm{nullity}(A) &= \mathrm{dim}(\mathrm{N}(A)) \\
+                            &= \text{#non-pivot cols in}\ \mathrm{RREF}(A)
+        \end{align}
+        $$
     </p>
 
 <h3>Column Space Of A Matrix</h3>
@@ -1092,8 +1125,15 @@ solve_linear_system(system, x, y, z)</pre>
     of its column vectors, which is the span of the column vectors:
 
     $$
-        \mathrm{C}(A) = \mathrm{span}(A)
+    \begin{align}
+        \mathrm{C}(A) &= \mathrm{span}(\text{the column vectors of}\ A) \\
+                      &= \mathrm{span}(\text{the LI column vectors of}\ A)
+    \end{align}
     $$
+
+    Note that the column vectors of $A$ might not be LI. The set can be
+    reduced so that only the LI vectors are used, which means the above still holds,
+    and then we say that the LI set is a <em>basis for $\mathrm{C}(A)$</em>.
 
     The column space of A is a valid subspace.
 </p>
@@ -1115,12 +1155,63 @@ solve_linear_system(system, x, y, z)</pre>
     null space. Recall that $\mathrm{N}(A) = \mathrm{N}(\mathrm{RREF}(A))$ and
     that the column vectors of a matrix A are LI if and only if $N(A) = {\vec 0}$!
 </p>
+<p>
+    How do we figure out the set of column vectors that are LI? To do this,
+    put the matrix in RREF and select the columns that have pivot entries (the pivot columns). 
+    <em>The pivot column vectors are the basis vectors for $\mathrm{C}(A)$</em> :) The reason is that you can always write the columns with the free variables
+    as linear combinations of the pivot columns.
+</p>
+<p>
+    Because column vectors containing a pivot are all-zeros except
+    for the pivot, the <b>set of pivot columns must also be LI</b>.
+    You can always represent the free columns as linear combinations of the
+    pivot columns.
+</p>
+<p>
+    So to find column space of $A$, pick the columns from $A$ that correspond
+    to (have the same position as) the pivot columns in $\mathrm{RREF}(A)$.
+</p>
 
 <h3>Rank Of A Matrix</h3>
+<p>
+    We can now define what the rank of a matrix is:
+
+    $$
+    \begin{align}
+    \mathrm{rank}(A) &= \mathrm{dim}(\mathrm{C_{basis}}(A)) \\
+                     &= \text{#pivot columns in}\ \mathrm{RREF}(A)
+    \end{align}
+    $$
+
+    The rank is the number of vectors in a basis for the column space of $A$.
+    You can get this by counting the pivot columns in $\mathrm{RREF}(A)$.
+</p>
 <pre>
+TODO:
 https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
-https://math.stackexchange.com/questions/21131/physical-meaning-of-the-null-space-of-a-matrix
 </pre>
+
+<h3>Basis Of The Column Space VS Basis Of The Null Space</h3>
+<p>
+    Really good answer by <a href="https://www.khanacademy.org/profile/JPMeijer/discussion">John-Paul Meyer</a> on the <a href="https://www.khanacademy.org/math/linear-algebra/vectors-and-spaces/null-column-space/v/dimension-of-the-null-space-or-nullity">Khan Academy website</a>:
+</p>
+<blockquote>
+    <p>
+        ... a &quot;basis of a column space&quot; is different than a &quot;basis of the null space&quot;, for the same matrix....
+    </p>
+    <p>
+        A basis is a a set of vectors related to a particular mathematical &quot;space&quot; (specifically, to what is known as a vector space). A basis must:
+    </p>
+    <ol>
+        <li>be linearly independent and</li>
+        <li>span the space.</li>
+    </ol>
+    <p>
+        The &quot;space&quot; could be, for example: $\mathbb{R}^2$, $\mathbb{R}^3$, $\mathbb{R}^4$, ... , the column space of a matrix, the null space of a matrix, a subspace of any of these, and so on...
+    </p>
+    <footer>-- <a href="https://www.khanacademy.org/math/linear-algebra/vectors-and-spaces/null-column-space/v/dimension-of-the-null-space-or-nullity">John-Paul Meyer's Answer On Khan Academy</a>.</footer>
+</blockquote>
+<p></p>
 
 <h3>Orthogonal Matrices</h3>
 	<p>
