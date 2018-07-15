@@ -546,7 +546,7 @@ ports=12345/tcp|4321|99,105:110/udp</pre>
     <table>
       <tr>
         <td>Get status:</td>
-        <td><code>sudo fail2ban status</code></td>
+        <td><code>sudo fail2ban status [(verbose|numbered)]</code></td>
       </tr>
       <tr>
         <td>View logs:</td>
@@ -565,13 +565,16 @@ ports=12345/tcp|4321|99,105:110/udp</pre>
 
   <h3>Jails, Filters &amp; Actions</h3>
   <p>
-    Jails define the conditions that will lead an IP address to be banned by associating a
-    <em>filter</em> with an <em>action</em>.
+    <B>Jails</B> define the conditions that will lead an IP address to be banned by associating a
+    <b>filter</b> with an <b>action</b>.
   </p>
   <p>
-    The filter is just a set of regular expressions which are used to extract the IP address
-    out of log messages. The action is self explanatory: usually adds a rule to the firewall but
+    The <b>filter</b> is just a set of regular expressions which are used to extract the IP address
+    out of log messages. The <b>action</b> is self explanatory: usually adds a rule to the firewall but
     can do anything like send emails etc.
+  </p>
+  <p>
+    <img src="##IMG_DIR##/fail2ban_jail_assoc_filter_action.png" alt="Fail2Ban jail associates filters with actions"/>
   </p>
   <p>
     Jails are found in <code>/etc/fail2ban/jail.conf</code>. Don't modify this file! Put new changes
@@ -586,6 +589,9 @@ ports=12345/tcp|4321|99,105:110/udp</pre>
     Actions are found in <code>/etc/fail2ban/action.d/</code>. Filters are found in <code>/etc/fail2ban/filter.d/</code>.
     The default action for everything is to ban an IP address. The default firewall being used is
     iptables. Note: if you are using UFW you will have to reconfigure Fail2Ban to use UFW.
+  </p>
+  <p>
+    <img src="##IMG_DIR##/fail2ban-full.png" alt="Fail2Ban jail associates filters with actions"/>
   </p>
   <p>
     Note, that to begin with <em>all</em> jails are disabled by default. You should only enable
@@ -611,13 +617,57 @@ enabled = true</pre>
     all you need to do is add the following to your <code>/etc/fail2ban/jail.local</code> file:
   </p>
   <pre>[DEFAULT]
-banaction = ufw
-action=ufw</pre>
+banaction = ufw</pre>
   <p>
     This works by overriding the default ban action because of the file <code>/etc/fail2ban/action.d/ufw.conf</code>
     that is nicely provided for us :)
   </p>
+  <p>
+    To go into a little more detail have a look at <code>/etc/fail2ban/jail.conf</code>. Inside
+    you will see the following definition:
+  </p>
+  <pre>action = %(action_)s</pre>
+  <p>
+    This is the default action that will be taken when fail2ban bans an IP address. It is set to
+    a macro expansion. In this case it expands the macro &quot;<code>action_</code>&quot;.
+  </p>
+  <p>
+    If we look at this macro we can see it defined as this:
+  </p>
+  <pre>action_ = %(banaction)s[name=%(__name__)s, bantime="%(bantime)s", port="%(port)s", protocol="%(protocol)s", chain="%(chain)s"]</pre>
+  <p>
+    It is itself a string that contains multiple macros that are in turn expanded. The most important macro,
+    if we want to do anything other than the default ban action is, &quot;<code>banaction</code>&quot;. Thus
+    by overriding this variable we have cause the default action to use UFW.
+  </p>
 
+  <h3>Sending Email Alerts</h3>
+  <p>
+    There are other interesting actions available that we can find, including &quot;<code>action_mwl</code>&quot;. We'd want to use
+    this if we not only want to ban IP addresses but also send the server admin an email about the event. To use this rule, we
+    simply modify the <code>DEFAULT</code> section of our <code>jail.local</code> faile as follows:
+  </p>
+  <pre>[DEFAULT]
+destemail = admin@email.address
+sender = sender@email.address
+banaction = ufw
+action = %(action_mwl)s</pre>
+  <p>
+    There is one little caveat you will have to address. Sendmail, which is the mail client fail2ban will
+    use by default, will want a fully qualified domain name as the hostname. It gets this by indirectly looking up
+    the <code>/etc/hosts</code> file (via OS APIs). So you need to change the following line in <code>/etc/hosts</code>:
+  </p>
+  <pre>127.0.0.1 localhost</pre>
+  <p>To something like:</p>
+  <pre>127.0.0.1 my.client-name.com localhost</pre>
+  <p>
+    Now sendmail won't barf on startup and on trying to send mail! You want a real, or at least a unique, domain
+    name so that if you have different servers sending events to you, you can identify which server sent it.
+  </p>
+  <p>
+    There is also the option of hardcoding the FQDN in <code>/etc/mail/sendmail.mc</code>, but you will still
+    have to modify <code>/etc/hosts</code> anwyay [<a href="https://selliott.org/node/40" target="_blank">Ref</a>].
+  </p>
 
   <h3>Define Your Own Ban</h3>
   <p>
