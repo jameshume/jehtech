@@ -546,11 +546,15 @@ ports=12345/tcp|4321|99,105:110/udp</pre>
     <table>
       <tr>
         <td>Get status:</td>
-        <td><code>sudo fail2ban status [(verbose|numbered)]</code></td>
+        <td><code>sudo fail2ban status</code></td>
       </tr>
       <tr>
         <td>View logs:</td>
         <td><code>sudo cat /var/log/fail2ban.log</code></td>
+      </tr>
+      <tr>
+        <td>Set log level:</td>
+        <td><code>fail2ban-client set loglevel (CRITICAL|ERROR|WARNING|NOTICE|INFO|DEBUG|HEAVYDEBUG)</code></td>
       </tr>
       <tr>
         <td>Start/stop/reload/get status:</td>
@@ -559,6 +563,35 @@ ports=12345/tcp|4321|99,105:110/udp</pre>
       <tr>
         <td>Un-ban an IP</td>
         <td><code>sudo fail2ban-client set jail-name unbanip ip-address</code></td>
+      </tr>
+      <tr>
+        <td>Dump config:</td>
+        <td><code>fail2ban-client -d</code></td>
+      </tr>
+      <tr>
+        <td>Jail Information:</td>
+        <td>
+          <table>
+            <tr>
+              <td>List files jail monitors:</td>
+              <td><code>fail2ban-client get &lt;jail-name&gt; logpath</code></td>
+            </tr>
+            <tr>
+              <td>List regular expressions for failures:</td>
+              <td><code>fail2ban-client get &lt;jail-name&gt; failregex</code></td>
+            </tr>
+            <tr>
+              <td>List actions:</td>
+              <td><code>fail2ban-client get &lt;jail-name&gt; actions</code></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td>Test A Jail Regex:</td>
+        <td><code>fail2ban-regex /path/to/log/file /etc/fail2ban/filter.d/my-silly-server.conf [regex-to-ignore]</code>
+            <br/><code>fail2ban-regex /path/to/log/file "a test regex"</code>
+        </td>
       </tr>
     </table>
   </p>
@@ -640,12 +673,18 @@ banaction = ufw</pre>
     if we want to do anything other than the default ban action is, &quot;<code>banaction</code>&quot;. Thus
     by overriding this variable we have cause the default action to use UFW.
   </p>
+  <p>
+    One thing you might be wondering is why each expansion has an &quot;s&quot; appended at the end, like for example,
+    on the line <code>%(action_)<b>s</b></code>. What does the trailing &quot;s&quot; do? It is there because Fail2Ban uses
+    <a href="https://docs.python.org/2/library/stdtypes.html#string-formatting-operations" target="_blank">Python string interpolation</a>
+    and the trailing &quot;s&quot; means that the variable is converted to a string using the Python <code>str()</code> function.
+  </p>
 
   <h3>Sending Email Alerts</h3>
   <p>
     There are other interesting actions available that we can find, including &quot;<code>action_mwl</code>&quot;. We'd want to use
     this if we not only want to ban IP addresses but also send the server admin an email about the event. To use this rule, we
-    simply modify the <code>DEFAULT</code> section of our <code>jail.local</code> faile as follows:
+    simply modify the <code>DEFAULT</code> section of our <code>jail.local</code> jail as follows:
   </p>
   <pre>[DEFAULT]
 destemail = admin@email.address
@@ -712,6 +751,26 @@ failregex = Some error from &lt;HOST&gt;
     or &quot;The client 1.2.3.4 sent yet another regex-defined error&quot;, then the
     IP address <code>1.2.3.4</code> will be blocked by adding a rule to the firewall in use.
   </p>
+  <p>
+    You can test out your regex using the <code>fail2ban-regex</code> as so:
+  </p>
+  <pre>fail2ban-regex /path/to/log/file /etc/fail2ban/filter.d/my-silly-server.conf [regex-to-ignore]</pre>
+  <p>Or:</p>
+  <pre>fail2ban-regex /path/to/log/file "a test regex"</pre>
+
+  <h3>Backends</h3>
+  <p>
+    The following is taken from <a href="https://github.com/fail2ban/fail2ban/issues/1986" target="_blank">this fail2ban github thread</a>. You should set your backend for sshd jail to systemd. File-backends (like pyinotify, polling as well as auto) do montoring of the log-files only (not systemd-journals).
+  </p>
+  <pre>[sshd]
+backend = systemd</pre>
+  <p>
+    And for check it via fail2ban-regex you can use:
+  </p>
+  <pre># for >= 0.10:
+fail2ban-regex systemd-journal sshd
+# or for 0.9:
+fail2ban-regex systemd-journal /etc/fail2ban/filter.d/sshd.conf</pre>
 
 </div>
 
