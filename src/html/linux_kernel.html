@@ -1233,6 +1233,132 @@ vals[found].val = pinctrl_spec.args[1];</pre>
     Device tree files can also import other device tree files and also C header files so that it is
     easy and less error prone to share named quantities between kernel code and the device tree.
   </p>
+
+  <h3>Source</h3>
+  <p>
+    The device tree access functions are found under the directory <a href="https://elixir.bootlin.com/linux/v3.2/source/drivers/of" target="_blank"><code>drivers/of</code></a>:
+  </p>
+  <ul>
+    <li><a href="https://elixir.bootlin.com/linux/v3.2/source/drivers/of/base.c" target="blank">Base DTB functions</a>
+    </li>
+    <li><a href="https://elixir.bootlin.com/linux/v3.2/source/drivers/of/irq.c" target="_blank">Interrupt related DTB functions</a>
+    </li>
+  </ul>
+
+  <h3>Interrupts</h3>
+  <div>
+    <p>References:</p>
+    <ul>
+      <li><a href="http://billauer.co.il/blog/2012/08/irq-zynq-dts-cortex-a9/" target="_blank">Interrupt definitions in DTS (device tree) files for Xilinx Zynq-7000 / ARM</a>, Eli Billauer's Tech Blog.
+      </li>
+      <li>https://saurabhsengarblog.wordpress.com/2015/11/28/device-tree-tutorial-arm/
+      </li>
+      <li>https://github.com/devicetree-org/devicetree-specification/blob/master/source/devicetree-basics.rst</li>
+      <li>https://elinux.org/Device_Tree_Usage</li>
+      <li>http://invo-tronics.com/linux-kernel-irq-domain/</li>
+    </ul>
+    <p>
+      In the above image we saw the part of the DTS file that read <code>interrupts = &lt;intr-specifiers&gt;</code>. The interrupt specifiers are an n-tuple, the meaning of which seems specific to the interrupt controller. For example, PCI interrupt numbers only use one cell, whereas the system interrupt controller uses 2 cells for the irq number and falgs. When it is a 3-tuple, it looks like it is likely to mean the following:
+    </p>
+    <ol>
+      <li>
+        SPI flag - 0 means device is <i>not</i> using a <u>S</u>hared <u>P</u>eripheral <u>I</u>nterrupt (SPI), anything else means that it is a shared interrupt.
+      </li>
+      <li>
+        Interrupt line number. This is the hardware interrupt number. It is a peripheral interrupt identifier in the actual hardware interrupt controller.
+      </li>
+      <li>
+        Interrupt type - edge, level triggered etc. This can be an ORed combination of some of the flags in <code>irq.h</code>. For example, it could be <code>IRQ_TYPE_LEVEL_HIGH</code> or <code>IRQ_TYPE_EDGE_RISING</code>.
+      </li>
+    </ol>
+
+    <h4>TODO</h4>
+    <pre>  interrupt number loose all kind of correspondence to hardware interrupt numbers:
+
+ mechanism to separate controller-local interrupt numbers, called hardware irq’s, from Linux IRQ number: irq_alloc_desc*() and irq_free_desc*() APIs provide allocation of irq numbers
+
+#address-cells
+    property indicate how many cells (i.e 32 bits values) are needed to form the base address part in the reg property
+
+#interrupt-cells
+    indicates the number of cells in the interrupts property for the interrupts managed by the selected interrupt controller
+    #interrupt-cells property is used by the root of an interrupt domain to define the number of &lt;u32&gt; values needed to encode an interrupt specifier. 
+
+    https://github.com/devicetree-org/devicetree-specification/blob/master/source/devicetree-basics.rst
+
+
+include/linux/of.h:struct device_node {
+    const char *name;
+    const char *type;
+    phandle phandle;
+    char    *full_name;
+
+    struct  property *properties;
+    struct  property *deadprops;    /* removed properties */
+    struct  device_node *parent;
+    struct  device_node *child;
+    struct  device_node *sibling;
+    struct  device_node *next;  /* next device of same type */
+    struct  device_node *allnext;   /* next in list of all nodes */
+    struct  proc_dir_entry *pde;    /* this node's proc directory */
+    struct  kref kref;
+    unsigned long _flags;
+    void    *data;
+#if defined(CONFIG_SPARC)
+    char    *path_component_name;
+    unsigned int unique_id;
+    struct of_irq_controller *irq_trans;
+#endif
+};
+
+struct property {
+    char    *name;
+    int length;
+    void    *value;
+    struct property *next;
+    unsigned long _flags;
+    unsigned int unique_id;
+};
+
+include/linux/of_irq.h: struct of_irq {
+    struct device_node *controller; /* Interrupt controller node */
+    u32 size;                       /* Specifier size */
+    u32 specifier[OF_MAX_IRQ_SPEC]; /* Specifier copy */
+};
+
+irq_of_parse_and_map()
+  |
+  | (and then irq_create_of_mapping():kernel/irq/irqdomain.c)
+  v
+In of_irq_map_on()
+    Get interrupts property - returns an array of u32s
+    Get reg property - returns a device_node struct pointer
+    interrupt cells
+    Get the parent interrupt controller
+
+    Call of_irq_map_raw(p, intspec + index * intsize, intsize, addr, out_irq:of_irq);
+                        ^  ^                          ^        ^     ^
+                        ^  ^                          ^        ^     stuct filled
+                        ^  ^                          ^        reg property
+                        ^  ^                          number of values in intr property
+                        ^  pointer to first interrupt property in the list
+                        ^  + index of the interrupt to resolve
+                        ^  * intsize - the #cells in an interrupt property
+                        The parent controller
+
+        Search up the interrupt tree to find the first #interrupt-cells property.
+        Then search there and further up to find the interrupt-controller and then
+        split out the intspec into the out_irq struct's specifier[] array.
+
+
+
+irq_create_of_mapping - translate a device tree interrupt specifier to a valid linux irq number.
+
+LOOK IN LOGS FOR: pr_debug("%s: mapped hwirq=%i to irq=%i, flags=%x\n",
+         controller->full_name, (int)hwirq, irq, type);</pre>
+  </div>
+
+
 </div>
 
 <h2>Linux Device Drivers</h2>
