@@ -834,13 +834,31 @@
     <li>Row addition: $R_i \rightarrow R_i + kR_j$</li>
 </ol>
 <p>
+    In row echelon form:
+</p>
+<ol>
+    <li>All rows containing only zeros appear below rows with nonzero entries, and</li>
+    <li>The first nonzero entry in any row appears in a column to the right of the first nonzero entry in any preceding row.</li>
+</ol>
+<p>
+    The first non zero entry in a row is called the <i>pivot</i> for that row.
+</p>
+
+<p>
     And woop, woop, even more important than echelon form is <b>reduced row-echelon form (rref)</b>. This is when:
 </p>
 <ol>
     <li>If a row has all zeros then it is below all rows with a non-zero entry.</li>
     <li>The left most entry in each row is 1 - it is called the <em>pivot</em>.</li>
     <li>The left most non-zero entry in each row is the only non-zero in that column.</li>
-    <li>Each row has more zeros to the left of the pivit than the row above.</li>
+    <li>Each row has more zeros to the left of the pivot than the row above.</li>
+</ol>
+<p>
+    Or, to put it another way, when it is a matrix in row-echelon form where:
+</p>
+<ol>
+    <li>All pivots are equal to 1, and</li>
+    <li>Each pivot is the only non-zero in its column.</li>
 </ol>
 <p>
     Some important terms are <em>pivot position</em> and <em>pivot column</em>. The position is the location of a leading 1, which meets the above criteria, and the column is a column that contains a pivot position.
@@ -876,6 +894,7 @@
     <li><em>No Solution</em>. If  the  last  (augmented)  column  of  $[A|b]$  (ie. the column which contains
         $b$) contains a pivot entry.
     </li>
+    <li><em>Restructed Solution Set</em>. If the last row of the matrix is all zeros except the pivot column which is a function of $b_1 \ldots b_m$.</li>
     <li><em>Exactly One Solution</em>. If the last (augmented) column of $[A|b]$ (ie. the column which contains
         $b$) does not contain a pivot entry and all of the columns of the coefficient part (ie. the columns
         of $A$) do contain a pivot entry.
@@ -885,6 +904,109 @@
         (ie.  the columns of $A$) also does not contain a pivot entry.
     </li>
 </ol>
+
+<p>
+    Let's look at a quick example of a matrix in echelon-form:
+
+        $$
+        \left[
+            \begin{array}{ccc|c}
+            -5 & -1 & -3 & 3 \\
+            0 & 3 & 5 & 8 \\
+            0 & 0 & 2 & -4
+            \end{array}
+        \right]
+        $$
+</p>
+<p>
+    We can get the solution to the set of simultaneous linear equations using back subsitution. Directly
+    from the above row-echelon form (useful because the last row has one pivot and no free variables) matrix we know that:
+
+    $$
+    -5x_1 -x_2 -3X3 = 3 \tag{1}
+    $$
+    $$
+    3x_2 + 5x_3 = 8     \tag{2}
+    $$
+    $$
+    2x_3 = -4           \tag{3}
+    $$
+
+    From (1) we know:
+    $$
+        x_3 = -2 \tag{4}
+    $$
+
+    Substitute (4) back into (2):
+
+    $$
+        3x_2 + -10 = 8 \implies x_2 = 6     \tag{5}
+    $$
+
+    Substitute (5) and (4) back into (1):
+    $$
+    -5x_1 -6 +6 = 3 \implies x_1 = -\frac{3}{5} \tag{6}
+    $$
+</p>
+
+<p>
+    We can use RREF to accomplish the same thing and find the solutions to the above.
+
+            $$
+        \left[
+            \begin{array}{ccc|c}
+            -5 & -1 & -3 & 3 \\
+            0 & 3 & 5 & 8 \\
+            0 & 0 & 2 & -4
+            \end{array}
+        \right] \\
+
+        \rightarrow 
+
+        \left[
+            \begin{array}{ccc|c}
+            1 & \frac{1}{5} & -\frac{3}{5} & -\frac{3}{5} \\
+            0 & 3 & 5 & 8 \\
+            0 & 0 & 1 & -2
+            \end{array}
+        \right] (r1 = \frac{r1}{5}, r3 = \frac{r3}{2}) \\
+
+        \rightarrow
+
+        \left[
+            \begin{array}{ccc|c}
+            1 & \frac{1}{5} & -\frac{3}{5} & -\frac{3}{5} \\
+            0 & 3 & 0 & 18 \\
+            0 & 0 & 1 & -2
+            \end{array}
+        \right]  (r2 = r2 - 5r3) \\
+
+        \rightarrow 
+
+        \left[
+            \begin{array}{ccc|c}
+            1 & \frac{1}{5} & -\frac{3}{5} & -\frac{3}{5} \\
+            0 & 1 & 0 & 6 \\
+            0 & 0 & 1 & -2
+            \end{array}
+        \right] (r2 = \frac{r2}{3}) \\
+
+        \rightarrow 
+        
+        \left[
+            \begin{array}{ccc|c}
+            1 & 0 & 0 & -\frac{3}{5} \\
+            0 & 1 & 0 & 6 \\
+            0 & 0 & 1 & -2
+            \end{array}
+        \right] (r1 = r1 + \frac{3r3}{5} \rightarrow, r1 = r1 - \frac{r2}{5})
+        $$
+
+    Which means we come to the same conclusion as we did when doing back subsitution, but were able to
+    do it using elementary row operations.
+
+</p>
+
 <hr style="width:75%"/>
 <div>
     <p>
@@ -1640,24 +1762,29 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
         <img src="##IMG_DIR##/linear-transform-rotate.png" alt="Graph showing a linear transformation doing rotations"/>
     </p>
 
-    <h4>Inverse Transformations</h4>
+    <h3>Inverse Linear Transformations</h3>
     <p>
         We saw in the <a href="#functions">section on functions</a> that an invertible function has to be
         bijective (one-to-one and onto). As a transform is just a vector valued
         function, the same condition for invertibility exists. Recall that:
 
         $$
-            \mathrm{f}: X \Rightarrow Y \Leftrightarrow \color{red}{\forall y \in Y}, \color{blue}{\exists! x \in X} \mid \mathrm{f}(x) = y
+            \mathrm{f}: X \Rightarrow Y \ \text{is invertible}\ \Leftrightarrow \color{red}{\forall y \in Y}, \color{blue}{\exists! x \in X} \mid \mathrm{f}(x) = y
         $$
 
         Where the red inidcates that the range is the domain (mapping is surjective or onto) and the blue
         indicates that the mapping is unqiue (injective or onto-to-one).
     </p>
     <p>
+        It can be shown that <b>invertibility implies a unique solution to $f(x)=y$</b>.
+    </p>
+    <p>
         We want to understand under what conditions our standard linear transform,
         $T: \mathbb{R}^n \rightarrow \mathbb{R}^m,\ \mathrm{T}(\vec x) = A \vec x$, is invertible.
         i.e. when is it both injective (ont-to-one) and surjective (onto)?
     </p>
+
+    <h4>Surjective (Onto)</h4>
     <p>
         Start with <em>surjective (onto)</em>... we are looking at $\mathrm{T}(\vec x) = \vec b$,
         i.e., $A\vec x = \vec b$...
@@ -1669,13 +1796,13 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
             A\vec x = \vec{a_1}x_1 + \vec{a_2}x_2 + \cdots + \vec{a_n}x_n
         $$
 
-        Remember that a surjective, or onto, function provides a mapping from the domain to every 
+        Remember that a surjective, or onto, function provides a mapping from the domain to <em>every</em> 
         element of the co-domain. Thus for our transform to be surjective (onto) <em>the set of the above
         linear combinations must span $\mathbb{R}^m$</em>.
     </p>
     <p>
         This means that for $T$ to be sujective (onto) <em>the column vectors of $A$ have to span
-        $\mathbb{R}^m$, i.e., the column space of $A$ must span $\mathbb{R}^m$.</em> Thus, the
+        $\mathbb{R}^m$, i.e., the column space of $A$ must span $\mathbb{R}^m$</em> (look at the equation above to see why). I.e. $\mathrm{C}(A) = \mathbb{R}^m$. Thus, the
         challenge becomes finding this out, because if it is true we are half way there to showing
         that the transform is invertible.
     </p>
@@ -1689,9 +1816,17 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
     <p>To recap, when a matrix is in RREF:</p>
     <ul>
         <li>Free variables mean many solutions, $\therefore \mathrm{C}(A) = \mathrm{R}^m$, which is what we want!</li>
-        <li>No free variables means a unique solution, $\therefore \mathrm{C}(A) \ne \mathrm{R}^m$.</li>
-        <li>Pivot or function in the the augmented column means no solution or restricted solution set respectively and $\therefore \mathrm{C}(A) \ne \mathrm{R}^m$.</li>
+        <li>No free variables (all columns have a pivot) means a unique solution, $\therefore \mathrm{C}(A) \ne \mathrm{R}^m$.</li>
+        <li>Pivot or function in the augmented column means no solution or restricted solution set respectively and $\therefore \mathrm{C}(A) \ne \mathrm{R}^m$.</li>
     </ul>
+    <p>
+        Thus, to show that a transform is surjective (onto) we need the RREF of the transformation matrix to have at at least one solution... i.e., there is a unique solution or many solutions - the first two items on the list above.
+    </p>
+
+    <h4>Injective (One-To-One)</h4>
+    <p>
+        For invertivility, onto is not enough. We need one-to-one as well!
+    </p>
 
 <h3>Projections</h3>
 <p style="float:left;">
