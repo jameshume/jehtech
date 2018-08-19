@@ -383,13 +383,31 @@
     already in $S$. You don't add any new information.
 </p>
 <p>
+    Put more formally: Let $V$ be a subspace of $\mathbb{R}^n$. A subset ${\vec v_1, \vec v_2, \ldots, \vec v_k}$ is a basis for $V$ iff the following are true:
+</p>
+<ol>
+    <li>The vectors $\vec v_1, \vec v_2, \ldots, \vec v_k$ span $V$, and</li>
+    <li>They are linearly <em>in</em>dependent.</li>
+</ol>
+<p>
     A subspace can have an infinite number of basis, but there are <em>standard basis</em>. For
-    example in $\mathbb{R}^2$ the standard basis is $\{[1, 0], [0, 1]\}$
+    example in $\mathbb{R}^2$ the standard basis is $\{[1, 0], [0, 1]\}$. The rule of <b>invariance of dimension</b> states that two bases for a subspace contain the same number of vectors. The number of elements in the basis for a subspace is called the subspace's <b>dimension</b>, denoted as $\mathrm{dim}(W)$, where $W$ is the subspace.
+</p>
+<p>
+    Thus, we can say that every subspace $W$ of $\mathbb{R}^n$ has a basis and $\mathrm{dim}(W) \le n$.
 </p>
 <p>
     A basis is a good thing because we can break down any element in the space that the basis
     defines into a linear combination of basic building blocks, i.e. the basis vectors.
 </p>
+<p>
+    To <b>find a basis</b> use the following method:
+</p>
+<ol>
+    <li>Form a matrix where the j<sup>th</sup> column vector is the j<sup>th</sup> vector $w_j$.</li>
+    <li>Reduce the matrix to row-echelon form.</li>
+    <li>Tak the column vectors that contain a pivot and these are the basis vectors.</li>
+</ol>
 <p>
     TODO discuss the canonical vectors in R2 and R3. $[1,0]$, $[0,1]$... but we could also have $[1,0]$, $[1,1]$.
 </p>
@@ -402,6 +420,7 @@
 <p>
     Orthonormal are good because we can find the coefficient in the new basis easily: $\alpha_k = \vec w_k \dot x$
 </p>
+
 
 <h3>The Dot Product</h3>
 <div>
@@ -1156,6 +1175,10 @@ solve_linear_system(system, x, y, z)</pre>
         normal reduction to RREF to solve the above ($[A\mid\vec 0] \longrightarrow [R \mid \vec 0]$).
     </p>
     <p>
+        The system of linear equasions $A\vec x 0 \vec 0$ is called <b>homogeneous</b>. It is always
+        <b>consistent</b> because $\vec x = \vec 0$ is always a solution (and is called the <b>trivial</b> solution).
+    </p>
+    <p>
         <em>The null space of a matrix is a valid subspace of $\mathbb{R}^n$</em> because
         it satisfies the following conditions, as we saw in the 
         <a href="#linear-subspace">section on subspaces</a>.
@@ -1293,6 +1316,9 @@ https://math.stackexchange.com/questions/21131/physical-meaning-of-the-null-spac
     So to find column space of $A$, pick the columns from $A$ that correspond
     to (have the same position as) the pivot columns in $\mathrm{RREF}(A)$.
 </p>
+<p>
+    A really interested property of the column space is the <b>column space criterion</b> which states that a linear system, $A\vec x = \vec b$ has a solution iff $\vec b$ is in the column space of A.
+</p>
 
 <h3>Rank Of A Matrix</h3>
 <p>
@@ -1308,6 +1334,17 @@ https://math.stackexchange.com/questions/21131/physical-meaning-of-the-null-spac
     The rank is the number of vectors in a basis for the column space of $A$.
     You can get this by counting the pivot columns in $\mathrm{RREF}(A)$.
 </p>
+<p>
+    The <b>rank equation</b> is $\mathrm{rank}(A) + \mathrm{nullity}(A) = n$, where $A$ is an $m x n$ matrix.
+</p>
+<p>
+    If $A$ is reduced to row-echelon form $H$, then:
+</p>
+<ol>
+    <li>$\mathrm{nullity}(A)$ is the number of free variables in solution space of $A\vec x = \vec 0$, which equals the number of pivot-free columns in $H$.</li>
+    <li>$\mathrm{rank}(A)$ is the number of pivots in $H$.</li>
+    <li>$\mathrm{rank}(A) + \mathrm{nullity}(A) = n$, equals the number of columns of $A$.</li>
+</ol>
 <pre>
 TODO:
 https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
