@@ -31,3 +31,12 @@ Then I found I needed the latest node version so...
 sudo npm install -g n
 sudo n latest
 ```
+
+But, then later on I got this error message for some reason:
+{{{
+SyntaxError: Block-scoped declarations (let, const, function, class) not yet supported outside strict mode
+}}}
+
+The answer is that you need to upgrade nodejs. Use `sudo apt-get remove nodejs` to uninstall, then
+download nodejs from `https://nodejs.org/dist/v9.9.0/` (use the latest), untar somewhere and put the
+`bin` directory on your path.

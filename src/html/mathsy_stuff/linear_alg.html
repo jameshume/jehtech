@@ -305,7 +305,7 @@
     </p>
 </div>
 
-<a href="linear-subspace"></a>
+<a name="linear-subspace"></a>
 <h3 style="clear:both">Linear Subspace</h3>
 <p>
     If $V$ is a set of vectors in $\mathbb{R}^n$, then $V$ is a <em>subspace</em> of $\mathbb{R}^n$
@@ -1023,7 +1023,116 @@
 
     Which means we come to the same conclusion as we did when doing back subsitution, but were able to
     do it using elementary row operations.
+</p>
+<p>
+    We can not talk about the <b>general solution vector</b>, $\vec x$, which in this case is:
 
+    $$
+     \begin{bmatrix}
+        x_1 \\
+        x_2 \\
+        x_3
+     \end{bmatrix}
+
+     =
+
+     \begin{bmatrix}
+        -\frac{3}{5} \\
+        6 \\
+        -2
+     \end{bmatrix}
+    $$
+
+    We can also talk about the <b><a name="solution_set">solution set</a></b>, which is the set of all vectors that result in a valid solution to our system of equations. In this case our solution set is trivial: it just has the above vector in it because the RREF had pivots in every column so there is exactly one solution.
+</p>
+<p>
+    Lets, therefore, look at something more interesting. Take the RREF matrix below:
+    $$
+        \left[ \begin{array}{cccc|c}
+          1 & 0 & 4 & 9 & 0 \\
+          0 & 1 & 8 & 3 & 0 \\
+          0 & 0 & 0 & 0 & 0 \\
+          0 & 0 & 0 & 0 & 0
+        \end{array} \right]
+    $$
+
+    Now we have two free variables! Now $x_3 = a$ and $x_4 = b$ where $a$ and $b$ can be any values we like. Now the general solution vector looks like this:
+
+    $$
+     \begin{bmatrix}
+        x_1 \\
+        x_2 \\
+        x_3 \\
+        x_4
+     \end{bmatrix}
+
+     =
+
+     \begin{bmatrix}
+        -4a - 9b \\
+        -8a -3b \\
+        a \\
+        b
+     \end{bmatrix}
+     $$
+
+     How did we get here? We we know from the RREF matrix that:
+
+     $$
+        \require{cancel} x_1 + 4\cancel{x_3}a + 9\cancel{x_4}b = 0
+     $$
+     $$
+        x_2 + 8\cancel{x_3}a + 3\cancel{x_4}b = 0
+     $$
+
+     We replace $x_3$ and $x_4$ with our free variables and then solve for the pivots, thus getting the general solution vector.
+</p>
+<p>
+    The above can then be represented using the <b>general solution vector</b>:
+    $$
+     \begin{bmatrix}
+        -4a - 9b \\
+        -8a -3b \\
+        a \\
+        b
+     \end{bmatrix} 
+     =
+     a\begin{bmatrix}
+        -4 \\
+        -8 \\
+        1 \\
+        0
+     \end{bmatrix} 
+     +
+     b\begin{bmatrix}
+        -9b \\
+        -3b \\
+        0 \\
+        1
+     \end{bmatrix} 
+     $$
+
+     The <b>solution set</b> thus becomes:
+
+     $$
+\mathrm{span}
+\left(
+
+        \begin{bmatrix}
+        -4 \\
+        -8 \\
+         1 \\
+         0
+     \end{bmatrix} 
+     , 
+     \begin{bmatrix}
+        -9 \\
+        -3 \\
+         0 \\
+         1
+     \end{bmatrix}
+\right)
+     $$
 </p>
 
 <hr style="width:75%"/>
@@ -1171,12 +1280,11 @@ solve_linear_system(system, x, y, z)</pre>
         $$
 
         In words, the <em>null space of a matrix is the set of all solutions
-        that result in the zero vector</em>. We can get this set by using the
-        normal reduction to RREF to solve the above ($[A\mid\vec 0] \longrightarrow [R \mid \vec 0]$).
+        that result in the zero vector</em>, i.e. the <a href="#solution_set">solution set</a> to the above. We can get this set by using the normal reduction to RREF to solve the above ($[A\mid\vec 0] \longrightarrow [R \mid \vec 0]$). The solution space set to this is the null space.
     </p>
     <p>
-        The system of linear equasions $A\vec x 0 \vec 0$ is called <b>homogeneous</b>. It is always
-        <b>consistent</b> because $\vec x = \vec 0$ is always a solution (and is called the <b>trivial</b> solution).
+        The system of linear equations $A\vec x = \vec 0$ is called <b>homogeneous</b>. It is always
+        <b>consistent</b>, i.e., has a solution, because $\vec x = \vec 0$ is always a solution (and is called the <b>trivial</b> solution).
     </p>
     <p>
         <em>The null space of a matrix is a valid subspace of $\mathbb{R}^n$</em> because
@@ -1810,7 +1918,11 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
         $$
 
         Where the red inidcates that the range is the domain (mapping is surjective or onto) and the blue
-        indicates that the mapping is unqiue (injective or onto-to-one).
+        indicates that the mapping is unqiue (injective or onto-to-one). We can also write this as follows:
+
+        $$
+            A \ \text{is invertible} \rightarrow \exists T^{-1} \mid T^{-1} \circ T = I \cap T \circ T^{-1} = I
+        $$
     </p>
     <p>
         It can be shown that <b>invertibility implies a unique solution to $f(x)=y$</b>.
@@ -1859,11 +1971,140 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
     <p>
         Thus, to show that a transform is surjective (onto) we need the RREF of the transformation matrix to have at at least one solution... i.e., there is a unique solution or many solutions - the first two items on the list above.
     </p>
+    <p>
+        Thus, there must be a pivot in every row of ou $m\times n$ matrix $A$, so for be onto we can say $\mathrm{rank}(A) = m$.
+    </p>
 
     <h4>Injective (One-To-One)</h4>
     <p>
-        For invertivility, onto is not enough. We need one-to-one as well!
+        For invertivility, onto is not enough. We need one-to-one as well! It can be shown that the
+        solution set to $A\vec x = \vec b$ is a the set of shifted versions of the null space. I.e.,
+        <q>assuming that $A\vec x = \vec b$ has a solution, the solution set is ${\vec x_p + n \mid n \in \mathrm{N}(A)}$</q> [<a href="https://www.khanacademy.org/math/linear-algebra/matrix-transformations/modal/v/linear-algebra-exploring-the-solution-set-of-ax-b" target="_blank">Ref</a>].
     </p>
+    <p>
+        This means that for $A$ to be one-to-one we require the null space of $A$ contain only the zero vector. I.e., <b>for a transformation matrix to be one-to-one, its null space must be trivial</b>.
+    </p>
+    <p>
+        If the null space of $A$ is trivial then $\mathrm{N}(A) = {\vec 0} \rightarrow \ \text{column vectors of A are LI}$. Because the column vectors a LI, they form a basis of $n$ vectors so $\mathrm{dim}(A) = n \rightarrow \mathrm{rank}(A) = n$.
+    </p>
+    <p>
+        Thus, <b>the transform $A$ is one-to-one if and only if $\mathrm{rank}(A) = n$</b>.
+    </p>
+
+    <h4>Invertible: Injective (One-To-One) <em>and</em> Surjective (Onto)</h4>
+    <p>
+        We saw that to be surjective, $\mathrm{rank}(A) = m$, and to be injective, $\mathrm{rank}(A) = n$.
+        Therefore, <b>to be invertible, $A$ must be a <u>square</u> matrix</b>. As it's rank is $n$, this also means that every column must contain a pivot, and because all the columns form a basis, i.e., are LI, if we reduce $A$ to RREF, it must be the elementary matrix, $I$. Thus, <b> $\mathrm{RREF}(A) = I$ must also be true</b>.
+    </p>
+    <p>
+        The inverse mapping is also linear. To recap, linearity implies:
+
+        $$
+            \mathrm{T}(\vec x + \vec y) = \mathrm{T}(\vec x) + \mathrm{T}(\vec y)
+        $$
+
+        and
+
+        $$
+        \mathrm{T}(c\vec x) = c\mathrm{T}(\vec x)
+        $$
+    </p>
+
+    <h4>Finding The Inverse</h4>
+    <p>
+        To find the inverse of a matrix we augment it with the equivalently size elementry matrix and reduce it to RREF. 
+    </p>
+    <p>
+        Let...
+        $$
+        A = \left[
+            \begin{array}{cc}
+                2 & 2 \\
+                0 & 5\\
+            \end{array} 
+        \right]
+        $$
+
+        Augment $A$ with $I$ to form $[A \mid I]$ and reduce:
+
+        $$
+        \left[
+            \begin{array}{cc|cc}
+                2 & 2     &     1 & 0 \\
+                0 & 5     &     0 & 1 \\
+            \end{array} 
+        \right]
+        \rightarrow rref \rightarrow
+        \left[
+            \begin{array}{cc|cc}
+                1 & 0     &     1/2 & -1/5\\
+                0 & 1     &     0 & 1/5  \\
+            \end{array} 
+        \right]
+        $$
+
+        Thus,
+        $$
+        A^{-1} = \left[
+            \begin{array}{cc}
+                1/2 & -1/5\\
+                0 & 1/5  \\
+            \end{array} 
+        \right]
+        $$
+
+        And we see that it is indeed the inverse because:
+
+        $$
+        AA^{-1} = \left[
+            \begin{array}{cc}
+                2 & 2 \\
+                0 & 5 \\
+            \end{array} 
+        \right]
+        \left[
+            \begin{array}{cc}
+                1/2 & -1/5\\
+                0 & 1/5   \\
+            \end{array} 
+        \right]
+        =
+        \left[
+            \begin{array}{cc}
+                1 & 0\\
+                0 & 1 \\
+            \end{array} 
+        \right]
+        $$
+
+        And:
+
+        $$
+        A^{-1}A = 
+        \left[
+            \begin{array}{cc}
+                1/2 & -1/5\\
+                0 & 1/5   \\
+            \end{array} 
+        \right]\left[
+            \begin{array}{cc}
+                2 & 2 \\
+                0 & 5 \\
+            \end{array} 
+        \right]
+        =
+        \left[
+            \begin{array}{cc}
+                1 & 0\\
+                0 & 1 \\
+            \end{array} 
+        \right]
+        $$
+
+        As we've seen, if $A$ isn't square then don't bother - it doesn't have an inverse. If it is square
+        and doesn't reduce to RREF, then it is <b>singular</b> and does not have an inverse.
+    </p>
+
 
 <h3>Projections</h3>
 <p style="float:left;">

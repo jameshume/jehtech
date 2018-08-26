@@ -1,0 +1,3 @@
+{
+    "cmd": ["python3", "generate_site.py"]
+}
