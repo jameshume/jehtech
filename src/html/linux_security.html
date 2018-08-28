@@ -112,7 +112,7 @@ https://www.systutorials.com/docs/linux/man/1-audit2why/
 <p>
   This discretionary access means that the system admin is not totally in control of who accesses
   what. For example, Bob can change the group associated with a file he owns and suddenly
-  give a different set of indiviudals the right to read/write/execute that file. This is not
+  give a different set of individuals the right to read/write/execute that file. This is not
   in the system admin's control. Bob has been able to make to make a <em>policy decision</em>!
 </p>
 <p>
@@ -123,7 +123,7 @@ https://www.systutorials.com/docs/linux/man/1-audit2why/
   <li>Processes' access is based on users' access: the kernel can not distinguish applications from users,</li>
   <li>Processes can change security properties: discretionary access control. Processes can escape security policy!</li>
   <li>Only 2 privilege levels, user and root: too simplistic and no way to enforce &quot;least-privilege&quot; (i.e., a process should be given
-      only those priviliges essential for it to perform its work) <a href="https://en.wikipedia.org/wiki/Principle_of_least_privilege", target="_blank">[Ref]</a></li>
+      only those privileges essential for it to perform its work) <a href="https://en.wikipedia.org/wiki/Principle_of_least_privilege", target="_blank">[Ref]</a></li>
 </ul>
 <div class="box_container"><div class="info">
   <p>
@@ -133,14 +133,14 @@ https://www.systutorials.com/docs/linux/man/1-audit2why/
     <li><em>Security policy</em> is the set of rules used to make access control decisions.</li>
     <li><em>Discretionary access</em> means that a subject with a certain access permission is capable of passing that permission on.</li>
     <li><em>Least-privilege</em> describes a security mindset that states that a process should be given
-      only those priviliges essential for it to perform its work.</li>
+      only those privileges essential for it to perform its work.</li>
   </ul>
 </div></div>
 
 <h3>SELinux: A Bird's Eye View</h3>
 <p>
   SELinux stands for <u>S</u>ecurity <u>E</u>nhanced Linux. It is built on years of the NSA's
-  security research and is an applicaton of their Flash security architecture, implemented as part of the
+  security research and is an application of their Flash security architecture, implemented as part of the
   <a href="https://en.wikipedia.org/wiki/Linux_Security_Modules" target="_blank">Linux Security Module (LSM)</a>
   framework. It adds <em><u>M</u>anditory <u>A</u>ccess <u>C</u>ontroll (MAC)</em> to Linux:
 </p>
@@ -154,7 +154,7 @@ https://www.systutorials.com/docs/linux/man/1-audit2why/
   </footer>
 </blockquote>
 <p>
-  Most intestestingly, for me at least, Android uses SELinux (since 4.3)
+  Most interestingly, for me at least, Android uses SELinux (since 4.3)
   <a href="https://source.android.com/security/selinux/concepts" target="_blank">[Ref]</a>
   which means that it is
   a very heavily used and &quot;industry-leading&quot; security measure. If you're going to work in the guts of
@@ -162,7 +162,7 @@ https://www.systutorials.com/docs/linux/man/1-audit2why/
   about it.
 </p>
 <p>
-  So, a more secure Linux: access control is mandatory (default denial - anythong not explicilty allowed is denied), more fine grained (no longer just root and not-root) and also implements the principle of least-privilege.
+  So, a more secure Linux: access control is mandatory (default denial - anything not explicitly allowed is denied), more fine grained (no longer just root and not-root) and also implements the principle of least-privilege.
 </p>
 <p>
   There are thee forms of access control, the only one I've made notes on is <em><u>T</u>ype <u>E</u>nforcement</em> (TE),
@@ -211,7 +211,7 @@ https://www.systutorials.com/docs/linux/man/1-audit2why/
 </p>
 <ol>
   <li>Enforcing: Policy is actively enforced.</li>
-  <li>Permissive: Policy is not enforcedm but violations are still logged. Good for debug.</li>
+  <li>Permissive: Policy is not enforced but violations are still logged. Good for debug.</li>
   <li>Disabled: Not running :(</li>
 </ol>
 <p>
@@ -273,7 +273,7 @@ https://www.systutorials.com/docs/linux/man/1-audit2why/
   </li>
 </ul>
 <h3>The SELinux Ubuntu Setup</h3>
-<p>Okay, to do this I am going to follow the debian tutorial as the Ubuntu one points to it.
+<p>Okay, to do this I am going to follow the Debian tutorial as the Ubuntu one points to it.
 </p>
 <p>Following the instructions went pretty well. I now have SELinux running in permissive mode
    on my desktop:
@@ -511,7 +511,7 @@ description=A really long description about JEHTech server
 ports=12345/tcp|4321|99,105:110/udp</pre>
   <p>
     The only &quot;complicated bit&quot; is the <code>ports</code>. For the ports you can use
-    a pipe delimited sequency of port numbers, ranges and protocols as shown.
+    a pipe delimited sequence of port numbers, ranges and protocols as shown.
   </p>
   <p>
     After creating this file you will need to force UFW to re-read it. Type
@@ -822,7 +822,7 @@ fail2ban-regex systemd-journal /etc/fail2ban/filter.d/sshd.conf</pre>
   </p>
   <pre>sudo systemctrl restart ssh</pre>
   <p>
-    To setup a new public/private key pair with, at the time of writing, some furture proofing in the key length, use the following:
+    To setup a new public/private key pair with, at the time of writing, some future proofing in the key length, use the following:
   </p>
   <pre>ssh-keygen -t rsa -b 3072 -C "A meaningful description" -f file-name-for-your-key-pair</pre>
   <p>

@@ -57,8 +57,8 @@
     </p>
     <p>
         Processes are created in Linux by <code>fork()</code>ing an existing process. In the
-        beginning Linux would copy the processes in its entirity: the parent process' memory would be cloned
-        for the new chile process and the page tables for the child would be created to
+        beginning Linux would copy the processes in its entirety: the parent process' memory would be cloned
+        for the new child process and the page tables for the child would be created to
         &quot;point&quot; correctly to the new memory. That's <em>expensive</em> as the
         system has to copy a potentially large amount of memory. For example, if a huge processes
         using, say, 1.5GB of RAM just wanted to <code>exec</code> a really small utility, the 1.5GB
@@ -66,10 +66,10 @@
         5MB! What a waste of time!
     </p>
     <p>
-        That is why <b>modern Linux now uses <em>copy-on-write paages</em></b>. This way the memory space of the
+        That is why <b>modern Linux now uses <em>copy-on-write pages</em></b>. This way the memory space of the
         parent processes is only copied to the child if the child tries to write to it. Therefore,
         in the above example, the parent and child will share the same memory until the child
-        <code>exec</code>s another program. Therefore the potentially hige memory copy is avoided.
+        <code>exec</code>s another program. Therefore the potentially huge memory copy is avoided.
         Should the child modify the shared memory, a copy of the addressed memory page(s) are
         created for the child, but only the modified pages need be copied, so it is again as
         efficient as possible.
@@ -124,7 +124,7 @@
         get the example code here</a>. I won't just splurge it all out here, we'll just look at the important bits.
     </p>
     <p>
-    	To start receiving events relating to files/firectory you need to create an inotify file descriptor:
+    	To start receiving events relating to files/directory you need to create an inotify file descriptor:
     </p>
     <pre class="prettyprint linenums">int inotifyFd = inotify_init();</pre>
     <p>
@@ -174,7 +174,7 @@ while(buffer &lt; bufferEnd)
 	<p>
 		This code does a <code>reinterpret_cast</code>, which means the buffer must
 		be correctly aligned: if you statically allocate a buffer you must make sure it is
-    	correctly alligned. To work around this I've dynamically allocated the buffer which
+    	correctly aligned. To work around this I've dynamically allocated the buffer which
     	guarantees correct alignment.
 	</p>
 	<p>
@@ -221,7 +221,7 @@ close(inotifyFd);</pre>
 		<li>File descriptors suffering exceptional conditions.</li>
 	</ol>
 	<p>
-		The sets of file descriptors being watched for events are descibed by <code>fd_set</code>s.
+		The sets of file descriptors being watched for events are described by <code>fd_set</code>s.
 		A set is created and manipulated as follows:
 	</p>
 	<pre class="prettyprint linenums">fd_set fd_set;

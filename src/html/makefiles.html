@@ -45,7 +45,7 @@
 <h2>Makefile Basics</h2>
 <div>
 	<p>
-		A Makefile descibes how your program is built by specifying everything
+		A Makefile describes how your program is built by specifying everything
 		that it depends on and building the dependencies first. A Makefile rule
 		looks like this:
 	</p>
@@ -62,7 +62,7 @@
 		<li><b>Rule</b> is what's shown above - it defines how to build a target.</li>
 	</ul>
 	<p>
-		To performa a build, make will construct a directed acyclic graph (DAG) from the rules. It will
+		To perform a build, make will construct a directed acyclic graph (DAG) from the rules. It will
 		then do a post order traversal (visit children first), building the leaf nodes first and
 		going back up the graph.
 	</p>
@@ -99,7 +99,7 @@ prequisite_6:
 prequisite_7:
 &lt;tab&gt;   commands_H</pre>
 	<p>
-		The post-order traveral is shown by the orange-background numbers.
+		The post-order traversal is shown by the orange-background numbers.
 	</p>
 	<ol>
 		<li>Make looks at <code>target</code> and visits the first child, <code>prerequisit_1</code>. It can
@@ -126,9 +126,9 @@ prequisite_7:
 		</li>
 		<li>Make returns back to <code>target</code> and examines the next dependency <code>prerequisit_3</code>.
 			There are two dependencies, <code>prerequisit_5</code> and <code>prerequisit_7</code>.
-			Make has already built <code>prerequisit_5</code> so it knows that it does not beed
+			Make has already built <code>prerequisit_5</code> so it knows that it does not need
 			to build this again, so it ignores this path... nice! Thus all that is left is to
-			look at <code>prerequisit_7</code>, asumming it is older than <code>prerequisit_3</code>.
+			look at <code>prerequisit_7</code>, assuming it is older than <code>prerequisit_3</code>.
 			Assume it is, so make builds it.
 		</li>
 		<li>
@@ -150,7 +150,7 @@ prequisite_7:
 	<ul>
 		<li>Make finds files indicated by the targets and prerequisites.
 		</li>
-		<li>If a prerequisite has a rule associated with it (i.e., make is looking at the rule <code>target: prequisite</code> and the rule <code>prequisite: dependencies</code> exists), make will try to update the prerequisite first.
+		<li>If a prerequisite has a rule associated with it (i.e., make is looking at the rule <code>target: prerequisite</code> and the rule <code>prerequisite: dependencies</code> exists), make will try to update the prerequisite first.
 		</li>
 		<li>When considering a target, if any prerequisite is newer than the target, make will
 			attempt to make the prequisite(s) first.
@@ -179,7 +179,7 @@ prequisite_7:
             </tr>
             <tr>
                 <td><code>$&lt;</code></td>
-                <td>The name of the first prerequisite. Memory peg: The shevron looks like it &quot;points&quot; to a target, so think prerequisite.</td>
+                <td>The name of the first prerequisite. Memory peg: The chevron looks like it &quot;points&quot; to a target, so think prerequisite.</td>
             </tr>
             <tr>
                 <td><code>$?</code></td>

@@ -27,12 +27,12 @@
 			I first learnt about MVC when playing with <a href="http://rubyonrails.org/" target="_blank">Rails</a> 
 			and just followed &quot;the book&quot; without really considering
 			the architecture that closely... it is intuitively &quot;easy&quot; (or so I thought) to understand and has obvious
-			benifits.
+			benefits.
 		</p>
 		<p>
 			From my own perspective, it was <a href="http://rubyonrails.org/" target="_blank">Rails</a> that &quot;popularised&quot; 
 			this pattern for me. Before then I'd written
-			web applications using the standard LAMP combiniation and through trial and error had my own seperation of various
+			web applications using the standard LAMP combination and through trial and error had my own separation of various
 			logical components that helped but was not as strict or as formalised as MVC. So, learning about MVC for web development
 			was a boon.
 		</p>
@@ -101,7 +101,7 @@ c = CreateController(Test, m, v)</pre>
    }
 
    Delete(testRecord) {
-      The delete request has been copleted
+      The delete request has been completed
       Delete the specified record from the list control
       Renable delete button and change its label to &quot;Delete&quot;
    }
@@ -156,7 +156,7 @@ c = CreateController(Test, m, v)</pre>
 			The above structure has already led to my first thought... the controller doesn't really seem to be doing very much. In fact, it
 			wouldn't make much difference if it didn't exist and the view contained all the controller logic. It might even be cleaner
 			because the controller isn't doing much more than passing messages between the view and model. Okay, it is launching threads to use
-			the model so that the GUI can remain responsive whilse a request is being processed, but the GUI could do that, and probably
+			the model so that the GUI can remain responsive while a request is being processed, but the GUI could do that, and probably
 			should be the one deciding whether it wants to use the model asynchronously or not.
 		</p><p style="font-weight: bold;">
 			Second question: A window combining views... How should this be structured using MVC?
@@ -181,7 +181,7 @@ c = CreateController(Test, m, v)</pre>
 			hearing it mentioned here and there. Reading about it from this historical perspective did clear a few things up for me.
 			I ended up reading the following articles, which appear to be written by folks who were intimately involved in 
 			coming up with these patterns. Apparently Trygve Reenskaug was the originator (according to Pattern Oriented Software
-			Architecture For Dummies) but it was first widly seen by people in SmallTalk.
+			Architecture For Dummies) but it was first widley seen by people in SmallTalk.
 		</p>
 		<ol>
 			<li><a href="http://heim.ifi.uio.no/~trygver/1979/mvc-1/1979-05-MVC.pdf" target+"_blank">Thing-Model-View-Editor</a> by Trygve Reenskaug. [Last accessed 10-Feb-2015]</li>
@@ -200,10 +200,10 @@ c = CreateController(Test, m, v)</pre>
 			to display and with this should display the text however desired.
 		</p><p>
 			Or as another example, a view on an address book retrieves a list of all names beginning with 'L' through the model. The model
-			stores the addresses in a raw binary file. Now the software is to be ugraded to store the address book in XML. Because the view is
+			stores the addresses in a raw binary file. Now the software is to be upgraded to store the address book in XML. Because the view is
 			separate from the model the storage can easily be changed without having to touch a single line of code in the view.
 		</p><p>
-			The split of responsibilities is easy enough to understand, but it was the description of the controller that ellucidated things
+			The split of responsibilities is easy enough to understand, but it was the description of the controller that elucidated things
 			for me. In my development so far the controller seemed to be waifer thin and wasn't really doing a lot other than forwarding
 			messages between the view and model. I couldn't really see the point of it... until I read both the articles. In the SmallTalk world the 
 			controller would do things like detect the key press, or detect the mouse click and figure out if the key press would modify the model or whether
@@ -232,7 +232,7 @@ c = CreateController(Test, m, v)</pre>
 			controller interprets the key press. Is it the enter key? Is it a normal character? I.e., the controller has knowledge
 			about what the key does/signifies and starts a set of events. 
 		</p><p>
-			If the key was a character, for example, the controller could message the model and ask it to append the new chracter to its character store. 
+			If the key was a character, for example, the controller could message the model and ask it to append the new character to its character store. 
 			The model would do this and then signal, either using a publish/subscribe or other mechanism, to the world in general that it had 
 			made such an update. The view could then listen for and receive this update and query the model for the new text and display it however
 			it wanted.

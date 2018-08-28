@@ -478,14 +478,14 @@ for multiplier in create_multipliers():
    print multiplier(2)
 
 # Outputs
-# 8 8 8 8 (newlines removed for brievity)</pre>
+# 8 8 8 8 (newlines removed for brevity)</pre>
 	<p>
 		Why does it output 8's? Because the list comprehension creates a list of lambda functions,
 		in which the variable <code>i</code> has <em>not yet</em> been evaluated. By the time
 		we come to evaluate the lambda <code>i</code> is set to 4. How is <code>i</code> evaluated?
 		As it is a free variable in the lambda it is &quot;resolved using the nearest enclosing scope&quot;.
 		The nearest enclosing scope is the function body of <code>create_multiplies()</code> (because
-		a list comprehesion is not a block, so <code>i</code> is bound in <code>create_multiplies()</code>).
+		a list comprehension is not a block, so <code>i</code> is bound in <code>create_multiplies()</code>).
 		By the time <code>create_multiplies()</code> exits, <code>i</code> is 4, but because the lambda
 		closes this scope, every time <code>i</code> is looked up, it is 4, because the lookup of <code>i</code>
 		does not occur until later, when the lambdas are actually evaluated.
@@ -540,7 +540,7 @@ int main(int argc, char* argv[])
 		<h3>The recursion problem</h3>
 		<p>In most, if not all, of the little tutorials I used to learn about
 			<tt>__setattr__()</tt> and <tt>__getattr__()</tt>
-			seemed either to treat them independently, in otherwords, the example classes had one or the other
+			seemed either to treat them independently, in other words, the example classes had one or the other
 			defined but not both, or used both but had very simple use cases. Then as I started to play with them, in
 			my newbie-to-python state, I did the following (abstracted out into a test case). This also
 			serves as a little Python <tt>__setattr__</tt> example and a Python <tt>__getattr__</tt> example...
@@ -614,7 +614,7 @@ Test attribute</pre>
 		<b>if self._somePrivate == 2: # -- Oops --</b></pre>
 		<p>This means that <tt>__getattr__()</tt> must be called to resolve <tt>self._somePrivate</tt>
 			because <em>the variable does not yet exist</em> and therefore cannot be &quot;...found through the normal mechanism...&quot;.
-		   And here is the flaw... my initial assumpton was that this would work because <tt>__getattr__()</tt>
+		   And here is the flaw... my initial assumption was that this would work because <tt>__getattr__()</tt>
 			is only called if the attribute can't otherwise be found, and I thought it would be found.
 		</p>
 		<p>
@@ -623,7 +623,7 @@ Test attribute</pre>
 		</p>
 		<p>And from this we can understand why the second example worked. Because there is no <tt>__setattr__()</tt> defined in the second test
 			class, the method does not try to read the variable first (as my little example did) and so <tt>__getattr__()</tt> need never be
-			called. Therefore the variable is created successfull upon class initialisation and any subsequent queries on the variable
+			called. Therefore the variable is created successful upon class initialisation and any subsequent queries on the variable
 			will be found using the normal mechanism. Even if the second example had defined <tt>__setattr__()</tt>, as long as it did not
 			try to read <tt>self._somePrivate</tt>, it would have been okay.
 		</p>
@@ -718,7 +718,7 @@ Table column name found
 				length. To get a linear runtime cost ... build a list and use .join()
 			</p>
 			<footer>
-				-- <a href="https://docs.python.org/3/library/stdtypes.html" target="_blank">Python documumentation: Built-in types</a> section 4.6.1 - Common Sequence Operations
+				-- <a href="https://docs.python.org/3/library/stdtypes.html" target="_blank">Python documentation: Built-in types</a> section 4.6.1 - Common Sequence Operations
 			</footer>
 		</blockquote>
 		<p>
@@ -844,7 +844,7 @@ closestIndex     = findClosestIndex(array_to_search, value_to_find_closest_to)</
 	</p>
 	<p>
 		The line <tt>distanceFromVal = abs(vec-val)</tt> produces an array where
-		<tt>distanceFromVal[i] == |vec[i] - val|</tt>. In otherwords each element in
+		<tt>distanceFromVal[i] == |vec[i] - val|</tt>. In other words, each element in
 		<tt>distanceFromVal</tt> corresponds to the distance of the same element in
 		<tt>vec</tt> from the value we are searching for, <tt>val</tt>.
 	</p>

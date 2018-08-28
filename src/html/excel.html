@@ -52,7 +52,7 @@ https://superuser.com/questions/316239/how-to-get-the-current-column-name-in-exc
 			</p>
 			<p>
 				Had wanted to index a matrix, or table, but not using the row and
-				column numerical indicies but using row and column labels. Lets take 
+				column numerical indices but using row and column labels. Lets take 
 				a look at a little toy example. I have a matrix of students names and
 				their score for a set of subjects in the following excel spreadhseet:
 			</p>
@@ -107,7 +107,7 @@ https://superuser.com/questions/316239/how-to-get-the-current-column-name-in-exc
 			<p>
 				Having clicked the data select box (<img src="##IMG_DIR##/excel_data_select_icon.PNG" style="vertical-align: -3px;"/>) 
 				you must then select, from the table in your excel worksheet,
-				the row containing the student nammes. This is shown below (selected cells highlighted in yellow):
+				the row containing the student names. This is shown below (selected cells highlighted in yellow):
 			</p>
 			<img src="##IMG_DIR##/excel_select_table_row_headers.PNG"/>
 			<p>
@@ -183,10 +183,10 @@ https://superuser.com/questions/316239/how-to-get-the-current-column-name-in-exc
 			<ol>
 				<li><tt><i>value</i></tt> is the value, in the left most column of the table, that you
 				    want to find, i.e., index your table rows by,</li>
-				<li><tt><i>table</i></tt> is the rectangular block of cells that consitute your table,</li>
-				<li><tt><i>column</i></tt> is the column that you want to look up. The cokumn in the row that contained
+				<li><tt><i>table</i></tt> is the rectangular block of cells that constitute your table,</li>
+				<li><tt><i>column</i></tt> is the column that you want to look up. The column in the row that contained
 				    <tt><i>value</i></tt> is the value that the function will return.</li>
-				<li><tt><i>search type</i></tt> specificies whether your do an exact search (TRUE),
+				<li><tt><i>search type</i></tt> specifies whether your do an exact search (TRUE),
 				    where the function will search all cells in the first column for an <em>exact</em>
 				    value, or non-exact (FALSE)
 				    where the data in the first column of your table <em>must</em> be sorted and
@@ -235,7 +235,7 @@ https://superuser.com/questions/316239/how-to-get-the-current-column-name-in-exc
 			<h4>Bringing It Together!</h4>
 			<p>
 				So, we're getting there! Now, to tie this to our example in stead of
-				seatching for &quot;C&quot; we would search for the value contained
+				searching for &quot;C&quot; we would search for the value contained
 				in cell <tt>B1</tt>. Thus to get from student name to column number
 				we want to use <tt>MATCH(B1, A1:D1, 0)</tt>.
 			</p>
@@ -270,13 +270,13 @@ https://superuser.com/questions/316239/how-to-get-the-current-column-name-in-exc
 				column B has a path to a file as named in column A, and column C has 
 				a different path to a file as named in column A. I want to click the
 				file name and then open two images: <tt>pathInColumn(B) + a</tt> and
-				<tt>pathInColumn(C) + a</tt>. The image below demostrates this a 
+				<tt>pathInColumn(C) + a</tt>. The image below demonstrates this a 
 				little more clearly...
 			</p>
 			<p>
 				<img src="##IMG_DIR##/excel_click_cell_load_img.png" alt="Microsoft Excel spreadsheet showing that I want to click a cell and catch cell click event"/>
 			<p>
-				To accomplish this I had a bit of a google and the following is 
+				To accomplish this I had a bit of a Google and the following is 
 				based on these two links.
 			</p>
 			<ul>
