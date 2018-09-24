@@ -1620,6 +1620,117 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
 		mechanics behind determinants, byt <a href="https://www.youtube.com/channel/UCYO_jab_esuFRV4b17AJtAw" target="blank">3BlueBrown</a> (awesome!).
 	</p>
 	<iframe width="560" height="315" src="https://www.youtube.com/embed/Ip3X9LOh2dk?rel=0" frameborder="0" allowfullscreen></iframe>
+    <p>
+        An now follows the notes from Khan...
+    </p>
+    <p>
+        If $B$ is defined as follows...
+
+        $$
+        B = \begin{bmatrix}
+        a & b \\
+        c & d \\
+        \end{bmatrix}
+        $$
+
+        Then we write the determinate of B as...
+
+        $$
+        \mathrm{det}(B) = |B| = \begin{vmatrix}
+        a & b \\
+        c & d
+        \end{vmatrix} = ad - bc
+        $$
+    </p>
+    <p>
+        A <b>matrix is invertible iff $|B| \ne 0$</b>. We can define the inverse as follows using the determinant:
+
+        $$
+        B^{-1} = \frac{1}{|B|} \begin{bmatrix}
+            d & -b \\
+            -c & a
+            \end{bmatrix}
+        $$
+
+        It is defined as long as $|B| \ne 0$.
+    </p>
+    <p>
+        If $A$ is a 3x3 matrix defined as follows, where the elements $a_{ij}$ represents the element at row $i$ and column $j$:
+
+        $$
+        A = \begin{bmatrix}
+        a_{11} & a_{12} & a_{13} \\
+        a_{21} & a_{22} & a_{23} \\
+        a_{31} & a_{32} & a_{33} \\
+        \end{bmatrix}
+        $$
+
+        We can define the determinant as:
+
+        $$
+        \mathrm{det}(A) = a_{11} \begin{vmatrix} 
+            a_{22} & a_{23} \\
+            a_{32} & a_{33}
+            \end{vmatrix}
+
+        - a_{12} \begin{vmatrix} 
+            a_{21} & a_{23} \\
+            a_{31} & a_{33}
+            \end{vmatrix}
+
+        + a_{13} \begin{vmatrix} 
+            a_{21} & a_{22} \\
+            a_{31} & a_{32}
+            \end{vmatrix}    
+        $$
+
+        Same rule applies: If the determinant is not zero then the matrix will be invertible.
+    </p> 
+    <p>
+        We've used the first row ($a_{11}, a_{12}, a_{13}$) but we could have used any row, or any column: choose
+        the one with the most zeros as this will make the calculation easier/faster.
+    </p>
+    <p>
+        Select the row or column with the most zeros and go through it. Use each element $a_{ij}$ multiplied by the determinant of the 2x2 matrix you get if you take out the i<sup>th</sup> row and j<sup>th</sup> column of
+        the matrix.
+    </p>
+    <p>
+        This generalises to an nxn matrix as follows:
+
+        $$
+        \stackrel{A}{\small{nxn}} \ = \begin{bmatrix}
+        a_{11} & a_{12} & \cdots & a_{1n} \\
+        a_{21} & a_{22} & \cdots & a_{2n} \\
+        \vdots & \vdots & \ddots & \vdots \\
+        a_{n1} & a_{n2} & \cdots & a_{nn} 
+        \end{bmatrix}
+        $$
+
+        Define $A_{ij}$ to be the (n-1) x (n-1) matrix you get when you ignore the i<sup>th</sup> and j<sup>th</sup> column of the nxn matrix A.
+    </p>
+    <p>
+        Then we can define the determinant <em>recursively</em> as follows:
+
+        $$
+        \textrm{det}(A) = a_{11}|A_{11}| - a_{12}|A_{12}| + a_{13}|A_{13}| - \cdots + a_{1n}|A_{1n}|
+        $$
+
+        For each $|A_{ij}|$, apply the formula recursively until a 2x2 matrix is reached, at which point you
+        can use the 2x2 determinant formula.
+    </p>
+    <p>
+        There is a pattern to the &quot;+&quot;'s and &quot;-&quot;'s:
+
+        $$
+        \textrm{sign}(i, j) = -1^{(i+j)}
+        $$
+    </p>
+
+    <h4>Do It In Python</h4>
+    <pre class="prettyprint linenums">&gt;&gt;&gt;import numpy as np
+&gt;&gt;&gt; A = np.mat("3 4 5 6;53 6 17 8; 3 3 3 3; 22 8 2 6")
+&gt;&gt;&gt; np.linalg.det(A)
+2220.0</pre>
 
 <h3>Eigenvectors and Eigenvalues</h3>
 	<p>
