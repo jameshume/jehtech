@@ -1,0 +1,2768 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>6</zoom_level>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>852</x>
+      <y>816</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>User 5-11
+customelement=
+drawLine(0, 0.1 * height, 0, height - 0.1 * height)
+drawLine(width,  0, width, height)
+drawLine(0, 0.1 * height, width, 0)
+drawLine(0, height - 0.1 * height, width, height)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>852</x>
+      <y>840</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>User 12-13
+customelement=
+drawLine(0, 0.1 * height, 0, height - 0.1 * height)
+drawLine(width,  0, width, height)
+drawLine(0, 0.1 * height, width, 0)
+drawLine(0, height - 0.1 * height, width, height)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>852</x>
+      <y>912</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>User 20-21
+customelement=
+drawLine(0, 0.1 * height, 0, height - 0.1 * height)
+drawLine(width,  0, width, height)
+drawLine(0, 0.1 * height, width, 0)
+drawLine(0, height - 0.1 * height, width, height)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>852</x>
+      <y>888</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>User 18-1
+customelement=
+drawLine(0, 0.1 * height, 0, height - 0.1 * height)
+drawLine(width,  0, width, height)
+drawLine(0, 0.1 * height, width, 0)
+drawLine(0, height - 0.1 * height, width, height)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>852</x>
+      <y>864</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>User 14-17
+customelement=
+drawLine(0, 0.1 * height, 0, height - 0.1 * height)
+drawLine(width,  0, width, height)
+drawLine(0, 0.1 * height, width, 0)
+drawLine(0, height - 0.1 * height, width, height)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>852</x>
+      <y>936</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>User 22-23
+customelement=
+drawLine(0, 0.1 * height, 0, height - 0.1 * height)
+drawLine(width,  0, width, height)
+drawLine(0, 0.1 * height, width, 0)
+drawLine(0, height - 0.1 * height, width, height)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>852</x>
+      <y>960</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>User 24-25
+customelement=
+drawLine(0, 0.1 * height, 0, height - 0.1 * height)
+drawLine(width,  0, width, height)
+drawLine(0, 0.1 * height, width, 0)
+drawLine(0, height - 0.1 * height, width, height)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>852</x>
+      <y>984</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>User 26-30
+customelement=
+drawLine(0, 0.1 * height, 0, height - 0.1 * height)
+drawLine(width,  0, width, height)
+drawLine(0, 0.1 * height, width, 0)
+drawLine(0, height - 0.1 * height, width, height)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>852</x>
+      <y>1008</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>User 31
+customelement=
+drawLine(0, 0.1 * height, 0, height - 0.1 * height)
+drawLine(width,  0, width, height)
+drawLine(0, 0.1 * height, width, 0)
+drawLine(0, height - 0.1 * height, width, height)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>852</x>
+      <y>1032</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>User 32
+customelement=
+drawLine(0, 0.1 * height, 0, height - 0.1 * height)
+drawLine(width,  0, width, height)
+drawLine(0, 0.1 * height, width, 0)
+drawLine(0, height - 0.1 * height, width, height)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>852</x>
+      <y>1056</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>User 33-34
+customelement=
+drawLine(0, 0.1 * height, 0, height - 0.1 * height)
+drawLine(width,  0, width, height)
+drawLine(0, 0.1 * height, width, 0)
+drawLine(0, height - 0.1 * height, width, height)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>852</x>
+      <y>1080</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>User 35-36
+customelement=
+drawLine(0, 0.1 * height, 0, height - 0.1 * height)
+drawLine(width,  0, width, height)
+drawLine(0, 0.1 * height, width, 0)
+drawLine(0, height - 0.1 * height, width, height)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>852</x>
+      <y>1104</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>User 37
+customelement=
+drawLine(0, 0.1 * height, 0, height - 0.1 * height)
+drawLine(width,  0, width, height)
+drawLine(0, 0.1 * height, width, 0)
+drawLine(0, height - 0.1 * height, width, height)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>852</x>
+      <y>1128</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>User 38-41
+customelement=
+drawLine(0, 0.1 * height, 0, height - 0.1 * height)
+drawLine(width,  0, width, height)
+drawLine(0, 0.1 * height, width, 0)
+drawLine(0, height - 0.1 * height, width, height)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>852</x>
+      <y>1152</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>User 43
+customelement=
+drawLine(0, 0.1 * height, 0, height - 0.1 * height)
+drawLine(width,  0, width, height)
+drawLine(0, 0.1 * height, width, 0)
+drawLine(0, height - 0.1 * height, width, height)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>852</x>
+      <y>1176</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>User 44
+customelement=
+drawLine(0, 0.1 * height, 0, height - 0.1 * height)
+drawLine(width,  0, width, height)
+drawLine(0, 0.1 * height, width, 0)
+drawLine(0, height - 0.1 * height, width, height)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>264</x>
+      <y>564</y>
+      <w>96</w>
+      <h>114</h>
+    </coordinates>
+    <panel_attributes>These are event generators. They are specific peripherals on chip that have events routed to the event subsystem
+
+Generator's events enabled in their specific units.
+bg=white
+transparency=1
+style=wordwrap
+fg=black</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>426</x>
+      <y>564</y>
+      <w>138</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>These are MUXs that map a generator's event to an EVSYS channel #0-11
+
+_*Reg: CHANNEL[0 -11].EVGEN*_
+bg=white
+transparency=1
+style=wordwrap
+fg=black</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>684</x>
+      <y>774</y>
+      <w>240</w>
+      <h>432</h>
+    </coordinates>
+    <panel_attributes>Channel 1 Processing
+bg=orange
+transparency=1
+layer=-1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1164</x>
+      <y>816</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>DMAC CH0-7</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1164</x>
+      <y>840</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>TCC0 EV0-1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1164</x>
+      <y>864</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>TCC0 MC0-3</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1164</x>
+      <y>888</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>TCC1 EV0-1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1164</x>
+      <y>912</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>TCC1 MC0-1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1164</x>
+      <y>936</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>TCC2 EV0-1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1164</x>
+      <y>960</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>TCC2 MC0-1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1164</x>
+      <y>984</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>TC0-4</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1164</x>
+      <y>1008</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>ADC START</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1164</x>
+      <y>1032</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>ADC SYNC</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1164</x>
+      <y>1056</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>AC COMP0-1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1164</x>
+      <y>1080</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>DAC START0-1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1164</x>
+      <y>1104</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>PTC STCONV</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1164</x>
+      <y>1128</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>CLL LUTIN0-3</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1164</x>
+      <y>1152</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>MTB START</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1164</x>
+      <y>1176</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>MTB STOP</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>264</x>
+      <y>144</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>RTC
+transparency=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>264</x>
+      <y>180</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>EIC
+transparency=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>264</x>
+      <y>216</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>DMAC
+transparency=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>264</x>
+      <y>252</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>TCC 0-2
+transparency=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>264</x>
+      <y>288</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>TC0-4
+transparency=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>264</x>
+      <y>324</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>ADC
+transparency=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>264</x>
+      <y>360</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>AC
+transparency=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>264</x>
+      <y>396</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>DAC
+transparency=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>264</x>
+      <y>432</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>PTC
+transparency=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>264</x>
+      <y>468</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>TRNG
+transparency=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>264</x>
+      <y>504</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>CCL
+transparency=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>264</x>
+      <y>540</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>PAC
+transparency=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>270</x>
+      <y>138</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>transparency=1
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>276</x>
+      <y>132</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>transparency=1
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>270</x>
+      <y>174</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>transparency=1
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>276</x>
+      <y>168</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>transparency=1
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>270</x>
+      <y>210</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>transparency=1
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>276</x>
+      <y>204</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>transparency=1
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>270</x>
+      <y>246</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>transparency=1
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>276</x>
+      <y>240</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>transparency=1
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>270</x>
+      <y>282</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>transparency=1
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>276</x>
+      <y>276</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>transparency=1
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>270</x>
+      <y>318</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>transparency=1
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>276</x>
+      <y>312</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>transparency=1
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>270</x>
+      <y>354</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>transparency=1
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>276</x>
+      <y>348</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>transparency=1
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>270</x>
+      <y>390</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>transparency=1
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>276</x>
+      <y>384</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>transparency=1
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>270</x>
+      <y>426</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>transparency=1
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>276</x>
+      <y>420</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>transparency=1
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>270</x>
+      <y>462</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>transparency=1
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>276</x>
+      <y>456</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>transparency=1
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>270</x>
+      <y>498</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>transparency=1
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>276</x>
+      <y>492</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>transparency=1
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>270</x>
+      <y>534</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>transparency=1
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>276</x>
+      <y>528</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>transparency=1
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>456</x>
+      <y>138</y>
+      <w>54</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>Chan1 MUX
+customelement=
+drawLine(0, 0.1 * height, 0, height - 0.1 * height)
+drawLine(width,  0, width, height)
+drawLine(0, 0.1 * height, width, 0)
+drawLine(0, height - 0.1 * height, width, height)
+transparency=1
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>576</x>
+      <y>138</y>
+      <w>18</w>
+      <h>450</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;730.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>582</x>
+      <y>138</y>
+      <w>18</w>
+      <h>450</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;730.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>576</x>
+      <y>114</y>
+      <w>84</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>These are the 12 event channels.
+
+
+bg=blue
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>504</x>
+      <y>144</y>
+      <w>90</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;130.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>324</x>
+      <y>144</y>
+      <w>144</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>220.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>324</x>
+      <y>180</y>
+      <w>144</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>220.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>456</x>
+      <y>174</y>
+      <w>54</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>Chan2 MUX
+customelement=
+drawLine(0, 0.1 * height, 0, height - 0.1 * height)
+drawLine(width,  0, width, height)
+drawLine(0, 0.1 * height, width, 0)
+drawLine(0, height - 0.1 * height, width, height)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>324</x>
+      <y>216</y>
+      <w>144</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>220.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>456</x>
+      <y>210</y>
+      <w>54</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>Chan3 MUX
+customelement=
+drawLine(0, 0.1 * height, 0, height - 0.1 * height)
+drawLine(width,  0, width, height)
+drawLine(0, 0.1 * height, width, 0)
+drawLine(0, height - 0.1 * height, width, height)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>324</x>
+      <y>252</y>
+      <w>144</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>220.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>456</x>
+      <y>246</y>
+      <w>54</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>Chan4 MUX
+customelement=
+drawLine(0, 0.1 * height, 0, height - 0.1 * height)
+drawLine(width,  0, width, height)
+drawLine(0, 0.1 * height, width, 0)
+drawLine(0, height - 0.1 * height, width, height)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>324</x>
+      <y>288</y>
+      <w>144</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>220.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>456</x>
+      <y>282</y>
+      <w>54</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>Chan5 MUX
+customelement=
+drawLine(0, 0.1 * height, 0, height - 0.1 * height)
+drawLine(width,  0, width, height)
+drawLine(0, 0.1 * height, width, 0)
+drawLine(0, height - 0.1 * height, width, height)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>324</x>
+      <y>324</y>
+      <w>144</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>220.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>456</x>
+      <y>318</y>
+      <w>54</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>Chan6 MUX
+customelement=
+drawLine(0, 0.1 * height, 0, height - 0.1 * height)
+drawLine(width,  0, width, height)
+drawLine(0, 0.1 * height, width, 0)
+drawLine(0, height - 0.1 * height, width, height)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>324</x>
+      <y>360</y>
+      <w>144</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>220.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>456</x>
+      <y>354</y>
+      <w>54</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>Chan7 MUX
+customelement=
+drawLine(0, 0.1 * height, 0, height - 0.1 * height)
+drawLine(width,  0, width, height)
+drawLine(0, 0.1 * height, width, 0)
+drawLine(0, height - 0.1 * height, width, height)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>324</x>
+      <y>396</y>
+      <w>144</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>220.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>456</x>
+      <y>390</y>
+      <w>54</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>Chan8 MUX
+customelement=
+drawLine(0, 0.1 * height, 0, height - 0.1 * height)
+drawLine(width,  0, width, height)
+drawLine(0, 0.1 * height, width, 0)
+drawLine(0, height - 0.1 * height, width, height)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>324</x>
+      <y>432</y>
+      <w>144</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>220.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>456</x>
+      <y>426</y>
+      <w>54</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>Chan9 MUX
+customelement=
+drawLine(0, 0.1 * height, 0, height - 0.1 * height)
+drawLine(width,  0, width, height)
+drawLine(0, 0.1 * height, width, 0)
+drawLine(0, height - 0.1 * height, width, height)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>324</x>
+      <y>468</y>
+      <w>144</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>220.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>456</x>
+      <y>462</y>
+      <w>54</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>Chan10 MUX
+customelement=
+drawLine(0, 0.1 * height, 0, height - 0.1 * height)
+drawLine(width,  0, width, height)
+drawLine(0, 0.1 * height, width, 0)
+drawLine(0, height - 0.1 * height, width, height)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>324</x>
+      <y>504</y>
+      <w>144</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>220.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>456</x>
+      <y>498</y>
+      <w>54</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>Chan11 MUX
+customelement=
+drawLine(0, 0.1 * height, 0, height - 0.1 * height)
+drawLine(width,  0, width, height)
+drawLine(0, 0.1 * height, width, 0)
+drawLine(0, height - 0.1 * height, width, height)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>324</x>
+      <y>540</y>
+      <w>144</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>220.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>456</x>
+      <y>534</y>
+      <w>54</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>Chan12 MUX
+customelement=
+drawLine(0, 0.1 * height, 0, height - 0.1 * height)
+drawLine(width,  0, width, height)
+drawLine(0, 0.1 * height, width, 0)
+drawLine(0, height - 0.1 * height, width, height)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>354</x>
+      <y>144</y>
+      <w>18</w>
+      <h>414</h>
+    </coordinates>
+    <panel_attributes>lt=-
+lw=2</panel_attributes>
+    <additional_attributes>10.0;670.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>354</x>
+      <y>144</y>
+      <w>24</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>customelement=
+drawArc(5, 5, 10, 10, 130, 360, true) bg=black transparency=1
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>354</x>
+      <y>180</y>
+      <w>24</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>customelement=
+drawArc(5, 5, 10, 10, 130, 360, true) bg=black transparency=1
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>354</x>
+      <y>216</y>
+      <w>24</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>customelement=
+drawArc(5, 5, 10, 10, 130, 360, true) bg=black transparency=1
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>354</x>
+      <y>252</y>
+      <w>24</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>customelement=
+drawArc(5, 5, 10, 10, 130, 360, true) bg=black transparency=1
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>354</x>
+      <y>288</y>
+      <w>24</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>customelement=
+drawArc(5, 5, 10, 10, 130, 360, true) bg=black transparency=1
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>354</x>
+      <y>324</y>
+      <w>24</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>customelement=
+drawArc(5, 5, 10, 10, 130, 360, true) bg=black transparency=1
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>354</x>
+      <y>360</y>
+      <w>24</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>customelement=
+drawArc(5, 5, 10, 10, 130, 360, true) bg=black transparency=1
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>354</x>
+      <y>396</y>
+      <w>24</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>customelement=
+drawArc(5, 5, 10, 10, 130, 360, true) bg=black transparency=1
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>354</x>
+      <y>432</y>
+      <w>24</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>customelement=
+drawArc(5, 5, 10, 10, 130, 360, true) bg=black transparency=1
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>354</x>
+      <y>468</y>
+      <w>24</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>customelement=
+drawArc(5, 5, 10, 10, 130, 360, true) bg=black transparency=1
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>354</x>
+      <y>504</y>
+      <w>24</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>customelement=
+drawArc(5, 5, 10, 10, 130, 360, true) bg=black transparency=1
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>354</x>
+      <y>540</y>
+      <w>24</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>customelement=
+drawArc(5, 5, 10, 10, 130, 360, true) bg=black transparency=1
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>330</x>
+      <y>138</y>
+      <w>30</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=-
+lw=2</panel_attributes>
+    <additional_attributes>30.0;20.0;30.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>336</x>
+      <y>132</y>
+      <w>30</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=-
+lw=2</panel_attributes>
+    <additional_attributes>30.0;30.0;30.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>330</x>
+      <y>174</y>
+      <w>30</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=-
+lw=2</panel_attributes>
+    <additional_attributes>30.0;20.0;30.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>336</x>
+      <y>168</y>
+      <w>30</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=-
+lw=2</panel_attributes>
+    <additional_attributes>30.0;30.0;30.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>330</x>
+      <y>246</y>
+      <w>30</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=-
+lw=2</panel_attributes>
+    <additional_attributes>30.0;20.0;30.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>336</x>
+      <y>240</y>
+      <w>30</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=-
+lw=2</panel_attributes>
+    <additional_attributes>30.0;30.0;30.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>330</x>
+      <y>210</y>
+      <w>30</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=-
+lw=2</panel_attributes>
+    <additional_attributes>30.0;20.0;30.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>336</x>
+      <y>204</y>
+      <w>30</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=-
+lw=2</panel_attributes>
+    <additional_attributes>30.0;30.0;30.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>330</x>
+      <y>390</y>
+      <w>30</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=-
+lw=2</panel_attributes>
+    <additional_attributes>30.0;20.0;30.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>336</x>
+      <y>384</y>
+      <w>30</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=-
+lw=2</panel_attributes>
+    <additional_attributes>30.0;30.0;30.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>330</x>
+      <y>354</y>
+      <w>30</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=-
+lw=2</panel_attributes>
+    <additional_attributes>30.0;20.0;30.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>336</x>
+      <y>348</y>
+      <w>30</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=-
+lw=2</panel_attributes>
+    <additional_attributes>30.0;30.0;30.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>330</x>
+      <y>318</y>
+      <w>30</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=-
+lw=2</panel_attributes>
+    <additional_attributes>30.0;20.0;30.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>336</x>
+      <y>312</y>
+      <w>30</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=-
+lw=2</panel_attributes>
+    <additional_attributes>30.0;30.0;30.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>330</x>
+      <y>282</y>
+      <w>30</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=-
+lw=2</panel_attributes>
+    <additional_attributes>30.0;20.0;30.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>336</x>
+      <y>276</y>
+      <w>30</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=-
+lw=2</panel_attributes>
+    <additional_attributes>30.0;30.0;30.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>330</x>
+      <y>534</y>
+      <w>30</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=-
+lw=2</panel_attributes>
+    <additional_attributes>30.0;20.0;30.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>336</x>
+      <y>528</y>
+      <w>30</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=-
+lw=2</panel_attributes>
+    <additional_attributes>30.0;30.0;30.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>330</x>
+      <y>498</y>
+      <w>30</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=-
+lw=2</panel_attributes>
+    <additional_attributes>30.0;20.0;30.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>336</x>
+      <y>492</y>
+      <w>30</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=-
+lw=2</panel_attributes>
+    <additional_attributes>30.0;30.0;30.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>330</x>
+      <y>462</y>
+      <w>30</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=-
+lw=2</panel_attributes>
+    <additional_attributes>30.0;20.0;30.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>336</x>
+      <y>456</y>
+      <w>30</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=-
+lw=2</panel_attributes>
+    <additional_attributes>30.0;30.0;30.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>330</x>
+      <y>426</y>
+      <w>30</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=-
+lw=2</panel_attributes>
+    <additional_attributes>30.0;20.0;30.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>336</x>
+      <y>420</y>
+      <w>30</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=-
+lw=2</panel_attributes>
+    <additional_attributes>30.0;30.0;30.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>588</x>
+      <y>138</y>
+      <w>18</w>
+      <h>450</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;730.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>594</x>
+      <y>138</y>
+      <w>18</w>
+      <h>450</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;730.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>600</x>
+      <y>138</y>
+      <w>18</w>
+      <h>450</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;730.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>606</x>
+      <y>138</y>
+      <w>18</w>
+      <h>450</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;730.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>612</x>
+      <y>138</y>
+      <w>18</w>
+      <h>450</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;730.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>618</x>
+      <y>138</y>
+      <w>18</w>
+      <h>450</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;730.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>624</x>
+      <y>138</y>
+      <w>18</w>
+      <h>450</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;730.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>630</x>
+      <y>138</y>
+      <w>18</w>
+      <h>450</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;730.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>636</x>
+      <y>138</y>
+      <w>18</w>
+      <h>450</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;730.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>642</x>
+      <y>138</y>
+      <w>18</w>
+      <h>450</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;730.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>504</x>
+      <y>180</y>
+      <w>96</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;140.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>504</x>
+      <y>216</y>
+      <w>102</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;150.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>504</x>
+      <y>252</y>
+      <w>108</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;160.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>504</x>
+      <y>288</y>
+      <w>114</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;170.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>504</x>
+      <y>324</y>
+      <w>120</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;180.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>504</x>
+      <y>360</y>
+      <w>126</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;190.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>504</x>
+      <y>396</y>
+      <w>132</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;200.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>504</x>
+      <y>432</y>
+      <w>138</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;210.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>504</x>
+      <y>468</y>
+      <w>144</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;220.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>504</x>
+      <y>504</y>
+      <w>150</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;230.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>504</x>
+      <y>540</y>
+      <w>156</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;240.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>576</x>
+      <y>564</y>
+      <w>120</w>
+      <h>228</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>180.0;360.0;10.0;360.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>696</x>
+      <y>792</y>
+      <w>90</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>Event processing</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>852</x>
+      <y>792</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>User 0-4
+customelement=
+drawLine(0, 0.1 * height, 0, height - 0.1 * height)
+drawLine(width,  0, width, height)
+drawLine(0, 0.1 * height, width, 0)
+drawLine(0, height - 0.1 * height, width, height)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1164</x>
+      <y>792</y>
+      <w>66</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>PORT EV0-3</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>780</x>
+      <y>792</y>
+      <w>84</w>
+      <h>402</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>120.0;650.0;60.0;650.0;60.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>810</x>
+      <y>792</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>810</x>
+      <y>816</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>810</x>
+      <y>840</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>810</x>
+      <y>912</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>810</x>
+      <y>888</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>810</x>
+      <y>864</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>810</x>
+      <y>1056</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>810</x>
+      <y>1032</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>810</x>
+      <y>1008</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>810</x>
+      <y>984</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>810</x>
+      <y>960</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>810</x>
+      <y>936</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>810</x>
+      <y>1152</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>810</x>
+      <y>1128</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>810</x>
+      <y>1104</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>810</x>
+      <y>1080</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>900</x>
+      <y>792</y>
+      <w>276</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=1</panel_attributes>
+    <additional_attributes>440.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>900</x>
+      <y>816</y>
+      <w>276</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=1</panel_attributes>
+    <additional_attributes>440.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>900</x>
+      <y>840</y>
+      <w>276</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=1</panel_attributes>
+    <additional_attributes>440.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>900</x>
+      <y>912</y>
+      <w>276</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=1</panel_attributes>
+    <additional_attributes>440.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>900</x>
+      <y>888</y>
+      <w>276</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=1</panel_attributes>
+    <additional_attributes>440.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>900</x>
+      <y>864</y>
+      <w>276</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=1</panel_attributes>
+    <additional_attributes>440.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>900</x>
+      <y>1056</y>
+      <w>276</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=1</panel_attributes>
+    <additional_attributes>440.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>900</x>
+      <y>1032</y>
+      <w>276</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=1</panel_attributes>
+    <additional_attributes>440.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>900</x>
+      <y>1008</y>
+      <w>276</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=1</panel_attributes>
+    <additional_attributes>440.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>900</x>
+      <y>984</y>
+      <w>276</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=1</panel_attributes>
+    <additional_attributes>440.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>900</x>
+      <y>960</y>
+      <w>276</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=1</panel_attributes>
+    <additional_attributes>440.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>900</x>
+      <y>936</y>
+      <w>276</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=1</panel_attributes>
+    <additional_attributes>440.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>900</x>
+      <y>1176</y>
+      <w>276</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=1</panel_attributes>
+    <additional_attributes>440.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>900</x>
+      <y>1152</y>
+      <w>276</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=1</panel_attributes>
+    <additional_attributes>440.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>900</x>
+      <y>1128</y>
+      <w>276</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=1</panel_attributes>
+    <additional_attributes>440.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>900</x>
+      <y>1104</y>
+      <w>276</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=1</panel_attributes>
+    <additional_attributes>440.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>900</x>
+      <y>1080</y>
+      <w>276</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+lw=1</panel_attributes>
+    <additional_attributes>440.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>696</x>
+      <y>756</y>
+      <w>240</w>
+      <h>432</h>
+    </coordinates>
+    <panel_attributes>Channel 2 Processing
+bg=white
+transparency=1
+layer=-2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>708</x>
+      <y>738</y>
+      <w>240</w>
+      <h>432</h>
+    </coordinates>
+    <panel_attributes>Channel 3 Processing
+bg=white
+transparency=1
+layer=-3</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>720</x>
+      <y>720</y>
+      <w>240</w>
+      <h>432</h>
+    </coordinates>
+    <panel_attributes>Channel 4 Processing
+bg=white
+transparency=1
+layer=-4</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>732</x>
+      <y>702</y>
+      <w>240</w>
+      <h>432</h>
+    </coordinates>
+    <panel_attributes>Channel 5 Processing
+bg=white
+transparency=1
+layer=-5</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>744</x>
+      <y>684</y>
+      <w>240</w>
+      <h>432</h>
+    </coordinates>
+    <panel_attributes>Channel 6 Processing
+bg=white
+transparency=1
+layer=-6</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>756</x>
+      <y>666</y>
+      <w>240</w>
+      <h>432</h>
+    </coordinates>
+    <panel_attributes>Channel 7 Processing
+bg=white
+transparency=1
+layer=-7</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>768</x>
+      <y>648</y>
+      <w>240</w>
+      <h>432</h>
+    </coordinates>
+    <panel_attributes>Channel 8 Processing
+bg=white
+transparency=1
+layer=-8</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>780</x>
+      <y>630</y>
+      <w>240</w>
+      <h>432</h>
+    </coordinates>
+    <panel_attributes>Channel 9 Processing
+bg=white
+transparency=1
+layer=-9</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>582</x>
+      <y>570</y>
+      <w>126</w>
+      <h>204</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>190.0;320.0;10.0;320.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>588</x>
+      <y>570</y>
+      <w>132</w>
+      <h>186</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>200.0;290.0;10.0;290.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>594</x>
+      <y>570</y>
+      <w>138</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>210.0;260.0;10.0;260.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>600</x>
+      <y>552</y>
+      <w>144</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>220.0;260.0;10.0;260.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>606</x>
+      <y>534</y>
+      <w>150</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>230.0;260.0;10.0;260.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>612</x>
+      <y>516</y>
+      <w>156</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>240.0;260.0;10.0;260.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>618</x>
+      <y>498</y>
+      <w>162</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>250.0;260.0;10.0;260.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>624</x>
+      <y>480</y>
+      <w>168</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>260.0;260.0;10.0;260.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>792</x>
+      <y>612</y>
+      <w>240</w>
+      <h>432</h>
+    </coordinates>
+    <panel_attributes>Channel 10 Processing
+bg=white
+transparency=1
+layer=-10</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>804</x>
+      <y>594</y>
+      <w>240</w>
+      <h>432</h>
+    </coordinates>
+    <panel_attributes>Channel 11 Processing
+bg=white
+transparency=1
+layer=-11</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>816</x>
+      <y>576</y>
+      <w>240</w>
+      <h>432</h>
+    </coordinates>
+    <panel_attributes>Channel 12 Processing
+bg=white
+transparency=1
+layer=-11</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>630</x>
+      <y>462</y>
+      <w>174</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>270.0;260.0;10.0;260.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>636</x>
+      <y>444</y>
+      <w>180</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>280.0;260.0;10.0;260.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>642</x>
+      <y>426</y>
+      <w>186</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>290.0;260.0;10.0;260.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>420</x>
+      <y>78</y>
+      <w>666</w>
+      <h>1158</h>
+    </coordinates>
+    <panel_attributes>*EVENT SUBSYSTEM*
+bg=orange
+layer=-2
+fontsize=24</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1146</x>
+      <y>732</y>
+      <w>96</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>There are the event USERS. Each user has it's event response enabled in its own unit.
+bg=white
+transparency=1
+style=wordwrap
+fg=black</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>804</x>
+      <y>1200</y>
+      <w>138</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>bg=white
+transparency=1
+style=wordwrap
+fg=black
+These are MUXs that map a channel to a user (a peripheral that reacts to the event)
+
+_*Reg: USER[0 -41].CHANNEL*_
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

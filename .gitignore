@@ -8,3 +8,4 @@ __test
 *.*#
 src/reCaptureSecret.txt
 node_modules
+package-lock.json

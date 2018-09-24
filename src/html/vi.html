@@ -30,6 +30,12 @@
 :g/regexp/    -- just highlight but don't delete lines that would be delete
 :g!/regexp/d  -- delete lines NOT matching regexp
 :v/regexp/d  -- delete lines NOT matching regexp (same as above)</pre>
+	<h2>Remove Control Characters</h2>
+	<p>See SO reference <a href="https://stackoverflow.com/questions/3844311/how-do-i-replace-or-find-non-printable-characters-in-vim-regex" target="_blank">here</a>.</p>
+	<pre>Control characters - :%s/[[:cntrl:]]//g
+Non-ASCII characters - :%s/[^[:print:]]//g
+	</pre>
+
     <h2>Editor Font</h2>
 	 <h3>Type Face</h3>
     <p>To bring up a font selection dialog type the following (works on Windows and Linux but not all platforms may support it).</p>
