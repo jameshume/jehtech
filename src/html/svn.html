@@ -32,17 +32,28 @@
 		</div>
 
 		<h2>TODOs</h2>
-		<p>
-		http://stackoverflow.com/questions/14889395/concrete-sample-merges-of-git-that-wont-work-in-svn<
-		</p>
-		<p>
-		http://svn.apache.org/repos/asf/subversion/trunk/notes/skip-deltas
-		</p>
+		<pre>http://stackoverflow.com/questions/14889395/concrete-sample-merges-of-git-that-wont-work-in-svn<
+http://svn.apache.org/repos/asf/subversion/trunk/notes/skip-deltas
+https://stackoverflow.com/questions/6296284/svn-list-files-committed-for-a-revision
+http://svnbook.red-bean.com/en/1.7/svn.ref.svn.c.mergeinfo.html
+https://pythonconquerstheuniverse.wordpress.com/2011/03/16/learning-subversion-the-mystery-of-svn-2/
+http://svnbook.red-bean.com/en/1.7/svn.branchmerge.basicmerging.html#svn.branchmerge.basicmerging.mergeinfo</pre>
 
 		<h2>Install On Ubuntu Or Upgrade</h2>
 		<pre>sudo apt-get install subversion --upgrade</pre>
 
-		<h2>Make SVN use P4Merge For Diff</h2>
+<!-- --------------------------- SECTION BEGIN --------------------------- -->
+<h2>Diffs</h2>
+<div>
+		<h3>On The Fly Diff Tool</h3>
+		<p>
+			To use a specific diff tool from the command line use:
+		</p>
+		<pre>svn diff some.file --diff-cmd meld
+svn diff some.file --diff-cmd kdiff3
+etc...</pre>
+
+		<h3>Make SVN use P4Merge For Diff</h3>
 		<p>I really like the <a href="http://www.perforce.com/product/components/perforce-visual-merge-and-diff-tools" target="_blank">
 		   Perforce merge and diff tools</a> so after a bit of searching
 		   around now use the following script on my Linux box</p>
@@ -91,8 +102,9 @@ p4merge "$BASE" "$MINE" "$THEIRS" "$MERGED"</pre>
 		<pre class="prettyprint linenums">[helpers]
 &lt;snip&gt;
 merge-tool-cmd = p4_merge_helper.sh</pre>
+</div>
 
-
+<!-- --------------------------- SECTION BEGIN --------------------------- -->
 		<h2>SVN Log</h2>
 		<h3>Only Report Changes After Branch</h3>
 		<pre class="prettyprint linenums">snv log --stop-on-copy </pre>

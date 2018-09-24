@@ -78,7 +78,18 @@
     <li>http://www.linuxinternals.org/blog/2014/05/07/spinlock-implementation-in-linux-kernel/</li>
     <li>Interrupts - https://elinux.org/images/8/8c/Zyngier.pdf </li>
     <li>Scripts to build a minimal linux from scratch! - https://github.com/ivandavidov/minimal</li>
+    <li>https://www.oreilly.com/library/view/linux-device-drivers/0596005903/ch07.html - Time, delays etc</li>
+    <li>https://www.ibm.com/developerworks/library/l-kernel-memory-access/index.html</li>
+    <li>https://stackoverflow.com/questions/442833/forcing-driver-to-device-match</li>
   </ol>
+
+  <p>Interesting looking courses:</p>
+  <ul>
+    <li>http://ieeeboston.org/embedded-linux-bsps-device-drivers-line-course/</li>
+    <li>http://www.jbinternational.co.uk/course/608/embedded-linux-device-drivers-training-course-london-uk</li>
+    <li>http://www.hitex.co.uk/training/embedded-android/</li>
+    <li>http://www.jbinternational.co.uk/course/524/android-porting-training-course-london-uk</li>
+  </ul>
 </div>
 
 <h2>Generally Useful Links</h2>
@@ -1757,9 +1768,12 @@ static const char * const fw_path[] = {
 <h3>Jiffies</h3>
 <pre>
 Defined in http://elixir.free-electrons.com/linux/latest/source/include/linux/jiffies.h
-
 See functions like  time_after(a,b) or time_in_rance(a,b,c) to deal with timer wrapping.
 </pre>
+
+<h3>Other time</h3>
+<pre>const u64 now = ktime_to_ns(ktime_get());
+const u64 end = ktime_to_ns(ktime_get()) + 10; /* 10ns */</pre>
 
 <h3>Sleeping</h3>
 <pre>
