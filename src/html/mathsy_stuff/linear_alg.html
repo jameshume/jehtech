@@ -1615,6 +1615,7 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
 		because <a href="http://www.math.utah.edu/~pa/6610/20130916.pdf" target="_blank">they do not amplify errors</a>.
 
 <h3>Determinants</h3>
+<h4>The Fundamentals</h4>
 	<p>
 		This is one of the better YouTube tutorials I've found that explains the <i>concepts</i> and not just the
 		mechanics behind determinants, byt <a href="https://www.youtube.com/channel/UCYO_jab_esuFRV4b17AJtAw" target="blank">3BlueBrown</a> (awesome!).
@@ -1726,11 +1727,124 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
         $$
     </p>
 
-    <h4>Do It In Python</h4>
+    <p>
+        A quick example. $A$ is defined as follows:
+
+        $$
+        A = \begin{bmatrix}
+            1 & 2 & 3 & 4 \\
+            1 & 0 & 2 & 0 \\
+            0 & 1 & 2 & 3 \\
+            2 & 3 & 0 & 0
+        \end{bmatrix}
+        $$
+
+        We find the determinant as follows, where as we did previously, we define $A_{ij}$ to be the (n-1) x (n-1) matrix you get when you ignore the i<sup>th</sup> and j<sup>th</sup> column of the nxn matrix A.
+
+        $$
+        \textrm{det}(A) = -2|A_{41}| + 3|A_{42}|
+        $$
+
+        See how the 4<sup>th</sup> row was used as it contains 2 zeros, meaning that we only have to actually do
+        any work for two of the terms. Note also how we got the signes for the various components using $\textrm{sign}(i, j) = -1^{(i+j)}$. Another way to visualise this is shown below:
+
+        $$
+        \begin{bmatrix}
+            + & - & + & - \\
+            - & + & - & + \\
+            + & - & + & - \\
+            - & + & - & +
+        \end{bmatrix}
+        $$
+
+        This now needs to be applied recusively, so we figure out the determinants of $A_{41}$ and $A_{42}$ in the same way.
+    </p>
+    <p>
+        Let $B = A_{41}$: 
+        $$
+        |B| = 
+            \begin{vmatrix}
+            2 & 3 & 4 \\
+            0 & 2 & 0 \\
+            1 & 2 & 3 
+            \end{vmatrix} =
+            2|B_{22}| = 
+
+            2\begin{vmatrix}
+            2 & 4 \\
+            1 & 3 
+            \end{vmatrix} =
+
+            2(2*3 - 4*1) = 4
+        $$  
+        Note again how we picked row 2 because it only had 1 term which was non-zero and hence made our life easier.
+    </p>
+    <p>
+        Let $C = A_{42}$
+        $$
+\begin{aligned}
+        |C| &=  
+            \begin{vmatrix}
+            1 & 3 & 4 \\
+            1 & 2 & 0 \\
+            0 & 2 & 3
+            \end{vmatrix} \\
+&= 
+
+-1|C_{21}| + 2|C_{22}| = -1\begin{vmatrix}
+            3 & 4 \\
+            2 & 3
+            \end{vmatrix} + 2\begin{vmatrix}
+            1 & 4 \\
+            0 & 3
+            \end{vmatrix} \\
+&= -1(9-8) +2(3-0) \\
+&= 5
+\end{aligned}
+        $$
+
+        We picked row 2 again, but we could have just as easily used columns 1 or 3 to the same effect.
+    </p>
+    <p>
+        Now we can write:
+        $$
+        \begin{aligned}
+        \textrm{det}(A) &= -2|A_{41}| + 3|A_{42}|\\
+        &= -2|B| + 3|C|\\
+        &= -2(4) + 3(5) \\
+        &= 7
+        \end{aligned}
+        $$
+
+        We can see this answer verified in the section &quot;Do It In Python&quot;
+    </p>
+
+<h4>Do It In Python</h4>
     <pre class="prettyprint linenums">&gt;&gt;&gt;import numpy as np
-&gt;&gt;&gt; A = np.mat("3 4 5 6;53 6 17 8; 3 3 3 3; 22 8 2 6")
+&gt;&gt;&gt; A = np.mat("1 2 3 4;1 0 2 0; 0 1 2 3; 2 3 0 0")
 &gt;&gt;&gt; np.linalg.det(A)
-2220.0</pre>
+7.000000000000004</pre>
+
+<h4>Rule Of Sarrus</h4>
+<p>
+    For a 3x3 matrix defined as follows:
+
+    $$
+    A = \begin{bmatrix}
+    a & b & c\\
+    d & e & f\\
+    g & h & i
+    \end{bmatrix}
+    $$
+
+    The determinant is defined as:
+
+    $$
+    |A| = aei + bfg + cdh - afg - bdi - ceg
+    $$
+
+    Notice how it is the diagonals (wrapped) summed going from left to right, and the diagonals (wrapped) subtracted going from right to left.
+</p>
 
 <h3>Eigenvectors and Eigenvalues</h3>
 	<p>
