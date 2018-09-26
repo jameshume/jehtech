@@ -156,7 +156,7 @@
 
 	<h2>Video Introduction</h2>
 	<div>
-
+		<h3>The Basics</h3>
 		<p>
 			Video is a series of still images that are displayed quickly enough, one after the other, so that
 			the human eye/brain percieves only continuous motion and not individual stills. Each still image is
@@ -174,6 +174,7 @@
 		<p>
 			<img src="##IMG_DIR##/mpeg/electron_beam_scan.jpg" alt="Picture showing an electron beam scanning a CRT display."/>
 		</p>
+		<h3>Blanking</h3>
 		<p>
 			When the electron beam has finished one line, it must return to the start of the next
 			line. Whilst it is doing this it must be turned off, otherwise it would re-paint
@@ -194,15 +195,16 @@
 			known as the <b>persistence of vision</b>. This is why the
 			the frame rate has to be greater than roughly 32Hz, otherwise flicker will be perceived.
 		</p>
+		<h3>The Early Standards</h3>
 		<p>
 			Very early TV standards were developed by the NTSC in the Americas and in Europe a system
 			call PAL was used. France and Soviets used SECAM.
 		</p>
 		<p>
-			NTSC uses 30 fps and 525 lines per frame. 480 lines actively used.
+			NTSC uses 30 fps and 525 lines per frame. 480 lines actively used. 4:3 aspect ratio.
 		</p>
 		<p>
-			PAL &amp; SECAM use 25 fps and 625 lines per frame. 580 lines actively used.
+			PAL &amp; SECAM use 25 fps and 625 lines per frame. 580 lines actively used. 4:3 aspect ratio (orig) or 16:9 aspect ratio (later).
 		</p>
 		<p>
 			Not all of the lines are actively used due to vertical blanking. Horiztonal
@@ -212,6 +214,8 @@
 		<p>
 			<img src="##IMG_DIR##/mpeg/blanked_and_active_video.jpg" alt="Picture showing blanking regions on a video display"/>
 		</p>
+
+		<h3>Interlaced v.s. Progressive</h3>
 		<p>
 			But wait, haven't we just said that persistence of vision lasts between $\frac{1}{30}$ and $\frac{1}{32}$ seconds?
 			Yes, and that is a problem. At 30 fps for NTSC and 25 fps for PAL/SECAM, it is possible that visual
@@ -230,6 +234,35 @@
 		<p>
 			This is why we see the &quot;i&quot; and &quot;p&quot; to resolutions. For example, for 720x480i, the
 			suffix &quot;i&quot; means interlaced and for 720x480p, suffix &quot;p&quot; means progressive.
+		</p>
+
+		<h3>SD v.s. HD v.s. 4K v.s. Ultra HD</h3>
+		<p>
+			SD stands for <u>S</u>tandard <u>D</u>efinition. SD gives us the level of detail of an analogue TV, as
+			described above. In Europe we got 576i lines and in America 480i lines giving resolutions of 720×576 and 720×480
+			respectively. You may want to read the section 'Aspect Ratios v.s. Resolutions' if you're wondering how the 
+			different aspect ratios are giving us a 720 width!
+		</p>
+		<p>
+			HD stands for <u>H</u>igh <u>D</u>efinition. It's essentially SD with more pixels. HD comes as
+			720p, 1080i, and 1080p. Most modern TVs use progressive scanning as it has less flicker problems.
+		</p>
+		<p>
+			720p = 1280 x 720. 1080p = 1920 x 1080
+		</p>
+		<p>
+			4K is Ultra HD = 3840 x 2160p.
+		</p>
+
+		<h3>Aspect Ratios v.s. Resolutions</h3>
+		<p>
+			Oh dear! Lets take NTSC, for example. We've said it has an aspect ratio of 4:3, but if this were the
+			case, with 480 lines, we should have 640 pixels per line. Yet we've said the standard gives us a resolution of 720x480.
+			What gives? This <a href="https://en.wikipedia.org/wiki/Standard-definition_television" target="_blank">Wikipedia article</a>
+			explains it. It appears our signal is transmitted to satisfy the SDI bandwidth and I'm guessing this is where the 720
+			width is coming from. The display then decodes this and somehow displays the image in the display's actual aspec ratio.
+			For example, NTSC 480i has a resoltuion of 720x480. But with 480 lines and an aspect ration of 4:3 it is displayed
+			as 640x480. For SD TV this gives rise to something called the <a href="https://en.wikipedia.org/wiki/Pixel_aspect_ratio" target="_blank">pixel aspect ratio</a>.
 		</p>
 
         <h3>ASI / SDI</h3>
@@ -263,7 +296,6 @@
         <p>
             Audio is transmitted over SDI via the formats ancillary data, which is <q>... provided as a standardized transport for non-video payload within a serial digital signal; it is used for things such as embedded audio, closed captions, timecode, and other sorts of metadata...</q>.
         </p>
-
 	</div> <!-- End: Video Intro -->
 
 	<h2>MPEG Introduction</h2>
@@ -941,6 +973,14 @@ if (adaption_field_contains_pcr) {
         </blockquote>
         <p></p>
     </div>
+
+    <h2 style="clear:both;">The Different Standards: MPEG-2/4, H.264...</h2>
+    <div>
+    	<p>https://stackoverflow.com/questions/10477430/what-is-the-difference-between-h-264-video-and-mpeg-4-video</p>
+    	<p>https://wolfcrow.com/blog/understanding-mpeg-2-mpeg-4-h-264-avchd-and-h-265/</p>
+    	<p>https://wolfcrow.com/blog/what-is-a-video-container-or-wrapper/</p>
+
+    </div> 
 
 	<h2 style="clear:both;">Audio</h2>
 	<div>
