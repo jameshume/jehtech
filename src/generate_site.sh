@@ -1,4 +1,9 @@
-python generate_site.py $1
+if [ -z "$(which python)" ]
+then
+    python3 generate_site.py $1
+else
+    python generate_site.py $1
+fi
 
 
 # From: https://unix.stackexchange.com/questions/9605/how-can-i-detect-if-the-shell-is-controlled-from-ssh
