@@ -131,6 +131,11 @@ ssh -T git@github.com</pre>
         to start it [<a href="https://stackoverflow.com/questions/17846529/could-not-open-a-connection-to-your-authentication-agent" target="_blank">Ref</a>].
     </p>
 
+    <p>
+        For more detailed debugging use:
+    </p>
+    <pre>ssh -vvv -T git@bitbucket.org</pre>
+
     <p>To see if the key has been added to the client keyring...</p>
     <pre>ssh-list -l
 # or...
@@ -152,6 +157,22 @@ ssh -vT address-of-server</pre>
 	</p>
 	<pre>IdentityFile ~/.ssh/some_key_name</pre>
 </div> <!-- END: Create A Public/Private Keypair -->
+
+<h2>Debugging A Git Connection</h2>
+<p>
+    First try connecting over HTTPS:
+</p>
+<pre>ssh -T -p 443 git@ssh.github.com</pre>
+<p>
+    If this works you can then try to debug your SSH connection. You can use <code>GIT_SSH_COMMAND</code> [<a href="https://github.com/capistrano/capistrano/issues/1421" target="_blank">Ref</a>] as so, replacing the git command with whatever you like:
+</p>
+<pre>GIT_SSH_COMMAND="ssh -vvv" git push</pre>
+<p>
+    If this isn't playing ball, checkout your <code>~/.ssh/config</code> file. It should contain this [<a href="https://help.github.com/articles/using-ssh-over-the-https-port/" target="_blank">Ref</a>]:
+</p>
+<pre>Host github.com
+  Hostname ssh.github.com
+  Port 443</pre>
 
 <h2>Git Workspace v.s. Index v.s. Repository</h2>
 <div>
