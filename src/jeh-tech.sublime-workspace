@@ -183,7 +183,7 @@
 			"file": "html/linux_kernel.html",
 			"settings":
 			{
-				"buffer_size": 85552,
+				"buffer_size": 86383,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -192,39 +192,26 @@
 			"file": "html/mathsy_stuff/linear_alg.html",
 			"settings":
 			{
-				"buffer_size": 76635,
+				"buffer_size": 99701,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "jeh-tech.sublime-build",
+			"file": "generate_site.sh",
 			"settings":
 			{
-				"buffer_size": 47,
+				"buffer_size": 592,
 				"encoding": "UTF-8",
-				"line_ending": "Unix",
-				"name": "untitled.sublime-build"
+				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "/home/jh/.config/sublime-text-3/Packages/User/jeh-tech.sublime-build",
+			"file": "html/mathsy_stuff/determinant_solver_example.html",
 			"settings":
 			{
-				"buffer_size": 81,
-				"encoding": "UTF-8",
-				"line_ending": "Unix",
-				"name": "untitled.sublime-build"
-			}
-		},
-		{
-			"file": "/home/jh/Documents/inflowsense/firmware/inqos/drv_health/interrupt number loose all kind of correspondenc",
-			"settings":
-			{
-				"buffer_size": 3339,
-				"encoding": "UTF-8",
-				"line_ending": "Unix",
-				"name": "interrupt number loose all kind of correspondenc"
+				"buffer_size": 5988,
+				"line_ending": "Unix"
 			}
 		}
 	],
@@ -272,10 +259,15 @@
 	},
 	"expanded_folders":
 	[
-		"/home/jh/GIT/jehtech/src/html"
+		"/home/jh/GIT/jehtech/src/html",
+		"/home/jh/GIT/jehtech/src/html/mathsy_stuff"
 	],
 	"file_history":
 	[
+		"/home/jh/Documents/inflowsense/firmware/inqos/drv_health/interrupt number loose all kind of correspondenc",
+		"/home/jh/.config/sublime-text-3/Packages/User/jeh-tech.sublime-build",
+		"/home/jh/GIT/jehtech/src/jeh-tech.sublime-build",
+		"/home/jh/GIT/jehtech/src/html/git.html",
 		"/home/jh/GIT/jehtech/__deployed/mathsy_stuff/linear_alg.html",
 		"/home/jh/Documents/inflowsense/firmware/inqos/drv_health/drv_health.h",
 		"/home/jh/Documents/inflowsense/firmware/library/time/common/time_sync.c",
@@ -360,7 +352,6 @@
 		"/home/jh/GIT/jehtech/src/generate_site.sh",
 		"/home/jh/GIT/jehtech/src/deploy_site.py",
 		"/home/jh/Documents/House Final/rents.py",
-		"/home/jh/GIT/jehtech/src/html/git.html",
 		"/home/jh/Documents/House/rents.py",
 		"/home/jh/Documents/House/rents2.py",
 		"/home/jh/GIT/jehtech/src/html/_links.html",
@@ -400,10 +391,7 @@
 		"/home/jh/Sandbox/CPPPlay/test_smart_pointers.cpp",
 		"/home/jh/Desktop/Python/check_mort_split.py",
 		"/home/jh/Desktop/Python/mortgage.py",
-		"/home/jh/GIT/jehtech/src/html/linux_apis.html",
-		"/home/jh/GIT/jehtech/src/html/python/pandas.html",
-		"/home/jh/GIT/jehtech/src/html/mathsy_stuff/math_revision.html",
-		"/home/jh/GIT/jehtech/src/html/misc.html"
+		"/home/jh/GIT/jehtech/src/html/linux_apis.html"
 	],
 	"find":
 	{
@@ -421,6 +409,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"A \\\\text{is",
 			"trivial",
 			"linear.subspace",
 			"\\\\bar",
@@ -454,7 +443,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 85552,
+						"buffer_size": 86383,
 						"regions":
 						{
 						},
@@ -484,15 +473,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 76635,
+						"buffer_size": 99701,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								72987,
-								72987
+								76141,
+								76141
 							]
 						],
 						"settings":
@@ -500,7 +489,7 @@
 							"syntax": "Packages/HTML/HTML.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 35444.0,
+						"translation.y": 40486.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -508,24 +497,24 @@
 				},
 				{
 					"buffer": 2,
-					"file": "jeh-tech.sublime-build",
+					"file": "generate_site.sh",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 47,
+						"buffer_size": 592,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								47,
-								0
+								26,
+								26
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/JavaScript/JSON.sublime-syntax"
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -536,59 +525,31 @@
 				},
 				{
 					"buffer": 3,
-					"file": "/home/jh/.config/sublime-text-3/Packages/User/jeh-tech.sublime-build",
+					"file": "html/mathsy_stuff/determinant_solver_example.html",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 81,
+						"buffer_size": 5988,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								66,
-								66
+								47,
+								5972
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/JavaScript/JSON.sublime-syntax"
+							"syntax": "Packages/HTML/HTML.sublime-syntax",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 3564.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "/home/jh/Documents/inflowsense/firmware/inqos/drv_health/interrupt number loose all kind of correspondenc",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3339,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								3339
-							]
-						],
-						"settings":
-						{
-							"auto_name": "interrupt number loose all kind of correspondenc",
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
 					"type": "text"
 				}
 			]
@@ -670,8 +631,8 @@
 	"show_minimap": false,
 	"show_open_files": false,
 	"show_tabs": true,
-	"side_bar_visible": false,
-	"side_bar_width": 62.0,
+	"side_bar_visible": true,
+	"side_bar_width": 359.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{
