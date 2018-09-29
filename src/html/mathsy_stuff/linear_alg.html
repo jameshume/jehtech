@@ -1616,14 +1616,6 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
 
 <h3>Determinants</h3>
 <h4>The Fundamentals</h4>
-	<p>
-		This is one of the better YouTube tutorials I've found that explains the <i>concepts</i> and not just the
-		mechanics behind determinants, byt <a href="https://www.youtube.com/channel/UCYO_jab_esuFRV4b17AJtAw" target="blank">3BlueBrown</a> (awesome!).
-	</p>
-	<iframe width="560" height="315" src="https://www.youtube.com/embed/Ip3X9LOh2dk?rel=0" frameborder="0" allowfullscreen></iframe>
-    <p>
-        An now follows the notes from Khan...
-    </p>
     <p>
         If $B$ is defined as follows...
 
@@ -2263,7 +2255,63 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
 
     The same applies to lower triangular matrixies.
 </p>
+<p>
+    This method gives us a way of getting more efficient determinants for matricies if we can get them into an upper or lower diagonalisation. The Khan lectures give this example of a matrix reduction (remember that we saw that adding multiples of one row to another does not change the determinant):
 
+    $$
+        \begin{vmatrix}
+            1 & 2 & 2 & 1 \\
+            1 & 2 & 4 & 2 \\
+            2 & 7 & 5 & 2 \\
+            -1 & 4 & -6 & 3
+        \end{vmatrix} ~ -\begin{vmatrix}
+            1 & 2 & 2 & 1 \\
+            0 & 3 & 1 & 0 \\
+            0 & 0 & 2 & 1 \\
+            0 & 0 & 0 & 7
+        \end{vmatrix} = -(1 \times 3 \times 2 \times 7) = -42
+    $$
+
+    Note the minus because a row was swapped to do the reduction!
+</p>
+
+<h4>The Determinant And The Area Of A Parallelogram</h4>
+    <p>
+        This is one of the better YouTube tutorials I've found that explains the <i>concepts</i> and not just the
+        mechanics behind determinants, by <a href="https://www.youtube.com/channel/UCYO_jab_esuFRV4b17AJtAw" target="blank">3BlueBrown</a> (awesome!).
+    </p>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/Ip3X9LOh2dk?rel=0" frameborder="0" allowfullscreen></iframe>
+
+    <p>
+        Now, onto more nores from Khan Academy...
+    </p>
+    <p>
+        For two vectors, each made a column vector of a matrix A, the <b>determinant of A gives the area of the parallelogram formed by the two vectors</b>:
+    </p>
+    <p>
+        <img src="##IMG_DIR##/draw_projection_vectors_1.png"/>
+        <br/>
+        <a href="##IMG_DIR##/draw_projection_vectors_1.py">&lt;Python source for graph draw&gt;</a>.
+    </p>
+    <p>
+        Put a little more mathsy-like, if you have two vectors, call them, $\vec{v1}$ and $\vec{v2}$, then
+        the area of the parallelogram formed by the vectors, as shown above, is given by:
+        $$
+            \textrm{Area} = \begin{vmatrix}
+             | & | \\
+            \vec{v1} & \vec{v2} \\
+             | & | 
+            \end{vmatrix}
+        $$
+    </p>
+    <p>
+        To aid in the following explanation you might need to refer to the section on <a href="#projections">projections</a>.
+    </p>
+    <p>
+        The area of a parallelogram is given by the base times the height. In the above we can see that the base
+        of the parallelogram is just the length $\|\vec{v2}\|$. The height of the parallelogram, we can 
+        see is $\|\vec{v1} - \textrm{Proj}_{\vec{v1}}(\vec{v2})\|$.
+    </p>
 
 <h3>Eigenvectors and Eigenvalues</h3>
 	<p>
@@ -2750,6 +2798,7 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
     </p>
 
 
+<a id="projections"></a>
 <h3>Projections</h3>
 <p style="float:left;">
     <img src="##IMG_DIR##/projection.png" alt="Vector projections"/>
