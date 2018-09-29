@@ -16,8 +16,29 @@
 		var matrixDivs = null;
 		var msgBox = document.getElementById("matrix-messages");
 
+		function RemoveRowColFromMatrix(matrix, row2del, col2del)
+		{
+			var newMatrix = new Matrix(matrix.numRows-1, matrix.numCols-1);
+			var drow = 0, dcol = 0;
+			for (var row = 0; row < matrix.numRows; ++row)
+			{
+				if (row == row2del) { continue; }
+				for (var col = 0; col < matrix.numCols; ++col)
+				{
+					if (col == col2del) { continue; }
+
+					newMatrix.data[drow][dcol] = matrix[row][col];
+
+					dcol += 1;
+				}
+				drow += 1;
+			}
+
+			return newMatrix;
+		}
+
 		// Construct and empty numRows x numCols matrix
-		function Matrix(numCols, numRows)
+		function Matrix(numRows, numCols)
 		{
 			this.numCols = numCols;
 			this.numRows = numRows;
@@ -137,8 +158,6 @@
 				this.matrixDivs[i] = new Array(matrixObj.numCols);
 			}
 
-			this.containerDiv.style.border = "1px solid red";
-
 			// Must be part of the document if we are to get widths and heihts
 			parent.appendChild(this.containerDiv);
 
@@ -149,7 +168,8 @@
 					var newDiv = document.createElement("div");
 					var newTxt = document.createTextNode(matrixObj.data[row][col].toString());
 					newDiv.appendChild(newTxt);
-					newDiv.style.border = "1px solid blue";
+					newDiv.style.margin="5px";
+					//newDiv.style.border = "1px solid blue";
 					newDiv.style.float = "left";
 					if (col == 0) { newDiv.style.clear = "both"; }
 
@@ -170,11 +190,8 @@
 				}
 			}
 
-			console.log(maxWidth);
-			console.log(maxWidth * matrixObj.numCols + "px");
-
-			this.containerDiv.style.width = maxWidth * matrixObj.numCols + 6 + "px"; // TODO: FIXME: Perhaps boarder not included?
-			this.containerDiv.style.height = maxHeight * matrixObj.numRows + "px";
+			this.containerDiv.style.width = maxWidth * matrixObj.numCols + 100 + "px"; // TODO: FIXME: Perhaps boarder not included?
+			this.containerDiv.style.height = maxHeight * matrixObj.numRows + 100 + "px";
 
 			this.highlightRow = function(row, colour) {
 				if (row >= this.numRows || row < 0) {
@@ -212,19 +229,53 @@
 		function display_determinant_matrix() {
 			var mstr = document.getElementById("matrix-string").value;
 			var mc = document.getElementById("matrix-container");
+			var msg = document.getElementById("matrix-messages");
 			
 			var matrix = Matrix.fromString(mstr);
-			console.log(matrix);
-
 			var matrixDiv = new MatrixDiv(matrix, mc);
 			rowColInf = matrix.findBestRowColForDeterminantCalc();
 			if (rowColInf.isRow) 
 			{
 				matrixDiv.highlightRow(rowColInf.idxMostZeros, "yellow");
+				msg.innerHTML = "<p>The " + (rowColInf.idxMostZeros + 1) + "<sup>th</sup> row contains the most zeros so we will start there.</p>";
 			}
 			else
 			{
 				matrixDiv.highlightCol(rowColInf.idxMostZeros, "yellow");
+				msg.innerHTML = "<p>The " + (rowColInf.idxMostZeros + 1) + "<sup>th</sup> column contains the most zeros so we will start there.</p>";
+			}
+
+			var detSign = function(i, j) {
+				return ((i + j) % 2) == 0 ? "+" : "-";
+			}
+
+			msg.innerHTML += "<p>This means that the formula for the determinant becomes:</p>";
+			if (rowColInf.isRow) {
+				var formula = "";
+				for (var col = 0; col < matrix.numCols; ++col)
+				{
+					var coeff = matrix.data[rowColInf.idxMostZeros][col];
+					if (coeff != 0)
+					{
+						formula += detSign(rowColInf.idxMostZeros, col) + coeff.toString() + "|A<sub>" + rowColInf.idxMostZeros +"," + col + "</sub>| ";
+					}
+				}
+				msg.innerHTML += "<p>" + formula + "</p>";
+				msg.innerHTML  += "<p>Where...</p>";
+
+				for (var col = 0; col < matrix.numCols; ++col)
+				{
+					var coeff = matrix.data[rowColInf.idxMostZeros][col];
+					if (coeff != 0)
+					{
+						msg.innerHTML += "<p>A<sub>" + rowColInf.idxMostZeros +"," + col + "</sub> is A with row " + (rowColInf.idxMostZeros + 1) + ", column " + (col + 1) + " deleted.</p>";
+						var subMatrix = RemoveRowColFromMatrix(rowColInf.idxMostZeros, col);
+						//var subMatrixDiv = new MatrixDiv(subMatrix, mc);
+					}
+				}
+			}
+			else {
+
 			}
 		}
 
