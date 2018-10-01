@@ -424,6 +424,7 @@
 
 <h3>The Dot Product</h3>
 <div>
+    <h4>Definition</h4>
     <p>
         This is a <a href="https://www.mvps.org/directx/articles/math/dot/index.htm" target="_blank">good reference</a>.
     </p>
@@ -458,8 +459,10 @@
 
         The dot product is important because it will keep popping up in many places. Some particular
         uses are to calculate the length of a vector and to show that two vectors are linearly
-        independent. The operation has the following properties:
+        independent. 
     </p>
+    <h4>Properties</h4>
+    <p>The operation has the following properties:</p>
     <table>
         <tr><td>Commutative:</td>
             <td>$\vec v \cdot \vec w = \vec w \cdot \vec v$</td>
@@ -480,6 +483,8 @@
             <td>$\|\vec x + \vec y\| \le \|\vec x\| + \|\vec y\|$</td>
         </tr>
     </table>
+
+    <h4>Angle Between Vectors</h4>
     <p style="float:left;">
         <img src="##IMG_DIR##/angle-between-vectors-dot-prod.png" alt="Dot product defines the angle between vectors"/>
     </p>
@@ -521,7 +526,13 @@
             \cos(\theta) = \frac{1}{\|\vec a\|\|\vec b\|} \vec a \cdot \vec b
         $$
     </p>
-    <p style="clear:both;"></p>
+    <h4 style="clear:both;">Vector Length</h4>
+    <p style="clear:both;">
+        $$
+        \vec{a} \cdot \vec{a} = \|\vec{a}\|^2 \\
+        \therefore \|\vec{a}\| = \sqrt{\vec{a} \cdot \vec{a}}
+        $$
+    </p>
 </div>
 
 <a name="unit-vectors"></a>
@@ -1869,6 +1880,25 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
                 this.data[row] = new Array(numCols);
             }
 
+            this.removeRowAndColumn = function(rowIdx, colIdx) {
+                var newMatrix = new Matrix(this.numCols - 1, this.numRows - 1);
+                var drow = 0;
+                for (var row = 0; row < this.numRows; ++row)
+                {
+                    if (row == rowIdx) { continue; }
+                    var dcol = 0
+                    for (var col = 0; col < this.numCols; ++col)
+                    {
+                        if (col == colIdx) { continue; }
+                        newMatrix.data[drow][dcol] = this.data[row][col];
+                        dcol += 1;
+                    }
+                    drow += 1;
+                }
+
+                return newMatrix;
+            }
+
             this.findBestRowColForDeterminantCalc = function() {
                 var rowWithMostZeros = 0,
                     bestRowNumZeros  = 0,
@@ -1984,6 +2014,9 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
             // Must be part of the document if we are to get widths and heihts
             parent.appendChild(this.containerDiv);
 
+            console.log("Creating matrix div with " + matrixObj.numRows + " rows and " + matrixObj.numCols + " cols");
+            console.log(matrixObj);
+
             for (var row = 0; row < matrixObj.numRows; ++row)
             {
                 for (var col = 0; col < matrixObj.numCols; ++col)
@@ -2051,6 +2084,14 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
             }
         }
 
+        function add_text_div(parent, innerHTML) {
+            var td = document.createElement("div");
+            td.innerHTML = innerHTML;
+            td.style.clear="both";
+            parent.appendChild(td);
+            return td;
+        }
+
         function display_determinant_matrix() {
             clear_all_matricies();
 
@@ -2062,14 +2103,52 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
 
             var matrixDiv = new MatrixDiv(matrix, mc);
             rowColInf = matrix.findBestRowColForDeterminantCalc();
+            var msg;
             if (rowColInf.isRow) 
             {
                 matrixDiv.highlightRow(rowColInf.idxMostZeros, "yellow");
+                msg = add_text_div(mc, "<p>Row " + rowColInf.idxMostZeros);
             }
             else
             {
                 matrixDiv.highlightCol(rowColInf.idxMostZeros, "yellow");
+                msg = add_text_div(mc, "<p>Column " + rowColInf.idxMostZeros);
             }
+            
+            var detSign = function(i, j) { return ((i + j) % 2) == 0 ? "+" : "-"; }
+
+            msg.innerHTML +=  "contains the most zeros so we will start here because minimises the number of calculations we have to do</p>";
+            msg.innerHTML += "<p>This means that the formula for the determinant becomes:</p>";
+            if (rowColInf.isRow) {
+                var formula = "";
+                for (var col = 0; col < matrix.numCols; ++col)
+                {
+                    var coeff = matrix.data[rowColInf.idxMostZeros][col];
+                    if (coeff != 0)
+                    {
+                        formula += detSign(rowColInf.idxMostZeros, col) + coeff.toString() + "|A<sub>" + (rowColInf.idxMostZeros + 1) + "," + (col + 1) + "</sub>| ";
+                    }
+                }
+                msg.innerHTML += "<p>" + formula + "</p>";
+                msg.innerHTML  += "<p>Where...</p>";
+
+                for (var col = 0; col < matrix.numCols; ++col)
+                {
+                    var coeff = matrix.data[rowColInf.idxMostZeros][col];
+                    if (coeff != 0)
+                    {
+                        msg = add_text_div(mc, "<p>A<sub>" + (rowColInf.idxMostZeros + 1) + "," + (col + 1) + "</sub> is A with row " + (rowColInf.idxMostZeros + 1) + ", column " + (col + 1) + " deleted:</p>");
+                        console.log("Creating submatrix");
+                        var subMatrix = matrix.removeRowAndColumn(rowColInf.idxMostZeros, col);
+                        console.log("Creating subdiv");
+                        var subMatrixDiv = new MatrixDiv(subMatrix, mc);
+                    }
+                }
+            }
+            else {
+
+            }            
+
         }
 
         var btn = document.getElementById("matrix-button");
@@ -2312,6 +2391,8 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
         of the parallelogram is just the length $\|\vec{v2}\|$. The height of the parallelogram, we can 
         see is $\|\vec{v1} - \textrm{Proj}_{\vec{v1}}(\vec{v2})\|$.
     </p>
+
+
 
 <h3>Eigenvectors and Eigenvalues</h3>
 	<p>
