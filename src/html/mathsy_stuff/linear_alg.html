@@ -461,6 +461,7 @@
         uses are to calculate the length of a vector and to show that two vectors are linearly
         independent. 
     </p>
+    <a id="determinant_properties"></a>
     <h4>Properties</h4>
     <p>The operation has the following properties:</p>
     <table>
@@ -1828,27 +1829,6 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
 &gt;&gt;&gt; np.linalg.det(A)
 7.000000000000004</pre>
 
-<h4>Rule Of Sarrus</h4>
-<p>
-    For a 3x3 matrix defined as follows:
-
-    $$
-    A = \begin{bmatrix}
-    a & b & c\\
-    d & e & f\\
-    g & h & i
-    \end{bmatrix}
-    $$
-
-    The determinant is defined as:
-
-    $$
-    |A| = aei + bfg + cdh - afg - bdi - ceg
-    $$
-
-    Notice how it is the diagonals (wrapped) summed going from left to right, and the diagonals (wrapped) subtracted going from right to left.
-</p>
-
 <h4>See It In HTML</h4>
 <p>
     This is a really stupid and extremely incomplete Javascript app to explain calculation of determinant. Define a matrix in the text box
@@ -2156,6 +2136,28 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
     </script>
 </div>
 
+
+<h4>Rule Of Sarrus</h4>
+<p>
+    For a 3x3 matrix defined as follows:
+
+    $$
+    A = \begin{bmatrix}
+    a & b & c\\
+    d & e & f\\
+    g & h & i
+    \end{bmatrix}
+    $$
+
+    The determinant is defined as:
+
+    $$
+    |A| = aei + bfg + cdh - afg - bdi - ceg
+    $$
+
+    Notice how it is the diagonals (wrapped) summed going from left to right, and the diagonals (wrapped) subtracted going from right to left.
+</p>
+
 <h4>Effect When Row Multiplied By Scalar</h4>
 <p>
     Multiplying a row in a matrix by a scalar multiplies the determinant by that scalar. This is shown anecodtally below.
@@ -2362,7 +2364,8 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
     <iframe width="560" height="315" src="https://www.youtube.com/embed/Ip3X9LOh2dk?rel=0" frameborder="0" allowfullscreen></iframe>
 
     <p>
-        Now, onto more nores from Khan Academy...
+        Now, onto more notes from Khan Academy, which also give an abolsolutely awesome explanation! Also, this <a href="https://math.stackexchange.com/questions/29128/why-determinant-of-a-2-by-2-matrix-is-the-area-of-a-parallelogram/619212#619212" target="_blank">Mathematics StackExchange Post</a> gives 
+        loads of different ways of proving this.
     </p>
     <p>
         For two vectors, each made a column vector of a matrix A, the <b>determinant of A gives the area of the parallelogram formed by the two vectors</b>:
@@ -2373,12 +2376,12 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
         <a href="##IMG_DIR##/draw_projection_vectors_1.py">&lt;Python source for graph draw&gt;</a>.
     </p>
     <p>
-        Put a little more mathsy-like, if you have two vectors, call them, $\vec{v1}$ and $\vec{v2}$, then
+        Put a little more mathsy-like, if you have two vectors, call them, $\vec{v_1}$ and $\vec{v_2}$, then
         the area of the parallelogram formed by the vectors, as shown above, is given by:
         $$
             \textrm{Area} = \begin{vmatrix}
              | & | \\
-            \vec{v1} & \vec{v2} \\
+            \vec{v_1} & \vec{v_2} \\
              | & | 
             \end{vmatrix}
         $$
@@ -2388,8 +2391,34 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
     </p>
     <p>
         The area of a parallelogram is given by the base times the height. In the above we can see that the base
-        of the parallelogram is just the length $\|\vec{v2}\|$. The height of the parallelogram, we can 
-        see is $\|\vec{v1} - \textrm{Proj}_{\vec{v1}}(\vec{v2})\|$.
+        of the parallelogram is just the length $b = \|\vec{v_1}\|$. The height of the parallelogram, we can 
+        see is $h = \|\vec{v_2} - \textrm{Proj}_{\vec{v_1}}(\vec{v_2})\|$. So...
+
+        $$
+        \begin{align}
+            a &= b \times h \\
+              &= \|\vec{v_1}\| \times \|\vec{v_2} - \textrm{Proj}_{\vec{v_1}}(\vec{v_2})\| \\
+              &= \sqrt{\vec{v_1} \cdot \vec{v_1}}  \times\sqrt{(\vec{v_2} - \textrm{Proj}_{\vec{v_1}}(\vec{v_2})) \cdot (\vec{v_2} - \textrm{Proj}_{\vec{v_1}}(\vec{v_2}))} \ \text{ , because }\ \|\vec{a}\|^2 = \vec{a} \cdot \vec{a}
+        \end{align}
+        $$
+
+        Get rid of the square roots by squaring both sizes:
+
+        $$
+        \begin{align}
+            a^2 &= (\vec{v_1} \cdot \vec{v_1})  \times \bigl((\vec{v_2} - \textrm{Proj}_{\vec{v_1}}(\vec{v_2})) \cdot (\vec{v_2} - \textrm{Proj}_{\vec{v_1}}(\vec{v_2}))\bigr)
+        \end{align}
+        $$
+
+        Recalling that <a href="#projections">$\textrm{Proj}_L(\vec x) = \frac{\vec v \cdot \vec x}{\|\vec v\|^2} \vec v,\ \text{such that}\ \vec v \in L$</a>, we get:
+
+        $$
+        \begin{align}
+            a^2 &= (\vec{v_1} \cdot \vec{v_1})  \times \left(\left(\vec{v_2} - \left(\frac{\vec{v_1}\cdot\vec{v_2}}{\|\vec{v_1}\|} \vec{v_1}\right)\right) \cdot \left(\vec{v_2} - \left(\frac{\vec{v_1}\cdot\vec{v_2}}{\|\vec{v_1}\|} \vec{v_1}\right)\right)\right)
+        \end{align}
+        $$
+
+        We have seen that <a href="#determinant_properties">the determinant is distributive </a> so we can continue as follows:
     </p>
 
 
