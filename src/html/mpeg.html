@@ -512,7 +512,7 @@
 		</p>
 
 		<p>
-			PCR is measured as 33 bits of 90kHz clock and remaining 9 bits of a 27MHz clock, the
+			<b>PCR is measured as 33 bits of 90kHz clock and remaining 9 bits of a 27MHz clock</b>, the
 			<b>system clock frequency</b>. The system clock frequency's accuracy is restricted
 			by the the MPEG 2 standard:
 
@@ -667,6 +667,29 @@
 			we basically have to guess in an informed way! A basic low pass filter might do the trick but presumably the real mechanisms
 			implemented by manufacturers are far more complex. At least, for now, we have seen what the challenge of the clock recovery
 			is and how MPEG tries to help solve it by providing the PCR timestamps and the D/PTS timestamps.
+		</p>
+
+		<h4>PTS v.s. DTS</h4>
+		<blockquote>
+			<p>
+				... Some formats, like MPEG, use what they call "B" frames (B stands for "bidirectional"). The two other kinds of frames are called "I" frames and "P" frames ("I" for "intra" and "P" for "predicted"). I frames contain a full image. P frames depend upon previous I and P frames and are like diffs or deltas. B frames are the same as P frames, but depend upon information found in frames that are displayed both before and after them! ...
+			</p>
+			<p>
+				... So let's say we had a movie, and the frames were displayed like: I B B P. Now, we need to know the information in P before we can display either B frame. Because of this, the frames might be stored like this: I P B B. This is why we have a decoding timestamp and a presentation timestamp on each frame. The decoding timestamp tells us when we need to decode something, and the presentation time stamp tells us when we need to display something ... 
+			</p>
+			<footer>
+				-- <a href="http://dranger.com/ffmpeg/tutorial05.html" target="_blank">An ffmpeg and SDL Tutorial, Tutorial 05: Synching Video</a>.
+			</footer>
+		</blockquote>
+		<p>
+		</p>
+		<blockquote>
+			<p>... Presentation time stamps have a resolution of 90kHz, suitable for the presentation synchronization task ... </p>
+			<footer>
+				-- <a href="https://en.wikipedia.org/wiki/Presentation_timestamp" target="_blank">WikiPedia</a>.
+			</footer>
+		</blockquote>
+		<p>
 		</p>
 
 		<h3>A PES Packet</h3>

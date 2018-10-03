@@ -2397,30 +2397,109 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
         $$
         \begin{align}
             a &= b \times h \\
-              &= \|\vec{v_1}\| \times \|\vec{v_2} - \textrm{Proj}_{\vec{v_1}}(\vec{v_2})\| \\
-              &= \sqrt{\vec{v_1} \cdot \vec{v_1}}  \times\sqrt{(\vec{v_2} - \textrm{Proj}_{\vec{v_1}}(\vec{v_2})) \cdot (\vec{v_2} - \textrm{Proj}_{\vec{v_1}}(\vec{v_2}))} \ \text{ , because }\ \|\vec{a}\|^2 = \vec{a} \cdot \vec{a}
+              &= \|\vec{v_1}\| \|\vec{v_2} - \textrm{Proj}_{\vec{v_1}}(\vec{v_2})\| \\
+              &= \sqrt{\vec{v_1} \cdot \vec{v_1}} \sqrt{(\vec{v_2} - \textrm{Proj}_{\vec{v_1}}(\vec{v_2})) \cdot (\vec{v_2} - \textrm{Proj}_{\vec{v_1}}(\vec{v_2}))}\ \blacktriangleleft \text{ because }\ \|\vec{a}\|^2 = \vec{a} \cdot \vec{a}
         \end{align}
         $$
 
         Get rid of the square roots by squaring both sizes:
 
-        $$
+    $$
         \begin{align}
-            a^2 &= (\vec{v_1} \cdot \vec{v_1})  \times \bigl((\vec{v_2} - \textrm{Proj}_{\vec{v_1}}(\vec{v_2})) \cdot (\vec{v_2} - \textrm{Proj}_{\vec{v_1}}(\vec{v_2}))\bigr)
+            a^2 &= \bigl(
+                       \vec{v_1} \cdot \vec{v_1}
+                   \bigr) 
+                   \bigl(
+                       (
+                           \vec{v_2} - \textrm{Proj}_{\vec{v_1}}(\vec{v_2})
+                       )
+                       \cdot
+                       (
+                           \vec{v_2} - \textrm{Proj}_{\vec{v_1}}(\vec{v_2})
+                       )
+                   \bigr)\\
+                &= \Bigl(
+                       \vec{v_1} \cdot \vec{v_1}
+                   \Bigr) 
+                   \Bigl(
+                       \vec{v_2} \cdot \vec{v_2} -2\vec{v_2}\cdot\textrm{Proj}_{\vec{v_1}}(\vec{v_2}) + \bigl(\textrm{Proj}_{\vec{v_1}}(\vec{v_2})\bigr)^2
+                   \Bigr)\ \blacktriangleleft \text{ dot product is distributive } \\
+                &= \left(
+                       \vec{v_1} \cdot \vec{v_1}
+                   \right)
+                   \left(
+                       \vec{v_2}\cdot\vec{v_2} - 2\vec{v_2}\cdot\left(\frac{\vec{v_1}\cdot\vec{v_2}}{\|\vec{v_1}\|^2} \vec{v_1}\right) +
+                       \left(
+                           \left(
+                               \frac{\vec{v_1}\cdot\vec{v_2}}{\|\vec{v_1}\|^2} \vec{v_1}
+                           \right)
+                           \cdot
+                           \left(
+                               \frac{\vec{v_1}\cdot\vec{v_2}}{\|\vec{v_1}\|^2} \vec{v_1}
+                           \right)
+                       \right)
+                   \right) \blacktriangleleft\ \text{ because }\ \textrm{Proj}_L(\vec x) = \frac{\vec v \cdot \vec x}{\|\vec v\|^2} \vec v,\ \text{such that}\ \vec v \in L\\
+                &= \left(
+                       \vec{v_1} \cdot \vec{v_1}
+                   \right)
+                   \left(
+                       \vec{v_2}\cdot\vec{v_2} - 2\vec{v_2}\cdot\left(\frac{\vec{v_1}\cdot\vec{v_2}}{\|\vec{v_1}\|^2} \vec{v_1}\right) +
+                       \left(
+                           \left(
+                              \frac{\vec{v_1}\cdot\vec{v_2}}{\|\vec{v_1}\|^2}
+                           \right)^2
+                           \left(
+                               \vec{v_1}
+                               \cdot
+                               \vec{v_1}
+                           \right)
+                       \right)
+                   \right) \blacktriangleleft\ \text{ dot product is associative} \\
+                &= \left(
+                       \vec{v_1} \cdot \vec{v_1}
+                   \right)
+                   \left(
+                       \vec{v_2}\cdot\vec{v_2} 
+                       - 2\vec{v_2}\cdot\left(\frac{\vec{v_1}\cdot\vec{v_2}}{\vec{v_1} \cdot \vec{v_1}} \vec{v_1}\right) 
+                       + \frac{(\vec{v_1}\cdot\vec{v_2})^2}{\vec{v_1} \cdot \vec{v_1}}
+                    \right)\\
+                &= (\vec{v_1}\cdot\vec{v_1})(\vec{v_2}\cdot\vec{v_2}) 
+                    - \left(2\vec{v_2}\cdot\left(\frac{\vec{v_1}\cdot\vec{v_2}}{\vec{v_1} \cdot \vec{v_1}} \vec{v_1}\right)\right)(\vec{v_1}\cdot\vec{v_1}) 
+                    + \left(\frac{(\vec{v_1}\cdot\vec{v_2})^2}{\vec{v_1} \cdot \vec{v_1}}\right)(\vec{v_1}\cdot\vec{v_1})
+                \\                   
+                &= (\vec{v_1}\cdot\vec{v_1})(\vec{v_2}\cdot\vec{v_2}) 
+                    - 2\bigl((\vec{v_1} \cdot \vec{v_2})\cdot(\vec{v_1} \cdot \vec{v_2})\bigr)
+                    + (\vec{v_1}\cdot\vec{v_2})^2
+                \\
+                &= (\vec{v_1}\cdot\vec{v_1})(\vec{v_2}\cdot\vec{v_2})  - (\vec{v_1} \cdot \vec{v_2})\cdot(\vec{v_1} \cdot \vec{v_2})
         \end{align}
         $$
 
-        Recalling that <a href="#projections">$\textrm{Proj}_L(\vec x) = \frac{\vec v \cdot \vec x}{\|\vec v\|^2} \vec v,\ \text{such that}\ \vec v \in L$</a>, we get:
+        Now we have to solve the dot products, which means we will have to define our two vectors like so:
+
+        $$
+        \text{Let}\ \vec{v_1} = \begin{bmatrix} a\\b\end{bmatrix}
+        \text{ and}\ \vec{v_2} = \begin{bmatrix} c\\d\end{bmatrix}
+        $$
+
+        Substituting these vector definitions into the above we can expand out the dot products:
 
         $$
         \begin{align}
-            a^2 &= (\vec{v_1} \cdot \vec{v_1})  \times \left(\left(\vec{v_2} - \left(\frac{\vec{v_1}\cdot\vec{v_2}}{\|\vec{v_1}\|} \vec{v_1}\right)\right) \cdot \left(\vec{v_2} - \left(\frac{\vec{v_1}\cdot\vec{v_2}}{\|\vec{v_1}\|} \vec{v_1}\right)\right)\right)
+        a^2 &= (\vec{v_1}\cdot\vec{v_1})(\vec{v_2}\cdot\vec{v_2})  - (\vec{v_1} \cdot \vec{v_2})\cdot(\vec{v_1} \cdot \vec{v_2}) \\
+            &= (a^2 + b^2)(c^2 + d^2) - (ac + bd)(ac + bd) \\
+            &= a^2c^2 + a^2d^2 + b^2c^2 + b^2d^2 - (a^2c^2 + 2abcd + b^2d^2) \\
+            &= a^2d^2 + b^2c^2 - 2abcd \\
+            &= (ad - bc)(ad - bc)\\
+            &= |A|^2\\
+        \therefore a &= |A|
         \end{align}
         $$
-
-        We have seen that <a href="#determinant_properties">the determinant is distributive </a> so we can continue as follows:
     </p>
 
+    <p>
+        Now, in the section on <a href="#linear-transformations">linear transforms</a>, we will see that the columns vectors of the transform matrix show what happens to the canocial basis vectors. Thus, if the determinant of the transformation matrix is the area of the parallelogram formed by the column vectors of the matrix, the <b>determinant gives us the scaling factor of the transformation!</b>
+    </p>
 
 
 <h3>Eigenvectors and Eigenvalues</h3>
@@ -2583,6 +2662,7 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
         <em>Thus to be invertible a function must be bijective (one-to-one and onto)!!</em>
     </p>
 
+    <a id="linear-transformations"></a>
     <h3>Linear Transformations</h3>
     <p>
         Vector valued functions are <em>transformations</em>. Linear transformations are a particular
