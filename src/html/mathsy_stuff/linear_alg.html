@@ -421,7 +421,6 @@
     Orthonormal are good because we can find the coefficient in the new basis easily: $\alpha_k = \vec w_k \dot x$
 </p>
 
-
 <h3>The Dot Product</h3>
 <div>
     <h4>Definition</h4>
@@ -533,6 +532,56 @@
         \vec{a} \cdot \vec{a} = \|\vec{a}\|^2 \\
         \therefore \|\vec{a}\| = \sqrt{\vec{a} \cdot \vec{a}}
         $$
+    </p>
+</div>
+
+<h3>Vector Transposes And The Dot Product</h3>
+<div>
+    <p>
+        In linear algebra vectors are implicitly column vectors. I.e., when we talk about $\vec{v}$ we mean:
+
+        $$
+            \vec{v} = \begin{bmatrix} v_1 \\ v_2 \\ \vdots \\ v_n \end{bmatrix}
+        $$
+
+        Thus, the transpose of $\vec{v}$ is a row vector:
+
+        $$
+        \vec{v}^T = \begin{bmatrix} v_1 & v_2 & \cdots & v_n \end{bmatrix}
+        $$
+
+        We can then do vector multiplication of the two like so:
+
+        $$
+        \begin{align}
+        \vec{v}^T\vec{v} &= \begin{bmatrix} v_1 & v_2 & \cdots & v_n \end{bmatrix} \begin{bmatrix} v_1 \\ v_2 \\ \vdots \\ v_n \end{bmatrix} \\
+        &= v_1\cdot v_1 + v_2\cdot v_2 + \cdots + v_n\cdot v_n \\
+        &= \vec{v}\cdot\vec{v}
+        \end{align}
+        $$
+
+        So, in general $\vec{v}^T\vec{w} = \vec{v}\cdot\vec{w} = \vec{w}^T\vec{v}$.
+    </p>
+</div>
+
+<h3>Dot Product WIth Matrix Vector Product</h3>
+<div>
+    <p>
+        If $A$ is an mxn matrix and $\vec{x} \in \mathbb{R}^n$ then $A\vec{x} \in \mathbb{R}^m$.
+    </p>
+    <p>
+        Then, if $\vec{y} \in \mathbb{R}^m$ then $(A\vec{v})\cdot\vec{y}$ is also well defined and:
+
+        $$        
+        \begin{align}
+            (A\vec{v})\cdot\vec{y} &= (A\vec{x})^T\vec{y} \blacktriangleleft\ \text{See section Vector Transposes And The Dot Product} \\
+            &= \vec{x}A^T\vec{y} \blacktriangleleft\ \text{See matrix transpose rule }\ (A\vec{X})^T = \vec{x}^TA^T\\
+            &= \vec{x}^T(A^T\vec{y})\\
+            &= \vec{x}\cdot(A^T\vec{y})
+        \end{align}
+        $$
+
+        Thus we can say <b>$(A\vec{x})\cdot\vec{y} = \vec{x}\cdot(A^T\vec{y})$</b>.
     </p>
 </div>
 
@@ -758,9 +807,11 @@
 <ol>
     <li>Associative:$(rA)^T = rA^T$</li>
     <li>Distributive (into addition): $(A + B)^T = A^T + B^T$</li>
-    <li>Distributive (into mult): $(AB)^{T} = B^{T}A^{T}\ \color{red}{\blacktriangleleft \text{Note the reversal of terms}}$</li>
+    <li>Distributive (into mult): $(AB)^{T} = B^{T}A^{T}\ \color{red}{\blacktriangleleft \text{Note the reversal of terms}}$<br/>
+        Generalises to $(ABC)^T = C^TB^TA^T$</li>
     <li>Identity: $I^T = I$</li>
     <li>Inverse: $(A^T)^T = A$</li>
+    <li>$(A^T)^{-1} = (A^{-1})^T$</li>
 </ol>
 
 <h4>Matrix Inverse</h4>
@@ -1285,7 +1336,7 @@ solve_linear_system(system, x, y, z)</pre>
 <a name="null-space"></a>
 <h3>Null Space Of A Matrix</h3>
     <p>
-        For an mxn vector $A$, the nullspace of the nxm matrix $A$, $N(A)$ is defined as follows:
+        For an nxm vector $A$, the nullspace of the nxm matrix $A$, $N(A)$ is defined as follows:
 
         $$
             N(A) = \{\vec x \in \mathbb{R}^m \mid A\vec x = \vec 0 \}
