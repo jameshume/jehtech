@@ -132,7 +132,7 @@
 <p>
     It sounded a lot like everything was a vector space to me! So I did a quick bit of googling
     and found the paper
-    &quot;<a href="http://www.math.unm.edu/~loring/links/linear_s06/notVector.pdf" target="_blank">Things that are/aren't vector spaces</a>&quot;.
+    <a href="http://www.math.unm.edu/~loring/links/linear_s06/notVector.pdf" target="_blank">&quot;Things that are/aren't vector spaces&quot;</a>.
     It does a really good example of showing how in maths we might build up a model of something and expect it
     to behave &quot;normally&quot; (i.e., obeys the vector space axioms), but in fact doesn't, in which
     case it becomes a lot harder to reason about them. This is why vectors spaces are nice... we can
@@ -1335,6 +1335,7 @@ solve_linear_system(system, x, y, z)</pre>
 
 <a name="null-space"></a>
 <h3>Null Space Of A Matrix</h3>
+    <h4>Definition</h4>
     <p>
         For an nxm vector $A$, the nullspace of the nxm matrix $A$, $N(A)$ is defined as follows:
 
@@ -1362,6 +1363,8 @@ solve_linear_system(system, x, y, z)</pre>
     <p>
         It can also be shown that $N(A) = N(\mathrm{RREF}(A))$, where $\mathrm{RREF}$ is the <a href="#matrix-row-echelon">reduced row echelon form</a>.
     </p>
+
+    <h4>Relation To L.I. Of Column Vectors</h4>
     <p>
         The nullspace of a matrix can be related to the linear independence of it's column
         vectors. Using the above definition of nullspace,  we can write:
@@ -1408,20 +1411,179 @@ solve_linear_system(system, x, y, z)</pre>
         Given that our nullspace is the set of all vectors that satisfy the above, <em>by definition</em>,
         then we can say that <b>the column vectors of a matrix A are LI if and only if $N(A) = {\vec 0}$</b>.
     </p>
+
+    <h4>Calculating The Null Space</h4>
     <p>
         To <em>find</em> the null space of a matrix $A$, augment it with the zero vector and convert it to RREF. Then the solution set is the null space. So,
         if there are only pivots, the null space only contains the zero vector because there is only one solution (which therefore must be 0).
     </p>
-
-<pre>
-TODO:
-https://math.stackexchange.com/questions/21131/physical-meaning-of-the-null-space-of-a-matrix
-</pre>
-
-
-<h3>Nullity Of A Matrix</h3>
     <p>
-        We saw in the subspace section that the dimension of a subspace is the number of elements in a basis for that subspace. The dimension of 
+        Let's look at a trivial example:
+
+        $$
+        \begin{align}
+            \text{Let } A &=
+                \begin{bmatrix}
+                    4 & 1 & 1\\
+                    2 & 7.5 & -2\\
+                    6 & 1.5 & 3
+                \end{bmatrix}
+        \end{align}
+        $$
+
+        Then the null space is defined as the solution set to $A\vec x=\vec0$, i.e...
+
+        $$
+            \begin{bmatrix}
+                4 & 1 & 1 \\
+                8 & 3 & 0 \\
+                0 & 0 & 3 
+            \end{bmatrix}
+            \begin{bmatrix}
+                x_1 \\ x_2\\ x_3
+            \end{bmatrix}
+            =
+            \begin{bmatrix}
+                0\\ 0\\ 0
+            \end{bmatrix}
+        $$
+
+        We find the solution set using the normal augmented matrix method:
+
+        $$
+            \left[\begin{array}{ccc|c}
+                4 & 1 & 1 & 0\\
+                8 & 3 & 0 & 0\\
+                0 & 0 & 3 & 0
+            \end{array}\right]
+            \mapsto
+            \left[\begin{array}{ccc|c}
+                4 & 1 & 1  & 0\\
+                0 & 1 & -1 & 0\\
+                0 & 0 & 3  & 0
+            \end{array}\right]
+            \mapsto
+            \left[\begin{array}{ccc|c}
+                4 & 1 & 1  & 0\\
+                0 & 1 & -1 & 0\\
+                0 & 0 & 1  & 0
+            \end{array}\right]
+\\
+            \mapsto
+            \left[\begin{array}{ccc|c}
+                4 & 1 & 0 & 0\\
+                0 & 1 & 0 & 0\\
+                0 & 0 & 1 & 0
+            \end{array}\right]
+            \mapsto
+            \left[\begin{array}{ccc|c}
+                1 & 0 & 0 & 0\\
+                0 & 1 & 0 & 0\\
+                0 & 0 & 1 & 0
+            \end{array}\right]
+        $$
+
+        There are no free variables, so therefore the solution set can contain only the zero vector because we have three contraints $x_1 = 0, x_2 = 0$ and $x_3 = 0$. The only values for the $x_i$'s that can satisfy these constrains is zero, hence the null space can only contain the zero vector.
+    </p>
+    <p>
+        Lets try an consider another trivial example. 
+        $$
+        \begin{align}
+            \text{Let } A &=
+                \begin{bmatrix}
+                    2 & 3 & 0\\
+                    6 & 12 & 0\\
+                    8 & 15 & 0
+                \end{bmatrix}
+        \end{align}
+        $$
+
+        It's pretty contrived because I constructed it by applying row operations to the identify matrix! Null space is defined as solutions to:
+
+        $$
+            \begin{bmatrix}
+                    2 & 3 & 0\\
+                    6 & 12 & 0\\
+                    8 & 15 & 0
+            \end{bmatrix}
+            \begin{bmatrix}
+                x_1 \\ x_2\\ x_3
+            \end{bmatrix}
+            =
+            \begin{bmatrix}
+                0\\ 0\\ 0
+            \end{bmatrix}
+        $$
+
+        We find the solution set using the normal augmented matrix method:
+
+        $$
+            \left[\begin{array}{ccc|c}
+                     2 & 3 & 0 & 0\\
+                    6 & 12 & 0 & 0\\
+                    8 & 15 & 0 & 0
+            \end{array}\right]
+            \mapsto
+            \left[\begin{array}{ccc|c}
+                    1 & 0 & 0 & 0\\
+                    0 & 1 & 0 & 0\\
+                    0 & 0 & 0 & 0
+            \end{array}\right]
+        $$
+
+        Now we can see that $x_1 = 0$ and $x_2 = 0$. The variable $x_3$, however, is free. It can take any value. Let's call that value $x_3 = a$. The solution vector is therefore:
+
+        $$
+           \begin{bmatrix}x_1 \\ x_2 \\ x_3 \end{bmatrix} = \begin{bmatrix}0 \\ 0 \\ a \end{bmatrix}
+        $$
+
+        The general solution vectors is therefore:
+        $$
+           a \begin{bmatrix}0 \\ 0 \\ 1 \end{bmatrix}
+        $$
+
+        So we can say the null space is:
+
+        $$
+        \mathrm{N}(A) = \mathrm{span}\left(\begin{bmatrix}0 \\ 0 \\ 1 \end{bmatrix}\right)
+        $$
+    </p>
+
+    <h4>An Intuitive Meaning</h4>
+    <p>
+        This <a href="https://math.stackexchange.com/questions/21131/physical-meaning-of-the-null-space-of-a-matrix" target="_blank">StackOverflow thread</a> gives some really good intuitive meaning to the null space. I've quoted some of the answers verbatim here:
+    </p>
+    <blockquote>
+        <p>
+             It's good to think of the matrix as a linear transformation; if you let $h(\vec v)=A⋅\vec v$, then the <b>null-space is ... the set of all vectors that are sent to the zero vector</b> by $h$. Think of this as the  <b>set of vectors thatlose their identity</b> as $h$ is applied to them.
+        </p>
+        <footer>
+            -- SO user <a href="https://math.stackexchange.com/a/21132/213881" target="_blank">milcak's answer</a> (emphasis mine).
+        </footer>
+    </blockquote>
+    <p></p>
+    <blockquote>
+        <p>
+        Let's suppose that the matrix A represents a physical system. As an example, let's assume our system is a rocket, and A is a matrix representing the directions we can go based on our thrusters. So what do the null space and the column space represent?
+        </p>
+        <p>
+        Well let's suppose we have a direction that we're interested in. Is it in our column space? If so, then we can move in that direction. The column space is the set of directions that we can achieve based on our thrusters. Let's suppose that we have three thrusters equally spaced around our rocket. If they're all perfectly functional then we can move in any direction. In this case our column space is the entire range. But what happens when a thruster breaks? Now we've only got two thrusters. Our linear system will have changed (the matrix A will be different), and our column space will be reduced.
+        </p>
+        <p>
+        What's the null space? The null space are the set of thruster intructions that completely waste fuel. They're the set of instructions where our thrusters will thrust, but the direction will not be changed at all.
+        </p>
+        <p>
+        Another example: Perhaps A can represent a rate of return on investments. The range are all the rates of return that are achievable. The null space are all the investments that can be made that wouldn't change the rate of return at all.
+        </p>
+        <footer>
+            -- SO user <a href="https://math.stackexchange.com/a/987657/213881" target="_blank">NicNic8's answer</a>.
+        </footer>
+    </blockquote>
+    <p></p>
+
+    <h4>Nullity Of A Matrix</h4>
+    <p>
+        The dimension of a subspace is the number of elements in a basis for that subspace. The dimension of 
         the null space is called the <b>&quot;nullity&quot;</b>:
     </p>
     <p>
@@ -1434,6 +1596,7 @@ https://math.stackexchange.com/questions/21131/physical-meaning-of-the-null-spac
         \end{align}
         $$
     </p>
+
 
 <h3>Column Space Of A Matrix</h3>
 <p>
@@ -2424,7 +2587,7 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
     <p>
         <img src="##IMG_DIR##/draw_projection_vectors_1.png"/>
         <br/>
-        <a href="##IMG_DIR##/draw_projection_vectors_1.py">&lt;Python source for graph draw&gt;</a>.
+        <a href="##IMG_DIR##/draw_projection_vectors_1.py" target="_blank">&lt;Python source for graph draw&gt;</a>.
     </p>
     <p>
         Put a little more mathsy-like, if you have two vectors, call them, $\vec{v_1}$ and $\vec{v_2}$, then
@@ -2726,7 +2889,7 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
         <li>$T(\vec 0) = \vec 0$</li>
     </ol>
     <p>
-        In other words, the origin must remain fixed and all lines must remain lines.
+        In other words, the origin must remain fixed and all lines must remain lines. For example, a transformation such as $\mathrm{f}(x) = x^2$ is non linear because $\mathrm{f}(a + b) \ne \mathrm{f}(a) + \mathrm{f}(b)$, generally, for example.
     </p>
     <p>
         Matrices are used to do the linear transformations so the function $T$ will generally
