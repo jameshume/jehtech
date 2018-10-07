@@ -1417,6 +1417,7 @@ solve_linear_system(system, x, y, z)</pre>
         To <em>find</em> the null space of a matrix $A$, augment it with the zero vector and convert it to RREF. Then the solution set is the null space. So,
         if there are only pivots, the null space only contains the zero vector because there is only one solution (which therefore must be 0).
     </p>
+    <h5>Example #1</h5>
     <p>
         Let's look at a trivial example:
 
@@ -1485,6 +1486,7 @@ solve_linear_system(system, x, y, z)</pre>
 
         There are no free variables, so therefore the solution set can contain only the zero vector because we have three contraints $x_1 = 0, x_2 = 0$ and $x_3 = 0$. The only values for the $x_i$'s that can satisfy these constrains is zero, hence the null space can only contain the zero vector.
     </p>
+    <h5>Example #2</h5>
     <p>
         Lets try an consider another trivial example. 
         $$
@@ -1546,6 +1548,49 @@ solve_linear_system(system, x, y, z)</pre>
 
         $$
         \mathrm{N}(A) = \mathrm{span}\left(\begin{bmatrix}0 \\ 0 \\ 1 \end{bmatrix}\right)
+        $$
+    </p>
+
+    <a id="null-space-ex-3"></a>
+    <h5>Example #3</h5>
+    <p>
+        Let's try one more example. This one is right out of Khan Achademy rather then my own made up rubbish :)
+        $$
+        \text{Let } A = \begin{bmatrix}
+            2 & -1 & -3 \\
+            -4 & 2 & 6
+        \end{bmatrix}
+        $$
+
+        We calculate the null space by setting up an augmented matrix to solve for $A\vec x = \vec 0$:
+
+        $$
+            \left[\begin{array}{ccc|c}
+             2 & -1 & -3 & 0\\
+             -4 & 2 & 6 & 0
+            \end{array}\right]
+            \mapsto
+            \left[\begin{array}{ccc|c}
+             1 & -1/2 & -3/2 & 0 \\
+             0 & 0 & 0 & 0 
+            \end{array}\right]
+        $$
+
+        We thus know that:
+        $$
+            x_1 = \frac{1}{2}x_2 + \frac{3}{2} x_3
+        $$
+
+        And that $x_2$ and $x_3$ are free variables. This means that the general solution is:
+
+        $$
+        \begin{bmatrix} x_1 \\ x_2 \\ x_3 \end{bmatrix} = x_2 \begin{bmatrix}\frac{1}{2}\\ 1\\ 0 \end{bmatrix} + x_3 \begin{bmatrix}\frac{3}{2}\\ 0\\ 1\end{bmatrix}
+        $$
+
+        And therefore we can define the null space as:
+
+        $$
+        \mathrm{N}(A) = \mathrm{span}\left(\begin{bmatrix}\frac{1}{2}\\ 1\\ 0 \end{bmatrix}, \begin{bmatrix}\frac{3}{2}\\ 0\\ 1\end{bmatrix}\right)
         $$
     </p>
 
@@ -2715,6 +2760,91 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
         Now, in the section on <a href="#linear-transformations">linear transforms</a>, we will see that the columns vectors of the transform matrix show what happens to the canocial basis vectors. Thus, if the determinant of the transformation matrix is the area of the parallelogram formed by the column vectors of the matrix, the <b>determinant gives us the scaling factor of the transformation!</b>
     </p>
 
+<h3>Rowspace &amp; Left Nullspace</h3>
+<p>
+    We saw in the <a href="#null-space-ex-3">3rd null space example</a> the following matrix, and its reduction to RREF:
+    $$
+    \text{Let } A = \begin{bmatrix}
+        2 & -1 & -3 \\
+        -4 & 2 & 6
+    \end{bmatrix}
+    $$
+
+    We calculate the null space by setting up an augmented matrix to solve for $A\vec x = \vec 0$:
+
+    $$
+        \left[\begin{array}{ccc|c}
+         2 & -1 & -3 & 0\\
+         -4 & 2 & 6 & 0
+        \end{array}\right]
+        \mapsto
+        \left[\begin{array}{ccc|c}
+         1 & -1/2 & -3/2 & 0 \\
+         0 & 0 & 0 & 0 
+        \end{array}\right]
+    $$
+
+    Giving...
+
+    $$
+    \mathrm{N}(A) = \mathrm{span}\left(\begin{bmatrix}\frac{1}{2}\\ 1\\ 0 \end{bmatrix}, \begin{bmatrix}\frac{3}{2}\\ 0\\ 1\end{bmatrix}\right)
+    $$
+
+    But, we also know that because only the first column in the RREF form has a pivot entry, the basis for the column space of the matrix $A$ only contains the first column vector:
+
+    $$
+    \mathrm{C}(A) = \mathrm{span}\left(\begin{bmatrix}2 \\ -4\end{bmatrix}\right)
+    $$
+
+    We also know the range of the matrix:
+
+    $$
+    \mathrm{rank}(A) = \mathrm{dim}(C_{\text{basis}}(A)) = 1
+    $$
+
+    Now we take the transpose of $A$:
+
+    $$
+        A^T = \left[\begin{array}{cc|c}
+         2 & -4 & 0\\
+         -1 & 2 & 0\\
+         -3 & 6 & 0
+        \end{array}\right]
+        \mapsto \text{ rref } \mapsto
+        \left[\begin{array}{cc|c}
+         1 & -2 & 0\\
+         0 & 0 & 0 \\ 
+         0 & 0 & 0
+        \end{array}\right]
+    $$
+
+    So, now we can calculate the nullspace of the transpose of A:
+
+    $$
+    \mathrm{N}(A^T) = \mathrm{span}\left(\begin{bmatrix}2 \\ 1\end{bmatrix}\right)
+    $$
+
+    The <b>$\mathrm{N}(A^T)$ is called the left null space of $A$</b>. Why have we called in the left null space?
+    Have a look at this...
+
+    $$
+        \mathrm{N}(A^T) = \left\{\vec x \mid A^T\vec x = \vec 0\right\}
+    $$
+
+    ...by the very definition of what a null space is. We are solving for $A^T\vec x = \vec 0$:
+
+    $$
+    \begin{align}
+        (A^T\vec x) &= \vec 0 \\
+        
+        \therefore (A^T\vec x)^T &= \vec 0 ^ T \ \blacktriangleleft \text{ transpose both sides}\\ 
+
+        \vec x^T(A^T)^T &= \vec 0 ^ T \ \blacktriangleleft \\
+
+        \vec x^T A &= \vec 0 ^ T \ \blacktriangleleft \\
+    \end{align}
+    $$
+</p>
 
 <h3>Eigenvectors and Eigenvalues</h3>
 	<p>
