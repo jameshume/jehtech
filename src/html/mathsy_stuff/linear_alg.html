@@ -626,9 +626,16 @@
     90 degrees to $\vec y$ and $\vec z$.
 </p>
 <p>
-    In any set of any vectors, $[\vec{a_1}, ..., \vec{a_n}]$, the vectors are
-    said to be linearly <b>linearly independent</b> if every vector in the set
-    is orthogonal to every other vector in the set.
+    In any set of any vectors, $[\vec{a_1}, ..., \vec{a_n}]$, the vectors will be <b>linearly independent</b> if every vector in the set
+    is orthogonal to every other vector in the set. Note, however that whilst an orthogonal set is L.I., a L.I. set is not necessarily
+    an orthogonal set. Take the following example:
+
+    $$
+    \vec a = \begin{bmatrix} 1 \\ 1 \end{bmatrix},\ \vec b = \begin{bmatrix} 1 \\ 1 \end{bmatrix}
+    $$
+
+    The vectors $\vec a$ and $\vec b$ are L.I. because nethier can be represented as a linear combination of the other. They are not
+    however orthogonal.
 </p>
 <p>
     So, how do we tell if one vector is orthogonal to another? The answer is
@@ -638,7 +645,7 @@
 </p>
 <p>
     We know when two <b>vectors are orthogonal when their dot product is
-    zero: $x \cdot y = 0 \implies$ x and y are orthogonal</b>.
+    zero: $x \cdot y = 0 \implies$ x and y are orthogonal</b>. You can scale either or both vectors and their dot product will still be zero!
 </p>
 <p>But why is this the case? Lets imagine any two arbitrary vectors, each
     on the circumference of a unit circle (so we know that they have the
@@ -805,13 +812,15 @@
 
 <h4>Matrix Transpose</h4>
 <ol>
-    <li>Associative:$(rA)^T = rA^T$</li>
+    <li>Associative:$(rA)^T = rA^T, r \in \mathbb{R}$</li>
     <li>Distributive (into addition): $(A + B)^T = A^T + B^T$</li>
     <li>Distributive (into mult): $(AB)^{T} = B^{T}A^{T}\ \color{red}{\blacktriangleleft \text{Note the reversal of terms}}$<br/>
         Generalises to $(ABC)^T = C^TB^TA^T$</li>
     <li>Identity: $I^T = I$</li>
     <li>Inverse: $(A^T)^T = A$</li>
-    <li>$(A^T)^{-1} = (A^{-1})^T$</li>
+    <li>Name?: $(A^T)^{-1} = (A^{-1})^T$</li>
+    <li>Name?: $(A\vec x)^T = \vec x^TA^T\ \color{red}{\blacktriangleleft \text{Note the reversal of terms}}$</li>
+    <li>Name?: $\mathrm{rank}(A) = \mathrm{rank}(A^T)$</li>
 </ol>
 
 <h4>Matrix Inverse</h4>
@@ -1637,9 +1646,12 @@ solve_linear_system(system, x, y, z)</pre>
         $$
         \begin{align}
         \mathrm{nullity}(A) &= \mathrm{dim}(\mathrm{N}(A)) \\
-                            &= \text{#non-pivot cols in}\ \mathrm{RREF}(A)
+                            &= \text{#non-pivot cols in}\ \mathrm{RREF}(A) \\
+                            &= n - \mathrm{rank}(A)
         \end{align}
         $$
+
+        This the null space has dimension, or <em>nullity</em>, $n - \mathrm{rank}(A)$. This equates to the number of free variables.
     </p>
 
 
@@ -1710,7 +1722,7 @@ solve_linear_system(system, x, y, z)</pre>
     \end{align}
     $$
 
-    The rank is the number of vectors in a basis for the column space of $A$.
+    I.e., The rank of a matrix is the number of pivots. This also means that the rank is the number of vectors in a basis for the column space of $A$.
     You can get this by counting the pivot columns in $\mathrm{RREF}(A)$.
 </p>
 <p>
@@ -2762,6 +2774,9 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
 
 <h3>Rowspace &amp; Left Nullspace</h3>
 <p>
+    Notes based on Khan Academy with extra reference to <a href="http://math.mit.edu/~gs/linearalgebra/ila0306.pdf" target="_blank">MIT Linear Algebra eBook Chapter</a>.
+</p>
+<p>
     We saw in the <a href="#null-space-ex-3">3rd null space example</a> the following matrix, and its reduction to RREF:
     $$
     \text{Let } A = \begin{bmatrix}
@@ -2796,7 +2811,7 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
     \mathrm{C}(A) = \mathrm{span}\left(\begin{bmatrix}2 \\ -4\end{bmatrix}\right)
     $$
 
-    We also know the range of the matrix:
+    We also know the rank of the matrix:
 
     $$
     \mathrm{rank}(A) = \mathrm{dim}(C_{\text{basis}}(A)) = 1
@@ -2836,14 +2851,19 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
     $$
     \begin{align}
         (A^T\vec x) &= \vec 0 \\
-        
         \therefore (A^T\vec x)^T &= \vec 0 ^ T \ \blacktriangleleft \text{ transpose both sides}\\ 
-
-        \vec x^T(A^T)^T &= \vec 0 ^ T \ \blacktriangleleft \\
-
-        \vec x^T A &= \vec 0 ^ T \ \blacktriangleleft \\
+        \vec x^T(A^T)^T &= \vec 0 ^ T \\
+        \vec x^T A &= \vec 0 ^ T
     \end{align}
     $$
+
+    Thus, $\mathrm{N}(A^T)$ is equivalent to finding the solution set for $\vec x^T A = \vec 0 ^ T$, wich is the following set:
+
+    $$
+    \left\{ \vec x \mid \vec x^TA = \vec 0 \right\}
+    $$
+
+    It is called the left nullspace because the vector $\vec x^T$ appears to the left of the transformation matrix $A$.
 </p>
 
 <h3>Eigenvectors and Eigenvalues</h3>
