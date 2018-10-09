@@ -821,6 +821,7 @@
     <li>Name?: $(A^T)^{-1} = (A^{-1})^T$</li>
     <li>Name?: $(A\vec x)^T = \vec x^TA^T\ \color{red}{\blacktriangleleft \text{Note the reversal of terms}}$</li>
     <li>Name?: $\mathrm{rank}(A) = \mathrm{rank}(A^T)$</li>
+    <li>If columns of $A$ are LI then columns of $A^TA$ are LI. $A^TA$ is square and also invertible.</li>
 </ol>
 
 <h4>Matrix Inverse</h4>
@@ -2772,7 +2773,8 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
         Now, in the section on <a href="#linear-transformations">linear transforms</a>, we will see that the columns vectors of the transform matrix show what happens to the canocial basis vectors. Thus, if the determinant of the transformation matrix is the area of the parallelogram formed by the column vectors of the matrix, the <b>determinant gives us the scaling factor of the transformation!</b>
     </p>
 
-<h3>Rowspace &amp; Left Nullspace</h3>
+<h3>Rowspace &amp; Left Nullspace &amp; Orthogonal Complements</h3>
+<h4>Left Null Space Definition</h4>
 <p>
     Notes based on Khan Academy with extra reference to <a href="http://math.mit.edu/~gs/linearalgebra/ila0306.pdf" target="_blank">MIT Linear Algebra eBook Chapter</a>.
 </p>
@@ -2833,7 +2835,7 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
         \end{array}\right]
     $$
 
-    So, now we can calculate the nullspace of the transpose of A:
+    So, now we can calculate the nullspace of the transpose of A. We see that $x_1 = 2x_2$ and that $x_2$ is a free variable so:
 
     $$
     \mathrm{N}(A^T) = \mathrm{span}\left(\begin{bmatrix}2 \\ 1\end{bmatrix}\right)
@@ -2857,13 +2859,122 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
     \end{align}
     $$
 
-    Thus, $\mathrm{N}(A^T)$ is equivalent to finding the solution set for $\vec x^T A = \vec 0 ^ T$, wich is the following set:
+    Thus, the null space of $A^T$ can also be defined as so:
 
     $$
-    \left\{ \vec x \mid \vec x^TA = \vec 0 \right\}
+        \mathrm{N}(A^T) = \left\{\vec x \mid \vec x^TA = \vec 0^T\right\}
     $$
 
-    It is called the left nullspace because the vector $\vec x^T$ appears to the left of the transformation matrix $A$.
+    Now we see why it is called the &quot;left&quot; null space: the vector $\vec x^T$ is on the LHS of the transformation matrix!
+</p>
+<h4>Rowspace</h4>
+<p>
+    The rowspace of the transformation $A$ is defined as $\mathrm{C}(A^T)$:
+
+    $$
+        \mathrm{Rowspace}(A) = \mathrm{C}(A^T)
+    $$
+
+    Recall from above:
+
+    $$
+        A^T = \left[\begin{array}{cc|c}
+         2 & -4 & 0\\
+         -1 & 2 & 0\\
+         -3 & 6 & 0
+        \end{array}\right]
+        \mapsto \text{ rref } \mapsto
+        \left[\begin{array}{cc|c}
+         1 & -2 & 0\\
+         0 & 0 & 0 \\ 
+         0 & 0 & 0
+        \end{array}\right]
+    $$
+
+    The only pivot column is the first, so:
+
+    $$
+        \mathrm{Rowspace}(A) = \mathrm{C}(A^T) = \mathrm{span}\left(\begin{bmatrix}2 \\ -1 \\ -3\end{bmatrix}\right)
+    $$
+
+</p>
+
+<h4>Relationship Between The Spaces: Orthogonal Complements</h4>
+<p>
+    TODO: Graphs and relate to above example.
+</p>
+<p>
+    An orthogonal complement is defined as follows. If $V$ is a subspace of $\mathbb{R}^n$, the orthogonal complement of $V$ is written $V^\perp$ as is defined as so:
+
+    $$
+    V^\perp = \{\vec x \in \mathbb{R}^n \| \vec x \cdot \vec v = 0\ \forall \vec v \in V\}
+    $$
+
+    In other words, every member of $V^\perp$ is orthogonal to every member of $V$.
+</p>
+<p>
+    It can be shown that $V^\perp$ is a valid subspace: it is closed under addition and scalar multiplication.
+</p>
+<p>
+    The column space and left-null space are perpendicular. They are orthogonal complements. Thus we can say:
+    $$
+    \begin{align}
+    \mathrm{C}(A) &= \left(\mathrm{N}(A^T)\right)^\perp\ \text{ and}\\
+    \mathrm{N}(A^T) &= \left(\mathrm{C}(A)\right)^\perp
+    \end{align}
+    $$
+</p>
+<p>
+    The null space and row space are perpendicular. They are orthogonal complements. Thus we can say:
+    $$
+    \begin{align}
+    \mathrm{N}(A) &= \left(\mathrm{C}(A^T)\right)^\perp\ \text{ and}\\
+    \mathrm{C}(A^T) &= \left(\mathrm{N}(A)\right)^\perp
+    \end{align} 
+    $$
+
+    We can show that $\mathrm{C}(A^T) = \left(\mathrm{N}(A)\right)^\perp$. We want to show that if $\vec x \in \mathrm{N}(A)$ then $\vec x \cdot \vec a = 0$ for all $\vec a \in (\mathrm{C}(A^T))^\perp$. We know 
+    that $\mathrm{N}(A) = \{\vec x \in \mathbb{R}^n \| A\vec x = \vec 0\}$ which we can write as:
+
+    $$
+    \underbrace{
+      \begin{bmatrix}
+        \leftarrow r_1^T \rightarrow \\
+        \leftarrow r_2^T \rightarrow \\
+        \vdots \\
+        \leftarrow r_m^T \rightarrow
+        \end{bmatrix} 
+    }_{m \times n}
+    \vec x 
+    =
+    \underbrace{
+      \begin{bmatrix}
+        0 \\
+        0 \\
+        \vdots \\
+        0
+      \end{bmatrix}
+    }_{m \times 1}
+    $$
+
+    Where $r_i^T$ is the i<sup>th</sup> row vector of $A$.
+</p>
+<p>
+    We know that, by the definition of matrix definition we can say the following:
+
+    $$
+     \vec r_1^T \vec x = 0 \\
+     \vec r_2^T \vec x = 0 \\
+     \vdots \\
+     \vec r_m^T \vec x = 0 \\
+    $$
+
+    The above is just the the matrix multiplication shown above written out. But, we know that
+    $\vec r_i^T \vec x$ is the same as the dot product, so it is equal to $\vec r_i \cdot \vec x$. I.e., the row vectors of $A$ must all be orthogonal to $\vec x$ if $\vec x$ is a member of the null space.
+</p>
+<p>
+    Thus, the vectors in the null space are $\perp$ to the column vectors of $A^T$. Thus,
+    $\mathrm{N}(A) = (\mathrm{C}(A^T))^\perp$.
 </p>
 
 <h3>Eigenvectors and Eigenvalues</h3>
