@@ -535,6 +535,7 @@
     </p>
 </div>
 
+<a id="vector-transpose-and-dot-product"></a>
 <h3>Vector Transposes And The Dot Product</h3>
 <div>
     <p>
@@ -1675,8 +1676,13 @@ solve_linear_system(system, x, y, z)</pre>
     The column space of A is a valid subspace.
 </p>
 <p>
-    For the system of equations $A\vec x = \vec b$, $\mathrm{C}(a)$ is
-    , therefore, the set of all values that $A\vec x$ can be.
+    For the system of equations $A\vec x = \vec b$, $\mathrm{C}(A)$ is the set of all values that $A\vec x$ can be. We can look at this this way:
+    
+    $$
+    A\vec x = \begin{bmatrix}a & b \\ c & d\end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix} = \begin{bmatrix} ax + by \\ cx + dy\end{bmatrix} = x \begin{bmatrix}a \\ c\end{bmatrix} + y \begin{bmatrix}b \\ d\end{bmatrix} = \vec b
+    $$
+
+    The solution, $\vec b$, can be seen to be a linear combination of the column vectors of $A$. Thus, $\vec b \in \mathrm{C}(A)$.
 </p>
 <p>
     Therefore, if $A\vec x = \vec{b_1}$ and $\vec{b_1} \notin \mathrm{C}(A)$,
@@ -2970,11 +2976,28 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
     $$
 
     The above is just the the matrix multiplication shown above written out. But, we know that
-    $\vec r_i^T \vec x$ is the same as the dot product, so it is equal to $\vec r_i \cdot \vec x$. I.e., the row vectors of $A$ must all be orthogonal to $\vec x$ if $\vec x$ is a member of the null space.
+    <a href="#vector-transpose-and-dot-product">$\vec r_i^T \vec x$ is the same as the dot product</a>, so it is equal to $\vec r_i \cdot \vec x$. I.e., the row vectors of $A$ must all be orthogonal to $\vec x$ if $\vec x$ is a member of the null space.
 </p>
 <p>
     Thus, the vectors in the null space are $\perp$ to the column vectors of $A^T$. Thus,
-    $\mathrm{N}(A) = (\mathrm{C}(A^T))^\perp$.
+    $\mathrm{N}(A) \subseteq (\mathrm{C}(A^T))^\perp$.
+</p>
+<p>
+    If we let $B^T = A$, then $\mathrm{N}(B^T) \subseteq \mathrm{C}(B)^\perp$ and thus $\mathrm{N}(A) = \mathrm{C}(A^T)^\perp$.
+</p>
+<p>
+    The <b>dimensions of each subspace can also be related</b>: $\mathrm{dim}(V) + \mathrm{dim}(V^\perp) = n$, where $V$ is a subspace of $\mathbb{R}^n$. This, therefore, means that if $\mathrm{dim}(V) = k$, then $\mathrm{dim}(V^\perp) = n - k$.
+</p>
+<p>
+    This relation implies that $V \bigcup V^\perp = \mathbb{R}^n$. So, if $V_b$ is a basis for V then $V_b \bigcup V_b^\perp$ is a basis for $\mathbb{R}^n$. This
+    leads us to an importan property where we can say that <b>any vector in $\mathbb{R}^n$ can be represented <i>uniquely</i> by some vector in a subspace $V$ of $\mathbb{R}^n$ and some vector in $V^\perp$</b>:
+
+    $$
+    \forall \vec a \in \mathbb{R}^n: \vec a = \vec v + \vec v_p \text{ where } \vec v \in V \text{ and } \vec v_p \in V^\perp
+    $$
+</p>
+<p>
+    We can also notice something important about the <b>intersection of a subset and its orthogonal complement</b>: if $\vec x \in V$ and $\vec x \in V^\perp$ then $\vec x = 0$. I.e. $V \bigcap V^\perp = \{0\}$.
 </p>
 
 <h3>Eigenvectors and Eigenvalues</h3>
