@@ -1656,7 +1656,7 @@ solve_linear_system(system, x, y, z)</pre>
         This the null space has dimension, or <em>nullity</em>, $n - \mathrm{rank}(A)$. This equates to the number of free variables.
     </p>
 
-
+<a id="column-space"></a>
 <h3>Column Space Of A Matrix</h3>
 <p>
     The columns space of a matrix is the set of all linear combinations
@@ -2913,7 +2913,7 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
     An orthogonal complement is defined as follows. If $V$ is a subspace of $\mathbb{R}^n$, the orthogonal complement of $V$ is written $V^\perp$ as is defined as so:
 
     $$
-    V^\perp = \{\vec x \in \mathbb{R}^n \| \vec x \cdot \vec v = 0\ \forall \vec v \in V\}
+    V^\perp = \{\vec x \in \mathbb{R}^n \mid \vec x \cdot \vec v = 0\ \forall \vec v \in V\}
     $$
 
     In other words, every member of $V^\perp$ is orthogonal to every member of $V$.
@@ -2922,25 +2922,29 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
     It can be shown that $V^\perp$ is a valid subspace: it is closed under addition and scalar multiplication.
 </p>
 <p>
-    The column space and left-null space are perpendicular. They are orthogonal complements. Thus we can say:
+    The <b>column space and left-null space are perpendicular</b>. They are orthogonal complements. Thus we can say:
+    <div style="border:1px solid blue;">
     $$
     \begin{align}
     \mathrm{C}(A) &= \left(\mathrm{N}(A^T)\right)^\perp\ \text{ and}\\
     \mathrm{N}(A^T) &= \left(\mathrm{C}(A)\right)^\perp
     \end{align}
     $$
+    </div>
 </p>
 <p>
-    The null space and row space are perpendicular. They are orthogonal complements. Thus we can say:
+    The <b>null space and row space are perpendicular</b>. They are orthogonal complements. Thus we can say:
+    <div style="border:1px solid blue;">
     $$
     \begin{align}
     \mathrm{N}(A) &= \left(\mathrm{C}(A^T)\right)^\perp\ \text{ and}\\
     \mathrm{C}(A^T) &= \left(\mathrm{N}(A)\right)^\perp
     \end{align} 
     $$
+    </div>
 
     We can show that $\mathrm{C}(A^T) = \left(\mathrm{N}(A)\right)^\perp$. We want to show that if $\vec x \in \mathrm{N}(A)$ then $\vec x \cdot \vec a = 0$ for all $\vec a \in (\mathrm{C}(A^T))^\perp$. We know 
-    that $\mathrm{N}(A) = \{\vec x \in \mathbb{R}^n \| A\vec x = \vec 0\}$ which we can write as:
+    that $\mathrm{N}(A) = \{\vec x \in \mathbb{R}^n \mid A\vec x = \vec 0\}$ which we can write as:
 
     $$
     \underbrace{
@@ -2985,11 +2989,13 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
 <p>
     If we let $B^T = A$, then $\mathrm{N}(B^T) \subseteq \mathrm{C}(B)^\perp$ and thus $\mathrm{N}(A) = \mathrm{C}(A^T)^\perp$.
 </p>
+<h4>Relating The Dimension Of A Subspace To Its Orthogonal Complement</h4>
 <p>
     The <b>dimensions of each subspace can also be related</b>: $\mathrm{dim}(V) + \mathrm{dim}(V^\perp) = n$, where $V$ is a subspace of $\mathbb{R}^n$. This, therefore, means that if $\mathrm{dim}(V) = k$, then $\mathrm{dim}(V^\perp) = n - k$.
 </p>
+<h4>Representing A Vector As A Combination Of A Vector In A Subspace And One In Its Orthogonal Complement</h4>
 <p>
-    This relation implies that $V \bigcup V^\perp = \mathbb{R}^n$. So, if $V_b$ is a basis for V then $V_b \bigcup V_b^\perp$ is a basis for $\mathbb{R}^n$. This
+    This relation implies that $V \bigcup V^\perp = \mathbb{R}^n$. So, if $V_b$ is a basis for $V$ then $V_b \bigcup V_b^\perp$ is a basis for $\mathbb{R}^n$. This
     leads us to an importan property where we can say that <b>any vector in $\mathbb{R}^n$ can be represented <i>uniquely</i> by some vector in a subspace $V$ of $\mathbb{R}^n$ and some vector in $V^\perp$</b>:
 
     $$
@@ -2998,6 +3004,50 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
 </p>
 <p>
     We can also notice something important about the <b>intersection of a subset and its orthogonal complement</b>: if $\vec x \in V$ and $\vec x \in V^\perp$ then $\vec x = 0$. I.e. $V \bigcap V^\perp = \{0\}$.
+</p>
+<h4>Unique Rowspace Solution To $A\vec x = \vec b$</h4>
+<p>
+    We have seen that any vector in $\mathrm{R}^n$ can be represented as a combination of $\vec a \in \mathrm{N}(A)$ and $\vec b \in \mathrm{N}(A)^\perp = \mathrm{C}(A^T)$.
+</p>
+<p style="border:1px solid blue">
+    So if $\vec x$ is a solution to $A\vec x = \vec b$, where $x \in \mathrm{R}^n$, then we can express
+    $\vec x$ as $\vec x = \vec{r_0} + \vec{n_0}$ where $\vec{r_0} \in \mathrm{C}(A^T)$ and $\vec{n_0} \in \mathrm{N}(A)$. 
+</p>
+<p>
+    I.e., the solution is a linear combination of some vector in the rowspace of $A$ and some vector in the null space of $A$. 
+</p>
+<p>
+    $$
+        \begin{align}
+        \vec x &= \vec{r_0} + \vec{n_0} \text{ where } \vec{r_0} \in \mathrm{C}(A^T), \vec{n_0} \in \mathrm{N}(A) \\
+        \therefore A\vec x &= A(\vec{r_0} + \vec{n_0})  \\
+                           &= A\vec{r_0} + A\vec{n_0} \\
+                           &= A\vec{r_0}\ \text{ because, by defn } A\vec{n_0} = \vec 0 \\
+                           &= \vec b
+        \end{align}
+    $$
+
+    Thus, $A\vec{r_0} = \vec b$, which means that $\vec{r_0}$ is a solution!
+</p>
+<p>
+    We have also seen, in the section on the <a href="column-space">column space</a> that the solution, if it exists, must be in the column space of $A$. Therefore, for any vector, $\vec b$, in the column space of $A$, there is a <em>unique</em> vector, $\vec{r_0}$ in the rowspace of $A$ that is the solution. Woah!!
+</p>
+<p>
+    It can also be shown that this is a unique solution. Proof ommited.
+</p>
+<p>
+    To summarise: any solution to $A\vec x = \vec b$ can we written as $\vec x = \vec{r_0} + \vec{n_0}$ and we know there is a unique solution in the rowspace of A, $\mathrm{C}(A^T)$.
+</p>
+<p>
+    This means that we can also write:
+
+    $$
+    \|\vec x\|^2 = \|\vec{r_0}\|^2 + \|\vec{n_0}^2\| \ge \|\vec{r_0}\|^2 \\
+    \therefore \|\vec x\|^2 \ge \|\vec{r_0}\|^2 \ge 0
+    $$
+
+    This is a very important point, as we'll see later on when this gets applied to things like least square
+    estimation. <b>If $\mathbf{\vec b \in \mathrm{C}(A), \text{ then } \exists!\vec{r_0} \in \mathrm{C}(A^T) \mid \vec{r_0} \text{ is a solution to } A\vec x = \vec b\ \text{ and no other solution has a length } \lt \|\vec{r_0}\|}$</b>.
 </p>
 
 <h3>Eigenvectors and Eigenvalues</h3>
