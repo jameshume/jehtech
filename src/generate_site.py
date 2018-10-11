@@ -278,13 +278,14 @@ def deploy_site(specificFile, generateImages):
         monoCssFilename = os.path.join(DEPLOYED_DIR, 'jeh-monolith.css')
         combine_files("./css", monoCssFilename)
 
-    # Regex to put in the links into all the HTML pages
+    # Regex to put in the links "page" into all the HTML pages
     prog = re.compile('(<\s*div\s+id\s*=\s*"includedContent"\s*>)', re.IGNORECASE)
 
     # Regexs to put in JS and CSS
     prog_css = re.compile('(<!--\s*CSS_INSERT\s*-->)', re.IGNORECASE)
     prog_js  = re.compile('(<!--\s*JAVASCRIPT_INSERT\s*-->)', re.IGNORECASE)
     prog_img = re.compile('##IMG_DIR##')
+    prog_snippet = re.compile('##\s*INCLUDE\s*:\s*([\w.\\/]+)\s*##')
 
     last_dirname = None
     link_to_root = ""
@@ -343,6 +344,14 @@ def deploy_site(specificFile, generateImages):
         htmlFileContents = prog_js.sub('<script src="{}{}jeh-monolith.js"></script>'.format(link_to_root, "" if link_to_root == "" else '/'), htmlFileContents)
         htmlFileContents = prog_img.sub('{}{}images/jeh-tech'.format(link_to_root, "" if link_to_root == "" else '/'), htmlFileContents)
 
+        # Lazy shitty coding
+        def snippet_replace(matchobj):
+            xhtmlFileName = os.path.join(dirname, matchobj.group(1))
+            xhtmlFile = codecs.open(xhtmlFileName, 'r', 'utf-8')
+            xhtmlFileContents = xhtmlFile.read();
+            xhtmlFile.close()
+            return xhtmlFileContents;
+        htmlFileContents = prog_snippet.sub(snippet_replace, htmlFileContents)
 
         #print("Opening {} from {}".format(newFileName, os.getcwd()))
         newFile = codecs.open(newFileName, 'w', 'utf-8')
