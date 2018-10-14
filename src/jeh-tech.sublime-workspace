@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"html",
+				"htmlFileContents"
+			],
+			[
 				"n",
 				"n"
 			],
@@ -192,26 +196,19 @@
 			"file": "html/mathsy_stuff/linear_alg.html",
 			"settings":
 			{
-				"buffer_size": 99701,
+				"buffer_size": 123143,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "generate_site.sh",
+			"contents": "Searching 83 files for \"\\mathrm{R}(\"\n\n/home/jh/GIT/jehtech/src/html/mathsy_stuff/linear_alg.html:\n 2790      \n 2791      $$\n 2792:     \\mathrm{R}(A) = \\mathrm{C}(A^T) = \\mathrm{span}\\left(\\begin{bmatrix}3 \\\\ -2\\end{bmatrix}\\right)\n 2793      $$\n 2794  \n\n1 match in 1 file\n",
 			"settings":
 			{
-				"buffer_size": 592,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "html/mathsy_stuff/determinant_solver_example.html",
-			"settings":
-			{
-				"buffer_size": 5988,
-				"line_ending": "Unix"
+				"buffer_size": 272,
+				"line_ending": "Unix",
+				"name": "Find Results",
+				"scratch": true
 			}
 		}
 	],
@@ -264,6 +261,11 @@
 	],
 	"file_history":
 	[
+		"/home/jh/GIT/jehtech/src/generate_site.sh",
+		"/home/jh/GIT/jehtech/src/html/mathsy_stuff/determinant_calculator_snippet.html",
+		"/home/jh/GIT/jehtech/src/generate_site.py",
+		"/home/jh/Desktop/InputReader.cpp",
+		"/home/jh/GIT/jehtech/src/html/mathsy_stuff/determinant_solver_example.html",
 		"/home/jh/Documents/inflowsense/firmware/inqos/drv_health/interrupt number loose all kind of correspondenc",
 		"/home/jh/.config/sublime-text-3/Packages/User/jeh-tech.sublime-build",
 		"/home/jh/GIT/jehtech/src/jeh-tech.sublime-build",
@@ -285,7 +287,6 @@
 		"/home/jh/Documents/inflowsense/firmware/inqos/driver/common/driver.c",
 		"/home/jh/Documents/inflowsense/firmware/inqos/driver/inqos_driver.h",
 		"/home/jh/Documents/inflowsense/timesync/time_server/debian_server_setup/04_setup_fail2ban.sh",
-		"/home/jh/GIT/jehtech/src/generate_site.py",
 		"/home/jh/GIT/jehtech/src/html/linux_security.html",
 		"/home/jh/GIT/jehtech/src/html/mathsy_stuff/linear_alg.html",
 		"/home/jh/Documents/inflowsense/timesync/time_server/debian_server_setup/01_setup_base_system.sh",
@@ -349,7 +350,6 @@
 		"/tmp/mozilla_jh0/jh_debug-02.txt",
 		"/home/jh/GIT/jehtech/src/html/makefiles.html",
 		"/home/jh/GIT/jehtech/src/html/c-and-c-cplus-plus-programming-language.html",
-		"/home/jh/GIT/jehtech/src/generate_site.sh",
 		"/home/jh/GIT/jehtech/src/deploy_site.py",
 		"/home/jh/Documents/House Final/rents.py",
 		"/home/jh/Documents/House/rents.py",
@@ -381,7 +381,6 @@
 		"/home/jh/GIT/linux_kernel_play/linux-kernel-labs/linux/block/Kconfig",
 		"/home/jh/GIT/linux_kernel_play/linux-kernel-labs/linux/Documentation/DocBook/Makefile",
 		"/home/jh/GIT/linux_kernel_play/linux-kernel-labs/linux/Documentation/Makefile",
-		"/home/jh/Desktop/InputReader.cpp",
 		"/home/jh/test.py",
 		"/home/jh/GIT/jehtech/src/css/jeh-tech.css",
 		"/home/jh/Documents/Betfair/listMarketPrices.py",
@@ -389,9 +388,7 @@
 		"/home/jh/Documents/Betfair/bfAPILibrary.py",
 		"/home/jh/Sandbox/CPPPlay/test_smart_pointers2.cpp",
 		"/home/jh/Sandbox/CPPPlay/test_smart_pointers.cpp",
-		"/home/jh/Desktop/Python/check_mort_split.py",
-		"/home/jh/Desktop/Python/mortgage.py",
-		"/home/jh/GIT/jehtech/src/html/linux_apis.html"
+		"/home/jh/Desktop/Python/check_mort_split.py"
 	],
 	"find":
 	{
@@ -402,6 +399,7 @@
 		"height": 101.0,
 		"where_history":
 		[
+			""
 		]
 	},
 	"find_state":
@@ -409,6 +407,17 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"\\mathrm{R}(",
+			"\\mathrm{R}",
+			"msgBox",
+			"matrix-messages",
+			"rowColInf",
+			"\\<col\\>",
+			"console.log",
+			"\\<mc\\>",
+			"mstr",
+			"prog",
+			"array",
 			"A \\\\text{is",
 			"trivial",
 			"linear.subspace",
@@ -421,7 +430,7 @@
 		"highlight": true,
 		"in_selection": false,
 		"preserve_case": false,
-		"regex": true,
+		"regex": false,
 		"replace_history":
 		[
 		],
@@ -464,7 +473,7 @@
 						"translation.y": 27694.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -473,15 +482,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 99701,
+						"buffer_size": 123143,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								76141,
-								76141
+								98661,
+								98661
 							]
 						],
 						"settings":
@@ -489,7 +498,7 @@
 							"syntax": "Packages/HTML/HTML.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 40486.0,
+						"translation.y": 50847.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -497,56 +506,46 @@
 				},
 				{
 					"buffer": 2,
-					"file": "generate_site.sh",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 592,
+						"buffer_size": 272,
 						"regions":
 						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										135,
+										146
+									]
+								],
+								"scope": ""
+							}
 						},
 						"selection":
 						[
 							[
-								26,
-								26
+								142,
+								142
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "html/mathsy_stuff/determinant_solver_example.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 5988,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								47,
-								5972
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/HTML/HTML.sublime-syntax",
+							"detect_indentation": false,
+							"line_numbers": false,
+							"output_tag": 1,
+							"result_base_dir": "",
+							"result_file_regex": "^([^ \t].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3564.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,

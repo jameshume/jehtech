@@ -1,26 +1,36 @@
 <div>
-    <input id="matrix-string" type="text"><input id="matrix-button" type="submit" value="Go...">
+    <p>
+        <input id="matrix-string" type="text" value="0 2 3 4; 0 5 0 2; 0 4 3 1; 5 4 9 8">
+        <input id="matrix-button" type="submit" value="Go...">
+    </p>
     <div id="matrix-container" style="width:100%; border: 1px solid gray">
     </div>
 
-    <div id="matrix-messages" style="border:1px solid gray;">
-    </div>
-
     <script>
+    (function() {
         /*
-        Copyright (c) 2018 James Hume
+         * Copyright (c) 2018 James Hume
+         * 
+         * Permission is hereby granted, free of charge, to any person obtaining a copy of this 
+         * software and associated documentation files (the “Software”), to deal in the Software
+         * without restriction, including without limitation the rights to use, copy, modify,
+         * merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit
+         * persons to whom the Software is furnished to do so, subject to the following conditions:
+         * 
+         * The above copyright notice and this permission notice shall be included in all copies or
+         * substantial portions of the Software.
+         *
+         * THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
+         * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
+         * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE 
+         * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR 
+         * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+         * DEALINGS IN THE SOFTWARE.
+         */
+        /* PS: Not written this is brilliant coding in mind... needs much improvement! */
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
-/* PS: This is really shitty code!! Sorry if you're having to look at it!
- */
         var mrows = null;
         var matrixDivs = null;
-        var msgBox = document.getElementById("matrix-messages");
 
         // Construct and empty numRows x numCols matrix
         function Matrix(numCols, numRows)
@@ -157,18 +167,14 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
 
             this.matrixObj = matrixObj;
             this.containerDiv = document.createElement("div");
+            //this.containerDiv.style.border="1px solid black";
             this.matrixDivs = new Array(matrixObj.numRows);
             for (var i = 0; i < this.matrixDivs.length; i++) {
                 this.matrixDivs[i] = new Array(matrixObj.numCols);
             }
 
-            this.containerDiv.style.border = "1px solid red";
-
             // Must be part of the document if we are to get widths and heihts
             parent.appendChild(this.containerDiv);
-
-            console.log("Creating matrix div with " + matrixObj.numRows + " rows and " + matrixObj.numCols + " cols");
-            console.log(matrixObj);
 
             for (var row = 0; row < matrixObj.numRows; ++row)
             {
@@ -177,7 +183,9 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
                     var newDiv = document.createElement("div");
                     var newTxt = document.createTextNode(matrixObj.data[row][col].toString());
                     newDiv.appendChild(newTxt);
-                    newDiv.style.border = "1px solid blue";
+                    newDiv.style.background = "#ebebe0";
+                    newDiv.style.margin = "2px";
+                    newDiv.style.padding = "2px";
                     newDiv.style.float = "left";
                     if (col == 0) { newDiv.style.clear = "both"; }
 
@@ -185,8 +193,10 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
                     this.containerDiv.appendChild(newDiv);
 
                     // Do this after adding to document so it has a width & height.
-                    if (newDiv.offsetWidth > maxWidth)   { maxWidth = newDiv.offsetWidth; }
-                    if (newDiv.offsetHeight > maxHeight) { maxHeight = newDiv.offsetHeight; }
+                    var displayWidth = parseFloat(newDiv.offsetWidth) + 4;   // inc margin
+                    var displayHeight = parseFloat(newDiv.offsetHeight) + 4; // inc margin
+                    if (displayWidth > maxWidth) { maxWidth = displayWidth; }
+                    if (displayHeight > maxHeight) { maxHeight = displayHeight; }
                 }
             }
 
@@ -198,10 +208,7 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
                 }
             }
 
-            console.log(maxWidth);
-            console.log(maxWidth * matrixObj.numCols + "px");
-
-            this.containerDiv.style.width = maxWidth * matrixObj.numCols + 6*matrixObj.numCols + "px"; // TODO: FIXME: Perhaps boarder not included?
+            this.containerDiv.style.width = maxWidth * matrixObj.numCols + 10 * matrixObj.numCols + "px"; // TODO: FIXME: Perhaps boarder not included?
             this.containerDiv.style.height = maxHeight * matrixObj.numRows + "px";
 
             this.highlightRow = function(row, colour) {
@@ -245,86 +252,176 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
             return td;
         }
 
+        function nextChar(c) {
+            return String.fromCharCode(c.charCodeAt(0) + 1);
+        }
+
         function display_determinant_matrix() {
             var mstr = document.getElementById("matrix-string").value;
             var mc = document.getElementById("matrix-container");
             clear_all_matricies();
             var matrix = Matrix.fromString(mstr);
-            display_determinant_matrix2(matrix, mc, 0);
 
-        }
-
-        function display_determinant_matrix2(matrix, mc, indent) {
-            if(matrix.numCols <= 2) {
-                add_text_div(mc, "<p>2x2 matrix is solved using ad - bc = " + matrix.data[0][0] + " * " + matrix.data[1][1] + " - " + matrix.data[0][1] + " * " + matrix.data[1][0] +  " = " + (matrix.data[0][0] * matrix.data[1][1] - matrix.data[0][1] * matrix.data[1][0]) +  "</p>");
-            } else {
-                display_determinant_matrix3(matrix, mc, indent);
+            if (matrix.numCols != matrix.numRows) {
+                add_text_div(mc, "<p>ERROR: The matrix must be square!</p>");
+                return;
+            } else if (matrix.numCols > 5) {
+                add_text_div(mc, "<p>ERROR: May 5x5 matricies supported. Matrix too large.</p>");
+                return;
             }
+
+            display_determinant_matrix2(matrix, mc, 0, "A");
         }
 
-        function display_determinant_matrix3(matrix, mc, indent) {
+        function display_determinant_matrix2(matrix, mc, indent, matrixLetter) {
+            var det = 0;
+
+            if(matrix.numCols == 2) {
+                det = matrix.data[0][0] * matrix.data[1][1] - matrix.data[0][1] * matrix.data[1][0];
+                add_text_div(
+                    mc, 
+                    "<p>The determinant for this 2x2 matrix is solved using ad - bc = " + 
+                        matrix.data[0][0] + " * " + matrix.data[1][1] + " - " + 
+                        matrix.data[0][1] + " * " + matrix.data[1][0] +  " = " + det + "</p>");
+            } 
+            else if(matrix.numCols == 1) {
+                det = matrix.data[0][0];
+                add_text_div(
+                    mc,
+                    "<p>The determinant for this 1x1 matrix determinant is trivially the number " +
+                        " in the matrix: " +  det + "</p>");
+            }
+            else {
+                det = display_determinant_matrix3(matrix, mc, indent, matrixLetter);
+            }
+
+            return det;
+        }
+
+        function display_determinant_matrix3(matrix, mc, indent, matrixLetter) {
             var thisIndentDiv = document.createElement("div");
             thisIndentDiv.style.marginLeft = indent + "px";
             mc.appendChild(thisIndentDiv);
 
             if (indent == 0)
-                add_text_div(thisIndentDiv, "Find the determinant for the following matrix:")
+                add_text_div(
+                    thisIndentDiv, 
+                    "Find the determinant for the following matrix, " + matrixLetter + ":");
             else
-                add_text_div(thisIndentDiv, "Find the determinant for the previous sub matrix. Following is the sub matrix displayed again, this time with the row/col that we will use (the one with the most zeros) highlighted:")
+                add_text_div(
+                    thisIndentDiv,
+                    "Find the determinant for the previous sub matrix, which we'll call " + 
+                        matrixLetter + ". Following is the sub matrix displayed again, this time " +
+                        "with the row/col that we will use (the one with the most zeros) " +
+                        "highlighted:");
 
             var matrixDiv = new MatrixDiv(matrix, thisIndentDiv);
-
-
-            rowColInf = matrix.findBestRowColForDeterminantCalc();
+            var rowColInf = matrix.findBestRowColForDeterminantCalc();
             var msg;
-            var msg_common_txt =" contains the most zeros, so we will start here because this minimises the number of calculations we have to do.</p>";
+            var msg_common_txt = ", highlighted above, contains the most zeros, so we will start " +
+                                 "here because this minimises the number of calculations we have " +
+                                 "to do.</p>";
             if (rowColInf.isRow) 
             {
-                matrixDiv.highlightRow(rowColInf.idxMostZeros, "yellow");
-                msg = add_text_div(thisIndentDiv, "<p>Row " + rowColInf.idxMostZeros.toString() + msg_common_txt);
+                matrixDiv.highlightRow(rowColInf.idxMostZeros, "#ffc0d3");
+                msg = add_text_div(
+                    thisIndentDiv,
+                    "<p>Row " + rowColInf.idxMostZeros.toString() + msg_common_txt);
             }
             else
             {
-                matrixDiv.highlightCol(rowColInf.idxMostZeros, "yellow");
-                msg = add_text_div(thisIndentDiv, "<p>Column " + rowColInf.idxMostZeros.toString() + msg_common_txt);
+                matrixDiv.highlightCol(rowColInf.idxMostZeros, "#ffc0d3");
+                msg = add_text_div(
+                    thisIndentDiv,
+                    "<p>Column " + rowColInf.idxMostZeros.toString() + msg_common_txt);
             }
             
-            var detSign = function(i, j) { return ((i + j) % 2) == 0 ? "+" : "-"; }
 
             msg.innerHTML += "<p>This means that the formula for the determinant becomes:</p>";
-            if (rowColInf.isRow) {
-                var formula = "";
-                for (var col = 0; col < matrix.numCols; ++col)
-                {
-                    var coeff = matrix.data[rowColInf.idxMostZeros][col];
-                    if (coeff != 0)
-                    {
-                        formula += detSign(rowColInf.idxMostZeros, col) + coeff.toString() + "|A<sub>" + (rowColInf.idxMostZeros + 1) + "," + (col + 1) + "</sub>| ";
-                    }
-                }
-                msg.innerHTML += "<p>" + formula + "</p>";
-                msg.innerHTML  += "<p>Where...</p>";
 
-                for (var col = 0; col < matrix.numCols; ++col)
+            // Matrix has to be square so can use numCols or numRows
+            var formula = "det(" + matrixLetter + ") = ";
+            var detSign = function(i, j) { return ((i + j) % 2) == 0 ? "+" : "-"; }
+            for (var idx = 0; idx < matrix.numCols; ++idx)
+            {
+                var coeff = rowColInf.isRow
+                                ? matrix.data[rowColInf.idxMostZeros][idx]
+                                : matrix.data[idx][rowColInf.idxMostZeros];
+                if (coeff != 0)
                 {
-                    var coeff = matrix.data[rowColInf.idxMostZeros][col];
-                    if (coeff != 0)
-                    {
-                        msg = add_text_div(thisIndentDiv, "<p>A<sub>" + (rowColInf.idxMostZeros + 1) + "," + (col + 1) + "</sub> is A with row " + (rowColInf.idxMostZeros + 1) + ", column " + (col + 1) + " deleted:</p>");
-                        console.log("Creating submatrix");
-                        var subMatrix = matrix.removeRowAndColumn(rowColInf.idxMostZeros, col);
-                        console.log("Creating subdiv");
-                        var subMatrixDiv = new MatrixDiv(subMatrix, thisIndentDiv);
-                        display_determinant_matrix2(subMatrix, thisIndentDiv, indent + 50);
+                    var dsign = rowColInf.isRow 
+                                    ? detSign(rowColInf.idxMostZeros, idx)
+                                    : detSign(idx, rowColInf.idxMostZeros);
+
+                    formula += dsign + coeff.toString() + "|" + matrixLetter + "<sub>";
+                    if (rowColInf.isRow) {
+                        formula += (rowColInf.idxMostZeros + 1) + "," + (idx + 1) + "</sub>| ";
+                    }
+                    else {
+                        formula += (idx + 1) + "," + (rowColInf.idxMostZeros + 1) + "</sub>| ";
                     }
                 }
             }
-            else {
 
+            msg.innerHTML += "<p>" + formula + "</p><p>Where...</p>";
+
+            // Matrix has to be square so can use numCols or numRows
+            var det = 0;
+            var nextMatrixLetter = matrixLetter;
+            var detSignNumeric = function(i, j) { return ((i + j) % 2) == 0 ? 1 : -1; }
+            for (var idx = 0; idx < matrix.numCols; ++idx)
+            {
+                console.log(rowColInf.isRow);
+                var coeff = rowColInf.isRow 
+                                ? matrix.data[rowColInf.idxMostZeros][idx]
+                                : matrix.data[idx][rowColInf.idxMostZeros];
+                if (coeff != 0)
+                {
+                    var matrixIsTxt = "<p>" + matrixLetter + "<sub>";
+                    if (rowColInf.isRow) {
+                        matrixIsTxt += (rowColInf.idxMostZeros + 1) + "," + (idx + 1);
+                    }
+                    else {
+                        matrixIsTxt += (idx + 1) + "," + (rowColInf.idxMostZeros + 1);
+                    }
+                    matrixIsTxt += "</sub> is " + matrixLetter + " with row ";
+                    if (rowColInf.isRow) {
+                        matrixIsTxt += (rowColInf.idxMostZeros + 1) + ", column " + (idx + 1);
+                    }
+                    else {
+                        matrixIsTxt += (idx +1) + ", column " + (rowColInf.idxMostZeros + 1);
+                    }
+                    
+                    nextMatrixLetter = nextChar(nextMatrixLetter);
+                    matrixIsTxt += " deleted (which we shall call " + nextMatrixLetter + "):</p>";
+                    add_text_div(thisIndentDiv, matrixIsTxt);
+
+                    var subMatrix = rowColInf.isRow
+                                        ? matrix.removeRowAndColumn(rowColInf.idxMostZeros, idx)
+                                        : matrix.removeRowAndColumn(idx, rowColInf.idxMostZeros)
+                    var subMatrixDiv = new MatrixDiv(subMatrix, thisIndentDiv);
+            
+                    var dsignNumeric = rowColInf.isRow
+                                           ? detSignNumeric(rowColInf.idxMostZeros, idx)
+                                           : detSignNumeric(idx, rowColInf.idxMostZeros);
+
+                    var subMatrixDeterminant = 
+                        display_determinant_matrix2( 
+                            subMatrix, thisIndentDiv, indent + 50, nextMatrixLetter);
+                    det += dsignNumeric * coeff *subMatrixDeterminant;
+                }
             }
+
+            add_text_div(
+                thisIndentDiv,
+                "<p>Therefore det(" + matrixLetter + ") = " + formula + " = " + det + "</p>");
+            
+            return det;
         }
 
         var btn = document.getElementById("matrix-button");
         btn.onclick = display_determinant_matrix;
+        display_determinant_matrix();
+    })();
     </script>
 </div>

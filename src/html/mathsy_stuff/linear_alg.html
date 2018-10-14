@@ -2108,13 +2108,20 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
 7.000000000000004</pre>
 
 <h4>See It In HTML</h4>
-<p>
-    This is a really stupid and extremely incomplete Javascript app to explain calculation of determinant. Define a matrix in the text box
-    using a Matlab-like sytax. For example, &quot;<code>1 2; 3 4</code>&quot;, defines a 2x2 matrix. Currently all it does is highlight the first
-    row or column that you would use by funding the row/column with the most zeros. Eventually I want it to do some form of animation or
-    at least a step by step explanation of the process.
+<p style="margin-bottom:10px;">
+    The following is an online matrix determinant calculator app, written in Javascript, to explain calculation of determinant. Define a matrix in the text box
+    using a Matlab-like sytax. For example, &quot;<code>1 2 3; 3 4 5; 5 6 7</code>&quot;, defines the 3x3 matrix:
+    $$
+    \begin{bmatrix}
+    1 & 2 & 3 \\ 3 & 4 & 5 \\ 5 & 6 & 7
+    \end{bmatrix}
+    $$
+    Use it to create matricies to see, step by step, with explanations, how the determinant is calculated. Just replace the text in the message box below and hit the button to see how you can solve for the determinant of your matrix...
 </p>
+
 ##INCLUDE:determinant_calculator_snippet.html##
+
+<p></p>
 
 <h4>Rule Of Sarrus</h4>
 <p>
@@ -2782,7 +2789,7 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
     We have seen that the column space of a matrix will be the column vectors associated with the pivot columns. Therefore:
     
     $$
-    \mathrm{R}(A) = \mathrm{C}(A^T) = \mathrm{span}\left(\begin{bmatrix}3 \\ -2\end{bmatrix}\right)
+    \mathrm{RowSpace}(A) = \mathrm{C}(A^T) = \mathrm{span}\left(\begin{bmatrix}3 \\ -2\end{bmatrix}\right)
     $$
 
     ^^TODO: Is this right??????
