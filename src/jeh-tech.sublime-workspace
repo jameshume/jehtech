@@ -183,34 +183,6 @@
 	},
 	"buffers":
 	[
-		{
-			"file": "html/linux_kernel.html",
-			"settings":
-			{
-				"buffer_size": 86383,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "html/mathsy_stuff/linear_alg.html",
-			"settings":
-			{
-				"buffer_size": 123143,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"contents": "Searching 83 files for \"\\mathrm{R}(\"\n\n/home/jh/GIT/jehtech/src/html/mathsy_stuff/linear_alg.html:\n 2790      \n 2791      $$\n 2792:     \\mathrm{R}(A) = \\mathrm{C}(A^T) = \\mathrm{span}\\left(\\begin{bmatrix}3 \\\\ -2\\end{bmatrix}\\right)\n 2793      $$\n 2794  \n\n1 match in 1 file\n",
-			"settings":
-			{
-				"buffer_size": 272,
-				"line_ending": "Unix",
-				"name": "Find Results",
-				"scratch": true
-			}
-		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -261,6 +233,10 @@
 	],
 	"file_history":
 	[
+		"/home/jh/GIT/jehtech/src/images/jeh-tech/draw_projection_vectors_1.py",
+		"/home/jh/GIT/jehtech/src/images/jeh-tech/draw_rowspace_nullspace.py",
+		"/home/jh/GIT/jehtech/src/html/mathsy_stuff/linear_alg.html",
+		"/home/jh/GIT/jehtech/src/html/linux_kernel.html",
 		"/home/jh/GIT/jehtech/src/generate_site.sh",
 		"/home/jh/GIT/jehtech/src/html/mathsy_stuff/determinant_calculator_snippet.html",
 		"/home/jh/GIT/jehtech/src/generate_site.py",
@@ -288,14 +264,12 @@
 		"/home/jh/Documents/inflowsense/firmware/inqos/driver/inqos_driver.h",
 		"/home/jh/Documents/inflowsense/timesync/time_server/debian_server_setup/04_setup_fail2ban.sh",
 		"/home/jh/GIT/jehtech/src/html/linux_security.html",
-		"/home/jh/GIT/jehtech/src/html/mathsy_stuff/linear_alg.html",
 		"/home/jh/Documents/inflowsense/timesync/time_server/debian_server_setup/01_setup_base_system.sh",
 		"/media/jh/DEBIAN 9_4_/debian_server_setup/06_setup_pps_and_ntp.sh",
 		"/home/jh/Documents/inflowsense/timesync/time_server/debian_server_setup/06_setup_pps_and_ntp.sh",
 		"/home/jh/GIT/crossfit/lib/python3.6/site-packages/django/views/generic/base.py",
 		"/home/jh/GIT/jehtech/src/html/linux_script.html",
 		"/home/jh/GIT/jehtech/README.md",
-		"/home/jh/GIT/jehtech/src/html/linux_kernel.html",
 		"/home/jh/GIT/crossfit/src/crossfit/crossfit/settings/base.py",
 		"/home/jh/GIT/crossfit/src/crossfit/crossfit/urls.py",
 		"/home/jh/GIT/crossfit/lib/python3.6/site-packages/django/core/handlers/exception.py",
@@ -386,9 +360,7 @@
 		"/home/jh/Documents/Betfair/listMarketPrices.py",
 		"/home/jh/Documents/Betfair/test.py",
 		"/home/jh/Documents/Betfair/bfAPILibrary.py",
-		"/home/jh/Sandbox/CPPPlay/test_smart_pointers2.cpp",
-		"/home/jh/Sandbox/CPPPlay/test_smart_pointers.cpp",
-		"/home/jh/Desktop/Python/check_mort_split.py"
+		"/home/jh/Sandbox/CPPPlay/test_smart_pointers2.cpp"
 	],
 	"find":
 	{
@@ -407,6 +379,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"TODO: Is thi",
+			"m \\times",
 			"\\mathrm{R}(",
 			"\\mathrm{R}",
 			"msgBox",
@@ -443,114 +417,8 @@
 	"groups":
 	[
 		{
-			"selected": 1,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "html/linux_kernel.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 86383,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								59549,
-								59549
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/HTML/HTML.sublime-syntax",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 27694.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "html/mathsy_stuff/linear_alg.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 123143,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								98661,
-								98661
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/HTML/HTML.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 50847.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 272,
-						"regions":
-						{
-							"match":
-							{
-								"flags": 112,
-								"regions":
-								[
-									[
-										135,
-										146
-									]
-								],
-								"scope": ""
-							}
-						},
-						"selection":
-						[
-							[
-								142,
-								142
-							]
-						],
-						"settings":
-						{
-							"detect_indentation": false,
-							"line_numbers": false,
-							"output_tag": 1,
-							"result_base_dir": "",
-							"result_file_regex": "^([^ \t].*):$",
-							"result_line_regex": "^ +([0-9]+):",
-							"scroll_past_end": true,
-							"syntax": "Packages/Default/Find Results.hidden-tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				}
 			]
 		}
 	],

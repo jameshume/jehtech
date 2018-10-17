@@ -2652,7 +2652,7 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
     </div>
 
     We can show that $\mathrm{C}(A^T) = \left(\mathrm{N}(A)\right)^\perp$. We want to show that if $\vec x \in \mathrm{N}(A)$ then $\vec x \cdot \vec a = 0$ for all $\vec a \in (\mathrm{C}(A^T))^\perp$. We know 
-    that $\mathrm{N}(A) = \{\vec x \in \mathbb{R}^n \mid A\vec x = \vec 0\}$ which we can write as:
+    that $\mathrm{N}(A) = \{\vec x \in \mathbb{R}^\mathbf{\color{blue}{n}} \mid A\vec x = \vec 0\}$ which we can write as:
 
     $$
     \underbrace{
@@ -2672,7 +2672,7 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
         \vdots \\
         0
       \end{bmatrix}
-    }_{m \times 1}
+    }_{\mathbf{\color{blue}{n}} \times 1}
     $$
 
     Where $r_i^T$ is the i<sup>th</sup> row vector of $A$.
@@ -2750,13 +2750,14 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
     This means that we can also write:
 
     $$
-    \|\vec x\|^2 = \|\vec{r_0}\|^2 + \|\vec{n_0}^2\| \ge \|\vec{r_0}\|^2 \\
+    \|\vec x\|^2 = \|\vec{r_0}\|^2 + \|\vec{n_0}^2\| \ge \|\vec{r_0}\|^2
     $$
 
     $$
     \therefore \|\vec x\|^2 \ge \|\vec{r_0}\|^2 \ge 0
     $$
-
+</p>
+<p style="border: 1px solid blue;">
     This is a very important point, as we'll see later on when this gets applied to things like least square
     estimation. <b>If $\mathbf{\vec b \in \mathrm{C}(A), \text{ then } \exists!\vec{r_0} \in \mathrm{C}(A^T) \mid \vec{r_0} \text{ is a solution to } A\vec x = \vec b\ \text{ and no other solution has a length } \lt \|\vec{r_0}\|}$</b>.
 </p>
@@ -2791,8 +2792,6 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
     $$
     \mathrm{RowSpace}(A) = \mathrm{C}(A^T) = \mathrm{span}\left(\begin{bmatrix}3 \\ -2\end{bmatrix}\right)
     $$
-
-    ^^TODO: Is this right??????
     </p>
     <p>So, what about the solution set?
     $$
@@ -2806,19 +2805,18 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
     $$
     \therefore\text{ Solution Set } = 
         \left\{
-            x_2 \color{blue}{
+            x_2 \color{red}{
                 \underbrace{\begin{bmatrix}\frac{2}{3} \\1\end{bmatrix}}_{\vec{n_0} \in \mathrm{N}(A)}
             } + 
-          \color{red}{
-                \underbrace{
-                    \begin{bmatrix}3 \\0\end{bmatrix}
-                }_{
-                    \vec{r_0 \in \mathrm{C}(A^T)}
-                }
+          \color{green}{
+                \begin{bmatrix}3 \\0\end{bmatrix}                
             },\ x_2 \in \mathbb{R}
     
       \right\}
     $$
+
+    We can see that the solution set is a scaled vector from the null space plus some particular solution. These can
+    be plotted as so:
 </p>
 
 
