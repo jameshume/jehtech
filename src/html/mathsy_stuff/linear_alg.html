@@ -2759,7 +2759,7 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
 </p>
 <p style="border: 1px solid blue;">
     This is a very important point, as we'll see later on when this gets applied to things like least square
-    estimation. <b>If $\mathbf{\vec b \in \mathrm{C}(A), \text{ then } \exists!\vec{r_0} \in \mathrm{C}(A^T) \mid \vec{r_0} \text{ is a solution to } A\vec x = \vec b\ \text{ and no other solution has a length } \lt \|\vec{r_0}\|}$</b>.
+    estimation. <b>If $\mathbf{\vec b \in \mathrm{C}(A)}$, then $\mathbf{\exists!\vec{r_0} \in \mathrm{C}(A^T)}$ such that $\mathbf{\vec{r_0}}$ is a solution to $\mathbf{A\vec x = \vec b}$  and no other solution has a length less than $\mathbf{\|\vec{r_0}\|}$</b>.
 </p>
 <h4>A Visual Exploration</h4>
 <p>
@@ -2817,6 +2817,11 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
 
     We can see that the solution set is a scaled vector from the null space plus some particular solution. These can
     be plotted as so:
+</p>
+<p>
+    <video autoplay loop>
+        <source src="##IMG_DIR##/draw_rowspace_nullspace.mp4" type="video/mp4">
+    </video>
 </p>
 
 
