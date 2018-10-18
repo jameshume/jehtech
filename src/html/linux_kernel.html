@@ -460,6 +460,17 @@ https://source.android.com/devices/input/touch-devices.html
       </li>
     </ul>
 </p>
+<pre>
+Todo read:
+https://embedjournal.com/kernel-compilation-beaglebone-black/
+https://embedjournal.com/custom-rfs-beaglebone-black/
+https://www.elinux.org/Beagleboard:BeagleBoneBlack#Software_Resources
+http://derekmolloy.ie/write-a-new-image-to-the-beaglebone-black/ -- writes to onboard eMMC
+https://wiki.beyondlogic.org/index.php?title=BeagleBoneBlack_Upgrading_uBoot
+https://www.twam.info/hardware/beaglebone-black/u-boot-on-beaglebone-black
+http://processors.wiki.ti.com/index.php/SD/MMC_format_for_OMAP3_boot
+https://www.digikey.com/eewiki/display/linuxonarm/BeagleBone+Black#BeagleBoneBlack-ARMCrossCompiler:GCC
+</pre>
 <p>
     Notes created whilst working through
     <a href="http://free-electrons.com/doc/training/linux-kernel/linux-kernel-labs.pdf"
@@ -1244,6 +1255,10 @@ vals[found].val = pinctrl_spec.args[1];</pre>
     Device tree files can also import other device tree files and also C header files so that it is
     easy and less error prone to share named quantities between kernel code and the device tree.
   </p>
+  <p>
+    The device tree is exposed in Linux under the <code>/proc/device-tree/</code> directory. The directories are paths in the device tree
+    and the nodes can all be <code>cat</code>'ed. If you have the device tree compiler on your system, which is contained in the <code>device-tree-compiler</code> package, you can use <code>dtc -I fs /sys/firmware/devicetree/base</code> [<a href="https://unix.stackexchange.com/questions/289563/how-to-list-the-kernel-device-tree" target="_blank">Ref</a>].
+  </p>
 
   <h3>Source</h3>
   <p>
@@ -1539,6 +1554,11 @@ the pin controller driver to execute different settings.</p>
   is permanently connected to the system and so our BeagleBone configuration would always be
   setup to enable the I2C muxing on the P9 connector.
 </p>
+
+<p>
+  To see a list of the claimed pin muxes (and the GPIOS) you can type the following: <code>cat /sys/kernel/debug/pinctrl/44e10800.pinmux/pinmux-pins</code>.
+</p>
+
 </div> <!-- End H2 -->
 
 <h2>Wait Queues</h2>
