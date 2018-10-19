@@ -81,6 +81,12 @@
     <li>https://www.oreilly.com/library/view/linux-device-drivers/0596005903/ch07.html - Time, delays etc</li>
     <li>https://www.ibm.com/developerworks/library/l-kernel-memory-access/index.html</li>
     <li>https://stackoverflow.com/questions/442833/forcing-driver-to-device-match</li>
+    <li>https://www.ibm.com/developerworks/library/l-initrd/index.html</li>
+    <li>https://www.digikey.com/eewiki/display/linuxonarm/BeagleBone+Black#BeagleBoneBlack-LinuxKernel</li>
+    <li>http://blog.logikonlabs.com/how-to-create-a-custom-microsd-card-image-for-the-beaglebone-black/</li>
+    <li>https://www.digikey.com/eewiki/display/linuxonarm/BeagleBone+Black</li>
+    <li>https://www.element14.com/community/community/designcenter/single-board-computers/next-gen_beaglebone/blog/2015/12/05/mainline-linux-kernel-on-beaglebone-black</li>
+    <li>https://kernelnewbies.org/ ************</li>
   </ol>
 
   <p>Interesting looking courses:</p>
@@ -458,6 +464,8 @@ https://source.android.com/devices/input/touch-devices.html
       </li>
       <li><a href="http://www.ti.com/lit/ug/spruh73p/spruh73p.pdf" target="_blank">AM335x and AMIC110 Sitara<sup>TM</sup> Processors Technical Reference Manual</a>.
       </li>
+      <li><a href="https://www.digikey.com/eewiki/display/linuxonarm/BeagleBone" target="_blank">BeagleBone</a>, Robert Nelso.
+      </li>
     </ul>
 </p>
 <pre>
@@ -470,6 +478,7 @@ https://wiki.beyondlogic.org/index.php?title=BeagleBoneBlack_Upgrading_uBoot
 https://www.twam.info/hardware/beaglebone-black/u-boot-on-beaglebone-black
 http://processors.wiki.ti.com/index.php/SD/MMC_format_for_OMAP3_boot
 https://www.digikey.com/eewiki/display/linuxonarm/BeagleBone+Black#BeagleBoneBlack-ARMCrossCompiler:GCC
+https://elinux.org/Beagleboard:BeagleBoneBlack_Rebuilding_Software_Image
 </pre>
 <p>
     Notes created whilst working through
@@ -583,7 +592,7 @@ tar xvf linux-kernel-labs.tar.xz</pre>
   <a href="https://help.ubuntu.com/community/SettingUpNFSHowTo" target="_blank">SettingUpNFSHowTo</a>.
 </p>
 
-<h4> Setup Uboot</h4>
+<h4>Setup Uboot</h4>
 <p>
     The version of UBoot I had by default on my BB did not have the &quot;<code>saveenv</code>&quot;
     command :( So, for now at least, I will type the boot commands manually rather than worrying
@@ -1438,6 +1447,22 @@ LOOK IN LOGS FOR: pr_debug("%s: mapped hwirq=%i to irq=%i, flags=%x\n",
   available. For now, I'm ending my learning-via-code-base as its probably a bit more depth than I
   need right now.
 </p>
+
+<h3>Which Drivers</h3>
+<p>
+  You can see which drivers are statically compiled into the kernel using the following command <a href="https://superuser.com/questions/577307/how-to-get-a-list-of-active-drivers-that-are-statically-built-into-the-linux-ker" target="_blank">[Ref]</a>.
+</p>
+<pre class="prettyprint linenums">
+cat /lib/modules/$(uname -r)/modules.builtin
+</pre>
+<p>
+  You can see which drivers are loaded as modules using the following:
+</p>
+<pre class="prettyprint linenums">
+cat /proc/modules
+# Or to pretty print it...
+lsmod
+</pre>
 
 <h3>Device Attributes</h3>
 <p>
