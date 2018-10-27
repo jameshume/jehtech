@@ -27,12 +27,11 @@
 	as being obvious, for example, <q>the dot product of two orthogonal vectors
 	is zero</q>. Well... why is this? The result was a pretty simple but
 	nonetheless it took a little while to think it through properly.
-	Hence, these notes... they're my musings on the &quot;why&quot;, even if the
-	&quot;why&quot; might be obvious to the rest of the world! It also degraded
-    into just notes too, without the musings :'(...
+	Hence, these notes... they started of as my musings on the &quot;why&quot;, even if the
+	&quot;why&quot; might be obvious to the rest of the world!
 </p>
 <p>
-    A lot of these notes are now just based on the amazing <a href="https://www.khanacademy.org/math/linear-algebra" target="_blank">Khan Academy linear algebra tutorials</a>.
+    A lot of these notes are now just based on the amazing <a href="https://www.khanacademy.org/math/linear-algebra" target="_blank">Khan Academy linear algebra tutorials</a>. In fact, id say the vast majority are... they are literally just notes on Sal's lectures!
 </p>
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -2989,14 +2988,16 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
     <h3>Linear Transformations</h3>
     <p>
         Vector valued functions are <em>transformations</em>. Linear transformations are a particular
-        type of transformation that obeys thee following rules. If $T: \mathbb{R}^n \mapsto \mathbb{R}^m$ and
+        type of transformation that obey the following rules. If $T: \mathbb{R}^n \mapsto \mathbb{R}^m$ and
         $\vec a, \vec b \in \mathbb{R}^n$ then:
     </p>
+    <a id="linear-transform-rules">
     <ol>
         <li>$T(\vec a + \vec b) = T(\vec a) + T(\vec b)$</li>
         <li>$T(\alpha \vec a) = \alpha T(\vec a) \mid \alpha \in \mathbb{R}$</li>
         <li>$T(\vec 0) = \vec 0$</li>
     </ol>
+    </a>
     <p>
         In other words, the origin must remain fixed and all lines must remain lines. For example, a transformation such as $\mathrm{f}(x) = x^2$ is non linear because $\mathrm{f}(a + b) \ne \mathrm{f}(a) + \mathrm{f}(b)$, generally, for example.
     </p>
@@ -3352,10 +3353,10 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
     \textrm{Proj}_L(\vec x) = (\hat v \cdot \vec x) \hat v
     $$
 
-    And we have seen in a <a href="#unit-vectors">previous section</a> how to make an vector a unit vector. Whoopdi do!
+    And we have seen in a previous section how to <a href="#unit-vectors">make a vector a unit vector</a>. Whoopdi do!
 </p>
 <p>
-    Turns out that <b>projection is a linear transform</b>! To calculate the matrix that describes the projection transform,
+    Turns out that <b>projection is a linear transform</b> (see <a href="#linear-transform-rules">the rules</a>)! To calculate the matrix that describes the projection transform,
     apply the projection to each of the column vectors of the identity matrix where the column vectors of $I$ are the same
     length as the vector over which the projection is applied. So, for example, vectors in $\mathbb{R}^n$ to get the transformation
     matrix $A$ for a projection onto a line defined by the vector $\hat u$:
@@ -3366,6 +3367,47 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
     \end{bmatrix}
     $$
 </p>
+<p>
+This definition has been defined only for a projection onto a line, which is a valid subspace (recall: closed under addition and scalar multiplication). But what about projections onto planes in 3D or onto any abitrary &quot;space&quot; in $\mathbb{R}^n$? It does, in fact, generalise to a projection onto any subspace!
+</p>
+<p>
+    If $V$ is a subspace of $\mathbb{R}^n$, then we have seen that $V^\perp$ is also a valid subspace of $\mathbb{R}^n$. We have also seen that we can express any vector in $\mathbb{R}^n$ as the sum of a vector in $V$ and a vector in $V^\perp$.
+</p>
+<p>
+    I.e., if $\vec{x} \in \mathbb{R}^n$, $\vec v \in V$ and $\vec w \in V^\perp$, then $\vec x = \vec v + \vec w$. Thus we can say:
+
+    $$
+    \vec x = \underbrace{\vec v}_{\text{Part of } \vec x \text{ from V}} + \underbrace{\vec w}_{\text{Part of } \vec x \text{ from } V^\perp}
+    $$
+
+    Therefore:
+    $$
+    \begin{align}
+        \mathrm{Proj}_V(\vec x) &= \text{Part of } \vec x \text{ from } V\\
+        &= \vec v \in V
+    \end{align}
+    $$
+
+    And:
+    $$
+    \begin{align}
+        \mathrm{Proj}_{V^\perp}(\vec x) &= \text{Part of } \vec x \text{ from } V^\perp\\
+        &= \vec w \in V^\perp
+    \end{align}
+    $$
+
+    We know that a projection is a linear transformation and is therefore defined by some $A\vec x = \vec b$, where $\vec x$ is the vector we are projecting, and $\vec b$ is the projection of that vector. But, projected onto what? Above we defined it for a line, and we have seen previously that solution set is $\{c\vec{n_0} + \vec{p}\}$, where $\vec{n_0} \in \mathrm{N}(A)$ and $\vec{p}$ is a particular solution. We can see this in the diagram below, which replicates the previous problem's matrix $A$:
+</p>
+<p>
+    <img src="##IMG_DIR##/project_onto_rowspace.png"/>
+</p>
+<p>
+    Thus we know that we have projected $\vec x$ onto the row space of our projection matrix $A$. So the row space is, in 2D world, the line we have projected $\vec x$ onto, and in any-D world, the subspace we have projected $\vec x$ onto.
+</p>
+The column space of the matrix A we get by following our proceedure to create the projection matrix is the
+canocial vectors projected onto our line. So we know how much of any is made up of the canocial vectors.
+
+
 
 <p style="clear:both;"></p>
 
