@@ -29,13 +29,10 @@ def init():
     # 27./13., -2./3. * 27./13.
 
     ax.quiver(0, 0, 2./3., 1, color='r', angles='xy', scale_units='xy', scale=1, zorder=2)
-    ax.quiver(3, 0, 2./3., 1, color='g', angles='xy', scale_units='xy', scale=1, zorder=2)
-    ax.quiver(0, 0, 3, 0, color='cyan', angles='xy', scale_units='xy', scale=1, zorder=2)
+#    ax.quiver(3, 0, 2./3., 1, color='g', angles='xy', scale_units='xy', scale=1, zorder=2)
     ax.quiver(0, 0, 27./13., -2./3. * 27./13., color='b', angles='xy', scale_units='xy', scale=1, zorder=2)
-
-
+    
     ax.plot([27./13.], [-2./3. * 27./13.], marker='o', markersize=4, color="black", zorder=1)
-
     ax.plot([-10, 10], [-15, 15], color='r', zorder=0, alpha=0.5)
     ax.plot([-10, 10], [20.0/3.0, -20.0/3.0], color='b', zorder=0, alpha=0.5)
     ax.plot([-7, 13], [-15, 15], color='g', zorder=0, alpha=0.5)
@@ -43,15 +40,6 @@ def init():
     ax.grid();
     ax.set_xlim(-5, 5)
     ax.set_ylim(-5, 5)
-
-    a = ax.annotate( r'$\vec{n_o} + [3, 0]$'
-               , xy=(3.3, 0.34)
-               , xytext=(10, -40)
-               , textcoords='offset points'
-               , fontsize='medium'
-               , arrowprops=dict(facecolor='green', shrink=0.05, connectionstyle="arc3,rad=0.1", fc="g")
-    )
-    annotations.append(a)
 
     a = ax.annotate( r'Solution set'
                , xy=(.75, -3.4)
@@ -77,15 +65,6 @@ def init():
                , textcoords='offset points'
                , fontsize='medium'
                , arrowprops=dict(facecolor='red', shrink=0.05, connectionstyle="arc3,rad=0.1", fc="r", alpha=0.5)
-    )
-    annotations.append(a)
-
-    a = ax.annotate( r'$[3, 0]$'
-               , xy=(1.5, 0)
-               , xytext=(-10, 35)
-               , textcoords='offset points'
-               , fontsize='medium'
-               , arrowprops=dict(facecolor='cyan', shrink=0.05, connectionstyle="arc3,rad=0.1", fc="cyan")
     )
     annotations.append(a)
 
