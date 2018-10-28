@@ -140,12 +140,13 @@ pre {
 	border-left:  5px solid gray;
 }
 
-h1, h2, h3 {
+h1, h2, h3, h4 {
 	border-left:  0px;
 	border-right: 0px;
 	border-top:   0px;
 	margin:       0px;
 	font-weight:  bolder;
+	border-bottom: 1px solid gray;
 }
 
 h1 {
@@ -159,12 +160,15 @@ h1.title {
 }
 
 h2 {
-	border-bottom: 1px solid gray; 
-	background-color: #E4EBF2;
+	background-color: #C9D5E1;
 }
 
 h3 {
-	border-bottom: 1px solid gray;
+	background-color: #E0E7EE;
+}
+
+h4 {
+	background-color: #ECF4FA;
 }
 
 #header	{ margin:           0px; 

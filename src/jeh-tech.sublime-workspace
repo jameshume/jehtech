@@ -4,6 +4,22 @@
 		"selected_items":
 		[
 			[
+				"an",
+				"annotations"
+			],
+			[
+				"ani",
+				"aniquiv"
+			],
+			[
+				"uni",
+				"unit_vec_c"
+			],
+			[
+				"len",
+				"len_a"
+			],
+			[
 				"html",
 				"htmlFileContents"
 			],
@@ -183,6 +199,24 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "html/mathsy_stuff/linear_alg.html",
+			"settings":
+			{
+				"buffer_size": 126099,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "images/jeh-tech/draw_rowspace_nullspace.py",
+			"settings":
+			{
+				"buffer_size": 3937,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -228,8 +262,7 @@
 	},
 	"expanded_folders":
 	[
-		"/home/jh/GIT/jehtech/src/html",
-		"/home/jh/GIT/jehtech/src/html/mathsy_stuff"
+		"/home/jh/GIT/jehtech/src/html"
 	],
 	"file_history":
 	[
@@ -379,6 +412,9 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"numpy",
+			"plt",
+			"v2",
 			"TODO: Is thi",
 			"m \\times",
 			"\\mathrm{R}(",
@@ -417,8 +453,69 @@
 	"groups":
 	[
 		{
+			"selected": 0,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "html/mathsy_stuff/linear_alg.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 126099,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 51644.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "images/jeh-tech/draw_rowspace_nullspace.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3937,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1981.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				}
 			]
 		}
 	],

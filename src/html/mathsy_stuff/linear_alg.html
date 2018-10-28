@@ -162,6 +162,8 @@
         \mathrm{span}(\vec{v_1}, \vec{v_2}, \ldots, \vec{v_n}) = \{c_1\vec{v_1} + c_2\vec{v_2} + \cdots + c_n\vec{v_n} \;|\; c_i \in \mathbb{R}\}
     $$
 
+    The span can also be refered to as the <b>generating set</b> of vectors for a subspace.
+</p><p>
     In the graph to the right there are two vectors $\vec a$ and $\vec b$. The dotted blue lines show
     all the possible scalings of the vectors. The vectors span those lines. The green lines show
     two particular scalings of $\vec a$ added to all the possible scalings of $\vec b$. One can
@@ -482,6 +484,7 @@
             <td>$\|\vec x + \vec y\| \le \|\vec x\| + \|\vec y\|$</td>
         </tr>
     </table>
+    <p></p>
 
     <h4>Angle Between Vectors</h4>
     <p style="float:left;">
@@ -564,7 +567,7 @@
     </p>
 </div>
 
-<h3>Dot Product WIth Matrix Vector Product</h3>
+<h3>Dot Product With Matrix Vector Product</h3>
 <div>
     <p>
         If $A$ is an mxn matrix and $\vec{x} \in \mathbb{R}^n$ then $A\vec{x} \in \mathbb{R}^m$.
@@ -2614,9 +2617,6 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
 
 <h4>Relationship Between The Spaces: Orthogonal Complements</h4>
 <p>
-    TODO: Graphs and relate to above example.
-</p>
-<p>
     An orthogonal complement is defined as follows. If $V$ is a subspace of $\mathbb{R}^n$, the orthogonal complement of $V$ is written $V^\perp$ as is defined as so:
 
     $$
@@ -2627,6 +2627,20 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
 </p>
 <p>
     It can be shown that $V^\perp$ is a valid subspace: it is closed under addition and scalar multiplication.
+</p>
+<p>
+    To find the orthogonal complement of $V$, take its generating vectors and place them as row vectors in a matrix. If, $V \in \mathbb{R}^n$ and the generating set of vectors, or span, of $V$ is $\{\vec{v_1}, \vec{v_2}, \ldots, \vec{v_k}\}$ then form the $k$ by $n$ matrix:
+
+    $$
+    A = \begin{bmatrix}
+        \leftarrow & \vec{v_1} & \rightarrow \\
+        \leftarrow & \vec{v_2} & \rightarrow \\
+        & \vdots \\
+        \leftarrow  & \vec{v_k} & \rightarrow 
+    \end{bmatrix}
+    $$
+
+    In the above matrix, $V$ becomes the row space of $A$. Because the null space of $A$ is the orthogonal complement of this matrix, the orthogonal compement to your subspace $V$ is found by finding the null space of the above matrix!
 </p>
 <p>
     The <b>column space and left-null space are perpendicular</b>. They are orthogonal complements. Thus we can say:
@@ -2760,6 +2774,20 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
     This is a very important point, as we'll see later on when this gets applied to things like least square
     estimation. <b>If $\mathbf{\vec b \in \mathrm{C}(A)}$, then $\mathbf{\exists!\vec{r_0} \in \mathrm{C}(A^T)}$ such that $\mathbf{\vec{r_0}}$ is a solution to $\mathbf{A\vec x = \vec b}$  and no other solution has a length less than $\mathbf{\|\vec{r_0}\|}$</b>.
 </p>
+
+<a id="orthogonal-complements-summary"></a>
+<h4>Summary</h4>
+<p>
+    The orthogonal complement $V^\perp$ of a subspace $V \in \mathbb{R}^n$ has the following properties:
+</p>
+<ul>
+    <li>$V^\perp$ is a subspace of $\mathbb{R}^n$.</li>
+    <li>$\mathrm{dim}(V^\perp) = n - \mathrm{dim}(V)$.</li>
+    <li>$(V^\perp)^\perp = V$.</li>
+    <li>Each vector $\vec b$ in $\mathbb{R}^n$ can be expressed unqiuely in the form $\vec b = \vec{b_V} + \vec{b_{V^\perp}}$ for $\vec{b_V} \in V$ and $\vec {b_{V^\perp}} \in V^\perp$.</li>
+    <li>If ${\vec b \in \mathrm{C}(A)}$, then ${\exists!\vec{r_0} \in \mathrm{C}(A^T)}$ such that ${\vec{r_0}}$ is a solution to ${A\vec x = \vec b}$  and no other solution has a length less than ${\|\vec{r_0}\|}$</li>
+</ul>
+
 <h4>A Visual Exploration</h4>
 <p>
     $$
@@ -3383,7 +3411,7 @@ This definition has been defined only for a projection onto a line, which is a v
     If $V$ is a subspace of $\mathbb{R}^n$, then we have seen that $V^\perp$ is also a valid subspace of $\mathbb{R}^n$. We have also seen that we can express any vector in $\mathbb{R}^n$ as the sum of a vector in $V$ and a vector in $V^\perp$.
 </p>
 <p>
-    I.e., if $\vec{x} \in \mathbb{R}^n$, $\vec v \in V$ and $\vec w \in V^\perp$, then $\vec x = \vec v + \vec w$. Thus we can say:
+    I.e., if $\vec{x} \in \mathbb{R}^n$, $\vec v \in V$ and $\vec w \in V^\perp$, then we can express $\vec x$ uniquely as $\vec x = \vec v + \vec w$, as we have <a href="#orthogonal-complements-summary">seen in a previous section</a>. Thus we can say:
 
     $$
     \vec x = \underbrace{\vec v}_{\text{Part of } \vec x \text{ from V}} + \underbrace{\vec w}_{\text{Part of } \vec x \text{ from } V^\perp}
@@ -3405,20 +3433,94 @@ This definition has been defined only for a projection onto a line, which is a v
     \end{align}
     $$
 
-    We know that a projection is a linear transformation and is therefore defined by some $A\vec x = \vec b$, where $\vec x$ is the vector we are projecting, and $\vec b$ is the projection of that vector. But, projected onto what? Above we defined it for a line, and we have seen previously that solution set is $\{c\vec{n_0} + \vec{p}\}$, where $\vec{n_0} \in \mathrm{N}(A)$ and $\vec{p}$ is a particular solution. We can see this in the diagram below, which replicates the previous problem's matrix $A$:
+    We know that a projection is a linear transformation and is therefore defined by some $A\vec x = \vec b$, where $\vec x$ is the vector we are projecting, and $\vec b$ is the projection of that vector. But, projected onto what?  We can see this in the diagram below, which replicates the previous problem's matrix $A$:
 </p>
 <p>
     <img src="##IMG_DIR##/project_onto_rowspace.png"/>
 </p>
 <p>
-    Thus we know that we have projected $\vec x$ onto the row space of our projection matrix $A$. So the row space is, in 2D world, the line we have projected $\vec x$ onto, and in any-D world, the subspace we have projected $\vec x$ onto.
+    We have projected $\vec x$ onto the row space of our projection matrix $A$, and the projection is the unique solution from the rowspace. So the row space is, in 2D world, the line we have projected $\vec x$ onto, and in any-D world, the subspace we have projected $\vec x$ onto. We can say:
+
+    $$
+    \mathrm{proj}_{\mathrm{C}(A^\perp)}(\vec s) = \vec r
+    $$
+
+    In the above problem, the easiest solution was the vector $[3, 0]$, so we have:
+
+    $$
+        \begin{align}
+            \mathrm{proj}_{\mathrm{C}(A^\perp)}(\vec s) 
+                &= \frac{ \begin{bmatrix} 3 \\ 0\end{bmatrix} \cdot \begin{bmatrix} 3 \\ -2\end{bmatrix} }
+                        { \begin{bmatrix} 3 \\ -2\end{bmatrix} \cdot \begin{bmatrix} 3 \\ -2\end{bmatrix} }
+                   \begin{bmatrix} 3 \\ -2\end{bmatrix} \\
+                &= \begin{bmatrix} \frac{27}{13} \\ \frac{-18}{13}\end{bmatrix} \\
+                &= \vec r
+        \end{align}
+    $$
+
+    So, we can see the definition of projection for onto a line generalises to a projection onto any subspace
 </p>
-The column space of the matrix A we get by following our proceedure to create the projection matrix is the
-canocial vectors projected onto our line. So we know how much of any is made up of the canocial vectors.
+
+<pre>
+What I'm not clear on so far...
+
+We know how to find the projection matrix for our vector onto a subspace by applying the formula to the column vectors of the identity matrix. So we can get our projection matrix.
+
+Above we've said that the projection is the vector from one of the the othog complements, say V. So the project of an arbitrary vector x onto V will be r if V is the rowspace of the transformation matrix.
+
+So the rowspace of the projection matrix, that we know how to find, must therefore contain r.
+
+To find a projection of x onto V
+1. Find the basis vector set for V
+2. Find the basis vector set for V^\perp
+3. Find the coordinate vector of x relative to the basis vectors of V \union V^\perp - as we can express any vector like this
+4. Then b onto V is just the combo of the vector basis components of V
+
+So this must relate projection to change of basis too!! Aaaarg... brain melty
+</pre>
 
 
+<h4>A Projection Onto A Subspace Is A Linear Transform</h4>
+<p>
+    Say that $V$ is a subspace of $\mathbb{R}^n$ and that $V$ has basis vectors $\{\vec{b_1}, \vec{b_2}, \ldots, \vec{b_k}\}$. This means that
+    any vector $\vec a \in V$ can be defined as:
 
-<p style="clear:both;"></p>
+    $$
+    \vec a = y_1\vec{b_1} + y_2\vec{b_2} + \cdots + y_k\vec{b_k}
+    $$
+
+    We know from the definition of matrix multiplcation that we can re-write the above as:
+
+    $$
+    \vec a = \begin{bmatrix}
+            \uparrow & \uparrow & & \uparrow\\
+            \vec{b_1} & \vec{b_2} & \cdots & \vec{b_k} \\
+            \downarrow & \downarrow & & \downarrow\\
+    \end{bmatrix}
+    \begin{bmatrix}
+        y_1 \\
+        y_2 \\
+        \vdots \\
+        y_k
+    \end{bmatrix}
+    $$
+
+    Where
+
+    $$
+    A = \underbrace{
+        \begin{bmatrix}
+            \uparrow & \uparrow & & \uparrow\\
+            \vec{b_1} & \vec{b_2} & \cdots & \vec{b_k} \\
+            \downarrow & \downarrow & & \downarrow\\
+        \end{bmatrix}
+    }_{
+        \text{cols are basis vecs of subspace } V
+    }
+    $$
+
+    Therefore, if $\vec a \in V$, then we can write $A\vec y = \vec a$ for some $\vec y \in \mathbb{R}^k$.
+</p>
 
 </div>
 
