@@ -813,6 +813,7 @@
     a general matrix $A$, $AB = AC \nRightarrow B = C$, unless $A$ is invertible.
 </p>
 
+<a id="matrix-transpose-rules"></a>
 <h4>Matrix Transpose</h4>
 <ol>
     <li>Associative:$(rA)^T = rA^T, r \in \mathbb{R}$</li>
@@ -2643,15 +2644,17 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
     In the above matrix, $V$ becomes the row space of $A$. Because the null space of $A$ is the orthogonal complement of this matrix, the orthogonal compement to your subspace $V$ is found by finding the null space of the above matrix!
 </p>
 <p>
-    The <b>column space and left-null space are perpendicular</b>. They are orthogonal complements. Thus we can say:
-    <div style="border:1px solid blue;">
-    $$
-    \begin{align}
-    \mathrm{C}(A) &= \left(\mathrm{N}(A^T)\right)^\perp\ \text{ and}\\
-    \mathrm{N}(A^T) &= \left(\mathrm{C}(A)\right)^\perp
-    \end{align}
-    $$
-    </div>
+    <a id="column-space-perp-to-left-null-space">
+        The <b>column space and left-null space are perpendicular</b>. They are orthogonal complements. Thus we can say:
+        <div style="border:1px solid blue;">
+            $$
+            \begin{align}
+            \mathrm{C}(A) &= \left(\mathrm{N}(A^T)\right)^\perp\ \text{ and}\\
+            \mathrm{N}(A^T) &= \left(\mathrm{C}(A)\right)^\perp
+            \end{align}
+            $$
+        </div>
+    </a>
 </p>
 <p>
     The <b>null space and row space are perpendicular</b>. They are orthogonal complements. Thus we can say:
@@ -3502,7 +3505,7 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
         y_2 \\
         \vdots \\
         y_k
-    \end{bmatrix}
+    \end{bmatrix} = A\vec y
     $$
 
     Where
@@ -3519,10 +3522,87 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
     }
     $$
 
-    Therefore, if $\vec a \in V$, then we can write $A\vec y = \vec a$ for some $\vec y \in \mathbb{R}^k$.
+    Therefore, $\forall \vec a \in V$, we can say $A\vec y = \vec a$ for some $\vec y \in \mathbb{R}^k$.
+</p>
+<p>
+    If we have some vector, $\vec x \in \mathbb{R}^n$, then $\mathrm{proj}_V(\vec x) \in V$ by the definition of a projection. Because,
+    as we have shown above, $\forall \vec a \in V,\ \exists \vec y \in \mathbb{R}^k\ |\ A\vec y = \vec a$, we can say:
+
+    $$
+        \mathrm{proj}_V(\vec x) = A\vec y
+    $$
+
+    We also know that we can say:
+
+    $$
+        \vec x = \mathrm{proj}_V(\vec x) + \mathrm{proj}_{V^\perp}(\vec x) \implies \vec x - \mathrm{proj}_V(\vec x) = \mathrm{proj}_{V^\perp}(\vec x)
+    $$
+
+    Because $\mathrm{proj}_{V^\perp}(\vec x) \in V^\perp$, by definition of a projection, we must therefore be able to say, because of the equality above that:
+
+    $$
+        \vec x - \mathrm{proj}_V(\vec x) \in V^\perp
+    $$
+
+    Now we note that our matrix, $A$, has the its column vectors set as the basis vectors of $V$. Therefore $\mathrm{C}(A) = V$. We can take the 
+    orthogonal complement of both sides to get $\bigl(\mathrm{C}(A)\bigr)^\perp = V^\perp$. From here, we can <a href="#column-space-perp-to-left-null-space">recall that 
+    $\bigl(\mathrm{C}(A)\bigr)^\perp = \mathrm{N}(A^T)$</a>, and that therefore $V^\perp = \mathrm{N}(A^T)$. Armed with this knowlege, we can substitue this into the above to get:
+
+    $$
+        \vec x - \mathrm{proj}_V(\vec x) \in \mathrm{N}(A^T)
+    $$
+
+    By the definition of a null space, we can say that:
+
+    $$
+        \begin{align}
+            A^T\bigl(\vec x - \mathrm{proj}_V(\vec x)\bigr) &= \vec 0 \\
+            A^T\vec x - A^T\mathrm{proj}_V(\vec x) &= \vec 0 
+        \end{align}
+    $$
+
+    And, we say a couple of stages back that $\mathrm{proj}_V(\vec x) = A\vec y$, so we can substitue this in to get:
+
+    $$
+        \begin{align}
+            A^T\vec x - A^TA\vec y &= \vec 0 \\
+            \therefore A^T\vec x &= A^TA\vec y
+        \end{align}
+    $$
+
+    Now, if $A^TA$ was invertible then we can solve for $\vec y$. It was state (without any proof) in the <a href="#matrix-transpose-rules">matrix transpose rules list</a> that this is need the case because the columns of $A$, in this case, are LI. Thus:
+
+    $$
+        \begin{align}
+            \text{As } A^T\vec x &= A^TA\vec y \\ 
+            \therefore (A^TA)^{-1}A^T\vec x &= \vec y
+        \end{align}
+    $$
+
+    Because we set $\vec y = \mathrm{proj}_V(\vec x)$, we have found an interesting formula for the projection of $\vec x$ onto $V$:
+
+    <div style="border:1px solid blue">
+    $$
+        \mathbf{\mathrm{proj}_V(\vec x) = (A^TA)^{-1}A^T\vec x}
+    $$
+    </div>
+   
+    This is a linear transform because $(A^TA)^{-1}A$ is just another matrix! So if we have the basis vectors for our subspace we have a formula to project any vector onto it :)
 </p>
 
 </div>
+
+<pre>
+Gonna need these later for change of basis plots:
+https://matplotlib.org/gallery/api/skewt.html
+https://matplotlib.org/examples/axes_grid/demo_floating_axes.html
+https://matplotlib.org/gallery/scales/custom_scale.html
+** https://matplotlib.org/devel/add_new_projection.html
+** https://matplotlib.org/users/transforms_tutorial.html
+?? https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=10&ved=2ahUKEwikxcKiqKveAhXC_SwKHfIvAUIQFjAJegQIBRAB&url=http%3A%2F%2Fwww-astro.physics.ox.ac.uk%2F~Zuntz%2Fpage4%2Ffiles%2FSkyAxes.py&usg=AOvVaw2oZxJcucD4zHZbt01YuWBd
+*** https://matplotlib.org/tutorials/toolkits/axisartist.html#axisartist-users-guide-index
+*** http://dfm.io/astropy/visualization/wcsaxes/generic_transforms.html
+</pre>
 
 <h2>PCA</h2>
 <div>
