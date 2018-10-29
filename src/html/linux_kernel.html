@@ -87,15 +87,8 @@
     <li>https://www.digikey.com/eewiki/display/linuxonarm/BeagleBone+Black</li>
     <li>https://www.element14.com/community/community/designcenter/single-board-computers/next-gen_beaglebone/blog/2015/12/05/mainline-linux-kernel-on-beaglebone-black</li>
     <li>https://kernelnewbies.org/ ************</li>
+    <li>https://vadl.github.io/beagleboneblack/2016/07/29/setting-up-bbb-gpio</li>
   </ol>
-
-  <p>Interesting looking courses:</p>
-  <ul>
-    <li>http://ieeeboston.org/embedded-linux-bsps-device-drivers-line-course/</li>
-    <li>http://www.jbinternational.co.uk/course/608/embedded-linux-device-drivers-training-course-london-uk</li>
-    <li>http://www.hitex.co.uk/training/embedded-android/</li>
-    <li>http://www.jbinternational.co.uk/course/524/android-porting-training-course-london-uk</li>
-  </ul>
 </div>
 
 <h2>Generally Useful Links</h2>
@@ -621,6 +614,11 @@ md 0x81000000</pre>
     <li><a href="https://events.linuxfoundation.org/sites/events/files/slides/petazzoni-device-tree-dummies.pdf" target="_blank">Device Tree For Dummies</a>, T Petazzoni.</li>
     <li><a href="https://www.kernel.org/doc/ols/2008/ols2008v2-pages-27-38.pdf" target="_blank">A Symphony of Flavours: Using the device tree to describe embedded hardwarw</a>, G Likely, J Boyer.</li>
 </ul>
+
+<h4>An Alternative Setup</h4>
+<p>
+  I needed to create a Kernel build and file system from &quot;kinda-scratch&quot; to boot off an SD card. The instructions I had to follow were slightly different and I've put some brief notes <a href="linux_bbb_build.html">here</a>.
+</p>
 
 <h4>Compiling The Kernel</h4>
 <p>
@@ -1229,6 +1227,7 @@ vals[found].val = pinctrl_spec.args[1];</pre>
     <li><a href="https://git.kernel.org/pub/scm/utils/dtc/dtc.git/plain/Documentation/manual.txt?id=HEAD"
            target="_blank">Device Tree Compiler Manual</a>.
     </li>
+    <li><a href="https://www.lynxbee.com/how-to-compile-and-install-device-tree-compiler-on-ubuntu/" target="_blank">How To Compile And Install The Device Tree Compiler On Ununtu</a>.</li>
   </ul>
   <p>
     Linux uses device trees to avoid having to recompile the kernel for every single variation
@@ -1269,7 +1268,17 @@ vals[found].val = pinctrl_spec.args[1];</pre>
     and the nodes can all be <code>cat</code>'ed. If you have the device tree compiler on your system, which is contained in the <code>device-tree-compiler</code> package, you can use <code>dtc -I fs /sys/firmware/devicetree/base</code> [<a href="https://unix.stackexchange.com/questions/289563/how-to-list-the-kernel-device-tree" target="_blank">Ref</a>].
   </p>
 
-  <h3>Source</h3>
+  <h3>Building DTC From Scratch</h3>
+  <p>
+    I wanted to run <code>dtc</code> natively on my target to double check that the DTB blobs it was using were correct. To cross build the DTC itself:
+  </p>
+  <pre>git clone git://git.kernel.org/pub/scm/utils/dtc/dtc.git
+cd dtc
+export CROSS_COMPILE=arm-linux-gnueabihf-
+export ARCH=arm
+make V=1 NO_PYTHON=1 # NO_PYTHON stops it trying to build Python library/bindings</pre>
+
+  <h3>Linux DTB Accessor Functions Source</h3>
   <p>
     The device tree access functions are found under the directory <a href="https://elixir.bootlin.com/linux/v3.2/source/drivers/of" target="_blank"><code>drivers/of</code></a>:
   </p>
