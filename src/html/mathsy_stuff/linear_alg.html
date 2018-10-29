@@ -3590,6 +3590,18 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
     This is a linear transform because $(A^TA)^{-1}A$ is just another matrix! So if we have the basis vectors for our subspace we have a formula to project any vector onto it :)
 </p>
 
+<h4>A Projection Is The Closest Vector In The Subspace Projected Onto</h4>
+<p>
+    We kinda already saw this. The vector $\vec r$ was the shortest solution and this was the projection onto the subspace.
+</p>
+<p>
+    Also the distance from $\vec x$ to $\mathrm{proj}_V(\vec x)$ is the shorter than the distance from $x$ to any other vector in $V$:
+
+    $$
+    \| \vec x - \mathrm{proj}_V(\vec x) \| \le \| \vec x - \vec v\|,\ \forall \vec v \in V
+    $$
+</p>
+
 </div>
 
 <pre>
@@ -3603,6 +3615,23 @@ https://matplotlib.org/gallery/scales/custom_scale.html
 *** https://matplotlib.org/tutorials/toolkits/axisartist.html#axisartist-users-guide-index
 *** http://dfm.io/astropy/visualization/wcsaxes/generic_transforms.html
 </pre>
+
+<h2>Least Squares</h2>
+<div>
+    <p>
+        Lets say we have an $n$ by $k$ matrix such that:
+
+        $$
+            \underbrace{A}_{n \times k} \underbrace{\vec x}_{\in \mathbb{R}^k} = \underbrace{\vec b}_{\in \mathbb{R}^n}
+        $$
+
+        Lets also say that there is NO solution to the above. We know that we can write out $A\vec x$ as 
+        $A\vec x = x_1\vec{a_1} + x_2\vec{a_2} + \cdots + x_k\vec{a_k}$. The fact that there is no solution means that there are no coefficients $\vec {x_i}$ that can satisfy the equation. I.e. $\vec b \notin \mathrm{C}(A)$.
+    </p>
+    <p>
+        What we'd like to do is find a vector $\vec x^*$ where $A\vec x^*$ is as close as possible to $\vec b$! I.e., we want to <b>minimise</b> $\mathbf{\| \vec b - A\vec x^* \|}$.
+    </p>
+</div>
 
 <h2>PCA</h2>
 <div>
