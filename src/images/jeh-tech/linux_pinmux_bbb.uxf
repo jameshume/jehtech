@@ -1,0 +1,649 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>680</x>
+      <y>210</y>
+      <w>300</w>
+      <h>280</h>
+    </coordinates>
+    <panel_attributes>halign=left
+transparency=0
+P8_07_pinmux {
+    compatible = "bone-pinmux-helper";
+    status = "okay";
+
+    pinctrl-names = "default", "gpio", "gpio_pu", 
+                              "gpio_pd", "timer";
+
+
+
+
+
+
+
+
+
+
+};</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1110</x>
+      <y>220</y>
+      <w>330</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>halign=left
+transparency=0
+P8_07_default_pin: pinmux_P8_07_default_pin {
+    pinctrl-single,pins = &lt;0x090  0x37&gt;; 
+}; /* Mode 7, Pull-Up, RxActive */
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1110</x>
+      <y>290</y>
+      <w>330</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>halign=left
+transparency=0
+P8_07_gpio_pin: pinmux_P8_07_gpio_pin {
+    pinctrl-single,pins = &lt;0x090  0x2F&gt;;
+}; /* Mode 7, RxActive */</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1110</x>
+      <y>360</y>
+      <w>330</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>halign=left
+transparency=0
+P8_07_gpio_pu_pin: pinmux_P8_07_gpio_pu_pin {
+    pinctrl-single,pins = &lt;0x090  0x37&gt;;
+};     /* Mode 7, Pull-Up, RxActive */</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>920</x>
+      <y>240</y>
+      <w>210</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>190.0;10.0;110.0;10.0;110.0;90.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>920</x>
+      <y>310</y>
+      <w>210</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>190.0;10.0;130.0;10.0;130.0;50.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>920</x>
+      <y>380</y>
+      <w>210</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>190.0;10.0;130.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>700</x>
+      <y>320</y>
+      <w>230</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>halign=left
+bg=white
+transparency=1
+layer=1
+pinctrl-0 = &lt;&amp;P8_07_default_pin&gt;;
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>700</x>
+      <y>350</y>
+      <w>230</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>halign=left
+bg=white
+transparency=1
+layer=1
+pinctrl-1 = &lt;&amp;P8_07_gpio_pin&gt;;
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>700</x>
+      <y>380</y>
+      <w>230</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>halign=left
+bg=white
+transparency=1
+layer=1
+pinctrl-2 = &lt;&amp;P8_07_gpio_pu_pin&gt;;
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>700</x>
+      <y>410</y>
+      <w>230</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>halign=left
+transparency=0
+bg=white
+transparency=1
+layer=1
+pinctrl-3 = &lt;&amp;P8_07_gpio_pd_pin&gt;;
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>700</x>
+      <y>440</y>
+      <w>230</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>halign=left
+bg=white
+transparency=1
+layer=1
+pinctrl-4 = &lt;&amp;P8_07_timer_pin&gt;;
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1110</x>
+      <y>430</y>
+      <w>330</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>halign=left
+transparency=0
+P8_07_gpio_pd_pin: pinmux_P8_07_gpio_pd_pin {
+    pinctrl-single,pins = &lt;0x090  0x27&gt;;
+}; /* Mode 7, Pull-Down, RxActive */</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1110</x>
+      <y>500</y>
+      <w>330</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>halign=left
+transparency=0
+P8_07_timer_pin: pinmux_P8_07_timer_pin {
+    pinctrl-single,pins = &lt;0x090  0x32&gt;;
+}; /* Mode 2, Pull-Up, RxActive */</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>920</x>
+      <y>410</y>
+      <w>210</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>190.0;50.0;130.0;50.0;130.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>920</x>
+      <y>440</y>
+      <w>210</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>190.0;90.0;110.0;90.0;110.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>660</x>
+      <y>180</y>
+      <w>340</w>
+      <h>400</h>
+    </coordinates>
+    <panel_attributes>halign=left
+*&amp;ocp {*
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+...
+...
+};
+/&lt;&lt;am335x-bone-common-universal.dtsi&gt;&gt;/
+bg=gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1090</x>
+      <y>180</y>
+      <w>380</w>
+      <h>460</h>
+    </coordinates>
+    <panel_attributes>halign=left
+*&amp;am33xx_pinmux {*
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+...
+...
+};
+/&lt;&lt;am335x-bone-common-universal.dtsi&gt;&gt;/
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>420</x>
+      <y>330</y>
+      <w>200</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+pintctrl-X - List of phandles, referencing config nodes. 
+
+Devices that need pins to be muxed in a certain way must declare the pinctrl configuration they need.
+
+When a device is probed, its default pinctrl state is requested automatically.
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>610</x>
+      <y>330</y>
+      <w>110</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;30.0;90.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1540</x>
+      <y>200</y>
+      <w>170</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+Config node must be child node of pin controller they configure.
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>610</x>
+      <y>210</y>
+      <w>110</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;90.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1430</x>
+      <y>220</y>
+      <w>130</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;30.0;110.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>420</x>
+      <y>180</y>
+      <w>200</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+The list of names to assign states. List entry 0 defines the name for integer state ID 0, list entry 1 for state ID 1, and so on.
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1290</x>
+      <y>20</y>
+      <w>420</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+/Pin controller/
+
+Hardware modules that control pin multiplexing or configuration parameters such as pull-up/down, tri-state, drive-strength etc are designated as pin controllers.
+
+Pin controller devices should contain the pin configuration nodes that client devices reference.
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1210</x>
+      <y>150</y>
+      <w>100</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;40.0;80.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>910</x>
+      <y>130</y>
+      <w>60</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>40.0;10.0;10.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>770</x>
+      <y>0</y>
+      <w>320</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+/Client device/
+
+Hardware modules whose signals are affected by pin configuration are designated client devices
+
+Client device references pin config nodes in controller.
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>0</x>
+      <y>250</y>
+      <w>320</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+bg=blue
+For a client device to operate correctly, certain pin controllers must set up certain specific pin configurations. Some client devices need a single static pin configuration, e.g. set up during initialization. Others need to reconfigure pins at run-time, for example to tri-state pins when the device is inactive. Hence, each client device can define a set of named states.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>310</x>
+      <y>220</y>
+      <w>130</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;100.0;110.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>310</x>
+      <y>320</y>
+      <w>130</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;110.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>380</x>
+      <y>700</y>
+      <w>620</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+*/Remember:/*
+
+*DT is hardware description, not configuration: it is really a hardware description language.*
+
+*It should describe the hardware layout, and how it works.*
+
+*But it should not describe which particular hardware configuration you’re interested in.*
+
+/-- Device Tree For Dummies/
+bg=black
+fg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1150</x>
+      <y>820</y>
+      <w>380</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>halign=left
+*am33xx_pinmux: pinmux@800 {*
+    compatible = "pinctrl-single";
+    reg = &lt;0x800 0x238&gt;;
+    #address-cells = &lt;1&gt;;
+    #size-cells = &lt;0&gt;;
+    pinctrl-single,register-width = &lt;32&gt;;
+    pinctrl-single,function-mask = &lt;0x7f&gt;;
+};
+transparency=0
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1130</x>
+      <y>780</y>
+      <w>420</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>halign=left
+scm: scm@210000 {
+    ...
+
+
+
+
+
+
+
+
+
+
+    ...
+};
+transparency=0
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1110</x>
+      <y>740</y>
+      <w>460</w>
+      <h>330</h>
+    </coordinates>
+    <panel_attributes>halign=left
+l4_wkup: l4_wkup@44c00000 {
+    ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    ...    ...
+};
+transparency=0
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1090</x>
+      <y>700</y>
+      <w>500</w>
+      <h>420</h>
+    </coordinates>
+    <panel_attributes>halign=left
+ocp {
+    ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    ...
+};
+/&lt;&lt;am33xx.dtsi&gt;&gt;/
+transparency=0
+bg=gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1460</x>
+      <y>420</y>
+      <w>480</w>
+      <h>500</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;&gt;
+lw=2
+Although the pinmux is defined in am33xx.dtsi
+the particular muxing options are defined in
+am335x-bone-common-universal.dtsi. This
+is probably because the pinmux hardware is
+the same across several board types, but what
+exactly is muxed through the hardware is 
+different depending on what board its on.</panel_attributes>
+    <additional_attributes>70.0;480.0;170.0;480.0;170.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+</diagram>

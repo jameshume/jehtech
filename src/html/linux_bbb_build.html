@@ -133,7 +133,11 @@ export CROSS_COMPILE=arm-linux-gnueabihf-
 export ARCH=arm
 make -j8 [V=1]#&lt;&lt; Build the kernel and device tree
 make -j8 dtbs #&lt;&lt; OR just build the device tree</pre>
-
+<p>
+	Once the kernel is built, copy to your sd card like this:
+</p>
+<pre>cp arch/arm/boot/zImage /media/your-sd-card/boot/vmlinuz-4.4.145-bone23
+# Take kernel version from build script output in setup stage</pre>
 </div> <!-- END padding div -->
 </div> <!-- END content div -->
 </body>

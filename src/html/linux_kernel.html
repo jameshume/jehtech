@@ -459,7 +459,12 @@ https://source.android.com/devices/input/touch-devices.html
       </li>
       <li><a href="https://www.digikey.com/eewiki/display/linuxonarm/BeagleBone" target="_blank">BeagleBone</a>, Robert Nelso.
       </li>
-    </ul>
+      <li><a href="https://vadl.github.io/beagleboneblack/2016/07/29/setting-up-bbb-gpio" target="_blank">Setting Up the BeagleBone Black's GPIO Pins</a>.
+      </li>
+      <li>
+          <a href="https://github.com/beagleboard/beaglebone-black/blob/master/BBB_SCH.pdf" target="_blank">BBB Schematic</a>.
+      </li>
+  </ul>
 </p>
 <pre>
 Todo read:
@@ -1192,6 +1197,37 @@ vals[found].val = pinctrl_spec.args[1];</pre>
   rather than the &quot;stock&quot; DTB file.
 </p>
 
+
+<p>
+	Urg... working on another BBB kernel compilation and have created the following, which explains how pinctrl driver is found... 
+</p>
+<p>
+	<img src="##IMG_DIR##/linux_pinmux_bbb.png" alt="pinmux controller and pinmux client in Linux example"/>
+</p>
+<p>
+	This still left me with the question, how does the device that requests a certain pin-muxing, get that pin-muxing? After all, in most
+	devices I see requesting a pin-muxing in the device-tree, the doesn't appear to be anything to read the pin-muxing in their <code>probe()</code> function.
+	The reason is this (kinda - see paragraphs after the quote too!):
+</p>
+<blockquote>
+	<p>
+		When a device driver is about to probe, the <b>device core will automatically attempt to issue pinctrl_get_select_default() on these devices</b>. This way driver writers do not need to add any of the boilerplate code ...
+
+		... So if you just want to put the pins for a certain device into the default state and be done with it, there is nothing you need to do besides providing the proper mapping table. The device core will take care of the rest.
+	</p>
+	<footer>
+		-- <a href="https://01.org/linuxgraphics/gfx-docs/drm/driver-api/pinctl.html#pin-control-requests-from-drivers" target="_blank">Pin control requests from drivers</a>, The Linux driver implementer’s API guide. (Emphasis mine)
+	</footer>
+</blockquote>
+<p>
+	Err... is this true? I've had a little search through the 4.4 kernel and the references I find to <code>pinctrl_get_select_default()</code> are pretty
+	minimal. They seem to occur in some device specific files and then ones that look more generic like <code>gpio-of-helper.c::gpio_of_helper_probe()</code>. But even that seems like it is a specific driver, which probably does the pinctrl &quot;boilerplace&quot;, but would need to be compiled into the kernel, and
+	in any case only would apparently work for GPIOs.
+</p>
+<p>
+	A search for the device manager and where it might probe devices revealed <code>dd.c::really_probe()</code>, part of the attempt to bind a device with a driver, which calls <code>pinctrl_bind_pins()</code> before probing the device. The comment for <code>pinctrl_bind_pins()</code> says <q>...called by the device core before probe...</q>, which gives us the answer for this kernel. And, in fact, it calls <code>pinctrl_set_state()</code> for the default state. What I also found is that there is an &quot;&init&quot; state too that will superceed the default state at initialisation. The above quote is either inaccurate or for another kernel version.
+</p>
+
 <h4>The Linux I2C Core</h4>
 <p>
   The I<sup>2</sup>C core is a set of convenience functions for driver developers that &quot;hook&quot;
@@ -1206,7 +1242,6 @@ vals[found].val = pinctrl_spec.args[1];</pre>
   <footer>Chapter 8, Essential Linux Device Drivers</footer>
 </blockquote>
 <p></p>
-
 
 </div> <!-- End H2 -->
 
@@ -1554,7 +1589,12 @@ error = sysfs_create_group(&amp;dev.kobj, &amp;mxt_attr_group);</pre>
       </li>
       <li>
         <a href="https://raw.githubusercontent.com/CircuitCo/BeagleBone-Black/master/BBB_SRM.pdf" target="_blank">BeagleBone Black System Reference Manual</a>, Rev C.1.
+      </li>
+      <li>
+         <a href="http://derekmolloy.ie/gpios-on-the-beaglebone-black-using-device-tree-overlays/" target="_blank">GPIOs on the Beaglebone Black using the Device Tree Overlays</a>, Derek Molloy.
+      </li>
     </ul>
+
 </p>
 <p>
   Introduced in v3.2:
@@ -1590,7 +1630,7 @@ the pin controller driver to execute different settings.</p>
 </p>
 
 <p>
-  To see a list of the claimed pin muxes (and the GPIOS) you can type the following: <code>cat /sys/kernel/debug/pinctrl/44e10800.pinmux/pinmux-pins</code>.
+  To see a list of the claimed pin muxes (and the GPIOS) you can type the following: <code>cat /sys/kernel/debug/pinctrl/44e10800.pinmux/pinmux-pins</code>. Just remember these are the pins of the chip, not just, for example, the GPIO pins!!
 </p>
 
 </div> <!-- End H2 -->
@@ -1814,6 +1854,31 @@ static const char * const fw_path[] = {
   via the command line to allow boot time configuration of where firmware files
   can be looked for.
 </p>
+</div>
+
+<h2>Debugging</h2>
+<div>
+	<h3>FTrace</h3>
+	<p>
+		References:
+	</p>
+	<ul>
+		<li><a href="https://lwn.net/Articles/365835/" target="_blank">Debugging the kernel using Ftrace - part 1</a>.</li>
+		<li><a href="https://lwn.net/Articles/366796/" target="_blank">Debugging the kernel using Ftrace - part 2</a>.</li>
+		<li><a href="https://lwn.net/Articles/410200/" target="_blank">trace-cmd: A front-end for Ftrace</a>.</li>
+		<li><a href="https://lwn.net/Articles/370423/" target="_blank">Secrets of the Ftrace function tracer</a>.</li>
+		<li>https://opensource.com/article/17/7/dynamic-tracing-linux-user-and-kernel-space</li>
+	</ul>
+	<p>
+		The above are two really useful references on how to use ftrace to see what is going on inside the kernel using files
+		found in <code>/sys/kernel/debug/tracing</code>.
+	</p>
+	<p>Use the article &quot;Secrets of the Ftrace function tracer&quot; to see
+		how to limit the increasible amount of information that can be thrown at you through the trace.
+	</p>
+	<p>
+		To get a nicer interface to the above take a lookg at <code>trace-cmd</code>.
+	</p>
 </div>
 
 <h2>TO DO</h2>
