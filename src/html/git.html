@@ -53,8 +53,6 @@
 </ol>
 </div>
 
-
-
 <h2>To Read / To Do</h2>
 <div>
     <pre>https://stackoverflow.com/questions/35941566/delete-remote-branch-via-git
@@ -496,7 +494,30 @@ git difftool:      To use external diff tool</pre>
 diffend=0544f6a
 wanted=$(git diff $diffstart $diffend --name-only  | grep -v "\(xls\|tsv\)$")
 git diff $diffstart $diffend --full-index  -- $wanted</pre>
-<p></p>
+    <p></p>
+
+    <h4>Diffing Between 2 Repos</h4>
+    <p>
+        From <a href="https://stackoverflow.com/questions/1968512/getting-the-difference-between-two-repositories" target="_blank">this SO thread:</a>
+    </p>
+
+    <blockquote>
+        <p><b>Question:</b></p>
+        <p>
+            How can we get the difference between two git repositories?
+        </p>
+        <p>
+            The scenario: We have a repo_a and repo_b. The latter was created as a copy of repo_a. There have been parallel development in both the repositories afterwards. Is there a way we can list the differences of the current versions of these two repositories?
+        </p>
+        <p><b>Answer:</b></p>
+        <p>In repo_a:</p>
+        <pre>git remote add -f b path/to/repo_b.git
+git remote update
+git diff master remotes/b/master
+git remote rm b</pre>
+        <footer>-- <a href="https://stackoverflow.com/questions/1968512/getting-the-difference-between-two-repositories" target="_blank">Getting the difference between two repositories</a></footer>
+    </blockquote>
+    <p></p>
 </div>
 
 
