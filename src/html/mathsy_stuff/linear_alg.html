@@ -1295,6 +1295,19 @@ solve_linear_system(system, x, y, z)</pre>
             \end{bmatrix}
         $$
     </p>
+
+    <p>
+        <p>
+                The concept of matrix multiplication, the type I learnt in school, is
+                shown in the little animation below. For each <i>row</i> vector of the LHS matrix
+                we take the <a href="https://en.wikipedia.org/wiki/Dot_product" target="_blank">dot product</a> 
+                of that vector with each <i>column</i> vector from the RHS matrix to produce the result:
+            </p>
+
+            <iframe src="../yorick_matrix_anim.html" style="width:660px; height:270px; border:0px;">
+            </iframe>
+    </p>
+
     <p>
         But having said that, I'd never really thought of it as shown below until watching some
         stuff on Khan Academy:
@@ -3581,6 +3594,7 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
 
     Because we set $\vec y = \mathrm{proj}_V(\vec x)$, we have found an interesting formula for the projection of $\vec x$ onto $V$:
 
+    <a id="projection-matrix-formula"></a>
     <div style="border:1px solid blue">
     $$
         \mathbf{\mathrm{proj}_V(\vec x) = (A^TA)^{-1}A^T\vec x}
@@ -3629,8 +3643,217 @@ https://matplotlib.org/gallery/scales/custom_scale.html
         $A\vec x = x_1\vec{a_1} + x_2\vec{a_2} + \cdots + x_k\vec{a_k}$. The fact that there is no solution means that there are no coefficients $\vec {x_i}$ that can satisfy the equation. I.e. $\vec b \notin \mathrm{C}(A)$.
     </p>
     <p>
-        What we'd like to do is find a vector $\vec x^*$ where $A\vec x^*$ is as close as possible to $\vec b$! I.e., we want to <b>minimise</b> $\mathbf{\| \vec b - A\vec x^* \|}$.
+        What we'd like to do is find a vector $\vec{x^*}$, which is called our <b>least squares estimate</b>, where $A\vec{x^*}$ is as close as possible to $\vec b$! I.e., we want to <b>minimise</b> $\mathbf{\| \vec b - A\vec{x^*} \|}$. So whilst $\vec b$ may have no solution, $\vec{x^*}$ is a solution, and it will be the solution with the least error, or distance, from $\vec b$.
     </p>
+    <p>
+        Let $\vec v = A\vec{x^*}$. Then we are going to minimise $\| \vec b - \vec v \|$. Because $\vec v$ is a solution, it means that $\vec v \in \mathrm{C}(A)$. So the question is, what vector in $A$'s column space should we pick? Well, we have seen that the projection of a vector onto a subspace is the closest vector in that subspace to the projectee. So we pick the projection of $\vec b$ onto the column space of A!
+    </p>
+    <p>
+        TODO INSERT DIAGRAM TO SHOW THIS
+    </p>
+    <p>
+        So we want the following, as we know it will produce the least distance between $\vec v$ and $\vec b$:
+
+        $$
+        \vec v = A\vec{x^*} = \mathrm{proj}_{C(A)}(\vec b)
+        $$
+
+        We have previously seen that there is a <a href="#projection-matrix-formula">formula for the projection matrix</a>. We could just use that, but
+        as Sal continues to explain there is an eaier way - calculating the projection matrix involves a bit of work so lets be lazy :)
+    </p>
+    <p>
+        Start by subtracting $\vec b$ from both sides of the above equation...
+
+        $$
+        \vec v - \vec b = A\vec{x^*} - \vec b = \mathrm{proj}_{C(A)}(\vec b) - \vec b
+        $$
+
+        Here $\mathrm{proj}_{C(A)}(\vec b) - \vec b$ is orthogonal to $\mathrm{proj}_{C(A)}(\vec b)$. 
+    </p>
+    <p>
+        TDO INSERT DIAGRAM
+    </p>
+    <p>Thus, $A\vec{x^*} - \vec b$
+        is equal to somthing that is orthogonal to the projection, i.e., $A\vec{x^*} - \vec b \in \mathrm{C}(A)^\perp$. We have also seen
+        that $\mathrm{C}(A)^\perp = \mathrm{N}(A^T)$, so we can re-write the above as:
+
+        $$
+        \underbrace{A\vec{x^*} - \vec b}_{\text{just a vector}} \in \mathrm{N}(A^T)
+        $$
+
+        And, by definition of a null space, $\mathrm{N}(A^T)$ will be the set of solutions that are sent to the zero vector, ie., solutions that satisfy $A^T\vec d = \vec 0$. So,
+
+        $$
+        \begin{align}
+            A^T(A\vec{x^*} - \vec b) = \vec 0 \\
+            A^TA\vec{x^*} - A^T\vec b = \vec 0 \\
+            A^TA\vec{x^*} = A^T\vec b 
+        \end{align}
+        $$
+
+        We've ended up with:
+
+        <div style="border: 1px solid blue;">
+            $$
+                A^TA\vec{x^*} = A^T\vec b
+            $$
+        </div>
+
+        We have derived the above formula from our original problem so we know its a valid solution. And using this is much easier than calculating the projection matrix: all we do is take the transpose of $A$ so that we'll know $A^T$, $A$, and $\vec b$ and can therefore solve for $\vec{x^*}$, our least squares estimate.
+    </p>
+
+    <h3>Example 1</h3>
+    <p>
+        Let's take a look at Sal's first example, an overdetermined set of linear equations:
+
+        $$
+        \begin{align}
+            2x - y = 2 & \rightarrow y = 2x - 2 \\
+            x + 2y = 1 & \rightarrow y = -0.5x + 0.5 \\
+            x + y = 2 & \rightarrow y = -x + 4 
+        \end{align}
+        $$
+
+        This means that our coefficient matrix is a 3 by 2 matrix, and we get:
+
+        $$
+        \begin{bmatrix}
+            2 & -1 \\
+            1 & 2  \\
+            1 & 1
+        \end{bmatrix}
+        \begin{bmatrix} x \\ y \end{bmatrix}
+        =
+        \begin{bmatrix} 2 \\ 1 \\ 4 \end{bmatrix}
+
+        $$
+
+        We saw that $A^TA\vec{x^*} = A^T\vec b$ and we know both $A$ and $\vec b$ so,
+
+        $$
+        \begin{align}
+            A^TA &= \begin{bmatrix} 2 & 1 & 1 \\ -1 & 2 & 1\end{bmatrix}\begin{bmatrix}2 & -1 \\ 1 & 2 \\ 1 & 1\end{bmatrix} \\
+            &= \begin{bmatrix} 6 & 1 \\ 1 & 6 \end{bmatrix}
+        \end{align}
+        $$
+        
+        And...
+
+        $$
+        \begin{align}
+            A^T\vec b &= \begin{bmatrix}2 & 1 & 1 \\ -1 & 2 & 1\end{bmatrix}\begin{bmatrix} 2 \\ 1 \\ 4\end{bmatrix}\\
+             &= \begin{bmatrix} 9 \\ 4\end{bmatrix}
+        \end{align}
+        $$
+
+        Thus, by substituting these into our least squares equation we get:
+
+        $$
+         \begin{bmatrix} 6 & 1 \\ 1 & 6 \end{bmatrix}
+         \begin{bmatrix} x \\ y \end{bmatrix}
+         = \begin{bmatrix} 9 \\ 4 \end{bmatrix}
+        $$
+
+        Which we can solve in the normal way:
+
+        $$
+        \left[\begin{array}{cc|c}
+        6 & 1 & 9 \\ 1 & 6 & 4
+        \end{array}\right]
+        \rightarrow \cdots \rightarrow \left[\begin{array}{cc|c}
+        1 & 0 & 10/7 \\ 0 & 1 & 3/7
+        \end{array}\right]
+        $$
+
+        Leaving us with our least squares solution to the problem:
+
+        $$
+        \therefore \begin{bmatrix} x \\ y \end{bmatrix} = \begin{bmatrix} 10/7 \\ 3/7 \end{bmatrix} = \vec{x^*}
+        $$
+    </p>
+
+    <h3>Example 2</h3>
+    <p>
+    Quite often we will have sets of data that look like they are linearly related, but the data points don't line up into an exact straight line. However, we can visually imagine fitting a line through our noisy data that would give us the best approximation, or the least error with respect to all the data points.
+    </p>
+    <p>
+    So to Khan Academy's second example. We have a set of data points $\bigl\{(-1, 0), (0,1), (1,2), (2,1)\bigr\}$. There is no solution that can put a line through these points, but we can generate a least squares estimate that will produce a line &quot;through&quot; these points that generates the least error: minimises the sum of the square errors from each point to the line of best fit.
+    </p>
+    <p>
+    TODO insert graph
+    </p>
+    <p>
+    Once again, our points generate a set of linear equations in the form of $y = mx + b$:
+    $$
+    \begin{align}
+    (-1, 0) &\  \rightarrow \ \  \color{red}0 = \color{blue}{-1}m + b\\
+    (0, 1) &\  \rightarrow \ \ \color{red}1 = \color{blue}0m + b\\
+    (1, 2) &\  \rightarrow \ \ \color{red}2 = \color{blue}1m + b\\
+    (2, 1) &\  \rightarrow \ \ \color{red}1 = \color{blue}2m + b\\
+    \end{align}
+    $$
+    We will solve for $m$ and $b$ to generate our line of best fit. Thus,
+
+    $$
+    A = \begin{bmatrix}
+    \color{blue}{-1} & 1 \\ 
+    \color{blue}0 & 1 \\ 
+    \color{blue}1 & 1 \\ 
+    \color{blue}2 & 1\end{bmatrix}\ \text{ and } \ \vec b = \begin{bmatrix}\color{red}{0 \\ 1 \\ 2 \\ 1}\end{bmatrix}
+    $$
+
+    As we saw, $A^TA\vec{x^*} = A^T\vec b$, so:
+
+    $$
+    A^TA = \begin{bmatrix}-1 & 0 & 1 & 2\\1 & 1 & 1& 1\end{bmatrix}\begin{bmatrix}
+    -1 & 1 \\ 
+    0 & 1 \\ 
+    1 & 1 \\ 
+    2 & 1\end{bmatrix}
+    = \begin{bmatrix}6 & 2 \\ 2 & 4\end{bmatrix}
+    $$
+
+    And:
+
+    $$
+    A^T\vec b = 
+    \begin{bmatrix}-1 & 0 & 1 & 2\\1 & 1 & 1& 1\end{bmatrix}
+    \begin{bmatrix}0 \\ 1 \\ 2 \\ 1\end{bmatrix}
+    = \begin{bmatrix}4 \\ 4\end{bmatrix}
+    $$
+
+    Now we can solve for $\vec{x^*}$:
+
+    $$
+    \begin{bmatrix}6 & 2 \\ 2 & 4\end{bmatrix}\begin{bmatrix}m \\ b\end{bmatrix} = \begin{bmatrix}4 \\ 4\end{bmatrix}
+    $$
+
+    Using the standard augmented matrix method:
+
+    $$
+    \left[\begin{array}{cc|c}
+    6 & 2 & 4 \\ 2 & 4 & 4
+    \end{array}\right]
+    \rightarrow \cdots \rightarrow
+
+    \left[\begin{array}{cc|c}
+    1 & 0 & 2/5 \\ 0 & 1 & 4/5
+    \end{array}\right]
+    $$
+
+    Therefore, $m = 2/5$ and $b = 4/5$ :)
+    </p>
+    <p>
+    TODO: Animation with projections onto this line with line moving showing error increase.
+    </p>
+    <p>
+        TODO Add notes from eboot scipy and numpy for examples of linear regression and maths in python
+    </p>
+
+</div>
+
+<h2>Change Of Basis</h2>
+<div>
 </div>
 
 <h2>PCA</h2>
