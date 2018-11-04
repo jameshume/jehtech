@@ -2375,7 +2375,7 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
     <p>
         <img src="##IMG_DIR##/draw_projection_vectors_1.png"/>
         <br/>
-        <a href="##IMG_DIR##/draw_projection_vectors_1.py" target="_blank">&lt;Python source for graph draw&gt;</a>.
+        <a href="##IMG_DIR##/draw_projection_vectors_1.py" target="_blank" style="font-size:75%;">&lt;View source&gt;</a>.
     </p>
     <p>
         Put a little more mathsy-like, if you have two vectors, call them, $\vec{v_1}$ and $\vec{v_2}$, then
@@ -2863,7 +2863,8 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
 <p>
     <video autoplay loop>
         <source src="##IMG_DIR##/draw_rowspace_nullspace_partic.mp4" type="video/mp4">
-    </video>
+    </video><br/>
+    <a href="##IMG_DIR##/draw_rowspace_nullspace_partic.py" target="_blank" style="font-size:75%;">&lt;View source&gt;</a>
 </p>
 
 <p>
@@ -2873,7 +2874,8 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
 <p>
     <video autoplay loop>
         <source src="##IMG_DIR##/draw_rowspace_nullspace.mp4" type="video/mp4">
-    </video>
+    </video><br/>
+    <a href="##IMG_DIR##/draw_rowspace_nullspace.py" target="_blank" style="font-size:75%;">&lt;View source&gt;</a>
 </p>
 
 
@@ -3367,12 +3369,13 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
 
 <a id="projections"></a>
 <h3>Projections</h3>
-<p style="float:left;">
-    <img src="##IMG_DIR##/projection.png" alt="Vector projections"/>
+<p>
+    The graph to the below shows a vector $\vec x$ and its <em>projection</em> onto the line $L$, defined by the vector $\vec v$.
+    The projection of $\vec x$ onto $L$ describes <em>how much of $\vec x$ goes in the direction of $L$</em>.
 </p>
 <p>
-    The graph to the left shows a vector $\vec x$ and its <em>projection</em> onto the line $L$, defined by the vector $\vec v$.
-    The projection of $\vec x$ onto $L$ describes <em>how much of $\vec x$ goes in the direction of $L$</em>.
+    <img src="##IMG_DIR##/projection.png" alt="Vector projections"/><br/>
+    <a href="##IMG_DIR##/draw_projection_general.py" target="_blank" style="font-size:75%;">&lt;View source&gt;</a>
 </p>
 <p>
     We write &quot;the projection of $\vec x$ onto $L$ like so:
@@ -3848,6 +3851,22 @@ https://matplotlib.org/gallery/scales/custom_scale.html
     </p>
     <p>
         TODO Add notes from eboot scipy and numpy for examples of linear regression and maths in python
+    </p>
+
+    <h4> </h4>
+    <p>WOAH, in trying to do one of the graphs I've found our that the projection formula from the previous section only really makes sense
+    if the line passes through the origin as a line defined by a vector (with no yintercept) has to pass through origin.</p>
+    <p>
+        Also found this post: https://math.stackexchange.com/a/2398320 which seems to confirm it.
+    </p>
+    <p>
+        Here are the projections of the data points, but using proj formula they project onto the solution vector passing
+        trhough the origin, not the actual solution vector which has a non-zero y intercept!!!
+    </p>
+    <p>
+        <img src="##IMG_DIR##/draw_least_squares_example.png"/>
+        <br/>
+        <a href="##IMG_DIR##/draw_least_squares_example.py" target="_blank" style="font-size:75%;">&lt;View source&gt;</a>.
     </p>
 
 </div>
