@@ -3621,18 +3621,6 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
 
 </div>
 
-<pre>
-Gonna need these later for change of basis plots:
-https://matplotlib.org/gallery/api/skewt.html
-https://matplotlib.org/examples/axes_grid/demo_floating_axes.html
-https://matplotlib.org/gallery/scales/custom_scale.html
-** https://matplotlib.org/devel/add_new_projection.html
-** https://matplotlib.org/users/transforms_tutorial.html
-?? https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=10&ved=2ahUKEwikxcKiqKveAhXC_SwKHfIvAUIQFjAJegQIBRAB&url=http%3A%2F%2Fwww-astro.physics.ox.ac.uk%2F~Zuntz%2Fpage4%2Ffiles%2FSkyAxes.py&usg=AOvVaw2oZxJcucD4zHZbt01YuWBd
-*** https://matplotlib.org/tutorials/toolkits/axisartist.html#axisartist-users-guide-index
-*** http://dfm.io/astropy/visualization/wcsaxes/generic_transforms.html
-</pre>
-
 <h2>Least Squares</h2>
 <div>
     <p>
@@ -3873,7 +3861,85 @@ https://matplotlib.org/gallery/scales/custom_scale.html
 
 <h2>Change Of Basis</h2>
 <div>
-</div>
+    <p>
+        In 2D Cartesian space we are used to specifying coordinates like $(2,1)$, which means 2 integer units along the x-axis and 1 along the y-axis.
+        These coordinates are, in fact, coefficients of a linear combination of the standard basis vectors $\hat i$ and $\hat j$, such that we would write $(2,1)$ as $2\hat i + 1\hat j$, where,
+
+        $$
+        \hat i = \begin{bmatrix}1\\0\end{bmatrix},\ \hat j = \begin{bmatrix}0\\1\end{bmatrix}
+        $$
+
+        The coefficents in the linear combination of the space's basis vectors are called the coordinates.
+
+        I.e.,
+
+        $$
+            (\color{blue}2, \color{red}1)_\text{std basis} = \color{blue}2\begin{bmatrix} 1 \\ 0\end{bmatrix} + \color{red}1\begin{bmatrix} 0 \\ 1\end{bmatrix}
+        $$
+    </p>
+    <p>
+        The standard basis in $\mathbb{R}^2$ aren't the only basis vectors, as we know. We could use the vectors $\begin{bmatrix} 1 \\ 1\end{bmatrix}$ and $\begin{bmatrix} 0 \\ 1\end{bmatrix}$, in which case all coordinates $(x, y)$ are defined as the coefficients of the linear combination of the 2 basis vectors we just chose:
+
+        $$
+            x_\text{new basis}\begin{bmatrix} 1 \\ 1\end{bmatrix} + y_\text{new basis}\begin{bmatrix} 0 \\ 1\end{bmatrix} 
+        $$
+    </p>
+    <p>
+        What would our coordinates, $(2,1)_\text{std basis}$, written w.r.t the standard basis be if we wrote them w.r.t our new basis?
+        $$
+          2\begin{bmatrix} 1 \\ 0\end{bmatrix} + 1\begin{bmatrix} 0 \\ 1\end{bmatrix} = \begin{bmatrix} 2 \\ 1\end{bmatrix}\\
+          \downarrow\\
+          x_\text{new basis}\begin{bmatrix} 1 \\ 1\end{bmatrix} + y_\text{new basis}\begin{bmatrix} 0 \\ 1\end{bmatrix} = \begin{bmatrix} 2 \\ 1\end{bmatrix} \\
+        $$
+
+        With respect to our new basis our x-like and y-like coordinates would be $x_\text{new basis} = 2$ and $y_\text{new basis} = -1$. So w.r.t our new basis, the coordinates are the coefficients of the basis vectors so we would write $(2, -1)$. I.e.,
+
+        $$
+        (2, 1)_\text{std basis} = (\color{blue}2, \color{red}{-1})_\text{new basis} = \color{blue}2\begin{bmatrix} 1 \\ 1\end{bmatrix} + \color{red}{-1}\begin{bmatrix} 0 \\ 1\end{bmatrix}
+        $$
+
+        So... <b>the coefficients in the linear combination of the basis vectors for your subspace represent to <u>coordinates</u> w.r.t those chosen basis vectors</b>.
+    </p>
+    <hr style="width:50%"/>
+    <p>
+        We can generalise the above and introduce some new notation to make things clearer:
+    </p>
+    <p>
+        If $V$ is a subspace of $\mathbb{R}^n$, and if $B$ is a basis for $V$, where $B = \{\vec{v_1}, \vec{v_2}, \ldots, \vec{v_n}\}$, then
+        $$
+        \vec a \in V \rightarrow \vec a = c_1\vec{v_1} + c_2\vec{v_2} + \cdots + c_n\vec{v_n}
+        $$
+        Where the coordinates of $\vec a$ are
+        $$
+        \text{coordinates of } \vec a \text{ w.r.t } B = \left[\vec a\right]_B = \begin{bmatrix}c_1 \\ c_2 \\ \vdots \\ c_n\end{bmatrix}
+        $$
+
+        Thus in our above examples, we would have said, if $B$ was our new basis:
+
+        $$\left[(2, 1)\right]_B = (2, -1)$$
+
+        And
+
+        $$
+        \left[(2, -1)\right]_\text{std basis} = (2, 1)
+        $$
+
+        When we just write $(2, 1)$, without the above notation, the standard basis is implied.
+    </p>
+<div>
+
+<pre>
+Gonna need these later for change of basis plots:
+https://matplotlib.org/gallery/api/skewt.html
+https://matplotlib.org/examples/axes_grid/demo_floating_axes.html
+https://matplotlib.org/gallery/scales/custom_scale.html
+** https://matplotlib.org/devel/add_new_projection.html
+** https://matplotlib.org/users/transforms_tutorial.html
+?? https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=10&ved=2ahUKEwikxcKiqKveAhXC_SwKHfIvAUIQFjAJegQIBRAB&url=http%3A%2F%2Fwww-astro.physics.ox.ac.uk%2F~Zuntz%2Fpage4%2Ffiles%2FSkyAxes.py&usg=AOvVaw2oZxJcucD4zHZbt01YuWBd
+*** https://matplotlib.org/tutorials/toolkits/axisartist.html#axisartist-users-guide-index
+*** http://dfm.io/astropy/visualization/wcsaxes/generic_transforms.html
+</pre>
+
 
 <h2>PCA</h2>
 <div>
