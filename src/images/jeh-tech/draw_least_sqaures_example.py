@@ -115,38 +115,35 @@ lss_yintercept = np.array([0, 4./5.])
 ## Build projection of each data point vector onto LSS
 projections = []
 for dp in data_points:
-    projections.append(proj_x_onto_L(dp, lss_vec))
+    projections.append(proj_x_onto_L(dp, lss_vec))    
 
 ##
 ## Plot the data points
-for dp, c in zip(data_points, colours):
+for i, (dp, c) in enumerate(zip(data_points, colours)):
     ax.plot(dp[0], dp[1], 'x', color=c)
-    #ax.plot([0, dp[0]], [0, dp[1]], color=c)
+    ax.text(dp[0], dp[1] + 0.03, '$\\vec{{d_{}}}$'.format(i), color=c)
 
 ##
 ## Plot the least squares solution line
-lss_line = plot_line_plane(lss_vec, lss_yintercept[1], color='black')
-lss_line = plot_line_plane(lss_vec, 0, color='gray')
+lss_line = plot_line_plane(lss_vec, lss_yintercept[1], color='grey')
+lss_line_through_origin = plot_line_plane(lss_vec, 0, color='black')
 
 
 ##
-## Plot the projections
+## Plot the projections - and here we see that the projections are onto the line
+## passing through the origin, because to project onto a vector, it must pass through
+## the origin because if L = c \vec{v}, for all real c's, when c is zero, it passes
+## through origin.
+orthogs = []
 for dp, p, c in zip(data_points, projections, colours):
-    #plot_vec(p, [0,0], color=c, alpha=0.5)
-    plot_vec(p - dp, dp, color=c, alpha=0.5)
-    #plot_vec(p - dp, dp + lss_yintercept, color=c, alpha=0.5)
+    l = plot_vec(p - dp, dp, color=c, alpha=0.5)
+    orthogs.append(l)
 
-##
-## Plot em!
-# projectee = plot_vec(vec, [0,4./5.], 'b')
-# projected = plot_vec(vec_proj_to_lss, [0,4./5.], 'g', alpha=0.5)
-# orthog = plot_vec(vec-vec_proj_to_lss, vec_proj_to_lss + np.array([0,4./5.]), 'purple')
-# plane = plot_line_plane(lss, 4./5., color="black", alpha=0.3)
+p2 = plot_vec(projections[2], [0, 0], color=colours[2], alpha=1.)
 
-# annotate_line(plane, -1.25, r'$L = \{c\vec v + \vec b\ \|\ c \in \mathrm{R}\}$', (30, 35))
-# annotate_line(projectee, 0.5, r'$\vec x$', (-30, 30))
-# annotate_line(projected, 0.5, r'$\mathrm{proj}_L(\vec x)$', (-30, -40))
-# annotate_line(orthog, 1.1, r'$\vec x - \mathrm{proj}_L(\vec x)$', (30, 20))
+annotate_line(lss_line, -1.25, r'Least squares solution', (-40, 35))
+annotate_line(lss_line_through_origin, 2, 'LSS through origin', (-30, -30))
+annotate_line(p2, 1., 'Formula for $\\mathrm{{proj}}_L(\\vec{{d_2}})$ projects onto\nLLS through origin, not onto actual LSS!!', (-50, -95))
 
 fig.show()
 pl.show()

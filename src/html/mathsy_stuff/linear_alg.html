@@ -3384,9 +3384,9 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
         \textrm{Proj}_L(\vec x)
     $$
 
-    The projection is found by dropping a line, perpendicular to $L$ from the top of $\vec x$. Where this line
+    The projection is found by dropping a line, perpendicular to $L$ from the top of $\vec x$, down to $L$. Where this line
     hits $L$ is the end of the vector that describes the projection. This is shown on the graph by the
-    smaller green vector labelled $\vec x - \textrm{Proj}_L$.
+    smaller green vector labelled $\textrm{Proj}_L$, and the purple line labelled $\vec x - \textrm{Proj}_L$.
 </p>
 <p style="clear:both;">
     Because $\vec x - \textrm{Proj}_L(\vec x)$ is perpendicular to $L$ we can say the following (recall perpendicular vector's dot product is zero):
@@ -3411,8 +3411,14 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
 
     And we have seen in a previous section how to <a href="#unit-vectors">make a vector a unit vector</a>. Whoopdi do!
 </p>
+<p style="border: 1px solid blue; margin: 10px;">
+    An important point to note - which wasn't immediately obvious to me, but probably should've been in hindsight - is that with this projection-onto-a-line, the <b>line projected onto has to pass through the origin!</b> This is seen in better detail later in the <a href="#lss_projects_onto_line_through_origin">second least squares example</a>.
+</p>
 <p>
-    Turns out that <b>projection is a linear transform</b> (see <a href="#linear-transform-rules">the rules</a>)! To calculate the matrix that describes the projection transform,
+    Turns out that <b>projection is a linear transform</b> (see <a href="#linear-transform-rules">the rules</a>)! (<b>But the line <a href="https://math.stackexchange.com/questions/2397750/orthogonal-projection-of-point-onto-line-not-through-origin/2398320#2398320" target="_blank">must pass through the origin</a>!</b>).
+</p>
+<p>
+    To calculate the matrix that describes the projection transform,
     apply the projection to each of the column vectors of the identity matrix where the column vectors of $I$ are the same
     length as the vector over which the projection is applied. So, for example, vectors in $\mathbb{R}^n$ to get the transformation
     matrix $A$ for a projection onto a line defined by the vector $\hat u$:
@@ -3842,6 +3848,7 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
     </p>
 
     <h4> </h4>
+    <a id="lss_projects_onto_line_through_origin"></a>
     <p>WOAH, in trying to do one of the graphs I've found our that the projection formula from the previous section only really makes sense
     if the line passes through the origin as a line defined by a vector (with no yintercept) has to pass through origin.</p>
     <p>
@@ -3857,6 +3864,16 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
         <a href="##IMG_DIR##/draw_least_squares_example.py" target="_blank" style="font-size:75%;">&lt;View source&gt;</a>.
     </p>
 
+</div>
+
+<h2>Affine Transforms</h2>
+<div>
+<p>
+    https://www.cs.utexas.edu/users/fussell/courses/cs384g-fall2011/lectures/lecture07-Affine.pdf
+</p>
+<p>
+    https://www.youtube.com/watch?v=2Snoepcmi9U
+</p>
 </div>
 
 <h2>Change Of Basis</h2>

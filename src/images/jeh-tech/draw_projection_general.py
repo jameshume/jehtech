@@ -87,7 +87,7 @@ def annotate_line(line, annotate_at_x, annotate_txt, xytext):
 ## leave enough room to make figure look "good"
 fig, ax = pl.subplots()
 ax.set_xlim([-1.5, 1.5])
-ax.set_ylim([-0.5, 2.5])
+ax.set_ylim([-1.5, 1.5])
 ax.spines['left'].set_position('zero')
 ax.spines['bottom'].set_position('zero')
 ax.spines['top'].set_color('none')
@@ -101,14 +101,15 @@ vec_proj_to_lss = proj_x_onto_L(vec, lss) ##< Projection of vec onto L = {a * ls
 
 ##
 ## Plot em!
-projectee = plot_vec(vec, [0,4./5.], 'b')
-projected = plot_vec(vec_proj_to_lss, [0,4./5.], 'g', alpha=0.5)
-orthog = plot_vec(vec-vec_proj_to_lss, vec_proj_to_lss + np.array([0,4./5.]), 'purple')
-plane = plot_line_plane(lss, 4./5., color="black", alpha=0.3)
+zero = np.array([0, 0])
+projectee = plot_vec(vec, zero, 'b')
+projected = plot_vec(vec_proj_to_lss, zero, 'g', alpha=0.5)
+orthog = plot_vec(vec-vec_proj_to_lss, vec_proj_to_lss, 'purple')
+plane = plot_line_plane(lss, 0, color="black", alpha=0.3)
 
-annotate_line(plane, -1.25, r'$L = \{c\vec v + \vec b\ \|\ c \in \mathrm{R}\}$', (30, 35))
-annotate_line(projectee, 0.5, r'$\vec x$', (-30, 30))
-annotate_line(projected, 0.5, r'$\mathrm{proj}_L(\vec x)$', (-30, -40))
+annotate_line(plane, -1.25, r'$L = \{c\vec v\ \|\ c \in \mathrm{R}\}$', (30, -35))
+annotate_line(projectee, 0.5, r'$\vec x$', (-20, 20))
+annotate_line(projected, 0.5, r'$\mathrm{proj}_L(\vec x)$', (-30, -50))
 annotate_line(orthog, 1.1, r'$\vec x - \mathrm{proj}_L(\vec x)$', (30, 20))
 
 fig.show()
