@@ -3840,19 +3840,14 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
 
     Therefore, $m = 2/5$ and $b = 4/5$ :)
     </p>
-    <p>
-    TODO: Animation with projections onto this line with line moving showing error increase.
-    </p>
-    <p>
-        TODO Add notes from eboot scipy and numpy for examples of linear regression and maths in python
-    </p>
 
-    <h4> </h4>
     <a id="lss_projects_onto_line_through_origin"></a>
+    <h4>Projection Onto Line Must Go Through Origin </h4>
     <p>WOAH, in trying to do one of the graphs I've found our that the projection formula from the previous section only really makes sense
     if the line passes through the origin as a line defined by a vector (with no yintercept) has to pass through origin.</p>
     <p>
-        Also found this post: https://math.stackexchange.com/a/2398320 which seems to confirm it.
+        Also found this <a href="https://math.stackexchange.com/a/2398320" target="_blank">SO post</a>, which confirmed my suspeicions. It
+        put me onto the idea of affine transforms.
     </p>
     <p>
         Here are the projections of the data points, but using proj formula they project onto the solution vector passing
@@ -3863,7 +3858,22 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
         <br/>
         <a href="##IMG_DIR##/draw_least_squares_example.py" target="_blank" style="font-size:75%;">&lt;View source&gt;</a>.
     </p>
-
+    <p>
+        So, what we need to do is to translate the real line so that it passes through the origin, apply the same transform to the data points,
+        project them onto the transformed line, and the apply the inverse translation to the data points and their projections. Then we get what
+        we want:
+    </p>
+    <p>
+        <img src="##IMG_DIR##/draw_least_squares_example_translation.png"/>
+        <br>
+        <a href="##IMG_DIR##/draw_least_squares_example_translation.py" target="_blank" style="font-size:75%;">&lt;View source&gt;</a>.
+    </p>
+    <p>
+        The above is not calculated using an affine transform in the way described in this <a href="https://math.stackexchange.com/a/2398320" target="_blank">SO post</a>, but does the shifting manually to achieve the same effect.
+    </p>
+    <p>
+        BUT, if we have to do all of this work, how does the reasoning for LSE work? We said we're projecting onto the column space of A, but if the column space doesn't pass through the origin and we don't do any translations, does it still hold? The projectiion calculated would be onto a phantom column space - the real column space shifted so it passes through the origin - as we've seen above. This means the lengths of the orthogonals from the data points to their projections would not be the length we wanted???? aaaarg, brain melty :'(
+    </p>
 </div>
 
 <h2>Affine Transforms</h2>
@@ -3878,6 +3888,7 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
 
 <h2>Change Of Basis</h2>
 <div>
+    <h3>A Definition</h3>
     <p>
         In 2D Cartesian space we are used to specifying coordinates like $(2,1)$, which means 2 integer units along the x-axis and 1 along the y-axis.
         These coordinates are, in fact, coefficients of a linear combination of the standard basis vectors $\hat i$ and $\hat j$, such that we would write $(2,1)$ as $2\hat i + 1\hat j$, where,
@@ -3917,6 +3928,14 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
 
         So... <b>the coefficients in the linear combination of the basis vectors for your subspace represent to <u>coordinates</u> w.r.t those chosen basis vectors</b>.
     </p>
+    <p>
+        We can see this graphically below, where we see the same two vectors plotted with respect to our different bases. You can see that with the non-standard basis, because everything is expressed as combinations of the non standard basis vectors, our graph's grid has become skewed. This is the effect of the change in basis.
+    </p>
+    <p>
+        <img src="##IMG_DIR##/draw_change_of_basis_1.png"/>
+        <br>
+        <a href="##IMG_DIR##/draw_change_of_basis_1.py" target="_blank" style="font-size:75%;">&lt;View source&gt;</a>.
+    </p>
     <hr style="width:50%"/>
     <p>
         We can generalise the above and introduce some new notation to make things clearer:
@@ -3943,20 +3962,34 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
 
         When we just write $(2, 1)$, without the above notation, the standard basis is implied.
     </p>
+
+    <h3>Change Of Basis Matrix</h3>
+    <p>
+        We have seen that to construct a transformation matrix we apply the transformation to each column vector of the identity matrix. This means that if $B = \{\vec{v_1}, \vec{v_2}, \ldots, \vec{v_k}\}$ is a basis for $\mathbb{R}^k$, then the transformation matrix, $C$, is:
+
+        $$
+            C = \begin{bmatrix}
+                    \uparrow & \uparrow & & \uparrow \\
+                    \vec{v_1} & \vec{v_2} & \cdots & \vec{v_k} \\
+                    \downarrow & \downarrow & & \downarrow \\
+                \end{bmatrix}
+        $$
+
+        Any vector w.r.t to $B$ would be written as:
+
+        $$
+            \left[\vec a\right]_B = \begin{bmatrix}c_1 \\ c_2 \\ \vdots \\ c_k\end{bmatrix}
+        $$
+
+        But here's the interesting thing about the notation. If we were to express $\vec a$ as a linear combination of the basis vectors we would write:
+
+        $$
+        \vec a = c_1\vec{v_1} + c_2\vec{v_2} + \cdots + c_k\vec{v_k}
+        $$
+
+        Notice how we did write $[\vec a]_B$.
+    </p>
 <div>
-
-<pre>
-Gonna need these later for change of basis plots:
-https://matplotlib.org/gallery/api/skewt.html
-https://matplotlib.org/examples/axes_grid/demo_floating_axes.html
-https://matplotlib.org/gallery/scales/custom_scale.html
-** https://matplotlib.org/devel/add_new_projection.html
-** https://matplotlib.org/users/transforms_tutorial.html
-?? https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=10&ved=2ahUKEwikxcKiqKveAhXC_SwKHfIvAUIQFjAJegQIBRAB&url=http%3A%2F%2Fwww-astro.physics.ox.ac.uk%2F~Zuntz%2Fpage4%2Ffiles%2FSkyAxes.py&usg=AOvVaw2oZxJcucD4zHZbt01YuWBd
-*** https://matplotlib.org/tutorials/toolkits/axisartist.html#axisartist-users-guide-index
-*** http://dfm.io/astropy/visualization/wcsaxes/generic_transforms.html
-</pre>
-
 
 <h2>PCA</h2>
 <div>
