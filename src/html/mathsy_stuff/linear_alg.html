@@ -501,9 +501,11 @@
         We know that:
 
         $$
-            \cos(\theta_a) = a_x \;\text{and}\; \sin(\theta_a) = a_y \\
-            \cos(\theta_b) = b_x \;\text{and}\; \sin(\theta_b) = b_y \\
+            \cos(\theta_a) = a_x \;\text{and}\; \sin(\theta_a) = a_y
+        $$
 
+        $$
+            \cos(\theta_b) = b_x \;\text{and}\; \sin(\theta_b) = b_y
         $$
 
         And we know that:
@@ -3392,8 +3394,12 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
     Because $\vec x - \textrm{Proj}_L(\vec x)$ is perpendicular to $L$ we can say the following (recall perpendicular vector's dot product is zero):
 
     $$
-    (\vec x - \textrm{Proj}_L(\vec x)) \cdot \vec v = 0,\ \text{where}\ \vec v\ \text{is a defining vector of the line L} \\
-    \therefore (\vec x - c\vec v) \cdot \vec v = 0, \text{because}\ c\vec v \in L\ \text{and}\ \textrm{Proj}_L(\vec x) \in L\ \text{it means, for some}\ c,\ c\vec v = \textrm{Proj}_L(\vec x) \\
+    (\vec x - \textrm{Proj}_L(\vec x)) \cdot \vec v = 0,\ \text{where}\ \vec v\ \text{is a defining vector of the line L}
+    $$
+    $$
+    \therefore (\vec x - c\vec v) \cdot \vec v = 0, \text{because}\ c\vec v \in L\ \text{and}\ \textrm{Proj}_L(\vec x) \in L\ \text{it means, for some}\ c,\ c\vec v = \textrm{Proj}_L(\vec x)
+    $$
+    $$
     \therefore c = \frac{\vec v \cdot \vec x}{\|\vec v\|^2}
     $$
 
@@ -3411,9 +3417,14 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
 
     And we have seen in a previous section how to <a href="#unit-vectors">make a vector a unit vector</a>. Whoopdi do!
 </p>
-<p style="border: 1px solid blue; margin: 10px;">
-    An important point to note - which wasn't immediately obvious to me, but probably should've been in hindsight - is that with this projection-onto-a-line, the <b>line projected onto has to pass through the origin!</b> This is seen in better detail later in the <a href="#lss_projects_onto_line_through_origin">second least squares example</a>.
-</p>
+<div style="border: 1px solid blue; margin: 10px;">
+    <p>
+        An important point to note - which wasn't immediately obvious to me, but probably should've been in hindsight - is that with this projection-onto-a-line, the <b>line projected onto has to pass through the origin!</b> This is seen in better detail later in the <a href="#lss_projects_onto_line_through_origin">second least squares example</a>.
+    </p>
+    <p>
+        However, I realised this is fine because when we're talking about subspaces they must contain the zero vector, because they are closed under scalar multiplication, so when projecting onto a subspace, the line, plane, or whatever, must pass through the origin! It is only when one starts thinking about graphs or graphics that we need to consider the case where the line doesn't pass through the origin, so this is a case that does not bother us here :)
+    </p>
+</div>
 <p>
     Turns out that <b>projection is a linear transform</b> (see <a href="#linear-transform-rules">the rules</a>)! (<b>But the line <a href="https://math.stackexchange.com/questions/2397750/orthogonal-projection-of-point-onto-line-not-through-origin/2398320#2398320" target="_blank">must pass through the origin</a>!</b>).
 </p>
@@ -3850,6 +3861,9 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
         put me onto the idea of affine transforms.
     </p>
     <p>
+        I've realised this is fine because when we're talking about subspaces they must contain the zero vector, because they are closed under scalar multiplication, so when projecting onto a subspace, the line, plane, or whatever, must pass through the origin! It is only when one starts thinking about graphs or graphics that we need to consider the case where the line doesn't pass through the origin, so this is a case that does not bother us here, generally :) It is only a bother when I wanted to do a graphica plot like below:
+    </p>
+    <p>
         Here are the projections of the data points, but using proj formula they project onto the solution vector passing
         trhough the origin, not the actual solution vector which has a non-zero y intercept!!!
     </p>
@@ -3872,7 +3886,7 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
         The above is not calculated using an affine transform in the way described in this <a href="https://math.stackexchange.com/a/2398320" target="_blank">SO post</a>, but does the shifting manually to achieve the same effect.
     </p>
     <p>
-        BUT, if we have to do all of this work, how does the reasoning for LSE work? We said we're projecting onto the column space of A, but if the column space doesn't pass through the origin and we don't do any translations, does it still hold? The projectiion calculated would be onto a phantom column space - the real column space shifted so it passes through the origin - as we've seen above. This means the lengths of the orthogonals from the data points to their projections would not be the length we wanted???? aaaarg, brain melty :'(
+        BUT, if we have to do all of this work, how does the reasoning for LSE work? The answer is because all subspaces contain the zero vector. We're only concerned with direction. The catesian coordinates are only a problem because we're trying to plot things here... generally when projecting onto subspaces, we know they contain the origin, because this is a property of a subspace!
     </p>
 </div>
 
@@ -3987,7 +4001,53 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
         \vec a = c_1\vec{v_1} + c_2\vec{v_2} + \cdots + c_k\vec{v_k}
         $$
 
-        Notice how we did write $[\vec a]_B$.
+        Notice how we did <em>not</em> write $[\vec a]_B$. The reason for this is that no matter the basis vectors, the linear combination of the coordinates and basis vectors will always result in a vector in $\mathbb{R}^k$, which is expressed by the standard basis.
+    </p>
+    <p>
+        Thus our change of basis matrix does the following:
+    </p>
+    <p style="border: 1px solid blue; margin: 5px;">
+        $$
+        C\left[\vec{a}_b\right] = \vec a
+        $$
+    </p>
+    <p>
+        Because,
+
+        $$
+        C\left[\vec{a}_b\right] = \begin{bmatrix}
+                    \uparrow & \uparrow & & \uparrow \\
+                    \vec{v_1} & \vec{v_2} & \cdots & \vec{v_k} \\
+                    \downarrow & \downarrow & & \downarrow \\
+                \end{bmatrix} \begin{bmatrix}
+                    c_1 \\ c_2 \\ \vdots \\c_l
+                \end{bmatrix}
+                = c_1\vec{v_1} + c_2\vec{v_2} + \cdots + c_k\vec{v_k}
+                =  \vec a
+
+        $$
+    </p>
+
+    <h3>Invertible Change Of Baisis Matrix</h3>
+    <p>
+        We have seen that if $B$ is a basis and its vectors are the column vectors of a matrix $C$, then $C$ is the transformation matrix that does the change of basis - it is the change-of-basis matrix:
+
+        $$
+        C\left[\vec a\right]_B = \vec a
+        $$
+
+        If $C$ is square, then because its columns are L.I. (because they're a basis), we can say that:
+
+        $$
+        C^{-1}C\left[\vec a\right]_B = C^{-1}\vec a
+        $$
+
+        And therefore:
+    </p>
+    <p style="border: 1px solid blue;">
+        $$
+            \left[\vec a\right]_B = C^{-1}\vec a
+        $$
     </p>
 <div>
 

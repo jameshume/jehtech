@@ -384,6 +384,21 @@ max-line-length = 100</pre>
 @="C:\\Python27\\Lib;C:\\Python27\\DLLs;C:\\Python27\\Lib\\lib-tk"</pre>
 </div>
 
+<h2>Running Python 2 and 3 on Windows</h2>
+<div>
+<p>
+	See <a href="https://stackoverflow.com/questions/341184/can-i-install-python-3-x-and-2-x-on-the-same-windows-computer" target="_blank">this SO thread</a>. To summarise:
+</p>
+<pre>## Run scripts:
+py -3 my_script.py # execute using python 3
+py -2 my_script.py # execute using python 2
+
+## Run pip:
+pip3 (alias)
+py -3 -m pip install ... # Python 3 pip install
+py -2 -m pip install ... # Python 2 pip install</pre>
+</div>
+
 <h2>Python functions gotcha: default argument values - default value evaluated only once!</h2>
 <div>
 	<p>
