@@ -78,8 +78,6 @@ print(removedFiles)
 print("\nThe following files have been added")
 print(newFiles)
 
-print("\nAttempting to FTP into server")
-
 def ConvertPcLocalToHostLocal(filename):
 	# drop the __depolyed front. then need to figure out whether the directory tree exists. if it does copy, otherwise create directory tree and then copy!
 	return os.path.split(filename)[1]
@@ -209,8 +207,21 @@ class MyFTP(object):
 ftpWasSuccessfull = True
 ftp = None
 try:
-	ftp = ftplib.FTP(FTP_ADDRESS, FTP_USER_ID, sys.argv[1])
-	ftp.set_debuglevel(0)
+	ftp = ftplib.FTP()
+	ftp.set_pasv(True)
+	ftp.set_debuglevel(2)
+
+	print("\nAttempting to connect to FTP server {}".format(FTP_ADDRESS))
+	try:
+		r = ftp.connect(host=FTP_ADDRESS, timeout=5)
+		print(r)
+		sys.exit(1)
+	except:
+		print("### ERROR: Failed to FTP into server")
+		raise
+		
+	print("\nAttempting to login to FTP server as user {}".format(FTP_USER_ID))
+	ftp.login(FTP_USER_ID, sys.argv[1])
 
 	myftp = MyFTP(ftp)
 

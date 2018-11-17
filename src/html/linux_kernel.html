@@ -88,6 +88,10 @@
     <li>https://www.element14.com/community/community/designcenter/single-board-computers/next-gen_beaglebone/blog/2015/12/05/mainline-linux-kernel-on-beaglebone-black</li>
     <li>https://kernelnewbies.org/ ************</li>
     <li>https://vadl.github.io/beagleboneblack/2016/07/29/setting-up-bbb-gpio</li>
+    <li>http://www.rdrop.com/users/paulmck/scalability/paper/whymb.2010.06.07c.pdf - memory barries </li>
+    <li>https://community.arm.com/processors/b/blog/posts/memory-access-ordering---an-introduction</li>
+    <li>https://www.cs.umd.edu/~mvz/cmsc430-s07/M24risc.pdf</li>
+    <li>https://www.quora.com/How-does-the-out-of-order-execution-work-in-microprocessors</li>
   </ol>
 </div>
 
@@ -2015,6 +2019,8 @@ When compiling out-of-source render the src tree read-only - it is good practice
 
 = Linux Modules
 init_module and cleanup_module should have a module specific name. Good practice to print loading and unloading message for module load and unload event. But use short messages because prink() disables interrupts whilst using busy-waiting to poll for characters - eek! Don't use printk() elsewhere for this reason - there are new and better debug options!
+
+
 </pre>
 
 </div>

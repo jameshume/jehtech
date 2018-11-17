@@ -33,6 +33,9 @@
 <p>
     A lot of these notes are now just based on the amazing <a href="https://www.khanacademy.org/math/linear-algebra" target="_blank">Khan Academy linear algebra tutorials</a>. In fact, id say the vast majority are... they are literally just notes on Sal's lectures!
 </p>
+<p>
+    Another resource that is really worth watching is 3 Blue 1 Brown's series <a href="https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab" target="_blank">&quot;The essence of linear algebra&quot;</a>.
+</p>
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 <h2>Page Contents</h2>
@@ -4047,6 +4050,125 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
     <p style="border: 1px solid blue;">
         $$
             \left[\vec a\right]_B = C^{-1}\vec a
+        $$
+    </p>
+
+
+    <h3>Transformation Matrix w.r.t A Basis</h3>
+    <p>
+        Let $T$ be $T: \mathbb{R}^n \rightarrow \mathbb{R}^n$, such that $T(\vec x) = A\vec x$. If $T$ transforms $\vec x$ w.r.t. the standard basis to a vector $\vec y$, then there is a transform that transforms $\left[\vec x\right]_B$ to $\left[\vec y\right]_B$, where $B$ is a basis for $\mathbb{R}^n$.
+    </p>
+    <p>
+        Lets write this other transform as $D\left[\vec x\right]_B = \left[\vec y\right]_B$. We know $\vec y = A \vec x$, so we can write:
+        
+        $$
+            \begin{align}D\left[\vec x\right]_B &= \left[A\vec x\right]_B\\
+              &= \left[T(\vec x)\right]_B
+            \end{align}
+        $$
+
+        Therefore, $D$ is the transformation matrix of $T$ w.r.t the basis $B$.
+    </p>
+    <p>
+        Note, at the point, that $D$ is some random transform... maybe we're rotating vectors, scaling them or something. $D$ is not trying to change basis... it is just a transformation that works on vectors expressed w.r.t. a specific basis.
+    </p>
+    <p>
+        To change basis, we need a change of basis matrix. We saw in the previous section that $\left[\vec x\right]_B = C^{-1}\vec x$, so we know that we can go from any vector w.r.t. the standard basis to the same vector w.r.t. to any other basis, where the basis is the column vectors of $C$.
+    </p>
+    <p>
+        This means that so far we have:
+        $$
+            D\left[\vec x\right]_B = \left[T(\vec x)\right]_B = \left[A\vec x\right]_B = \left[\vec y\right]_B = C^{-1}\vec y = C^{-1}A\vec x = C^{-1}AC\left[\vec x\right]_B
+        $$
+        Thus:
+    </p>
+    <p style="border: 1px solid blue;">
+        $$
+            D\left[\vec x\right]_B = C^{-1}AC\left[\vec x\right]_B
+        $$
+        $$
+            \implies D = C^{-1}AC
+        $$
+
+        Where $C$ is our change of basis matrix and $D$ is our transformation matrix w.r.t to basis $B$. $D$ is $T$ w.r.t. $B$!!
+    </p>
+    <p>
+        Sal presents this graph which is an excellent summary:
+        $$
+        \begin{array}{ccc}
+            \large\mathbf{\vec x} & \rightarrow & \small{A=CDC^{-1}}& \rightarrow & \large\mathbf{T\left(\vec x\right)} \\
+            \downarrow & & & & \downarrow \\
+            \small{C^{-1}} & & & & \small{C^{-1}}\\
+            \downarrow & & & & \downarrow \\
+            \large\mathbf{\left[\vec x\right]_B} & \rightarrow & \small{D=C^{-1}AC} & \rightarrow & \large\mathbf{\left[T\left(\vec x\right)\right]_B}
+        \end{array}
+        $$
+    </p>
+
+    <h3>Changing Coordinate Systems To Help Find A Transform Matrix</h3>
+    <p>
+        Sal gives the example of finding the transform for a a reflection in a line, $L$. Normally we would apply the transform to the identity matrix, "I", to get the transformation matrix, $A$:
+
+        $$
+        A = \begin{bmatrix} \mathrm{T}(\vec e_1) & \mathrm{T}(\vec e_2) \end{bmatrix}
+        $$
+
+        We could try to figure out $\mathrm{T}(\vec e_i)$ using trig but it would be difficult and doesn't scale well into 3D and would be very very difficult in higher dimensions!
+    </p>
+    <p>
+        But, if we use $\vec b_1 \in L$ as our first basis vector and $\vec b_2 \in L^\perp$ as our second basis vector and express our space with respect to this basis, then the problem becomes taking a reflection in the horizontal axis, which is bar far a simpler problem to solve!
+    </p>
+    <p>
+        If we wanted to reflect $\vec y \in \mathbb{R}^2$, then we reflect $\left[\vec y\right]_B$ in the horizontal axis. To do this all we have to do is negate the y-value in the vector $\left[\vec y\right]_B$. Nice!
+    </p>
+    <p>
+        So, 
+
+        $$
+        \vec b = c_1\vec{b_1} + c_2\vec{b_2} = \left[\vec v\right]_B = \begin{bmatrix}c_1\\c_2\end{bmatrix}
+        $$
+
+        The transform is thus:
+
+        $$
+        \begin{bmatrix}c_1\\c_2\end{bmatrix} \rightarrow \begin{bmatrix}c_1\\-c_2\end{bmatrix}
+        $$
+
+        I.e.,
+
+        $$
+            D\begin{bmatrix}c_1\\c_2\end{bmatrix} = \begin{bmatrix}c_1\\-c_2\end{bmatrix}
+        $$
+        $$
+            \therefore \begin{bmatrix}d_1 & d_2 \\ d_3 & d_4\end{bmatrix}\begin{bmatrix}c_1\\c_2\end{bmatrix} = \begin{bmatrix}c_1\\-c_2\end{bmatrix}
+        $$
+
+        From this we get:
+        $$
+            D = \begin{bmatrix}1 & 0 \\ 0 & -1\end{bmatrix}
+        $$
+
+        Now we can transform $D$, which is $\left[\mathrm{T}(\vec x)\right]_B$, back to $\mathrm{T}(\vec x)$.
+    </p>
+    <p>
+        We know that $A = CDC^{-1}$, so happily we can now calculate the original transform!
+    </p>
+    <p>
+        However, Sal does this, of course, much more elegantly. Take the basis $B = \{\vec{b_1}, \vec{b_2}\}$. We would express each basis vector vector w.r.t. $B$ as follows:
+
+        $$
+            \left[\vec{b_1}\right]_B = 1\vec{b_1} + 0\vec{b_2} = \begin{bmatrix}1 \\ 0\end{bmatrix}
+        $$
+        $$
+            \left[\vec{b_2}\right]_B = 0\vec{b_1} + 1\vec{b_2} = \begin{bmatrix}0 \\ 1\end{bmatrix}
+        $$
+
+        OOH look how the basis vectors expressed w.r.t the basis look like the standard basis :)
+    </p>
+    <p>
+        Anyway, now we can write:
+
+        $$
         $$
     </p>
 <div>
