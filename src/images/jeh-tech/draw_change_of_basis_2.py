@@ -183,7 +183,6 @@ if __name__ == '__main__':
     std_ax_pos = std_ax.get_position()
     print(std_ax_pos.x0, std_ax_pos.x1, std_ax_pos.y0, std_ax_pos.y1)
     print(std_ax_pos)
-    std_ax_pos.x0 -= 0.045
     cob_ax = fig.add_axes(std_ax_pos, frameon=False, projection='skewx')
     cob_ax.grid(True, color='red')
  
