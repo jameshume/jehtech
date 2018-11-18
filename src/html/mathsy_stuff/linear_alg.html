@@ -3932,9 +3932,13 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
     <p>
         What would our coordinates, $(2,1)_\text{std basis}$, written w.r.t the standard basis be if we wrote them w.r.t our new basis?
         $$
-          2\begin{bmatrix} 1 \\ 0\end{bmatrix} + 1\begin{bmatrix} 0 \\ 1\end{bmatrix} = \begin{bmatrix} 2 \\ 1\end{bmatrix}\\
-          \downarrow\\
-          x_\text{new basis}\begin{bmatrix} 1 \\ 1\end{bmatrix} + y_\text{new basis}\begin{bmatrix} 0 \\ 1\end{bmatrix} = \begin{bmatrix} 2 \\ 1\end{bmatrix} \\
+          2\begin{bmatrix} 1 \\ 0\end{bmatrix} + 1\begin{bmatrix} 0 \\ 1\end{bmatrix} = \begin{bmatrix} 2 \\ 1\end{bmatrix}
+        $$
+        $$
+          \downarrow
+        $$
+        $$
+          x_\text{new basis}\begin{bmatrix} 1 \\ 1\end{bmatrix} + y_\text{new basis}\begin{bmatrix} 0 \\ 1\end{bmatrix} = \begin{bmatrix} 2 \\ 1\end{bmatrix}
         $$
 
         With respect to our new basis our x-like and y-like coordinates would be $x_\text{new basis} = 2$ and $y_\text{new basis} = -1$. So w.r.t our new basis, the coordinates are the coefficients of the basis vectors so we would write $(2, -1)$. I.e.,
@@ -4029,6 +4033,50 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
                 =  \vec a
 
         $$
+    </p>
+    <p>
+        Lets try this using our simple skew example. The change of basis matrix would be:
+
+        $$
+        C = \begin{bmatrix} 1 & 1\\ 0 & 1\end{bmatrix}
+        $$
+
+        We know that we transformed $[0\ \ 1]$ to $[1\ \ 1]$, so $[1\ \ 1]_B$ is $[0\ \ 1]$ in the standard basis:
+
+        $$
+        \begin{align}
+                C{\begin{bmatrix} 0 \\ 1\end{bmatrix}}_B &= \begin{bmatrix} 1 & 1\\ 0 & 1\end{bmatrix}\begin{bmatrix} 0 \\ 1\end{bmatrix} \\
+                    &= \begin{bmatrix} 1 \\ 1\end{bmatrix}
+        \end{align}
+        $$
+
+        Which is exactly what we expected.
+    </p>
+    <p>
+        In this case, because $C$ is square and we know, by definition of its construction, that its column vectors are L.I., that $C$ must be invertible. This means we can do the opposite using:
+    </p>
+    <p style="border: 1px solid blue; margin: 5px;">
+        $$
+        \left[\vec{a}\right]_B = C^{-1}\vec a
+        $$
+    </p>
+    <p>
+        In this case, $C^{-1}$ is trivially found:
+        $$
+            C^{-1} = \begin{bmatrix} 0 & 1 \\ 1 & 0\end{bmatrix}
+        $$
+
+        So,
+
+        $$
+            \begin{align}
+            \left[{\vec a}_B\right] &= C^{-1}\begin{bmatrix}1 \\ 1\end{bmatrix}\\
+            &=\begin{bmatrix} 1 & -1 \\ 0 & 1\end{bmatrix}\begin{bmatrix}1 \\ 1\end{bmatrix}\\
+            &=\begin{bmatrix}0 \\ 1\end{bmatrix}
+            \end{align}
+        $$
+
+        Which, is again what we expect. Happy days :)
     </p>
 
     <h3>Invertible Change Of Baisis Matrix</h3>
@@ -4148,29 +4196,122 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
             D = \begin{bmatrix}1 & 0 \\ 0 & -1\end{bmatrix}
         $$
 
-        Now we can transform $D$, which is $\left[\mathrm{T}(\vec x)\right]_B$, back to $\mathrm{T}(\vec x)$.
+        Now we can transform $D$, which is $\left[\mathrm{T}(\vec x)\right]_B$, back to $\mathrm{T}(\vec x)$ because we know that $A = CDC^{-1}$, so happily we can now calculate the original transform!
+    </p>
+    
+
+    <h3>Orthonormal Basis</h3>
+    <p>
+        If all vectors in a basis $B = \{\vec{v_1}, \vec{v_2}, \ldots, \vec{v_k}\}$ are unit length and are orthogonal to each other, then we call this basis orthonormal. Because all the vectors are orthogonal to eachother, they are also independent.
     </p>
     <p>
-        We know that $A = CDC^{-1}$, so happily we can now calculate the original transform!
+        Orthonormal basis make good coordinate systems, but as Sal asks, &quot;What does good mean?&quot;. If $B$ is an orthonormal basis for a subspace $V$, and $\vec x \in V$, then we can say, by definition:
+
+        $$
+        \vec x = c_1\vec{v_1} + c_2\vec{v_2} + \cdots + c_i\vec{v_i} + \cdots + c_k\vec{v_k}
+        $$
+        $$
+        \therefore \vec x \cdot \vec{v_i} = 
+            \underbrace{c_1\vec{v_1}\cdot \vec{v_i} + c_2\vec{v_2}\cdot \vec{v_i} + \cdots}_\text{must be zero} + \underbrace{c_i\vec{v_i}\cdot \vec{v_i}}_\text{must be 1} + \underbrace{\cdots + c_k\vec{v_k}\cdot \vec{v_i}}_\text{must be zero}
+        $$
+
+        We know that $c_i\vec{v_i}\cdot \vec{v_i}$ can be the only non-zero quantity because by definition all other vectors are perpendicular to $\vec{v_i}$, so their dot products with $\vec{v_i}$ must be zero. Therefore we can say that:
+
+        $$
+        \vec{v_i} \cdot \vec x = c_i
+        $$
+
+        And why is this good?
     </p>
     <p>
-        However, Sal does this, of course, much more elegantly. Take the basis $B = \{\vec{b_1}, \vec{b_2}\}$. We would express each basis vector vector w.r.t. $B$ as follows:
+        Well, $C\left[\vec x\right]_B = \vec x$ and $\left[\vec x\right]_B = C^{-1}\vec x$ may be hard to find, especially if $C$ is not invertible. Then we would have to solve for $\left[\vec x\right]_B$. This method of using $\vec{v_i}\cdot\vec x$, which only holds for orthonormal basis, however, just lets us do:
 
         $$
-            \left[\vec{b_1}\right]_B = 1\vec{b_1} + 0\vec{b_2} = \begin{bmatrix}1 \\ 0\end{bmatrix}
-        $$
-        $$
-            \left[\vec{b_2}\right]_B = 0\vec{b_1} + 1\vec{b_2} = \begin{bmatrix}0 \\ 1\end{bmatrix}
+        \left[\vec x\right]_B = \begin{bmatrix}c_1\\c_2\\\vdots\\c_k\end{bmatrix} = \begin{bmatrix}\vec{v_1}\cdot \vec x \\ \vec{v_2}\cdot \vec x \\ \vdots \\ \vec{v_k}\cdot \vec x\end{bmatrix}
         $$
 
-        OOH look how the basis vectors expressed w.r.t the basis look like the standard basis :)
+        This is <em>MUCH EASIER</em>! This is why orthonomrla basis are &quot;good&quot;: it is easy to figure out coordinates!
+    </p>
+
+
+    <h3>Projection Onto Subspace With Orthonormal Basis</h3>
+    <p>
+        We had previously seen that a <a href="#projection-matrix-formula">projection onto any subspace</a> can be defined as:
+
+        $$
+            \mathbf{\mathrm{proj}_V(\vec x) = (A^TA)^{-1}A^T\vec x}
+        $$
+
+        Where the column vectors of $A$ are the basis vectors for the subspace $V$ that we are projecting onto. However, when the basis is orthonormal, this reduces to:
+
+    </p>
+    <p style="border:1px solid blue;">
+        $$
+            \mathrm{proj}_V(\vec x) = A^TA\vec x
+        $$
     </p>
     <p>
-        Anyway, now we can write:
+        Much nicer :) Another reason why orthonormal basis are &quot;good&quot;
+    </p>
+
+    <h3>Orthogonal Matricies Preserve Angles And Lengths</h3>
+    <p>
+        An orthogonal matrix is one whos columns and rows are orthonomal vectors of the same number of elements, i.e., they're square. This means
+        that:
 
         $$
+            A^TA = AA^T = I
+        $$
+
+        This also means that:
+
+        $$
+        C^T = C^{-1}
+        $$
+
+        This makes finding the inverse of the matrix much, much easier!
+    </p>
+    <p>
+        Such matricies also preserve angles and lengths when they are used as transformation matricies. Thus, if we tranformed two different vectors, then angle between them would stay the same and their lengths would too. In other words, what we are saying is, that under this transform:
+
+        $$
+        \|\vec x\| = \|C\vec x\|
+        $$
+
+        We can see that such a transform preserves lengths:
+
+        $$
+        \begin{align}
+            \|\vec x\|^2 &= \|C\vec x\|^2 \\
+                         &= C\vec x \cdot C\vec x \\
+                         &= (C\vec x)^TC\vec x \\
+                         &=\vec{x}^TC^TC\vec x \\
+                         &= \vec{x}^T\underbrace{C^TC}_{=I}\vec x \\
+                         &= \vec {x}^T\vec x \\
+                         &= \|\vec x\|^2
+        \end{align}
+        $$
+
+        We can, in a similar manner, see that such a transform preserves angles:
+
+        $$
+        \begin{align}
+            \cos \theta_C &= \frac{C\vec v \cdot C\vec w}{\|C\vec v\|\|C\vec w\|} \\
+                &= \frac{C\vec v \cdot C\vec w}{\|\vec v\|\|\vec w\|} \\
+                &= \frac{\left(C\vec w\right)^T \cdot C\vec v}{\|\vec v\|\|\vec w\|} \\
+                &= \cdots \\
+                &= \frac{\vec v \cdot \vec w}{\|\vec v\|\|\vec w\|} \\
+                &= \cos \theta
+        \end{align}
         $$
     </p>
+
+
+    <h3>Make Any Basis Orthonormal: The Gram-Schmidt Process</h3>
+    <p>
+        Any basis can be transformed into an orthonormal basis using the Gram-Schidt processes. It is a recursive method.
+    </p>
+
 <div>
 
 <h2>PCA</h2>
