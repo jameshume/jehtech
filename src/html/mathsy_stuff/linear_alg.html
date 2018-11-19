@@ -4320,8 +4320,78 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
     <p>
         Any basis can be transformed into an orthonormal basis using the Gram-Schidt processes. It is a recursive method.
     </p>
+    <p>
+        If $B$ is a basis $\{\vec {v_1},\vec {v_2},\ldots, \vec {v_k}\}$, for $V$, the vectors must be L.I., but not necessarily perpendicular. To make them perpendicular and of unit length, create a subspace $V_1$:
+        
+        $$
+        V_1 = \mathrm{span}\left(\hat{u_1}\right),\text{ where } \hat{u_1} = \frac{\vec{v_1}}{\|\vec{v_1}\|}
+        $$
 
+        Next create a subspace, $V_2$ as follows:
+
+        $$
+        \begin{align}
+            V_2 &= \mathrm{span}\left(\vec{v_1}, \vec{v_2}\right) \\
+                &= \mathrm{span}\left(\hat{u_1}, \vec{v_2}\right)
+        \end{align}
+        $$
+
+        We know that we can re-write $\vec{v_2}$ as the sum of two vectors from a subspace and its perpendicular subspace.
+        We can write:
+
+        $$
+        \vec{v_2} = \vec{x_2} + \vec{y_2},\text{ where } \vec{x_2} \in V_1 \text{ and } $\vec{y_2} \in V_1^\perp
+        $$
+
+        We also know
+
+        $$
+        \vec{x_2} = \mathrm{proj}_{V_1}\left(\vec{v_2}\right)
+        $$
+
+        And
+
+        $$
+        \vec{y_2} = \vec{v_2} - \mathrm{proj}_{V_1}\left(\vec{v_2}\right)
+        $$
+
+        Because $V_1$ has been made an orthonormal basis, we know that
+
+        $$
+        \mathrm{proj}_{V_1}\left(\vec{v_2}\right) = (\vec{v_2}\cdot\hat{u_1})\hat{u_1}
+        $$
+
+        So,
+
+        $$
+        \vec{y_2} = \vec{v_2} - (\vec{v_2}\cdot\hat{u_1})\hat{u_1}
+        $$
+
+        We can now, again, normalise $\vec{y_2}$ to become $\hat{u_2}$ in the same way as before:
+
+        $$
+        \hat{u_2} = \frac{\vec{y_2}}{\|\vec{y_2}\|}
+        $$
+
+        And now we can re-write $V_2$ as the orthonormal basis
+
+        $$
+        V_2 = \mathrm{span}\left(\hat{u_1}, \hat{u_2}\right)
+        $$
+
+        We can keep repeating this process for all the vectors in the basis until they are normalised.
+    </p>
 <div>
+
+<h2>Eigen Vectors &amp; Eigen Values</h2>
+<div>
+    <p>
+        If $T\left(\vec v\right) = A\vec v = \lambda\vec v$ and $\vec v \ne \vec 0$, then $\vec v$ is an <b>eigen vector</b> and $\lambda$ is an <b>eigen value</b>.
+    </p>
+    <p>
+        We can note from the above definition that $A$ only scales the vector $\vec v$. Because vectors are only scaled, the angles between them must also be maintained. This is a little reminiscent of the seciont on orthogonal matricies preserving angles and lengths, except in this case, lengths are not maintined.
+    </p>
+</div>
 
 <h2>PCA</h2>
 <div>
