@@ -214,8 +214,6 @@ try:
 	print("\nAttempting to connect to FTP server {}".format(FTP_ADDRESS))
 	try:
 		r = ftp.connect(host=FTP_ADDRESS, timeout=5)
-		print(r)
-		sys.exit(1)
 	except:
 		print("### ERROR: Failed to FTP into server")
 		raise
