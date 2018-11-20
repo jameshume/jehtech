@@ -1396,6 +1396,7 @@ solve_linear_system(system, x, y, z)</pre>
         It can also be shown that $N(A) = N(\mathrm{RREF}(A))$, where $\mathrm{RREF}$ is the <a href="#matrix-row-echelon">reduced row echelon form</a>.
     </p>
 
+    <a id="nullspace_vs_li_columns"></a>
     <h4>Relation To L.I. Of Column Vectors</h4>
     <p>
         The nullspace of a matrix can be related to the linear independence of it's column
@@ -4389,7 +4390,62 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
         If $T\left(\vec v\right) = A\vec v = \lambda\vec v$ and $\vec v \ne \vec 0$, then $\vec v$ is an <b>eigen vector</b> and $\lambda$ is an <b>eigen value</b>.
     </p>
     <p>
-        We can note from the above definition that $A$ only scales the vector $\vec v$. Because vectors are only scaled, the angles between them must also be maintained. This is a little reminiscent of the seciont on orthogonal matricies preserving angles and lengths, except in this case, lengths are not maintined.
+        We can note from the above definition that $A$ only scales the vector $\vec v$. Because vectors are only scaled, the angles between them must also be maintained. This is a little reminiscent of the section on orthogonal matricies preserving angles and lengths, except in this case, lengths are not maintined.
+    </p>
+    <p>
+        If $A\vec v = \lambda \vec v$ and a solution exists with $\vec v \ne \vec 0$, then eigen vectors and values exist.
+
+        $$
+            A\vec v = \lambda \vec v
+        $$
+        $$
+            \therefore A\vec v = \lambda I_n \vec v
+        $$
+        $$
+            \therefore  (\lambda I_n - A)\vec v = \vec 0 \text{, and } \vec v \ne \vec 0
+        $$
+        $$
+            \implies \vec v \in \mathrm{N}\left(\lambda I_n - A\right)
+        $$
+
+        We know that $\vec v \ne \vec 0$ so $\mathrm{N}(A)$ is <em>non trivial</em>. We saw in the section on
+        <a href="#nullspace_vs_li_columns">null spaces</a> that the column vectors of a matrix A are LI if and only if $\mathrm{N}(A) = \{ \vec 0 \}$. 
+    </p>
+    <p>
+        This means that the column vectors of $\lambda I_n - A$ must <em>not</em> be L.I. This means that the matrix is <em>not</em> invertible, which means that there must be some $\lambda$ for which $\mathrm{det}(\lambda I_n - A) = 0$.
+    </p>
+    <p style="border: 1px solid blue;">
+        $A\vec v = \lambda \vec v$ has solutions for non-zero $\vec v$'s iff $\mathrm{det}(\lambda I_n - A) = 0$. By using this we can solve for $\lambda$.
+    </p>
+    <p>
+        An example...
+
+        $$
+            A = \begin{bmatrix}
+                    1 & 2 \\ 3 & 4            
+                \end{bmatrix}
+        $$
+
+        $\lambda$ is an eigen value of $A$.
+
+        $$
+        \mathrm{det}\left(\lambda \begin{bmatrix}1 & 0 \\ 0 & 1\end{bmatrix} - \begin{bmatrix}1 & 2 \\ 3 & 4\end{bmatrix} \right) = 0
+        $$
+        $$
+        \therefore \mathrm{det}\left(\begin{bmatrix}\lambda - 1 & -2 \\ -4 & \lambda - 3\end{bmatrix}\right) = 0
+        $$
+        $$
+        \therefore (\lambda - 1)(\lambda -3) - 8 = 0
+        $$
+        $$
+        \therefore \lambda^2 - 4\lambda - 5 = 0
+        $$
+        $$
+        \therefore (\lambda - 5)(\lambda + 1) = 0
+        $$
+        $$
+        \therefore \lambda = 5 \text { or } \lambda = -1
+        $$
     </p>
 </div>
 
