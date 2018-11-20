@@ -168,10 +168,7 @@
 		<p>
 			Video is a series of still images that are displayed quickly enough, one after the other, so that
 			the human eye/brain percieves only continuous motion and not individual stills. Each still image is
-			called a <b>frame</b>. Consumer video displays between 50 and 60 frames per second. Computer
-			displays typically display between 70 and 90 frames per second. The number of full frames per
-			second is called the <b>frame rate</b>. It is sometimes refered to as the <b>temperal resolution</b> of
-			the image: how quickly the image is being scanned.
+			called a <b>frame</b>. 
 		</p>
 		<p>
 			First video screens were CRTs. An electron beam was &quot;fired&quot; at a screen which contained
@@ -182,19 +179,6 @@
 		<p>
 			<img src="##IMG_DIR##/mpeg/electron_beam_scan.jpg" alt="Picture showing an electron beam scanning a CRT display."/>
 		</p>
-		<h3>Blanking</h3>
-		<p>
-			When the electron beam has finished one line, it must return to the start of the next
-			line. Whilst it is doing this it must be turned off, otherwise it would re-paint
-			pixels it shouldn't on its return path. This turning-off-during-return is called
-			<b>blanking</b>. There are two forms of blanking: <b>horizontal blanking</b> and
-			<b>vertical blanking</b>. Horizontal blanking is used to disable the electron beam
-			as it travels from the end of one line down to the start of the next line. Vertical
-			blanking is used when an entire frame has been painted and the beam has to move
-			back to the top left of the first scan line. Blanking information is part of the video
-			signal. Vertical sync is timing info indicating when new image starts.
-			Horizontal sync is timing info indicating when new scan line starts.
-		</p>
 		<p>
 			By scanning quickly enough, an image can be &quot;painted&quot; on the screen. Each pixel
 			would fluoresce for a certain amount of time so by scanning image after image on the screen
@@ -203,10 +187,50 @@
 			known as the <b>persistence of vision</b>. This is why the
 			the frame rate has to be greater than roughly 32Hz, otherwise flicker will be perceived.
 		</p>
+		<p>
+			Consumer video displays between 50 and 60 frames per second. Computer
+			displays typically display between 70 and 90 frames per second. The number of full frames per
+			second is called the <b>frame rate</b>. It is sometimes refered to as the <b>temperal resolution</b> of
+			the image: how quickly the image is being scanned.
+		</p>
+
+		<h3>Blanking</h3>
+		<p>
+			When the electron beam has finished one line, it must return to the start of the next
+			line. Whilst it is doing this it must be turned off, otherwise it would re-paint
+			pixels it shouldn't on its return path. This turning-off-during-return is called
+			<b>blanking</b>. There are two forms of blanking: 
+		</p>
+		<ol>
+			<li>horizontal blanking, and</li>
+			<li>vertical blanking.</li>
+		</ol>
+		<p>
+			Horizontal blanking is used to disable the electron beam
+			as it travels from the end of one line down to the start of the next line. Vertical
+			blanking is used when an entire frame has been painted and the beam has to move
+			back to the top left of the first scan line.
+		</p>
+		<p> 
+			Blanking information is part of the video signal. This means that there is &quot;blank&quot; data transmitted
+			during the blanking interval which not displayed. This is done to give the electron beam enough time
+			to be turned off before it returns to the top of the screen.
+		</p>
+		<p>
+			Vertical sync, VSYNC, is timing info indicating when new image starts.
+			Horizontal sync, HSYNC, is timing info indicating when new scan line starts.
+		</p>
+		<p>
+			None of the data sent during the blanking intervals is displayed. This means the data can be used to
+			carry other information. For example, <a href="#closed_captions">closed caption</a> data can be sent as
+			part of the VBI info.
+		</p>
+
+
 		<h3>The Early Standards</h3>
 		<p>
-			Very early TV standards were developed by the NTSC in the Americas and in Europe a system
-			call PAL was used. France and Soviets used SECAM.
+			Very early TV standards were developed by the NTSC (named after National Television System Committee) in the Americas
+			and in Europe a system call PAL was used. France and Soviets used SECAM.
 		</p>
 		<p>
 			NTSC uses 30 fps and 525 lines per frame. 480 lines actively used. 4:3 aspect ratio.
@@ -242,6 +266,15 @@
 		<p>
 			This is why we see the &quot;i&quot; and &quot;p&quot; to resolutions. For example, for 720x480i, the
 			suffix &quot;i&quot; means interlaced and for 720x480p, suffix &quot;p&quot; means progressive.
+		</p>
+
+		<h3>Digital Standards</h3>
+		<p>
+			The ATSC standard, named after the Advanced Television Systems Committee, is for <em>digital</em> broadcast. I find the &uot;A&quot;
+			really annoying because it makes me think analogue. It isn;t, this is a <em>digital</em> standard. It is, like NTSC, an American standard, mostly used in North America.
+		</p>
+		<p>
+			In the same way that we had the NTSC and PAL standards, the European equivalent of ATSC is DVB-T, which stands for Digital Video Boardcasting - Terrestrial.
 		</p>
 
 		<h3>SD v.s. HD v.s. 4K v.s. Ultra HD</h3>
@@ -322,6 +355,8 @@
         <p>
             Audio is transmitted over SDI via the formats ancillary data, which is <q>... provided as a standardized transport for non-video payload within a serial digital signal; it is used for things such as embedded audio, closed captions, timecode, and other sorts of metadata...</q>.
         </p>
+
+        <a id="closed_captions"></a>
         <h3>Subtitles / Closed Captions</h3>
         <p>
         	The terms seem interchangeable as far as I can see, although closed captions might imply better functionaility, like being able to say how the captions should look and where they appear on the screen etc.
@@ -337,6 +372,11 @@
         </p>
         <p>
         	Two closed caption standards are CEA-608 and CEA-708 <a href="https://www.3playmedia.com/2015/08/11/whats-the-difference-between-cea-608-line-21-captions-cea-708-captions/" target="_blank">[Ref]</a> (also refered to as EIA-608/708). The former is the older standard for analogue TV and the latter is the newer standard for digital TV.
+        </p>
+        <p>
+        	In modern, digital data streams blanking information is no longer needed really but is still used. Closed captions that would have been
+        	carried in the VBI for an analogue signal, can be embedded into MPEG-2 bitstreams, for example. Standards like SCTE-20 <a href="https://www.scte.org/documents/pdf/Standards/SCTE%2020%202012.pdf" target="_blank">[Ref]</a> and SCTE-21 <a href="https://www.scte.org/documents/pdf/Standards/SCTE%2020%202012.pdf" target="_blank">[Ref]</a>
+        	define "a standard for the carriage of CEA-608 Closed Captions ... in MPEG-2 compliant bitstreams" <a href="https://www.scte.org/documents/pdf/Standards/ANSISCTE212001R2006.pdf" target="_blank">[Ref]</a>.
         </p>
 	</div> <!-- End: Video Intro -->
 
