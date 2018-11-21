@@ -72,6 +72,9 @@ make ARCH=arm CROSS_COMPILE=${CC}
 
 ##
 ## Clone and build Linux Kernel
+## The clone actually checks out Robert Nelson's scripts and patches repository. It is the script build_kernel.sh
+## that actually clones the linux kernel and then applies the relevant patches, downloads the cross compiler and
+## then builds the kernel.
 ## NOTE: This bit might fail if you don't have all the dependencies installed... a few sudo apt installs will solve this
 cd ~/bbb_build
 git clone https://github.com/RobertCNelson/bb-kernel

@@ -223,8 +223,15 @@
 		<p>
 			None of the data sent during the blanking intervals is displayed. This means the data can be used to
 			carry other information. For example, <a href="#closed_captions">closed caption</a> data can be sent as
-			part of the VBI info.
+			part of the VBI info. Other <a href="https://en.wikipedia.org/wiki/Ancillary_data" target="_blank">ancillary data</a> is sent is part of the horizontal blanking.
 		</p>
+		<p>
+			Ancillary data packets have the following fields:
+		</p>
+		<ul>
+			<li>DID - Data IDentifier - Gives type of ancillary data. If no SDID gives 1 word data identification, otherwise 2 word data identification.</li>
+			<li>SDID - Secondary Data IDentifier - Only valid with DID to give a two word data identification.
+		</ul>
 
 
 		<h3>The Early Standards</h3>
@@ -373,6 +380,12 @@
         <p>
         	Two closed caption standards are CEA-608 and CEA-708 <a href="https://www.3playmedia.com/2015/08/11/whats-the-difference-between-cea-608-line-21-captions-cea-708-captions/" target="_blank">[Ref]</a> (also refered to as EIA-608/708). The former is the older standard for analogue TV and the latter is the newer standard for digital TV.
         </p>
+        <blockquote>
+        	<p>In  NTSC  and  SMPTE  259M  digital  system,  captions  are  encoded  onto  line  21  of  the  Vertical  Blanking  
+Interval (VBI) ... [In ATSC] The HD-SDI closed caption and related data is carried in three separate portions of the HD-SDI bitstream. They are the Picture User Data, the Program Mapping Table (PMT) and the Event Information Table (EIT).
+			</p>
+			<footer> -- <a href="https://evertz.com/resources/eia_608_708_cc.pdf" target="_blank">EIA-608 and EIA-708 Closed Captioning</a>, Sarkis Abrahamian</footer>
+        </blockquote>
         <p>
         	In modern, digital data streams blanking information is no longer needed really but is still used. Closed captions that would have been
         	carried in the VBI for an analogue signal, can be embedded into MPEG-2 bitstreams, for example. Standards like SCTE-20 <a href="https://www.scte.org/documents/pdf/Standards/SCTE%2020%202012.pdf" target="_blank">[Ref]</a> and SCTE-21 <a href="https://www.scte.org/documents/pdf/Standards/SCTE%2020%202012.pdf" target="_blank">[Ref]</a>

@@ -856,11 +856,10 @@
 <p>
     The set of linear equations:
 
-    $$ a_{11}x_1 + a_{12}x_2 + ... + a_{1n}x_n = b_1\\
-       a_{21}x_1 + a_{22}x_2 + ... + a_{2n}x_n = b_2\\
-       ... \\
-       a_{m1}x_1 + a_{m2}x_2 + ... + a_{mn}x_n = b_m
-    $$
+    $$ a_{11}x_1 + a_{12}x_2 + ... + a_{1n}x_n = b_1 $$
+    $$a_{21}x_1 + a_{22}x_2 + ... + a_{2n}x_n = b_2 $$
+    $$... $$
+    $$a_{m1}x_1 + a_{m2}x_2 + ... + a_{mn}x_n = b_m $$
 
     Can be represented in matrix form:
 
@@ -1060,8 +1059,9 @@
             0 & 3 & 5 & 8 \\
             0 & 0 & 2 & -4
             \end{array}
-        \right] \\
-
+        \right]
+$$
+$$
         \rightarrow 
 
         \left[
@@ -1070,8 +1070,9 @@
             0 & 3 & 5 & 8 \\
             0 & 0 & 1 & -2
             \end{array}
-        \right] (r1 = \frac{r1}{5}, r3 = \frac{r3}{2}) \\
-
+        \right] \small{(r1 = \frac{r1}{5}, r3 = \frac{r3}{2})}
+$$
+$$
         \rightarrow
 
         \left[
@@ -1080,8 +1081,9 @@
             0 & 3 & 0 & 18 \\
             0 & 0 & 1 & -2
             \end{array}
-        \right]  (r2 = r2 - 5r3) \\
-
+        \right]  \small{(r2 = r2 - 5r3)}
+$$
+$$
         \rightarrow 
 
         \left[
@@ -1090,8 +1092,9 @@
             0 & 1 & 0 & 6 \\
             0 & 0 & 1 & -2
             \end{array}
-        \right] (r2 = \frac{r2}{3}) \\
-
+        \right] \small{(r2 = \frac{r2}{3})}
+$$
+$$
         \rightarrow 
         
         \left[
@@ -1100,7 +1103,7 @@
             0 & 1 & 0 & 6 \\
             0 & 0 & 1 & -2
             \end{array}
-        \right] (r1 = r1 + \frac{3r3}{5} \rightarrow, r1 = r1 - \frac{r2}{5})
+        \right] \small{(r1 = r1 + \frac{3r3}{5} \rightarrow, r1 = r1 - \frac{r2}{5})}
         $$
 
     Which means we come to the same conclusion as we did when doing back substitution, but were able to
