@@ -1445,6 +1445,11 @@ solve_linear_system(system, x, y, z)</pre>
         then we can say that <b>the column vectors of a matrix A are LI if and only if $N(A) = {\vec 0}$</b>.
     </p>
 
+    <h4>Relation To Determinant</h4>
+    <p>
+        If the determinant of a matrix is zero then the null space will be non trivial.
+    </p>
+
     <h4>Calculating The Null Space</h4>
     <p>
         To <em>find</em> the null space of a matrix $A$, augment it with the zero vector and convert it to RREF. Then the solution set is the null space. So,
@@ -1926,6 +1931,7 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
 		vectors but keep the shape they construct, or in numerical analysis
 		because <a href="http://www.math.utah.edu/~pa/6610/20130916.pdf" target="_blank">they do not amplify errors</a>.
 
+<a id="determinants"></a>
 <h3>Determinants</h3>
 <h4>The Fundamentals</h4>
     <p>
@@ -2144,7 +2150,7 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
 ##INCLUDE:determinant_calculator_snippet.html##
 
 <p></p>
-
+<a id="rule-of-sarrus"></a>
 <h4>Rule Of Sarrus</h4>
 <p>
     For a 3x3 matrix defined as follows:
@@ -2160,7 +2166,7 @@ https://math.stackexchange.com/questions/21100/importance-of-matrix-rank
     The determinant is defined as:
 
     $$
-    |A| = aei + bfg + cdh - afg - bdi - ceg
+    |A| = aei + bfg + cdh - afh - bdi - ceg
     $$
 
     Notice how it is the diagonals (wrapped) summed going from left to right, and the diagonals (wrapped) subtracted going from right to left.
@@ -4412,11 +4418,20 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
         <a href="#nullspace_vs_li_columns">null spaces</a> that the column vectors of a matrix A are LI if and only if $\mathrm{N}(A) = \{ \vec 0 \}$. 
     </p>
     <p>
-        This means that the column vectors of $\lambda I_n - A$ must <em>not</em> be L.I. This means that the matrix is <em>not</em> invertible, which means that there must be some $\lambda$ for which $\mathrm{det}(\lambda I_n - A) = 0$.
+        This means that the column vectors of $\lambda I_n - A$ must <em>not</em> be L.I. This means that the matrix is <em>not</em> invertible, which means that there must be some $\lambda$ for which $\mathrm{det}(\lambda I_n - A) = 0$ (see the section on <a href="#determinants">determinants</a> - a matrix is only invertible iff $|A| \ne $).
     </p>
     <p style="border: 1px solid blue;">
         $A\vec v = \lambda \vec v$ has solutions for non-zero $\vec v$'s iff $\mathrm{det}(\lambda I_n - A) = 0$. By using this we can solve for $\lambda$.
     </p>
+
+    <h3>Properties</h3>
+    <ul>
+        <li>Eigen vectors can only be found for square matricies.</li>
+        <li>Not every square matrix has eigen vectors, but if it does and it is an nxn matrix, then there are n eigen vectors.</li>
+        <li>When you find an eigen vector it is normally a good idea to normalise it.</li>
+    </ul>
+
+    <h3>Example 1</h3>
     <p>
         An example...
 
@@ -4446,6 +4461,93 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
         $$
         \therefore \lambda = 5 \text { or } \lambda = -1
         $$
+
+        We saw above how $(\lambda I_n - A)\vec v = 0 \implies \vec v \in \mathrm{N}(\lambda I_n - A)$. Thus for any eigen value, the eigen vectors, that correspont to it are the null space $\mathrm{N}(\lambda I_n - A)$. This is called the <b>eigen space</b> - denoted $E_\lambda$.
+    </p>
+    <p>
+        Thus for $\lambda = 5$:
+
+        $$
+        \begin{align}
+        E_\lambda &= \mathrm{N}(\lambda I_n - A) \\        
+                  &= \mathrm{N}\left(\begin{bmatrix}5 & 0\\ 0 & 5\end{bmatrix} - \begin{bmatrix}1 & 2\\ 3 & 4\end{bmatrix}\right) \\
+                  &= \mathrm{N}\left(\begin{bmatrix}4 & -2\\ -4 & 2\end{bmatrix}\right) \\
+        \end{align}
+        $$
+
+        From here we can say, therefore:
+
+        $$
+        \begin{align}
+            \begin{bmatrix}4 & -2\\ -4 & 2\end{bmatrix} \vec v = \begin{bmatrix}4 & -2\\ -4 & 2\end{bmatrix} \begin{bmatrix}v_1 \\ v_2\end{bmatrix} = \vec 0
+        \end{align}
+        $$
+
+        Solve using augmented matrix
+
+        $$
+        \begin{align}
+            \left[\begin{array}{cc|c}4 & -2 & 0\\ -4 & 2 & 0\end{array}\right] \\
+            \downarrow \tiny{(r2 = r2 - r1)}\\
+            \left[\begin{array}{cc|c}4 & -2 & 0\\ 0 & 0 & 0\end{array}\right] \\
+            \downarrow \tiny{(r1 = 0.25 r1)}\\
+            \left[\begin{array}{cc|c}1 & -0.5 & 0\\ 0 & 0 & 0\end{array}\right] \\
+        \end{align}
+        $$
+
+        Therefore, $v_1 = 0.5v_2$
+
+        $$
+        \begin{align}
+        \implies E_{\lambda = 5} &= \left\{t\begin{bmatrix}0.5\\1\end{bmatrix}, t \in \mathbb{R}\right\}
+                                 &= \mathrm{span}\left(\begin{bmatrix}0.5\\1\end{bmatrix}\right)
+        \end{align}
+        $$
+
+        And in the same way we can find out that
+                $$
+        \begin{align}
+        \implies E_{\lambda = -1} &= \mathrm{span}\left(\begin{bmatrix}-1\\1\end{bmatrix}\right)
+        \end{align}
+        $$
+    </p>
+
+    <h3>Example 2</h3>
+    <p>
+        Sal presents a second example...
+
+        $$
+        A = \begin{bmatrix}-1 & 2 & 2 \\ 2 & 2 & -1 \\ 2 & -1 & 2\end{bmatrix}
+        $$
+
+        Remember, the e.v. equation is $\mathrm{det}(\lambda I_n - A) = 0$, so in this case we have:
+
+        $$
+        |\lambda I_3 - A| = \begin{vmatrix}\lambda - 1 & 2 & 2 \\
+                                           2 & \lambda + 2 & -1 \\
+                                           2 & -1 & \lambda + 2
+                            \end{vmatrix} = 0
+        $$
+
+        We can use <a href="#rule-of-sarrus">the rule of Sarrus</a> to solve this:
+
+        $$
+        \begin{align}
+        |\lambda I_3 - A| &= (\lambda - 1)(\lambda + 2)(\lambda + 2) - 4 - 4 \\
+                           &\ \ \  - (\lambda - 1) - (4(\lambda + 2)) - (4(\lambda + 2)) \\
+                           & = 0
+        \end{align}
+        $$
+
+        Simplifying this a little we get:
+
+        $$
+        \begin{align}
+        |\lambda I_3 - A| = \lambda^3 + 3\lambda^2 - 9\lambda -27 = 0
+        \end{align}
+        $$
+
+        OOPS GOT IT WRONG... need to look back at this.
     </p>
 </div>
 
