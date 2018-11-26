@@ -155,8 +155,10 @@
                     <tr><td>SECAM</td><td>Séquentiel couleur à mémoire - French for &quot;Sequential colour with memory&quot;</td><td></td></tr>
                     <tr><td>SSM</td><td>Source Specific Multicast</td><td><q>A method of delivering multicast packets in which the only packets that are delivered to a receiver are those originating from a specific source address requested by the receiver. By so limiting the source, SSM reduces demands on the network and improves security</q> -- <a href="https://en.wikipedia.org/wiki/Source-specific_multicast" target="_blank">From WikiPedia</a>.</td>
                     <tr><td>UPID</td><td>Unique Program Identifier</td><td></td></tr>
-		    <tr><td>VUI</td><td>Video Usability Information</td><td></td></tr>
-		    <tr><td>SEI</td><td>Supplementa Enhancement Information</td><td></td></tr>
+		    		<tr><td>VUI</td><td>Video Usability Information</td><td></td></tr>
+		    		<tr><td>SEI</td><td>Supplementa Enhancement Information</td><td></td></tr>
+		    		<tr><td>PPS</td><td>Picture Parameter Set</td><td>Introduced in H.264/AVC in response to the devastating effects of a loss of the sequence header and picture header. <a href="https://www.quora.com/What-are-SPS-and-PPS-in-video-codecs" target="_blank">[Ref]</a></td></tr>
+		    		<tr><td>SPS</td><td>Sequence Parameter Set</td><td>Introduced in H.264/AVC in response to the devastating effects of a loss of the sequence header and picture header. <a href="https://www.quora.com/What-are-SPS-and-PPS-in-video-codecs" target="_blank">[Ref]</a></td></tr>
                 </tbody>
             </table>
         </p>
@@ -192,6 +194,47 @@
 			displays typically display between 70 and 90 frames per second. The number of full frames per
 			second is called the <b>frame rate</b>. It is sometimes refered to as the <b>temperal resolution</b> of
 			the image: how quickly the image is being scanned.
+		</p>
+
+		<h3>The Early Standards</h3>
+		<p>
+			Very early TV standards were developed by the NTSC (named after National Television System Committee) in the Americas
+			and in Europe a system call PAL was used. France and Soviets used SECAM.
+		</p>
+		<p>
+			NTSC uses 30 fps and 525 lines per frame. 480 lines actively used. 4:3 aspect ratio.
+		</p>
+		<p>
+			PAL &amp; SECAM use 25 fps and 625 lines per frame. 580 lines actively used. 4:3 aspect ratio (orig) or 16:9 aspect ratio (later).
+		</p>
+		<p>
+			Not all of the lines are actively used due to vertical blanking. Horiztonal
+			blanking occurs before and after each line. As said, the blanking information
+			is part of the early video signals:
+		</p>
+		<p>
+			<img src="##IMG_DIR##/mpeg/blanked_and_active_video.jpg" alt="Picture showing blanking regions on a video display"/>
+		</p>
+
+		<h3>Interlaced v.s. Progressive</h3>
+		<p>
+			But wait, haven't we just said that persistence of vision lasts between $\frac{1}{30}$ and $\frac{1}{32}$ seconds?
+			Yes, and that is a problem. At 30 fps for NTSC and 25 fps for PAL/SECAM, it is possible that visual
+			flicker could be seen. The frame rate needs to be increased. This is why  interlaced video was invented.
+			By transmitting the odd lines and then the even lines, for the same amount of data, the frame rate can be doubled,
+			which helps eliminate the effects of flicker. A frame is split up into the odd lines and the event lines, each set
+			of lines being transmitted and displayed seperately. Each set of lines is called a <b>field</b>. This process of
+			field-by-field scanning is called <b>interlaced scanning</b>. The higher frame rate gets traded off against
+			slightly worse vertical flicker for fast moving objects.
+		</p>
+		<p>
+			Modern compression and data rates mean that interlaced scanning isn't needed as much so most displays use
+			progressive scans where the frame is just the frame - both odd and even lines. The display fills the
+			image line after line. This is prefereable because it is more robust to vertical flicker.
+		</p>
+		<p>
+			This is why we see the &quot;i&quot; and &quot;p&quot; to resolutions. For example, for 720x480i, the
+			suffix &quot;i&quot; means interlaced and for 720x480p, suffix &quot;p&quot; means progressive.
 		</p>
 
 		<h3>Blanking &amp; Ancillary Data</h3>
@@ -256,47 +299,6 @@
 		</p>
 		<p>
 			<img src="##IMG_DIR##/vbi_hbi_ntsc.png"/>
-		</p>
-
-		<h3>The Early Standards</h3>
-		<p>
-			Very early TV standards were developed by the NTSC (named after National Television System Committee) in the Americas
-			and in Europe a system call PAL was used. France and Soviets used SECAM.
-		</p>
-		<p>
-			NTSC uses 30 fps and 525 lines per frame. 480 lines actively used. 4:3 aspect ratio.
-		</p>
-		<p>
-			PAL &amp; SECAM use 25 fps and 625 lines per frame. 580 lines actively used. 4:3 aspect ratio (orig) or 16:9 aspect ratio (later).
-		</p>
-		<p>
-			Not all of the lines are actively used due to vertical blanking. Horiztonal
-			blanking occurs before and after each line. As said, the blanking information
-			is part of the early video signals:
-		</p>
-		<p>
-			<img src="##IMG_DIR##/mpeg/blanked_and_active_video.jpg" alt="Picture showing blanking regions on a video display"/>
-		</p>
-
-		<h3>Interlaced v.s. Progressive</h3>
-		<p>
-			But wait, haven't we just said that persistence of vision lasts between $\frac{1}{30}$ and $\frac{1}{32}$ seconds?
-			Yes, and that is a problem. At 30 fps for NTSC and 25 fps for PAL/SECAM, it is possible that visual
-			flicker could be seen. The frame rate needs to be increased. This is why  interlaced video was invented.
-			By transmitting the odd lines and then the even lines, for the same amount of data, the frame rate can be doubled,
-			which helps eliminate the effects of flicker. A frame is split up into the odd lines and the event lines, each set
-			of lines being transmitted and displayed seperately. Each set of lines is called a <b>field</b>. This process of
-			field-by-field scanning is called <b>interlaced scanning</b>. The higher frame rate gets traded off against
-			slightly worse vertical flicker for fast moving objects.
-		</p>
-		<p>
-			Modern compression and data rates mean that interlaced scanning isn't needed as much so most displays use
-			progressive scans where the frame is just the frame - both odd and even lines. The display fills the
-			image line after line. This is prefereable because it is more robust to vertical flicker.
-		</p>
-		<p>
-			This is why we see the &quot;i&quot; and &quot;p&quot; to resolutions. For example, for 720x480i, the
-			suffix &quot;i&quot; means interlaced and for 720x480p, suffix &quot;p&quot; means progressive.
 		</p>
 
 		<h3>Digital Standards</h3>
