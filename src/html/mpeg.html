@@ -194,7 +194,13 @@
 			the image: how quickly the image is being scanned.
 		</p>
 
-		<h3>Blanking</h3>
+		<h3>Blanking &amp; Ancillary Data</h3>
+		<p>
+			References:
+		</p>
+		<ul>
+			<li><a href="https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=4&ved=2ahUKEwi71uz4oeXeAhXlAcAKHbY6APgQFjADegQIBxAC&url=https%3A%2F%2Fwww.smpte.org%2Fsites%2Fdefault%2Ffiles%2Fsection-files%2F2014_July_Closed_Captioning.pptx&usg=AOvVaw2FB0nautCT7spfMWdx1A9P" target="_blank">Understanding & Troubleshooting  Closed Captions</a>, Tektronix.</li>
+		</ul>
 		<p>
 			When the electron beam has finished one line, it must return to the start of the next
 			line. Whilst it is doing this it must be turned off, otherwise it would re-paint
@@ -222,17 +228,35 @@
 		</p>
 		<p>
 			None of the data sent during the blanking intervals is displayed. This means the data can be used to
-			carry other information. For example, <a href="#closed_captions">closed caption</a> data can be sent as
-			part of the VBI info. Other <a href="https://en.wikipedia.org/wiki/Ancillary_data" target="_blank">ancillary data</a> is sent is part of the horizontal blanking.
+			carry other information, called either <b>ancillary data</b> (ANC) or blanking information. The vertical blanking
+			signal data is refered to as VBI (Vertical Blanking Information). The horizonal blanking information
+			is refered to as HBI (Horizontal Blanking Information) .
 		</p>
 		<p>
-			Ancillary data packets have the following fields:
+			VBI/HBI was part of the analogue signal standards. More modern digital signals have kept the blanking information. The corresponding
+			terms are VANC (Vertical Ancillary (Data)) and HANC (Horizontal Ancillary (Data)).
+		</p>
+		<p> 
+			For example, <a href="#closed_captions">closed caption</a> data can be sent as
+			part of the VBI or VANC data. Other <a href="https://en.wikipedia.org/wiki/Ancillary_data" target="_blank">ancillary data</a> is sent is part of the horizontal blanking.
+		</p>
+		<blockquote>
+			<p>Ancillary (ANC) data is a means of embedding non-video information, such as audio and metadata, in a serial digital transport stream. Ancillary data packets are located in horizontal (HANC) or vertical (VANC) blanking of a video signal. HANC is used to embed uncompressed audio data in the SDI or HD-SDI stream. VANC is used to embed low-bandwidth data -- information updated on a per-field or per-frame basis. Closed caption data (CCD) and Active Format Description (AFD) are examples of metadata stored as VANC. SMPTE 291m describes the details of Ancillary data packet structures.</p>
+			<footer>-- <a href="" target="_blank">Using VANC Insertion with FlipFactory</a>, FlipFactory App Note.</footer>
+		</blockquote>
+		<p>
+			Ancillary data packets include following fields (non-exhaustive!):
 		</p>
 		<ul>
 			<li>DID - Data IDentifier - Gives type of ancillary data. If no SDID gives 1 word data identification, otherwise 2 word data identification.</li>
 			<li>SDID - Secondary Data IDentifier - Only valid with DID to give a two word data identification.
 		</ul>
-
+		<p>
+			Generally, it seems that the upper VANC and &quot;front&quot; HANC regions are used to encode ANC data. This is why sometimes you will see diagrams such as the following <a href="http://www.sbe24.org/wba-sbe-shows/archives/Clinic2009/Conrad-Harris-2009.pdf" target="_blank">[Ref]</a>. It only shows the upper VBI and left HBI. I initially found this confusing because I thought it implied the onther blanking areas didn't exist - they do as was cleared up when I asked about this on SO <a href="https://video.stackexchange.com/a/25276/23697" target="_blank">[Ref]</a>.
+		</p>
+		<p>
+			<img src="##IMG_DIR##/vbi_hbi_ntsc.png"/>
+		</p>
 
 		<h3>The Early Standards</h3>
 		<p>
@@ -277,11 +301,17 @@
 
 		<h3>Digital Standards</h3>
 		<p>
-			The ATSC standard, named after the Advanced Television Systems Committee, is for <em>digital</em> broadcast. I find the &uot;A&quot;
-			really annoying because it makes me think analogue. It isn;t, this is a <em>digital</em> standard. It is, like NTSC, an American standard, mostly used in North America.
+			The ATSC standard, named after the Advanced Television Systems Committee, is for <em>digital</em> broadcast. I find the &quot;A&quot;
+			really annoying because it makes me think analogue. It isn't! This is a <em>digital</em> standard. It is, like NTSC, an American standard, mostly used in North America.
 		</p>
 		<p>
 			In the same way that we had the NTSC and PAL standards, the European equivalent of ATSC is DVB-T, which stands for Digital Video Boardcasting - Terrestrial.
+		</p>
+		<p>
+			The image below shows where the different digital standards are used (ref: EnEdC [Public domain], via Wikimedia Commons).
+		</p>
+		<p>
+<a title="EnEdC [Public domain], via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File:Digital_broadcast_standards.svg"><img width="512" alt="Digital broadcast standards" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Digital_broadcast_standards.svg/512px-Digital_broadcast_standards.svg.png"></a>
 		</p>
 
 		<h3>SD v.s. HD v.s. 4K v.s. Ultra HD</h3>
@@ -306,12 +336,23 @@
 		<p>
 			HEVC stands for <b>H</b>igh <b>E</b>fficiency <b>V</b>ideo <b>C</b>oding. It is the successor to H.264. It is a compression standard.
 		</p>
+		<P>
+			Supplemental enhancement information (SEI) and video usability information (VUI) carry extra information.
+		</P>
 
 		<h3>HDR</h3>
 		<p>
 			HDR stands for <b>H</b>igh <b>D</b>ynamic <b>R</b>ange. Provides better contrast and color accuracy (expands the range). Not a resolution thing. uses <b>W</b>ide <b>C</b>olour <b>G</b>ammut.
 		</p>
 
+		<H3>Misc comparison</H3>
+		<p>
+			https://wolfcrow.com/blog/understanding-mpeg-2-mpeg-4-h-264-avchd-and-h-265/
+		</p>
+		<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/XvoW-bwIeyY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+		<p></p>
+		<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/sisvOeZItb0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+		<p></p>
 		<h3>S-Log</h3>
 		<p>
 			Tone repoduction scheme for the high-lights and low-lights. Allows good expose in bright as well as dark parts of image, giving better detail and contrast.
@@ -362,9 +403,22 @@
         <p>
             Audio is transmitted over SDI via the formats ancillary data, which is <q>... provided as a standardized transport for non-video payload within a serial digital signal; it is used for things such as embedded audio, closed captions, timecode, and other sorts of metadata...</q>.
         </p>
+        <p>
+        	My understanding is that SDI is just a "signal" encapsulation format for transmission over a serial coaxial. Using SDI original (aalogue) production content can be transmitted, but digital standards MPEG-2 streams can also be transmitted.
+        </p>
 
         <a id="closed_captions"></a>
         <h3>Subtitles / Closed Captions</h3>
+        <p>
+        	References:
+        </p>
+        <ul>
+	        <li><a href="https://www.adobe.com/content/dam/acom/en/devnet/video/pdfs/introduction_to_closed_captions.pdf" target="_blank">Introduction to Closed Captions</a>, Adobe Technical Paper.</li>
+	        <li><a href="https://evertz.com/resources/eia_608_708_cc.pdf" target="_blank">EIA-608 and EIA-708 Closed Captioning </a>, Sarkis Abrahamian </li>
+	        <li><a href="https://www.3playmedia.com/2015/08/11/whats-the-difference-between-cea-608-line-21-captions-cea-708-captions/" target="_blank">What’s the Difference Between CEA-608 (Line 21) Captions & CEA-708 Captions?</a>, Emily Griffin</li>
+	        <li><a href="https://www.scte.org/documents/pdf/Standards/SCTE%2020%202012.pdf" target="_blank">SCTE 20 2012 - Methods For Carriage Of CEA-608 Closed Captions And Non-Real Time Sampled Video</a>.</li>
+	        <li><a href="https://www.scte.org/documents/pdf/Standards/ANSISCTE212001R2006.pdf" target="_blank">ANSI/SCTE 21 2001R2006</a>, Standard For Carriage Of NTSC VBI Data In Cable Digital Transport Streams.</li>
+	    </ul>
         <p>
         	The terms seem interchangeable as far as I can see, although closed captions might imply better functionaility, like being able to say how the captions should look and where they appear on the screen etc.
         </p>
@@ -381,16 +435,54 @@
         	Two closed caption standards are CEA-608 and CEA-708 <a href="https://www.3playmedia.com/2015/08/11/whats-the-difference-between-cea-608-line-21-captions-cea-708-captions/" target="_blank">[Ref]</a> (also refered to as EIA-608/708). The former is the older standard for analogue TV and the latter is the newer standard for digital TV.
         </p>
         <blockquote>
-        	<p>In  NTSC  and  SMPTE  259M  digital  system,  captions  are  encoded  onto  line  21  of  the  Vertical  Blanking  
-Interval (VBI) ... [In ATSC] The HD-SDI closed caption and related data is carried in three separate portions of the HD-SDI bitstream. They are the Picture User Data, the Program Mapping Table (PMT) and the Event Information Table (EIT).
+        	<p>In NTSC and SMPTE 259M digital system, captions are encoded onto line 21 of the Vertical Blanking Interval (VBI) ... [In ATSC] The HD-SDI closed caption and related data is carried in three separate portions of the HD-SDI bitstream. They are the Picture User Data, the Program Mapping Table (PMT) and the Event Information Table (EIT).
 			</p>
 			<footer> -- <a href="https://evertz.com/resources/eia_608_708_cc.pdf" target="_blank">EIA-608 and EIA-708 Closed Captioning</a>, Sarkis Abrahamian</footer>
         </blockquote>
+        <p>
+        	I.e., NTSC (analogue) CC -> line 21 of VBI<br/>
+        	Digital CC -> Picture User Data in MPEG-2 stream.
+        </p>
         <p>
         	In modern, digital data streams blanking information is no longer needed really but is still used. Closed captions that would have been
         	carried in the VBI for an analogue signal, can be embedded into MPEG-2 bitstreams, for example. Standards like SCTE-20 <a href="https://www.scte.org/documents/pdf/Standards/SCTE%2020%202012.pdf" target="_blank">[Ref]</a> and SCTE-21 <a href="https://www.scte.org/documents/pdf/Standards/SCTE%2020%202012.pdf" target="_blank">[Ref]</a>
         	define "a standard for the carriage of CEA-608 Closed Captions ... in MPEG-2 compliant bitstreams" <a href="https://www.scte.org/documents/pdf/Standards/ANSISCTE212001R2006.pdf" target="_blank">[Ref]</a>.
         </p>
+        <p>
+        	The 3playmedia article <a href="https://www.3playmedia.com/2015/08/11/whats-the-difference-between-cea-608-line-21-captions-cea-708-captions/" target="_blank">[Ref]</a> gives a great comparison of the two:
+        </p>
+        <table>
+        	<thead style="font-weight: bold;">
+        		<tr>
+        			<td>CEA-608 (Line 21) Captions</td>
+        			<td>CEA-708 Captions</td>
+        		</tr>
+        	</thead>
+        	<tbody>
+        		<tr><td>Standard for analog television</td>
+        			<td>Standard for digital television</td>
+        		</tr>
+        		<tr><td>Can be transmitted on analog & digital television</td>
+        			<td>Can only be transmitted on digital television</td>
+        		</tr>
+        		<tr><td>Appearance: Uppercase white text on black box background</td>
+        			<td>Appearance: User can control caption appearance. Options include: 8 fonts in 3 sizes, 64 text colors, 64 background colors, background opacity, and edged or dropshadowed text</td>
+        		</tr>
+        		<tr><td>Supports up to 2 languages at a time</td>
+        			<td>Supports multilingual captions</td>
+        		</tr>
+        		<tr><td>Language options are limited to English, Spanish, French, Portuguese, Italian, German, and Dutch (due to lack of special characters)</td>
+        			<td>Supports captions in any language (characters & symbols from every alphabet are supported)</td>
+        		</tr>
+        		<tr><td>Transmitted on Line 21</td>
+        			<td>Embedded in MPEG-2 streams</td>
+        		</tr>
+        		<tr><td>Caption position is fixed.</td>
+        			<td>Caption position can be changed. The FCC requires that captions be repositioned if they obscure important visual information.</td>
+        		</tr>
+        	</tbody>
+        </table>
+        <p></p>
 	</div> <!-- End: Video Intro -->
 
 	<h2>MPEG Introduction</h2>

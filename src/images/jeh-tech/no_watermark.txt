@@ -14,3 +14,4 @@ PCB_bkdg_ORIG.jpg
 quotes.png
 small_letter.png
 warning.png
+vbi_hbi_ntsc.png

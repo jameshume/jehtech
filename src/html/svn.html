@@ -391,6 +391,13 @@ svn commit</pre>
 				Or...
 			</p>
 			<pre>[-r <i>revision</i>] ^/path/to/external local/path</pre>
+			<p>
+				<B>WARNING:</B> When you do an <code>svn diff</code>, or in fact any other command other than the
+				<code>svn checkout</code>, <code>svn update</code>, <code>svn switch</code>, and <code>svn status</code> commands, 
+				you will not see diffs for externals. To get these diffs you will have to do an <code>svn status</code> and
+				grep for &quot;^M&quot;:
+			</p>
+			<pre class="prettyprint">svn status | grep "^M" | sed -e "s/^M\s*//g" | while read fn; do svn diff "$fn"; done</pre>
 		</div> <!-- END: H2 Externals -->
 
 		<h2>My Repository Moved!</h2>
