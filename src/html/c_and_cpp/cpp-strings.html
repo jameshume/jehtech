@@ -1,0 +1,165 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>Strings In C++ | JEHTech</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">Strings In C++</h1>
+<div style="padding-right:10px;">
+
+<h2>Page Contents</h2>
+<div id="page_contents">
+</div>
+
+<h2>References</h2>
+<pre>https://cal-linux.com/tutorials/strings.html
+https://www.oreilly.com/library/view/c-cookbook/0596007612/ch04s08.html
+https://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
+https://stackoverflow.com/questions/53849/how-do-i-tokenize-a-string-in-c
+https://tristanbrindle.com/posts/a-quicker-study-on-tokenising/
+https://www.bfilipek.com/2018/07/string-view-perf.html</pre>
+
+<h2>Parsing Strings</h2>
+<div>
+    <h3>Use A StringStream</h3>
+    <div id="page_contents">
+    <p>
+        Really basic string parsing can be done using a <code>std::stringstream</code>. But it is not very flexible. Look at the example below:
+    </p>
+    <pre class="prettyprint linenums">// See <a href="https://ideone.com/thoHPV" target="_blank">https://ideone.com/thoHPV</a>
+#include &lt;iostream&gt;
+#include &lt;sstream&gt;
+#include &lt;string&gt;
+
+int main(int argc, char *argv[])
+{
+    std::string parseMe = "This is     a test string";
+    std::stringstream parser(parseMe);
+    std::string token;
+
+    while (std::getline(parser, token, ' '))
+    {
+        std::cout &lt;&lt; token &lt;&lt; "\n";
+    }
+    
+    return 0;
+}
+
+/* Outputs:
+This
+is
+
+
+
+
+a
+test,
+string
+*/</pre>
+    <p>
+        Everything is split using whitespace - but not as we'd expect. Only one space is used as a separator between &quot;is&quot; and &quot;a&quot;. The other 4 spaces are returned as tokens.
+    </p>
+    <p>
+        We are also not able to use a token seperator list. We can't, for example, use <code>std::getline(parser, token, ' ,')</code> to split tokens on spaces and commas.
+    </p>
+    </div>
+
+    <h3>String Find Functions</h3>
+    <div>
+        <p>
+            If we look up the <a href="https://en.cppreference.com/w/cpp/string/basic_string" target="_blank"><code>std::string</code> docs</a>, under &quot;search&quot; we can find the following functions that might be of relevance:
+        </p>
+        <ul>
+            <li><code>find()</code>: This will find the first substring, starting at an index in the string.</li>
+            <li><code>find_first_of()</code>: This will find the first character in a string of chars in the target string.</li>
+            <li><code>find_first_not_of()</code>: This will find the first character in a string of chars <em>not</em> in the target string.</li>
+        </ul>
+        <p>
+            They all return the index into the string of the first found thing, or <code>std::npos</code> if not found.
+        </p>
+
+        <h4>find()</h4>
+        <p>
+            Look at the following example:
+        </p>
+        <pre class="prettyprint linenums">// See <a href="https://ideone.com/aY8liy" target="_blank">https://ideone.com/aY8liy</a>
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+int main(int argc, char *argv[])
+{
+    const std::string line = "I am a little test string...";
+
+    std::cout &lt;&lt; line.find("I am") &lt;&lt; "\n";
+    std::cout &lt;&lt; (line.find("I am", 1) == std::string::npos ? "not found" : "found") &lt;&lt; "\n";
+    std::cout &lt;&lt; line.find("a") &lt;&lt; "\n";
+    std::cout &lt;&lt; line.find("little") &lt;&lt; "\n";
+
+    return 0;
+}
+/* Outputs:
+0
+not found
+2
+7
+*/</pre>
+        <p>
+            Note how the first encountered substring is returned. You can also use <code>rfind()</code> to search from the end to the start, but you
+            will still only get the first match.
+        </p>
+
+        <h4>find_first_of()</h4>
+        <p>
+            Look at the following example:
+        </p>
+        <pre class="prettyprint linenums">// See <a href="https://ideone.com/wWHV7b" target="_blank">https://ideone.com/wWHV7b</a>
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+int main(int argc, char *argv[])
+{
+    const std::string line("I am a test, string");
+    const std::string::size_type pos = line.find_first_of(",");
+    std::cout &lt;&lt; pos &lt;&lt; " is " &lt;&lt; line[pos] &lt;&lt; "\n";
+    return 0;
+}
+/* Outputs:
+11 is ,
+*/</pre>
+    </div>
+
+    <h3>Write Your Own Class</h3>
+    <pre>https://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c</pre>
+
+    <h3>Use Boost::Tokenizer</h3>
+    <pre>https://stackoverflow.com/questions/53849/how-do-i-tokenize-a-string-in-c</pre>
+
+
+    <h3>Avoid Copying - StringViews (C++17)</h3>
+    <div>
+        <p></p>
+    </div>
+</div>
+
+</div> <!-- END H1 padding div -->
+</div>
+</body>
+</html>
+
+
