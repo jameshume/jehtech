@@ -3883,7 +3883,7 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
     <p>
         <img src="##IMG_DIR##/draw_least_squares_example.png"/>
         <br/>
-        <a href="##IMG_DIR##/draw_least_squares_example.py" target="_blank" style="font-size:75%;">&lt;View source&gt;</a>.
+        <a href="##IMG_DIR##/draw_least_sqaures_example.py" target="_blank" style="font-size:75%;">&lt;View source&gt;</a>.
     </p>
     <p>
         So, what we need to do is to translate the real line so that it passes through the origin, apply the same transform to the data points,
@@ -3893,7 +3893,7 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
     <p>
         <img src="##IMG_DIR##/draw_least_squares_example_translation.png"/>
         <br>
-        <a href="##IMG_DIR##/draw_least_squares_example_translation.py" target="_blank" style="font-size:75%;">&lt;View source&gt;</a>.
+        <a href="##IMG_DIR##/draw_least_sqaures_example_translation.py" target="_blank" style="font-size:75%;">&lt;View source&gt;</a>.
     </p>
     <p>
         The above is not calculated using an affine transform in the way described in this <a href="https://math.stackexchange.com/a/2398320" target="_blank">SO post</a>, but does the shifting manually to achieve the same effect.
@@ -4121,6 +4121,7 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
     </p>
 
 
+    <a href="transformation-matrix-wrt-a-basis"></a>
     <h3>Transformation Matrix w.r.t A Basis</h3>
     <p>
         Let $T$ be $T: \mathbb{R}^n \rightarrow \mathbb{R}^n$, such that $T(\vec x) = A\vec x$. If $T$ transforms $\vec x$ w.r.t. the standard basis to a vector $\vec y$, then there is a transform that transforms $\left[\vec x\right]_B$ to $\left[\vec y\right]_B$, where $B$ is a basis for $\mathbb{R}^n$.
@@ -4421,7 +4422,7 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
         <a href="#nullspace_vs_li_columns">null spaces</a> that the column vectors of a matrix A are LI if and only if $\mathrm{N}(A) = \{ \vec 0 \}$. 
     </p>
     <p>
-        This means that the column vectors of $\lambda I_n - A$ must <em>not</em> be L.I. This means that the matrix is <em>not</em> invertible, which means that there must be some $\lambda$ for which $\mathrm{det}(\lambda I_n - A) = 0$ (see the section on <a href="#determinants">determinants</a> - a matrix is only invertible iff $|A| \ne $).
+        This means that the column vectors of $\lambda I_n - A$ must <em>not</em> be L.I. This means that the matrix is <em>not</em> invertible, which means that there must be some $\lambda$ for which $\mathrm{det}(\lambda I_n - A) = 0$ (see the section on <a href="#determinants">determinants</a> - a matrix is only invertible iff $|A| \ne 0$).
     </p>
     <p style="border: 1px solid blue;">
         $A\vec v = \lambda \vec v$ has solutions for non-zero $\vec v$'s iff $\mathrm{det}(\lambda I_n - A) = 0$. By using this we can solve for $\lambda$.
@@ -4502,7 +4503,7 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
 
         $$
         \begin{align}
-        \implies E_{\lambda = 5} &= \left\{t\begin{bmatrix}0.5\\1\end{bmatrix}, t \in \mathbb{R}\right\}
+        \implies E_{\lambda = 5} &= \left\{t\begin{bmatrix}0.5\\1\end{bmatrix}, t \in \mathbb{R}\right\}\\
                                  &= \mathrm{span}\left(\begin{bmatrix}0.5\\1\end{bmatrix}\right)
         \end{align}
         $$
@@ -4513,6 +4514,14 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
         \implies E_{\lambda = -1} &= \mathrm{span}\left(\begin{bmatrix}-1\\1\end{bmatrix}\right)
         \end{align}
         $$
+
+        We can plot these:
+    </p>
+    <p>
+
+         <img src="##IMG_DIR##/eigen_spaces_ex1.png"/>
+         <br/>
+         <a href="##IMG_DIR##/eigen_spaces_ex1.py" target="_blank" style="font-size:75%;">&lt;View source&gt;</a>.
     </p>
 
     <h3>Example 2</h3>
@@ -4526,9 +4535,9 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
         Remember, the e.v. equation is $\mathrm{det}(\lambda I_n - A) = 0$, so in this case we have:
 
         $$
-        |\lambda I_3 - A| = \begin{vmatrix}\lambda - 1 & 2 & 2 \\
-                                           2 & \lambda + 2 & -1 \\
-                                           2 & -1 & \lambda + 2
+        |\lambda I_3 - A| = \begin{vmatrix}\lambda + 1 & -2 & -2 \\
+                                           -2 & \lambda - 2 & 1 \\
+                                           -2 & 1 & \lambda - 2
                             \end{vmatrix} = 0
         $$
 
@@ -4536,8 +4545,8 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
 
         $$
         \begin{align}
-        |\lambda I_3 - A| &= (\lambda - 1)(\lambda + 2)(\lambda + 2) - 4 - 4 \\
-                           &\ \ \  - (\lambda - 1) - (4(\lambda + 2)) - (4(\lambda + 2)) \\
+        |\lambda I_3 - A| &= (\lambda + 1)(\lambda - 2)(\lambda - 2) + 4 + 4 \\
+                           &\ \ \  - (\lambda + 1) - (4(\lambda - 2)) - (4(\lambda - 2)) \\
                            & = 0
         \end{align}
         $$
@@ -4546,11 +4555,88 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
 
         $$
         \begin{align}
-        |\lambda I_3 - A| = \lambda^3 + 3\lambda^2 - 9\lambda -27 = 0
+        |\lambda I_3 - A| &= \lambda^3 - 3\lambda^2 - 9\lambda + 27 \\
+                          &= (\lambda - 3)(\lambda^2 - 9) \\
+                          &= (\lambda - 3)(\lambda + 3)(\lambda - 3)
         \end{align}
         $$
 
-        OOPS GOT IT WRONG... need to look back at this.
+        This means that the roots are either $\lambda = 3$ or $\lambda = -3$
+    </p>
+    <p>
+        As before, we know that $E_\lambda = \mathrm{N}(\lambda I_n - A)$.
+    </p>
+    <p>
+        For $\lambda = 3$:
+
+        $$
+        E_\lambda = \mathrm{N}(\lambda I_n - A) \implies \begin{bmatrix}4 & -2 & -2\\ -2 & 1 & 1 \\ -2 & 1 & 1\end{bmatrix} \vec v = \vec 0
+        $$
+
+        Solve using augmented matrix:
+
+        $$
+        \left[\begin{array}{ccc|c}4 & -2 & -2 & 0\\ -2 & 1 & 1 & 0 \\ -2 & 1 & 1 & 0\end{array}\right]
+        $$
+        $$
+        \downarrow
+        $$
+        $$
+        \left[\begin{array}{ccc|c}1 & -2/4 & -2/4 & 0\\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0\end{array}\right]
+        $$
+
+        Thus:
+
+        $$
+        v_1 = 0.5v_2 + 0.5v_3
+        $$
+
+        From which we can say:
+        $$
+        E_{\lambda=+3} = \mathrm{span}\left(\begin{bmatrix}0.5 \\ 1 \\ 0\end{bmatrix}, \begin{bmatrix}0.5 \\ 0 \\ 1\end{bmatrix}\right)
+        $$
+
+        We can do the same for $E_{\lambda=-3}$, where we would get the result
+
+        $$
+        E_{\lambda=-3} = \mathrm{span}\left(\begin{bmatrix}-2 \\ 1 \\ 1\end{bmatrix}\right)
+        $$
+
+        We can note that $E_{\lambda=3}$ and $E_{\lambda=-3}$ are perpendicular. However, this need
+        not be the case in general <a href="https://math.stackexchange.com/questions/1092995/are-eigen-spaces-orthogonal" target="_blank">[Ref]</a>.
+    </p>
+
+
+    <h3>Showing That Eigen Basis Are Good Coorinate Systems</h3>
+    <p>
+        It can be shown that if a transformation matrix $A$ has and least $n$ L.I. eignevectors then we can form a basis
+        $B = \{\vec {v_1}, \ldots, \vec{v_n}\}$ where $A\vec{v_1} = \lambda_i\vec{v_i}$, such that the transfirmation in this new basis representation 
+        can be written as:
+
+        $$
+        D = \begin{bmatrix}
+        \lambda_1 & 0 & \cdots & 0 \\
+        0 & \lambda_2 & \cdots & 0 \\
+        \vdots & \vdots & \ddots & \vdots \\
+        0 & 0 & \cdots & \lambda_n
+        \end{bmatrix}
+        $$
+
+        Recall in the <a href="#transformation-matrix-wrt-a-basis">section on transformation matricies w.r.t a basis</a> Sal Khan's summary graph:
+
+        $$
+        \begin{array}{ccc}
+            \large\mathbf{\vec x} & \rightarrow & \small{A=CDC^{-1}}& \rightarrow & \large\mathbf{T\left(\vec x\right)} \\
+            \downarrow & & & & \downarrow \\
+            \small{C^{-1}} & & & & \small{C^{-1}}\\
+            \downarrow & & & & \downarrow \\
+            \large\mathbf{\left[\vec x\right]_B} & \rightarrow & \small{D=C^{-1}AC} & \rightarrow & \large\mathbf{\left[T\left(\vec x\right)\right]_B}
+        \end{array}
+        $$
+
+        We can show this as follows:
+
+        TODO
     </p>
 </div>
 
@@ -4567,6 +4653,9 @@ So this must relate projection to change of basis too!! Aaaarg... brain melty
  		<li><a href="https://www.youtube.com/watch?v=NUn6WeFM5cM" target="_blank">Dimensionality Reduction: Principal Components Analysis, Part 2</a></li>
  		<li><a href="https://www.youtube.com/watch?v=7WqWoEKUdQY" target="_blank">Dimensionality Reduction: Principal Components Analysis, Part 3</a></li>
 	</ol>
+    <p>
+        These are notes based on these lectures... TODO
+    </p>
 
 </div>
 
