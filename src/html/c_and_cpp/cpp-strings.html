@@ -35,6 +35,13 @@ https://stackoverflow.com/questions/53849/how-do-i-tokenize-a-string-in-c
 https://tristanbrindle.com/posts/a-quicker-study-on-tokenising/
 https://www.bfilipek.com/2018/07/string-view-perf.html</pre>
 
+<h2>Anonymouse Streams To Strings</h2>
+<pre class="prettyprint linenums">
+// https://stackoverflow.com/questions/19665458/use-an-anonymous-stringstream-to-construct-a-string
+// http://www.velocityreviews.com/forums/t543728-how-do-you-create-and-use-an-ostringstream-in-an-initialisation-list.html
+#define MAKE_STRING(stream) (static_cast&lt;std::ostringstream&&gt;(std::ostringstream() &lt;&lt; std::dec &lt;&lt; stream)).str()</pre>
+<p></p>
+
 <h2>Parsing Strings</h2>
 <div>
     <h3>Use A StringStream</h3>
