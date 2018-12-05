@@ -184,6 +184,10 @@ svn mergeinfo --show-revs=eligible ^/trunk ^/branches/0_developers/my_name/branc
 				The first line reports a summary of changelists where trunk was merged to branch. The
 				second line reports a summary of changelists where trunk has not yet been merged to branch
 			</p>
+			<p>
+				If a merge doesn't work out and you have <em>not yet committed it</em>, to revert the merge just use:
+			</p>
+			<pre>svn revert -R .</pre>
 
 			<h3>Reintegrating</h3>
 			<p>

@@ -532,6 +532,18 @@ parse_repo() {
    echo ""
 }
 
+
+## COMMAND: strip_ws
+strip_ws() {
+   sed -i 's/[[:space:]]*$//' $@
+}
+
+## COMMAND: svnmods
+alias svnmods='svn status | grep "^[MAD]"'
+
+## COMMAND: svnfindexernaldirs
+alias svnfindexernaldirs='find . \( -path \*/.svn -o -path \*/.git \) -prune -o -type d | while read f;do svn propget svn:externals "$f" >/dev/null 2>&1 && echo "$f"; done'
+
 PS1="\[\e[0;33m\]\$(parse_repo)\[\e[0m\]\n[\w]\n\u@\h\$ "
 
 alias gap='printf "\n%.0s" {1..100}'</pre>
