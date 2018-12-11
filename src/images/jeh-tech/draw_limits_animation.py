@@ -47,6 +47,8 @@ txt2 = ax.text(3.5, 3.5*3.5, "{}".format(3.5*3.5), color=p2.get_color())
 
 msg = ax.text(0,15,"We can approach x=3.0 from\nboth the left and the right", alpha=1.0, fontsize=20)
 
+#framemsg = ax.text(3,0,"Start")
+
 ax.set_title("Limits")
 
 #pl.show()
@@ -58,12 +60,13 @@ xmin_orig, xmax_orig = ax.get_xlim()
 # https://github.com/matplotlib/matplotlib/issues/10729/
 def animate(i):
     global ax, p1, txt1, p2, txt2, msg
-
-    print(i)
+    #global framemsg
 
     if i < 50:
+        #framemsg.set_text("A{}".format(i))
         msg.set_alpha((i+1)/50)
     elif i < 100:
+        #framemsg.set_text("B{}".format(i))
         i = i - 50
         x1 = 2.5 + i/100.0
         p1.set_xdata([x1])
@@ -77,38 +80,41 @@ def animate(i):
         p2.set_xdata([x2])
         p2.set_ydata([x2 * x2])
 
-        print(x1,x2)
         txt2.set_x(x2)
         txt2.set_y(x2 * x2)
         txt2.set_text("{:.4f}".format(x2 * x2))
     elif i < 150:
+        #framemsg.set_text("C{}".format(i))
         i = i - 100
         msg.set_alpha(1.0 - (i+1)/50)
     elif i < 200:
+        #framemsg.set_text("D{}".format(i))
         i = i - 150
-        msg.set_text("We get pretty close, and\nwe can ALWAYS zoom in")
+        msg.set_text("We get pretty close, and\nwe can ALWAYS zoom in...")
         msg.set_alpha(i/50)
     elif i < 250:
+        #framemsg.set_text("E{}".format(i))
         pass
     elif i < 300:
+        #framemsg.set_text("F{}".format(i))
         i = i - 250
         msg.set_alpha(1.0 - i/50)
     elif i < 350: 
+        #framemsg.set_text("G{}".format(i))
         i = i - 300
         xmin_new = 2.989
         xmax_new = 3.011
         xmin_delta = (xmin_new - xmin_orig) / 49.0
         xmax_delta = (xmax_orig - xmax_new) / 49.0
         xmin, xmax = ax.get_xlim()
-        print([i, xmin_orig + i * xmin_delta, xmax_orig - i * xmax_delta])
         ax.set_xlim([xmin_orig + i * xmin_delta, xmax_orig - i * xmax_delta])
     elif i < 375:
+        #framemsg.set_text("H{}".format(i))
         pass
     elif i < 400:
-        print("K")
+        #framemsg.set_text("I{}".format(i))
         i = i - 375
-        x1 = p1.get_xdata()[0] + 1/5500.0
-        print(x1)
+        x1 = p1.get_xdata()[0] + 1/2700.0
         p1.set_xdata([x1])
         p1.set_ydata([x1 * x1])
 
@@ -116,7 +122,7 @@ def animate(i):
         txt1.set_y(x1 * x1)
         txt1.set_text("{:.4f}".format(x1 * x1))
 
-        x2 = p2.get_xdata()[0] - 1/5500.0
+        x2 = p2.get_xdata()[0] - 1/2700.0
         p2.set_xdata([x2])
         p2.set_ydata([x2 * x2])
 
@@ -124,13 +130,16 @@ def animate(i):
         txt2.set_y(x2 * x2)
         txt2.set_text("{:.4f}".format(x2 * x2))
     elif i < 450:
+        #framemsg.set_text("J{}".format(i))
         i = i - 400
-        print("L {}".format((i+1)/50))
-        msg.set_text("We could zoom in even further. The process \n never ends - we can get as close as we like!!")
+        msg.set_x(2.99)
+        msg.set_text("We could zoom in even further.\nThe process never ends...\nwe can get as close as we like\nwithout ever reaching x=3!")
         msg.set_alpha((i+1)/50)
+    elif i < 500:
+        pass
 
 
 Writer = animation.writers['ffmpeg']
 writer = Writer(fps=25, metadata=dict(artist='James Hume @ www.jeh-tech.com'), bitrate=1800)
-ani = animation.FuncAnimation(fig, animate, frames=500, blit=False, repeat=False)
+ani = animation.FuncAnimation(fig, animate, frames=550, blit=False, repeat=False)
 ani.save('animation.mp4', writer=writer)

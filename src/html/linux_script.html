@@ -532,21 +532,22 @@ parse_repo() {
    echo ""
 }
 
-
 ## COMMAND: strip_ws
 strip_ws() {
    sed -i 's/[[:space:]]*$//' $@
 }
 
 ## COMMAND: svnmods
-alias svnmods='svn status | grep "^[MAD]"'
+alias svnmods='svn status | grep "^\s*[MAD]"'
 
 ## COMMAND: svnfindexernaldirs
-alias svnfindexernaldirs='find . \( -path \*/.svn -o -path \*/.git \) -prune -o -type d | while read f;do svn propget svn:externals "$f" >/dev/null 2>&1 && echo "$f"; done'
+alias svnfindexernaldirs='find . -type d -a -not -path \*/.svn\* -print | while read f;do svn propget svn:externals "$f" >.svnproptmp 2>&1 && echo "$f" && cat -b .svnproptmp && rm .svnproptmp; done'
 
-PS1="\[\e[0;33m\]\$(parse_repo)\[\e[0m\]\n[\w]\n\u@\h\$ "
+## COMMAND: gap
+alias gap='printf "\n%.0s" {1..100}'
 
-alias gap='printf "\n%.0s" {1..100}'</pre>
+## Custom Prompt
+PS1="\[\e[0;33m\]\$(parse_repo)\[\e[0m\]\n[\w]\n\u@\h\$ "</pre>
       <p></p>
 
       <h2>Writing UDev Rules</h2>

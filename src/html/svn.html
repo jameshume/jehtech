@@ -396,12 +396,28 @@ svn commit</pre>
 			</p>
 			<pre>[-r <i>revision</i>] ^/path/to/external local/path</pre>
 			<p>
-				<B>WARNING:</B> When you do an <code>svn diff</code>, or in fact any other command other than the
-				<code>svn checkout</code>, <code>svn update</code>, <code>svn switch</code>, and <code>svn status</code> commands, 
-				you will not see diffs for externals. To get these diffs you will have to do an <code>svn status</code> and
+				<B>WARNING:</B> When you do an <code>svn diff</code> you will not see diffs for externals. To get these diffs you will have to do an <code>svn status</code> and
 				grep for &quot;^M&quot;:
 			</p>
-			<pre class="prettyprint">svn status | grep "^M" | sed -e "s/^M\s*//g" | while read fn; do svn diff "$fn"; done</pre>
+			<pre class="prettyprint">svn status | grep "^\s*[MAD]" | sed -e "s/^M\s*//g" | while read fn; do svn diff "$fn"; done</pre>
+			<p>
+				<b>WARNING</b>: Just like for diffs, you generally do not affect or get information on externals.
+				Any other command other than the <code>svn checkout</code>, <code>svn update</code>, <code>svn switch</code>, and <code>svn status</code> commands, will usually skip externals.
+			</p>
+			<p>
+				Note this means that when you merge from one branch to another, externals are <em>not</em> merged! You have to do
+				these seperately.
+			</p>
+			<p>
+				To quickly see all the externals in a repo you could try something like the following:
+			</p>
+			<pre class="prettyprint linenums">find . -type d -a -not -path \*/.svn\* -print | \
+    while read f; do \
+        svn propget svn:externals "$f" >.svnproptmp 2>&1 && \
+        echo "$f" && \
+        cat -b .svnproptmp && \
+        rm .svnproptmp; \
+    done</pre>
 		</div> <!-- END: H2 Externals -->
 
 		<h2>My Repository Moved!</h2>
@@ -413,6 +429,24 @@ svn commit</pre>
 				<a href="http://svnbook.red-bean.com/en/1.7/svn.ref.svn.c.relocate.html" target="_blank"><code>svn relocate</code></a>.
 			</p>
 			<pre>svn relocate FROM-PREFIX TO-PREFIX</pre>
+		</div>
+
+		<h2>Sparse Chekoukouts</h2>
+		<div>
+			<p>
+				When dealing with really large repositories, you may not need to check out the <i>entire</i> repository. If this is the
+				case you can use a &quot;sparse&quot; checkout. To do this type:
+			</p>
+			<pre class="prettyprint linenums">svn checkout --depth=immediates https://your.repo/root checkout_dir</pre>
+			<p>
+				This will only check out the immediate files at the root of your repository and will <i>not</i> recurse into
+				subdirectories. This means that files in the root directory are checked out and directories in the root are
+				created, but their contents are not filled.
+			</p>
+			<p>
+				For directories that you need, you can then change into them (maybe applying the sparse checkout recursively to selctively get subdirectories), and type:
+			</p>
+			<pre class="prettyprint linenums">svn update --set-depth=infinity</pre>
 		</div>
 
 		<h2>Misc</h2>
