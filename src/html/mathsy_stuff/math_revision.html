@@ -556,14 +556,26 @@ Reference: <a href="http://www.mathwords.com/s/square_root_rules.htm" target="_b
 <div>
 	<h3>Definition</h3>
     <p>
+      When we talking about the limit of a function, we are asking what value the function will give as the
+      input gets closer and closer to some value, but without reaching that value. The animation below
+      tries to explain this:
+    </p>
+    <p>
         <video autoplay loop>
             <source src="##IMG_DIR##/draw_limits_animation.mp4" type="video/mp4">
         </video><br/>
         <a href="##IMG_DIR##/draw_limits_animation.py" target="_blank" style="font-size:75%;">&lt;View source&gt;</a>
     </p>
+    <p>
+      What you should see in the animation is that we can always get closer to the point $x=3$ without ever
+      reaching $x=3$ by adding smaller and smaller amounts. In other words, you can get $\mathrm f(x)$ as
+      close to the limit (in the above case 9) by getting $x$ sufficiently close to some input (in the
+      above case 3)
+    </p>
     <p>Intuitively,
        $$\lim_{x\to c} f(x)=L$$
-          If $f$ is defined near (but not necessarily at) $c$ and $\operatorname{f}(x)$ approaches $L$
+    
+    If $f$ is defined near, but <em>not necessarily at</em>, $c$, then $\operatorname{f}(x)$ will approach $L$
 	  as $x$ approaches $c$. More rigorously, let $f$ be defined at all $x$ in an open interval
 	  containing $c$, except possibly at $c$ itself. Then,
 
@@ -742,9 +754,19 @@ Reference: <a href="http://www.mathwords.com/s/square_root_rules.htm" target="_b
         You need a minus in front of $x^m$ when $n$ is even and $m$ is odd.
      </p>
 
-     <h4>The Sandwich Principle</h4>
+     <h4>The Sandwich Principle / Squeeze Theorem</h4>
      <p>
      	If $g(x) \le f(x) \le h(x)$ for all x near a, and $\lim_{x \rightarrow a} g(x) = \lim_{x \rightarrow a} h(x) = L$, then $\lim_{x \rightarrow a} f(x) = L$ too.
+     </p>
+     <p>
+        Sal on Khan Achademy gives a good example of using the squeeze theorem to solve the following limit.
+        $$
+          \lim_{\theta \rightarrow 0}\left(\frac{\sin \theta}{\theta}\right) = 1
+        $$
+
+        The limit cannot be defined at $\theta = 0$, so the function is not continuous at that point, but it can still
+        have a limit as $\theta$ tends to 0, as it does not have to equal 0... we only have to be able to get
+        arbitrarily close.
      </p>
 
        <h4>L'Hopital's Rule</h4>
@@ -809,6 +831,24 @@ pl.show()</pre>
 			\lim_{x \to 0} \frac{\tan(x)}{x} = 1
 		$$
 	</p>
+
+  <h3>&quot;Continuous&quot; In Terms Of Limits</h3>
+  <p>
+      A function is <em>continuous at a point</em> if it can &quot;be drawn without taking the pen off the
+      paper&quot; <a href="#calc_life_saver">[Ref]</a>. This means, more formally, that
+      a function $f(x)$ is continuous at $x = a$ if $\lim_{x \rightarrow a}f(x) = f(a)$.
+  </p>
+
+  <h3>Intermediate Value Theroem</h3>
+  <p>
+      If $\mathrm{f}$ is a function continuous at every point of the interval $[a, b]$, then:
+  </p>
+  <ul>
+    <li>$\mathrm{f}$ will take on every value between $\mathrm{f}(a)$ and $\mathrm{f}(b)$ over the interval, and</li>
+    <li>For any $L$ between the values $\mathrm{f}(a)$ and $\mathrm{f}(b)$, there exists a $c \in [a, b]$ such that
+        $\mathrm{f})c_ = L$
+    </li>
+  </ul>
 </div>
 
 <h2>Differentiation</h2>
