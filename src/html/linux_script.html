@@ -475,6 +475,91 @@
           </table>
         </p>
 
+        <h3>Bash Commands</h3>
+        <p>
+          <table>
+            <tr>
+              <td>Arrays</td>
+              <td>
+                <table>
+                  <tr>
+                    <td>Set:</td>
+                    <td><code>myarray=( 1 2 3 )</code><br/>
+                        <code>myarray[0]=1</code>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Append:</td>
+                    <td><code>myarray+=( 4 5 )</code>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Access:</td>
+                    <td><code>${myarray[0]}  # Print 1st element.</code><br/>
+                        <code>${myarray[@]}  # All elements - if in double quotes expand to separate words.</code><br/>
+                        <code>${myarray[*]}  # All elements - if in double quotes expand to single word.</code><br/>
+                        <code>${!myarray[@]} # Get indicies.</code><br/>
+                        <code>${arr[@]:s:n}  # Get n elements starting at index s.</code>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Length:</td>
+                    <td><code>${#myarray[*]}</code></td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td>Parameter Substitution</td>
+              <td>
+                <table>
+                  <tr>
+                    <td>Default parameters:</td>
+                    <td><code>${parameter:-default} # Get variable value. If not defined return default.</code><br/>
+                        <code>${parameter:=default} # Get variable value. If not defined SET variable to default and return value.</code><br/>
+                        <code>${parameter:?err_msg [cmd]} # If set use, else exit script with err_msg. If cmd set then exec cmd.</code>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Variable Length:</td>
+                    <td><code>${#var}</code></td>
+                  </tr>
+                  <tr>
+                    <td>Remove Substring:</td>
+                    <td><code>${var#pattern}  # Remove SHORTEST part of $pattern that matches FRONT end of $var.</code><br/>
+                        <code>${var##pattern} # Remove LONGEST part of $pattern that matches FRONT end of $var.</code><br/>
+                        <code>${var%pattern}  # Remove SHORTEST part of $pattern that matches BACK end of $var.</code><br/>
+                        <code>${var%%pattern} # Remove LONGEST part of $pattern that matches BACK end of $var.</code><br/>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Substring Replacement:</td>
+                    <td><code>${var:pos}       # Expand from offset pos.</code><br/>
+                        <code>${var:pos:len}   # Expand from offset pos max len chars.</code><br/>
+                        <code>${var/pat/repl}  # Replace first match of pat with repl. If repl blank, delete.</code><br/>
+                        <code>${var//pat/repl} # As above but global over all matches of pat.</code>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Change case:</td>
+                    <td><code>${var,}   # Set first character to lowercase</code><br/>
+                        <code>${var,,}  # Set first character to lowercase</code><br/>
+                        <code>${var^}   # Set first character to uppercase</code><br/>
+                        <code>${var^^}  # Set entire string to uppercase</code>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+<!--
+            <tr>
+              <td></td>
+              <td></td>
+            </tr>
+-->
+          </table>
+        </p>
+
         <p></p>
 
       <h2>.bashrc</h2>
@@ -1420,6 +1505,10 @@ done</pre>
                target="_blank">disappear after the loop terminates</a>. The
             summary is that the <code>while</code> loop is executed in a
             sub shell, so will have a new variable and context.
+         </p>
+         <p>
+            This is further explained in this <a href="https://unix.stackexchange.com/questions/272698/why-is-the-array-empty-after-the-while-loop" target="_blank">SO thread</a> - 
+            the <q>problem is that <b>in a pipeline ( command1 | command2 | command3 ... ) the commands are run in subshells</b></q>.
          </p>
          <h4>Reading Files Line By Line</h4>
          <p>

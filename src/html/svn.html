@@ -40,7 +40,7 @@ https://pythonconquerstheuniverse.wordpress.com/2011/03/16/learning-subversion-t
 http://svnbook.red-bean.com/en/1.7/svn.branchmerge.basicmerging.html#svn.branchmerge.basicmerging.mergeinfo</pre>
 
 		<h2>Install On Ubuntu Or Upgrade</h2>
-		<pre>sudo apt-get install subversion --upgrade</pre>
+		<pre class="linenums prettyprint">sudo apt-get install subversion --upgrade</pre>
 
 <!-- --------------------------- SECTION BEGIN --------------------------- -->
 <h2>Diffs</h2>
@@ -49,7 +49,7 @@ http://svnbook.red-bean.com/en/1.7/svn.branchmerge.basicmerging.html#svn.branchm
 		<p>
 			To use a specific diff tool from the command line use:
 		</p>
-		<pre>svn diff some.file --diff-cmd meld
+		<pre class="linenums prettyprint">svn diff some.file --diff-cmd meld
 svn diff some.file --diff-cmd kdiff3
 etc...</pre>
 
@@ -119,7 +119,7 @@ merge-tool-cmd = p4_merge_helper.sh</pre>
 		<p>
 			Too see changes in properties use the following command:
 		</p>
-		<pre>svn log -v --diff --depth=empty .</pre>
+		<pre class="linenums prettyprint">svn log -v --diff --depth=empty .</pre>
 		<p>
 			Grep the output for &quot;Modified: svn:externals&quot;
 		</p>
@@ -147,6 +147,28 @@ merge-tool-cmd = p4_merge_helper.sh</pre>
 		</blockquote>
 		<p></p>
 
+		<h2>Diffs and Revision Keywords</h2>
+		<div>
+			<p>
+				Normally, having looked at the log you would diff 2 revisions by executing:
+			</p>
+			<pre class="prettyprint linenums">svn diff -r aaa:bbb</pre>
+			<p>
+				However, for some easy tasks, there are special revision keywords that can be used <a href="http://svnbook.red-bean.com/en/1.7/svn.tour.revs.specifiers.html#svn.tour.revs.keywords" target="_blank">[Ref]</a> when referring to a <em>working copy path</em>:
+			</p>
+			<ul>
+				<li><code>HEAD</code> - The latest commit.</li>
+				<li><code>BASE</code> - The revision number of an item in a working copy. If the item has been locally modified, this refers to the way the item appears without those local modifications.</li>
+				<li><code>COMMITTED</code> - The most recent revision prior to, or equal to, <code>BASE</code>, in which an item changed.</li>
+				<li><code>PREV</code> - <code>COMMITTED - 1</code>.</li>
+			</ul>
+			<p>
+				For example:
+			</p>
+			<pre class="linenums prettyprint">$ svn diff -r PREV:COMMITTED foo.c
+# shows the last change committed to foo.c</pre>
+		</div>
+
 		<h2>Branch, Checkout, Merge and Reintegrate</h2>
 		<div>
 			<h3>Branching &amp; Checkout</h3>
@@ -158,18 +180,18 @@ merge-tool-cmd = p4_merge_helper.sh</pre>
 			<p>
 				To branch off, for example trunk, to new workshpace:
 			</p>
-			<pre>svn cp svn+ssh://myserver.com/trunk/src svn+ssh://myserver.com/0_developers/my_name/branch_name -m "a description"
+			<pre class="linenums prettyprint">svn cp svn+ssh://myserver.com/trunk/src svn+ssh://myserver.com/0_developers/my_name/branch_name -m "a description"
 cd /where/you/want/to/checkout/to
 svn co svn+ssh://myserver.com/0_developers/my_name/branch_name</pre>
 
 			<h3>Checkout At Specific Revision</h3>
-			<pre>svn up -r1234</pre>
+			<pre class="linenums prettyprint">svn up -r1234</pre>
 
 			<h3>Merging</h3>
 			<p>
 				To update my local branch with changes from trunk make sure branch is cleann no local modifications and up to date.
 			</p>
-			<pre>cd /where/you/want/to/checkout/to
+			<pre class="linenums prettyprint">cd /where/you/want/to/checkout/to
 svn merge ^/trunk/src</pre>
 			<p>
 				<em>Note that this has only affected your working copy!</em> The changes have <em>not</em> been submitted to
@@ -178,7 +200,7 @@ svn merge ^/trunk/src</pre>
 			<p>
 			<a name="mergeinfo_tips1">Useful tips from the Red Book...</a>
 			</p>
-			<pre>svn mergeinfo --show-revs=merged ^/trunk ^/branches/0_developers/my_name/branch_name
+			<pre class="linenums prettyprint">svn mergeinfo --show-revs=merged ^/trunk ^/branches/0_developers/my_name/branch_name
 svn mergeinfo --show-revs=eligible ^/trunk ^/branches/0_developers/my_name/branch_name</pre>
 			<p>
 				The first line reports a summary of changelists where trunk was merged to branch. The
@@ -187,7 +209,7 @@ svn mergeinfo --show-revs=eligible ^/trunk ^/branches/0_developers/my_name/branc
 			<p>
 				If a merge doesn't work out and you have <em>not yet committed it</em>, to revert the merge just use:
 			</p>
-			<pre>svn revert -R .</pre>
+			<pre class="linenums prettyprint">svn revert -R .</pre>
 
 			<h3>Reintegrating</h3>
 			<p>
@@ -201,7 +223,7 @@ svn mergeinfo --show-revs=eligible ^/trunk ^/branches/0_developers/my_name/branc
 			</p>
 
 			<h4>Pre v1.8</h4>
-			<pre>cd /where/truck/is/checked/out
+			<pre class="linenums prettyprint">cd /where/truck/is/checked/out
 svn up
 svn merge <b>--reintegrate</b> ^/0_developers/my_name/branch_name
 ... test ...
@@ -262,7 +284,7 @@ svn commit -m "message"</pre>
 				Your trunk working copy cannot have any local edits, switched paths, or contain a mixture of revisions so
 				commit any pending edits and then <tt>svn update</tt> the branch.
 			</p>
-			<pre>cd /where/truck/is/checked/out
+			<pre class="linenums prettyprint">cd /where/truck/is/checked/out
 svn up
 svn merge ^/0_developers/my_name/branch_name
 ... test ...
@@ -303,7 +325,7 @@ svn commit -m "message"</pre>
 			<p>
 				To do this you use...
 			</p>
-			<pre>svn resolve --accept='working' file-name</pre>
+			<pre class="linenums prettyprint">svn resolve --accept='working' file-name</pre>
 			<p>
 				This removes the conflict marker and says that the working copy contains
 				the resolved file. (At this point, note however that it does NOT!).
@@ -334,7 +356,7 @@ svn commit -m "message"</pre>
 			<a href="http://svnbook.red-bean.com/en/1.8/svn.branchmerge.basicmerging.html#svn.branchmerge.basicmerging.undo" target="_blank">here</a>.
 		</p>
 
-		<pre>svn update
+		<pre class="linenums prettyprint">svn update
 svn merge -r &lt;newer-rev&gt;:&lt;older-rev&gt; <i>&lt;filename or . for current dir&gt;</i>
 svn commit</pre>
 
@@ -390,11 +412,11 @@ svn commit</pre>
 			<p>
 				The format for the <tt>svn:externals</tt> property is this:
 			</p>
-			<pre>^/path/to/external[@<i>revision</i>] local/path</pre>
+			<pre class="linenums prettyprint">^/path/to/external[@<i>revision</i>] local/path</pre>
 			<p>
 				Or...
 			</p>
-			<pre>[-r <i>revision</i>] ^/path/to/external local/path</pre>
+			<pre class="linenums prettyprint">[-r <i>revision</i>] ^/path/to/external local/path</pre>
 			<p>
 				<B>WARNING:</B> When you do an <code>svn diff</code> you will not see diffs for externals. To get these diffs you will have to do an <code>svn status</code> and
 				grep for &quot;^M&quot;:
@@ -428,10 +450,10 @@ svn commit</pre>
 				the new location and manually add these edits. Solution was the command
 				<a href="http://svnbook.red-bean.com/en/1.7/svn.ref.svn.c.relocate.html" target="_blank"><code>svn relocate</code></a>.
 			</p>
-			<pre>svn relocate FROM-PREFIX TO-PREFIX</pre>
+			<pre class="linenums prettyprint">svn relocate FROM-PREFIX TO-PREFIX</pre>
 		</div>
 
-		<h2>Sparse Chekoukouts</h2>
+		<h2>Sparse Checkouts</h2>
 		<div>
 			<p>
 				When dealing with really large repositories, you may not need to check out the <i>entire</i> repository. If this is the
@@ -455,7 +477,7 @@ svn commit</pre>
 			<p>
 				Useful when uploading diffs to ReviewBoard for example. Use the following:
 			</p>
-			<pre>svn diff --internal-diff --patch-compatible -rX:Y &gt; patch.diff</pre>
+			<pre class="linenums prettyprint">svn diff --internal-diff --patch-compatible -rX:Y &gt; patch.diff</pre>
 			<p>
 				Note the use of the <tt>--internal-diff</tt>. If your SVN config file
 				specifies a diff tool other than the internal SVN diff tool your patch
@@ -472,7 +494,7 @@ svn commit</pre>
 				that your keys are correctly loaded using the following command (on
 				Linux with OpenSSH) to list your loaded keys...
 			</p>
-			<pre>ssh-add -L</pre>
+			<pre class="linenums prettyprint">ssh-add -L</pre>
 			<p>
 				If you're still having problems look in <tt>~/.subversion/config</tt> and
 				go to the <tt>[tunnels]</tt> section. In the SSH command take out the
@@ -481,7 +503,7 @@ svn commit</pre>
 			<p>
 				<b>OR...</b> even better just type...
 			</p>
-			<pre>export SVN_SSH=&quot;ssh -v &quot;</pre>
+			<pre class="linenums prettyprint">export SVN_SSH=&quot;ssh -v &quot;</pre>
 			<p>
 				...either on the same line as your svn command to just apply it
 				to that command, or on a line by its own to make the setting
@@ -489,12 +511,12 @@ svn commit</pre>
 			</p>
 
 			<h3>Add all untracked files</h3>
-			<pre>svn add $(svn status | grep ? | awk '{print $2}')</pre>
+			<pre class="linenums prettyprint">svn add $(svn status | grep ? | awk '{print $2}')</pre>
 
 			<h3>Diff all changes in changeset</h3>
-			<pre>svn diff -c &lt;changeset&gt; [filename]</pre>
+			<pre class="linenums prettyprint">svn diff -c &lt;changeset&gt; [filename]</pre>
 			<p>This is the same as running the following:</p>
-			<pre> svn diff -r rev-1:rev [filename]</pre>
+			<pre class="linenums prettyprint"> svn diff -r rev-1:rev [filename]</pre>
 			<p>If <tt>filename</tt> is ommitted all changes in that changeset
 			are examined</p>
 
@@ -507,7 +529,7 @@ svn commit</pre>
 			</ul>
 
 			<p>Therefore the whole line expands to the following.</p>
-			<pre>svn diff &lt;root&gt;/branches/PATH_1/some/repo/path &lt;root&gt;/branches/PATH_2/some/repo/path</pre>
+			<pre class="linenums prettyprint">svn diff &lt;root&gt;/branches/PATH_1/some/repo/path &lt;root&gt;/branches/PATH_2/some/repo/path</pre>
 
 			<p>
 				This is really a linux variable expansion, it's not something
