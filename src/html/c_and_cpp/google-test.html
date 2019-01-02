@@ -27,6 +27,233 @@
 <div id="page_contents">
 </div>
 
+<h2>Read The Docs!</h2>
+<div>
+    <ul>
+        <li>
+            <a href="https://github.com/google/googletest/blob/master/googletest/docs/primer.md" target="_blank">Google Test Primer</a>.
+        </li>
+        <li>
+            <a href="https://github.com/google/googletest/blob/master/googletest/docs/advanced.md" target="_blank">Advanced Google Test Topics</a>.
+        </li>
+        <li>
+            <a href="https://github.com/google/googletest/blob/master/googletest/docs/samples.md" target="_blank">Google Test Samples</a>.
+        </li>
+    </ul>
+</div>
+
+<h2>Installing</h2>
+<div>
+    <p>
+        To download the source files and install <a href="https://askubuntu.com/a/145913/475473" target="_blank">[Ref]</a>:
+    </p>
+    <pre class="prettyprint linenums">sudo apt-get install libgtest-dev
+cd /usr/src/gtest # Might also be /usr/src/googletest/googletest
+sudo mkdir build
+cd build
+sudo cmake -DCMAKE_BUILD_TYPE=RELEASE ..
+sudo make
+sudo cp libg* /usr/lib
+cd ..
+sudo rm -fr build</pre>
+</div>
+
+<h2>Skeleton main()</h2>
+<div>
+    <pre class="prettyprint linenums">int main(int argc, char **argv)
+{
+    ::testing::InitGoogleTest(&amp;argc, argv);
+    return RUN_ALL_TESTS();
+}</pre>
+
+<h2>Basic Test Structure</h2>
+<div>
+    <p>
+        When there is nothing to do to prepare for your tests, i.e., no setup or tear down, 
+        just use the <code>TEST()</code> macro to define the tests:
+    </p>
+    <pre class="prettyprint linenums">TEST(TestCaseName, ThisTestName) {
+    ...
+}</pre>
+    <p>
+        If you have some preparation for each test, i.e., you require some test setup and tear down,
+        then use the <code>TEST_F()</code> macro. To use this macro you need to create a test-fixture
+        object that inherits from <code>public testing::Test</code>:
+    </p>
+    <pre class="prettyprint linenums">// Class is created for each test and destroyed after
+class MyTestFixture : public testing::Test {
+protected:
+
+    MyTestFixture() {
+        // Can do setup here too
+    }
+
+    ~MyTestFixture() {
+        // Can do tear down here too
+    }
+
+    // Called before each test is run
+    virtual void SetUp() override {
+        ...
+    }
+
+    // Called after each test. Don't neeed to define if no tear down required.
+    virtual void TearDown override {
+        ...
+    }
+
+    int m_dummy;
+};
+
+...
+
+TEST_F(MyTestFixture, ThisTestName)
+{
+    // You can refer to all the members and functions in the class MyTestFixture here directly.
+    // For example:
+    std::cout << "Dummy is " << m_dummy << "\n";
+}</pre>
+</div>
+
+<h2>Basic Test Assertions</h2>
+<div>
+    <p>
+        The test macros are <code>ASSERT_*</code> or <code>EXPECT_*</code>. The former is a fatal
+        error and returns from the current function and the latter prints out a warning, continues
+        in the current function and the error is logged only after it completes.
+    </p>
+    <p>
+        All the macros return a stream-like object that you can stream a message to that will be
+        printed out on error. For example:
+    </p>
+    <pre class="prettyprint linenums">ASSERT_GT(1,2) << "1 is not greater than 2";</pre>
+    <p>
+        Also note that when test macros fail, they <em>only abort the current function</em>, not the entire test,
+        so if you call functions from your <code>TEST[_F]</code> macro-function and the sub function errors, your
+        main test function will still continue. See <a href="https://github.com/google/googletest/blob/master/googletest/docs/advanced.md" target="_blank">Google's advanced guide</a> for more info. Probably the easiest solution is to wrap subroutine calls with <code>ASSERT_NO_FATAL_FAILURE()</code>.
+    </p>
+    <p>
+        Here are some common test macros:
+    </p>
+    <p>
+        <table>
+            <tr>
+                <td>Check booleans:</td>
+                <td><code>ASSERT_(TRUE|FALSE)</code></td>
+            </tr>
+            <tr>
+                <td>Check numbers:</td>
+                <td><code>ASSERT_(EQ|NE|LT|LE|GT|GE)</code></td>
+            </tr>
+            <tr>
+                <td>Check C-style strings:</td>
+                <td><code>ASSERT_STR(EQ|NE)</code> and <code>ASSERT_STRCASE(EQ|NE)</code> to ignore case.</td>
+            </tr>
+            <tr>
+                <td>Check floats:</td>
+                <td><code>ASSERT_NEAR</code> or <code>ASSERT_(FLOAT|DOUBLE)_EQ</code>.</td>
+            </tr>
+            <tr>
+                <td>Check exceptions:</td>
+                <td><code>ASSERT_THROW</code> or <code>ASSERT_(ANY|NO)THROW</code>.<br/>
+                    Eg: <code>ASSERT_THROW(Foo(5), bar_exception);</code><br/>
+                    Eg: <code>EXPECT_NO_THROW({ .. body of code... });</code>
+                </td>
+            </tr>
+        </table>
+    </p>
+</div>
+
+<h2>Passing Arguments To Your Test Program</h2>
+<div>
+    <p>
+        When you compile your Google Test application it includes code that parses the command line options
+        to enable things like filtering tests etc. So, how then, do you pass command line options through
+        to your test code?
+    </p>
+    <p>
+        The answer is that after parsing all the Google Test relevant command line options, they are
+        removed from <code>argv</code> and <code>argc</code> is updated appropriately so that in your
+        <code>main()</code> function you can just parse <code>argv</code>. The remaining arguments
+        will be all those that Google Test didn't recognise.
+    </p>
+    <p>
+        To parse command line options there are several options including Boost, <code>getopt()</code>,
+        or to roll-your-own parser <a href="https://stackoverflow.com/questions/865668/how-to-parse-command-line-arguments-in-c" target="_blank">[Ref]</a>. Some examples, taken from the reference and modified slightly:
+    </p>
+    <pre class="prettyprint linenums">static std::string getCmdOption(char **begin, char **end, const std::string &amp;option)
+{
+    char **itr = std::find(begin, end, option);
+    if (itr != end &amp;&amp; ++itr != end)
+    {
+        return std::string(*itr);
+    }
+    return std::string();
+}
+static bool cmdOptionExists(char** begin, char** end, const std::string&amp; option)
+{
+    return std::find(begin, end, option) != end;
+}</pre>
+    <p>
+        Often, if all or many tests need to query your own test options it can be a nice idea to base all of your tests off a base class that inherits from <code>::testing::Test</code> and contains
+        functions to get any options. E.g. base your test classes on this:
+    </p>
+    <pre class="prettyprint linenums">#include &lt;gtest/gtest.h&gt;
+
+...
+
+class TestBase : public ::testing::Test
+{
+public:
+    static void Initialise(int exOpt1, const std::string &mp;exOpt2)
+    {
+        exampleCommandLineOption1 = exOpt1;
+        exampleCommandLineOption2 = exOpt2;
+    }
+
+    static int GetExampleCommandLineOption1(void)
+    {
+        return exampleCommandLineOption1;
+    }
+
+    ...
+
+private:
+    static int exampleCommandLineOption1;
+    static std::string exampleCommandLineOption2;
+};</pre>
+    <p>
+        Just call the <code>Initialise()</code> function before you call <code>RUN_ALL_TESTS()</code> and all your test classes will have access to the
+        command line options you parsed.
+    </p>
+</div>
+
+<h2>Filtering Tests</h2>
+<div>
+    <p>
+        To list your tests run with <code>--gtest_list_tests</code>.
+    </p>
+    <p>
+        Just run your test executable with the <code>--gtest_filter=test-name(s)</code> option. The filter
+        accepts file-globbing syntax so you can use, for example, <code>--gtest_filter=my_new_test*</code> to
+        run all tests who's name is prefixed with &quot;my_new_test&quot;.
+    </p>
+</div>
+
+<h2>Scoped Traces</h2>
+<div>
+    <p>
+        GTest has a useful macro <code>SCOPED_TRACE(<i>streamable</i>)</code>. It is useful because it creates a stack of messages that will automatically printed out with any error trace. This can be handy to a) see the path through the test that failed and b) see loop iteration numbers that fail.
+    </p>
+    <p>
+        One useful little macro follows. <code>SCIPED_TRACE</code> accepts a streamable object but sometimes you may want to build up a string, so the following can be used.
+    </p>
+    <pre class="prettyprint linenums">#define SCOPED_TRACE_STR(x) \
+    SCOPED_TRACE( \
+        static_cast&lt;std::stringstream &amp;&gt;( \
+            (std::stringstream().flush() &lt;&lt; x) \
+        ).str())</pre>
+</div>
 
 </div> <!-- END H1 padding div -->
 </div>
