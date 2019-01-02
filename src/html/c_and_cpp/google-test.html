@@ -39,6 +39,9 @@
         <li>
             <a href="https://github.com/google/googletest/blob/master/googletest/docs/samples.md" target="_blank">Google Test Samples</a>.
         </li>
+        <li>
+            <a href="https://github.com/google/googletest/blob/master/googlemock/docs/ForDummies.md" target="_blank">What Is Google C++ Mocking Framework?</a>.
+        </li>
     </ul>
 </div>
 
@@ -158,6 +161,26 @@ TEST_F(MyTestFixture, ThisTestName)
                 <td><code>ASSERT_THROW</code> or <code>ASSERT_(ANY|NO)THROW</code>.<br/>
                     Eg: <code>ASSERT_THROW(Foo(5), bar_exception);</code><br/>
                     Eg: <code>EXPECT_NO_THROW({ .. body of code... });</code>
+                </td>
+            </tr>
+            <tr>
+                <td>Matchers: </td>
+                <td>
+                    <p style="margin-top:0;">
+                        These make use of GMock matchers, so you must include &quot;gmock/gmock.h&quot;
+                        in your test code.
+                    </p>
+                    <p>
+                        <code>(ASSERT|EXPECT)_THAT(value, matcher)</code>
+                    </p>
+                    <p>
+                        Examples:
+                    </p>
+                    <p>
+                          <code>EXPECT_THAT(Foo(), StartsWith("Hello"));</code><br/>
+                          <code>EXPECT_THAT(Bar(), MatchesRegex("Line \\d+"));</code><br/>
+                          <code>ASSERT_THAT(Baz(), AllOf(Ge(5), Le(10)));</code><br/>
+                    </p>
                 </td>
             </tr>
         </table>
