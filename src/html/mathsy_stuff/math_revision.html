@@ -198,7 +198,7 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
 	</p>
 </div>
 
-<h2>Trig Identities</h2>
+<h2>Trigonometry</h2>
 <div>
     <p>
       <a href="https://en.wikipedia.org/wiki/Proofs_of_trigonometric_identities"
@@ -208,6 +208,85 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
      The &quot;cut the knot&quot; website lists some excellent proofs of the fundamental
      <a href="http://www.cut-the-knot.org/pythagoras/" target="_blank">Pythagorean Theorem</a>
    </p>
+   <h3>Basics</h3>
+   <p>
+     $$
+     \color{blue}{\sin}(\theta) = \frac{\text{opposite}}{\text{hypotenuse}},\ \color{green}{\cos}(\theta) = \frac{\text{adjacent}}{\text{hypotenuse}},\ \color{red}{\tan}(\theta) = \frac{\text{opposite}}{\text{adjacent}}
+     $$
+   </p>
+   <p style="text-align:center;">
+       <iframe src="https://www.desmos.com/calculator/xvbqf3umwo?embed" width="500px" height="500px" style="border: 1px solid #ccc" frameborder=0></iframe>
+   </p>
+   <p>
+     $$
+     \tan(\theta) = \frac{\sin{\theta}}{\cos{\theta}}
+     $$
+
+     $$
+     \color{red}{\csc}(\theta) = \frac{1}{\sin(\theta)},\ \color{blue}{\sec}(\theta) = \frac{1}{\cos(\theta)},\ \color{green}{\cot}(\theta) = \frac{1}{\tan(\theta)}
+     $$
+   </p>
+   <p style="text-align:center;">
+      <iframe src="https://www.desmos.com/calculator/eizzfoa2f9?embed" width="500px" height="500px" style="border: 1px solid #ccc" frameborder=0></iframe>
+   </p>
+   <p>
+    $$
+    \cot(\theta) = \frac{\cos{\theta}}{\sin{\theta}}
+    $$
+   </p>
+   <p>
+      Some trig functions are "complementary" in the sense that a in pair of such functions, one equals the other shifted by 90 degrees ($\pi/2$ radians).
+      So, "co<u>s</u>" is "complementary <u>sine</u>", for example, and "co<u>t</u>" is "complementary <u>tan</u>". The one that doesn't quite fit this
+      pattern is the "csc" and "sec" complements :'(...
+
+      $$
+      \sin(\theta) = \cos(\frac{\pi}{2} - \theta),\ \cos(\theta) = \sin(\frac{\pi}{2} - \theta)
+      $$
+
+      $$
+      \tan(\theta) = \cot(\frac{\pi}{2} - \theta),\ \cot(\theta) = \tan(\frac{\pi}{2} - \theta)
+      $$
+
+      $$
+      \sec(\theta) = \csc(\frac{\pi}{2} - \theta),\ \csc(\theta) = \sec(\frac{\pi}{2} - \theta)
+      $$
+   </p>
+
+    <h3>Radians</h3>
+    <p>
+      Here is a <a href="https://www.askamathematician.com/2014/10/q-why-radians/" target="_blank">fantastic page about the <em>why</em> of radians</a>. In summary
+      radians define a circle such that the angle measured in radians is also the arc length around the unit circle for that arc.
+
+      $$
+      \text{angle in radians } = \frac{\pi}{180} \times \text{ angle in degrees}
+      $$
+    </p>
+    <p style="text-align:center;">
+      <img src="https://www.askamathematician.com/wp-content/uploads/2014/10/unitcircle.jpg"/ width="371" height="343"><br/>
+      <span style="font-size:75%;">[Image taken from <a href="https://www.askamathematician.com/wp-content/uploads/2014/10/unitcircle.jpg" target="_blank">Ask A Mathamatition</a>.]</span>
+    </p>
+
+    <h3>Common Values For Sine and Cosine</h3>
+    <p>
+      <table>
+        <tr>
+          <td></td>                <td>$0$</td> <td>$\frac \pi 6$</td>        <td>$\frac \pi 4$</td>        <td>$\frac \pi 3$</td>        <td>$\frac \pi 2$</td>
+        </tr>
+        <tr>
+          <td>$\sin(\theta)$</td>  <td>$0$</td> <td>$\frac 1 2$</td>          <td>$\frac 1 {\sqrt 2}$</td>  <td>$\frac {\sqrt 3} 2$</td>  <td>$1$</td> 
+        </tr>
+        <tr>
+          <td>$\cos(\theta)$</td>  <td>$1$</td> <td>$\frac {\sqrt 3} 2$</td>  <td>$\frac 1 {\sqrt 2}$</td>  <td>$\frac 1 2$</td>          <td>$0$</td> 
+        </tr>
+        <tr>
+          <td>$\tan(\theta)$</td>  <td>$0$</td> <td>$\frac 1 {\sqrt 3}$</td>  <td>$1$</td>                 <td>$\sqrt 3$</td>            <td>$*$</td> 
+        </tr>
+
+      </table>
+    </p>
+
+    <h3>Reference Angles and the ATSC Method</h3>
+
    <h3>Sum and product formulas</h3>
    <a id="sum_and_product_trig_formulas"></a>
     <p style="align:left;">
@@ -243,7 +322,7 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
        $$\frac{\sin(a)}{\cos(a)} = \tan(a)$$
        $$\sin^2 (\theta)+\cos^2 (\theta)=1$$
        $$\tan^2 (\theta)+1=\sec^2 (\theta)$$
-       $$\cot^2 (\theta)+1=csc^2 (\theta)$$
+       $$\cot^2 (\theta)+1=\csc^2 (\theta)$$
     </p>
     <h3>Sum or Difference of Two Angles</h3>
     <p>
@@ -260,13 +339,14 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
        $$\tan(2\theta)=\frac{2\tan(\theta)}{1-\tan^2(\theta)}$$
     </p>
 
-    <h3>A Nice GIF</h3>
+    <h3>A Nice GIF Relating Sin And Cos</h3>
     <p>
       <img src="https://i.imgur.com/iFctMlX.gif" alt="Animation of trig functions"/>
     </p>
     <p>
       Found the above <a href="https://imgur.com/gallery/iFctMlX" target="_blank">here</a>.
     </p>
+
  </div>
 
     <h2>Logarithms</h2>
