@@ -1,0 +1,135 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>Wrapping System Calls | JEHTech</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">Wrapping System Calls</h1>
+<div style="padding-right:10px;">
+
+<h2>Page Contents</h2>
+<div id="page_contents">
+</div>
+
+<h2>References</h2>
+<div>
+    <ul>
+        <li><a href="ftp://ftp.gnu.org/old-gnu/Manuals/ld-2.9.1/html_node/ld_3.html" target="_blank">GCC Linker Command Line Options</a>.
+        </li>
+    </ul>
+</div>
+
+<h2>Why Wrap System Calls?</h2>
+<div>
+    <p>
+        The main reason I like to do this is to check error handling in my code. I will wrap system functions so that
+        I can simulate various possible errors that may occur and check that these are gracefully.
+    </p>
+    <p>
+        For example, lets say some resources have been allocated and then a system call fails. Have I cleaned up 
+        correctly? Below I offet a contrived example...
+    </p>
+    <pre class="prettyprint linenums">char *some_function() {
+    char *buffer = malloc(...);
+    if (!buffer) {
+        // handle error
+    }
+
+    // ...
+    // ... Do lots of work and ALLOCATE MORE RESOURCES
+    // ...
+
+    FILE *fh = fopen(...)
+    if (!fh) {
+        free(buffer);
+        buffer = NULL;
+    }
+
+    // ...
+    // ...
+
+    return buffer;
+}</pre>
+    <p>
+        If, in the snippet above, <code>fopen()</code> fails, I should free the <code>buffer</code>. I can force the
+        function to fail by wrapping it with my own function that will return <code>NULL</code> and set some desired
+        <code>errno</code> and then check whether the function returns <code>NULL</code>. Note, for memory leak detection
+        Valgrind or Dr. Memory would be the prefered options - this just checks the function logic flow.
+    </p>
+
+</div>
+
+<h2>How To Wrap System Calls</h2>
+<p>
+    The GCC linker allows symbols to be linked to wrapper functions when the symbol in a translation unit is undefined.
+    What this means is that when you compile your <code>.c</code> into a <code>.o</code> and the object file
+    references <code>fopen()</code>, the symbol before linkage will be undefined. It is the linker's job to link this
+    to the actual <code>fopen()</code> function. So, what the linker can do is link this to some wrapper function that
+    you specify.
+</p>
+<p>
+    Lets say I write a test file and want to wrap <code>fopen()</code> to test the above function, which I helpfully
+    called <code>some_function()</code>. I would write the following in my test file:
+</p>
+<pre class="prettyprint linenums">FILE *fh <b>__wrap_</b>fopen(...)
+{
+    errno = -E_SOME_CODE;
+    return NULL;
+}
+</pre>
+<p>
+    And in my makefile I would write:
+</p>
+<pre class="prettyprint linenums">my_test: $(TEST_OBJS)
+    $(LINK.cpp) $^ $(LOADLIBES) $(LDLIBS) -o $@ <b>-Wl,--wrap=fopen</b></pre>
+<p>
+    Maybe I only want <code>fopen()</code> to fail at certain points in my test. Then in my test file I would write:
+</p>
+
+<pre class="prettyprint linenums">
+static bool some_flag = false;
+
+FILE *fh <b>__wrap_</b>fopen(...)
+{
+    if (some_flag) {
+        errno = -E_SOME_CODE;
+        return NULL;
+    }
+    else {
+        return <b>__real_</b>fopen(...);
+    }
+}
+
+void test_some_feature()
+{
+    some_function();   // My fopen wrap should work
+    some_flag = true;
+    some_function();   // Now I know my fopen wrap will fail and I can test condition is handled
+}</pre>
+
+<p>
+    Using this strategy I can excercise some difficult-to-test paths through my code.
+</p>
+
+</div> <!-- END H1 padding div -->
+</div>
+</body>
+</html>
+
+
