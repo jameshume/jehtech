@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLHierarchy</id>
+    <coordinates>
+      <x>160</x>
+      <y>280</y>
+      <w>270</w>
+      <h>400</h>
+    </coordinates>
+    <panel_attributes>type=Package
+/
+	common
+	dir_A
+		file_A.1 (V2)
+		file_A.2 (V2)
+		...
+		external_A
+			file_EA.1 (V2)
+			file_EA.2 (V2)
+			...
+		...
+	...</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>370</x>
+      <y>390</y>
+      <w>370</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>customelement=
+// Parameters drawLine(x1, y1, x2, y2)
+drawLine(10, 10, 10, height-10) // left edge
+drawLine(10, 10, width-25, 10) // top long edge
+drawLine(10, height-10, width-25, height-10) // bottom long edge
+
+drawLine(width-25,0,width-25,10)  // upper arrow lip
+drawLine(width-25,height-10,width-25,height) // lower arrow lip
+
+drawLine(width-25,0,width-10,height/2)  // upper diag
+drawLine(width-25,height,width-10,height/2) // lower diag
+bg=white
+layer=1
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>100</x>
+      <y>320</y>
+      <w>180</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+lw=2</panel_attributes>
+    <additional_attributes>120.0;10.0;10.0;70.0;10.0;140.0;160.0;170.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>950</x>
+      <y>480</y>
+      <w>50</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>fontsize=100
+}</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>1000</x>
+      <y>410</y>
+      <w>270</w>
+      <h>270</h>
+    </coordinates>
+    <panel_attributes>*The merge will NOT update externals!*
+
+So here, the checkout of dir_A will
+not receive the updates to
+external_A. For this to occur, the
+directory that external_A "references"
+must be merged "manually".
+
+This happens because the dev repo has
+not been checked out from the root
+directory. Had it been checked out
+from the root directory, this would
+not have been a problem as the dir
+labelled common would also have been
+merged across (as it is not an
+external)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>740</x>
+      <y>540</y>
+      <w>30</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>*!*
+fontsize=35
+fg=yellow
+bg=red
+transparency=0</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>720</x>
+      <y>480</y>
+      <w>230</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>transparency=75
+bg=red
+fg=none</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>160</x>
+      <y>250</y>
+      <w>270</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Trunk</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>720</x>
+      <y>320</y>
+      <w>230</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Branch checked out from child dir</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLHierarchy</id>
+    <coordinates>
+      <x>720</x>
+      <y>350</y>
+      <w>230</w>
+      <h>260</h>
+    </coordinates>
+    <panel_attributes>type=Package
+dir_A
+	file_A.1 (V2)
+	file_A.2 (V2)
+	...
+	external_A
+		file_EA.1 (V1!!)
+		file_EA.2 (V1!!)
+		...
+layer=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>410</x>
+      <y>520</y>
+      <w>330</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>customelement=
+// Parameters drawLine(x1, y1, x2, y2)
+drawLine(10, 10, 10, height-10) // left edge
+drawLine(10, 10, width-25, 10) // top long edge
+drawLine(10, height-10, width-25, height-10) // bottom long edge
+
+drawLine(width-25,0,width-25,10)  // upper arrow lip
+drawLine(width-25,height-10,width-25,height) // lower arrow lip
+
+drawLine(width-25,0,width-10,height/2)  // upper diag
+drawLine(width-25,height,width-10,height/2) // lower diag
+bg=white
+layer=1
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>510</x>
+      <y>510</y>
+      <w>80</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lw=5
+fg=red</panel_attributes>
+    <additional_attributes>10.0;10.0;60.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>510</x>
+      <y>510</y>
+      <w>80</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lw=5
+fg=red</panel_attributes>
+    <additional_attributes>60.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+</diagram>

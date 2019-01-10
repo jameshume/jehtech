@@ -424,11 +424,17 @@ svn commit</pre>
 			<pre class="prettyprint">svn status | grep "^\s*[MAD]" | sed -e "s/^M\s*//g" | while read fn; do svn diff "$fn"; done</pre>
 			<p>
 				<b>WARNING</b>: Just like for diffs, you generally do not affect or get information on externals.
-				Any other command other than the <code>svn checkout</code>, <code>svn update</code>, <code>svn switch</code>, and <code>svn status</code> commands, will usually skip externals.
+				Any other command other than the <code>svn checkout</code>, <code>svn update</code>, <code>svn switch</code>, and <code>svn status</code> commands, will usually skip externals. This means that <b>when you merge from one branch to another, externals are <em>not</em> merged! You have to do
+				these seperately!</b>
 			</p>
 			<p>
-				Note this means that when you merge from one branch to another, externals are <em>not</em> merged! You have to do
-				these seperately.
+				This can lead to problems if, for example, you haven't checked out your development branch from the root (perhaps its a massive repo and you didn't want to check it all out). This is shown below and assumes the externals are relative paths inside the one repo that do not speciify specific revisions.
+			</p>
+			<p>
+				<img src="##IMG_DIR##/svn_merge_externals.png" alt="SVN merging a repo with externals"/>
+			</p>
+			<p>
+				The solution would be to checkout the development branch at its root, rather than a subdirectory, as shown above. However, if the real repo is really massive you might not want to do that do a <a href="#sparse-checkout">sparse checkout</a> with only the modified externals will do.
 			</p>
 			<p>
 				To quickly see all the externals in a repo you could try something like the following:
@@ -453,8 +459,12 @@ svn commit</pre>
 			<pre class="linenums prettyprint">svn relocate FROM-PREFIX TO-PREFIX</pre>
 		</div>
 
+		<a id="sparse-checkout"></a>
 		<h2>Sparse Checkouts</h2>
 		<div>
+			<p>
+				See <a href="http://svnbook.red-bean.com/en/1.8/svn.advanced.sparsedirs.html" target="_blank">docs</a>.
+			</p>
 			<p>
 				When dealing with really large repositories, you may not need to check out the <i>entire</i> repository. If this is the
 				case you can use a &quot;sparse&quot; checkout. To do this type:
@@ -469,11 +479,27 @@ svn commit</pre>
 				For directories that you need, you can then change into them (maybe applying the sparse checkout recursively to selctively get subdirectories), and type:
 			</p>
 			<pre class="prettyprint linenums">svn update --set-depth=infinity</pre>
+			<p>
+				Other targets of use:
+			</p>
+			<blockquote>
+				<p><code>--depth empty</code><br/>
+				   &nbsp;&nbsp;&nbsp;Include only the immediate target of the operation, not any of its file or directory children.</p>
+				<p><code>--depth files</code><br/>
+				   &nbsp;&nbsp;&nbsp;Include the immediate target of the operation and any of its immediate file children.</p>
+				<p><code>--depth immediates</code><br/>
+				   &nbsp;&nbsp;&nbsp;Include the immediate target of the operation and any of its immediate file or directory children. The directory children will themselves be empty.</p>
+				<p><code>--depth infinity</code><br/>
+				   &nbsp;&nbsp;&nbsp;Include the immediate target, its file and directory children, its children's children, and so on to full recursion.</p>
+				 <footer>-- SVN manual</footer>
+			</blockquote>
+			<p>
+			</p>
 		</div>
 
 		<h2>Misc</h2>
 		<div>
-			<h3>Generate A Patch File</h3>
+			<h3>Generate And Restore A Patch File</h3>
 			<p>
 				Useful when uploading diffs to ReviewBoard for example. Use the following:
 			</p>
@@ -487,6 +513,11 @@ svn commit</pre>
 				might then have to edit the resulting patch file to replace the text <tt>(nonexistent)</tt>
 				with <tt>(revision 0)</tt>).
 			</p>
+			<p>
+				To restore a patch do:
+			</p>
+			<pre class="prettyprint linenums">patch &lt; patch.diff</pre>
+			<p></p>
 
 			<h3>Check Your SSH Connection</h3>
 			<p>
