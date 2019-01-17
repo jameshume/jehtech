@@ -53,6 +53,80 @@
     <pre>http://www.agileadvice.com/2015/04/15/referenceinformation/summary-of-user-stories-the-three-cs-and-invest/</pre>
 </div>
 
+<h2>S.O.L.I.D</h2>
+<div>
+	<h3>References</h3>
+	<ul>
+		<li>Clean Architecture, Robert C. Martin,</li>
+		<li><a href="https://dzone.com/articles/solid-grasp-and-other-basic-principles-of-object-o" target="_blank">SOLID, GRASP, and Other Basic Principles of Object-Oriented Design</a>,  Muhammad Umair </li>
+		<li>Wikipedia (of course!)</li>
+	</ul>
+
+	<h3>Intro</h3>
+	<p>
+		These design priciples help make software more understandable, flexible and maintainable: they tell us how
+		to arrange the components of our programs.
+	</p>
+	<ol>
+		<li><b><u>S</u></b>ingle Responsibility Principle (SRP)</li>
+		<li><b><u>O</u></b>pen/Closed Principle (OCP)</li>
+		<li><b><u>L</u></b>iskov Substitution Principle (LSP)</li>
+		<li><b><u>I</u></b>nterface Segregation Principle (ISP)</li>
+		<li><b><u>D</u></b>ependency Inversion (DI)</li>
+	</ol>
+
+	<h3>Single Responsibility (SRP)</h3>
+	<p>Rob martin, in his book "Clean Architecture" says:</p>
+	<p>
+		<q>
+			A module should be responsible to one, and only one, actor
+		</q>.
+	</p>
+	<p>
+		For example, if a module <code>register</code> is used by a <code>student</code> and <code>teacher</code>, then it
+		is responsible to more than one actor.
+	</p>
+	<p>
+		Such modules may suffer from,
+	</p>
+	<ol>
+		<li><p>Accidental dependency:</p>
+			<p>This can occur when common code is shared by two actors. If the code is change because one actor needs
+				some feature, it may break it for the other actor. 
+			</p>
+		</li>
+		<li><p>Merges:</p>
+			<p>Two or more developers make changes to the code on behalf of separate actors and the requirements either
+				clash or modify the same code in subtly different ways.
+			</p>
+		</li>
+	</ol>
+	<p>
+		The solution is to always <em>separate code that supports different actors</em>. To accomplish this, use the
+		<em>facade pattern</em>. In our example, the <code>classroom</code> object would be a facade for two objects,
+		one which implements the functionality required by a <code>student</code> and the other impementing the functionality
+		required by a <code>tracher</code>.
+	</p>
+	
+	<h3>Open/Closed Principle (OCP)</h3>
+	<p>
+		<q>A software artificat should be open for extension but closed for modification</q>.
+	</p>
+	<p>
+		Why? We want to be be able to upgrade or otherwise extend our project but without having to incur the risk
+		of changing whats there already and presumably already mature and tested!
+	</p>
+	
+	<h3>Liskov Substitution Principle (LSP)</h3>
+	<p></p>
+	
+	<h3>Interface Segration Principle (ISP)</h3>
+	<p></p>
+	
+	<h3>Dependency Inversion</h3>
+	<p></p>
+</div>
+
 <h2>Code Quality</h2>
 <div>
 	<p>Spell check comments: <a href="https://github.com/Jason3S/cspell" target="_blank">CSpell</ahref="https:> (requires NodeJS)
