@@ -53,6 +53,67 @@
     <pre>http://www.agileadvice.com/2015/04/15/referenceinformation/summary-of-user-stories-the-three-cs-and-invest/</pre>
 </div>
 
+<h2>Ready To Start / Correct Completion</h2>
+<h3>Definition Of Ready</h3>
+<ul>
+	<li>Does it have clear acceptance criteria?</li>
+	<li>Is the work item specific/small enough - can it be broken down further</li>
+	<li>Is the work item independent? If not identify criticla path.</li>
+	<li>Is it testable?</li>
+	<li>Have test cases been defined?</li>
+	<li>Are the requirements understood and linked to the tasks?</li>
+	<li>Have tasks been estimated></li>
+</ul>
+
+<h3>Definition Of Done</h3>
+<p>
+	Answers the question &quot;What does done mean?&quot;. In other words, how do we know when a task or story is absolutely complete?
+</p>
+<ul>
+ 	<li>Think about what you've done - why? is there a better way? how could it be improved?</li>
+	<li>Have you run a spell checked over it?</li>
+	<li>As const as possible?</li>
+	<li>Scope as small as possible?</li>
+	<li>Array bound checking?</li>
+	<li>Assumptions - Ass/u/me</li>
+	<li>Has all trailing whitespace been removed?</li>
+	<li>Are all function commented - decr, parms, return, pre, post etc?</li>
+	<li>Are all structures/classes data members commented?</li>
+	<li>Is code S.O.L.I.D?</li>
+	<li>Tests:
+		<ul>
+			<li>Have unit tests been written and passed?</li>
+			<li>At a minimum, does each public API have a test that exercises all input parameters and tests for appropriate output regardless of how "simple" the interface may appear?</li>
+			<li>Acceptance tests?</li>
+			<li>Functional tests?</li>
+		</ul>
+	</li>
+	<li>Non-Functional requirements met?</li>
+	<li>Have all acceptance criteria been met?</li>
+	<li>Has product owner accepted?</li>
+	<li>Have coverage statistics been generated? E.g. using gprof?</li>
+	<li>Has a linter such as FlexLint or CPPCheck been run over the code where appropriate?</li>
+	<li>Has Vera++ been run over the code where appropriate?</li>
+	<li>Have we completed CI tests for the new feature? Are they passing?</li>
+	<li>Has code been peer reviewed by at least on other engineer?</li>
+	<li>For Linux: Has coding style script been run over code?</li>
+	<li>For Linux: Has SMASH been run over code?</li>
+	<li>Has code been merged back to trunk?</li>
+</ul>
+
+<h3>Functional v.s. Non-Functional v.s. Acceptance</h3>
+<p>
+	To paraphrase the SO thread <a href="https://stackoverflow.com/a/3371165/1517244" target="_blank">Difference between acceptance test and functional test?</a>,
+	functional testing is <em>verification</em>, i.e. does it work correctly - did we build it right? Acceptance testing is a <em>validation</em> activity. Did we build the right thing?
+</p>
+<p>
+	Functional: Did we build it right? Verification: Did we build the right thing?
+</p>
+<p>
+	To paraphrase the SO thread <a href="https://stackoverflow.com/a/16476014/1517244" target="_blank">What is the difference between functional and non functional requirement?</a>:
+	<q>A functional requirement describes what a software system should do, while non-functional requirements place constraints on how the system will do so.</q>.
+</p>
+
 <h2>S.O.L.I.D</h2>
 <div>
 	<h3>References</h3>
