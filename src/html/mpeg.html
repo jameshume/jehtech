@@ -142,6 +142,7 @@
             <li>Color: http://poynton.ca/notes/colour_and_gamma/GammaFAQ.html#gamma</li>
             <li>Color: https://poynton.ca/PDFs/coloureq.pdf</li>
             <li>Color: https://help.prodicle.com/hc/en-us/articles/115015911188-Color-Space-and-Transfer-Function</li>
+            <li>https://www.fortinet.com/content/dam/fortinet/assets/white-papers/wp-ip-surveillance-camera.pdf</li>
         </ul>
     </div> <!-- H2 TODO intro -->
 
@@ -1350,10 +1351,21 @@ if (adaption_field_contains_pcr) {
     <h2>FFMPEG</h2>
     <div>
     	<p>
+    		See <a href="https://ffmpeg.org/ffmpeg.htm" target="_blank">the docs</a>!
+    	</p>
+        <h3>ffmpeg</h3>
+        <h4>Intro</h4>
+        <p>
+        	General command is:
+        </p>
+        <pre>ffmpeg [global_options] {[input_file_options] -i input_url} ... {[output_file_options] output_url} ...</pre>
+        <p>This is how options like <code>-f</code> can say that they force either the input or output file type: whether
+        	it forces input or output depends whether it appears before the <code>-i</code> or not.</p>
+    	<p>
     		Very useful is to use &quot;<code>-hide_banner</code>&quot; in command lines to get
     		rid of version info (quite large) in output. Note the UNDERSCORE (not hyphen).
     	</p>
-        <h3>ffmpeg</h3>
+        <h4>Extract Frames</h4>
         <p>
             To extract each frame of a video file as an individual picture run the following. FFMPEG parses the output
             (<code>printf</code>-like) string and understands from it what you are trying to do.
@@ -1398,11 +1410,15 @@ if (adaption_field_contains_pcr) {
         </p>
         <pre>ffmpeg -i &lt;your-input-file&gt; -map 0:2 &lt;name-of-output-file&gt;</pre>
         <p>
+        	The <code>-map</code> option is used for manual control of stream selection in each output file.
+        </p>
+        <p>
             <a href="https://ffmpeg.org/ffmpeg-filters.html#Filtering-Introduction" target="_blank">Filtering</a> is
             done via to <b><code>-vf</code></b> option. For example to output one image every I-frame:
         </p>
         <pre>ffmpeg -i input.flv -vf "<a href="https://ffmpeg.org/ffmpeg-filters.html#select_002c-aselect" target="_blank">select</a>='eq(pict_type,PICT_TYPE_I)'" -vsync vfr thumb%04d.png</pre>
 
+        <h4>Modify Bitrates</h4>
         <p>
         	One thing I wanted to do was to be able to artifically increase the bit depth of a WAV file. This doesn't get you better resolution note! You still have the original quantisation error from the lower bit depth. It just enabled me to compare it more easily with another WAV file of differing bit depth.
         </p>
@@ -1411,6 +1427,7 @@ if (adaption_field_contains_pcr) {
         	The parameter <tt>acodec</tt> sets the output audio codec to be used.
         </p>
 
+        <h4>Cut out sections</h4>
         <p>
         	To <b>cut out a section</b> of a video and drop audio, use the following:
         </p>
@@ -1420,6 +1437,7 @@ if (adaption_field_contains_pcr) {
 # -an - drop audio
 # -t 00:00:10 - Copy 10 seconds</pre>
 
+		<h4>Compression</h4>
         <p>
             To <b>compress</b> your video or <b>change its size</b> try the following:
         </p>
