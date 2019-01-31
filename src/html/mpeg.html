@@ -1116,6 +1116,7 @@ if (adaption_field_contains_pcr) {
 			<tt>temporal_reference</tt> tells the decoder where in this sequence the frame lies in terms of its <em>display</em> order.
 		</p>
 
+		<h3>Frame Types</h3>
         <p>
             There are three types of pictures that use different coding methods:
         </p>
@@ -1187,6 +1188,45 @@ if (adaption_field_contains_pcr) {
         </p>
         <p style="clear:both;">
         </p>
+        <p></p>
+        <h3>Groups Of Pictures (GPS) &amp; Coded Video Sequences (CVS)</h3>
+        <p>
+        	The definition of a GOP is easily found on Wikipedia and aplies mostly to H.264. Apparently it is replaced by CVS in H.265 <a href="https://www.researchgate.net/post/What_is_the_difference_between_Group_of_Pictures_GOP_and_video" target="_blank">[Ref]</a>.
+        </p>
+        <blockquote>
+        	<p>A group of pictures, or GOP structure, specifies the order in which intra- and inter-frames are arranged. The GOP is a collection of successive pictures within a coded video stream. Each coded video stream consists of successive GOPs, from which the visible frames are generated. Encountering a new GOP in a compressed video stream means that the decoder doesn't need any previous frames in order to decode the next ones, and allows fast seeking through the video. </p>
+        	<footer>-- <a href="https://en.wikipedia.org/wiki/Group_of_pictures" target="_blank">Wikipedia</a></footer>
+        </blockquote>
+        <p>
+        	Another nice definition is:
+        </p>
+        <blockquote>
+        	<p>
+        	The GOP is, as its name shows, a group of frames arranged in a specific order (I-frames, B-frames and P-frames in case of the H.264/AVC standard). The coded video stream is actually a succession of GOPs of a specific size (e.g 8 or 12 frames, which is set in the header of the standard).
+	        </p><p>
+				A GOP starts always with an I-frame (Intra coded frame or reference frame) also called "key frame". The size of the GOP is the distance between two consecutive I-frames (e.g IBBPBBPBBPBBI means that the size of the GOP is 12).
+			</p><p>
+				To extract GOP from a coded video, you should look at the ffmpeg documentation. One solution could be:
+			</p>
+			<pre>ffmpeg -i INPUT.mp4 -acodec copy -f segment -vcodec copy -reset_timestamps 1 -map 0 OUTPUT%d.mp4</pre>
+			<p>[This] will split your input mp4 video into a series of numbered output files starting each with an I-frame. 
+			</p>
+			<footer>-- <a href="https://www.researchgate.net/post/What_is_the_difference_between_Group_of_Pictures_GOP_and_video" target="_blank">ResearchGate.net</a>.</footer>
+        </blockquote>
+        <p>
+        	I have some confusion over wheter CVS is new to H.265 as it appears in the book <a href="https://books.google.co.uk/books?id=9NWnBAAAQBAJ&pg=PA102&lpg=PA102&dq=gop+(group+of+pictures)+vs+cvs+(coded+video+sequence)&source=bl&ots=67Zty0IG2f&sig=ACfU3U0C8k3dOvHXy9ldeYAx8RYaXdfM2Q&hl=en&sa=X&ved=2ahUKEwjRnd7I4JfgAhXNRBUIHbcBB5wQ6AEwCHoECAYQAQ#v=onepage&q=gop%20(group%20of%20pictures)%20vs%20cvs%20(coded%20video%20sequence)&f=false" target=_blank">High Efficiency Video Coding"</a>, which is H.264. To quote:
+        </p>
+        <blockquote>
+        	<p>
+        		A video of a given number of picutures may be partitioned into one or multiple coded video sequences ... Each CVS can be decoded independently from over coded video sequences that may be contained in the same bitstream ...
+        	</p>
+        	<p>... The <i>coding structure</i> comprises a consecutive set of pictures in the sequence with a specific coding order and defined dependencies between the included pictures. The full video sequence may be represented by periodic reprition of this coding structure. The set of pictures that is comprised in the coding structure is ofter called a Group of Pictures (GOP)...
+        	</p>
+        	<footer>-- <a href="https://books.google.co.uk/books?id=9NWnBAAAQBAJ&pg=PA102&lpg=PA102&dq=gop+(group+of+pictures)+vs+cvs+(coded+video+sequence)&source=bl&ots=67Zty0IG2f&sig=ACfU3U0C8k3dOvHXy9ldeYAx8RYaXdfM2Q&hl=en&sa=X&ved=2ahUKEwjRnd7I4JfgAhXNRBUIHbcBB5wQ6AEwCHoECAYQAQ#v=onepage&q=gop%20(group%20of%20pictures)%20vs%20cvs%20(coded%20video%20sequence)&f=false" target=_blank">High Efficiency Video Coding: Coding Tools and Specification</a>,  Mathias Wien.
+        	</footer>
+        </blockquote>
+        <p></p>
+        
     </div> <!-- END H2 Video Streams -->
 
     <h2>SCTE-35: Advertisment insertion opportunities</h2>
