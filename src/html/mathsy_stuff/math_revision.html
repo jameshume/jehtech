@@ -550,8 +550,25 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
   </p>
   <p>
     How do we go from rectangular form ($z = a + bi$) to polar form ($(r, \theta)$)?
-    Recall $\tan(\theta) = \frac{a}{b}$ and that therefore $\theta = \tan^{-1}(\frac{a}{b})$.
+    Recall $\tan(\theta) = \frac{b}{a}$ and that therefore $\theta = \tan^{-1}(\frac{b}{a})$.
     We already know row to calculate $r$.
+  </p>
+  <p>
+    Lets do a quick example. Let $z = 2 + 3i$:
+
+    $$
+    \tan \theta = \frac{3}{2}
+    $$
+    
+    $$
+    \therefore \theta = 0.983\ \text{radians, rounded to 3dp}
+    $$
+    
+    $$
+    |z| = r = \sqrt{13}
+    $$
+
+    Thus, in polar form the complex number $z = 2 + 3i$ is expressed as $(\sqrt{13}, 0.983)$.
   </p>
   
   <h3>Exponential Form</h3>
@@ -588,6 +605,41 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
   <p>
     We can go back from exponential form to rectangular form using the same two
     formulas we saw above: $r\cos(\theta) = a$ and $r\sin(\theta) = b$.
+  </p>
+  <p>
+    Taking the example from the previous section where we saw that we could represent $z = 2 + 3i$
+    as $(\sqrt{13}, 0.983)$, we can now see this is easily converted to exponential form: $z = \sqrt{13}e^{0.983i}$.
+  </p>
+  <p>
+    And, if we wish to go back we can see that $a \approx \sqrt{13}cos(0.983) \approx 2$ (approximately because the 0.983 value is rounded).
+  </p>
+  <p>
+    The exponential form is particularly useful in subjects like DSP for doing things like changing a signal's phase, which ends up just being a multiplication like this:
+
+    $$
+    z' = ze^{j\alpha}
+    $$
+
+    The number $z'$ is $z$ rotated anticlockwise by $\alpha$ radians!
+  </p>
+  <p>
+    To explain a little more clearly, a discrete complex exponential is generally represented as:
+    $$
+      A[\cos(\omega n +\theta) + j\sin(\omega n + \theta)] = Ae^{j\omega n + \theta}
+    $$
+    Where $\omega$ is the angular frequency is radians per sample period, $A$ is the amplitude and $\theta$ is the initial phase of the signal in radians. If we had to do a phase shift of the signal we'd either have to remember a whole load of trig identities or use the complex exponetial form, which makes life easier...
+  </p>
+  <p>
+    We can see this very simply by noting the following:
+
+    $$
+    \begin{align}
+      \cos(\omega n + \theta) &= \mathscr{R}\{e^{j(\omega n + \theta)}\} \\
+                              &= \mathscr{R}\{e^{j\omega n} e^{j\theta}\}
+    \end{align}
+    $$
+
+    The phase shift has become just multiplication.
   </p>
 </div>
 

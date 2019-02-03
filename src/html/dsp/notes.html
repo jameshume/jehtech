@@ -33,7 +33,7 @@
 	<p>None</p>
 </div>
 
-<h2>Blah</h2>
+<h2>To Read</h2>
 <pre>
 https://www.maths.ox.ac.uk/system/files/attachments/complex%20%281%29.pdf
 https://ocw.mit.edu/courses/mathematics/18-03sc-differential-equations-fall-2011/unit-i-first-order-differential-equations/complex-arithmetic-and-exponentials/MIT18_03SCF11_s6_5text.pdf
@@ -49,7 +49,10 @@ https://math.stackexchange.com/questions/9416/extracting-exact-frequencies-from-
 https://dsp.stackexchange.com/questions/38577/fft-starting-at-zero
 </pre>
 
+<h2>An Intro To Digital Signals</h2>
 <div>
+
+<h3>What Is A Digital Signal?</h3>
 <p>
 
 <div style="float: right;">
@@ -79,8 +82,7 @@ pl.show()
 
 <p>
 	Analogue and digital signals can carry the same information under certain conditions. Answered by
-	Harry Nyquist and Claude Shannon. Under appropriate &quot;slowness&quot; conditions for $x(t)$ we
-	have the Sampling Theorem:
+	Harry Nyquist and Claude Shannon. When the sampling frequency is at least double the maximum frequency in the signal being sampled, the sampling theoroem holds:
 
 	$$
 	x(t) = \sum_{n=-\infty}^{\infty} x[n] \mathrm{sinc}\left(\frac{t - nT_s}{T_s}\right)
@@ -123,23 +125,109 @@ pl.show()
 	<li>finite support - infinite length with on a finite number of non zero samples. Eg unit step.</li>
 </ul>
 <p>
-	Elementary operations include scaling, sum, product. These can be applied to any discrete signal.
+	<img src="##IMG_DIR##/signal_classes.png"/>
+</p>
+<h3>Elementary Operations On Digital Signals</h3>
+<p>
+	Elementary operations include scaling, sum, product and shift. These can be applied to any discrete signal.
+</p>
+<ul>
+	<li>Scale: $y[n] = \alpha x[n],\ \alpha \in \mathbb{C}$.</li>
+	<li>Sum: $y[n] = x[n] + z[n]$.</li>
+	<li>Product: $y[n] = x[n] \cdot z[n]$.</li>
+	<li>Shift: $y[n] = x[n - k],\ k \in \mathbb{Z}$.</li>
+</ul>
+<p>
 	Shift-by-k can be applied to infinite signals, but when applying to discrete time signals we need
 	to state what happens when we go beyond the index range N, i.e., how we embed it into an
 	infinite length sequence. Can embed into a finite-support sequence by putting zeros on the
 	left and right. Or we could use a periodic extension, whereby the shift becomes circular.
 	<em>The periodic extension is the natural way to interpret the shift of a finite-length signal</em>.
 </p>
+<h3>Energy And Power</h3>
 <p>
 	Energy of signal defined by the following.
 
-	$$E_x = \sum_{n = -\infty}^{\infty} |x[n]|^2$$
+	$$
+	E_x = \sum_{n = -\infty}^{\infty} |x[n]|^2
+	$$
 </p>
 <p>
 	Power is the rate of energy production defined as follows.
-	$$P_x = \lim_{N\to\infty} \frac{1}{2N+1} \sum_{n=-N}^{N} |x[n]|^2$$
+	
+	$$
+	P_x = \lim_{N\to\infty} \frac{1}{2N+1} \sum_{n=-N}^{N} |x[n]|^2
+	$$
+	
+	It is like the overage energy over one period or energy per unit time.
 </p>
-<!-- https://www.khanacademy.org/math/precalculus/imaginary-and-complex-numbers -->
+<h3>Analog To Digital And Back Again</h3>
+<p>
+	Analog signals are sampled at regular intervals to produce digital signals. The time between samples is called the <em>sampling period</em> and is detoted $T_s$.
+</p>
+<P>
+	If $x_a(t)$ is our analog signal, that we sample with period $T_s$, then our sampled signal $x[n]$ is
+	related to the anlog by:
+	
+	$$
+	x[n] = x_a(nT_s)
+	$$
+
+	The sampling period is just $F_s = 1/T_s$.
+</P>
+<p>
+	There is thus the following relationship between discrete samples and anlalog time:
+	$$
+		t = nT_s = \frac{n}{F_s}
+	$$
+</p>
+<p>
+	Therefore, if a signal has a period of $M$ samples then this period is $MT_s$ seconds long, which means that the original signal in the analog world had a frequency of $f = \frac{1}{MT_s} \text{Hz}$.
+</p>
+<p>
+	For example, a typical sampling frequency for audio is $T_s = 48000\text{Hz}$ and therefore the sampling
+	period is $T_s \approx 20.8\mu\text{S}$.
+</p>
+<p>
+	In this case, if we know that there are 110 samples in the signal's period, i.e. $M=110$, we can say that the frequency of the signal is $f \approx 440Hz$.
+</p>
+
+<h3>Discrete Time Sinusoids Not Always Periodic</h3>
+<p>
+	A discrete complex exponential is only period if the frequency is a rational number (any number that's a fraction $p/q$ of two integers) of $2\pi$.
+</p>
+<p>
+	I.e., to be periodic the frequency must satisfy:
+	$$
+		\omega = \frac{M}{N}\cdot 2\pi\ m,n \in \mathbb{N}
+	$$
+
+	To be periodic recall that $x[n] = x[n + N]$. This means that:
+
+	$$
+	\begin{align}
+		e^{j(\omega n + \theta)} &= e^{j(w(n + N) + \theta)} \\
+		    &= e^{j(\omega n + \omega N + \theta)} \\
+		    &= e^{j\omega n} e^{j\omega N} e^{j\theta} \\
+		\therefore e^{j\omega n} e^{j\theta} = e^{j\omega n} e^{j\omega N} e^{j\theta}
+	\end{align}
+	$$
+
+	The only way this can be true is if $e^{j\omega N}$, which can only be true if $\omega N = 2M\pi$ and
+	thus if $\omega = 2\pi \frac{M}{N}$.
+</p>
+<p>
+	The <em>fundamental frequency</em> is the smallest value of N for which $x[n] = x[n + N]$ is true.
+</p>
+<h3>Aliasing</h3>
+<p>
+	Discrete time sinusoids whos frequencies are separated by an integer multiple of $2\pi$ are identical, as shown in the reasoning above.
+</p>
+<p>
+	This gives rise to something called <em>aliasing</em>, where any discrete time sinusoid has
+	multiple equivalends, or aliases, separated by integer multiples of 
+</p>
+
 </div>
 
 <h2>DFT/FFT</h2>
