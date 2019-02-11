@@ -1500,7 +1500,6 @@ ffprobe -show_packets -select_streams v -i &lt;your-input-file&gt;
 
 # Select only the video stream with index 1
 ffprobe -show_packets -select_streams v:1 -i &lt;your-input-file&gt;</pre>
-    </div>
     	<p>
     		Other useful flags include <code>-show_frames</code>, <code>-show_streams</code>,
     		<code>-show_programs</code>, <code>-count_frames</code>, <code>--count_packets</code>.
@@ -1518,6 +1517,40 @@ ffprobe -show_packets -select_streams v:1 -i &lt;your-input-file&gt;</pre>
             &quot;<code>id=...</code>&quot; string in the video stream info dump.
         </p>
         <pre>ffprobe -show_programs -select_streams v -i &lt;your-input-file&gt;</pre>
+    </div>
+    <h3>V4L Loopback</h3>
+    <div>
+        <p>
+        	If you want to catch an arbitrary video stream and make it appear as a V4L device, i.e., appear as <code>/dev/videoX</code> then
+        	you need V4L loopback. It is a kernel module that will create a V4L device that can be fed frame data from any source, which
+        	then can be read back out from the V4L device using the V4L API.
+        </p>
+        <p>
+        	To install V4LLoopback:
+        </p>
+        <pre class="prettyprint linenums">sudo apt install $(uname -r)
+sudo apt install libelf-dev
+
+git clone https://github.com/umlaeute/v4l2loopback.git
+cd v4l2loopback
+
+make
+sudo make install
+
+modprobe v4l2loopback [video_nr=...]</pre>
+		<p>
+			As an example, lets say you want to capture some arbitrary transport stream from a multicast channel and make
+			that stream appear through a V4L interface:
+		</p>
+		<pre class="prettyprint linenums">ffmpeg -i udp://239.0.aaa.bbb:port -vcodec rawvideo -pix_fmt yuv420p -threads 0 -f v4l2 /dev/videoX</pre>
+		<p>
+			You may wish to control the format and size of the V4L device's buffer. In this case you might do something like:
+		</p>
+		<pre class="prettyprint linenums">sudo v4l2loopback-ctl set-caps "video/x-raw,format=UYVY,width=1280,height=720" /dev/videoX</pre>
+		<p>
+			If you do this, you must change the transcode of the FFMEG instance feeding this V4L buffer.
+		</p>
+	</div>
 </div> <!-- END H1 padding div -->
 
 </div>
