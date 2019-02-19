@@ -85,6 +85,18 @@
 		on the server will not change. I.e. the side effect is the same whether 1 or many requests
 		are sent (there are no side effects).
 	</p>
+	<p>
+		From <a href="https://www.w3schools.com/tags/ref_httpmethods.asp" target="_blank">W3Schools</a>:
+	</p>
+	<ul>
+		<li>GET requests can be cached</li>
+		<li>GET requests remain in the browser history</li>
+		<li>GET requests can be bookmarked</li>
+		<li>GET requests should never be used when dealing with sensitive data</li>
+		<li>GET requests have length restrictions</li>
+		<li>GET requests is only used to request data (not modify)</li>
+	</ul>
+
 
 	<h3>POST</h3>
 	<blockquote>
@@ -119,8 +131,17 @@
 		identifies the <em>resource that will process/handle</em> the message contents. Because the
 		processing is whatever the server likes, POSTs cannot guarantee idempotency, because the
 		server can do whatever it likes with the message contents... all that was specified was the
-		resource that operates on the contents!
+		resource that operates on the contents! Think <code>x++</code> - this is not idempotent.
 	</p>
+	<p>
+		From <a href="https://www.w3schools.com/tags/ref_httpmethods.asp" target="_blank">W3Schools</a>:
+	</p>
+	<ul>
+		<li>POST requests are never cached</li>
+		<li>POST requests do not remain in the browser history</li>
+		<li>POST requests cannot be bookmarked</li>
+		<li>POST requests have no restrictions on data length</li>
+	</ul>
 
 	<h3>PUT</h3>
 	<blockquote>
@@ -131,7 +152,7 @@
 	<p>
 		In a PUT request, the URI identifies the <em>entity in the request</em>, i.e., the message
 		contents. This is why idempotency is required. If we PUT the same uniquely identified thing
-		many times, we should still have one uniquely identified thing!
+		many times, we should still have one uniquely identified thing! Think <code>x = 5</code> - this is idempotent.
 	</p>
 
 	<h3>DELETE</h3>
@@ -357,6 +378,13 @@ https://www.youtube.com/watch?v=fSoXIqBlg9M - antennas
 		An unsigned number ranges from $0$ to $2^{N-1}$, so $U(i, f)$ must range from
 		$0$ to $\frac{2^{N-1}}{2^f}$.
 	</p>
+</div>
+
+<h2>Conferences</h2>
+<div>
+	<pre>https://www.embedded-world.eu
+https://events.linuxfoundation.org/events
+http://2019.pyconuk.org/</pre>
 </div>
 
 	</div> <!-- END H1 padding div -->

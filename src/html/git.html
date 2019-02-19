@@ -59,6 +59,7 @@
 https://stackoverflow.com/questions/1889559/git-diff-to-ignore-m
 https://stackoverflow.com/questions/1822849/what-are-these-ms-that-keep-showing-up-in-my-files-in-emacs
 https://stackoverflow.com/questions/1510798/trying-to-fix-line-endings-with-git-filter-branch-but-having-no-luck/1511273
+https://stackoverflow.com/questions/10002239/difference-between-git-checkout-track-origin-branch-and-git-checkout-b-branch/10002469#10002469
 https://stackoverflow.com/questions/20106712/what-are-the-differences-between-git-remote-prune-git-prune-git-fetch-prune</pre>
 </div>
 
@@ -1524,13 +1525,21 @@ git push --recurse-submodules=on-demand</pre>
     <p></p>
 </div>
 
-<h2>Other stuff</h2>
+<h2>Remotes</h2>
 <div>
     <h3>Push To Remote With Different Name</h3>
     <pre>git push origin local-name:remote-name</pre>
 
-    <h3>To read</h3>
-    <pre>https://stackoverflow.com/questions/10002239/difference-between-git-checkout-track-origin-branch-and-git-checkout-b-branch/10002469#10002469</pre>
+    <h3>Syncing GitHub Forks</h3>
+    <p>
+        Read <a href="https://help.github.com/articles/syncing-a-fork/#platform-linux" target="_blank">the docs</a>!
+    </p>
+    <pre class="prettyprint linenums">git remote add upstream https://github.com/ORIG_OWNER/ORIG_REPO.git # Specify a new remote upstream repository that will be synced with the fork.
+git fetch upstream        # Get the upstream fork
+git checkout master       # Checkout the branch you want to merge the upstream into
+git merge upstream/master # Merge locally
+git push                  # Push back to your remote</pre>
+    <p></p>
 </div>
 
 </div> <!-- END H1 Git Notes -->
