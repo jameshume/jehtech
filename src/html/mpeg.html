@@ -1530,6 +1530,10 @@ if (adaption_field_contains_pcr) {
         <p>The following copies one V4L2 source to two other V4L2 loopback devices...</p>
         <pre>ffmpeg -hide_banner -i /dev/video0 -c copy -f tee -map 0:v "[f=v4l2]/dev/video10|[f=v4l2]/dev/video11"</pre>
 
+        <h4>Discover and specify source formats</h4>
+        <pre>ffmpeg -f v4l2 -list_formats all -i /dev/videoX</pre>
+        <pre>ffmpeg -f v4l2 -input_format mjpeg -video_size=1920x1080 -i /dev/videoX ...</pre>
+
         <h3>ffprobe</h3>
         <p>
             To get information on your video file you can also use <a href="https://ffmpeg.org/ffprobe.html" target="_blank"><code>ffprobe</code></a>. To extract
@@ -1566,7 +1570,16 @@ ffprobe -show_packets -select_streams v:1 -i &lt;your-input-file&gt;</pre>
         <pre>ffprobe -show_programs -select_streams v -i &lt;your-input-file&gt;</pre>
     </div>
 
-    <h2>V4L Loopback</h2>
+    <h2>V2L2</h2>
+    <div>
+	    <pre>v4l2-ctl --list-framesizes=&lt;frame-type&gt;  # Get frame type from --list-formats
+             --list-formats[-ext]                  # Use to get frame types
+             --(get|set)-input
+             --list-inputs
+             --set-fmt-video</pre>
+	</div>
+
+    <h2>V4L2 Loopback</h2>
     <div>
         <p>
         	If you want to catch an arbitrary video stream and make it appear as a V4L device, i.e., appear as <code>/dev/videoX</code> then

@@ -1,0 +1,204 @@
+<map version="1.0.1">
+<!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
+<node COLOR="#000000" CREATED="1550652483189" ID="ID_814291116" MODIFIED="1550653835477" TEXT="USB">
+<font NAME="SansSerif" SIZE="20"/>
+<hook NAME="accessories/plugins/AutomaticLayout.properties"/>
+<node COLOR="#0033ff" CREATED="1550652844882" HGAP="8" ID="ID_163732878" MODIFIED="1550653885481" POSITION="left" TEXT="Host centric bus" VSHIFT="-27">
+<edge STYLE="sharp_bezier" WIDTH="8"/>
+<font NAME="SansSerif" SIZE="18"/>
+</node>
+<node COLOR="#0033ff" CREATED="1550652859696" HGAP="22" ID="ID_867446416" MODIFIED="1550653911558" POSITION="right" TEXT="Endpoints" VSHIFT="-76">
+<edge STYLE="sharp_bezier" WIDTH="8"/>
+<font NAME="SansSerif" SIZE="18"/>
+<node COLOR="#00b439" CREATED="1550652862289" ID="ID_194233379" MODIFIED="1550653835458" TEXT="Sources or sinks of data.">
+<edge STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="16"/>
+</node>
+<node COLOR="#00b439" CREATED="1550653084688" ID="ID_1897272574" MODIFIED="1550653835459" TEXT="Types">
+<edge STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="16"/>
+<node COLOR="#990000" CREATED="1550653089159" ID="ID_1063862174" MODIFIED="1550653835460" TEXT="Control Transfers">
+<font NAME="SansSerif" SIZE="14"/>
+<node COLOR="#111111" CREATED="1550653119589" ID="ID_1901416013" MODIFIED="1550653835460" TEXT="Command &amp; status operations"/>
+</node>
+<node COLOR="#990000" CREATED="1550653095711" ID="ID_1557092615" MODIFIED="1550653835460" TEXT="Interrupt Transfers">
+<font NAME="SansSerif" SIZE="14"/>
+<node COLOR="#111111" CREATED="1550653310040" ID="ID_1321021027" MODIFIED="1550653835460" TEXT="Host must poll device to receive interrupt!"/>
+<node COLOR="#111111" CREATED="1550653321863" ID="ID_1911841545" MODIFIED="1550653835460" TEXT="Guaranteed latency"/>
+<node COLOR="#111111" CREATED="1550653338509" ID="ID_1163366072" MODIFIED="1550653835461" TEXT="Error detection with retry"/>
+</node>
+<node COLOR="#990000" CREATED="1550653100694" ID="ID_1350048137" MODIFIED="1550653835461" TEXT="Isochonous Transfers">
+<font NAME="SansSerif" SIZE="14"/>
+<node COLOR="#111111" CREATED="1550653139378" ID="ID_1728854077" MODIFIED="1550653835461" TEXT="Continuous and periodic"/>
+<node COLOR="#111111" CREATED="1550653154729" ID="ID_1256281304" MODIFIED="1550653835461" TEXT="Time sensitive info"/>
+<node COLOR="#111111" CREATED="1550653163432" ID="ID_1793199105" MODIFIED="1550653835461" TEXT="Guaranteed access to USB bandwidth"/>
+<node COLOR="#111111" CREATED="1550653173382" ID="ID_549914939" MODIFIED="1550653835462" TEXT="Bounded latency"/>
+<node COLOR="#111111" CREATED="1550653189477" ID="ID_184984718" MODIFIED="1550653835462" TEXT="EP determines max data payload">
+<node COLOR="#111111" CREATED="1550653207843" ID="ID_89811756" MODIFIED="1550653835462" TEXT="&lt;= 1023 bytes"/>
+</node>
+<node COLOR="#111111" CREATED="1550653227081" ID="ID_448110590" MODIFIED="1550653835462" TEXT="Error detection (CRC)"/>
+</node>
+<node COLOR="#990000" CREATED="1550653107478" ID="ID_1475072307" MODIFIED="1550653835463" TEXT="Bulk Transfers">
+<font NAME="SansSerif" SIZE="14"/>
+<node COLOR="#111111" CREATED="1550653252831" ID="ID_620970505" MODIFIED="1550653835463" TEXT="Large bursty data"/>
+<node COLOR="#111111" CREATED="1550653264053" ID="ID_1955999838" MODIFIED="1550653835463" TEXT="Guaranteed delivery"/>
+<node COLOR="#111111" CREATED="1550653271277" ID="ID_1351162052" MODIFIED="1550653835463" TEXT="Error detection (CRC)"/>
+</node>
+</node>
+</node>
+<node COLOR="#0033ff" CREATED="1550652951334" HGAP="104" ID="ID_862104433" MODIFIED="1550653897168" POSITION="left" TEXT="Functions" VSHIFT="-36">
+<edge STYLE="sharp_bezier" WIDTH="8"/>
+<font NAME="SansSerif" SIZE="18"/>
+<node COLOR="#00b439" CREATED="1550652999209" ID="ID_1613276119" MODIFIED="1550653835465" TEXT="USB devices which provide a capability or function">
+<edge STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="16"/>
+</node>
+<node COLOR="#00b439" CREATED="1550653004009" ID="ID_1837186782" MODIFIED="1550653835466" TEXT="Eg. printer, scanner etc.">
+<edge STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="16"/>
+</node>
+<node COLOR="#00b439" CREATED="1550653023039" ID="ID_214671522" MODIFIED="1550653835467" TEXT="One function to many end points">
+<edge STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="16"/>
+</node>
+</node>
+<node COLOR="#0033ff" CREATED="1550653047707" HGAP="59" ID="ID_140339066" MODIFIED="1550653914126" POSITION="right" TEXT="Pipe" VSHIFT="-63">
+<edge STYLE="sharp_bezier" WIDTH="8"/>
+<font NAME="SansSerif" SIZE="18"/>
+<node COLOR="#00b439" CREATED="1550653050427" ID="ID_226576123" MODIFIED="1550653835468" TEXT="Logical connection between host and endpoint(s)">
+<edge STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="16"/>
+</node>
+</node>
+<node COLOR="#0033ff" CREATED="1550653355739" HGAP="77" ID="ID_205285389" MODIFIED="1550653895264" POSITION="left" TEXT="Descriptors" VSHIFT="-33">
+<edge STYLE="sharp_bezier" WIDTH="8"/>
+<font NAME="SansSerif" SIZE="18"/>
+<node COLOR="#00b439" CREATED="1550653358732" ID="ID_1684133286" MODIFIED="1550653835469" TEXT="Device">
+<edge STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="16"/>
+</node>
+<node COLOR="#00b439" CREATED="1550653362043" ID="ID_1909859307" MODIFIED="1550653835470" TEXT="Configuration">
+<edge STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="16"/>
+</node>
+<node COLOR="#00b439" CREATED="1550653365650" ID="ID_1584887397" MODIFIED="1550653835470" TEXT="Interface">
+<edge STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="16"/>
+</node>
+<node COLOR="#00b439" CREATED="1550653368698" ID="ID_1783726876" MODIFIED="1550653835471" TEXT="Endpoint">
+<edge STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="16"/>
+</node>
+<node COLOR="#00b439" CREATED="1550653374001" ID="ID_209517878" MODIFIED="1550653835472" TEXT="String">
+<edge STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="16"/>
+</node>
+</node>
+<node COLOR="#0033ff" CREATED="1550653439971" HGAP="41" ID="ID_696744433" MODIFIED="1550653917494" POSITION="right" TEXT="Frames" VSHIFT="6">
+<edge STYLE="sharp_bezier" WIDTH="8"/>
+<font NAME="SansSerif" SIZE="18"/>
+<node COLOR="#00b439" CREATED="1550653455890" ID="ID_219568308" MODIFIED="1550653835473" TEXT="Frame">
+<edge STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="16"/>
+<node COLOR="#990000" CREATED="1550653497477" ID="ID_1734200844" MODIFIED="1550653835473" TEXT="1 per millisecond">
+<font NAME="SansSerif" SIZE="14"/>
+</node>
+<node COLOR="#990000" CREATED="1550653577652" ID="ID_630750758" MODIFIED="1550653835474" TEXT="1 transfer per frame">
+<font NAME="SansSerif" SIZE="14"/>
+</node>
+</node>
+<node COLOR="#00b439" CREATED="1550653478134" ID="ID_1039818047" MODIFIED="1550653835474" TEXT="Microframe">
+<edge STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="16"/>
+<node COLOR="#990000" CREATED="1550653482183" ID="ID_1853755778" MODIFIED="1550653835475" TEXT="125us long">
+<font NAME="SansSerif" SIZE="14"/>
+</node>
+<node COLOR="#990000" CREATED="1550653488350" ID="ID_923731606" MODIFIED="1550653835476" TEXT="8 per millisecond">
+<font NAME="SansSerif" SIZE="14"/>
+</node>
+<node COLOR="#990000" CREATED="1550653558774" ID="ID_36073581" MODIFIED="1550653835477" TEXT="3 isochronous/interrupt transfers per microframe">
+<font NAME="SansSerif" SIZE="14"/>
+</node>
+</node>
+</node>
+<node COLOR="#0033ff" CREATED="1550653846873" HGAP="59" ID="ID_310582210" MODIFIED="1550653902975" POSITION="left" TEXT="Versions" VSHIFT="65">
+<edge STYLE="sharp_bezier" WIDTH="8"/>
+<font NAME="SansSerif" SIZE="18"/>
+<node COLOR="#00b439" CREATED="1550652562841" HGAP="31" ID="ID_628620022" MODIFIED="1550653905431" TEXT="2.0" VSHIFT="-51">
+<edge STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="16"/>
+<node COLOR="#990000" CREATED="1550652564825" ID="ID_1165695415" MODIFIED="1550653864246" TEXT="EHCI">
+<edge STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="14"/>
+<node COLOR="#111111" CREATED="1550652567833" ID="ID_380762684" MODIFIED="1550653864246" TEXT="Enhanced Host Controller Interface">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node COLOR="#111111" CREATED="1550652584390" ID="ID_1458469347" MODIFIED="1550653864246" TEXT="Intel, Compaq, Microsoft, ...">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+<node COLOR="#990000" CREATED="1550653681761" ID="ID_1038492313" MODIFIED="1550653864247" TEXT="High Speed @ 480 Mbps">
+<edge STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="14"/>
+</node>
+</node>
+<node COLOR="#00b439" CREATED="1550652492516" ID="ID_1661022124" MODIFIED="1550653871079" TEXT="1.1">
+<edge STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="16"/>
+<node COLOR="#990000" CREATED="1550652497529" ID="ID_453653558" MODIFIED="1550653871079" TEXT="UHCI">
+<edge STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="14"/>
+<node COLOR="#111111" CREATED="1550652503760" ID="ID_258009952" MODIFIED="1550653871079" TEXT="Universal Host Controller Interface">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node COLOR="#111111" CREATED="1550652511463" ID="ID_1150159846" MODIFIED="1550653871079" TEXT="Intel">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node COLOR="#111111" CREATED="1550652519742" ID="ID_1770244801" MODIFIED="1550653871080" TEXT="Burden on software">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+<node COLOR="#990000" CREATED="1550652524502" ID="ID_161026831" MODIFIED="1550653871080" TEXT="OHCI">
+<edge STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="14"/>
+<node COLOR="#111111" CREATED="1550652527797" ID="ID_516027959" MODIFIED="1550653871080" TEXT="Open Host Controller Interface">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node COLOR="#111111" CREATED="1550652535036" ID="ID_8387760" MODIFIED="1550653871081" TEXT="Compaq, Microsoft, ...">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node COLOR="#111111" CREATED="1550652550275" ID="ID_1358054232" MODIFIED="1550653871081" TEXT="Burden on hardware">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+<node COLOR="#990000" CREATED="1550653673075" ID="ID_1142062363" MODIFIED="1550653871081" TEXT="Full speed @ 12 Mbps">
+<edge STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="14"/>
+</node>
+<node COLOR="#990000" CREATED="1550653732781" ID="ID_1120703646" MODIFIED="1550653871082" TEXT=" Low Speed @ Max 1.5 Mbps">
+<edge STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="14"/>
+</node>
+</node>
+<node COLOR="#00b439" CREATED="1550652696666" HGAP="19" ID="ID_1119472198" MODIFIED="1550653908103" TEXT="3.x" VSHIFT="51">
+<edge STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="16"/>
+<node COLOR="#990000" CREATED="1550652699794" ID="ID_1782356983" MODIFIED="1550653874877" TEXT="Super Speed @ 5Gbits/s">
+<edge STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="14"/>
+</node>
+<node COLOR="#990000" CREATED="1550652741405" ID="ID_591845991" MODIFIED="1550653874878" TEXT="Super Speed+ @ 10 and 20 Gbits/s">
+<edge STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="14"/>
+</node>
+<node COLOR="#990000" CREATED="1550652798631" ID="ID_1362131900" MODIFIED="1550653874878" TEXT="xHCI">
+<edge STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="14"/>
+<node COLOR="#111111" CREATED="1550652805742" ID="ID_119259559" MODIFIED="1550653874878" TEXT="eXtensible Host Controller Interface">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</map>
