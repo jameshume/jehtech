@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html> 
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>USB | JEHTech</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">USB</h1>
+<div style="padding-right:10px;">
+
+<h2>Page Contents</h2>
+<div id="page_contents">
+</div>
+
+<p>
+	<img src="##IMG_DIR##/USB.png" alt="Mind map of USB info"/>
+</p>
+
+<h2>Transaction Limits</h2>
+<img src="##IMG_DIR##/usb-fullspeed-iso-tx-rates.png" alt="snapshot of USB 2.0 standard, table 5-4" style="float:left; margin:10px"/>
+<p>
+	To the left is a screenshot of "Table 5-4. Full-speed Isochonous Transaction Limits" from the USB 2.0 standard <a href="http://sdphca.ucsd.edu/Lab_Equip_Manuals/usb_20.pdf" target="_blank">[Ref]</a>.
+</p>
+<p>
+	To see how the limits are arrived at lets consider transfering the maximum isochronous packet size of 1023 bytes. Given the 9 bytes header we have a total of 1032 byes. At 12 Mbps, which is 1.5MBps, 1032 bytes takes 688uS. Thus in the 1 millisecond frame time allocated we can only do one such transfer. 312uS are not used, which is equivalent to 468 bytes.
+</p>
+<p>
+	The standard has similar tables for high speed and low speed transfers too...
+</p>
+
+
+</div> <!-- END H1 padding div -->
+</div>
+</body>
+</html>
+
+

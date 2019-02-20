@@ -238,6 +238,7 @@ try:
 		myftp.putFile(filename)
 
 	for filename in removedFiles:
+		print("local file {} looks likes its been deleted".format(filename))
 		assert(not os.path.isfile(filename))
 		destFilename = ConvertPcLocalToHostLocal(filename)
 		print("deleting {}".format(destFilename))
