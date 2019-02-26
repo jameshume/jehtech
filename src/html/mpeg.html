@@ -1446,7 +1446,8 @@ if (adaption_field_contains_pcr) {
         	it forces input or output depends whether it appears before the <code>-i</code> or not.</p>
     	<p>
     		Very useful is to use &quot;<code>-hide_banner</code>&quot; in command lines to get
-    		rid of version info (quite large) in output. Note the UNDERSCORE (not hyphen).
+    		rid of version info (quite large) in output. Note the UNDERSCORE (not hyphen). To make it super quiet 
+    		use the option <code>-loglevel panic</code> as the first command line argument.
     	</p>
         <h4>Extract Frames</h4>
         <p>
@@ -1530,9 +1531,19 @@ if (adaption_field_contains_pcr) {
         <p>The following copies one V4L2 source to two other V4L2 loopback devices...</p>
         <pre>ffmpeg -hide_banner -i /dev/video0 -c copy -f tee -map 0:v "[f=v4l2]/dev/video10|[f=v4l2]/dev/video11"</pre>
 
-        <h4>Discover and specify source formats</h4>
+        <h4>formats</h4>
+        <p>FFMPEG supports loads of Discover and specify source <a href="https://ffmpeg.org/ffmpeg-formats.html" target="_blank">formats</a>, and can
+        additionally tell you what formats your device supports...</p>
         <pre>ffmpeg -f v4l2 -list_formats all -i /dev/videoX</pre>
         <pre>ffmpeg -f v4l2 -input_format mjpeg -video_size=1920x1080 -i /dev/videoX ...</pre>
+        <p>To measure the bandwidth taken by a webcam at a desired frame size, for example:</p>
+        <pre>ffmpeg -loglevel panic -hide_banner -f v4l2 -input_format rawvideo -video_size 1920x1080 -i /dev/videoX -c:v copy -f rawvideo - | pv > /dev/null</pre>
+
+        <h4>Complex Filtering</h4>
+        <pre>https://stackoverflow.com/questions/35341451/how-to-duplicate-a-mpegts-stream-into-multiple-other-udp-streams-using-ffmpeg</pre>
+        <pre>https://ffmpeg.org/ffmpeg-filters.html#scale-1 and https://ffmpeg.org/ffmpeg-filters.html#Examples-93</pre>
+        <pre>https://trac.ffmpeg.org/wiki/FilteringGuide</pre>
+
 
         <h3>ffprobe</h3>
         <p>
@@ -1572,7 +1583,8 @@ ffprobe -show_packets -select_streams v:1 -i &lt;your-input-file&gt;</pre>
 
     <h2>V2L2</h2>
     <div>
-	    <pre>v4l2-ctl --list-framesizes=&lt;frame-type&gt;  # Get frame type from --list-formats
+    	<pre>v4l2-ctl --device=/dev/video0 --info</pre>
+	    <pre>v4l2-ctl -d /dev/videoX --list-framesizes=&lt;frame-type&gt;  # Get frame type from --list-formats
              --list-formats[-ext]                  # Use to get frame types
              --(get|set)-input
              --list-inputs

@@ -16,6 +16,10 @@ DEPLOYED_DIR = os.path.join('..','__deployed')
 FTP_ADDRESS="000kwjq.wcomhost.com"
 FTP_USER_ID="ftp3286307"
 
+forceUploadAllFiles = False
+if len(sys.argv) > 2 and sys.argv[2] == "--force":
+    forceUploadAllFiles = True
+
 def GenerateCheckSum(data):
 	return zlib.adler32(data) & 0xffffffff
 
@@ -41,7 +45,7 @@ for dirpath, dirnames, filenames in os.walk(DEPLOYED_DIR):
 			fileCRC[fullPath] = GenerateCheckSum(fh.read())
 print("Done\n")
 
-if os.path.isfile(DB_FILENAME):
+if (not forceUploadAllFiles) and os.path.isfile(DB_FILENAME):
 	# use the existing database to find out which files are new since the last upload, which
 	# have been deleted and which are just modified so only these are copied...
 	# The DB is just a dictionary with a key that is the full path to the file relative to

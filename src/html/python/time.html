@@ -37,6 +37,8 @@
    	   Julien Danjou.</li>
    <li><a href="http://lucumr.pocoo.org/2011/7/15/eppur-si-muove/" target="_blank">Dealing with Timezones in Python</a>, 
    	   Armin Ronacher.</li>
+   <li><a href="https://regebro.wordpress.com/2007/12/18/python-and-time-zones-fighting-the-beast/" target="_blank">Problems with Python and timezones</a>,
+   	   Lennart Regebro</li>
 </ul>
 </div>
 
@@ -81,6 +83,86 @@
 	</p>
 	<iframe width="560" height="315" src="https://www.youtube.com/embed/-5wpm-gesOY" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 	<p></p>
+</div>
+
+<h2>Time Standards</h2>
+<div>
+	<p>Note that these are NOT time zones!
+	</p>
+	<h3>Solar Time</h3>
+	<div>
+		<ul>
+			<li>Time set based on the local position of the sun.</li>
+			<li>E.g. sundial time.</li>
+			<li>Day lengths vary depending on season - effects accumulate.</li>
+		</ul>
+	</div>
+
+	<h3>UT1</h3>
+	<div>
+		<ul>
+			<li>Based on the Earth's rotation, from which the mean solar day is derived.</li>
+			<li>Modern continuation of GMT.</li>
+		</ul>
+	</div>
+
+	<h3>TAI</h3>
+	<div>
+		<ul>
+			<li>Atomic clock based standard based on the average of hundres of atmoic clocks throught the world.</li>
+			<li>Basis for UTC.</li>
+			<li>Never adjusted and always continuous. I.e., no leap seconds.</li>
+		</ul>
+	</div>
+
+	<h3>UTC</h3>
+	<div>
+		<ul>
+			<li>Based on TAI with leap seconds added to keep it within 0.9 seconds of UT1.</li>
+			<li>Modified to be related to UT1 using leap seconds. UTC ticks with the same frequency as TAI - very accurate and stable - but is phase aligned in jumps of leap-seconds to UT1</li>
+			<li>Related to UT1 so that the &quot;wall clock&quot; relates to the human day - i.e., when it is day and night.</li>
+			<li>Not continuous because of leap seconds.</li>
+		</ul>
+	</div>
+
+	<h3>Unix Epoch</h3>
+	<div>
+		<ul>
+			<li>A.k.a. just the &quot;Epoch&quot;.</li>
+			<li>Seconds elapsed since 00:00:00 UTC on January 1, 1970</li>
+		</ul>
+	</div>
+</div>
+
+<h2>Time Zones & Daylight Saving Hours</h2>
+<div>
+	<p>
+		The world uses UTC. By agreement we've all said we'll use UTC to agree on the same standard of time. The added complexity to the
+		mix is time zones. At a UTC time of X in some parts of the world it will be day and in others it will be night, so in regions
+		of the world the UTC time is offset so that 12pm is roughly what we would perceive as midday in terms of sun position.
+	</p>
+	<p>
+		For historical reasons UTC+0 is GMT - the mean solar time at the Royal Observatory in Greenwich. The following is an image
+		of the world timezones as <a href="https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/World_Time_Zones_Map.png/1920px-World_Time_Zones_Map.png" target="_blank">found on Wikipedia</a>.
+	</p>
+	<p>
+		<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/World_Time_Zones_Map.png/1920px-World_Time_Zones_Map.png" style="width:75%;"/>
+	</p>
+	<p>
+		From the above, we can see that if we lived in, for example, Malta, we would use UTC+1 as our time base. We can also
+		see that timezones are as much political as they are geographic.
+	</p>
+	<p>
+		To make life even more complicated there are daylight saving hours to consider. In countries where the potion of the dat
+		that is light moves depending on season an offset of +/- 1 hour (or fractional or multiple) can be applied to the time. This
+		is purely a human thing so that we get more of the &quot;day&quot; time in the light!
+	</p>
+	<p>
+		Figuring out your machine's local time zone can be <a href="https://regebro.wordpress.com/2008/05/13/thanks-for-the-testing-help-conclusions/" target="_blank">suprisingly difficult</a>. The same authot's first blog about the <a href="https://regebro.wordpress.com/2007/12/18/python-and-time-zones-fighting-the-beast/" target="_blank">problems with Python and timezones</a> is a good read too.
+	</p>
+	<p>
+		Of particular note is the <a href="https://en.wikipedia.org/wiki/Tz_database" target="_blanK">TZ Database</a>.
+	</p>
 </div>
 
 <h2>Using Dates &amp; Times in Python</h2>
@@ -158,6 +240,24 @@ datetime.datetime(2018, 3, 18, 12, 36, 52, 315868, tzinfo=&lt;UTC&gt;)</pre>
 '2018-03-19T07:53:48.225000+00:00'
 &gt;&gt;&gt; iso8601.parse_date(a)
 datetime.datetime(2018, 3, 19, 7, 53, 48, 225000, tzinfo=&lt;FixedOffset '+00:00' datetime.timedelta(0)&gt;)</pre>
+
+	<h3>Convert Local Time To UTC</h3>
+	<div>
+		<p>
+			Copied verbatim from this <a href="https://stackoverflow.com/a/79877/1517244" target="_blank">SO answer</a>.
+		</p>
+		<pre class="prettyprint linenums">import pytz, datetime
+local = pytz.timezone ("America/Los_Angeles") # See the <a href="https://en.wikipedia.org/wiki/Tz_database" target="_blanK">TZ Database</a>...
+naive = datetime.datetime.strptime ("2001-2-3 10:11:12", "%Y-%m-%d %H:%M:%S")
+local_dt = local.localize(naive, is_dst=None)
+utc_dt = local_dt.astimezone(pytz.utc)
+utc_dt.strftime ("%Y-%m-%d %H:%M:%S")</pre>
+	</div>
+
+	<h3>Convert DateTime To Epoch</h3>
+	<p>Summarised from <a href="https://stackoverflow.com/a/11743262/1517244" target="_blank">here</a>.
+	<pre class="prettyprint linenums">(datetime.datetime(year,month,day[,hours[,mins[,secs[,usecs[,tzinfo]]]]]) - datetime.datetime(1970,1,1)).total_seconds() # Py 2
+datetime.datetime(year,month,day[,hours[,mins[,secs[,usecs[,tzinfo]]]]]).strftime('%s') # Py 3</pre>
 <p></p>
 </div>
 
