@@ -239,7 +239,7 @@ def create_references(contents):
         line = line.strip()
 
         if end_refs.match(line) is not None:
-            conents[lineno] = "<\ol>"
+            conents[lineno] = "</ol>"
             end_found = True
             break
 
