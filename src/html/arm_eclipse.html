@@ -1,0 +1,243 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>Installing The Eclipse C/C++ IDE For ARM Development | JEHTech</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">Installing The Eclipse C/C++ IDE For ARM Development </h1>
+<div style="padding-right:10px;">
+
+<h2>Page Contents</h2>
+<div id="page_contents">
+</div>
+
+<h2>Installing The GNU ARM Embedded Toolchain</h2>
+<div>
+	<p>
+		We'll need a cross compiler to create our ARM apps and Eclipse will need to know where to find 
+		the compiler and its related tool chain utilities. The ARM website describes what the tool chain
+		is:
+	</p>
+	<blockquote>
+		<p>The GNU Arm Embedded toolchains are integrated and validated packages featuring the Arm Embedded GCC compiler, libraries and other GNU tools necessary for bare-metal software development on devices based on the Arm Cortex-M and Cortex-R processors.</p>
+		<footer>
+			-- <a href="https://developer.arm.com/open-source/gnu-toolchain/gnu-rm">GNU Arm Embedded Toolchain</a>
+		</footer>
+	</blockquote>
+	<p>
+		The tool chains includes the (cross) compiler, binutils, debugger and more! 
+	</p>
+	<p>
+		Visit the <a href="https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads" target="_blank">download page</a> and download the tool chain archive.
+	</p>
+	<p>
+		Extract the archive to a directory of your choosing and remember the path. For the purposes of the notes
+		on this page we will assume it has been extracted to the user-local directory <code>~/gcc-arm-none</code>.
+		We will need to tell Eclipse where we extracted the toolchain to later.
+	</p>
+</div>
+
+<h2>Installing Eclipse Plugins</h2>
+<div>
+	<h3>The Eclipse C/C++ Development Tools SDK</h3>
+	<div>
+		<p>
+			The Eclipse C/C++ Development Tools (CDT) run on the eclipse platform and add 
+			extra functionality that will help with developing C/C++ applications, including
+			things like syntax highlighting and code indexing. 
+		</p>
+		<blockquote>
+			<p>
+				The CDT Project provides a fully functional C and C++ Integrated Development Environment based on the Eclipse platform. Features include: support for project creation and managed build for various toolchains, standard make build, source navigation, various source knowledge tools, such as type hierarchy, call graph, include browser, macro definition browser, code editor with syntax highlighting, folding and hyperlink navigation, source code refactoring and code generation, visual debugging tools, including memory, registers, and disassembly viewers. 
+			</p>
+			<footer> -- <a href="https://www.eclipse.org/cdt/" target="_blank">Eclipse CDT (C/C++ Development Tooling)</a></footer>
+		</blockquote>
+		<p>
+			To install the CDT follow these steps:			
+		</p>
+		<ol>
+			<li>
+				<p>From the main Eclipse window menu bar select <code>Help &gt; Install New Software</code>:
+				</p>
+				<p><img src="##IMG_DIR##/eclipse_install_new_software.png" alt=""/>
+				</p>
+			</li>
+
+			<li>
+				<p>In the window that pops up click on the <code>Manage</code> button.
+				</p>
+				<p><img src="##IMG_DIR##/eclipse_manage_software_to_work_with.png" alt=""/>
+				</p>
+			</li>
+
+			<li>
+				<p>In the resulting pop-up select CDT and click <code>Apply and Close</code>
+				</p>
+				<p><img src="##IMG_DIR##/exclipse_work_with_cdt.png" alt=""/>
+				</p>
+			</li>
+
+			<li>
+				<p>You will return to the previous &quot;Available Software&quot; window. Drop the
+					&quot;work with&quot; list down and select CDT as shown.
+				</p>
+				<p><img src="##IMG_DIR##/eclipse_work_with_cdt_2.png" alt=""/>
+				</p>
+			</li>
+
+			<li>
+				<p>Select &quot;CDT Main Features&quot; and click <code>Next</code>.
+				</p>
+				<p><img src="##IMG_DIR##/eclipse_install_cdt_main_features.png" alt=""/>
+				</p>
+			</li>
+
+			<li><p>Click next through the remain screens accepting an license conditions.</p>
+			</li>
+			<li><p>At this point you must now restart Eclipse if not prompted to do so.</p>
+			</li>
+		</ol>
+	</div> <!-- END H3 -->
+
+	<h3>GNU ARM Plugin</h3>
+	<div>
+		<p>
+			This plugin extends the CDT plugin installed in the previous seciton by providing
+			a mechanism with which to use the GNU toolchain, which you installed in the first
+			section, through the Eclipse GUI.
+		</p>
+		<blockquote>
+			<p>The GNU MCU Eclipse plug-ins allow to create, build, debug and in general to manage ARM & RISC-V projects (executables and static/shared libraries, in both 32 and 64-bit versions) with the Eclipse framework...
+			</p>
+			<footer>-- <a href="https://gnu-mcu-eclipse.github.io/" target="_blank">GNU MCU Eclipse</a>.
+		</blockquote>
+		<p>
+			To install this plugin follow these steps:
+		</p>
+		<ol>
+			<li><p>From the main Eclipse menu select <code>Help &gt; Eclipse Marketplace</code>.</p>
+				<p><img src="##IMG_DIR##/eclipse_marketplace.png"/></p>
+			</li>
+
+			<li>
+				<p>In the pop-up window that appears type &quot;gnu arm eclipse&quot; in the
+					&quot;Find&quot; textbox and click on <code>Go</code> to kick off the search.
+					The first entry found should be as shown, &quot;GNU MCU Eclipse a.b.c&quot;. Click
+					on <code>install</code> and follows the steps.
+				<p><img src="##IMG_DIR##/eclipse_marketplace_gnu_arm_eclipse.png"/></p>
+				<p>At this point you must now restart Eclipse if not prompted to do so.</p>
+			</li>
+
+			<li><p>Once Eclipse has restarted, from the main window's menu select
+				<code>Help &gt; Install New Software</code>.</p>
+				<p><img src="##IMG_DIR##/eclipse_install_new_software.png" alt=""/>
+				</p>
+			</li>
+
+			<li>
+				<p>In the resulting window select to work with &quot;GNU MCE Eclipse.</p>
+				<p><img src="##IMG_DIR##/eclipse_work_with_gnu_mcu.png"/></p>
+			</li>
+
+			<li>
+				<p>Select &quot;GNU ARM &amp; RISC c/c++ Cross Development TOols&quot; and clicj <code>Next</code>, clicking through the installation screens and accepting agreements.</p>
+				<p><img src="##IMG_DIR##/eclipse_install_gnu_mce.png"/></p>
+				<p>At this point you must now restart Eclipse if not prompted to do so.</p>
+			</li>
+		</ol>
+	</div> <!-- END H3 -->
+</div> <!-- END H2 -->
+
+<h2>OpenOCD</h2>
+<div>
+	<h3>Installing OpenOCD</h3>
+	<div>
+		<p>Included on the devlopment boards I've been playing with is the <a href="https://www.st.com/en/development-tools/st-link.html" target="_blank">ST-LINK in-ciruit debugger and programmer</a>. To use
+			take advantage of this and use it with Eclipse we need to install OpenOCD, which
+			provides on-chip programming and debugging support.
+		</p>
+		<p>The best resource here is the <a href="https://sourceforge.net/p/openocd/code/ci/master/tree/README" target="_blank">OpenOCD README file</a>.
+		</p>
+		<p>To install the OpenOCD debugger:
+		</p>
+		<ol>
+			<li><p>Install the required libraries for ST-LINK debugging:</p>
+				<pre>sudo apt install libusb-1.0-0-dev</pre>
+			</li>
+			
+			<li><p>Download OpenOCD <a href="https://sourceforge.net/projects/openocd/files/openocd/0.10.0/" target="_blank">from sourceforge</a>.</p>
+			</li>
+
+			<li><p>Extract the downloaded archive to a directory of your choice. From the command line change into
+			that directory and type:</p>
+			    <pre>./configure --enable-stlink # or use --help for help
+	make
+	sudo make install</pre>
+				<p>When I compiled I had build errors. They were due to warnings that were converted to
+					errors so I got fed up and disabled <code>-Werror</code> in the Makefile to
+					&quot;solve&quot; the issue... OpenOCD ran fine after :)
+				</p>
+			</li>
+			
+			<li><p>Now, to grant the correct USB permissions so that OpenOCD can be run using your user
+				account and not root, copy the UDEV rule <code>60-openocd.rules</code> to <code>/usr/local/share/openocd/contrib/99-openocd.rules</code>.</p>
+				<p>It creates the group <code>plugdev</code>. You may need to add yourself to this group
+					using <code>usermod -a -G plugdev</code>.
+				</p>
+			</li>
+		</ol>
+		<p>
+			Having installed OpenOCD you can run it from the command line by typing:
+		</p>
+		<pre>openocd -f /usr/local/share/openocd/scripts/board/your_boards_config_file.cfg</pre>
+		<p>
+			For the ST-Nucleo boards the file will be named something like <code>st_nucleo_fx.cfg</code>,
+			for example.
+		</p>
+		<p>
+			When you run the <code>openocd</code> command it starts a service that will communicate
+			with your target using JTAG. The service can be controlled by connecting to it using
+			telnet, for example, or GDB.
+		</p>
+		<p>
+			To connect to the service using telnet type <code>telnet localhost 4444</code>.
+		</p>
+	</div> <!-- END H3 -->
+
+	<h3>Add OpenOCD To The Eclipse IDE</h3>
+	<div>
+		<ol>
+			<li>
+				<p>From the main window menus select <code>Run &gt; External Tools &gt; External Tools Configuration...</code>. 
+				</p>
+				<p><img src="##IMG_DIR##/eclipse_config_external_tools_menu.png"/>
+				</p>
+			</li>
+		</ol>
+	</div> <!-- END H3 -->
+</div> <!-- END H2 -->
+
+<p></p>
+
+</div> <!-- END H1 padding div -->
+</div>
+</body>
+</html>
+
+
