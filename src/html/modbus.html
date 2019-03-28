@@ -1,0 +1,214 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>Modbus | JEHTech</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">Modbus</h1>
+<div style="padding-right:10px;">
+
+<h2>Page Contents</h2>
+<div id="page_contents">
+</div>
+
+<h2>References</h2>
+<div>
+	<ul>
+		<li><a href="http://www.modbus.org/docs/Modbus_Application_Protocol_V1_1b.pdf" target="_blank">MODBUS Application Protocol Specification V1.1b</a>.
+		</li>
+	</ul>
+</div> <!-- END H2: Page contents-->
+
+<h2>Brief Intro</h2>
+<div>
+<ul>
+	<li><p>Application layer messaging protocol,</p>
+	</li>
+	<li><p>Request / reply protocol, services specified by function codes,</p>
+	</li>
+	<li><p>Simple PDU (protocol data unit):</p>
+		<ul>
+			<li>1-byte function code, followed by data: <code>{Function Code | Data}</code></li>
+			<li>Built by client, sent to server,</li>
+			<li>Max size = 256 bytes - server address (1 byte) - CRC (2bytes) = 253 bytes,</li>
+			<li>Function tells server what action to perform,</li>
+			<li>Three types:
+				<ul>
+					<li>MODBUS request - <code>mb_req_pdu = {function_code, request_data}</code>,</li>
+					<li>MODBUS response - <code>mb_rsp_pdu = {function_code, response_data}</code> - Normal server response echoes function code back,</li>
+					<li>MODBUS exception response - <code>mb_excep_rsp_pdu = {exception-function_code, exception-code}</code> - Exception response echoes function code | 0x80. Exception code is one of:
+						<table>
+							<tr><td>0x01</td><td>Illegal function</td></tr>
+							<tr><td>0x02</td><td>Illegal data address</td></tr>
+							<tr><td>0x03</td><td>Illegal data value</td></tr>
+							<tr><td>0x04</td><td>Slave devuce failure</td></tr>
+							<tr><td>0x05</td><td>Acknowledge</td></tr>
+							<tr><td>0x06</td><td>Slave device busy</td></tr>
+							<tr><td>0x07</td><td>n/a</td></tr>
+							<tr><td>0x08</td><td>Memory parity error</td></tr>
+							<tr><td>0x09</td><td>n/a</td></tr>
+							<tr><td>0x0A</td><td>Gateway path unavailable</td></tr>
+							<tr><td>0x0B</td><td>Gateway target failed to respond</td></tr>
+						</table>
+					</li>
+				</ul>
+			</li>
+			<li>In PDU each data item address from 0 to 65535,</li>
+		</ul>
+	</li>
+	<li><p>ADU (application data unit):</p>
+		<ul>
+			<li>Wraps a PDU : <code>Additional address | PDU | Error check</code> = <code>Additional address | Function Code | Data | Error check</code>,</li>
+			<li>Adds an address prefix and a CRC suffix,</li>
+			<li>Lets MODBUS work on specific busses,</li>
+		</ul>
+	</li>
+	<li><p>Big endian,</p></li>
+	<li><p>Data model based on &quot;tables&quot;, which are essentially registers of which there ar 4 types:</p>
+		<ul>
+			<li>Discrete inputs - RO single bits,</li>
+			<li>Coils - RW single bits,</li>
+			<li>Input registers - RO 16-bit words,</li>
+			<li>Holding registers - RW 16-bit words,</li>
+		</ul>
+		<p>&quot;Tables&quot; can overlay eachother or not,</p>
+		<p>For each table, protocol allows individual selection of 65536 data items,</p>
+	</li>
+	<li><p>Function codes:</p>
+		<ul><li>Public:
+				<ul>
+					<li>Well defined and guaranteed unique,</li>
+					<li>Validated by MODBUS-IDA,</li>
+					<li>Conformance test available,</li>
+					<li>1 - 64</li>
+				</ul>
+			</li>
+			<li>User definded:
+				<ul>
+					<li>No guarantee of uniqueness,</li>
+					<li>65 - 72 or 100 to 110</li>
+				</ul>
+			</li>
+			<li>Reserved</li>
+		</ul>
+	</li>
+</ul>
+</div>
+
+<h2>Some Public 16-bit Access Tables</h2>
+<div>
+	<p>A summary of some of the most common 16-bit tables (read registers):
+	</p>
+	<table>
+		<tr>
+			<td>Read Holding Registers</td> <td>0x03</td> <td>
+			                                              <ul>
+			                                                  <li>Request:
+			                                                      <table><tr><td>Function code</td><td>1 byte</td><td>0x03</td></tr>
+			                                                             <tr><td>Start address</td><td>2 bytes</td><td></td></tr>
+			                                                             <tr><td>Num registers</td><td>2 bytes</td><td>0x0001 to 0x007D</td></tr>
+			                                                      </table>
+			                                                  </li>
+			                                                  <li>Response:
+			                                                      <table><tr><td>Function code</td><td>1 byte</td><td>0x03</td></tr>
+			                                                             <tr><td>Byte count</td><td>1 byte</td><td>2N</td></tr>
+			                                                             <tr><td>Register value</td><td>2N bytes</td><td></td></tr>
+			                                                      </table>
+			                                                  </li>
+			                                                  <li>RError:
+			                                                      <table><tr><td>Error code</td><td>1 byte</td><td>0x83</td></tr>
+			                                                             <tr><td>Exception code</td><td>1 byte</td><td>1, 2, 3 or 4</td></tr>
+			                                                      </table>
+			                                                  </li>
+
+			                                              </ul>
+			                                           </td>
+		</tr>
+		<tr>
+			<td>Read Input Register</td> <td>0x04</td> <td>
+			                                              <ul>
+			                                                  <li>Request:
+			                                                      <table><tr><td>Function code</td><td>1 byte</td><td>0x04</td></tr>
+			                                                             <tr><td>Start address</td><td>2 bytes</td><td></td></tr>
+			                                                             <tr><td>Num registers</td><td>2 bytes</td><td>0x0001 to 0x007D</td></tr>
+			                                                      </table>
+			                                                  </li>
+			                                                  <li>Response:
+			                                                      <table><tr><td>Function code</td><td>1 byte</td><td>0x04</td></tr>
+			                                                             <tr><td>Byte count</td><td>1 byte</td><td>2N</td></tr>
+			                                                             <tr><td>Input registers</td><td>2N bytes</td><td></td></tr>
+			                                                      </table>
+			                                                  </li>
+			                                                  <li>RError:
+			                                                      <table><tr><td>Error code</td><td>1 byte</td><td>0x84</td></tr>
+			                                                             <tr><td>Exception code</td><td>1 byte</td><td>1, 2, 3 or 4</td></tr>
+			                                                      </table>
+			                                                  </li>
+
+			                                              </ul>
+			                                           </td>
+		</tr>
+		<tr>
+			<td>Write Single Register</td> <td>0x06</td> <td>
+			                                              <ul>
+			                                                  <li>Request:
+			                                                      <table><tr><td>Function code</td><td>1 byte</td><td>0x06</td></tr>
+			                                                             <tr><td>Register address</td><td>2 bytes</td><td></td></tr>
+			                                                             <tr><td>Value</td><td>2 bytes</td><td></td></tr>
+			                                                      </table>
+			                                                  </li>
+			                                                  <li>Response:
+			                                                      <table><tr><td>Function code</td><td>1 byte</td><td>0x06</td></tr>
+			                                                             <tr><td>Register address</td><td>2 bytes</td><td></td></tr>
+			                                                             <tr><td>Value</td><td>2 bytes</td><td></td></tr>
+			                                                      </table>
+			                                                  </li>
+			                                                  <li>RError:
+			                                                      <table><tr><td>Error code</td><td>1 byte</td><td>0x86</td></tr>
+			                                                             <tr><td>Exception code</td><td>1 byte</td><td>1, 2, 3 or 4</td></tr>
+			                                                      </table>
+			                                                  </li>
+			                                              </ul>
+			                                           </td>
+		</tr>
+		<tr>
+			<td>Write Multiple Register</td> <td>0x16</td> <td></td>
+		</tr>
+		<tr>
+			<td>Read/Write Multiple Register</td> <td>0x23</td> <td></td>
+		</tr>
+		<tr>
+			<td>Mask Write Register</td> <td>0x22</td> <td></td>
+		</tr>
+		<tr>
+			<td>Read Exception Stats</td> <td>0x07</td> <td></td>
+		</tr>
+		<tr>
+			<td>Diagnostic</td> <td>0x08</td> <td>Subcodes 0x00-0x18, 0x20</td>
+		</tr>
+	</table>
+	<p></p>
+</div>
+
+</div> <!-- END H1 padding div -->
+</div>
+</body>
+</html>
+
+
