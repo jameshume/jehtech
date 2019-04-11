@@ -60,7 +60,17 @@ https://stackoverflow.com/questions/1889559/git-diff-to-ignore-m
 https://stackoverflow.com/questions/1822849/what-are-these-ms-that-keep-showing-up-in-my-files-in-emacs
 https://stackoverflow.com/questions/1510798/trying-to-fix-line-endings-with-git-filter-branch-but-having-no-luck/1511273
 https://stackoverflow.com/questions/10002239/difference-between-git-checkout-track-origin-branch-and-git-checkout-b-branch/10002469#10002469
-https://stackoverflow.com/questions/20106712/what-are-the-differences-between-git-remote-prune-git-prune-git-fetch-prune</pre>
+https://stackoverflow.com/questions/20106712/what-are-the-differences-between-git-remote-prune-git-prune-git-fetch-prune
+
+https://git-scm.com/docs/git-merge
+https://stackoverflow.com/questions/4693588/git-what-is-a-tracking-branch/4697054#4697054
+https://stackoverflow.com/questions/3471827/how-do-i-list-all-remote-branches-in-git-1-7
+https://medium.com/@zaran.56/how-to-recover-restore-deleted-git-branch-5a068c07bed2
+https://stackoverflow.com/questions/3640764/can-i-recover-a-branch-after-its-deletion-in-git
+https://stackoverflow.com/questions/5308816/how-to-use-git-merge-squash
+https://www.atlassian.com/git/tutorials/git-prune
+http://www.totallynota.ninja/2016/06/why-i-prefer-merging-over-rebasing-in.html
+</pre>
 </div>
 
 <h2>GitHub Related Sites</h2>
@@ -492,7 +502,7 @@ git commit --amend</pre>
     <pre>git diff: What you have changed but NOT staged
 git diff --staged: What will go into next commit
 git diff --cached: Synonym for --staged
-git difftool:      To use external diff tool</pre>
+git difftool -y [tool=(kdiff3|p4merge|...):      To use external diff tool</pre>
 
     <p>To view only the names of files changed between two commits:</p>
     <pre>git diff 99f6eae 0544f6a --name-only</pre>
@@ -504,6 +514,12 @@ diffend=0544f6a
 wanted=$(git diff $diffstart $diffend --name-only  | grep -v "\(xls\|tsv\)$")
 git diff $diffstart $diffend --full-index  -- $wanted</pre>
     <p></p>
+
+    <p>
+    	The <code>difftool</code> can be configured by setting the configuration variable <code>difftool.&lt;tool&gt;.path</code>. To set a default
+    	tool edit the file <code>~/.gitconfig</code> and in the <code>[diff]</code> section add or change the line <code>tool = your-tool</code>.
+    	For anything else out of the ordinay see <a href="https://stackoverflow.com/questions/255202/how-do-i-view-git-diff-output-with-my-preferred-diff-tool-viewer" target="_blank">this SO thread</a>.
+    </p>
 
     <h4>Diffing Between 2 Repos</h4>
     <p>
@@ -896,7 +912,20 @@ git branch -d new_feature</pre>
         rather than the many commits that may have been made in the development branch). This is
         why a lot of Git users prefer rebasing (see below).
     </p>
-    <h3>Rebasing</h3>
+
+    <h3>Merging With A Squash</h3>
+    <p>
+    	The <code>git merge</code> command has an option <code>--squash</code>.
+    </p>
+    <img style="float:left;" src="##IMG_DIR##/git_merge_squash.png" alt="Image describing the 'git merge --squash' command"/>
+    <p>
+    	You can see code that tests this out here - <a href="https://github.com/jameshume/bash-scripts/blob/master/test_git_squash_merge.sh" target="_blank">test_git_squash_merge.sh</a>.
+    </p>
+    <p>
+    	One can see that the squash-merge is a little bit like a rebase, except that the original branch is left alone. This has the advantage of not destorying your branch, in case you want to continue using it, or have done something wrong (and a rebase would have been harder to undo). Its basically a kinda-safer shortcut to rebasing and squashing your development branch onto the master.
+    </p>
+
+    <h3 style="clear:both;">Rebasing</h3>
     <p>The Git world offers something that CVS, SVN, Perforce etc users won't be as familiar
        with... rebasing. It gives you a cleaner (no merge commits polluting the project history)
        and a more linear project history by taking changes
@@ -1337,13 +1366,21 @@ The commit number</pre>
     <p>To check for white-space and tabs in indents:</p>
     <pre>git -c core.whitespace=tab-in-indent diff --check</pre>
 
-    <h3>Adding an Alias</h3>
+    <h3>Adding or Removing an Alias</h3>
     <p>This can be useful when you want to make a shorthand command for something
     you do frequently, or for long commands that are hard to remember.</p>
     <p>For instance, the white-space and tabs in indent check above can be reduced to:</p>
     <pre>git whitespace</pre>
     <p>By adding the alias:</p>
     <pre>git config --global alias.whitespace 'git -c core.whitespace=tab-in-indent diff --check'</pre>
+    <p>To remove an alias use:</p>
+    <pre>git config --global --unset alias.the-name-of-the-alias</pre>
+    <p></p>
+
+    <h3>Listing Available Aliases</h3>
+    <pre>git config --get-regexp "^alias\."
+git config --global alias.alias "config --get-regexp ^alias\." # Add an alias to check aliases :)
+    </pre>
 
     <h3>Useful Aliases</h3>
     <b>Whitespace Check: &quot;git whitespace&quot;</b>
