@@ -1,0 +1,21 @@
+An implementation may allocate any addressable storage unit large enough to hold a bit?eld. If enough space remains, a bit-?eld that immediately follows another bit-?eld in a structure shall be packed into adjacent bits of the same unit. If insuf?cient space remains, whether a bit-?eld that does not ?t is put into the next unit or overlaps adjacent units is implementation-de?ned. The order of allocation of bit-?elds within a unit (high-order to low-order or low-order to high-order) is implementation-de?ned. The alignment of the addressable storage unit is unspeci?ed.
+
+
+
+offsetof(type, member-designator)
+which expands to an integer constant expression that has type size_t, the value of which is the offset in bytes, to the structure member (designated by member-designator), from the beginning of its structure (designated by type). The type and member designator shall be such that given
+static type t;
+then the expression &(t.member-designator) evaluates to an address constant. (If the speci?ed member is a bit-?eld, the behavior is unde?ned.)
+
+
+
+The following are unspeci?ed:
+   - The alignment of the addressable storage unit allocated to hold a bit-?eld (6.7.2.1).
+   - The member designator parameter of an offsetof macro is an invalid right operand of the . operator for the type parameter, or designates a bit-?eld (7.17).
+
+
+J.3 Implementation-de?ned behavior
+— Whether a ‘‘plain’’ int bit-?eld is treated as a signed int bit-?eld or as an unsigned int bit-?eld (6.7.2, 6.7.2.1).
+— Allowable bit-?eld types other than _Bool, signed int, and unsigned int (6.7.2.1).
+— Whether a bit-?eld can straddle a storage-unit boundary (6.7.2.1).
+— The order of allocation of bit-?elds within a unit (6.7.2.1).

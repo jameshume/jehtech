@@ -453,9 +453,10 @@ git commit --amend</pre>
 
     <p><b>A Note About Reset:</b></p>
     <p>A <code>git reset</code> actually alters your history and can only work
-        backwards from the current commit. By altering the history you could
-        potentially loose history. Also once a change is pushed to a shared
-        repository, resetting the change afterwards can become troublesome!
+        backwards from the current commit. By altering the history <b>you could
+        potentially loose history</b>. Also once a change is pushed to a shared
+        repository, resetting the change afterwards can become troublesome! You
+        will also <b>loose all uncommitted changes</b>.
     </p>
     <blockquote>
         <p>If git revert is a &quot;safe&quot; way to undo changes, you can <b>think of git reset as the dangerous method</b>. When you undo with git reset(and the commits are no longer referenced by any ref or the reflog), there is no way to retrieve the original copy — <b>it is a permanent undo</b>. Care must be taken when using this tool, as it’s one of the only Git commands that <b>has the potential to lose your work</b>.</p>
@@ -599,6 +600,46 @@ git remote rm b</pre>
     </blockquote>
     <p></p>
 </div>
+
+<h2>Specifying Revisions</h2>
+<p>
+	Read <a href="schacon.github.io/git/git-rev-parse.html#_specifying_revisions" target="_blank">the Docs</a> :)
+</p>
+<h3>Immediate Parents</h3>
+<p>
+	You can iterate through immediate parents using the hat character (<code>^</code>) there <code>^n</code>
+	selects the n<sup>th</sup> immediate parent. Note that <code>&lt;rev&gt;^</code> is a shorthand for
+	<code>&lt;rev&gt;^1</code>.
+</p>
+<h3>Grand Parents</h3>
+<p>
+	The notation <code>~n</code> selects the n<sup>th</sup> generation grand-parent. For example,
+	<code>~1</code> selects the first parent, and <code>~2</code> selects the first grand-parent,
+	and <code>~3</code> selects the first great grand-parent
+</p>
+<h3>Parent v.s. Grand Parent Selection</h3>
+<p>Straight from <a href="schacon.github.io/git/git-rev-parse.html#_specifying_revisions" target="_blank">the Docs</a>:</p>
+<pre>G   H   I   J
+ \ /     \ /
+  D   E   F
+   \  |  / \
+    \ | /   |
+     \|/    |
+      B     C
+       \   /
+        \ /
+         A
+A =      = A^0
+B = A^   = A^1     = A~1
+C = A^2  = A^2
+D = A^^  = A^1^1   = A~2
+E = B^2  = A^^2
+F = B^3  = A^^3
+G = A^^^ = A^1^1^1 = A~3
+H = D^2  = B^^2    = A^^^2  = A~2^2
+I = F^   = B^3^    = A^^3^
+J = F^2  = B^3^2   = A^^3^2</pre>
+<p></p>
 
 <h2>Revert &amp; Reset</h2>
 <div>
@@ -1395,6 +1436,11 @@ git config --global alias.alias "config --get-regexp ^alias\." # Add an alias to
     <p>With colour <a href="https://coderwall.com/p/euwpig/a-better-git-log" target="_blank">[Ref]</a>...</p>
     <pre>git config --global alias.lg &quot;log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset' --abbrev-commit&quot;</pre>
 
+    <h3>Custome Commands</h3>
+    <p>When an alias isn't goot enough you can create an executable script called <code>git-command-name</code> and put
+    	it on your <code>PATH</code>. Then you can use the command <code>git command-name</code> to execute that script
+    	<a href="thediscoblog.com/blog/2014/03/29/custom-git-commands-in-3-steps/" target="_blank">[Ref]</a>.
+
     <h3>Logs</h3>
     <p>To see all the commits that have been for a specific branch that was branched off &quot;parent-branch-name&quot;:</p>
     <pre># From the branch that was branched from &quot;parent-branch-name&quot;
@@ -1408,6 +1454,12 @@ git log --no-merges parent-branch-name..
 
 <h2>Stashes</h2>
 <div>
+	<p>
+		Useful reads <a href="https://stackoverflow.com/a/20412685/1517244" target="_blank">here</a> and
+		<a href="https://stackoverflow.com/a/19003191/1517244" target="_blank">here</a> on SO.
+	</p>
+	<pre>https://stackoverflow.com/questions/1108853/recovering-added-file-after-doing-git-reset-hard-head/1109433#1109433
+https://stackoverflow.com/questions/89332/how-to-recover-a-dropped-stash-in-git</pre>
     <p>
         Stashes are for when you don't want to commit your current work, want
         to get on with something else, but don't, obviously, want to loose the
@@ -1420,14 +1472,29 @@ git log --no-merges parent-branch-name..
         stash to a remote.
     </p>
     <p>
+    	To stash uncommitted changes do <code>git stash save [stash-name]</code>. If you do not
+    	supply the optional stash name it gets an auto generated one. Even with a stash name you
+    	can only subsequently apply it using its index.
+    </p>
+    <p>
         <img src="##IMG_DIR##/git_stash.png" alt="Picture describing the Git stash processes/usage"/>
     </p>
     <p>
         Interestingly you can do more than one stash and then re-apply them
-        seperately. Use <code>stash list</code> to see a list of stashes. To
+        seperately - the stash command creates a stack of stashes.
+        Use <code>stash list</code> to see a list of stashes. To
         apply a specific stash use something like <code>git stash apply stash@{1}</code>,
         which would re-apply the penultimate stash (the smaller the number
         the more recent the stash).
+    </p>
+    <p>
+    	It is better to <b>prefer <code>apply</code> over <code>pop</code></b>.
+    	The reason for this is that <code>git stash apply</code> <b>leaves the
+    	stash in-place</b>. So, if you did something wrong the stash still
+    	exists. You can later, once you're happy, manually remove the stash using
+    	<code>git stash drop</code>. If you use <code>git stash pop</code> to apply
+    	your stashes it will apply the stash and automatically drop it, so if something
+    	was wrong, you don't have the stash to fall back on!
     </p>
     <p>
         Although you can't push a stash to a remote, you can carry it over to
@@ -1439,6 +1506,13 @@ git log --no-merges parent-branch-name..
 
 <h2>Hooks</h2>
 <div>
+    <p>
+        Hooks are actions that Git will automatically perform at perticular points. For example,
+        a pre-commit hook, is an action that will be executed with you <code>git commit</code> some
+        changes and will determine whether the commit should, in fact, be accepted or not.
+    </p>
+
+    <h3>Client Side Hooks</h3>
     <p>Look at the <code>.sample</code> files in the repo's &quot;hooks&quot;
     directory in the repo root. Rename a sample without the <code>.sample</code>
     extensions to &quot;activate&quot; it.</p>
@@ -1563,6 +1637,26 @@ git push --recurse-submodules=on-demand</pre>
     <p></p>
 </div>
 
+<h2>Super Error Recovery</h2>
+<div>
+	<p>If you have deleted something you shouldn't have or even lost a stash, <a href="https://stackoverflow.com/a/5879550/1517244" target="_blank">this SO thread</a> has the answers!
+		This beauty let me recover a stash that I had popped (note: should always prefer apply!) and then reverted - wow :)
+	</p>
+	<p>I have replicated the answer here with a little scripting added around it:</p>
+	<pre>while read filename
+do
+    echo -e "\n#########################################################\n$filename\n";
+    git cat-file -p $filename; 
+done <<< $(find .git/objects -newermt $(date +%Y-%m-%d -d '4 hours ago') \
+                -type f -exec ls -hal {} \; |
+           cut -d" " -f 9 |
+           sed -e 's/.git\/objects\///g' |
+           sed -e 's/\///g') > out.txt</pre>
+     <p>
+     	Then you can edit the file <code>out.txt</code> to possibly find what you lost :D
+     </p>
+</div>
+
 <h2>Remotes</h2>
 <div>
     <h3>Push To Remote With Different Name</h3>
@@ -1578,6 +1672,25 @@ git checkout master       # Checkout the branch you want to merge the upstream i
 git merge upstream/master # Merge locally
 git push                  # Push back to your remote</pre>
     <p></p>
+</div>
+
+<h2>Git Large File Systems (Git LFS)</h2>
+<div>
+	<p>
+		Ref: <a href="https://git-lfs.github.com/" target="_blank">https://git-lfs.github.com/</a>: <q>Git Large File Storage (LFS) replaces large files such as audio samples, videos, datasets, and graphics with text pointers inside Git, while storing the file contents on a remote server...</q>.
+	</p>
+	<p>
+		In your repository directory, to start using LFS type:
+	</p>
+	<pre>git lfs install</pre>
+	<p>
+		To get the large objects associated with the repo type:
+	</p>
+	<pre>git lfs pull</pre>
+	<p>
+		For general help:
+	</p>
+	<pre>git lfs help</pre>
 </div>
 
 </div> <!-- END H1 Git Notes -->

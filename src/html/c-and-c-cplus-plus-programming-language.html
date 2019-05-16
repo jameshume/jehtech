@@ -201,7 +201,9 @@
 			<p>Use GCC compiler option &quot;<code>-finstrument-functions</code>&quot; and implement these functions:</p>
 			<pre>void __cyg_profile_func_enter (void *, void *) __attribute__((no_instrument_function));
 void __cyg_profile_func_exit (void *, void *) __attribute__((no_instrument_function));</pre>
-
+			<p>For Windows see this <a href="https://stackoverflow.com/a/24416858/1517244" target="_blank">SO thread</a>. It shows how to use
+				the <code>/Gh</code> and <code>/GH</code> penter/pexit hooks.
+			</p>
 			<h3>Valgrind</h3>
 			<pre>valgrind \
     --tool=memcheck \
