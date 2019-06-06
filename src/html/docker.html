@@ -1,0 +1,302 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>Docker | JEHTech</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">Docker</h1>
+<div style="padding-right:10px;">
+
+<h2>Page Contents</h2>
+<div id="page_contents">
+</div>
+
+<pre>
+See https://docs.docker.com/get-started/
+
+https://www.redhat.com/en/topics/containers/whats-a-linux-container
+https://en.wikipedia.org/wiki/Chroot
+https://www.freebsd.org/doc/handbook/jails.html
+https://www.redhat.com/cms/managed-files/rh-history-of-containers-infographic-201609-en.pdf7
+https://www.freebsd.org/doc/en_US.ISO8859-1/books/arch-handbook/jail.html
+http://opentodo.net/2012/11/implementation-of-freebsd-jails-part-i/
+https://en.wikipedia.org/wiki/Cgroups
+https://en.wikipedia.org/wiki/Linux_namespaces
+https://lwn.net/Articles/531114/#series_index
+https://stackoverflow.com/questions/41550727/how-does-docker-for-windows-run-linux-containers
+https://en.wikipedia.org/wiki/Hyper-V
+https://www.flexiant.com/2014/02/05/what-does-a-hypervisor-do/
+https://blackberry.qnx.com/content/dam/qnx/whitepapers/2017/what-is-a-hypervisor-and-how-does-it-work-pt1.pdf ### REALLY GOOD
+https://community.atlassian.com/t5/Bitbucket-questions/Caching-a-public-Docker-Hub-image/qaq-p/1045777
+https://confluence.atlassian.com/bitbucket/configure-bitbucket-pipelines-yml-792298910.html#Configurebitbucket-pipelines.yml-ci_cachescaches
+
+
+Run apps on one machine in a way where they won't "meddle" with other apps on the same machine.
+Eg. N projects, each with its own set of dependencies! Docker images help "sandbox" each project so
+you can keep them all on the same machine without getting cross-interference.
+
+More resource efficient than full VMs. Docker shares common ground between projects. Runs on Linux.
+On windows its just a VM!
+
+Portability across machines and environments - e.g. dependency version mismatch.
+
+Docker container is not a VM on Linux. On Windows it can be, but depends on your windows version 
+and method of Docker-install - Docker Toolbox v.s. Docker for Windows. The former uses VirtualBox
+(type 2 hypervisor) and can only be accessed from the Docker Quickstart Terminal. The latter uses
+the Windows hypervisor (type 1 hypervisor) and can be accessed from any terminal you like. There is
+currently the restriction with the latter that you cannot run both the type1 hypervisor and
+VirtualBox at the same time :( Toolbox access the daemon at 192.168.99.100 and have to use the
+Docker terminal. On the latter you can use local host. 
+
+VM - isolate system
+Docket - isolate application
+
+################################################################################
+# Architecture
+Docker daemon, provides REST API, and the docker CLI client, which uses the REST API.
+
+Docker container is a running instance of a docker image
+
+Image - file system and parmeters - like a package containing everything you need to run your application
+      - can download, build and run
+
+Container == running image - like instance of a class
+          Is immutable so any changes made whilst running them are lost on exit
+
+
+##-- alpine is only about 3MB so much better to download than ubuntu which could be seveal hundred MB.
+##-- althernative is "slim"
+docker run -it --rm --name alpine alpine sh 
+           ^^^ ^^^^ ^^^^^^
+           ^^^ ^^^^ Custom unique name or handle to refer to instance by
+           ^^^ Completely remove container when stopped
+           be interactive and terminal (handle ctrl-c and colours etc)
+
+docker stop alpine # to shut down the container
+
+docker hub as auatomated build hooks - so if i push a change to my GitHub the docker registery can rebuild my image for me automatgiclaly.
+
+################################################################################
+# Docker build processes
+
+1. Run docker container, modify then do "docker commit"
+2. Docker file - blueprint or recipe for what you want your docker image to be - the best way (apparently)
+
+Docker images are layers, which are kinda like self-contained files and the docker image is the result of stacking up these layers.
+
+First non-comment in docker file must be the "FROM" instruction (instruction names in caps) - import a base image to build on.
+ 	# FROM tag:version
+ 	FROM python:2.7-alpine
+ 	FROM ruby:2.4-alpine ## etc etc
+
+
+RUN - to run a command
+
+	# RUN -any script you can run in your base OS without Docker-
+	RUN mkdir /app
+	WORKDIR /app # change working directory for subsequent RUN commands
+	COPY requirements.txt # You can use relative paths but cannot copy in files above the dockerfile.
+	LABEL value="something" # Attach arbitrary metadata to an image (must use quotes for value)
+	CMD - default command to  instance run.
+		note RUN - build of image
+		CMD - run when instance of image starts up]
+      By default this is run as an argument to `/bin/sh -c`.
+      The CMD instruction is being passed in as an argument to and ENTRYPOINT script (see later)
+
+FROM python:2.7-alpine
+
+RUN mkdir /app
+WORKDIR /app
+
+COPY requirements.txt requirements.txt # goes to /app/requirements.txt
+RUN pip install -r requirements.txt
+COPY . . #again /app - copies everything from local machine relative to dockerfile into our dicjer image.
+LABEL maintainer="James James &lt;james.james@james.com&gt;" \
+      version="1.0"
+CMD flask run --host=0.0.0.0 --port=5000
+
+
+VERY IMPORTANT HOW YOU ORDER THINGS! Each command will be a cached-layer so make sure that more static
+large layers come first so that if something changes Docker won't have to redo a lot of stuff (because
+cached layers below the layer that change stay the same but layers above it must be redone).
+
+Chain commands together where possible to avoid creating unecessary additional layers.
+
+Layers can be cached across multiple Docker images for memory usage efficiency.
+
+# Build Docker Images from CLI
+$ docker image build -t web1:1.0 .
+                     ^^     ^^^
+                     ^^     the tag version
+                     tag the image so that we dont have to use its random hash
+
+$ docker image inspect web1
+
+$docker image ls [-a]
+$docker image rm &lt;tag:version&gt;|&lt;hash (image ID)&gt;
+
+# Run/stop Docker Instances
+$ docker container ls  [-a] # List running docker images (akak containers)
+$ docker container run web1
+$ docker container stop web1 or container-ID
+
+# Ports
+$ docker container run -p bind-port-on-host:bind-port-in-container
+
+# Env var
+$ docker container run -e SOME_VAR=some-value
+
+# Logs and stats
+$ docker container logs [-f] container-ID-or-name
+$ docker container stats
+
+# Auto restart
+use docker run ... --restart on-failure ...
+
+
+# Windows
+https://blog.docker.com/2016/09/build-your-first-docker-windows-server-container/
+https://docs.docker.com/docker-for-windows/#switch-between-windows-and-linux-containers
+
+
+
+################################################################################
+# Volumes
+Avoid the Kill-build-reload cycle every time you change your code. I.e. you change it, kill the
+docker instance, rebuild the image, and re-run it... sigh!
+
+Mount source code from main operating system straight into the running container. To do this use the
+`-v` option.
+
+   docker container run ... -v abs-path-on-host:path-to-mount-in-target
+
+To specify a path on C:\ in windows do -v //c/path/to/wherever
+
+################################################################################
+# Dynamically connect to container and run commands
+
+Here you are connecting to an _already running_ container
+
+$ docker container exec [--user] "$(id -u):$(id -g)"] -it the-name (bash|sh|cmd)
+                        ^^^^^^^^
+                        When running on linux host so that files created in docker are not owned
+                        by root, but by you.
+
+or to run a command once without an interactive shell
+$ docker container exec "echo james" alpine
+
+
+
+################################################################################
+# Link Docker containers over a network
+$docker network ls
+
+Docker will have installed a virtual network adaptor. On windows I see it as:
+
+   Ethernet adapter vEthernet (DockerNAT):
+
+      Connection-specific DNS Suffix  . :
+      IPv4 Address. . . . . . . . . . . : 10.0.75.1
+      Subnet Mask . . . . . . . . . . . : 255.255.255.0
+      Default Gateway . . . . . . . . . :
+
+
+On Linux I see it as:
+
+   TODO
+
+See the docker networks using
+$ docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+5c6e2a9ca9b2        bridge              bridge              local << This is the virtual network adapter created oh your host as seen above (DockerNAT)
+0aa3a20ed51a        host                host                local
+bb9b8f0ffcd6        none                null                local
+
+The bridge network is used by default. Inspect it using:
+$ docker network inspect bridge
+
+NOTE: Conatiners are, by default, added to the bridge network unless you specify otherwise
+
+
+To get DNS "out of the box" you need to configure your own network. 
+   docker metwork create --driver bridge mynetworkmame
+
+With new network supply "--net mynetworkname" to the "docker conatiner run..." command line.
+
+Once this is done each container can be accessed using its name, rather than the IP address. Docker has
+a little DNS server running for us that maps the container name to the IP address Docker assigned it :)
+
+
+
+################################################################################
+# Data Volumes aka named volumes
+
+Allow you to persist data - but note containers really should be STATELESS and PORTABLE.
+
+Create using "docker volume create my_volume_name"
+Use "docker volume inspect my_volume_name" to see things like its mountpoint in the container.
+
+In stead of doing -v /local/path:/path/on/conatiner do my_volume_name:/path/on/container
+                                                       ^^^^^^^^^^^^^^
+                                                        Name if volume created in prev step
+
+
+
+################################################################################
+# Entrypoints
+
+A command in the Docker file that auto-runs a script after the container has started
+
+   ENTRYPOINT['/path/to/some/executable/script']
+
+From some dynamic config you can create an environment variable tha the script can read to
+change its execution directly
+
+   Use -e ENV_VAR_NAME=value on the command line to the "docker container run" command.
+
+Last line of your script must read
+   exec "$@"
+This is because, in your docker file, the CMD instruction is being passed in as an 
+argument to your ENTRYPOINT script, so you must take care to run it, otherwise whatever was
+in the CMD line in the docker file will not get run!
+
+
+################################################################################
+# Managing docker
+docker system info
+docker system df [-v] #&lt; See disk usage
+docker system prune [-a] [-f] (Caution when using -a!!)
+docker image ls #&lt; See images: images with &lt;none&gt; and dangling and can be killed
+docker container stop $(docker container ls -a -q) #&lt; Stop all running containers
+
+
+################################################################################
+################################################################################
+# Docker Compose
+
+
+</pre>
+
+
+</div> <!-- END H1 padding div -->
+</div>
+</body>
+</html>
+
+

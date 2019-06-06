@@ -264,6 +264,14 @@ git clone git://repo_addr [dirname]</pre>
         copied locally. A remote called &quot;origin&quot; will be automatically added to point
         to <code>https://repo_addr</code>.
     </p>
+    <p>
+        If you want to control the amount of history you download use the <code>--depth=<i>n</i></code> option. Normaly you would
+        use <code>--depth=1</code> to get just the HEAD with no history. This equals <em>faster cloning</em> at the expense of 
+        a history.
+    </p>
+    <p>
+        To do an even faster clone, you may also consider <code>--single-banch --branch <i>branch-name</i></code>.
+    </p>
 
     <!-- ++++++++++++++++++++++++++++++++ -->
     <h3>Checking Out Repos</h3>
