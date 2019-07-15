@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>590</x>
+      <y>170</y>
+      <w>30</w>
+      <h>250</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;230.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>650</x>
+      <y>170</y>
+      <w>30</w>
+      <h>250</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;230.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>710</x>
+      <y>170</y>
+      <w>30</w>
+      <h>250</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;230.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>770</x>
+      <y>170</y>
+      <w>30</w>
+      <h>250</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;230.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>830</x>
+      <y>170</y>
+      <w>30</w>
+      <h>250</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;230.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>890</x>
+      <y>160</y>
+      <w>30</w>
+      <h>260</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;240.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>950</x>
+      <y>170</y>
+      <w>30</w>
+      <h>250</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;230.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1010</x>
+      <y>170</y>
+      <w>30</w>
+      <h>250</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;230.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1070</x>
+      <y>170</y>
+      <w>30</w>
+      <h>250</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;230.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1130</x>
+      <y>170</y>
+      <w>30</w>
+      <h>250</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;230.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1190</x>
+      <y>170</y>
+      <w>30</w>
+      <h>250</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;230.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>590</x>
+      <y>70</y>
+      <w>630</w>
+      <h>330</h>
+    </coordinates>
+    <panel_attributes>lw=2
+fg=red</panel_attributes>
+    <additional_attributes>10.0;310.0;60.0;310.0;80.0;140.0;120.0;140.0;140.0;310.0;240.0;310.0;260.0;140.0;300.0;140.0;310.0;10.0;320.0;140.0;360.0;140.0;380.0;310.0;420.0;310.0;440.0;140.0;480.0;140.0;500.0;310.0;610.0;310.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>590</x>
+      <y>200</y>
+      <w>630</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>lw=2
+fg=blue</panel_attributes>
+    <additional_attributes>10.0;10.0;60.0;10.0;80.0;180.0;120.0;180.0;140.0;10.0;240.0;10.0;260.0;180.0;300.0;180.0;310.0;50.0;320.0;180.0;360.0;180.0;380.0;10.0;420.0;10.0;440.0;180.0;480.0;180.0;500.0;10.0;610.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>870</x>
+      <y>70</y>
+      <w>60</w>
+      <h>320</h>
+    </coordinates>
+    <panel_attributes>bg=red
+transparency=75
+layer=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1260</x>
+      <y>90</y>
+      <w>380</w>
+      <h>320</h>
+    </coordinates>
+    <panel_attributes>bg=red
+fontsize=20
+Because both the +ve and -ve wires of
+the signal are normally very close
+together, probably as a twisted pair, any
+interference should affect both almost
+identically. Because it is the difference
+between the two signals that determines
+te logic level of the current bit the
+effect does not change the interpretation
+of the bit.
+
+In this case (A + d) - (B + d) = A - B,
+so the noise, d, is eliminated and
+A - B &gt; threshold so it is inteprettted,
+correctly, as a 0.
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>530</x>
+      <y>190</y>
+      <w>60</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>A
+fontsize=40
+fg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>530</x>
+      <y>350</y>
+      <w>60</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>B
+fontsize=40
+fg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>600</x>
+      <y>400</y>
+      <w>50</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>1
+bg=gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>660</x>
+      <y>400</y>
+      <w>50</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>0
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>720</x>
+      <y>400</y>
+      <w>50</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>1
+bg=gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>780</x>
+      <y>400</y>
+      <w>50</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>1
+bg=gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>840</x>
+      <y>400</y>
+      <w>50</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>0
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>900</x>
+      <y>400</y>
+      <w>50</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>0
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>960</x>
+      <y>400</y>
+      <w>50</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>1
+bg=gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>1080</x>
+      <y>400</y>
+      <w>50</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>1
+bg=gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>1140</x>
+      <y>400</y>
+      <w>50</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>1
+bg=gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>1020</x>
+      <y>400</y>
+      <w>50</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>0
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>450</x>
+      <y>500</y>
+      <w>220</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>A is -ve w.r.t B, i.e.,
+A - B &lt; threshold, which
+is interpretted as 1
+bg=gray
+fontsize=20</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>710</x>
+      <y>500</y>
+      <w>230</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>A is -+ve w.r.t B, i.e.,
+A - B &gt; threshold, which
+is interpretted as 0
+bg=gray
+fontsize=20</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>430</y>
+      <w>60</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;40.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>570</x>
+      <y>430</y>
+      <w>70</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;70.0;50.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>920</x>
+      <y>130</y>
+      <w>360</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>
+fg=red</panel_attributes>
+    <additional_attributes>10.0;10.0;340.0;70.0</additional_attributes>
+  </element>
+</diagram>

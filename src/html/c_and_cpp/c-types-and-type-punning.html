@@ -27,10 +27,289 @@
 <div id="page_contents">
 </div>
 
+<h2>References</h2>
+<ul>
+	<li>https://en.cppreference.com/w/c/language/type</li>
+	<li>https://en.wikipedia.org/wiki/Type_punning</li>
+	<li>https://www.cocoawithlove.com/2008/04/using-pointers-to-recast-in-c-is-bad.html</li>
+	<li>https://stackoverflow.com/questions/98650/what-is-the-strict-aliasing-rule/51228315#51228315</li>
+	<li>https://cellperformance.beyond3d.com/articles/2006/06/understanding-strict-aliasing.html</li>
+	<li>https://adriann.github.io/undefined_behavior.html</li>
+	<li>https://blog.regehr.org/archives/959</li>
+	<li>https://stackoverflow.com/questions/98650/what-is-the-strict-aliasing-rule</li>
+</ul>
+
 <h2>Types</h2>
 <div>
 	<p>
+		Before we can talk about type punning, we must know what a type is and what kinds of types
+		there are...
+	</p>
+	<p>
+		In C an &quot;object&quot; is is just a region of data storage that represents a value. The
+		way in which an object is interpretted, i.e., the meaning that the value of the object is given,
+		is determined by the object's type. For example, if, in an 8-bit block of memory, the value 0x80 is
+		stored, when accessed as an <code>unsigned char</code> type, it has the value 128. However, when the same
+		object is accessed as a <code>signed char</code> it would have the value -128. Thus, to quote the
+		standard verbatim, <q>the meaning of a value stored in an object ... is determined by the type
+		of the expression used to access it</q>.
+	</p>
+	<p>
 		<img src="##IMG_DIR##/c_types_bubble.png" alt="Bubble map of C types"/>
+	</p>
+	<p>
+		All the above are <em>unqualified</em> types. They can be <em>qualified</em> using the keywords
+		<code>const</code>, <code>volatile</code> or <code>restrict</code>.
+	</p>
+	<p>
+		When it comes to accessing an object, the <em>effective type</em> is its <em>declared type</em>, or
+		in the case of allocated objects, which have no declared type, the type of the lvalue referencing the object. The standard goes into real details and says this (parapgraphs added for readability):
+	</p>
+	<blockquote>
+		<p>
+			The effective type of an object for an access to its stored value is the declared type of
+			the object, if any [Allocated objects have no declared type]. 
+		</p>
+		<p>
+			If a value is stored into
+			an object having no declared type through an lvalue having a type that is not a character
+			type, then the type of the lvalue becomes the effective type of the object for that access
+			and for subsequent accesses that do not modify the stored value. 
+		</p>
+		<p>
+			If a value is copied into
+			an object having no declared type using memcpy or memmove, or is copied as an array of
+			character type, then the effective type of the modiﬁed object for that access and for
+			subsequent accesses that do not modify the value is the effective type of the object
+			from which the value is copied, if it has one.
+		</p>
+		<p>
+			For all other accesses to an object having
+			no declared type, the effective type of the object is simply the type of the lvalue used
+			for the access...</p>
+	</blockquote>
+	<p>
+	</p>
+</div>
+
+<h2>Punning a.k.a. Aliasing</h2>
+<div>
+	<p>
+		WikiPedia has the following to say about type punning.
+	</p>
+	<blockquote>
+		<p>
+			In C and C++, constructs such as pointer type conversion and union ... are provided in order
+			to permit many kinds of type punning, although some kinds are not actually supported by the standard language. 
+		</p>
+	</blockquote>
+
+	<p>
+		Type aliasing or punning is when an object is referred to using different types, which may or may not
+		be &quot;compatible&quot;. In the C99 standard it states:
+	</p>
+
+	<!-- Page 40 -->
+	<blockquote>
+	<p>
+		All declarations that refer to the same object or function shall have compatible type; otherwise,
+		the behavior is undeﬁned.
+	</p>
+	</blockquote>
+
+	<p>
+		Remember that an &quot;object&quot; is just a region of data storage that represents a value. This
+		means that any variables that we declare that refers to the same region of data storage must have
+		compatible types, otherwise the behaviour of the program when accessing said storage is undefined.
+	</p>
+	<p>
+		This begs the question, &quot;what is a compatible type?&quot;. The standard has this to say about
+		compatible types (paragraph formatting and bullet points added for readability):
+	</p>
+	
+	<!-- Page 40 -->
+	<blockquote>
+		<p>
+			Two types have compatible type if their types are the same. Additional rules for determining
+			whether two types are compatible are described ... for type specifiers, ... for type
+			qualifiers, and ... for declarators [footnote: two types need not be identical to be compatible] ...
+		</p>
+		<p>
+			Moreover, two structure, union, or enumerated types
+			declared in separate translation units are compatible if their tags and members satisfy the
+			following requirements: 
+		</p>
+		<ol>
+			<li>If one is declared with a tag, the other shall be declared with the same tag.</li>
+			<li>If both are complete types, then the following additional requirements apply: 
+				<ol>
+					<li>
+						there shall be a one-to-one correspondence between their members such that each pair 
+						of corresponding members are declared with compatible types, and such that 
+					</li> 
+					<li>
+						if one member of a corresponding pair is declared with a name, the other member
+						is declared with the same name. 
+					</li>
+				</ol>
+			</li>
+			<li>For two structures, corresponding members shall be declared in the same order.</li>
+			<li>For two structures or unions, corresponding bit-ﬁelds shall have the same widths.
+			<li>For two enumerations, corresponding	members shall have the same values.</li>
+		</li>
+		<p>
+		</p>
+	</blockquote>
+	<p>
+		So, what about type specifiers? The standard says this:
+	</p>
+	<blockquote>
+		<p>
+			Each enumerated type shall be compatible with char, a signed integer type, or an unsigned
+			integer type. The choice of type is implementation-deﬁned, but shall be capable of
+			representing the values of all the members of the enumeration ...
+		</p>
+	</blockquote>
+	<p>
+		For type qualifiers:
+	</p>
+	<blockquote>
+		<p>
+			For two qualiﬁed types to be compatible, both shall have the identically qualified 
+			version of a compatible type; the order of type qualiﬁers within a list of speciﬁers or
+			qualiﬁers does not affect the speciﬁed type. 
+		</p>
+	</blockquote>
+		<p>
+		For type declarators:
+	</p>
+	<blockquote>
+		<p>
+			For two pointer types to be compatible, both shall be identically qualified and both
+			shall be pointers to compatible types ...
+		</p>
+		<p>
+			... For two array types to be compatible, both shall have compatible element types, and
+			if both size speciﬁers are present, and are integer constant expressions, then both size
+			speciﬁers shall have the same constant value. If the two array types are used in a context
+			which requires them to be compatible, it is undeﬁned behavior if the two size speciﬁers evaluate
+			to unequal values ... 
+		</p>
+		<p>
+			... For two function types to be compatible, both shall specify compatible return types.
+			Moreover, the parameter type lists, if both are present, shall agree in the number of 
+			parameters and in use of the ellipsis terminator; corresponding parameters shall have compatible types ...
+		</p>
+	</blockquote>
+	<p>
+		As is typical of the standard it can be a rather terse read and contain some vocabulary that
+		we might need to understand.
+	</p>
+	<p>
+		A <em>type specifier</em> is the type you declare a variable with. For example &quot;<code>unsigned int varName;</code>&quot;
+		declares a variable <code>varName</code> with the type specified <code>unsigned int</code>.
+	</p>
+	<p>
+		A <em>type qualifier</em> is something like <code>const</code> or <code>volatile</code>. It gives us
+		a property of the type - it doesn't change the underlying type, it just changes a property of the
+		type: is it read only, can in change unpredictably etc?
+	</p>
+	<p>
+		A <em>declaritor</em> is something that gives an identifier a type and possibly a qualifier and
+		reserves &quot;room&quot; for it. For example, the declaration <code>struct MyStruct temp;</code>
+		declares an identifier &quot;temp&quot; that references an object of type <code>MyStruct</code>.
+		Memory has been reserved for the object, possibly on the stack, for example, if this it is
+		a local variable to a function.
+	</p>
+	<p>
+		A <em>tag</em> of a structure/union/enum is the name given to that type of structure/union/enum:
+	</p>
+	<pre>struct MyStruct { ... } # The "tag" is "MyStruct"
+union MyUnion { ... } # The "tag" is "MyUnion", etc</pre>
+
+	<p>
+		The standard also says:
+	</p>
+	<!-- Page 68 -->
+	<blockquote>
+		<p>
+			An object shall have its stored value accessed only by an lvalue expression that has
+			one of the following types [footnote: The intent of this list is to specify those
+			circumstances in which an object may or may not be aliased]:
+		</p>
+		<ul>
+			<li>a type compatible with the effective type of the object,</li>
+			<li>a qualiﬁed version of a type compatible with the effective type of the object,</li>
+			<li>a type that is the signed or unsigned type corresponding to the effective type of the object,</li>
+			<li>a type that is the signed or unsigned type corresponding to a qualiﬁed version of the
+				effective type of the object,</li>
+			<li>an aggregate or union type that includes one of the aforementioned types among its members
+				(including, recursively, a member of a subaggregate or contained union), or</li>
+			<li>a character type.</li>
+		</ul>
+	</blockquote>
+
+	<p>
+		With an exception for unions:
+	</p>
+
+	<blockquote>
+		<p>
+			One special guarantee is made in order to simplify the use of unions: if a union contains
+			several structures that share a common initial sequence (see below), and if the union
+			object currently contains one of these structures, it is permitted to inspect the common
+			initial part of any of them anywhere that a declaration of the complete type of the union is
+			visible.
+		</p>
+		<p>...</p>
+		<p>
+			The following is a valid fragment:
+		</p>
+		<pre class="prettyprint linenums">union {
+   struct {
+      int alltypes;
+   } n;
+   struct {
+      int type;
+      int intnode;
+   } ni;
+   struct {
+      int type;
+      double doublenode;
+   } nf;
+} u;
+u.nf.type = 1;
+u.nf.doublenode = 3.14;
+/* ... */
+if (u.n.alltypes == 1)
+   if (sin(u.nf.doublenode) == 0.0)
+      /* ... */</pre>
+	</blockquote>
+
+	<p>
+		For example, a <code>signed int</code> and <code>unsigned int</code> have compatible types,
+		as far as I can see from the above definitions because they are <q>the signed or unsigned type corresponding to the effective type</q>. Thus, I think integer is the &quot;base&quot; type and then it signedness is extra.
+	</p>
+	<p>
+		But, a <code>short</code> is not however compatible with an <code>int</code> from the above
+		definitions. Why can we not alias/type-pun an int as shown below?
+	</p>
+	<pre class="prettyprint">int a = 10;
+short *b = (short *)&a; // b aliases a or is a type pun of a
+printf("%hd\n", *b);    // What value does this print out??</pre>
+	<p>
+		Why is type puning sometimes seen as dangerous? The biggest problem is the mention of
+		&quot;undefined behaviour&quot;.
+	</p>
+	<p>
+		One reason accessing the object <code>a</code> through the pointer <code>b</code> can result
+		in &quot;undefined behaviour&quot; is that the <em>C standard makes no assumptions about the
+		endianess of the platform</em>. Hence <code>*b</code> could access the MSB or LSB of the <code>short</code>
+		depending on what platform we compile this on! Thus, this is not a safe operation as it could result
+		in all sorts of issues should the program ever be ported onto machines with differing endianess.
+	</p>
+	<p>
+
 	</p>
 </div>
 

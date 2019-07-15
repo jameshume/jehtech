@@ -27,33 +27,233 @@
 <div id="page_contents">
 </div>
 
+<h2>References</h2>
+<div>
+	<ol>
+		<li>
+			<a href="http://www.cs.utah.edu/~regehr/papers/emsoft08-preprint.pdf" target="_blank">Volatiles Are Miscompiled, and What to Do about It</a>, Eric Eide et al.
+		</li>
+		<li><a href="https://stackoverflow.com/questions/40614016/is-a-global-implicitly-volatile-in-c" target="_blank">Is A Global Implicitly Volatile In C</a>, Stackoverflow.com.
+		</li>
+		<li><a href="https://msdn.microsoft.com/en-us/magazine/dn904673.aspx" target="_blank">Compilers - What Every Programmer Should Know About Compiler Optimizations</a>, Hadi Brais, Feb 2015.
+		</li>
+		<li><a href="https://msdn.microsoft.com/en-us/magazine/dn973015.aspx" target="_blank">Compilers - What Every Programmer Should Know About Compiler Optimizations, Part 2</a>, Hadi Brais, May 2015.
+		</li>
+		<li><a href="https://blog.regehr.org/archives/232" target="_blank">A Guide to Undefined Behavior in C and C++, Part 3</a>, John Regehr.
+		</li>
+		<li><a href="https://gcc.gnu.org/onlinedocs/gcc/Volatiles.html" target="_blank">When is a Volatile Object Accessed?</a>, GCC manual.
+		</li>
+		</li>
+		<li><a href="https://preshing.com/20120625/memory-ordering-at-compile-time/
+" target="_blank">Memory Ordering at Compile Time</a>, Jun 25 2012.
+		</li>
+		<li><a href="https://blogs.msdn.microsoft.com/itgoestoeleven/2008/03/07/the-joys-of-compiler-and-processor-reordering/" target="_blank">The Joys of Compiler and Processor Reordering</a>, Microsoft Blog, March 2008.
+		</li>
+		<li><a href="https://www.cl.cam.ac.uk/teaching/0809/OptComp/slides/lecture14.pdf" target="_blank">Instruction scheduling</a>.
+		</li>
+		<li><a href="https://lwn.net/Articles/233479/" target="_blank">The Trouble With Volatile</a>, May 2007, LWN.
+		</li>
+	</ol>
+</div>
+
 <h2>Types</h2>
 <div>
-	
-	<a href="http://www.cs.utah.edu/~regehr/papers/emsoft08-preprint.pdf" target="_blank">[Ref</a><a href="volatiles-are-miscompiled-eric-eide-and-john-regehr.pdf" target="_blank"> | local]</a>.
-	<pre>https://stackoverflow.com/questions/40614016/is-a-global-implicitly-volatile-in-c
-https://msdn.microsoft.com/en-us/magazine/dn973015.aspx
-https://blog.regehr.org/archives/232
-https://gcc.gnu.org/onlinedocs/gcc/Volatiles.html
-https://msdn.microsoft.com/en-us/magazine/dn973015.aspx
-https://preshing.com/20120625/memory-ordering-at-compile-time/
-https://blogs.msdn.microsoft.com/itgoestoeleven/2008/03/07/the-joys-of-compiler-and-processor-reordering/
-https://www.cl.cam.ac.uk/teaching/0809/OptComp/slides/lecture14.pdf ******
-https://lwn.net/Articles/233479/
+	<p>
+		The C standard has this to say about the <code>voltile</code> keyword.
+	</p>
+	<blockquote>
+		<p>
+			An object that has volatile-qualified type may be modified in ways unknown to the implementation or have other unknown side effects.
+		</p>
+		<footer>-- C99 Standard</footer>
+	</blockquote>
+	<p>
+		So what? Why does the compiler care? The reason is that the compiler is free to re-organise and change your code during optimization as long as the visible result is the same.
+	</p>
+	<p>
+		The Compiler Design Handbook by Y.N. Srikant et al has this to say about compiler optimisations.
+	</p>
+	<blockquote>
+		<p>Ever since the advent of reduced instruction set computers ... instruction scheduling techniques have gained importance as they rearrange instructions to "cover" the delay or latency that is required between an instruction and its dependent successor. Without such reordering, pipelines would stall, resulting in wasted processor cycles...
+		</p>
+		<p>... Instruction scheduling methods for basic blocks may result in a moderate imporovement (less that 5 to 10%) in performance, in terms of execution time of a schedule, for simple pipelined RISC architectires. However, the performance improvement achieved for multiple instruction issue processors could be significant...
+		</p>
+		<p>Instruction scheduling is typically performed after machine-indpendent optimizations ... on the target machine's assembly code...</p>
+		<footer>-- The Compiler Design Handbook by Y.N. Srikant et al</footer>
+	</blockquote>
+	<p>
+		It is important to note that <code>volatile</code> only stops the compiler optimising lines that access
+		<code>volatile</code> objects. It does <b>not imply</b> that the object is in non-cacheable memory, or
+		that caches are invalidated before it is read or anything like this!
+	</p>
+	<p>
+		It should also be noted that whilst a <code>volatile</code> access will not moved w.r.t. to
+		other <code>volatile</code> accesses, non-volatile accesses can be re-ordered around them.
+	</p>
+</div>
+
+<h2>When/How The Compiler Optimizes</h2>
+<div>
+<p>
+	Using the super amazing <a href="https://godbolt.org/" target="_blank">Godbold compiler explorer</a>, compiling using GCC for arm at opimisation level 3, we can explore how volatile works on one of the most simple optimisations.
+</p>
+
+<!-- ------------------------------------------------------------------------------------------- -->
+<h3>The Compiler Can Assume A Variable Stays Constant</h3>
+<p>
+	In the following example the compiler can see that the variable <code>a</code> is not modified inside the <code>while</code> loop. It assumes a single flow of execution and so can see that in the <code>while</code> loop the expression <code>a == 1</code> will always evaluate to the same boolean value within the loop. Thus, to save compatuational time, it does not need to recalculate this expression and worse, have to branch, for each iteration of the loop. It can just to this once before the loop runs and then either execute an empty loop or return.
+</p>
+<pre class="prettyprint" style="float:left;">int a = 1;
+
+void f(void)
+{
+    while(1)
+    {<span style="background: #b6cdf2">
+        if (a == 1) break;
+</span>    }
+<span style="background: #f2eda7">}</span></pre>
+
+<pre class="prettyprint" style="float:left;">f:<span style="background: #b6cdf2">
+        adrp    x0, .LANCHOR0
+        ldr     w0, [x0, #:lo12:.LANCHOR0]
+        cmp     w0, 1
+        beq     .L1</span>
+.L3:<span style="background: #b6cdf2">
+        b       .L3</span>
+.L1:<span style="background: #f2eda7">
+        ret</span>
+a:
+        .word   1</pre>
+<pre class="prettyprint" style="float:left;"># The assembler equivalent is this:
+int a = 1;
+
+void f(void)
+{
+    if (a == 1) goto L1;
+    while(1)
+    {
+    }
+L1:
+}</pre>
+
+<p style="clear:both">
+	You can <a href="https://godbolt.org/z/-1UChA" target="_blank">see the above code on Godbolt</a>.
+</p>
+
+
+<!-- ------------------------------------------------------------------------------------------- -->
+<h3>Using Volatile To Remove Compiler's Ability To Assume Constantness</h3>
+<p>
+	By marking the global variable from the previous example as <code>volatile</code> the compiler can not assume anything about the state
+	of the variable w.r.t. the last statement executed. Thus, it is not free to move the varialble outside of the loop as on each evaulation it can no longer assume that the value is the same.
+</p>
+<pre class="prettyprint" style="float:left;">
+volatile int a = 1;
+
+void f(void)<span style="background: #b6cdf2">
+{</span>
+    while(1)
+    {<span style="background: #f2eda7">
+        if (a == 1) break;</span>
+    }<span style="background: #eacef2">
+}</span>
+</pre>
+<pre class="prettyprint" style="float:left;">
+f:<span style="background: #b6cdf2">
+        adrp    x1, .LANCHOR0
+        add     x1, x1, :lo12:.LANCHOR0</span>
+.L2:<span style="background: #f2eda7">
+        ldr     w0, [x1]
+        cmp     w0, 1
+        bne     .L2</span><span style="background: #eacef2">
+        ret</span>
+a:
+        .word   1</pre>
+<p style="clear:both">
+	You can <a href="https://godbolt.org/z/jy0pbY" target="_blank">see the above code on Godbolt</a>.
+</p>
+
+
+<!-- ------------------------------------------------------------------------------------------- -->
+<h3>Using A Memory Barrier To Remove Compiler's Ability To Assume Constantness</h3>
+<p>
+	This one was brought to my attention when I was reading up about the view that the Linux kernel community takes to the <code>volatile</code> keyword within the kernel and in another situation, using <code>volatile</code> to share data between threads. The same effect can be produced, in the above example, by using a &quo;memory barrier&quot; that forces the compiler to assume that registers are &quot;dirty&quot; and that objects must be reloaded from memory. Doing so means that the object must be reloaded on each loop iteration, so again, the compiler cannot hoist it outof the loop.
+</p>
+<p>
+	Why might we want to do this?
+</p>
+<pre class="prettyprint" style="float:left;">int a = 1;
+
+void f(void)<span style="background: #b6cdf2">
+{</span>
+    while(1)
+    {
+        asm volatile("": : :"memory");<span style="background: #f2eda7">
+        if (a == 1) break;</span>
+    }<span style="background: #eacef2">
+}</span>
+</pre>
+<pre class="prettyprint" style="float:left;">
+f:<span style="background: #b6cdf2">
+        adrp    x1, .LANCHOR0
+        add     x1, x1, :lo12:.LANCHOR0</span>
+.L2:<span style="background: #f2eda7">
+        ldr     w0, [x1]
+        cmp     w0, 1
+        bne     .L2</span><span style="background: #eacef2">
+        ret</span>
+a:
+        .word   1</pre>
+<p style="clear:both">
+	You can <a href="https://godbolt.org/z/OM7tB1" target="_blank">see the above code on Godbolt</a>.
+</p>
+
+
+<!-- ------------------------------------------------------------------------------------------- -->
+<h3>Using A Function Call To Remove Compiler's Ability To Assume Constantness</h3>
+<p>
+	By placing a function call, to a function in a different translation unit (the compiler can't see into unless cross module optimisations are being done) before the evaluation of the conditional, it can not assume that the state of <code>a</code> has not been modified as a side effect of the function call.
+</p>
+<pre class="prettyprint" style="float:left;">
+int a = 1;
+
+extern void something(void);
+
+void f(void)<span style="background: #b6cdf2">
+{</span>
+    while(1)
+    {<span style="background: #f2eda7">
+        something();</span><span style="background: #eacef2">
+        if (a == 1) break;</span>
+    }<span style="background: #e09d9d">
+}</span>
 </pre>
 
-<pre>The Compiler Design Handbook: Optimizations a… (Hardcover)by Y.N. Srikant, Priti Shankar
-
-Ever since the advent of rediced instruction set computers ... instruction schediling techiques have gaine dimportance as they rearrange insturction to "cover" the delay or latency that is required between an instruction and its dependent successor. Without such reordering, peipelines would stall, resulting in wasted processor cycles....
-
-... Instructions cheduling methods for basic blocks may result in a moderate imporovement (less that 5 tgo 10%) in performance, in terms of execution time of a schedule, for simple pipelined RISC architectires. However, the perofrmance imporovement achieved for multiple instruction issue processors could be significant...
-
-Instruction scheduling is typically performed after machine-indpendent optimizations ... on the target machine's assembly code...
-
+<pre class="prettyprint" style="float:left;">
+f:<span style="background: #b6cdf2">
+        stp     x29, x30, [sp, -32]!
+        mov     x29, sp
+        str     x19, [sp, 16]
+        adrp    x19, .LANCHOR0
+        add     x19, x19, :lo12:.LANCHOR0</span>
+.L2:<span style="background: #f2eda7">
+        bl      something</span><span style="background: #eacef2">
+        ldr     w0, [x19]
+        cmp     w0, 1
+        bne     .L2</span><span style="background: #e09d9d">
+        ldr     x19, [sp, 16]
+        ldp     x29, x30, [sp], 32
+        ret</span>
+a:
+        .word   1
+</pre>
+<p style="clear:both">
+	You can <a href="https://godbolt.org/z/wLNs3h" target="_blank">see the above code on Godbolt</a>.
+</p>
 </div>
 
 </div> <!-- END H1 padding div -->
-</div>
+	</div>
 </body>
 </html>
 

@@ -1,0 +1,567 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>7</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1267</x>
+      <y>238</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>float</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1267</x>
+      <y>266</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>double</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1267</x>
+      <y>294</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>long double</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1246</x>
+      <y>210</y>
+      <w>112</w>
+      <h>119</h>
+    </coordinates>
+    <panel_attributes>Complex
+valign=top
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1407</x>
+      <y>238</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>float</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1407</x>
+      <y>266</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>double</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1407</x>
+      <y>294</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>long double</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1386</x>
+      <y>210</y>
+      <w>112</w>
+      <h>119</h>
+    </coordinates>
+    <panel_attributes>Real
+valign=top
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1218</x>
+      <y>182</y>
+      <w>308</w>
+      <h>161</h>
+    </coordinates>
+    <panel_attributes>Floating Types
+valign=top
+bg=gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>903</x>
+      <y>210</y>
+      <w>112</w>
+      <h>238</h>
+    </coordinates>
+    <panel_attributes>Unsigned
+valign=top
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>924</x>
+      <y>238</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>bool
+layer=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>924</x>
+      <y>273</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>char
+layer=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>924</x>
+      <y>308</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>short
+layer=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>924</x>
+      <y>343</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>int
+layer=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>924</x>
+      <y>378</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>long int
+layer=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>924</x>
+      <y>413</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>long long int
+layer=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1043</x>
+      <y>210</y>
+      <w>112</w>
+      <h>238</h>
+    </coordinates>
+    <panel_attributes>Signed
+valign=top
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1064</x>
+      <y>273</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>char
+layer=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1064</x>
+      <y>308</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>short
+layer=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1064</x>
+      <y>343</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>int
+layer=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1064</x>
+      <y>378</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>long int
+layer=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1064</x>
+      <y>413</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>long long int
+layer=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>875</x>
+      <y>182</y>
+      <w>308</w>
+      <h>280</h>
+    </coordinates>
+    <panel_attributes>Standard Integer Types
+valign=top
+bg=gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>847</x>
+      <y>154</y>
+      <w>707</w>
+      <h>322</h>
+    </coordinates>
+    <panel_attributes>*Arithmetic types*
+valign=top
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>756</x>
+      <y>112</y>
+      <w>826</w>
+      <h>392</h>
+    </coordinates>
+    <panel_attributes>*Basic types*
+valign=top
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>364</x>
+      <y>721</y>
+      <w>98</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>*Pointer Type*
+valign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>896</x>
+      <y>539</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>void
+bg=dark_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>665</x>
+      <y>112</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>enumeration
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>686</x>
+      <y>588</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>structure</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>686</x>
+      <y>623</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>array</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>665</x>
+      <y>560</y>
+      <w>112</w>
+      <h>98</h>
+    </coordinates>
+    <panel_attributes>*Aggregate Types*
+valign=top
+bg=pink</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>770</x>
+      <y>273</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>char
+layer=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>798</x>
+      <y>588</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>union</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>651</x>
+      <y>539</y>
+      <w>231</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>*Derived Types*
+valign=top
+bg=magenta
+layer=-1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>553</x>
+      <y>266</y>
+      <w>651</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>*Character Types*
+valign=center
+halign=left
+layer=1
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>651</x>
+      <y>84</y>
+      <w>553</w>
+      <h>434</h>
+    </coordinates>
+    <panel_attributes>*Integer Types*
+valign=top</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>532</x>
+      <y>56</y>
+      <w>1078</w>
+      <h>623</h>
+    </coordinates>
+    <panel_attributes>*Object Types*
+valign=top</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>532</x>
+      <y>700</y>
+      <w>98</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>*Function Type*
+valign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>532</x>
+      <y>742</y>
+      <w>98</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>*Incomplete Type*
+valign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>455</x>
+      <y>728</y>
+      <w>91</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>110.0;40.0;70.0;40.0;70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>455</x>
+      <y>707</y>
+      <w>91</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>110.0;10.0;70.0;10.0;70.0;40.0;10.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>455</x>
+      <y>637</y>
+      <w>91</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>110.0;10.0;70.0;10.0;70.0;140.0;10.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>336</x>
+      <y>133</y>
+      <w>1239</w>
+      <h>651</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>1750.0;10.0;1750.0;510.0;210.0;510.0;210.0;910.0;10.0;910.0;10.0;10.0;1750.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>350</x>
+      <y>147</y>
+      <w>77</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>*Scalar Types*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>224</x>
+      <y>609</y>
+      <w>560</w>
+      <h>196</h>
+    </coordinates>
+    <panel_attributes>lt=..</panel_attributes>
+    <additional_attributes>780.0;180.0;420.0;180.0;420.0;260.0;10.0;260.0;10.0;10.0;780.0;10.0;780.0;180.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>238</x>
+      <y>623</y>
+      <w>98</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>*Derived Declatrator*
+*Types*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>140</x>
+      <y>14</y>
+      <w>1498</w>
+      <h>805</h>
+    </coordinates>
+    <panel_attributes>*Unqalified Types*
+valign=top</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

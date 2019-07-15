@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>Arrays In C &amp; C++ | JEHTech</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">Arrays In C &amp; C++</h1>
+<div style="padding-right:10px;">
+
+<h2>Page Contents</h2>
+<div id="page_contents">
+</div>
+
+<h2>References</h2>
+<div>
+	<ol>
+		<li><a href="https://stackoverflow.com/q/56154380/1517244" target="_blank">How does this piece of code determine array size without using sizeof( )?</a>, StackOverflow.com.</li>
+		<li><a href="https://stackoverflow.com/q/16019009/1517244" target="_blank">Find size of array without using sizeof in C</a>, StackOverflow.com.</li>
+	</ol>
+</div>
+
+<h2>Arrays And Pointers To Arrays</h2>
+<div>
+	<p>
+		The reason this page exists because of 
+		<a href="https://stackoverflow.com/q/56154380/1517244" target="_blank">this StackOverflow question</a>.
+		The OP supplies the following bit of code and asks how it can calculate the size of the array.
+		It puzzled me (until I read the answers lol) so I'm jotting some notes down.
+	</p>
+	<pre class="prettyprint linenums">#include &lt;stdio.h&gt;
+
+int main() {
+    int a[] = {100, 200, 300, 400, 500};
+    int size = 0;
+
+    size = *(&a + 1) - a;
+    printf("%d\n", size);
+
+    return 0;
+}</pre>
+	<p>
+		There was <a href="https://stackoverflow.com/q/16019009/1517244">another post</a>, pointed out,
+		that supplied this code to do the same thing:
+	</p>
+	<pre class="prettyprint linenums">int main ()
+{
+    int arr[100];
+    printf ("%d\n", (&arr)[1] - arr);
+    return 0;
+}</pre>
+	<p></p>
+</div>
+
+</div> <!-- END H1 padding div -->
+</div>
+</body>
+</html>
+
+

@@ -27,18 +27,148 @@
 <div id="page_contents">
 </div>
 
-<h2>RS232</h2>
+<h2>TTL and CMOS</h2>
+<p>When connecting serial lines to equipment different voltage lebels may need to be accounted for. TTL and CMOS are the two types of circuit with associated
+	logic levels that you may need to convert to and from.</p>
+<h3>TTL</h3>
+<p>
+	TTL logic is transistor-to-transitor logic where the ciruits make use of transistors for both the logic and amplification functions. It has a reasonable resistance to noise and a high switching rate. It draws more current than CMOS circuits though <a href="https://whatis.techtarget.com/definition/transistor-to-transistor-logic-TTL" target="_blank">[Ref]</a>.
+</p>
+<p>
+	TTL circuits use 5V. The signal is low between 0V and 0.8V and high above 2V. Between 0.8V and 2V the signal is undefined. When receiving a signal a margin is added to these values to account for possible noise. Normally 0.4Vs of noise accounted for so low is defined as 0V to 0.4V and high as 2.4V or more (up to 5V).
+</p>
+<h3>CMOS</h3>
+<p>
+	Draws less current than TTL. Has wider noise margins normally. Can go from 0V to 5V but can also go from 0V to 3V3 for example, and what constitutes a low or high
+	signal is based on percentages of the high voltage <a href="ftp://ftp.ni.com/evaluation/pxi/Digital_States.pdf" target="_blank">[Ref]</a>.
+</p>
+
+<h2>Single Ended (Unbalanced) v.s. Differential Signals (Balanced)</h2>
 <div>
+	<p><em>Single ended</em> signals are measured with respect to a common ground between transmitter and receiver. Only one wire is nedded for one signal (and one for common ground).
+	</p>
+	<p><em>Differential</em> signals use two wires, A and B, for the one signal (and another wire for ground reference). The signal is high or low depending on the difference between the two received voltages. When A is +ve with respect to B, i.e., A > B, the signal represents a 0, or space. When A is -ve with respect to B, i.e., A < B, the signal
+	represents a 1, or mark. We can see that the lines produce <em>complementary (opposite) output signals</em>.
+	</p>
+	<p>
+		Although an extra wire is required, the signal becomes far more robust to noise as local signal interference should affect both wire equally, so will
+		be eliminted when the difference between the two volatages is taken: 
+	</p>
+	<p>
+		<img src="##IMG_DIR##/differential_signal.png" alt="Differential signal is robust to noise"/>
+	</p>
 </div>
 
-<h2>RS422</h2>
+
+<h2>RS232</h2>
 <div>
+	<h3>Introduction</h3>
+	<p>
+		RS232 links 2 devices together in a point-to-point fashion.	Historically the terminal end of the
+		link is the Data Terminal Equipment (DTE). This would have been your PC, for example. It is the
+		source and destination of the data. The other end is the Data Circuit-terminating Equipment (DCE).
+		This would have been an old-school modem, for example. The DCE is responsible for sending the
+		data somewhere... i.e., it was what did the communications.
+	</p>
+	<p>
+		Thats the history. You can connect any two devices together - it doesn't matter which is the DTE
+		and which is the DCE so long as there is one of each.
+	</p>
+
+	<h3>Signal Meanings/Functions</h3>
+	<p>
+		All signal names are from <em>the perspective of the DTE</em>.
+	</p>
+	<p>
+		RS232 can be setup with a minimum of 3 signals:
+	</p>
+	<pre>+-------+                           +-------+
+|       +---------TD/TX/TXD-------->+       |
+|       |                           |       |
+| DTE   +<--------RD/RX/RXD---------+ DCE   |
+|       |                           |       |
+|       +<--------SG/GND/SGND------>+       |
++-------+                           +-------+</pre>
+	<ul>
+		<li>TD, or terminal data, a.k.a TX or TXD, transmits data from DTE to DCE.</li>
+		<li>RD, or receive data, a.k.k RX or RXD, receives data sent from DCE to DTE.</li>
+		<li>SG, or signal ground, is a common groudn shared between the DTE and DCE so that they have common point of reference for measuring the voltages on TD and RD.</li>
+	</ul>
+	<p>
+		The other signals, such as DTR/DRS and RTS/CTS are used for handshaking.
+	</p>
+
+	<h3>Signal Volatages</h3>
+	<p>
+		The signals use <em>negative logic</em>. A true/high/logic-1 signal (aka mark) is transmitted as -5V.
+		A false/low/logic-0 signals (aka space) is +5V. Thse are the voltages used to drive the signal. However, because, over distances,
+		signa may attenuate (weaken) at the receive +3V and -3V are accepted as low and high values
+		respectively. Thus the RD line from the DTE's point of view uses 3V and -3V.
+	</p>
+	<p>
+		These are only typical volatests. They can range from +/-3V to +/-15V
+	</p>
+
+	<h3>Bit Meanings</h3>
+	<p>
+		Because RS232 is asynchronous there is no shared clock between the transmitter and receiver.
+		When the transmitter starts the receiver must set its clock to the same baud rate so that
+		it knows when to sample the incoming signal.
+	</p>
+	<p>
+		The receiver is &quot;primed&quot; by a <em>start bit</em>, which is a logic low or
+		&quot;space&quot; Whilst the line is idle it is held at a logic high, or mark. Normally
+		8 bits are transferred after the start bit, which are then preceeded, usually by a parity
+		bit and a stop bit.
+	</p>
+	<p>
+		Why the stop bit? It can be 1, 1.5, or 2 bit periods. It is used, not only to give a period of time
+		before the next start bit can be transmitted, but more importantly to guarantee a transition in the
+		signal level between each byte, which aids clock synchronisation between transmitter and
+		receiver. The stop bit is a mark, or logic high.
+	</p>
+	<p>
+		The following shows an example of a serial transfer of the text &quot;Jeh&quot; in ASCII with
+		1 stop bit and no parity:
+	</p>
+	<p>
+		<img src="##IMG_DIR##/rs232.png" alt="RS232 signal example"/>
+	</p>
 </div>
 
 <h2>RS485</h2>
 <div>
+	<p>
+		RS485 is most importantly a <em>differential signal</em>, which makes it more robust
+		to noise than the sigle-ended RS232 signal. It can also be transmitted over larger
+		distances before requiring a repeater, and can utilise faster bit rates <a href="https://www.lammertbies.nl/comm/info/RS-485.html" target="_blank">[Ref]</a>.
+	</p>
+	<p>
+		Like RS232, RS485 will still employ start and stop bits in order to synchronise sender and
+		receiver sampling times and may or may not use parity bits etc. Lets try and re-create the
+		transmission of &quot;Jeh&quot;:
+	</p>
+	<p>
+		<img src="##IMG_DIR##/rs485.png" alt="RS485 example"/>
+	</p>
+	<p>
+		Another ability of the RS485 standard is that it can be used to create a <em>half-duplex, multipoint</em> network,
+		because when the line is idle all senders are in a <em>high-impedence, tri-stated</em> state 
+		<a href="https://www.lammertbies.nl/comm/info/RS-485.html" target="_blank">[Ref]</a>. 
+		I.e., thge line &quot;floats&quot; and is not pulled either high or low. Therefore, any device on the network can acquire the bus.
+	</p>
+	<p>
+		How devices acquire the bus is not specified. It can be that one device is a controller and when a client is addressed only it
+		can respond, for example.
+	</p>
 </div>
 
+<h2>RS422</h2>
+<div>
+	<p>
+		Kinda like RS485 but <em>multi-point</em> rather than <em>multi-drop</em>.
+	</p>
+</div>
 
 </div> <!-- END H1 padding div -->
 </div>

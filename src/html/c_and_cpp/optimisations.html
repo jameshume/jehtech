@@ -1,0 +1,134 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>Compiler Optimisations | JEHTech</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">Compiler Optimisations</h1>
+<div style="padding-right:10px;">
+
+  <h2>Page Contents</h2>
+  <div id="page_contents">
+  </div>
+
+  <h2>References</h2>
+  <div>
+    <ol>
+        <li><a href="https://www.agner.org/optimize/" target="_blank">Software optimization resources</a>, Agner Fog
+        </li>
+    </ol>
+  </div>
+
+  <h2>Optimisations</h2>
+  <div>
+    <h3>Function Inlining</h3>
+    <h3>Constant Folding And Propogation</h3>
+    <h3>Pointer elimination</h3>
+    <h3>Common subexpression elimination</h3>
+    <h3>Register variables</h3>
+    <h3>Live range analysis</h3>
+    <h3>Join identical branches</h3>
+    <h3>Eliminate jumps</h3>
+    <h3>Loop unrolling</h3>
+    <h3>Loop invariant code motion</h3>
+    <h3>Induction variables</h3>
+<pre class="prettyprint" style="float:left;">
+## See https://godbolt.org/z/0Ys5iX
+#include &lt;stddef.h&gt;
+void f(void)<span style="background: green;">
+{</span>
+    extern void dosomething(int *v);
+    extern int a[300];
+<span style="background: yellow;">
+    for (size_t i = 0; i < 100; i++)</span>
+    {<span style="background: gray;">
+        dosomething(&a[i*3]);</span>
+    }<span style="background: red;">
+}</span></pre>
+	<pre class="prettyprint" style="float:left;"># Optimisation level -O3
+f:<span style="background: green;">
+        stp     x29, x30, [sp, -32]!
+        mov     x29, sp
+        stp     x19, x20, [sp, 16]
+        adrp    x19, a
+        add     x19, x19, :lo12:a
+        add     x20, x19, 1200</span>
+.L2:<span style="background: gray;">
+        mov     x0, x19
+        add     x19, x19, 12
+        bl      dosomething</span><span style="background: yellow;">
+        cmp     x20, x19
+        bne     .L2</span><span style="background: red;">
+        ldp     x19, x20, [sp, 16]
+        ldp     x29, x30, [sp], 32
+        ret</span></pre>
+	<pre class="prettyprint" style="float:left;"># No optimisation
+f:<span style="background: green;">
+        stp     x29, x30, [sp, -32]!
+        mov     x29, sp</span><span style="background: yellow;">
+        str     xzr, [sp, 24]
+        b       .L2</span>
+.L3:<span style="background: gray;">
+        ldr     x0, [sp, 24]
+        lsl     x0, x0, 2
+        lsl     x1, x0, 2
+        adrp    x0, a
+        add     x0, x0, :lo12:a
+        add     x0, x1, x0
+        bl      dosomething</span><span style="background: yellow;">
+        ldr     x0, [sp, 24]
+        add     x0, x0, 1
+        str     x0, [sp, 24]</span><span style="background: yellow;">
+.L2:
+        ldr     x0, [sp, 24]
+        cmp     x0, 99
+        bls     .L3</span><span style="background: red;">
+        nop
+        ldp     x29, x30, [sp], 32
+        ret</span></pre>
+	<p style="clear:both;">
+		How cool - the compiler has re-written our code! It seems it was pretty easy for the 
+		compiler to do this as it does this even with optimisation level 1. With no optimisation
+		we can still see some compiler made modifications to our code:
+	</p>
+
+
+    <h3>Scheduling</h3>
+    <h3>Algebraic reductions</h3>
+  </div>
+
+  <h2>Optimisation Killers</h2>
+  <div>
+    <h3>Cannot optimize across modules</h3>
+    <h3>Pointer aliasing</h3>
+    <h3>Dynamic memory allocation</h3>
+    <h3>Pure functions</h3>
+    <h3>Virtual functions and function pointers</h3>
+    <h3>Algebraic reduction</h3>
+    <h3>Floating point induction variables</h3>
+    <h3>Inlined functions have a non-inlined copy</h3>
+    <h3>Dependency Chains and Out Of Order Execution</h3>
+  </div>
+
+</div> <!-- END H1 padding div -->
+</div>
+</body>
+</html>
+
+

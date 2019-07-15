@@ -1549,6 +1549,41 @@ https://stackoverflow.com/questions/89332/how-to-recover-a-dropped-stash-in-git<
         our coding standards.
     </p>
 
+    <h4>Pre-Commit Hooks</h4>
+    <p>
+    	This hook can be super useful - eg auto-run a sanity checker like a linter or make sure the
+    	commit message is formatted correctly etc.
+    </p>
+    <p>
+    	If you want to <i>skip</i> any pre-commit tests you implement use <code>--no-verify</code>.
+    </p>
+    <p>
+    	For example my (sanitised-for-public-web-page) pre-commit hook looks like this:
+    </p>
+    <pre class="prettyprint linenums">##
+## Use Git boiler plate from sample pre-commit hook to figure out what to diff against
+if git rev-parse --verify HEAD >/dev/null 2>&1
+then
+   against=HEAD
+else
+   against=$(git hash-object -t tree /dev/null) # Initial commit: diff against an empty tree object
+fi
+
+##
+## Check all the changed files that have not been deleted for things...
+changed_files=$(git diff --name-only "$against")
+for file in $changed_files
+do
+   if [ -e "$file" ] # Cope with deleted files - obv must not check these...
+   then
+      if ! python my-script-name.py
+      then
+         echo -e "###\n### Could not do stuff \"$file\" has some kind of error \n###"
+         exit 1
+      fi
+   fi
+done</pre>
+
 </div>
 
 <h2>Adding Git Branch To Linux Prompt</h2>

@@ -1,0 +1,614 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>SPIN &amp; Promela | JEHTech</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+
+<div id="content">
+<h1 class="title">SPIN &amp; Promela</h1>
+<div style="padding-right:10px;">
+
+<h2>Page Contents</h2>
+<div id="page_contents">
+</div>
+
+<h2>Promela Notes</h2>
+<div>
+	<h3>Symbolic Names &amp; Variables</h3>
+	<p>
+		Almost equivalent of a C <code>enum</code>. Use the <code>mtype</code> declaration to
+		introduce symbolic names for constant values.
+	</p>
+	<pre class="prettyprint linenums">mtype = {SYM_NAME 1, SYM_NAME_2, ... };
+mtype my_variable = SUM_NAME_1 // Default would be zero</pre>
+	<p>
+		The symbol names have unique positive integer Ids.
+	</p>
+	<p>
+		The word <code>mtype</code> is short for &quot;message type&quot; and although
+		usually defining values for types of messages between promela-processes can be used
+		otherwise.
+	</p>
+
+	<h3>Promela Processes</h3>
+	<p>
+		The keyword <code>proctype</code> declares a promela-process. May be preceeded with the keyword
+		<code>active</code> to start an	instance of the promela-process automatically.
+	</p>
+	<p>
+		Note use of &quot;promela-process&quot; v.s. &quot;process&quot;.
+	</p>
+	<p>
+		Example:
+	</p>
+	<pre class="prettyprint linenums">active [n] proctype some_name()
+{
+   printf("Do something\n")
+}</pre>
+	<p>
+		The above starts <code>n</code> promela-processes of type <code>some_name</code>. The
+		<code>[n]</code> can be ommitted, and is so it is like writing <code>[1]</code>.
+	</p>
+	<p>
+		When more than 1 promela-process could continue to run, the choice of which gets to run
+		is randomly made. This means <em>no assumptions</em> are made about scheduling.
+	</p>
+	<p>
+		Processes can be run manually from the <code>init</code> block, although this is less
+		favourable as it creates another process (the <code>init</code> process), which could bloat
+		a verification state space unecessarily.
+	</p>
+	<pre class="prettyprint linenums">proctype some_name(int a)
+{
+   printf("Do something %d\n", a)
+}
+
+init {
+   run some_name(1);
+   run some_name(2);
+}</pre>
+	<p>
+		We can constrain a process using the <code>provided</code> keyword. A promela-process
+		cannot take <em>any</em> step unless the <code>provided</code> class is <code>true</code>.
+	</p>
+	<pre class="prettyprint linenums">active [n] proctype some_name() <b><u>provided (some-boolean-expression)</u></b>
+{
+   printf("Do something\n");     // This line won't execute until `some-boolean-expression` is true
+   printf("Do something else\n") // Neither will this line. 
+                                 // Its like each line is guarded by `some-boolean-expression`
+}</pre>
+	<p></p>
+
+	<h3>Scope</h3>
+	<p>
+		The only scopes are <em>global</em> and <em>process-local</em>. Thus variables cannot be
+		scoped to, for example, an <code>if</code> statement. Variables cannot be used until they
+		are declared - there is no JavaScript style hoisting.
+	</p>
+	<p>
+		In the global scope all promela-processes can see the variable. In the process-local scope 
+		only the process can see the variable.
+	</p>
+
+	<h3>Data Types</h3>
+	<p></p>
+	<table>
+		<tr><td>bit</td>     <td>0, 1</td></tr>
+		<tr><td>bool</td>    <td>false, true</td></tr>
+		<tr><td>byte</td>    <td>0...255</td></tr>
+		<tr><td>chan</td>    <td>1...255</td></tr>
+		<tr><td>mtype</td>   <td>1...255</td></tr>
+		<tr><td>pid</td>     <td>0...255</td></tr>
+		<tr><td>short</td>   <td>-2<sup>15</sup>...2<sup>15</sup>-1</td></tr>
+		<tr><td>int</td>     <td>-2<sup>31</sup>...2<sup>31</sup>-1</td></tr>
+		<tr><td>unsigned</td><td>0...2<sup>n</sup>-1</td></tr>
+	</table>
+	<p></p>
+
+	<h3>Data Structures</h3>
+	<p>Thing C-style structures</p>
+	<pre class="prettyprint linenums">typedef MyType {
+   short myShort = 3;
+   byte  myByte;
+   unsigned myUnsigned : 5 /*&lt; 5 bit unsigned integer */
+};
+
+proctype myProc(MyType t) {
+   t.myShort = 3;
+}</pre>
+	<p></p>
+
+	<h3>Flow Control &amp; Execution</h3>
+	<h4>Execution</h4>
+	<p>
+		All conditional statements guard execution, and <em>can block</em>, whether or not they have
+		any instructions to execute after the guard or not.
+	</p>
+	<pre class="prettyprint linenums">...
+(x == y) ->
+...</pre>
+	<p>
+		In the above snippet  the promela-process executing the code will <em>block</em> at the line
+		<code>(x == y) -></code> until the condition is true. As there are no statements after the
+		arrow, it will just block and when the condition becomes true continue onto the next line.
+	</p>
+	<p>
+		In promela <em>every type of statement can act as a guard in any context, even when used
+		standalone</em>. But note, it <em>should <u>not</u> have side effects</em>! Only <code>run(...)</code>
+		is allowed to have a side effect.
+	</p>
+	<p>
+		Things like prints or assignments are <em>immediately executable</em>.
+	</p>
+	<p>
+		Expressions which evaluate to <em>false guaranteeably have no side effects</em>.
+	</p>
+
+	<h4>Do Loop</h4>
+	<p>
+		A <code>do</code> loop looks like the following. It consists of a set of guard conditions.
+		The guard conditions are evaluated on each iteration.
+	</p>
+	<p>
+		If a guard evaluates to <em>true</em> then it is said to be <em>executable</em>.
+	</p>
+	<p>
+		If no guard is executable the promela-process <em>blocks</em> until one is. Otherwise one
+		branch out of the set of all executable branches is chosen at <em>random</em>.
+	</p>
+	<pre class="prettyprint linenums">do
+:: boolean-guard-1 -> printf("Execute choice 1");  // What follows the guard is the
+                      printf("do something 1")     // &quot;execution sequence &quot;
+:: boolean-guard-2 -> printf("Execute choice 2");
+                      printf("do something 2")     // Note last statement in sequence
+                                                   // has no trailing semi-colon. The semi-
+                                                   // colon is a seperator, not a terminator.
+...
+:: boolean-guard-n -> printf("Execute choice n");
+                      printf("do something n")
+od</pre>
+	<p>
+		Exit a loop using the <code>break</code> statement or the <code>goto</code> statement.
+	</p>
+	<p>
+		The arrow is just a nice syntactic sugar for the guard. It is equivalent to a semi-colon.
+		We could write it like this:
+	</p>
+	<pre class="prettyprint linenums">do
+:: boolean-guard-1; printf("Execute choice 1");
+                    printf("do something 1")
+:: boolean-guard-2; printf("Execute choice 2");
+                    printf("do something 2")
+...
+od</pre>
+	<p>
+		To avoid blocking if no guard is true you can use the <code>else</code> keyword:
+	</p>
+<pre class="prettyprint linenums">do
+:: boolean-guard-1 -> printf("Execute choice 1")
+:: else -> printf("Won't block and does busy waiting")
+od</pre>
+	<p>
+		The keyword <code>else</code> will only evaluate to <code>true</code> if and only if
+		all other guards are <code>false</code>. When else is selected it is therefore the
+		<em>only</em> executable option.
+	</p>
+
+	<h4>Selection / If</h4>
+	<p>
+		Same execuation rules as for <code>do</code> loop:
+	</p>
+	<pre class="prettyprint linenums">if
+:: boolean-guard-1; printf("Execute choice 1");
+                    printf("do something 1")
+:: boolean-guard-2; printf("Execute choice 2");
+                    printf("do something 2")
+...
+fi</pre>
+
+	<h3>Atomic Sequences</h3>
+	<p>
+		All statements in an atomic sequence are executed without interruption by another promela-process.
+		It is a type of <em>compund statement</em>.
+	</p>
+	<p>
+		An atomic sequence can have a guard (the first statement), in which case the guard determines 
+		whether the sequence runs, and when it does run, it does so atomically.
+	</p>
+	<p>
+		Write a sequence as follows:
+	</p>
+	<pre class="prettyprint linenums">atomic { boolean-guard-condition -> statment1; statement2; ... }</pre>
+	<p>
+		Sequences can included flow control and be non-deterministic (control structures with multiple
+		true guards can randomly choose a path).
+	</p>
+	<p>
+		<em>Warning</em>: If any statement in the sequence, other than the guard blocks, the atomicity
+		is broken at the point of blocking and re-gained when unblocking occurs.
+	</p>
+
+	<h3>Deterministic Steps</h3>
+	<p>
+		Like atomic sequences except <em>no</em> non-determinism (control structures will deterministically
+		choose a path when multiple guards are true), no jumps, and may <em>not contain blocking</em>
+		statements other than the guard. It is a type of <em>compund statement</em>.
+	</p>
+
+	<h3>Macros / Inline Functions</h3>
+	<p>
+		An <code>inline</code> &quot;function&quot; behaves, in many ways, like a C pre-processor macro does.
+		The word &quot;function&quot; is in quotes because it is <em>not a function!</em> It is just some
+		nice syntactic sugar that defines a macro.
+	</p>
+	<pre class="prettyprint linenums"><b><u>inline</u></b> macro_name(param1, ...) {
+// Do some stuff
+}</pre>
+	<p>
+		To see the result of preprocessing pass the <code>-I</code> option to SPIN.
+	</p>
+	<p>
+		Not that because this is a pre-processor substition the statements in the inline body
+		are not atomic unless you explicitly mark them so.
+	</p>
+
+	<h3>Special Variables</h3>
+	<h4>_pid</h4>
+	<p>
+		Read-only, local variable. Evaluates to numeric ID of currently running promela-process.
+	</p>
+	<p>
+		Variables holding numeric IDs should be of type <code>pid</code>. E.g.:
+	</p>
+	<pre class="prettyprint linenums">pid myvar = _pid;</pre>
+	<p></p>
+	<h4>timeout</h4>
+	<p>
+		Read-only boolean variable. Is true when no other statement in the <em>entire</em> system
+		is executable. False otherwise.
+	</p>
+
+	<h3>Message Passing</h3>
+	<p>
+		Promela <em>channels</em> are used to pass messages between asynchronous promela-processes.
+		Every channel has its own unique ID.
+	</p>
+	<h4>Declaring Channels</h4>
+	<p>
+		Declare channels using the <code>chan</code> keyword:
+	</p>
+	<pre class="prettyprint linenums">mtype = { some, set, of, symbolic_constants };
+...
+chan CHAN_NAME = [n] of { mtype, ... } </pre>
+	<p>
+		Where <code>n</code> is zero or a positive integer declaring how many items the channel
+		can hold until it blocks. Thus if <code>n == 0</code>, the channel will immediately block
+		a sender until a receiver reads the value being sent (creates a <em>rendez-vous</em>). If
+		<code>n == 1</code> the sender can send 1 value to an empty channel without blocking. If the
+		channel already has a message in it the sender would block, and so on...
+	</p>
+	<p>
+		The type of message is either a symbolic constant, in which case, for example we could
+		declare:
+	</p>
+	<pre class="prettyprint linenums">chan CHAN_NAME = [1] of {mtype}</pre>
+	<p>
+		Or the message can be an aggregate (think structure in C):
+	</p>
+	<pre class="prettyprint linenums">chan CHAN_NAME = [1] of {mtype, int, bit, user-defined, ...}</pre>
+
+	<h4>Sending / Receiving From Channels</h4>
+	<p>
+		To send a message into a channel:
+	</p>
+	<pre class="prettyprint linenums">CHAN_NAME<b><u>!</u></b>expr1[, expr2, ...]
+CHAN_NAME<b><u>!</u></b>expr1(expr2[, ...]) // equivalent to the above</pre>
+	<p>
+		The default is that the send is executable only if there is space in the channel otherwise
+		it will <em>block</em>.
+	</p>
+	<p>
+		To receive a message of particular type from a channel:
+	</p>
+	<pre class="prettyprint linenums">CHAN_NAME<b><u>?</u></b>var1[, var2, ...]
+CHAN_NAME<b><u>?</u></b>var1(var2[, ...]) // equivalent to the above</pre>
+	<p>
+		The default is that the receive is executable only if there is a message in the channel otherwise
+		it will <em>block</em>.
+	</p>
+	<p>
+		The above will receive messages into the listed variables. If you specify constants instead,
+		the statement is only executable if the constants match the message to be read.
+	</p>
+	<p>
+		If we want to use a variable as-if it were a constant to constrain what can be received
+		surround the variable with <code>eval(varname)</code>.
+	</p>
+
+	<h4>Constrain Channel Usage (Make Verification Quicker)</h4>
+	<p>
+		Use <code>xr</code>, meaning <em>exclusive read</em>, and <code>xs</code> for <em>exculsive
+		send</em> as shown:
+	</p>
+	<pre class="prettyprint linenums">
+chan b = [1] of { ... }
+chan c = [1] of { ... }
+active proctype proc1() {
+   xs b; /* assert proc1 only sends to b */
+   xr c; /* assert proc2 only receives from c */
+}</pre>
+	<p>
+		Helps reduce amount of work verification algorithm has to do by providing some hints about
+		the channel usage in the model. They are <em>assertions</em> that will be checked during a
+		validation.
+	</p>
+
+	<h4>Other Channel Operations</h4>
+	<p>
+		<b>Length</b>: Use <code>len(chanName)</code> to get the number of messages in a channel.
+	</p>
+	<p>
+		<b>Emptiness</b>: Use <code>empty/nempty(chanName)</code> to see if channel is empty/not-empty.
+	</p>
+	<p>
+		<b>Full</b>: Use <code>full/nfull(chanName)</code> to see if channel is full/not-full.
+	</p>
+	<p>
+		<b>Would progress</b>: To find out if a send/receive <em>would</em> be executable you cannot use <code>chan!expr</code> or
+		<code>chan?const_or_var</code> as these expressions both have side effects.
+	</p>
+	<p>
+		Instead use <code>chan![expr]</code> or <code>chan?<b>[</b>const_or_var<b>]</b></code>. These only
+		examine the precondition for the execution of the statement, but don't actually execute it.
+	</p>
+	<p>
+		<b>Read but don't dequeue</b>: <code>chanName?<b>&lt;</b>var_or_const<b>&gt;</b></code>
+	</p>
+</div>
+
+<h2>SPIN Notes</h2>
+<div>
+	<h3>Types Of Claims</h3>
+	<p>
+		SPIN is concerned about what is and isn't possible, not what is good or bad, or probable
+		and improbable.
+	</p>
+	<p>
+		To allow SPIN to tell you about what is and isn't possible you need to make claims about
+		your model. You can make,
+	</p>
+	<ol>
+		<li>Claims about reachable/unreachable states, and</li>
+		<li>Claims about feasible/infeasible executions (i.e., paths forming state transitions).
+		    E.g., every time state P is visited, subsequently state Q should eventually be visited.</li>
+	</ol>
+	<p>
+		SPIN <em>automatically</em> checks for deadlocks (unintended end states).
+	</p>
+	<p>
+		A <b>system invariant</b> should be true for every reachable state in the system. A
+		<b>process invariant</b> is true only for every state reachable in a process.
+	</p>
+
+	<h3>Basic Assertions</h3>
+	<p>
+		Basic assertions use the <code>assert(expr)</code> statement. The <code>expr</code> should
+		always evaluate to <code>true</code> (or non-zero <code>int</code>). If it does not SPIN
+		considers this an error and fails the model.
+	</p>
+
+	<h3>End States</h3>
+	<p>
+		Only default valid end state is when <em>every</em> promela-process has terminated. Verification
+		checks no invalid end states can be reached, which is a <em>saftey</em> issue.
+	</p>
+	<p>
+		To mark alternative states as valid end states use <code>end</code>-state labels. Labels must
+		be unique to their <code>proctype</code>. Every label that starts with the prefix <code>end</code>
+		marks a valid end state.
+	</p>
+	<p>
+		To make sure all promela-processes are in a valid end state at the end of verification
+		<em>and additionally</em> that all message queues are empty use the <code>-q</code> with
+		the compiler verifier.
+	</p>
+
+	<h3>Progress (Liveness) States</h3>
+	<p>
+		Used to specify <em>livenesss</em> properties.
+	</p>
+	<p>
+		Similar syntax to end states but use labels with the prefix <code>progress</code> to mark
+		statements that accomplishes something - allows infinite cycles to be seen as &quot;good&quot;
+		rather than an error condition that signals that a process is stuck making no progress.
+	</p>
+	<p>
+		See the SPIN command line usage on how to search for no-progress cycles. Enabling NP searching
+		disables the search for invalid end states (<em>safety</em>).
+	</p>
+
+	<h3>Faireness</h3>
+	<p>
+		Every process that can execute a statement will eventually do so. I.e., no <em>starvation</em>.
+		There are two types of faireness: weak and strong faireness.
+	</p>
+	<blockquote>
+		<p>
+			[Weak fairness] states that if a process reaches a point where it has an executable statement, and the executability of that statement never changes, it will eventually proceed by executing the statment...
+		</p>
+		<p>
+			...[Strong faireness] states that if the process reaches a point where it has a statement that becomes executable intinitely often, it will eventually proceeed by executing the statement.
+		</p>
+		<footer>
+			-- The SPIN Model Checker, Primer and Reference Manual, G. J. Holzmann.
+		</footer>
+	</blockquote>
+	<p>
+		See the SPIN command line usage on how enforce weak fairness. This adds a computational
+		burden to the verification so it will be slower. Strong fairness no supported as too
+		computationally expensive.
+	</p>
+
+	<h3>Accept States</h3>
+	<p>
+		Mostly used with a <code>never</code> claim. Used to find execution paths that do pass
+		through at least one accept state(s) but not infinitely often - use label prefix <code>accept</code>.
+	</p>
+
+	<h3>Never Claims</h3>
+	<p>
+		Claims that apply to <em>every state</em> in the entire system and <em>all times</em>, i.e.
+		at <q><em>every execution step</em> of the system</q>.
+	</p>
+	<p>
+		Ignored in simulation mode. Only used in verification mode. Help capture <em>liveness</em>
+		requirments.
+	</p>
+	<p>
+		Example of checking system invariant <code>p</code>, taken from &quot;The SPIN Model Checker, Primer and Reference Manual&quot; by G. J. Holzmann.
+	</p>
+	<pre class="prettyprint linenums">never {
+   do
+   :: !p -> break /* } Replace both lines with assert(p) */
+   :: else        /* } for equivalent behaviour          */
+   od
+}</pre>
+	<p>
+		If the invariant is ever broken, i.e. <code>!p</code>, the <code>never</code> claim exits,
+		which signals to SPIN that a violation has occured. Expressions in the claim must be
+		<em>side effect free</em>!
+	</p>
+	<p>
+		<em>Note the use of <code>else</code></em>. As the claim is to be checked at each statement
+		execution the loop must not block, although it is permissible for <code>never</code> claims
+		to block.
+	</p>
+	<p>
+		A more comples example from &quot;The SPIN Model Checker&quot; book (annotation mine):
+	</p>
+	<pre class="prettyprint linenums"><b>/* CHECK that every state in which p is true eventually leads to a state
+ * in which q is true, and in the interim, p remains true.
+ *
+ * SPIN checks for VIOLATIONS of this property only (i.e., does not check
+ * satisfaction).*/</b>
+<b>never</b> {
+S0:    do
+       :: p && !q -> break   /* p is true AND q is false -> expect q to become true */
+       :: true               /* Always executable, which is how we get the...       */
+       od                    /* ...&quot;eventually leads to a true &quot; because even...   */
+                             /* ...when (p &&!q) is true, this branch could...      */
+                             /* ...execute instead. Also allows for p to go false   */
+                             /* ... and then true again before we hit our condition.*/
+S1:
+accept:                      /* Remaining in this loop is a valid end state         */
+/* The loop blocks when p and q true in this accept state and the claim STOPS...    */
+/* ...tracking system execution - we don't have to create another infinite accept...*/
+/* ...state */
+       do
+       :: !q                 /* p is any AND q is false **forever**. Must mark as...*/
+                             /* ... valid end state, otherwise q never becoming...  */
+                             /* ... true would be an error!                         */
+       :: !(p || q) -> break /* p is false AND q is false -> true p did not reach...*/
+                             /* ...a true q!                                        */
+       od
+
+<b>}</b></pre>
+	<p>
+	</p>
+
+
+</div>
+
+<h2>SPIN Command Line</h2>
+<div>
+	<h3>Limit Simulation Steps</h3>
+	<p>The following limits the simulation exection to n steps:</p>
+	<pre class="prettyprint linenums">spin <b><u>-u&lt;n&gt;</u></b> file.pml</pre>
+	<p>For example, to limit it to 50 steps we would write:</p>
+	<pre class="prettyprint linenums">spin <b><u>-u50</u></b> file.pml</pre>
+
+	<h3>Columnated Output</h3>
+	<p>To just get the <code>prinf</code> output, one column per process:</p>
+	<pre class="prettyprint linenums">spin <b><u>-c</u></b> file.pml</pre>
+
+	<h3>Generate Verification model</h3>
+	<pre>spin <b><u>-a</u></b> filename.pml
+cc -o pan pan.c
+./pan</pre>
+	<p>
+		If there are any errors a <em>trail</em> file will be output named
+		<code>filename.pml.trail</code>.
+	</p>
+
+	<h3>Find Shortest Execution Trace</h3>
+	<p>
+		If a tail fails in <code>&lt;n&gt;</code> steps, to find the shortest
+		possible path to failure less than or equal to n steps:
+	</p>
+	<pre>spin <b><u>-t</u></b> file.pml
+cc <b><u>-DREACH</u></b> -o pan pan.c
+./pan <b><u>-i -m&lt;n&gt;</u></b></pre>
+	<p>
+		Alternatively compile to use breadth first search:
+	</p>
+	<pre>cc <b><u>-DBFS</u></b> -o pan pan.c
+./pan</pre>
+
+	<h3>Guided Simulation (Use A Trail File)</h3>
+	<p>
+		To replay a trail file in a simulation:
+	</p>
+	<pre class="prettyprint linenums">spin <b><u>-p -t</u></b> file.pml</pre>
+
+	<h3>Stricter End States - Message Queues Must Be Empty</h3>
+	<p>
+		By defailt when verification ends all promela-processes must be in a valid end state but
+		the message queues do not have to be empty. To make this stricter and require that message
+		queues also be empty use the <code>-q</code> with the compiled verifier.
+	</p>
+
+	<h3>Search For No Progress Cycles</h3>
+	<pre class="prettyprint linenums">spin -a file.pml     # Compile the verifier
+cc -DNP -o pan pan.c # Enable search for no-progress cycles.
+./pan -l [-f]        # Search for NP cycles.
+#        ^^^^
+#        Enforce weak fairness (strong fairness too computationally expensive)</pre>
+	<p></p>
+
+</div>
+
+<h2>Docker Image</h2>
+<p>
+	Bit of a Linux tool so to run on Windows using Docker the following will create a little
+	image which can run SPIN...
+</p>
+<div>
+	<pre class="prettyprint linenums">FROM ubuntu
+
+RUN apt update -y && \
+    apt install -y vim build-essential spin</pre>
+</div>
+
+</div> <!-- END H1 padding div -->
+</div>
+</body>
+</html>
+
+

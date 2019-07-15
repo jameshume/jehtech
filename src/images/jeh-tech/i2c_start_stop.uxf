@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>380</x>
+      <y>120</y>
+      <w>270</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lw=2
+ .</panel_attributes>
+    <additional_attributes>10.0;10.0;120.0;10.0;130.0;60.0;250.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>570</x>
+      <y>120</y>
+      <w>80</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lw=2</panel_attributes>
+    <additional_attributes>60.0;10.0;20.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>630</x>
+      <y>120</y>
+      <w>80</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=..
+lw=2</panel_attributes>
+    <additional_attributes>10.0;10.0;60.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>630</x>
+      <y>170</y>
+      <w>80</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=..
+lw=2</panel_attributes>
+    <additional_attributes>10.0;10.0;60.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>690</x>
+      <y>120</y>
+      <w>80</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lw=2</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;10.0;60.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>690</x>
+      <y>120</y>
+      <w>200</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lw=2</panel_attributes>
+    <additional_attributes>10.0;60.0;120.0;60.0;130.0;10.0;180.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>380</x>
+      <y>230</y>
+      <w>270</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lw=2</panel_attributes>
+    <additional_attributes>10.0;10.0;160.0;10.0;170.0;60.0;230.0;60.0;240.0;10.0;250.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>630</x>
+      <y>230</y>
+      <w>80</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=..
+lw=2</panel_attributes>
+    <additional_attributes>10.0;10.0;60.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>690</x>
+      <y>230</y>
+      <w>190</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lw=2</panel_attributes>
+    <additional_attributes>10.0;10.0;20.0;60.0;90.0;60.0;100.0;10.0;170.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>860</x>
+      <y>120</y>
+      <w>80</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=..
+lw=2</panel_attributes>
+    <additional_attributes>10.0;10.0;60.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>860</x>
+      <y>230</y>
+      <w>80</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=..
+lw=2</panel_attributes>
+    <additional_attributes>10.0;10.0;60.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>340</x>
+      <y>120</y>
+      <w>50</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>*SDA*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>340</x>
+      <y>230</y>
+      <w>50</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>*SCL*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>490</x>
+      <y>110</y>
+      <w>30</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>fg=green
+lw=3
+bg=green
+transparency=75</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>800</x>
+      <y>110</y>
+      <w>30</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>fg=red
+lw=3
+bg=red
+transparency=75</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>470</x>
+      <y>310</y>
+      <w>60</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>*START*
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>780</x>
+      <y>310</y>
+      <w>60</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>*STOP*
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>440</x>
+      <y>340</y>
+      <w>140</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>SCLis HIGH
+SDA HIGH -&gt; LOW
+bg=green</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>750</x>
+      <y>350</y>
+      <w>140</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>SCLis HIGH
+SDA LOW -&gt; HIGH
+bg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

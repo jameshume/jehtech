@@ -27,6 +27,44 @@
 <div id="page_contents">
 </div>
 
+<h2>References</h2>
+<div>
+	<ul>
+		<li>https://www.nxp.com/docs/en/application-note/AN10216.pdf</li>
+		<li>https://www.nxp.com/docs/en/user-guide/UM10204.pdf</li>
+	</ul>
+</div>
+
+<h2>Intro</h2>
+<div>
+	<p>
+		I2C was developed by Philips Semiconductors (now NXP). It has the following features:
+	</p>
+	<ul>
+		<li>2 line serial bus - SDA (data) &amp; SCL (clock),</li>
+		<li>Multi master / slave bus,</li>
+		<li>8-bit bidirectional @ 100kb/s (standard), 400kb/s (fast), 1Mb/s (fast+), 3.4 Mb/s (high-speed), 5Mb/s (ultra fast)</li>
+		<li>Its simple to implement, well known, univerially accepted, plug &amp; play, cost effective,</li>
+		<li>Normally very short distance (usually on PCBs).</li>
+	</ul>
+</div>
+
+<h2>Protocol</h2>
+<div>
+	<h3>Start / Stop Condition</h3>
+	<p>
+		Usually data on <em>SDA must be stable when SCL is HIGH</em> except for the START and STOP conditions.
+	</p>
+	<p>
+		For the START condition, SCL is HIGH, SDA goes HIGH to LOW.
+	</p>
+	<p>
+		For the STOP confition, SCL is HIGH, SDA goes LOW to HIGH.
+	</p>
+	<p>
+		<img src="##IMG_DIR##/i2c_start_stop.png" alt="I2C start and stop conditions"/>
+	</p>
+</div>
 
 </div> <!-- END H1 padding div -->
 </div>
