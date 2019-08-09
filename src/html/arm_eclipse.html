@@ -235,6 +235,38 @@
 
 <p></p>
 
+<h2>Install On Windows</h2>
+<pre>
+Got from here https://github.com/arduino/OpenOCD-build-script/blob/static/compile_win_openocd.sh
+
+Run WSL:
+   sudo apt install libusb-dev
+   sudo apt install libhidapi-libusb0 libhidapi-dev
+   ./configure --enable-cmsis-dap
+   make all -j 8
+   sudo make install
+
+Then create (see https://arduino.stackexchange.com/questions/28566/arduino-zero-error-unable-to-find-cmsis-dap-device):
+   sudo vim /etc/udev/rules.d/98-openocd.rules
+      ACTION!="add|change", GOTO="openocd_rules_end"
+      SUBSYSTEM!="usb|tty|hidraw", GOTO="openocd_rules_end"
+      ATTRS{product}=="*CMSIS-DAP*", MODE="664", GROUP="plugdev"
+      LABEL="openocd_rules_end"
+
+   sudo udevadm control --reload # to force reload if you make a mistake
+
+Then make sure you are in group plugdev
+
+
+Also tried here because I have a WSL problem - it cant find the CMSIS-DAP device - https://qiita.com/qawsed477/items/2f93f2c1ff0de6fef038
+
+THIS DOES NOT APPEAR TO BE POSSIBLE IN WSL YET :'( Moving on to looking at other options.
+
+Trying this: https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/jtag-debugging/setup-openocd-windows.html
+</pre>
+
+
+
 </div> <!-- END H1 padding div -->
 </div>
 </body>

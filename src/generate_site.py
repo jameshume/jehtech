@@ -358,7 +358,7 @@ def deploy_site(specificFile, generateImages):
         newFile.write(htmlFileContents)
         newFile.close()
 
-        if filename in ['math_revision.html', 'linear_alg.html', 'gaussians.html', 'stats.html', 'notes.html', 'gas-networks.html']:
+        if filename in ['math_revision.html', 'linear_alg.html', 'gaussians.html', 'stats.html', 'notes.html', 'gas-networks.html', 'spin.html']:
             mathjaxPageExe = getMathjaxNodePageBinPath()
             shutil.copyfile(newFileName, newFileName + ".TMP")
             print("   Parsing mathjax...")

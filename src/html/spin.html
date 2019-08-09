@@ -29,6 +29,27 @@
 <div id="page_contents">
 </div>
 
+<h2>References</h2>
+<div>
+	<ul>
+		<li><a href="https://spinroot.com/spin/Doc/Book_extras/" target="_blank">The SPIN Model Checker: Primer And Reference Manual</a>, G. Holzmann.
+		</li>
+		<li><a href="http://www.cs.tau.ac.il/~annaz/teaching/TAU_winter08/Seminar/daniel.pdf" target="_blank">Temporal Logics I: Theory</a>, 
+				Daniel Shahaf, Tel-Aviv University, November 2007
+		</li>
+		<li>Lecture 25, Linear Temporal Logic, Models of Software Systems, Fall 1999, Carnegie Mellon University</li>
+		<li>https://www.cs.utexas.edu/~mooney/cs343/slide-handouts/fopc.4.pdf</li>
+		<li>http://www.cs.tau.ac.il/~annaz/teaching/TAU_winter08/Seminar/daniel.pdf</li>
+		<li>http://www.cis.upenn.edu/~fisman/documents/EF_HBMC14.pdf</li>
+	</ul>
+</div>
+
+<h2>To Read</h2>
+<pre>
+https://www.research.ibm.com/haifa/conferences/hvc2010/present/Testing_and_Debugging_Concurrent_Software.pdf
+</pre>
+<p></p>
+
 <h2>Promela Notes</h2>
 <div>
 	<h3>Symbolic Names &amp; Variables</h3>
@@ -284,6 +305,10 @@ fi</pre>
 		Read-only boolean variable. Is true when no other statement in the <em>entire</em> system
 		is executable. False otherwise.
 	</p>
+	<h4>Don't Care Dummy Write Variable</h4>
+	<p>
+		The underscore (<code>_</code>).
+	</p>
 
 	<h3>Message Passing</h3>
 	<p>
@@ -380,6 +405,187 @@ active proctype proc1() {
 	</p>
 	<p>
 		<b>Read but don't dequeue</b>: <code>chanName?<b>&lt;</b>var_or_const<b>&gt;</b></code>
+	</p>
+</div>
+
+<h2>First Order Predicate Logic</h2>
+<div>
+	<h3>Automata</h3>
+	<p>
+		Finite State Automaton is defined by a tuple $(S, s_0, L, T, F)$ where:
+		<div style="margin-left:20px;">
+			$S$ is a finite set of states<br/>
+			$s_0$ is the initiatial state such that $s_0 \in S$<br/>
+			$L$ is a finite set of labels<br/>
+			$T$ is a set of transitions, $T \subseteq (S \times L \times S)$, and<br/>
+			$F$ is a set of final states<br/>
+		</div>
+	</p>
+	<p>
+		For example, look at the following automaton:
+	</p>
+	<p>
+		<img src="##IMG_DIR##/dummy_fsa.png" alt="Picture of a finite automaton"/>
+	</p>
+	<p>
+		For this automaton we have:
+		<div style="margin-left:20px;">
+			$S = \{ s_0, s_1, s_2, s_3 \}$<br/>
+			$s_0$ is the initiatial state such that $s_0 \in S$<br/>
+			$L = \{ a, b, c \}$<br/>
+			$T \subseteq (S \times L \times S) = \left\{ \{s_0, a, s_1\}, \{s_0, b, s_2\}, \{s_1, c, s_2\}, \{s_2, d, s_1\}, \{s_2, e, s_3\} \right\} $, and<br/>
+			$F = \{ s_3 \}$<br/>
+		</div>
+	</p>
+	<p>
+		Why is this interesting? It is interesting because we can represent concurrent activity as
+		a set of states. Imagine the following promela program:
+	</p>
+	<pre class="prettyprint linenums">mtype = { A, B }
+mytype state = A
+
+active proctype proc1()
+{
+    do
+    :: state = A
+    od
+}
+
+
+active proctype proc2()
+{
+    do
+    :: state = B
+    od
+}</pre>
+	<p>
+		We can represent the state of the program as follows:
+	</p>
+	<p>
+		<img src="##IMG_DIR##/dfa_state_tree.png"/>
+	</p>
+	<p>
+		An this is just for a super simple program! If there was more than one variable then the
+		state would consist of a tuple of all the variables. In this way SPIN can take a Promela
+		program and convert it into a finite automaton (FA) and use this to search all the possible states for us (not
+		infinitely although the above tree grows infinitely, the state space is finite - $S = \{A, B\}$).
+	</p>
+
+	<p>
+		The above automotons are all <em>deterministic</em> (and when finite known as DFA). From each state there is only one path
+		to the next state.
+	</p>
+	<p>
+		A <em>non-deterministic</em> automaton (if finite known by the abreviation NFA) is one where from at least one state there is more
+		that one path out of that state. But, there are algorithms to convert NFAs to equivalent DFAs.
+	</p>
+
+	<h4>Runs</h4>
+	<p>
+		A <em>run</em> of a FA is a an <em>ordered sequence of transitions</em> - possibly infinite.
+		For example $ R = \{ (s_0, l_0, s_1), (s_1, l_1, s_2), \ldots \} : \forall i,j,k, (i,j,k \ge 0) \implies (s_i, l_j, s_k) \in T)$.
+	</p>
+	<p>
+		An <b>accepting run</b> is one where the final state is in the set of end states
+		(implicity all the end states are seen as accepting).
+	</p>
+	<p>
+		Runs defined in this way are all <em>terminating</em>. But what about infinite loops through
+		states? These may or may not be a good thing. These runs must be <em>infinite</em> and are
+		referred to as $\omega$-runs. The set of transitions that occur infinitely often in the run
+		are denoted $\sigma^\omega$ and other states $\sigma^+$.
+	</p>
+	<p>
+		An <b>accepting $\omega$-run</b> is one where $\exists s_f: s_f \in F \land s_f \in \sigma^\omega$ - the Buchi acceptance definition.
+		I.e., an accepting $\omega$-run is a loop when at least one state is visited infinitely often.
+	</p>
+	<p>
+		This rule is extended to finite runs using the <em>stutter extension rule</em> which adds an end
+		state that can be repeated infinitely often.
+	</p>
+
+	<h3>LTL</h3>
+	<p>
+		Lets do a very quick recap of some First Order Predicate Logic (FOPL) stuff <a href="https://www.cs.utexas.edu/~mooney/cs343/slide-handouts/fopc.4.pdf" target="_blank">[Ref]</a>.
+	</p>
+	<p>
+		A <em>predicate</em> represents a property of, or a relation between terms that is either true or
+		false. For example, $\mathrm{isAlive}(james)$ or $\mathrm{greaterThan}(1,2)$, for example.
+	</p>
+	<p>
+		Standard <em>logical operators</em> can <em>connect</em> predicates $\lor, \land, \implies, \iff$.
+	</p>
+	<p>
+		<em>Quantifiers</em> allow entire ranges of objects to be reasoned about. For example. $\exists x \in \mathrm{N}: isPrime(x)$.
+		The <em>universal quantifier</em> says that something is true for all values of a variable - $\forall x \in \text{set}: \mathrm{predicate}(x)$ asserts that the predicate must be true for every value in a set. The <em>existential quantifier</em> says that a predicate must be true for at least one value.
+	</p>
+	<p>
+		The &quot;scope&quot; of a quantifier is everything that occurs after it (inside any brackets it belongs to). So $\forall x: \mathrm{isPurple}(x) \lor \mathrm{isLemon}(x)$ is equivalent to So $\forall x: [\mathrm{isPurple}(x) \land \mathrm{isLemon}(x)]$, i.e., everything in the entire universe is purple and a lemon. But in this - $(\forall x: \mathrm{isPurple}(x)) \land (\forall x: \mathrm{isLemon}(x))$ - the two $x$ variables are independent of eachother, although logically they express the same thing.
+	</p>
+	<p>
+		When quantifiers nest their &quot;scopes&quot; do too. So something like $\forall x \exists y: \mathrm{isChildOf}(y, x)$ means that every child has a parent. It was eqivalent to writing $\forall x: (\exists y: \mathrm{isChildOf}(y, x))$. Note that when the nested quanitifers are not the same that the order matters: $\exists x \forall y: \mathrm{isChildOf}(y, x)$ means that there exists a child for whom everyone is their parent!
+	</p>
+	<p>
+		Scope can also be used with variables of the same name where the inner hides the outer: $\exists x (\mathrm{pred1}(x)\lor \forall x \mathrm{pred2}(x))$. The $x$ in pred1 is existentially quantified and the $x$ in pred2 is universally quantified.
+	</p>
+	<p>
+		The quantifiers are related as follows:
+		$$
+		\forall x: ¬P \iff ¬\exists x: P
+		$$
+		$$
+		¬\forall x: P \iff \exists x: ¬P
+		$$
+		$$
+		\forall x: P \iff ¬\exists x: ¬P
+		$$
+		$$
+		\exists x: P \iff ¬\forall x: ¬P
+		$$
+	</p>
+</div>
+
+<h2>Linear Temporal Logic (LTL)</h2>
+<div>
+	<p>
+		First order predicate logic (FOPL) can reason about a system state at <em>one moment</em> in time. Using
+		it one can talk about things like &quot;James is alive&quot;. In the current moment this is true.
+		But what about tomorrow, or indeed eventually? We all die sometime. We cannot express this using
+		FOPL. This is where LTL comes in.
+	</p>
+	<p>
+		LTL is used to reason about the <em>change</em> in system states over time. We care about:
+	</p>
+	<ul>
+		<li><em>Saftey</em>: Nothing &quot;bad&quot;will happen. (Never conditions).
+		</li>
+		<li><em>Liveness</em>: Something &quot;good&quot; will happen.
+		</li>
+		<li><em>Fairness</em>: Processes can make progress - no starvation.
+		</li>
+	</ul>
+	<p>
+		LTL formulas are evaluated at a position $i$ along a path through the system.
+	</p>
+	<p>
+		LTL extends classical logic by adding new operators:
+	</p>
+	<ul>
+		<li>$\square P$: &quot;Always&quot;: Holds is $P$ is true henceforth (in the next position $i+1$) until the end of time.</li>
+		<li>$\lozenge P$: &quot;Eventually&quot;: Holds if $P$ holds someday, that is unspecified from today onwards,.</li>
+		<li>$\bigcirc$: &quot;Next time&quot;: Holds if $P$ holds at the next moment in time, $i+1$.</li>
+		<li>$A \bigcup B$: &quot;Until&quot;:  Holds if $A$ does not become false before $B$ becomes true.<br/>
+Two variants:
+			<ul>
+				<li>Strong until. $A \bigcup_\text{strong} B$ requires that $B$ eventually become true.
+				</li>
+				<li>Weak until
+				</li>
+			</ul>
+		</li>
+	</ul>
+	<p>
+		Now we can express the idea eventually James will die.
 	</p>
 </div>
 
@@ -528,11 +734,32 @@ accept:                      /* Remaining in this loop is a valid end state     
        :: !(p || q) -> break /* p is false AND q is false -> true p did not reach...*/
                              /* ...a true q!                                        */
        od
-
+/* The loop will exit (and cause a claim violation) if !p && !q */
 <b>}</b></pre>
 	<p>
 	</p>
 
+	<h3>Trace Assertions</h3>
+	<p>
+		Used for <em>message channels</em>. All referenced channels must be <em>global</em> and
+		all choices must be <em>deterministic</em>.
+	</p>
+	<p>
+		An example from the SPIN book:
+	</p>
+	<pre class="prettyprint linenums">trace {
+   do
+   :: q1!a; q2:b /* Says all ops on queue q1 must be send a, receive b, repeat */
+   od
+}</pre>
+	<p>
+		A trace assertion can only use <em>simple</em> queue operations. Values matched must
+		be constants or <code>mtype</code> or the special variable <code>_</code>, which means
+		&quot;don't care &quot;.
+	</p>
+	<p>
+		Use <code>notrace</code> blocks to achieve the exact opposite.
+	</p>
 
 </div>
 
