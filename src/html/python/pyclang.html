@@ -1,0 +1,313 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+   <meta charset="UTF-8">                                              <!-- HTML 5 -->
+   <title>PyClang Notes</title>
+   <!-- META_INSERT -->
+   <!-- CSS_INSERT -->
+   <!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+   -- This is JEHTech --
+</div>
+
+<div id="sidebar">
+   <h1 class="title">Links...</h1>
+   <div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">PyCLang Notes</h1>
+   <h2>References</h2>
+   <div>
+      <ul>
+         <li>
+            <a href="https://eli.thegreenplace.net/2011/07/03/parsing-c-in-python-with-clang" target="_blank">Parsing C++ in Python with Clang</a>, Eli Bendersky's Website, July 03, 2011.
+         </li>
+         <li>
+            <a href="https://clang.llvm.org/doxygen/structCXCursor.html" target="_blank">Clang CXCuror Doxygen</a>.
+         </li>
+         <li>
+            <a href="https://clang.llvm.org/doxygen/group__CINDEX__CURSOR__MANIP.html" target="_blank">Clang Cursor Manipulators Docygen</a>.
+         </li>
+   </div>
+
+   <h2>Some Examples / Playing</h2>
+   <div>
+      <p>
+         Here are some examples of playing around with pyclang...
+      </p>
+      <ul>
+         <li>
+            <a href="https://github.com/jameshume/mess-with-pyclang/blob/master/investigate_pyclang_ast.py" target="_blank">Investigating the AST</a>
+         </li>
+      </ul>
+   </div>
+
+   <h2>The Translation Unit - <code>clang.cindex.TranslationUnit</code></h2>
+   <p>
+      The <code>TranslationUnit</code> seems to have the following useful properties:
+   </p>
+   <ul>
+      <li>
+         <p>
+            <code>codeComplete(path, line, column)</code>
+         </p>
+         <p>
+            Gives some auto-complete suggestions:
+         </p>
+         <pre class="prettyprint linenums">&gt;&gt; import clang.cindex
+&gt;&gt; index = clang.cindex.Index.create()
+&gt;&gt; tu = index.parse('test_files/test1.c')
+&gt;&gt; a = tu.codeComplete('test_files/test1.c', 18, 33)
+&gt;&gt; for r in a.results: print(r)
+...
+{'const int', ResultType} | {'param1', TypedText} || Priority: 17 || Availability: Available || Brief comment: None
+{'const int', ResultType} | {'test_static_local', TypedText} || Priority: 17 || Availability: Available || Brief comment: None
+{'const int', ResultType} | {'test_static_global', TypedText} || Priority: 25 || Availability: Available || Brief comment: None
+{'enum MyTestEnum', ResultType} | {'TEST_ENUM_1', TypedText} || Priority: 16 || Availability: Available || Brief comment: None
+{'enum MyTestEnum', ResultType} | {'TEST_ENUM_2', TypedText} || Priority: 16 || Availability: Available || Brief comment: None</pre>
+      </li>
+      <li>
+         <p>
+            <code>cursor</code>. 
+         </p>
+         <p>
+            A cursor is an abstraction that represents any element in an AST.
+            <q>The cursor abstraction unifies the different kinds of entities in a program - declaration,
+            statements, expressions, references to declarations, etc. - under a single &auot;cursor&quot;
+            abstraction with a common set of operations. Common operation for a cursor include: getting
+            the physical location in a source file where the cursor points, getting the name associated
+            with a cursor, and retrieving cursors for any child nodes of a particular cursor.</q>
+            <a href="https://clang.llvm.org/doxygen/structCXCursor.html#details" target="_blank">[ref]</a>.
+         </p>
+      </li>
+      <li><code>diagnostics</code></li>
+      <li><code>from_ast_file</code></li>
+      <li><code>from_param</code></li>
+      <li><code>from_source</code></li>
+      <li><code>get_extent(filename, locations)</code></li>
+      <li><code>get_file()</code></li>
+      <li><code>get_includes()</code></li>
+      <li><code>get_location()</code></li>
+      <li><code>get_tokens()</code></li>
+      <li><code>index</code></li>
+      <li><code>obj</code></li>
+      <li><code>reparse()</code></li>
+      <li><code>save()</code></li>
+      <li><code>spelling</code> - Returns the filename the TU addresses</li>
+   </ul>
+
+   <h2>The Cursor Abstraction - <code>clang.cindex.Cursor</code></h2>
+   <div>
+      <p>
+         <q>The cursor abstraction unifies the different kinds of entities in a program - declaration,
+            statements, expressions, references to declarations, etc. - under a single &auot;cursor&quot;
+            abstraction with a common set of operations. Common operation for a cursor include: getting
+            the physical location in a source file where the cursor points, getting the name associated
+            with a cursor, and retrieving cursors for any child nodes of a particular cursor.</q>
+            <a href="https://clang.llvm.org/doxygen/structCXCursor.html#details" target="_blank">[ref]</a>.
+      </p>
+      <p>
+         The <code>cursor</code> functions that are useful for navigating the AST are <code>get_children()</code>,
+         <code>lixical_parent()</code>, <code>sematic_parent</code> and <code>walk_preorder()</code>. From the
+         clang docs:
+      </p>
+      <blockquote>
+         <p>
+            The lexical parent of a cursor is the cursor in which the given cursor was actually written. For many declarations, the lexical and semantic parents are equivalent (the semantic parent is returned by clang_getCursorSemanticParent()). They diverge when declarations or definitions are provided out-of-line. For example:
+         </p>
+         <pre class="prettyprint linenums">class C {
+ void f();
+};
+void C::f() { }</pre>
+
+         <p>
+            In the out-of-line definition of <code>C::f</code>, the semantic parent is the class <code>C</code>, of which this function is a member. The lexical parent is the place where the declaration actually occurs in the source code; in this case, the definition occurs in the translation unit. In general, the lexical parent for a given entity can change without affecting the semantics of the program, and the lexical parent of different declarations of the same entity may be different. Changing the semantic parent of a declaration, on the other hand, can have a major impact on semantics, and redeclarations of a particular entity should all have the same semantic context.
+         </p>
+         <p>
+            In the example above, both declarations of <code>C::f</code> have <code>C</code> as their semantic context, while the lexical context of the first <code>C::f</code> is <code>C</code> and the lexical context of the second <code>C::f</code> is the translation unit.
+         </p>
+         <footer>-- Clang Docs for <a href="https://clang.llvm.org/doxygen/group__CINDEX__CURSOR__MANIP.html#gace7a423874d72b3fdc71d6b0f31830dd" target="_blank"><code>clang_getCursorLexicalParent()</code></a> (some formatting mine). </footer>
+      </blockquote>
+      <p>
+         The <code>cursor</code> abstraction has the following properties/functions of interest, some
+         of which wrap up the C cursor manipulator functions <a href="https://clang.llvm.org/doxygen/group__CINDEX__CURSOR__MANIP.html" target="_blank">[ref]</a>:
+      </p>
+      <ul>
+         <li><code>access_specifier</code></li>
+         <li><code>availability</code></li>
+         <li><code>brief_comment</code></li>
+         <li><code>canonical</code></li>
+         <li><code>data</code></li>
+         <li><code>displayname</code></li>
+         <li><code>enum_type</code></li>
+         <li><code>enum_value</code></li>
+         <li><code>exception_specification_kind</code></li>
+         <li><code>extent</code></li>
+         <li><code>from_cursor_result</code></li>
+         <li><code>from_location</code></li>
+         <li><code>from_result</code></li>
+         <li><code>get_arguments</code></li>
+         <li><code>get_bitfield_width</code></li>
+         <li>
+            <p><code>get_children()</code></p>
+            <p>Returns a list iterator object of the immediate <code>cursor</code> children of this node.</p>
+            <pre class="prettyprint linenums">&gt;&gt; import clang.cindex
+&gt;&gt; index = clang.cindex.Index.create()
+&gt;&gt; tu = index.parse('test_files/test1.c')
+&gt;&gt; print(tu.cursor.get_children())
+&gt;&gt; print("\n")
+&gt;&gt; for a in tu.cursor.get_children():
+&gt;&gt;    print(a)
+
+&lt;list_iterator object at 0x0000020472AF4828&gt;
+&lt;clang.cindex.Cursor object at 0x0000020472A72D48&gt;
+&lt;clang.cindex.Cursor object at 0x0000020472A72DC8&gt;
+&lt;clang.cindex.Cursor object at 0x0000020472A72E48&gt;
+&lt;clang.cindex.Cursor object at 0x0000020472A72A48&gt;</pre>
+         </li>
+         <li><code>get_definition</code></li>
+         <li><code>get_field_offsetof</code></li>
+         <li><code>get_num_template_arguments</code></li>
+         <li><code>get_template_argument_kind</code></li>
+         <li><code>get_template_argument_type</code></li>
+         <li><code>get_template_argument_unsigned_value</code></li>
+         <li><code>get_template_argument_value</code></li>
+         <li><code>get_tokens</code></li>
+         <li><code>get_usr</code></li>
+         <li><code>hash</code></li>
+         <li><code>is_abstract_record</code></li>
+         <li><code>is_anonymous</code></li>
+         <li><code>is_bitfield</code></li>
+         <li><code>is_const_method</code></li>
+         <li><code>is_converting_constructor</code></li>
+         <li><code>is_copy_constructor</code></li>
+         <li><code>is_default_constructor</code></li>
+         <li><code>is_default_method</code></li>
+         <li>
+            <p>
+               <code>is_definition</code>
+            </p>
+            <p>
+               Returns <code>True</code> if this is a definition and <code>False</code> if it is
+               just a declaration. For example:
+            </p>
+            <pre class="prettyprint linenums">for cur in node.walk_preorder():
+   if cur.kind == clang.cindex.CursorKind.FUNCTION_DECL:
+      if xx.is_definition():
+         # This is the body of the function
+         pass
+      else:
+         # This is a declaration - just the function prototype
+         pass</pre>
+         </li>
+         <li><code>is_move_constructor</code></li>
+         <li><code>is_mutable_field</code></li>
+         <li><code>is_pure_virtual_method</code></li>
+         <li><code>is_scoped_enum</code></li>
+         <li><code>is_static_method</code></li>
+         <li><code>is_virtual_method</code></li>
+         <li>
+            <p><code>kind</code>
+            </p>
+            <p>This is a property holding the type of node in the AST that this <code>cursor</code> 
+               object represents. For example, for a function declaration it will be equal to
+               <code>clang.cindex.CursorKind.FUNCTION_DECL</code>.
+            </p>
+            <p>
+               To see all the cursor kinds it is best to refer to <a href="https://github.com/llvm-mirror/clang/blob/master/bindings/python/clang/cindex.py" target="_blank">cindex.py</a> in the bindings.
+            </p>
+            <p>
+               Here are some of the more useful/frequent ones you might use in a C program, for example:
+            </p>
+            <table>
+               <th>
+                  <tr>
+                     <td>CursorKind Name</td>
+                     <td>Meaning</td>
+                  </tr>
+               </th>
+               <tbody>
+                  <tr>
+                     <td><code>CursorKind.STRUCT_DECL</code></td>
+                     <td>A C or C++ struct.</td>
+                  </tr>
+                  <tr>
+                     <td><code>CursorKind.FIELD_DECL</code></td>
+                     <td>A field (in C) or non-static data member (in C++) in a struct, union, or C++ class.</td>
+                  </tr>
+                  <tr>
+                     <td><code>CursorKind.ENUM_DECL</code></td>
+                     <td>An enumeration.</td>
+                  </tr>
+                  <tr>
+                     <td><code>CursorKind.ENUM_CONSTANT_DECL</code></td>
+                     <td>An enumerator constant.</td>
+                  </tr>
+                  <tr>
+                     <td><code>CursorKind.FUNCTION_DECL</code></td>
+                     <td>A function.</td>
+                  </tr>
+                  <tr>
+                     <td><code>CursorKind.PARM_DECL</code></td>
+                     <td>A function parameter.</td>
+                  </tr>
+                  <tr>
+                     <td><code>CursorKind.VAR_DECL</code></td>
+                     <td>A variable.</td>
+                  </tr>
+                  <tr>
+                     <td><code>CursorKind.TYPEDEF_DECL</code></td>
+                     <td>A typedef.</td>
+                  </tr>
+               </tbody>
+            </table>
+            <p></p>
+         </li>
+         <li><code>lexical_parent</code></li>
+         <li><code>linkage</code></li>
+         <li><code>location</code></li>
+         <li><code>mangled_name</code></li>
+         <li><code>objc_type_encoding</code></li>
+         <li><code>raw_comment</code></li>
+         <li><code>referenced</code></li>
+         <li><code>result_type</code></li>
+         <li><code>semantic_parent</code></li>
+         <li>
+            <p>
+               <code>spelling</code>
+            </p>
+            <p>
+               A property giving the name for the entity referenced by this cursor. For example, if
+               this cursor references a function declaration (<code>clang.cindex.CursorKind.FUNCTION_DECL</code>)
+               for the function &quot;MyBestFunction(...)&quot; this property holds the string &quot;MyBestFunction&quot;.
+            </p>
+         </li>
+         <li><code>storage_class</code></li>
+         <li><code>tls_kind</code></li>
+         <li><code>translation_unit</code></li>
+         <li><code>type</code></li>
+         <li><code>underlying_typedef_type</code></li>
+         <li>
+            <p><code>walk_preorder()</code></p>
+            <p>
+               Returns a generator that allows you to visit every node in the AST in pre-order (visit the root first, then pre-order visit each child recursively).
+            </p>
+            <p>
+               Calling <code>next()</code> on the retured generator yields a <code>clang.cindex.Cursor</code> object.
+            </p>
+         </li>
+      </ul>
+
+   </div>
+
+</div>
+</div> <!-- End content div -->
+</body>
+</html>
+
+
