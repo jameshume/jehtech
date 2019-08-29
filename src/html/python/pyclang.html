@@ -25,6 +25,9 @@
    <div>
       <ul>
          <li>
+            <a href="https://github.com/llvm-mirror/clang/tree/master/bindings/python" target="_blank">Python Clang Bindings</a>, GitHub.
+         </li>
+         <li>
             <a href="https://eli.thegreenplace.net/2011/07/03/parsing-c-in-python-with-clang" target="_blank">Parsing C++ in Python with Clang</a>, Eli Bendersky's Website, July 03, 2011.
          </li>
          <li>
@@ -45,6 +48,19 @@
             <a href="https://github.com/jameshume/mess-with-pyclang/blob/master/investigate_pyclang_ast.py" target="_blank">Investigating the AST</a>
          </li>
       </ul>
+      <p>
+         I have version 6.0.0.2, installed using <code>pip install clang</code> (clang install seperately). 
+      </p>
+      <p>
+         Poo, at the moment, I cant see a way of getting the opcode of a binary operator using these
+         bindings. There appears to be an 
+         <a href="https://reviews.llvm.org/D10833?id=39158#change-vBa6Es1Tcb5q" target="_blank">accepted patch</a> for
+         this functionality,  but its been hanging around for over 4 years at the time of writing... so err... not holding my breath.
+      </p>
+      <p>
+         PyBee seems to have added this functionality in <a href="https://github.com/pybee/sealang/blob/master/clang/cindex.py" target="_blank">their fork called Sealang</a>, which they say is <q>an improved set of Python bindings for libclang</q>,
+         which they created because the <q>upstream maintainers of libclang have not been especially responsive to patches that address issues like Python 3 compatibility, and the significant omissions in the API</q>.
+      </p>
    </div>
 
    <h2>The Translation Unit - <code>clang.cindex.TranslationUnit</code></h2>
