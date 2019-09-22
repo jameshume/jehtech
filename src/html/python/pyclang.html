@@ -36,6 +36,10 @@
          <li>
             <a href="https://clang.llvm.org/doxygen/group__CINDEX__CURSOR__MANIP.html" target="_blank">Clang Cursor Manipulators Docygen</a>.
          </li>
+         <li>
+            <a href="https://stackoverflow.com/questions/26440911/python-clang-does-not-search-system-include-paths" target="_blank">Python clang does not search system include paths</a>, StackOverflow.
+         </li>
+     </ul>
    </div>
 
    <h2>Some Examples / Playing</h2>
@@ -59,8 +63,8 @@
       </p>
       <p>
          PyBee seems to have added this functionality in <a href="https://github.com/pybee/sealang/blob/master/clang/cindex.py" target="_blank">their fork called Sealang</a>, which they say is <q>an improved set of Python bindings for libclang</q>,
-         which they created because the <q>upstream maintainers of libclang have not been especially responsive to patches that address issues like Python 3 compatibility, and the significant omissions in the API</q>.
-      </p>
+         but <em>unfortunately this project is no longer maintained</em>. I tried testing it. Although it installed the module
+         could not be imported due a missing symbol - I'm guessing its too out of date to work with the later libclang verions :'(
    </div>
 
    <h2>The Translation Unit - <code>clang.cindex.TranslationUnit</code></h2>
@@ -186,7 +190,9 @@ void C::f() { }</pre>
 &lt;clang.cindex.Cursor object at 0x0000020472A72E48&gt;
 &lt;clang.cindex.Cursor object at 0x0000020472A72A48&gt;</pre>
          </li>
-         <li><code>get_definition</code></li>
+         <li><p><code>get_definition()</code></p>
+            <p>Use this to do from a function declaration node to its corresponding definition node.</p>
+         </li>
          <li><code>get_field_offsetof</code></li>
          <li><code>get_num_template_arguments</code></li>
          <li><code>get_template_argument_kind</code></li>
@@ -197,7 +203,10 @@ void C::f() { }</pre>
          <li><code>get_usr</code></li>
          <li><code>hash</code></li>
          <li><code>is_abstract_record</code></li>
-         <li><code>is_anonymous</code></li>
+         <li><p><code>is_anonymous()</code></p>
+            <p>Use this to figure out if the cursor node is an anonymouse <code>enum</code> 
+               or <code>struct</code>, for example.</p>
+         </li>
          <li><code>is_bitfield</code></li>
          <li><code>is_const_method</code></li>
          <li><code>is_converting_constructor</code></li>
@@ -206,7 +215,11 @@ void C::f() { }</pre>
          <li><code>is_default_method</code></li>
          <li>
             <p>
-               <code>is_definition</code>
+               <code>is_definition()</code>
+            </p>
+            <p>
+               All functions declarations and definitions have the node type <code>CursorKind.FUNCTION_DECL</code>.
+               To distinguish between the two, this function is used.
             </p>
             <p>
                Returns <code>True</code> if this is a definition and <code>False</code> if it is
@@ -285,7 +298,11 @@ void C::f() { }</pre>
             <p></p>
          </li>
          <li><code>lexical_parent</code></li>
-         <li><code>linkage</code></li>
+         <li><p><code>linkage</code></p>
+            <p>Tells you whether something is visible only within the compilation unit (<code>static</code>)
+               or is visible globally: <code>LinkageKind.INTERNAL</code> or <code>LinkageKind.EXTERNAL</code>.
+            </p>
+         </li>
          <li><code>location</code></li>
          <li><code>mangled_name</code></li>
          <li><code>objc_type_encoding</code></li>
@@ -318,8 +335,219 @@ void C::f() { }</pre>
             </p>
          </li>
       </ul>
-
    </div>
+
+
+   <h2>Finding Enums</h2>
+   <div>
+      <p>I wanted to find enums, whether they were anonymous or named, and for both cases if they
+         were hidden behind a typedef. I was only interested in globally defined enums, not enums embedded
+         in structs or local to functions, but I've included some examples here.
+      </p>
+
+      <ol>
+         <li>An anonymous enum:
+            <pre class="prettyprint linenums">// 1. Anonymous enum
+enum { ANON_ENUM_1, ... };</pre>
+            <ul>
+               <li><code>cursor.spelling = &quot;&quot;</code></li>
+               <li><code>cursor.type.spelling = &quot;name enum (anonymous)&quot;</code></li>
+               <li><code>cursor.is_anonymous() = True</code></li>
+               <li>The AST tree representing this is:
+                  <pre class="prettyprint linenums">
++-- NODE: CursorKind.ENUM_DECL spel = '' (len=0)
+    |   : cur.type.spelling: enum (anonymous at test_files/test1.c:1:1)
+    |   : cur.type.kind: TypeKind.ENUM
+    |   : cur.is_anonymous: True
+    |   : cur.lexical_parent.spelling: test_files/test1.c
+    |   : cur.semantic_parent.spelling: test_files/test1.c
+    |   : cur.enum_type.spelling: int
+    +-- NODE:  CursorKind.ENUM_CONSTANT_DECL spel = 'ANON_ENUM_1' (len=11)
+    |       : cur.type.spelling: int
+    |       : cur.enum_value: 0
+    |       : cur.semantic_parent.type.spelling: (anonymous at test_files/test1.c:1:1)
+    |       : cur.semantic_parent.kind.spelling: CursorKind.ENUM_DECL
+    +-- NODE:  CursorKind.ENUM_CONSTANT_DECL spel = 'ANON_ENUM_2' (len=11)
+    ...
+    ...
+    ...</pre>
+               </li>
+            </ul>
+         </li>
+         <li>A named enum called <code>bare_named</code>.
+             <pre class="prettyprint linenums">// 2. Named enum
+enum Bare_Named_Enum { BARE_NAMED_ENUM_1, ... };</pre>
+            <ul>
+               <li>There is only one enum decl.</li>
+               <li><code>cursor.spelling = &quot;bare_named&quot;</code></li>
+               <li><code>cursor.type.spelling = &quot;enum bare_named&quot;</code></li>
+               <li><code>cursor.is_anonymous() = False</code></li>
+               <li>The AST tree respresenting this:
+                  <pre class="prettyprint linenums">
++-- NODE: CursorKind.ENUM_DECL spel = 'Bare_Named_Enum' (len=15)
+    |   : cur.type.spelling: enum Bare_Named_Enum
+    |   : cur.type.kind: TypeKind.ENUM
+    |   : cur.is_anonymous: False
+    |   : cur.lexical_parent.spelling: test_files/test1.c test_files/test1.c
+    |   : cur.enum_type.spelling: int
+    +-- NODE:  CursorKind.ENUM_CONSTANT_DECL spel = 'BARE_NAMED_ENUM_1' (len=17)
+    |       : cur.type.spelling: int
+    |       : cur.enum_value: 0
+    |       : cur.semantic_parent.type.spelling: enum Bare_Named_Enum 
+    |       : cur.semantic_parent.kind.spelling: CursorKind.ENUM_DECL
+    +-- NODE:  CursorKind.ENUM_CONSTANT_DECL spel = 'BARE_NAMED_ENUM_2' (len=17)
+    ...
+    ...
+    ...</pre>
+               </li>
+            </ul>
+         </li>
+         <li>A typedef'ed anonymouse enum.
+            <pre class="prettyprint linenums">// 3. Typdef'd anonymouse enum
+typedef enum { TYPEDEF_ANON_ENUM_1, ... } Typedef_Anonymouse_Enum_t;</pre>
+            <ul>
+               <li><code>cursor.spelling = &quot;&quot;</code></li>
+               <li><code>cursor.type.spelling = &quot;type_t&quot;</code></li>
+               <li><code>cursor.is_anonymous() = False</code>. Presumably because it is referenced by the type created.</li>
+               <li>AST:
+                  <pre class="prettyprint linenums">
++-- NODE: CursorKind.TYPEDEF_DECL spel = 'Typedef_Anonymouse_Enum_t' (len=25)
+    |       : cur.type.spelling: Typedef_Anonymouse_Enum_t
+    |       : cur.spelling: Typedef_Anonymouse_Enum_t
+    |       : cur.underlying_typedef_type.spelling: enum Typedef_Anonymouse_Enum_t
+    +-- NODE: CursorKind.ENUM_DECL spel = '' (len=0)
+        |   : cur.type.spelling: Typedef_Anonymouse_Enum_t
+        |   : cur.type.kind: TypeKind.ENUM
+        |   : cur.is_anonymous(): False
+        |   : cur.lexical_parent.type.spelling: test_files/test1.c
+        |   : cur.semantic_parent.type.spelling: test_files/test1.c
+        |   : cur.enum_type.spelling: int
+        +-- NODE:  CursorKind.ENUM_CONSTANT_DECL spel = 'TYPEDEF_ANON_ENUM_1' (len=19)
+        |       : cur.type.spelling: int
+        |       : cur.enum_value: 0
+        |       : cur.lexical_parent.type.spelling: enum MySecondTestEnum
+        |       : cur.semantic_parent.kind.spelling: CursorKind.ENUM_DECL
+        +-- NODE:  CursorKind.ENUM_CONSTANT_DECL spel = 'TYPEDEF_NAMED_ENUM_2' (len=20)
+        ...
+        ...</pre>
+            </ul>
+         </li>
+         <li>A typedef'ed enum with a name.
+             <pre class="prettyprint linenums">// 4. Typdef'd named enum
+typedef enum Typdef_Named_enum { TYPEDEF_NAMED_ENUM_1, ... } Typedef_Named_Enum_t;</pre>
+            <ul>
+               <li>There are two enum decls - one for the enum alone, and one as a child of the typedef.</li>
+               <li><code>cursor.spelling = "named_and_typedefed"</code></li>
+               <li><code>cursor.type.spelling = "enum named_and_typedefed"</code></li>
+               <li><code>cursor.is_anonymous() = False</code></li>
+               <li>AST:
+                  <pre class="prettyprint linenums">
++-- NODE: CursorKind.TYPEDEF_DECL spel = 'Typedef_Named_Enum_t' (len=20)
+    |   : cur.type.spelling: Typedef_Named_Enum_t
+    |   : cur.spelling: Typedef_Named_Enum_t
+    |   : cur.underlying_typedef_type.spelling: enum Typdef_Named_enum
+    +-- NODE:  CursorKind.ENUM_DECL spel = 'Typdef_Named_enum' (len=17)
+        |       : cur.type.spelling: enum Typdef_Named_enum
+        |       : cur.kind.spelling: TypeKind.ENUM
+        |       : cur.is_anonymous(): False
+        |       : cur.lexical_parent.spelling test_files/test1.c
+        |       : cur.sementic_parent.spelling test_files/test1.c
+        |       : cur.enum_type.spelling: int
+        +-- NODE:  CursorKind.ENUM_CONSTANT_DECL spel = 'TYPEDEF_NAMED_ENUM_1' (len=20)
+        |           : cur.type.spelling: int
+        |           : cur.enum_value: 0
+        |           : cur.lexical_parent.type.spelling: enum Typdef_Named_enum 
+        |           : cur.semantic_parent.type.spelling: enum Typdef_Named_enum
+        |           : cur.semantic_parent.kind.spelling: CursorKind.ENUM_DECL
+        +-- NODE:  CursorKind.ENUM_CONSTANT_DECL spel = 'TYPEDEF_NAMED_ENUM_2' (len=20)
+        ...
+        ...
+     ...</pre>
+               </li>
+            </ul>
+         </li>
+         <li>A named enum declared inside a structure.
+            <pre class="prettyprint linenums">struct thestruct {
+   enum enum_in_struct {
+      ENUM_IN_STRUCT_1, ENUM_IN_STRUCT_2
+   } val;
+};</pre>
+            <ul>
+               <li>The AST looks like this:
+                  <pre class="prettyprint linenums">
++-- NODE:  CursorKind.STRUCT_DECL spel = 'thestruct' (len=9)
+    +-- NODE:  CursorKind.ENUM_DECL spel = 'enum_in_struct' (len=14)
+    |   |   : cur.type.spelling: enum enum_in_struct
+    |   |   : cur.type.kind: TypeKind.ENUM
+    |   |   : cur.is_anonymous(): False
+    |   |   : cur.lexical_parent.spelling: thestruct test_files/test1.c
+    |   |   : cur.semantic_parent.spelling: thestruct test_files/test1.c
+    |   |   : cur.enum_type.spelling:  int
+    |   +-- NODE:  CursorKind.ENUM_CONSTANT_DECL spel = 'ENUM_IN_STRUCT_1' (len=16)
+    |   |       : cur.type.spelling: int
+    |   |       : cur.enum_value: 0
+    |   |       : cur.lexical_parent.type.spelling: enum enum_in_struct 
+    |   |       : cur.semantic_parent.type.spelling: enum enum_in_struct
+    |   |       : cur.semantic_parent.kind: CursorKind.ENUM_DECL
+    |   +-- NODE:  CursorKind.ENUM_CONSTANT_DECL spel = 'ENUM_IN_STRUCT_2' (len=16)
+    |           ...
+    +-- NODE:  CursorKind.FIELD_DECL spel = 'val' (len=3)
+        +-- NODE:  CursorKind.ENUM_DECL spel = 'enum_in_struct' (len=14)
+            |   : cur.type.spelling: enum enum_in_struct
+            |   : cur.type.kind: TypeKind.ENUM
+            |   : cur.is_anonymous(): False
+            |   : cur.lexical_parent.spelling: thestruct test_files/test1.c
+            |   : cur.semantic_parent.spelling: thestruct test_files/test1.c
+            |   : cur.enum_type.spelling:  int
+            +-- NODE:  CursorKind.ENUM_CONSTANT_DECL spel = 'ENUM_IN_STRUCT_1' (len=16)
+            |       : cur.type.spelling: int
+            |       : cur.enum_value: 0
+            |       : parents: enum enum_in_struct enum enum_in_struct CursorKind.ENUM_DECL
+            +-- NODE:  CursorKind.ENUM_CONSTANT_DECL spel = 'ENUM_IN_STRUCT_2' (len=16)
+                    : cur.type.spelling: int
+                    : cur.enum_value: 1
+                    : parents: enum enum_in_struct enum enum_in_struct CursorKind.ENUM_DECL</pre>
+               </li>
+            </ul>
+         </li>
+         <li>A typedef'd enum declared in a function:
+           <pre class="prettyprint linenums">
++-- NODE:  CursorKind.FUNCTION_DECL spel = 'func' (len=4)
+    +-- NODE:  CursorKind.COMPOUND_STMT spel = '' (len=0)
+        +-- NODE:  CursorKind.DECL_STMT spel = '' (len=0)
+            +-- NODE:  CursorKind.ENUM_DECL spel = 'enum_in_func' (len=12)
+            |   +-- NODE:  CursorKind.ENUM_CONSTANT_DECL spel = 'E_IN_FUNC_1' (len=11)
+            |   +-- NODE:  CursorKind.ENUM_CONSTANT_DECL spel = 'E_IN_FUNC_2' (len=11)
+            +-- NODE:  CursorKind.TYPEDEF_DECL spel = 'Enum_In_Func_t' (len=14)
+                +-- NODE:  CursorKind.ENUM_DECL spel = 'enum_in_func' (len=12)
+                    +-- NODE:  CursorKind.ENUM_CONSTANT_DECL spel = 'E_IN_FUNC_1' (len=11)
+                    +-- NODE:  CursorKind.ENUM_CONSTANT_DECL spel = 'E_IN_FUNC_2' (len=11)</pre>
+         </li>
+      </ul>
+   </li>
+</ol>
+
+
+      <p>
+         To get the enums:
+      </p>
+   
+   </div>
+
+
+   <h2>Functions</h2>
+   <div>
+      <p>
+         All functions are represented in the AST using <code>CursorKind.FUNCTION_DECL</code> nodes. To
+         differentiate between declarations and definitions, the cursor function <code>is_definition()</code>
+         is used.
+      </p>
+      <p>
+         To go from the declaration to the definition the cursor function <code>get_definition()</code> can be
+         used.
+      </p>
+   </div>
+
 
 </div>
 </div> <!-- End content div -->
