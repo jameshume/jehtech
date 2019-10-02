@@ -98,7 +98,7 @@
          <p>
             A cursor is an abstraction that represents any element in an AST.
             <q>The cursor abstraction unifies the different kinds of entities in a program - declaration,
-            statements, expressions, references to declarations, etc. - under a single &auot;cursor&quot;
+            statements, expressions, references to declarations, etc. - under a single &quot;cursor&quot;
             abstraction with a common set of operations. Common operation for a cursor include: getting
             the physical location in a source file where the cursor points, getting the name associated
             with a cursor, and retrieving cursors for any child nodes of a particular cursor.</q>
@@ -546,9 +546,117 @@ typedef enum Typdef_Named_enum { TYPEDEF_NAMED_ENUM_1, ... } Typedef_Named_Enum_
          To go from the declaration to the definition the cursor function <code>get_definition()</code> can be
          used.
       </p>
+      <p>
+         When a function is called, it is represented in the AST using a <code>CursorKind.CALL_EXPR</code> node.
+      </p>
+      <div>
+         <pre style="float:left;" class="linenums prettyprint">
+typedef int NewType_t;
+
+<span style="background: #6bd186;">long</span> <span style="background: #6bd1c9;">func_with_params</span>(<span style="background: #6b7ad1;">char a</span>, <span style="background: #cc6bd1;">short b</span>, <span style="background: #d16b8b;">NewType_t c</span>)
+{
+   <span style="background:#c7d16b;">return</span> a <span style="background:#d1a36b;">*</span> b <span style="background:#db9997;">*</span> c;
+}
+         </pre>
+         <pre style="float:left; margin-left:10px;" class="linenums prettyprint">
++-- NODE:  <span style="background: #6bd1c9;">CursorKind.FUNCTION_DECL spel = 'func_with_params' (len=16)</span>
+    |   : cur.is_definition() True
+    |   : cur.linkage: LinkageKind.EXTERNAL
+    |   : <span style="background: #6bd186;">cur.result_type.spelling: long</span>
+    |   : cur.get_arguments().type.spelling: ['char', 'short', 'NewType_t']
+    +-- NODE:  <span style="background: #6b7ad1;">CursorKind.PARM_DECL spel = 'a' (len=1)</span>
+    |       : cur.type.spelling: char
+    +-- NODE:  <span style="background: #cc6bd1;">CursorKind.PARM_DECL spel = 'b' (len=1)</span>
+    |       : cur.type.spelling: short
+    +-- NODE:  <span style="background: #d16b8b;">CursorKind.PARM_DECL spel = 'c' (len=1)</span>
+    |       : cur.type.spelling: NewType_t
+    +-- NODE:  CursorKind.COMPOUND_STMT spel = '' (len=0)
+        +-- NODE:  <span style="background:#c7d16b;">CursorKind.RETURN_STMT spel = '' (len=0)</span>
+            +-- NODE:  CursorKind.UNEXPOSED_EXPR spel = '' (len=0)
+                +-- NODE:  <span style="background:#d1a36b;">CursorKind.BINARY_OPERATOR spel = '' (len=0)</span>
+                    |   : tokens: ['a', '*', 'b', '*', 'c']
+                    +-- NODE:  <span style="background:#db9997;">CursorKind.BINARY_OPERATOR spel = '' (len=0)</span>
+                    |   |   : tokens: ['a', '*', 'b']
+                    |   +-- NODE:  CursorKind.UNEXPOSED_EXPR spel = 'a' (len=1)
+                    |   |   +-- NODE:  CursorKind.UNEXPOSED_EXPR spel = 'a' (len=1)
+                    |   |       +-- NODE:  CursorKind.DECL_REF_EXPR spel = 'a' (len=1)
+                    |   |               : type char
+                    |   |               : referenced type char
+                    |   +-- NODE:  CursorKind.UNEXPOSED_EXPR spel = 'b' (len=1)
+                    |       +-- NODE:  CursorKind.UNEXPOSED_EXPR spel = 'b' (len=1)
+                    |           +-- NODE:  CursorKind.DECL_REF_EXPR spel = 'b' (len=1)
+                    |                   : type short
+                    |                   : referenced type short
+                    +-- NODE:  CursorKind.UNEXPOSED_EXPR spel = 'c' (len=1)
+                        +-- NODE:  CursorKind.DECL_REF_EXPR spel = 'c' (len=1)
+                                : type NewType_t
+                                : referenced type NewType_t
+         </pre>
+         <p style="clear:both;"></p>
+
+         <pre style="float:left;" class="prettyprint linenums">
+void call_func_with_params(void)
+{
+   long a;
+   <span style="background:#6bd1c9;">a</span> <span style="background:#6bd186;">=</span> <span style="background:#6b7ad1;">func_with_params</span>('c', 10, 100);
+}
+         </pre>
+         <pre style="float:left; margin-left:10px;" class="prettyprint linenums">
++-- NODE:  CursorKind.FUNCTION_DECL spel = 'call_func_with_params' (len=21)
+    |   : cur.is_definition() True
+    |   : cur.get_definition().is_definition() True
+    |   : cur.linkage: LinkageKind.EXTERNAL
+    |   : cur.result_type.spelling: void
+    +-- NODE:  CursorKind.COMPOUND_STMT spel = '' (len=0)
+        +-- NODE:  CursorKind.DECL_STMT spel = '' (len=0)
+        |   +-- NODE:  CursorKind.VAR_DECL spel = 'a' (len=1)
+        +-- NODE:  <span style="background:#6bd186;">CursorKind.BINARY_OPERATOR spel = '' (len=0)</span>
+            |   : tokens: ['a', '=', 'func_with_params', '(', "'c'", ',', '10', ',', '100', ')']
+            +-- NODE:  <span style="background:#6bd1c9;">CursorKind.DECL_REF_EXPR spel = 'a' (len=1)</span>
+            |       : type long
+            |       : referenced type long
+            +-- NODE:  <span style="background:#6b7ad1;">CursorKind.CALL_EXPR spel = 'func_with_params' (len=16)</span>
+                |   : cur.type.spelling: long
+                |   : cur.get_arguments().type.spelling: ['char', 'short', 'int']
+                +-- NODE:  CursorKind.UNEXPOSED_EXPR spel = 'func_with_params' (len=16)
+                |   +-- NODE:  CursorKind.DECL_REF_EXPR spel = 'func_with_params' (len=16)
+                |           : type long (char, short, int)
+                |           : referenced type long (char, short, int)
+                +-- NODE:  CursorKind.UNEXPOSED_EXPR spel = '' (len=0)
+                |   +-- NODE:  CursorKind.CHARACTER_LITERAL spel = '' (len=0)
+                +-- NODE:  CursorKind.UNEXPOSED_EXPR spel = '' (len=0)
+                |   +-- NODE:  CursorKind.INTEGER_LITERAL spel = '' (len=0)
+                |           : tokens: ['10']
+                +-- NODE:  CursorKind.INTEGER_LITERAL spel = '' (len=0)
+                        : tokens: ['100']
+         </pre>
+         <p style="clear:both;"></p>
+
+         <pre style="float:left;" class="prettyprint linenums">
+void use_a_function_pointer(void)
+{
+   long (*ptr)(char a, short b, int c);
+
+   ptr = &func_with_params;
+
+   struct
+   {
+      void(*ptr)(char a, short b, int c);
+   } s;
+
+   s.ptr = &func_with_params;
+
+   ptr(1, 2, 3);
+   s.ptr(11, 12, 13);
+}
+         </pre>
+         <pre style="float:left; margin-left:10px;" class="prettyprint linenums">
+
+         </pre>
+      </div>
    </div>
 
-
+ 
 </div>
 </div> <!-- End content div -->
 </body>
