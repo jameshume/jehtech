@@ -3,7 +3,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
 	<meta charset="UTF-8">                                              <!-- HTML 5 -->
-	<title>Arrays In C &amp; C++ | JEHTech</title>
+	<title>Coccinelle For C &amp; C++ | JEHTech</title>
 	<!-- META_INSERT -->
 	<!-- CSS_INSERT -->
 	<!-- JAVASCRIPT_INSERT -->
@@ -53,6 +53,273 @@
 	</ul>
 </div>
 
+<h2>An Intro</h2>
+<div>
+	<h3>Briefly...</h3>
+	<p>
+		<q>Coccinelle is a program matching and transformation engine which provides the language SmPL (Semantic Patch Language) for specifying desired matches and transformations in C code. </q> -- Coccinelle website.
+	</p>
+	<p>
+		Coccinelle allows you to &quot;templatize&quot; patches so that they can be applied over an 
+		entire codebase and match the same &quot;pattern&quot; in a way that abstracts out things
+		like whitespace, variable names etc.
+	</p>
+	<p>
+		All Coccinelle scripts look something like this:
+	</p>
+	<pre class="prettyprint linenums">@@
+// Metavariable declarations
+@@
+
+// Transformations</pre>
+	<p>
+		Metavariables allow you to abstract out things like types, expressions, statements etc. The transformations
+		dictate how the code should be changed.
+	</p>
+
+	<h3>An Example...</h3>
+	<p>
+		An example I had recently was very similar to the <a href="http://coccinelle.lip6.fr/rules/array.html" target="_blank"><code>ARRAY_SIZE()</code> example</a>. There were many places in the code where I was doing
+		<code>sizeof(ptr->field) / sizeof(byte_t)</code>, where <code>ptr</code> could be any
+		variable name that refers to a struct pointer and <code>field</code> could be any member of
+		that struct. It could appear anywhere in the code as say <code>size_t num_blocks = sizeof(new_block->info) / sizeof(byte_t)</code>, or <code>PrintBlockInfo(some_block, sizeof(some_block->data) / sizeof(byte_t))</code>,
+		for example. I wanted to be able to transform each of these to
+		<code>size_t num_blocks = NBLOCKS(new_block->data)</code> and
+		<code>PrintBlockInfo(some_block, NBLOCKS(some_block->info))</code>,	respectively.
+	</p>
+	<p>
+		These transformations are not something that could be easily accomplished with a regular expression.
+		One immediate problem is that in <code>sizeof(ptr->field) / sizeof(byte_t)</code>, <code>ptr</code> needs
+		to be of the type <code>block_descr_t</code>. Changing this for other types might not be the
+		correct thing to do, and certainly would read strangely for non-block types. Coccinelle to the
+		rescue!
+	</p>
+	<pre class="prettyprint linenums">@@
+typedef block_descr_t;
+typedef byte_t;
+block_descr_t *T;
+identifier F;
+@@
+
+- sizeof(T->F) / sizeof(byte_t) //< Coccinelle is clever - it knows T must be of type ...
++ NBLOCKS(F)                    //< ... `block_descr_t` to match :) </pre>
+
+	<p>
+		Lets create the following test file:
+	</p>
+	<pre class="prettyprint linenums">
+typedef unsigned char byte_t;
+typedef struct { byte_t header; byte_t crc[2]; } block_info_t;
+typedef struct { byte_t crc[2], byte_t data[20]; } block_data_t;
+typedef struct { block_info_t info; block_data_t data; } block_descr_t;
+
+void func(block_descr_t *desc)
+{
+	const size_t num_blocks = sizeof(desc->info) / sizeof(byte_t);
+
+	struct { byte_t byte_array[5]; } not_a_block;
+	const size_t just_bytes = sizeof(not_a_block->byte_array) / sizeof(byte_t);
+}
+
+void dump_block(block_descr_t *desc)
+{
+	for (size_t idx = 0; idx < sizeof(desc->info) / sizeof(byte_t); ++idx)
+	{
+		printf("%u", desc->info[idx]);
+	}
+}
+
+void dump_block_stats(block_descr_t *desc)
+{
+	printf("At line %u, num data|info blocks: %u|%u\n", 
+		__LINE__,
+		sizeof(desc->data) / sizeof(byte_t),
+		sizeof(desc->info) / sizeof(byte_t));
+}</pre>
+	<p>
+		If we run the Coccinelle script on the above C file (minus the annotation comments) we get
+		the following diff produced:
+	</p>
+	<pre class="prettyprint linenums">$ spatch -sp_file junk.cocci junk.c
+init_defs_builtins: /usr/lib/coccinelle/standard.h
+HANDLING: junk.c
+diff =
+--- junk.c
++++ /tmp/cocci-output-11849-4d0df1-junk.c
+@@ -5,12 +5,12 @@ typedef struct { block_info_t info; bloc
+
+ void func(block_descr_t *desc)
+ {<b><span style="background: #e38e88;">
+-    const size_t num_blocks = sizeof(desc->info) / sizeof(byte_t);</span><span style="background: #88e38d;">
++    const size_t num_blocks = NBLOCKS(info);</span></b>
+<span style="background: #e3c088;">
+     struct { byte_t byte_array[5]; } not_a_block;
+     const size_t just_bytes = sizeof(not_a_block->byte_array) / sizeof(byte_t);</span>
+ }
+
+ void dump_block(block_descr_t *desc)
+ {<b><span style="background: #e38e88;">
+-    for (size_t idx = 0; idx < sizeof(desc->info) / sizeof(byte_t); ++idx)</span><span style="background: #88e38d;">
++    for (size_t idx = 0; idx < NBLOCKS(info); ++idx)</span></b>
+     {
+         printf("%u", desc->info[idx]);
+     }
+@@ -20,6 +20,6 @@ void func2(block_descr_t *desc)
+ {
+     printf("At line %u, num data|info blocks: %u|%u\n",
+         __LINE__,<b><span style="background: #e38e88;">
+-        sizeof(desc->data) / sizeof(byte_t),
+-        sizeof(desc->info) / sizeof(byte_t));</span><span style="background: #88e38d;">
++        NBLOCKS(data),
++        NBLOCKS(info));</span></b>
+ }</pre>
+	<p>
+		So, we can see that the replacement has been made intelligently in multiple different
+		contexts and it has also only done the replacement for the desired type too - note how
+		<code>not_a_block</code> has correctly <em>not</em> been transformed. Sweeeet!
+	</p>
+
+
+
+<!--
+	<h3>The Whole Transformation Is A Match</h3>
+	<p>
+		The whole of the transformation section has to match for the transformation to be applied.
+		This is what I meant by a &quot;templatized&quot; patch.
+	</p>
+	<p>
+		If we were to re-write the transform from the previous section as:
+	</p>
+	<pre class="prettyprint linenums">@@
+typedef block_descr_t;
+typedef byte_t;
+block_descr_t *T;
+identifier F;
+@@
+
+void func(block_descr_t *desc)
+{
+- sizeof(T->F) / sizeof(byte_t)
++ NBLOCKS(F)</pre>
+-->
+</div>
+
+
+<h2>Types Of Metavariables</h2>
+<div>
+	<p></p>
+	<table>
+		<thead style="font-weight: bold;">
+			<tr>
+				<td>Keyword</td><td>Meaning</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><p>identifier</p></td>
+				<td>
+					<p>
+						An identifier matches any literal like 42, or &quot;a string&quot;, for example.
+						It also matches the names of functions, macros and variabels. It is the name of
+						something.
+					</p>
+					<p>
+						<q>An identifier is the name of a structure field, a macro, a function, or a
+							variable. It is the name of something rather than an expression that has
+							a value. But an identifier can be used in the position of an expression
+							as well, where it represents a variable.
+						</q>
+						<a href="http://coccinelle.lip6.fr/docs/main_grammar.pdf" target="_blank">[Ref]</a>.
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<td><p>parameter [list]</p></td>
+				<td>
+					<p>
+						Matches function parameters.
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<td><p>type</p></td>
+				<td>
+					<p>
+						Matches a particular type. E.g., remove casts of <code>malloc()</code>:
+						<pre class="prettyprint linenums">@@
+type I;
+identifier D;
+@@
+- I *D = (I)malloc(...);
++ I *D = malloc(...);</pre>
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<td><p>statement</p></td>
+				<td>
+					<p>
+						Matches any C statement, for example
+						<code>if (condition) do_something(); else do_something_else();</code>
+						or <code>{ ... }</code>, for example. A statement <q>is just a standalone unit of 
+						execution and doesn’t return anything ... the sole purpose of a statement is to have side-effects</q>
+						<a href="https://fsharpforfunandprofit.com/posts/expressions-vs-statements/" target="_blank">[Ref]</a>.
+					</p>
+					<p>
+						Note that an expression followed by a semicolon is a statement and any <q>sequence of statements
+						surrounded by curly braces is a statement - called a Compound Statement</q>
+						<a href="http://www.informit.com/articles/article.aspx?p=2472079&seqNum=4" target="_blank">[Ref]</a>. 
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<td><p>expression</p></td>
+				<td>
+					<p>
+						Matches any C expression. An expression <q>is a combination of values and
+						functions that are combined and interpreted by the compiler to create a new value ...
+						the purpose of an expression is to create a value (with some possible side-effects)</q>
+						<a href="https://fsharpforfunandprofit.com/posts/expressions-vs-statements/" target="_blank">[Ref]</a>.
+					</p>
+					<p>
+						An expression metavariable can be further constrained by its type.
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<td><p>constant</p></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><p>position</p></td>
+				<td>
+					<p>
+						<q>A position metavariable is used by attaching it using <code>@</code> to any token,
+							including another metavariable. Its value is the position (file, line number, etc.)
+							of the code matched by the token. It is also possible to attach expression,
+							declaration, type, initialiser, and statement metavariables in this manner. 
+							In that case, the metavariable is bound to the closest enclosing expression, 
+							declaration, etc. If such a metavariable is itself followed by a position metavariable,
+							the position metavariable applies to the metavariable that it follows, and not to the
+							attached token. This makes it possible to get eg the starting and ending position of 
+							<code>f(...)</code>, by writing <code>f(...)@E@p</code>, for expression metavariable
+							<code>E</code> and position metavariable <code>p</code></q>
+						<a href="http://coccinelle.lip6.fr/docs/main_grammar.pdf" target="_blank">[Ref]</a>.
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<td><p>declaration</p></td>
+				<td>
+					<p>
+						A declaration metavariable matches the declaration of one or more variables, all
+						sharing the same type specification.
+					</p>
+				 </td>
+		</tbody>
+	</table>
+	<p></p>
+</div>
 
 </div> <!-- END H1 padding div -->
 </div>
