@@ -1543,7 +1543,8 @@ done</pre>
             If you would like your bash script to fail on the first command that returns a non
             zero error code use:
          </p>
-         <pre>set -e</pre>
+         <pre>set -e # On its own may not be enough - see below...
+set -o pipefail # Make sure errors propogate through pipes!!</pre>
          <p>
             You can cancel it by using <code>+e</code>
          </p>

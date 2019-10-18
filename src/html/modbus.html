@@ -323,10 +323,10 @@
 	</p>
 	<pre class="prettprint linenums">
     modpoll [-0] -1 -a 101 -r 1 -c 5 -b 2400 -p none -t 4:hex COM5 [Write values]
-              ^   ^  ^      ^    ^                     ^            ^
-              ^   ^  ^      ^    ^                     ^            If not present then read else write
-              ^   ^  ^      ^    ^                     ^
-              ^   ^  ^      ^    ^                     Read holding registers and display as hex
+              ^   ^  ^      ^    ^                      ^           ^
+              ^   ^  ^      ^    ^                      ^           If not present then read else write
+              ^   ^  ^      ^    ^                      ^
+              ^   ^  ^      ^    ^                      16-bit holding registers, display as hex
               ^   ^  ^      ^    Number of registers to read
               ^   ^  ^      Number of first register read
               ^   ^  <b>Address</b> of slave device

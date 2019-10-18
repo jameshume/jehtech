@@ -36,6 +36,8 @@
 		<li><a href="https://pdfs.semanticscholar.org/182c/48ed40bf8c738da0e9a9073dc49bbc9b17bc.pdf" target="_blank">Finding Error Handling Bugs in OpenSSL using Coccinelle</a>.</li>
 		<li><a href="https://web.imt-atlantique.fr/x-info/coccinelle/stuart_thesis.pdf" target="_blank">Hunting bugs with Coccinelle</a>.</li>
 		<li><a href="https://github.com/coccinelle/coccinelle" target="_blank">GitHub Conccinelle Repo</a>.</li>
+		<li><a href="http://coccinelle.lip6.fr/docs/main_grammar016.html" target="_blank">Examples</a>.</li>
+		<li><a href="http://coccinelle.lip6.fr/rules/" target="_blank">More examples</a>.</li>
 	</ol>
 
 	<h3>StackOverflow Threads:</h3>
@@ -75,6 +77,14 @@
 	<p>
 		Metavariables allow you to abstract out things like types, expressions, statements etc. The transformations
 		dictate how the code should be changed.
+	</p>
+
+	<h3>Run Spatch</h3>
+	<p>
+		Check your COCCI script: <code>spatch --parse-cocci mysp.cocci</code>
+	</p>
+	<p>
+		Run your COCCI script:<code>spatch --sp-file mysp.cocci file.c</code> or <code>spatch --sp-file mysp.cocci --dir directory</code>.
 	</p>
 
 	<h3>An Example...</h3>
@@ -181,28 +191,98 @@ diff =
 
 
 
-<!--
 	<h3>The Whole Transformation Is A Match</h3>
 	<p>
 		The whole of the transformation section has to match for the transformation to be applied.
 		This is what I meant by a &quot;templatized&quot; patch.
 	</p>
 	<p>
-		If we were to re-write the transform from the previous section as:
+		Lets have a look at an example of removing the cast from calls to <code>malloc()</code>:
 	</p>
 	<pre class="prettyprint linenums">@@
-typedef block_descr_t;
-typedef byte_t;
-block_descr_t *T;
-identifier F;
+type I;
+expression E;
+identifier p;
 @@
 
-void func(block_descr_t *desc)
+-I *p = (I *)malloc(E);
++I *p = malloc(E); </pre>
+	<p>
+		Applying this to the following file will remove the cast:
+	</p>
+	<pre class="prettyprint linenums">int main(void)
 {
-- sizeof(T->F) / sizeof(byte_t)
-+ NBLOCKS(F)</pre>
--->
-</div>
+    int *some_int_prt = (int *)malloc(10 * sizeof(int));
+    // ^^^ The patch will replace the above with
+    // int *some_int_prt = malloc(10 * sizeof(int));
+
+    return 0;
+}</pre>
+	<p>
+		Let's modify the patch as follows - its contrived but hey:
+	</p>
+	<pre class="prettyprint linenums">@@
+type I;
+expression E, E2;
+identifier p, p2;
+@@
+
+I p2 = E2; // < We've artificially added this line for the example's sake.
+
+-I *p = (I *)malloc(E);
++I *p = malloc(E); </pre>
+	<p>
+		Apply this to the above C file and nothing happens - no patch is created. Why? The reason is that
+		the <em>whole patch must be able to match some section of the program</em> it is applied over. 
+		In the C file above, although the <code>malloc()</code> line will match the second rule, there
+		is nothing matching the	first rule, <code>I p2 = E2</code>.
+	</p>
+	<p>
+		The above patch would only modify a file that looked like this:
+	</p>
+	<pre class="prettyprint linenums">int main(void)
+{
+    int variable_1 = 2; // < This line is necessary so that the second patch file can match!
+
+    int *some_int_prt = (int *)malloc(10 * sizeof(int));
+    // ^^^ The patch will replace the above with
+    // int *some_int_prt = malloc(10 * sizeof(int));
+
+    return 0;
+}</pre>
+	<p>
+		The patch would not, however, match this file:
+	</p>
+	<pre class="prettyprint linenums">int main(void)
+{
+    int variable_1 = 2; //< This line is necessary so that the second patch file can match!
+
+    call_some_function();
+
+    int *some_int_prt = (int *)malloc(10 * sizeof(int));
+    // ^^^ The patch will replace the above with
+    // int *some_int_prt = malloc(10 * sizeof(int));
+
+    return 0;
+}</pre>
+	<p>
+		It does not find a match for precisely the sale reason - <code>call_some_function()</code>
+		does not appear in the semantic patch between the first integer variable declaration and
+		the pointer declaration and assignment. To make it match we would have to use ellipses
+		(<code>...</code>) to match arbitrary code between the first integer declaration and the
+		pointer declaration:
+	</p>
+<pre class="prettyprint linenums">@@
+type I;
+expression E, E2;
+identifier p, p2;
+@@
+
+I p2 = E2; //< We've artificially added this line for the example's sake.
+... //< Match arbirary program flow
+-I *p = (I *)malloc(E);
++I *p = malloc(E); </pre>
+
 
 
 <h2>Types Of Metavariables</h2>
@@ -250,7 +330,7 @@ void func(block_descr_t *desc)
 type I;
 identifier D;
 @@
-- I *D = (I)malloc(...);
+- I *D = (I *)malloc(...);
 + I *D = malloc(...);</pre>
 					</p>
 				</td>
@@ -320,6 +400,90 @@ identifier D;
 	</table>
 	<p></p>
 </div>
+
+<h2>Rules</h2>
+<div>
+	<p>
+		We've already been using anonymous rules in the form of:
+	</p>
+		<pre class="prettyprint linenums">@@
+// Meta variables
+@@
+
+// Transformations</pre>
+	<p>
+		Named rules are declared like so:
+	</p>
+	<pre class="prettyprint linenums"><b>@rulename@</b>
+// Meta variables
+@@
+
+// Transformations</pre>
+	<p>
+		When you define a rule it, like the anonymous rules we've been defining previously, it
+		will either match, or not match a portion of the target file.
+	</p>
+	<p>
+		All rules, anonymous or named, evaluate to <code>true</code> if they match something in the
+		target file, and <code>false</code>, otherwise.
+	</p>
+	<p>
+		This is how we can make one rule depend on another. If rule B depends on rule A, rule B is
+		only applied if rule A evaluates to <code>true</code>, i.e., matched something in the target.
+	</p>
+	<p>
+		The classic example is replacing <code>sizeof(a)/sizeof(a[0])</code> with the macro
+		<code>ARRAY_SIZE(a)</code>, which requires the header file <code>kernel.h</code>. If the 
+		target does not include this header then using the macro will cause a compile error so we
+		don't want to make that transformation! So, to only make the transformation when the header
+		is included we can use two rules. The first will make sure the header is included and the
+		second will do the actual transformation.
+	</p>
+	<p>
+		The first rule:
+	</p>
+	<pre class="prettyprint linenums">@includes_kernel_h@
+@@
+
+#include &lt;linux/kernel.h&gt;</pre>
+	<p>
+		If the file includes the <code>kernel.h</code> header file, the rule <code>includes_kernel_h</code>
+		will match that line and evaluate to <code>true</code>.
+	</p>
+	<p>
+		So... the second rule (<a href="http://coccinelle.lip6.fr/rules/array.html" target="_blank">see the real deal for a full example</a>):
+	</p>
+	<pre class="prettyprint	linenums">@depends on includes_kernel_h@
+type T;
+T[] E;
+@@
+
+- (sizeof(E)/sizeof(*E))
++ ARRAY_SIZE(E)</pre>
+	<p>
+		The transformation is specified to depend on the rule <code>includes_kernel_h</code>. This
+		means that the rule will run when, and only when, <code>includes_kernel_h</code> evaluates to <code>true</code>,
+		which will only be the case when that rule finds a match in the target file.
+	</p>
+	<p>
+		You can also invert the depends condition: <code>rule_name depends on <b><u>!</u></b>dep</code>.
+	</p>
+</div>
+
+
+<h2>Dots</h2>
+<div>
+	<p>
+	</p>
+</div>
+
+
+<h2>Positions</h2>
+<div>
+	<p>
+	</p>
+</div>
+
 
 </div> <!-- END H1 padding div -->
 </div>

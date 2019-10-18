@@ -396,6 +396,19 @@ git commit --amend</pre>
         search string:
     </p>
     <pre>git log -S&lt;search-string&gt;</pre>
+    
+    <p>
+        To do the same, (i.e. search the commit <em>diff</em>) but using regular expressions <a href="https://stackoverflow.com/a/9045562/1517244" target="_blank">[Ref]</a>:
+    </p>
+    <pre>git log -G'helper.*function' --full-history --all</pre>
+
+    <p>
+        To search through the commit <em>messages</em> use <a href="https://stackoverflow.com/a/15120469/1517244" target="_blank">[Ref]</a>:
+    </p>
+    <pre># case sensitive
+git log --all --grep='your-regexp-here'
+# case insensitive
+git log --all --grep='your-regexp-here' -i</pre>
 
     <p>To really pretty-print your logs:</p>
     <pre>git log --oneline --decorate --graph --all</pre>

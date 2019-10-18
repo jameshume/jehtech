@@ -408,103 +408,27 @@ active proctype proc1() {
 	</p>
 </div>
 
-<h2>First Order Predicate Logic</h2>
+<h2>Review Of Propositional Logic</h2>
 <div>
-	<h3>Automata</h3>
 	<p>
-		Finite State Automaton is defined by a tuple $(S, s_0, L, T, F)$ where:
-		<div style="margin-left:20px;">
-			$S$ is a finite set of states<br/>
-			$s_0$ is the initiatial state such that $s_0 \in S$<br/>
-			$L$ is a finite set of labels<br/>
-			$T$ is a set of transitions, $T \subseteq (S \times L \times S)$, and<br/>
-			$F$ is a set of final states<br/>
-		</div>
+		A quick recap of propositional logic <a href="https://www.geeksforgeeks.org/mathematical-logic-introduction-propositional-logic-set-2/" target="_blank">[Ref]</a>.
 	</p>
 	<p>
-		For example, look at the following automaton:
+		A <em>proposition</em> is a statement or sentence that is either True or False. For example,
+		&quot;it is raining&quot; is a proposition. It can only ever be True or False and has a
+		precise and unambiguous meaning.
 	</p>
 	<p>
-		<img src="##IMG_DIR##/dummy_fsa.png" alt="Picture of a finite automaton"/>
+		Propositions are usually represented using <em>propositional variables</em>. Popositional
+		logic deals with how individual propositions can be combined to produce more complex logical
+		popositions. For example, let $a$ mean &quot;it is raining&quot; and "b" mean &quot;it is flooding&quot;.
+		We can then construct logical statements like $a \land b$ to mean &quot;it is raining and flooding&quot; or
+		$b \implies a$ meaing &quot;if it is flooding then it is raining&quot;.
 	</p>
-	<p>
-		For this automaton we have:
-		<div style="margin-left:20px;">
-			$S = \{ s_0, s_1, s_2, s_3 \}$<br/>
-			$s_0$ is the initiatial state such that $s_0 \in S$<br/>
-			$L = \{ a, b, c \}$<br/>
-			$T \subseteq (S \times L \times S) = \left\{ \{s_0, a, s_1\}, \{s_0, b, s_2\}, \{s_1, c, s_2\}, \{s_2, d, s_1\}, \{s_2, e, s_3\} \right\} $, and<br/>
-			$F = \{ s_3 \}$<br/>
-		</div>
-	</p>
-	<p>
-		Why is this interesting? It is interesting because we can represent concurrent activity as
-		a set of states. Imagine the following promela program:
-	</p>
-	<pre class="prettyprint linenums">mtype = { A, B }
-mytype state = A
+</div>
 
-active proctype proc1()
-{
-    do
-    :: state = A
-    od
-}
-
-
-active proctype proc2()
-{
-    do
-    :: state = B
-    od
-}</pre>
-	<p>
-		We can represent the state of the program as follows:
-	</p>
-	<p>
-		<img src="##IMG_DIR##/dfa_state_tree.png"/>
-	</p>
-	<p>
-		An this is just for a super simple program! If there was more than one variable then the
-		state would consist of a tuple of all the variables. In this way SPIN can take a Promela
-		program and convert it into a finite automaton (FA) and use this to search all the possible states for us (not
-		infinitely although the above tree grows infinitely, the state space is finite - $S = \{A, B\}$).
-	</p>
-
-	<p>
-		The above automotons are all <em>deterministic</em> (and when finite known as DFA). From each state there is only one path
-		to the next state.
-	</p>
-	<p>
-		A <em>non-deterministic</em> automaton (if finite known by the abreviation NFA) is one where from at least one state there is more
-		that one path out of that state. But, there are algorithms to convert NFAs to equivalent DFAs.
-	</p>
-
-	<h4>Runs</h4>
-	<p>
-		A <em>run</em> of a FA is a an <em>ordered sequence of transitions</em> - possibly infinite.
-		For example $ R = \{ (s_0, l_0, s_1), (s_1, l_1, s_2), \ldots \} : \forall i,j,k, (i,j,k \ge 0) \implies (s_i, l_j, s_k) \in T)$.
-	</p>
-	<p>
-		An <b>accepting run</b> is one where the final state is in the set of end states
-		(implicity all the end states are seen as accepting).
-	</p>
-	<p>
-		Runs defined in this way are all <em>terminating</em>. But what about infinite loops through
-		states? These may or may not be a good thing. These runs must be <em>infinite</em> and are
-		referred to as $\omega$-runs. The set of transitions that occur infinitely often in the run
-		are denoted $\sigma^\omega$ and other states $\sigma^+$.
-	</p>
-	<p>
-		An <b>accepting $\omega$-run</b> is one where $\exists s_f: s_f \in F \land s_f \in \sigma^\omega$ - the Buchi acceptance definition.
-		I.e., an accepting $\omega$-run is a loop when at least one state is visited infinitely often.
-	</p>
-	<p>
-		This rule is extended to finite runs using the <em>stutter extension rule</em> which adds an end
-		state that can be repeated infinitely often.
-	</p>
-
-	<h3>LTL</h3>
+<h2>Review Of Predicate Logic</h2>
+<div>
 	<p>
 		Lets do a very quick recap of some First Order Predicate Logic (FOPL) stuff <a href="https://www.cs.utexas.edu/~mooney/cs343/slide-handouts/fopc.4.pdf" target="_blank">[Ref]</a>.
 	</p>
@@ -514,6 +438,15 @@ active proctype proc2()
 	</p>
 	<p>
 		Standard <em>logical operators</em> can <em>connect</em> predicates $\lor, \land, \implies, \iff$.
+	</p>
+	<p>
+		Predicates &quot;extend&quot; or add a greater flexibility to propositional logic. In propositial logic, we would have
+		to define 2 propositions $a$ = &quot;James is alive&quot; and $b$ = &quot;John is alive&quot;.
+		But in predicate logic we just define the predicate $\mathrm{isAlive}()$ and apply it to our objects
+		of interest, i.e., $\mathrm{isAlive}(\mathrm{james})$ and $\mathrm{isAlive}(\mathrm{john})$. Because
+		of this extra power, predicate logic can be used to reason about sets of objects. We don't need to
+		define a proposition for each member of a set; now we define a predicate applied over a set in a
+		more abstract way using quantifiers.
 	</p>
 	<p>
 		<em>Quantifiers</em> allow entire ranges of objects to be reasoned about. For example. $\exists x \in \mathrm{N}: isPrime(x)$.
@@ -564,6 +497,109 @@ active proctype proc2()
 		<li><em>Fairness</em>: Processes can make progress - no starvation.
 		</li>
 	</ul>
+	<p>
+		To talk about LTL, we need to do a quick review of automata...
+	</p>
+	<h3>Automata</h3>
+	<p>
+		Finite State Automaton is defined by a tuple $(S, s_0, L, T, F)$ where:
+		<div style="margin-left:20px;">
+			$S$ is a finite set of states<br/>
+			$s_0$ is the initiatial state such that $s_0 \in S$<br/>
+			$L$ is a finite set of labels<br/>
+			$T$ is a set of transitions, $T \subseteq (S \times L \times S)$, and<br/>
+			$F$ is a set of final states<br/>
+		</div>
+	</p>
+	<p>
+		For example, look at the following automaton:
+	</p>
+	<p>
+		<img src="##IMG_DIR##/dummy_fsa.png" alt="Picture of a finite automaton"/>
+	</p>
+	<p>
+		For this automaton we have:
+		<div style="margin-left:20px;">
+			$S = \{ s_0, s_1, s_2, s_3 \}$<br/>
+			$s_0$ is the initiatial state such that $s_0 \in S$<br/>
+			$L = \{ a, b, c, d \}$<br/>
+			$T \subseteq (S \times L \times S) = \left\{ \{s_0, a, s_1\}, \{s_0, b, s_2\}, \{s_1, c, s_2\}, \{s_2, d, s_1\}, \right\} $, and<br/>
+			$F = \{ s_2 \}$<br/>
+		</div>
+	</p>
+<!--
+	<p>
+		Why is this interesting? It is interesting because we can represent concurrent activity as
+		a set of states. Imagine the following promela program:
+	</p>
+	<pre class="prettyprint linenums">mtype = { A, B }
+mytype state = A
+
+active proctype proc1()
+{
+    do
+    :: state = A
+    od
+}
+
+
+active proctype proc2()
+{
+    do
+    :: state = B
+    od
+}</pre>
+	<p>
+		We can represent the state of the program as follows:
+	</p>
+	<p>
+		<img src="##IMG_DIR##/dfa_state_tree.png"/>
+	</p>
+	<p>
+		An this is just for a super simple program! If there was more than one variable then the
+		state would consist of a tuple of all the variables. In this way SPIN can take a Promela
+		program and convert it into a finite automaton (FA) and use this to search all the possible states for us (not
+		infinitely although the above tree grows infinitely, the state space is finite - $S = \{A, B\}$).
+	</p>
+
+	<p>
+		The above automotons are all <em>deterministic</em> (and when finite known as DFA). From each state there is only one path
+		to the next state.
+	</p>
+	<p>
+		A <em>non-deterministic</em> automaton (if finite known by the abreviation NFA) is one where from at least one state there is more
+		that one path out of that state. But, there are algorithms to convert NFAs to equivalent DFAs.
+	</p>
+
+	
+!-->
+	<h3>Runs Through FInite Automatons</h3>
+	<p>
+		A <em>run</em> of a FA is a an <em>ordered sequence of transitions</em> - possibly infinite.
+		For example $ R = \{ (s_0, l_0, s_1), (s_1, l_1, s_2), \ldots \} : \forall i,j,k, (i,j,k \ge 0) \implies (s_i, l_j, s_k) \in T)$.
+	</p>
+	<p>
+		An <b>accepting run</b> is one where the final state is in the set of end states
+		(implicity all the end states are seen as accepting).
+	</p>
+	<p>
+		Runs defined in this way are all <em>terminating</em>. But what about infinite loops through
+		states? These may or may not be a good thing. These runs must be <em>infinite</em> and are
+		referred to as $\omega$-runs. The set of transitions that occur infinitely often in the run
+		are denoted $\sigma^\omega$ and other states $\sigma^+$.
+	</p>
+	<p>
+		An <b>accepting $\omega$-run</b> is one where $\exists s_f: s_f \in F \land s_f \in \sigma^\omega$ - the Buchi acceptance definition.
+		I.e., an accepting $\omega$-run is a loop when at least one state is visited infinitely often.
+	</p>
+	<p>
+		This rule is extended to finite runs using the <em>stutter extension rule</em> which adds an end
+		state that can be repeated infinitely often.
+	</p>
+
+<p>
+	<hr/>
+</p>
 	<p>
 		LTL formulas are evaluated at a position $i$ along a path through the system.
 	</p>
