@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>Batteries notes</title>
+	<!-- META_INSERT -->
+	<meta name="description" content="Batteries">
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+	<script type="text/x-mathjax-config">
+		MathJax.Hub.Config({
+			tex2jax: {
+				inlineMath: [['$','$'], ['\\(','\\)']]
+			},
+			displayAlign: "left",
+			displayIndent: "2em"
+		});
+	</script>
+
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+
+<body>
+	<div id="header">
+		-- This is JEHTech --
+	</div>
+
+	<div id="sidebar">
+		<h1 class="title">Links...</h1>
+		<div id="includedContent"></div>
+	</div>
+
+	<div id="content">
+		<h1 class="title">Batteries Notes...</h1>
+		<h2>Page Contents</h2>
+		<div id="page_contents">
+		</div>
+
+		<h2>References</h2>
+		<div>
+			<ul>
+				<li><a href="https://www.allaboutcircuits.com/textbook/direct-current/chpt-11/electron-activity-chemical-reactions/" target="_blank">Electron Activity in Chemical Reactions, Chapter 11 - Batteries And Power Systems</a>, All About Circuits</li>
+				<li><a href="https://www.allaboutcircuits.com/textbook/direct-current/chpt-11/battery-ratings/" target="_blank">Battery Ratings, Chapter 11 - Batteries And Power Systems</a>, All About Circuits</li>
+				<li><a href="https://www.thoughtco.com/ionic-and-covalent-chemical-bond-differences-606097" target="_blank">Ionic vs Covalent Bonds - Understand the Difference</a>, ThoughtCo.</li>
+			</ul>
+		</div>
+
+
+		<h2>Chemistry Of Batteries</h2>
+		<div>
+			<h3>Chemical Bonds</h3>
+			<div>
+				<p>Covelant bond (a.k.a. molecular bond): Atoms <em>share</em> electrons in their outer orbitals. Weaker bond than ionic bonds. Only form between non metals.</p>
+				<p>Ionic bond: Atom &quot;donates&quot; electron(s) to its &quot;partner&quot: electron spends most of its time close to the bonded atom. Much stronger than a covelant bond. Can form between metals or nonmetals.</p>
+			</div>
+
+			<h3>Battery Cells</h3>
+			<div>
+				<p>Battery cells use ionic solutions because the transfer of electrons between atoms can generate electric current:</p>
+				<p><img src="##IMG_DIR##/electronics-battery-cell-chemistry.PNG" alt="Diagram of battery cell electrodes and ionic reaction causing current flow"/></p>
+				<p>Once all molecules in the electrolyte have been &quot;used up&quot;, meaning there are no more molecules left
+				to react with the positive electrode, the battery is depleted.</p>
+				<p>Some electrolytes can be rechared by an external source connected in the opposite direction so that it essentially &quot;undoes&quot; the reaction caused during discharge.</p>
+				<p>Batteries are not ideal - they have an <em>internal resistance</em>. Cells are connected in parallel to minimise this.</p>
+				<p>A <em>primary cell</em> is rechargable. A <em>secondary cell</em> is not.</p>
+			</div>
+		</div>
+
+		<h2>Battery Lifetime</h2>
+		<div>
+			<p>Measured in <em>amp-hours</em>. Capacity of 1 amp-hour means battery should be able to supply a current of 1 amp for an hour, 2 amps for half an hour etc...
+			</p>
+			<p>
+				Amp-hours normally specified at a given current, time or assumed 8-hours. Done because the discharge profile of a battery
+				will vary with current draw.
+			</p>
+			<p>
+				Discharge profile also changes with the age of the battery, temperature and the remaining charge.
+			</p>
+			<p>
+				As batteries discharge their internal resistance also increases. Thus, voltage of battery should
+				be checked under load to get correct reading.
+			</p>
+			<p>
+				$$
+				\text{amp-hour} = \text{continuous current (amps)} * \text{discharge time (hrs)}
+				$$
+
+				Therefore, an estimate of battery life can be made if the average current draw is known:
+
+				$$
+				\text{discharge time etc. (hrs)} = \frac{\text{amp-hour}}{\text{avg continuous current (amps)}}
+				$$
+			</p>
+		</div>
+
+	</div>
+</body>
+</html>
+
+

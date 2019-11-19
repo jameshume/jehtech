@@ -481,7 +481,7 @@ active proctype proc1() {
 <h2>Linear Temporal Logic (LTL)</h2>
 <div>
 	<p>
-		First order predicate logic (FOPL) can reason about a system state at <em>one moment</em> in time. Using
+		First order predicate logic (FOPL, aka just &quot;predicate logic&quot;) can reason about a system state at <em>one moment</em> in time. Using
 		it one can talk about things like &quot;James is alive&quot;. In the current moment this is true.
 		But what about tomorrow, or indeed eventually? We all die sometime. We cannot express this using
 		FOPL. This is where LTL comes in.
@@ -527,82 +527,54 @@ active proctype proc1() {
 			$F = \{ s_2 \}$<br/>
 		</div>
 	</p>
-<!--
-	<p>
-		Why is this interesting? It is interesting because we can represent concurrent activity as
-		a set of states. Imagine the following promela program:
-	</p>
-	<pre class="prettyprint linenums">mtype = { A, B }
-mytype state = A
 
-active proctype proc1()
-{
-    do
-    :: state = A
-    od
-}
-
-
-active proctype proc2()
-{
-    do
-    :: state = B
-    od
-}</pre>
-	<p>
-		We can represent the state of the program as follows:
-	</p>
-	<p>
-		<img src="##IMG_DIR##/dfa_state_tree.png"/>
-	</p>
-	<p>
-		An this is just for a super simple program! If there was more than one variable then the
-		state would consist of a tuple of all the variables. In this way SPIN can take a Promela
-		program and convert it into a finite automaton (FA) and use this to search all the possible states for us (not
-		infinitely although the above tree grows infinitely, the state space is finite - $S = \{A, B\}$).
-	</p>
-
-	<p>
-		The above automotons are all <em>deterministic</em> (and when finite known as DFA). From each state there is only one path
-		to the next state.
-	</p>
-	<p>
-		A <em>non-deterministic</em> automaton (if finite known by the abreviation NFA) is one where from at least one state there is more
-		that one path out of that state. But, there are algorithms to convert NFAs to equivalent DFAs.
-	</p>
-
-	
-!-->
-	<h3>Runs Through FInite Automatons</h3>
+	<h3>Runs Through Finite Automatons</h3>
 	<p>
 		A <em>run</em> of a FA is a an <em>ordered sequence of transitions</em> - possibly infinite.
-		For example $ R = \{ (s_0, l_0, s_1), (s_1, l_1, s_2), \ldots \} : \forall i,j,k, (i,j,k \ge 0) \implies (s_i, l_j, s_k) \in T)$.
+		For example, if $R$ is the run, and $T$ is the set of all possible transitions within the autonaton,
+		then $R = \{ (s_0, l_0, s_1), (s_1, l_1, s_2), \ldots \} : \forall i,j,k, (i,j,k \ge 0) \implies (s_i, l_j, s_k) \in T)$.
+		A concrete, finite, example using the automaton above could be
+		$R_\text{concrete} = \{ (s_0, a, s_1), (s_1, c, s_2) \}$. 
 	</p>
 	<p>
 		An <b>accepting run</b> is one where the final state is in the set of end states
-		(implicity all the end states are seen as accepting).
+		(implicity all the end states are seen as accepting). This applies to the concrete example
+		just given. Runs defined in this way are all <em>terminating</em>.
 	</p>
 	<p>
-		Runs defined in this way are all <em>terminating</em>. But what about infinite loops through
-		states? These may or may not be a good thing. These runs must be <em>infinite</em> and are
-		referred to as $\omega$-runs. The set of transitions that occur infinitely often in the run
+		But what about infinite loops through states? The same automaton we saw above provides the
+		possibility for infinite runs that oscillate between $s_1$ and $s_2$. For example:
+		$R_\text{inf ex.} = \{ (s_0, a, s_1), (s_1, c, s_2), (s_2, d, s_1), (s_1, c, s_2), (s_2, d, s_1), \ldots \}$.
+	</p>
+	<p>
+		These may or may not be a good thing. These runs must be <em>infinite</em> and are
+		referred to as <b>$\omega$-runs</b>. The set of transitions that occur infinitely often in the run
 		are denoted $\sigma^\omega$ and other states $\sigma^+$.
 	</p>
+	<ul>
+		<li>$\sigma^\omega$: transitions occuring infinitely often.</li>
+		<li>$\sigma^+$: transitions that occur a finite number of times.</li>
+	</ul>
 	<p>
-		An <b>accepting $\omega$-run</b> is one where $\exists s_f: s_f \in F \land s_f \in \sigma^\omega$ - the Buchi acceptance definition.
+		An <b>accepting $\omega$-run</b> is one where $\exists s_f: s_f \in F \land s_f \in \sigma^\omega$ - the <em>Buchi acceptance definition</em>.
 		I.e., an accepting $\omega$-run is a loop when at least one state is visited infinitely often.
 	</p>
 	<p>
 		This rule is extended to finite runs using the <em>stutter extension rule</em> which adds an end
 		state that can be repeated infinitely often.
 	</p>
-
-<p>
-	<hr/>
-</p>
 	<p>
-		LTL formulas are evaluated at a position $i$ along a path through the system.
+		Call $\sigma$ an instance of an $\omega$-run. If the states in the run are $s_0, s_1, \ldots$,
+		then:
 	</p>
+	<ul>
+		<li>$\sigma_i = s_i$</li>
+		<li>$\sigma[i] = \{ s_i, s_{i+1}, \ldots \}$ - this is called the suffix from position $i$. The indexing starts
+			at 1, so $\sigma \equiv \sigma[1] \equiv \sigma_1\sigma[2]$ and so on.
+		</li>
+	</ul>
+
+	<h3>Into The LTL</h3>
 	<p>
 		LTL extends classical logic by adding new operators:
 	</p>
@@ -613,16 +585,83 @@ active proctype proc2()
 		<li>$A \bigcup B$: &quot;Until&quot;:  Holds if $A$ does not become false before $B$ becomes true.<br/>
 Two variants:
 			<ul>
-				<li>Strong until. $A \bigcup_\text{strong} B$ requires that $B$ eventually become true.
-				</li>
-				<li>Weak until
-				</li>
+				<li>Strong until.</li>
+				<li>Weak until.</li>
 			</ul>
 		</li>
 	</ul>
 	<p>
-		Now we can express the idea eventually James will die.
+		When a formula $f$ holds for an $\omega$-run $\sigma$, we write $\sigma \models f$.
 	</p>
+
+	<h4>Weak Until</h4>
+	<p>
+		The weak until operator is expressed by the following:
+		$$
+		\sigma[i] \models (p \bigcup q) \Leftrightarrow \sigma_i \models q \lor \left(\sigma_i \models p \land \sigma[i+1] \models (p \bigcup q)\right)
+		$$
+		Which, if you're anything like me, makes you want to curl up in the corner of the room and cry!
+	</p>
+	<p>
+		So, can we break this down any? Well,
+
+		$$
+		\sigma[i] \models (p \bigcup q)
+		$$
+
+		Remember, $\sigma[i]$ means the states $s_i, s_{i+1}, \ldots$. So this chunk of the formula means
+		&quot;p until q holds for all the states in suffix $\sigma$ from position $i$.
+	</p>
+	<p>
+		&quot;$\Leftrightarrow$&quot; means &quot;if an only if&quot;. Then,
+
+		$$
+		\sigma_i \models q
+		$$
+
+		Means that $q$ holds (i.e., is true) in the state $i$ of the $\omega$-run, $\sigma$.
+	</p>
+	<p>
+		So far it is saying that the statement &quot;p is true until q is true (p until q)&quot; is true for
+		the run-suffix, starting at state $i$, if and only if $q$ is true at state $i$ in the run or...
+	</p>
+	<p>
+		Lets have a look at that &quot;or...&quot; bit next.
+	</p>
+	<p>
+		We can deal with the next bit in one chunk: 
+
+		$$
+		\left(\sigma_i \models p \land \sigma[i+1] \models (p \bigcup q)\right)
+		$$
+
+		This is saying that $p$ is true in state $i$ of the run and p-until-q holds for the suffix
+		of the run starting at state $i+$.
+	</p>
+	<p>
+		So, in total we have, &quot;p is true until q is true (p until q)&quot; is true for
+		the run-suffix, starting at state $i$, if and only if $q$ is true at state $i$ in the run, or
+		$p$ is true at state $i$ <em>and</em> &quot;p is true until q is true (p until q)&quot; holds for the
+		next suffix startin at state $i + 1$.
+	</p>
+	<p>
+		This is a recursive definition! Starting at the first state in our run, either $q$ is true
+		or $p$ is true recurse... therefore, we never actually know or require that $q$ ever become
+		true - we keep putting it off!
+	</p>
+
+	<h4>Strong Until</h4>
+	<p>
+		Unlike week until, where for $p \bigcup q$, $q$ was not required to ever become true (as
+		we could keep putting it off), strong-until does require that $q$ come true. It is defined
+		as follows:
+
+		$$
+		\sigma[i] \models (p \bigcup q) \Leftrightarrow \sigma[i] \models (p \bigcup q) \land \exists j, j \ge i, \sigma_j \models q
+		$$
+	</p>
+
+
 </div>
 
 <h2>SPIN Notes</h2>
