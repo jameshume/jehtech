@@ -43,6 +43,7 @@
 				<li><a href="https://www.allaboutcircuits.com/textbook/direct-current/chpt-11/electron-activity-chemical-reactions/" target="_blank">Electron Activity in Chemical Reactions, Chapter 11 - Batteries And Power Systems</a>, All About Circuits</li>
 				<li><a href="https://www.allaboutcircuits.com/textbook/direct-current/chpt-11/battery-ratings/" target="_blank">Battery Ratings, Chapter 11 - Batteries And Power Systems</a>, All About Circuits</li>
 				<li><a href="https://www.thoughtco.com/ionic-and-covalent-chemical-bond-differences-606097" target="_blank">Ionic vs Covalent Bonds - Understand the Difference</a>, ThoughtCo.</li>
+				<li><a href="https://www.build-electronic-circuits.com/why-does-the-battery-voltage-change/" target="_blank">Why does the battery voltage change?</a>, buildElectronicCircuits.com.</li>
 			</ul>
 		</div>
 
@@ -58,7 +59,7 @@
 			<h3>Battery Cells</h3>
 			<div>
 				<p>Battery cells use ionic solutions because the transfer of electrons between atoms can generate electric current:</p>
-				<p><img src="##IMG_DIR##/electronics-battery-cell-chemistry.PNG" alt="Diagram of battery cell electrodes and ionic reaction causing current flow"/></p>
+				<p><img src="##IMG_DIR##/electronics-battery-cell-chemistry.png" alt="Diagram of battery cell electrodes and ionic reaction causing current flow"/></p>
 				<p>Once all molecules in the electrolyte have been &quot;used up&quot;, meaning there are no more molecules left
 				to react with the positive electrode, the battery is depleted.</p>
 				<p>Some electrolytes can be rechared by an external source connected in the opposite direction so that it essentially &quot;undoes&quot; the reaction caused during discharge.</p>
@@ -69,11 +70,12 @@
 
 		<h2>Battery Lifetime</h2>
 		<div>
-			<p>Measured in <em>amp-hours</em>. Capacity of 1 amp-hour means battery should be able to supply a current of 1 amp for an hour, 2 amps for half an hour etc...
+			<p>Measured in <em>amp-hours</em>. Capacity of 1 amp-hour means battery should be able to supply a current of 1 amp for an hour, 2 amps for half an hour etc. It is a unit that describes available charge of a battery (see last paragraph).
 			</p>
 			<p>
 				Amp-hours normally specified at a given current, time or assumed 8-hours. Done because the discharge profile of a battery
-				will vary with current draw.
+				will vary with current draw. E.g. if battery has a 2 amp-hour capacity specified for a current of 2 amps, then it means
+				the battery can suuply a current of 2 amps for 1 hour ( 2 amp-hour / 2 amps).
 			</p>
 			<p>
 				Discharge profile also changes with the age of the battery, temperature and the remaining charge.
@@ -92,6 +94,13 @@
 				$$
 				\text{discharge time etc. (hrs)} = \frac{\text{amp-hour}}{\text{avg continuous current (amps)}}
 				$$
+			</p>
+			<p>
+				Coulomb counters monitor the number of Coulombs (defined as $6.25 \times 10^{18}$ electrons) seen
+				coming out of a battery (or in if recharging). They rarely give the value in Coulombs. 1 amp is
+				1 Coulomb per second past a point in a circuit - current is <em>speed</em> of charge flow around
+				a circuit. In an hour there are 3600 seconds, so 1 amp-hour means 3600 coulombs. The counters
+				will normally tell the total discharge seen so far in amp-hours or some similar unit.
 			</p>
 		</div>
 

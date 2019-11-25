@@ -661,6 +661,86 @@ Two variants:
 		$$
 	</p>
 
+	<h4>Always</h4>
+	<p>
+		Always means that something holds <em>invariantly true</em> throughout a run.
+
+		$$
+		\sigma \models \square p \Leftrightarrow \sigma \models \left(p \bigcup \text{false}\right)
+		$$
+
+		So, always $p$ means $p$ until $\text{false}$... hmmm. Lets break it down. If we consider weak until,
+		we know that $p \bigcup q$ does not require $q$ to ever become true and $p$ would therefore <em>always</em>
+		be true if $p \bigcup q$ were to hold. Thats why it is defined this way.
+	</p>
+
+	<h4>Eventually</h4>
+	<p>
+		A property will eventually become true at least once in a run.
+
+		$$
+		\sigma \models \lozenge q \Leftrightarrow \sigma \models \left(\text{true} \bigcup q \right)
+		$$
+	</p>
+
+	<h4>Next</h4>
+	<p>
+		$$
+		\sigma[i] \models Xp \Leftrightarrow \sigma_{i+1} \models p
+		$$
+	</p>
+
+	<h4>Combinations Of LTL Operators</h4>
+	<p>
+		<em>Recurrence</em> is expressed as $\square\lozenge p$, i.e., &quot;always eventually $p$ becomes true&quot;.
+		This expresses an <em>invariance</em>.
+	</p>
+	<p>
+		<em>Stability</em> is expressed as $\lozenge\square p$,i.e., &quot;eventally always $p$&quot;. This expresses
+		a <em>guarantee</em>.
+	</p>
+	<p>
+		A <em>response</em> is shown as $p \implies \lozenge q$. This works because if $p$ occurs, for the expression
+		to be true that $q$ must eventually become true.
+	</p>
+	<p>
+		A <em>precidence</em> (a usage, tradition, or standard to be followed in the future) is expressed as
+		$p \implies q \bigcup r$. I.e., $p$ implies that $q$ will be true until $r$ becomes true. The property
+		$q$ is the precedent that holds until a new precedent $r$ is set.
+	</p>
+	<p>
+		A <em>correlation</em> is decribed as $\lozenge p \implies \lozenge q$.
+	</p>
+	<p>
+		Other commonly used rules include:
+	</p>
+	<ul>
+		<li>$¬\square p \Leftrightarrow \lozenge ¬p$</li>
+		<li>$¬\lozenge p \Leftrightarrow \square ¬p$</li>
+		<li>$¬(p \bigcup q) \Leftrightarrow (¬q) \bigcup (¬p \land ¬q)$</li>
+		<li>$\square(p \land q) \Leftrightarrow \square p \land \square q$</li>
+		<li>$\lozenge(p \lor q) \Leftrightarrow \lozenge p \lor \lozenge q$</li>
+		<li>$p \bigcup (q \lor r) \Leftrightarrow (p \bigcup q) \lor (p \bigcup r)$</li>
+		<li>$(p \land q) \bigcup r \Leftrightarrow (p \bigcup r) \land (q \bigcup r)$</li>
+		<li>$p \bigcup (q \lor r) \Leftrightarrow (p \bigcup q) \lor(p \bigcup r)$</li>
+		<li>$\square\lozenge (p \lor q) \Leftrightarrow \square\lozenge p \lor \square\lozenge q$</li>
+		<li>$\lozenge\square(p \land q) \Leftrightarrow \lozenge\square p \land \lozenge\square q$</li>
+	</ul>
+
+	<h3>Going From Non-Temporal To Temporal Logic</h3>
+	<p>
+		The SPIN book uses the example of $p \implies q$. In the context of LTL, what does this mean
+		without any temporal operators? A &quot;true&quot; LTL statement implies means that this must
+		hold for every run of the system: $\sigma \models p\implies q$. Without temporal operators
+		this just applies for the first state in the run. States beyond that... it says nothing
+		about!
+	</p>
+	<p>
+		To &quot;implement&quot; this implication in LTL, a more accurate description could be
+		$\square(p \implies X(\lozenge q)) \land \lozenge p$. In other words, $p$ is eventuall true
+		and it is always the case that $p$ becoming true means that $q$ will eventually become true
+		sometime strictly after.
+	</p>
 
 </div>
 
@@ -896,17 +976,6 @@ cc -DNP -o pan pan.c # Enable search for no-progress cycles.
 
 </div>
 
-<h2>Docker Image</h2>
-<p>
-	Bit of a Linux tool so to run on Windows using Docker the following will create a little
-	image which can run SPIN...
-</p>
-<div>
-	<pre class="prettyprint linenums">FROM ubuntu
-
-RUN apt update -y && \
-    apt install -y vim build-essential spin</pre>
-</div>
 
 </div> <!-- END H1 padding div -->
 </div>
