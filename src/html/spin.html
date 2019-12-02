@@ -938,13 +938,17 @@ cc -o pan pan.c
 		If there are any errors a <em>trail</em> file will be output named
 		<code>filename.pml.trail</code>.
 	</p>
+	<p>
+		The shorthand for the above is to run the following.
+	</p>
+	<pre>spin -run filename.pml</pre>
 
 	<h3>Find Shortest Execution Trace</h3>
 	<p>
 		If a tail fails in <code>&lt;n&gt;</code> steps, to find the shortest
 		possible path to failure less than or equal to n steps:
 	</p>
-	<pre>spin <b><u>-t</u></b> file.pml
+	<pre>spin <b><u>-a</u></b> file.pml
 cc <b><u>-DREACH</u></b> -o pan pan.c
 ./pan <b><u>-i -m&lt;n&gt;</u></b></pre>
 	<p>
@@ -952,13 +956,61 @@ cc <b><u>-DREACH</u></b> -o pan pan.c
 	</p>
 	<pre>cc <b><u>-DBFS</u></b> -o pan pan.c
 ./pan</pre>
+	<p>
+		A shortcut for this should be the following.
+	</p>
+	<pre>spin -run -bfs file.pml</pre>
 
 	<h3>Guided Simulation (Use A Trail File)</h3>
 	<p>
 		To replay a trail file in a simulation:
 	</p>
-	<pre class="prettyprint linenums">spin <b><u>-p -t</u></b> file.pml</pre>
-
+	<pre class="prettyprint linenums">
+spin <b><u>-p -t</u></b> file.pml
+           ^  ^
+           ^  -t is a trail-hunting option. If the analyzer finds a violation of an 
+           ^  assertion, a deadlock or an unspecified reception, it writes an error
+           ^  trail into a file named pan.trail. The trail can be inspected in detail
+           ^  by invoking Spin with the -t option. In combination with the options pglrs
+           ^  different views of the error sequence are then easily obtained.
+           ^
+           -p Shows the state changes of the Promela processes at every time step.</pre>
+	<p>
+		Or...
+	</p>
+	<pre class="prettyprint linenums">spin <b><u>-p -replay</u></b> file.pml</pre>
+	<p>
+		The pglrs options are:
+	</p>
+	<table>
+		<thead>
+			<tr>
+				<td>Option</td><td>Description</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><code>-p</code></td>
+				<td>Shows the state changes of the Promela processes at every time step.</td>
+			</tr>
+			<tr>
+				<td><code>-g</code></td>
+				<td>Shows the current value of global variables at every time step.</td>
+			</tr>
+			<tr>
+				<td><code>-l</code></td>
+				<td>Shows the current value of local variables, after the process that owns them has changed state. It is best used in combination with option -p.</td>
+			</tr>
+			<tr>
+				<td><code>-r</code></td>
+				<td>Shows all message receive events. It shows the process performing the receive, its name and number, the source line number, the message parameter number (there is one line for each parameter), the message type and the message channel number and name.</td>
+			</tr>
+			<tr>
+				<td><code>-s</code></td>
+				<td>Shows all message send events.</td>
+			</tr>
+		</tbody>
+	</table>
 	<h3>Stricter End States - Message Queues Must Be Empty</h3>
 	<p>
 		By defailt when verification ends all promela-processes must be in a valid end state but
@@ -973,7 +1025,104 @@ cc -DNP -o pan pan.c # Enable search for no-progress cycles.
 #        ^^^^
 #        Enforce weak fairness (strong fairness too computationally expensive)</pre>
 	<p></p>
+</div>
 
+<h2>SPIN In Action</h2>
+<div>
+	<p>
+		Playing with <a target="_blank" href="http://spinroot.com/spin/Man/1_Exercises.html">SPIN verification example exercise 3a</a>:
+	</p>
+	<div style="float:left;">
+		<p>This was my solution to the exercise...</p>
+		<pre class="prettyprint linenums:15">bool yield[2];
+int lock;
+int cr_count = 0;
+
+active [2] proctype mutex_proc()
+{
+int other_procno = 1 - _pid
+C0: yield[_pid] = false
+C1: if
+    :: lock != _pid -&gt;
+C2:        if
+           :: !yield[other_procno] -&gt; goto C2
+           :: else -&gt; lock = _pid; goto C1
+           fi
+    :: else -&gt;
+CR:        // Enter critical region
+           cr_count = cr_count + 1
+           // Do some critical stuff
+           // Leave CR
+           cr_count = cr_count - 1
+           yield[_pid] = true
+           // Remainder of program (out of CR)
+           goto C0
+    fi
+}
+
+never  {    /* &lt;&gt;(cr_count &gt; 1) */
+T0_init:
+        do
+        :: atomic { ((cr_count &gt; 1)) -&gt;
+              assert(!((cr_count &gt; 1))) }
+        :: (1) -&gt; goto T0_init
+        od;
+accept_all:
+        skip
+}</pre></div>
+	<div style="float:left;">
+		<p>Following the instructions, one can use a BFS to find the smallest number of steps in which
+			the never claim is violated and it can be examined as so:
+		</p>
+		<pre>~/SPIN$ spin -p -replay ex_3a.pml
+starting claim 1
+using statement merging
+<span style="color: red">^^ yield = {0, 0}, lock = 0, cr_count = 0</span><span style="background: lightgray;">
+  1:    proc  1 (mutex_proc:1) ex_3a.pml:22 (state 1)   [yield[_pid] = 0]</span>
+<span style="color: red">^^ Proc 1 wants the lock</span><span style="background: lightgray;">
+  2:    proc  1 (mutex_proc:1) ex_3a.pml:24 (state 2)   [((lock!=_pid))]</span>
+<span style="color: red">^^ Proc 1 examines the lock variable. It does not have the lock!</span>
+  3:    proc  0 (mutex_proc:1) ex_3a.pml:22 (state 1)   [yield[_pid] = 0]
+<span style="color: red">^^ Proc 0 wants the lock</span>
+  4:    proc  0 (mutex_proc:1) ex_3a.pml:29 (state 10)  [else]
+<span style="color: red">^^ Proc 0 has the lock</span>
+  5:    proc  0 (mutex_proc:1) ex_3a.pml:31 (state 11)  [cr_count = (cr_count+1)]
+<span style="color: red">^^ yield = {0, 0}, lock = 0, cr_count = 1</span>
+  6:    proc  0 (mutex_proc:1) ex_3a.pml:34 (state 12)  [cr_count = (cr_count-1)]
+<span style="color: red">^^ yield = {0, 0}, lock = 0, cr_count = 0</span>
+  7:    proc  0 (mutex_proc:1) ex_3a.pml:35 (state 13)  [yield[_pid] = 1]
+<span style="color: red">^^ yield = {1, 0}, lock = 0, cr_count = 0. Proc 0 releases lock</span><span style="background: lightgray;">
+  8:    proc  1 (mutex_proc:1) ex_3a.pml:27 (state 5)   [else]</span>
+<span style="color: red">^^ Proc 1 can take the lock as proc 0 has yielded</span>
+  9:    proc  0 (mutex_proc:1) ex_3a.pml:22 (state 1)   [yield[_pid] = 0]
+<span style="color: red">^^ Proc 0 wants the lock. yield = {0, 0}, lock = 0, cr_count = 0</span>
+ 10:    proc  0 (mutex_proc:1) ex_3a.pml:29 (state 10)  [else]
+<span style="color: red">^^ ERROR! Proc 0 thinks it has the lock!</span><span style="background: lightgray;">
+ 11:    proc  1 (mutex_proc:1) ex_3a.pml:27 (state 6)   [lock = _pid]</span>
+<span style="color: red">^^ ERROR! Proc 1 thought it was clear to take the lock
+          Proc 1 takes the lock: yield = {0, 0}, lock = 1, cr_count = 0</span><span style="background: lightgray;">
+ 12:    proc  1 (mutex_proc:1) ex_3a.pml:29 (state 10)  [else]
+ 13:    proc  1 (mutex_proc:1) ex_3a.pml:31 (state 11)  [cr_count = (cr_count+1)]</span>
+ 14:    proc  0 (mutex_proc:1) ex_3a.pml:31 (state 11)  [cr_count = (cr_count+1)]
+<span style="color: red">^^ ERROR! Both proc 0 and 1 are in the CR!</span>
+spin: trail ends after 14 steps
+#processes: 2
+                yield[0] = 0
+                yield[1] = 0
+                lock = 1
+                cr_count = 2
+<span style="color: red">                ^^ ERROR! The never claim is violated</span>
+ 14:    proc  1 (mutex_proc:1) ex_3a.pml:34 (state 12)
+ 14:    proc  0 (mutex_proc:1) ex_3a.pml:34 (state 12)
+ 14:    proc  - (never_0:1) ex_3a.pml:43 (state 6)
+2 processes created</pre></div>
+<p style="clear:both;">By examining the trace we can see why this algorithm has failed. When the lock
+is yielded, it is not set to a value that represented &quot;not-owned&quot;, so proc 0 thought it had the lock,
+when in fact, no one had the lock!
+</p>
+<p>
+    The never claim, &quot;$\lozenge(cr_{count} &gt; 1)$&quot; was generated using the command line <code>spin -f &quot;&lt;&gt;(cr_count &gt; 1)&quot;</code>
+</p>
 </div>
 
 
