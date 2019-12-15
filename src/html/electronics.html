@@ -293,6 +293,9 @@
 				current is still often shown as conventional current.
 			</p>
 			<p>
+				Informally, <b>current is a flow of electric charge</b>.
+			</p>
+			<p>
 				Current, $i$, is the amount of charge, $q$, that moves through a point in the circuit at any time.
 				$$i = \frac{\mathrm dq}{\mathrm dt}$$
 				Charge, $q$, is measured in Coulombs. One electron has a charge of $-1.6 \times 10^{-19}$ Coulombs. This is the smallest
@@ -305,25 +308,60 @@
 			</p>
 			<h3 style="clear: both;">Ohm's Law</h3>
 			<div>
-				$$V = iR$$
+				<p>Ohm's law gives the relationship between voltage, current and resistance:
+				</p>
+				<p>
+					$$V = IR$$
+				</p>
 			</div>
 			<h3 style="clear: both;">Kirchoff's Laws</h3>
+
+			<h4>Nodes, Branches and Loops</h4>
+			<p>
+				<b>Branch</b>: A branch represents a single element such as a resistor. I.e., any two terminal element.
+			</p>
+			<p>
+				<b>Node</b>: A node is the point of connection between 2 or more branches.
+			</p>
+			<p>
+				<b>Loop</b>: A loops is any closed path in a circuit.
+			</p>
+			<p>
+				<img src="##IMG_DIR##/loops_nodes_branches.png" alt="Branches, loops and nodes in a ciruite"/>
+			</p>
+
+			<h4>The Laws...</h4>
 			<p>
 				Two important laws: <em>Kirchoff's voltage law</em> and <em>Kirchoff's current law</em>.
 			</p>
 			<p>
-				Kirchoff's current law says that the sum of currents flowing into a node must equal the sum of currents leaving a node.
+				Kirchoff's current law says that the <b>sum of currents flowing into a node must equal the sum of currents leaving</b> a node.
 				This is often expressed in another way: the sum of currents entering a node must always be zero. This works because we
 				label, by convention, all currents entering the node as positive and all currents leaving the node as negative.
 			</p>
 			<p>
-				Kirchoff's voltage law says that the sum of voltages around a closed circuit must be zero
+				<img src="##IMG_DIR##/kcl_kvl.png" alt="KCL"/>
+			</p>
+			<p>
+				Kirchoff's voltage law says that the <b>sum of voltages around a closed circuit must be zero</b>.
+			</p>
+			<p>
+				<img src="##IMG_DIR##/kvl.png" alt="KVL"/>
+			</p>
+			<p>
+					Say, for example, that $V_1$ is 12V, R2 is $4 \Omega$, R3 is $6 \Omega$, $V_2$ is 3V and R5 is $1 \Omega$.
+					Then we know $-12 + 4i + 6i - 4 + i = 0$. We can then work out the current in the circuit using KVL
+					by re-arranging the formula.
 			</p>
 		</div>
 		
 
 		<h2>Resistance</h2>
 		<div>
+			<p>
+				Resistors control the current that flows through a part of a circuit, as described by Ohm's Law ($V = IR$). Using
+				the formula one can see that as either resistance increases, current falls, and vice versa.
+			</p>
 			<h3 style="clear:both;">Resistor Colour Codes</h3>
 			<div>
 				<canvas id="myCanvas" width="360" height="540" style="margin: 10px; border:1px solid #000000; float: left;">
@@ -524,16 +562,53 @@
 				</p>
 			</div>
 
-			
+			<h3 style="clear:both;">Power</h3>
+			<div>
+				<p>When current flows through a resistor it disipates power in the form of heat. When it flows
+					through an LED it disipates power in the form of both heat and light.
+				</p>
+				<p>
+					Power, measured in <b>watts</b>, is defined as:
+					$$
+					P = VI = I^2R = \frac{V^2}{R}
+					$$
+				</p>
+				<p>
+					Resitors usually have a power rating (the power they can disipate) associated with them.
+					This means that if you know
+					the resistor's power rating you can calculate the maximum voltage or current you can
+					put across/through them without breaking the resistor.
+				</p>
+			</div>
 		</div>
+
+		<h2 style="clear:both;">Switches</h2>
+		<div>
+			<p>
+				Switches are defined by the number of poles and throws they have...
+			</p>
+			<p>
+				<b>Poles</b>: A switch pole refers to the number of separate circuits that the switch controls.
+			</p>
+			<p>
+				<b>Throw</b>: The number of throws indicates how many different output connections each switch pole can connect its input to.
+				Think of it as how many places a single source can be &quot;thown to&quot;.
+			</p>
+			<p>
+				<img src="##IMG_DIR##/switch_thows_and_poles.png" alt="Picture of switches with different #poles and thows"/>
+			</p>
+		</div>
+
+
+		<h2 style="clear:both;">Capacitance</h2>
+		<div>
+		</div>
+
 
 		<h2 style="clear:both;">Amplifiers</h2>
 		<div>
 		</div>
 
-		<h2>Capacitance</h2>
-		<div>
-		</div>
 	</div>
 </body>
 </html>

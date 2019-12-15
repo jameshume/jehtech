@@ -67,6 +67,10 @@ mtype my_variable = SUM_NAME_1 // Default would be zero</pre>
 		usually defining values for types of messages between promela-processes can be used
 		otherwise.
 	</p>
+	<p>
+		In later versions of spin, subtypes of the form <code>mtype:&lt;sub-type-name&gt; = { ... }</code>
+		can also be used.
+	</p>
 
 	<h3>Promela Processes</h3>
 	<p>
@@ -892,7 +896,32 @@ accept:                      /* Remaining in this loop is a valid end state     
 /* The loop will exit (and cause a claim violation) if !p && !q */
 <b>}</b></pre>
 	<p>
+		To generate a never claim you can use the spin command line: <code>spin -f 'ltl-formula'</code>.
+		You can make life a little easiler for yourself by combining complex expressions into <code>#define</code>'d
+		symbols. For example, in one simulation I wanted to chech that the following would <em>always</em> be
+		true: <code>!(lock_grant[0] && lock_grant[1]) && !(bus_connect[0] && bus_connect[1]) && (!bus_connect[0] || lock_grant[0]) && (!bus_connect[1] || lock_grant[1]) && (num_connected < 2)</code>. I also wanted to make sure that the following
+		would be <em>eventually</em> true: <code>(lock_grant[0] && bus_connect[0])</code> and
+		seperately, <code>(lock_grant[1] && bus_connect[1])</code>.
 	</p>
+	<p>
+		All of this would be a bit of a mouthful to have to type into the command line. So, instead, 
+		in the model:
+	</p>
+	<pre class="prettyprint linenums">#define always_c (!(lock_grant[0] && lock_grant[1]) && !(bus_connect[0] && bus_connect[1]) && (!bus_connect[0] || lock_grant[0]) && (!bus_connect[1] || lock_grant[1]) && (num_connected < 2))
+#define eventual_co1 (lock_grant[0] && bus_connect[0])
+#define eventual_co2 (lock_grant[1] && bus_connect[1])</pre>
+	<p>
+		Then, generating the never claim was done like so: <code>spin -f '([]always_c) &amp;&amp; (&lt;&gt;eventual_co1) &amp;&amp; (&lt;&gt;eventual_co2) */
+T'</code>. Much easier :)
+	</p>
+	<p>
+		It is also possible to use the <a href="http://spinroot.com/spin/Man/ltl.html" target="_blank">ltl section</a> directly
+		in your models:
+	</p>
+	<pre class="prettyprint linenums">ltl my_model_condition_1 {
+    ([]always_c) &amp;&amp; (&lt;&gt;eventual_co1) &amp;&amp; (&lt;&gt;eventual_co2)
+}</pre>
+	<p></p>
 
 	<h3>Trace Assertions</h3>
 	<p>
