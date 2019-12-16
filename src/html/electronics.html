@@ -602,6 +602,41 @@
 
 		<h2 style="clear:both;">Capacitance</h2>
 		<div>
+			<p>
+				A capacitor consists of two conducting plates separated by an insulator (a.k.a. a dialectric).
+			</p>
+			<p>
+				When connected to a voltage source, the source creates a positive charge on one plate
+				and a negative one on the other plate:
+			</p>
+			<p>
+				<img src="##IMG_DIR##/capacitor.png" alt="Pici of a capacitor with charge on both plates"/>
+			</p>
+			<p>
+				Charge stored is proportional to applied voltage:
+				$$
+					q = Cv
+				$$
+				Where $C$ is called the <b>capacitance</b> of the capacitor and is measured in Farads (F).
+				By re-arranging the above we can see that capacitance is the <em>charge per volt</em> that
+				the capacitor can store. This quanitity is dependent on the type of dialectric used,
+				the surface area of each plate and the distance between the plates.
+			</p>
+			<p>
+				Recall that current is the amount of charge that moves past a point per unit time. Thus,
+				by differentiating w.r.t time, the above, we get the current-voltage relationship of a cap:
+				$$
+					i = C\frac{\mathrm{d}q}{\mathrm{d}t}
+				$$
+				This gives us in important property of caps. Because for DC current the voltage does not change,
+				$\frac{\mathrm{d}q}{\mathrm{d}t}$ is zero, so a <b>capacitor is an open circuit to DC</b>! (But it
+				does charge).
+				Because of the definition of a derivative, we also know that the voltage across a cap must
+				be smooth - i.e., it cannot change abruptly.
+			</p>
+			<p>
+				Note that real capacitors dissipate their energy over time - they &quot;leak&quot;
+			</p>
 		</div>
 
 
