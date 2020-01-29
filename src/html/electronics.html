@@ -293,6 +293,14 @@
 				current is still often shown as conventional current.
 			</p>
 			<p>
+				From Wikipedia: <q>Conventional current flows from the positive pole (terminal) to the negative pole. Electrons flow from negative to positive. In a direct current (DC) circuit, current flows in one direction only, and one pole is always negative and the other pole is always positive. In an alternating current (AC) circuit the two poles alternate between negative and positive and the direction of the current (electron flow) reverses periodically.</q>.
+			</p>
+			<p>
+				Note that voltages are relative, which is why the negative terminal of the battery can be negative - it depends what
+				the reference voltage you are measuring agains is - e.g. if ground is midway between the two terminals then they will
+				have voltages -A and +A respectively.
+			</p>
+			<p>
 				Informally, <b>current is a flow of electric charge</b>.
 			</p>
 			<p>
@@ -637,6 +645,98 @@
 			<p>
 				Note that real capacitors dissipate their energy over time - they &quot;leak&quot;
 			</p>
+			<p>
+				Integrate both sides of the above equation to get:
+
+				$$
+					v = \frac{1}{C} \int_{t_o}^t i\ \mathrm{d}t + v(t_0)
+				$$
+
+				Capacitors resist abrupt changes in voltage.
+			</p>
+			<h3>Capacitors In Series</h3>
+			<p>
+				$$
+					\frac{1}{C_{eq}} = \frac{1}{C_1} + \frac{1}{C_2} + \cdots +  \frac{1}{C_n}
+				$$
+			</p>
+			<h3>Capacitors In Parallel</h3>
+			<p>
+				$$
+					C_{eq} = C_1 + C_2 + \cdots + C_n
+				$$
+			</p>
+		</div>
+
+		<h2>Inductors</h2>
+		<div>
+			<p>
+				An inductor is a coil of wire, sometimes round a feris core, that <b>stores energy in its magnetic field</b>.
+				Its strength depends on the number of turns in the coil and the type of core material and its
+				cross-sectional area.
+			</p>
+			<p>
+				Inductors <b>oppose the change of current</b> flowing though them. They are measured in &quot;Henrys&quot;.
+				The formula below defines inductance, L. Inductance is the voltage generated per unit change in
+				current.
+
+				$$
+				v = L \frac{\mathrm{d}i}{\mathrm{d}t}
+				$$
+
+				Integrating both sides and re-arranging we can get:
+
+				$$
+				i = \frac{1}{L}\int_{t_0}^{t} v(t)\ \mathrm{d}t - i(t_0)
+				$$
+			</p>
+			<h3>Inductors In Series</h3>
+			<p>
+				$$
+				L_{\text{eq}} = L_1 + L_2 + \cdots + L_n
+				$$
+			</p>
+			<h3>Inductors In Parallel</h3>
+			<p>
+				$$
+				\frac{1}{L_{\text{eq}}} = \frac{1}{L_1} + \frac{1}{L_2} + \cdots + \frac{1}{L_n}
+				$$
+
+				So, for 2 inductors in parallel:
+
+				$$
+				L_{\text{eq}} = \frac{L_1L_2}{L_1 + L_2}
+				$$
+			</p>
+		</div>
+
+
+		<h2 style="clear:both;">Diodes</h2>
+		<div>
+			<p>
+				<img src="##IMG_DIR##/diode_symbol.png" alt="diode symbol"/>
+			</p>
+			<p>
+				Diodes let current flow in one direction, but not the other, and always drop the
+				same voltage across them no matter the src voltage.
+			</p>
+			<p>
+				<img src="##IMG_DIR##/diode.png"/>
+			</p>
+			<p>
+				Diodes drop the same voltage across them no matter the voltage source rating. So, for example,
+				silicon diode needs about 0.7V to fwd bias, but won't let the voltage drop across it
+				exceed this. So if you don't protect it with a resistor it will allow too much current to
+				flow an potentially overheat!
+			</p>
+			<p>
+				<img src="##IMG_DIR##/diode_with_resistor_current.png"/>
+			</p>
+
+			<h3>References</h3>
+			<ul>
+				<li><a href="http://www.cs.tut.fi/kurssit/TLT-8016/Chapter3.pdf" target="_blank">Diodes and Diode Circuits</a>.</li>
+			</ul>
 		</div>
 
 

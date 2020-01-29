@@ -42,6 +42,91 @@
      </ul>
    </div>
 
+   <h2>Installing, Loading LibClang, Versions That Play Nice</h2>
+   <div>
+      <h3>A Basic Install</h3>
+      <p>
+         To install on Ubuntu try:
+      </p>
+      <pre>sudo apt-get update -y
+sudo apt-get install -y libclang-dev</pre>
+      <p>
+         But beware, sometimes versions don't play nice together. For example, Python bindings at
+         version 6.0.0.2 seem to require at least libclang1-8.so.1.
+      </p>
+      <p>
+         If you see anything like the following, you may have a bindings v.s. library version
+         dependency issue:
+      </p>
+      <pre>&gt;&gt;&gt; import clang.cindex
+&gt;&gt;&gt; index = clang.cindex.Index.create()
+Traceback (most recent call last):
+   <i>&lt;snip&gt;</i>
+AttributeError: /usr/lib/llvm-3.8/lib/libclang.so: undefined symbol: clang_CXXConstructor_isConvertingConstructor
+                         ^^^^^^^^
+                        Out-of-date libclang library!!!</pre>
+      <p>
+         To install a specific version use, for example:
+      </p>
+      <pre>sudo apt install libclang1-8</pre>
+
+      <h3>Getting Python To Find LibClang</h3>
+      <p>
+         On some platforms Python doesn't seem to automatically find the LibClang library. You'll know
+         it hasn't found the library when you see something like this:
+      </p>
+      <pre>&gt;&gt;&gt; import clang.cindex
+&gt;&gt;&gt; index = clang.cindex.Index.create()
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.5/dist-packages/clang/cindex.py", line 4129, in get_cindex_library
+    <i>&lt;snip&gt;</i>
+OSError: libclang.so: cannot open shared object file: No such file or directory
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  <i>&lt;snip&gt;</i>
+clang.cindex.LibclangError: libclang.so: cannot open shared object file: No such file or directory. To provide a path to libclang use Config.set_library_path() or Config.set_library_file().</pre>
+      <p>To get
+         it to find the library set your <code>LD_LIBRARY_PATH</code> environment variable to include
+         a path to that library's directory <a href="https://stackoverflow.com/a/59617521/1517244" target="_blank">[Ref]</a>.
+         You may also need to set <code>DYLD_LIBRARY_PATH</code>. For example:
+      </p>
+      <pre>export DYLD_LIBRARY_PATH=/usr/lib/llvm-8/lib/
+export LD_LIBRARY_PATH=/usr/lib/llvm-8/lib/</pre>
+      <p>
+         If you want to look at where Python is loading the library from use:
+      </p>
+      <pre>LD_DEBUG=libs python3</pre>
+      <p>
+         Do your import and index creation as normal and look at the trace output so see how it
+         is finding your libclang library.
+      </p>
+
+      <h3>Debian Stretch</h3>
+      <p>
+         Getting the right version of libclang for the Python3 bindings that are auto installed
+         using pip was a little challenging. So far I have this <a href="https://itsfoss.com/add-apt-repository-command-not-found/" target="_blank">[Ref1]</a><a href="https://apt.llvm.org/" target="_blank">[Ref2]</a> (seems to work!):
+      </p>
+      <pre>sudo add-apt-repository ppa:some/ppa
+sudo apt-get install software-properties-common
+apt install lsb-release
+
+# For latest version:
+# bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
+
+# But I want 8, so
+wget https://apt.llvm.org/llvm.sh
+chmod +x llvm.sh
+sudo ./llvm.sh 8
+
+sudo ln -s /usr/lib/llvm-8/lib/libclang.so.1 /usr/lib/llvm-8/lib/libclang.so
+export LD_LIBRARY_PATH=/usr/lib/llvm-8/lib
+export DYLD_LIBRARY_PATH=/usr/lib/llvm-8/lib</pre>
+      <p>
+      </p>
+   </div>
+
    <h2>Some Examples / Playing</h2>
    <div>
       <p>

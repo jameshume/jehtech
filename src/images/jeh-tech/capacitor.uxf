@@ -4,8 +4,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>380</x>
-      <y>240</y>
+      <x>850</x>
+      <y>350</y>
       <w>20</w>
       <h>40</h>
     </coordinates>
@@ -15,8 +15,8 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>400</x>
-      <y>230</y>
+      <x>870</x>
+      <y>340</y>
       <w>30</w>
       <h>70</h>
     </coordinates>
@@ -26,8 +26,8 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>360</x>
-      <y>230</y>
+      <x>830</x>
+      <y>340</y>
       <w>30</w>
       <h>70</h>
     </coordinates>
@@ -37,8 +37,8 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>360</x>
-      <y>130</y>
+      <x>270</x>
+      <y>250</y>
       <w>50</w>
       <h>120</h>
     </coordinates>
@@ -48,8 +48,8 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>380</x>
-      <y>130</y>
+      <x>290</x>
+      <y>250</y>
       <w>50</w>
       <h>120</h>
     </coordinates>
@@ -59,8 +59,8 @@
   <element>
     <id>Text</id>
     <coordinates>
-      <x>320</x>
-      <y>110</y>
+      <x>230</x>
+      <y>230</y>
       <w>150</w>
       <h>30</h>
     </coordinates>
@@ -70,19 +70,19 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>380</x>
-      <y>270</y>
-      <w>220</w>
-      <h>220</h>
+      <x>40</x>
+      <y>370</y>
+      <w>270</w>
+      <h>130</h>
     </coordinates>
     <panel_attributes>lt=..</panel_attributes>
-    <additional_attributes>10.0;10.0;200.0;200.0</additional_attributes>
+    <additional_attributes>250.0;10.0;10.0;110.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>530</x>
-      <y>470</y>
+      <x>0</x>
+      <y>480</y>
       <w>160</w>
       <h>40</h>
     </coordinates>
@@ -93,8 +93,8 @@ as a dialectric.</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>380</x>
-      <y>380</y>
+      <x>850</x>
+      <y>490</y>
       <w>30</w>
       <h>70</h>
     </coordinates>
@@ -104,8 +104,8 @@ as a dialectric.</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>390</x>
-      <y>390</y>
+      <x>860</x>
+      <y>500</y>
       <w>30</w>
       <h>50</h>
     </coordinates>
@@ -115,8 +115,8 @@ as a dialectric.</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>290</x>
-      <y>250</y>
+      <x>760</x>
+      <y>360</y>
       <w>120</w>
       <h>180</h>
     </coordinates>
@@ -126,8 +126,8 @@ as a dialectric.</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>390</x>
-      <y>250</y>
+      <x>860</x>
+      <y>360</y>
       <w>110</w>
       <h>180</h>
     </coordinates>
@@ -137,8 +137,8 @@ as a dialectric.</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>370</x>
-      <y>380</y>
+      <x>840</x>
+      <y>490</y>
       <w>20</w>
       <h>30</h>
     </coordinates>
@@ -148,8 +148,8 @@ as a dialectric.</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>350</x>
-      <y>230</y>
+      <x>820</x>
+      <y>350</y>
       <w>20</w>
       <h>30</h>
     </coordinates>
@@ -159,41 +159,8 @@ as a dialectric.</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>350</x>
-      <y>240</y>
-      <w>20</w>
-      <h>30</h>
-    </coordinates>
-    <panel_attributes>+</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Text</id>
-    <coordinates>
-      <x>350</x>
-      <y>250</y>
-      <w>20</w>
-      <h>30</h>
-    </coordinates>
-    <panel_attributes>+</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Text</id>
-    <coordinates>
-      <x>350</x>
-      <y>260</y>
-      <w>20</w>
-      <h>30</h>
-    </coordinates>
-    <panel_attributes>+</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Text</id>
-    <coordinates>
-      <x>410</x>
-      <y>230</y>
+      <x>880</x>
+      <y>350</y>
       <w>30</w>
       <h>30</h>
     </coordinates>
@@ -203,8 +170,8 @@ as a dialectric.</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>410</x>
-      <y>240</y>
+      <x>880</x>
+      <y>370</y>
       <w>30</w>
       <h>30</h>
     </coordinates>
@@ -214,8 +181,8 @@ as a dialectric.</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>410</x>
-      <y>250</y>
+      <x>870</x>
+      <y>490</y>
       <w>30</w>
       <h>30</h>
     </coordinates>
@@ -225,30 +192,8 @@ as a dialectric.</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>410</x>
-      <y>260</y>
-      <w>30</w>
-      <h>30</h>
-    </coordinates>
-    <panel_attributes> -</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Text</id>
-    <coordinates>
-      <x>400</x>
-      <y>380</y>
-      <w>30</w>
-      <h>30</h>
-    </coordinates>
-    <panel_attributes> -</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Text</id>
-    <coordinates>
-      <x>430</x>
-      <y>220</y>
+      <x>900</x>
+      <y>330</y>
       <w>30</w>
       <h>30</h>
     </coordinates>
@@ -258,12 +203,475 @@ as a dialectric.</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>310</x>
-      <y>220</y>
+      <x>780</x>
+      <y>330</y>
       <w>30</w>
       <h>30</h>
     </coordinates>
     <panel_attributes> +q</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>290</x>
+      <y>350</y>
+      <w>20</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>bg=black</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>310</x>
+      <y>340</y>
+      <w>30</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lw=4</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>270</x>
+      <y>340</y>
+      <w>30</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lw=4</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>300</x>
+      <y>500</y>
+      <w>30</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lw=5</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>200</x>
+      <y>360</y>
+      <w>120</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>100.0;160.0;10.0;160.0;10.0;10.0;80.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>300</x>
+      <y>360</y>
+      <w>110</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>20.0;10.0;90.0;10.0;90.0;160.0;10.0;160.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>280</x>
+      <y>490</y>
+      <w>20</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>310</x>
+      <y>490</y>
+      <w>30</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes> -</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>350</x>
+      <y>340</y>
+      <w>170</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-
+electrons
+move...</panel_attributes>
+    <additional_attributes>10.0;10.0;90.0;10.0;90.0;200.0;10.0;200.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>290</x>
+      <y>490</y>
+      <w>30</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lw=3</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>320</x>
+      <y>300</y>
+      <w>170</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=..</panel_attributes>
+    <additional_attributes>150.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>470</x>
+      <y>280</y>
+      <w>160</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>The plate is relatively
++ve w.r.t to the -ve
+terminal so electrons
+move from the negative
+terminal to this plate</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>1020</x>
+      <y>210</y>
+      <w>190</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>As more electrons move
+to this place, they repel
+electrons on the other
+plate, so it becomes
+more +ve.
+
+As this plate becomes more
+-ve, the p.d. between the
+batt and this plate drops
+so the rate of movement
+begins to slow.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>820</x>
+      <y>370</y>
+      <w>20</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1410</x>
+      <y>350</y>
+      <w>20</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>bg=black</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1430</x>
+      <y>340</y>
+      <w>30</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lw=4</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1390</x>
+      <y>340</y>
+      <w>30</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lw=4</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1410</x>
+      <y>490</y>
+      <w>30</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lw=3</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1420</x>
+      <y>500</y>
+      <w>30</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lw=5</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1320</x>
+      <y>360</y>
+      <w>120</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>100.0;160.0;10.0;160.0;10.0;10.0;80.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1420</x>
+      <y>360</y>
+      <w>110</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>20.0;10.0;90.0;10.0;90.0;160.0;10.0;160.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>1400</x>
+      <y>490</y>
+      <w>20</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>1380</x>
+      <y>350</y>
+      <w>20</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>1380</x>
+      <y>360</y>
+      <w>20</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>1440</x>
+      <y>340</y>
+      <w>30</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes> -</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>1440</x>
+      <y>350</y>
+      <w>30</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes> -</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>1440</x>
+      <y>360</y>
+      <w>30</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes> -</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>1440</x>
+      <y>370</y>
+      <w>30</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes> -</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>1430</x>
+      <y>490</y>
+      <w>30</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes> -</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>1460</x>
+      <y>330</y>
+      <w>30</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes> -q</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>1340</x>
+      <y>330</y>
+      <w>30</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes> +q</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>1380</x>
+      <y>370</y>
+      <w>20</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>1380</x>
+      <y>340</y>
+      <w>20</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>870</x>
+      <y>280</y>
+      <w>160</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=..</panel_attributes>
+    <additional_attributes>140.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1430</x>
+      <y>280</y>
+      <w>170</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=..</panel_attributes>
+    <additional_attributes>150.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>1590</x>
+      <y>270</y>
+      <w>190</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>Eventually no more electrons
+want to move as the plate
+becomes as negative as
+possible - the max amount of
+charge is being held by the
+capacitor</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>900</x>
+      <y>340</y>
+      <w>170</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-
+electrons
+move...</panel_attributes>
+    <additional_attributes>10.0;10.0;90.0;10.0;90.0;200.0;10.0;200.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>240</x>
+      <y>590</y>
+      <w>120</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>*1*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>810</x>
+      <y>590</y>
+      <w>120</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>*2*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>1360</x>
+      <y>590</y>
+      <w>120</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>*3*</panel_attributes>
     <additional_attributes/>
   </element>
 </diagram>
