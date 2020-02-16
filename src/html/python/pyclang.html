@@ -108,9 +108,9 @@ export LD_LIBRARY_PATH=/usr/lib/llvm-8/lib/</pre>
          Getting the right version of libclang for the Python3 bindings that are auto installed
          using pip was a little challenging. So far I have this <a href="https://itsfoss.com/add-apt-repository-command-not-found/" target="_blank">[Ref1]</a><a href="https://apt.llvm.org/" target="_blank">[Ref2]</a> (seems to work!):
       </p>
-      <pre>sudo add-apt-repository ppa:some/ppa
-sudo apt-get install software-properties-common
-apt install lsb-release
+      <pre>sudo apt install software-properties-common
+sudo apt update
+sudo apt install lsb-release
 
 # For latest version:
 # bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
@@ -124,6 +124,10 @@ sudo ln -s /usr/lib/llvm-8/lib/libclang.so.1 /usr/lib/llvm-8/lib/libclang.so
 export LD_LIBRARY_PATH=/usr/lib/llvm-8/lib
 export DYLD_LIBRARY_PATH=/usr/lib/llvm-8/lib</pre>
       <p>
+         But, note that this installs the entire clang toolchain, which if you only want the llibclang
+         shared library, takes up a whole load more memory than needed - gigs worth! The installed
+         tree can be pruned however to get rid of anything you dont need. There is probably as easier
+         way! Sigh...
       </p>
    </div>
 

@@ -372,6 +372,11 @@ git commit --amend</pre>
     <pre>git log <b>--online</b></pre>
 
     <p>
+        To get just the commit ID:
+    </p>
+    <pre>git log -1 --pretty=format:"%H" HEAD</pre>
+
+    <p>
         To get a log between versions/tags/commits/nranches etc:
     </p>
     <pre>git log <b>chng..chng</b></pre>

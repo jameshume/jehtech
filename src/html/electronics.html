@@ -623,18 +623,19 @@
 			<p>
 				Charge stored is proportional to applied voltage:
 				$$
-					q = Cv
+					q = Cv \implies C = \frac{q}{v}
 				$$
 				Where $C$ is called the <b>capacitance</b> of the capacitor and is measured in Farads (F).
-				By re-arranging the above we can see that capacitance is the <em>charge per volt</em> that
-				the capacitor can store. This quanitity is dependent on the type of dialectric used,
+				By re-arranging the above we can see that <B>capacitance is the charge per volt that
+				the capacitor can store</b>. Thus, the more charge that the capacitor stores per volt, the
+				higher its capacitance is. This quanitity is dependent on the type of dialectric used,
 				the surface area of each plate and the distance between the plates.
 			</p>
 			<p>
 				Recall that current is the amount of charge that moves past a point per unit time. Thus,
 				by differentiating w.r.t time, the above, we get the current-voltage relationship of a cap:
 				$$
-					i = C\frac{\mathrm{d}q}{\mathrm{d}t}
+					i = C\frac{\mathrm{d}v}{\mathrm{d}t}
 				$$
 				This gives us in important property of caps. Because for DC current the voltage does not change,
 				$\frac{\mathrm{d}q}{\mathrm{d}t}$ is zero, so a <b>capacitor is an open circuit to DC</b>! (But it
@@ -652,8 +653,43 @@
 					v = \frac{1}{C} \int_{t_o}^t i\ \mathrm{d}t + v(t_0)
 				$$
 
-				Capacitors resist abrupt changes in voltage.
+				<b>Capacitors resist abrupt changes in voltage</b>, which is why the function
+				as low pass filters.
 			</p>
+			
+			<h3>Charging Through A Resistor</h3>
+			<p>
+				When a capacitor, with a capacitance $C$, charges in series through a resistor of resistance $R$ ohms,
+				in $RC$ seconds it will charge to 63% of the supply voltage and in
+				$5 \times RC$ seconds it charges to over 99% <a href="http://www.learningaboutelectronics.com/Articles/How-long-does-it-take-to-charge-a-capacitor" target="_blank">[Ref]</a>.
+				You get an <em>exponentially decreasing current flow</em> as the <em>resistor draws current</em>
+				from the battery and the <em>capacitor stores the current's flowing charge</em> <a href="http://www.columbia.edu/~nas2173/Lab8_CapacitanceAndTheOscilloscopeNS.pdf" target="_blank">[Ref]</a>.
+
+				$$
+				\tau \ \text{(in seconds)} = RC
+				$$
+			</p>
+			<p>
+				<img src="##IMG_DIR##/capacitor_charge_e.png" alt="Capacitor charging through a resistor"/>
+			</p>
+			<p>
+				Recall KVL: the sum of voltages around a closed circuit must be zero. The dotted arrow
+				in the diagram above shows a direction around a closed ciruit, which by KVL means that:
+
+				$$
+				+V - IR - \frac{Q}{C} = 0 \implies V = IR + \frac{Q}{C}
+				$$
+
+				Recall that $I = \frac{dQ}{dt}$, so therefore,
+				
+				$$
+				V = \frac{\mathrm{d}Q}{\mathrm{d}t}R + \frac{Q}{C} \\ 
+				\therefore \  \frac{\mathrm{d}Q}{\mathrm{d}t} = \frac{V}{R} - \frac{Q}{RC}
+				$$
+
+				... TODO ...
+			</p>
+
 			<h3>Capacitors In Series</h3>
 			<p>
 				$$
@@ -732,11 +768,30 @@
 			<p>
 				<img src="##IMG_DIR##/diode_with_resistor_current.png"/>
 			</p>
+			<p>
+			</p>
 
 			<h3>References</h3>
 			<ul>
 				<li><a href="http://www.cs.tut.fi/kurssit/TLT-8016/Chapter3.pdf" target="_blank">Diodes and Diode Circuits</a>.</li>
+				<li><a href="https://electronics.stackexchange.com/a/76372/26358" target="_blank">Accounting for LED resistance</a>, StackExchange.</li>
 			</ul>
+		</div>
+
+		<h2 style="clear:both;">555 Timer</h2>
+		<div>
+			<p>
+				<img src="##IMG_DIR##/555_timer.png" alt="555 timer in astable operation"/>
+			</p>
+			<p>
+				The total resistance R<sub>A</sub> + R<sub>B</sub> will determine the time it takes
+				for the transistor to charge, assuming we keep capacitance constant.
+			</p>
+			<p>
+				Recall charge time for a cap to charge to 63% of the voltage across is is
+				$\tau = RC$. So by varying either the resistors or the capacitor the period of the
+				pulse train output on pin 3 can be varied.
+			</p>
 		</div>
 
 
