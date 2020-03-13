@@ -380,6 +380,58 @@ https://www.youtube.com/watch?v=fSoXIqBlg9M - antennas
 	</p>
 </div>
 
+<h2>BitBucket API v2</h2>
+<div>
+	<pre>https://developer.atlassian.com/bitbucket/api/2/reference/resource/repositories/%7Bworkspace%7D/%7Brepo_slug%7D/pullrequests/%7Bpull_request_id%7D/comments/%7Bcomment_id%7D
+https://confluence.atlassian.com/bitbucket/app-passwords-828781300.html
+https://bitbucket.org/novocien/howto/src/master/?_ga=2.186546081.981859681.1582201564-275772548.1563959193
+
+From Bash:
+    BITBUCKET_REPO_OWNER=...
+    BITBUCKET_WORKSPACE=...
+    BITBUCKET_REPO_SLUG=...
+    APP_PASSWORD=...
+    APP_NAME=...
+    PR_NUMBER
+    
+    curl -v \
+        "https://${BITBUCKET_REPO_OWNER}:${APP_PASSWORD}@api.bitbucket.org/2.0/    repositories/${BITBUCKET_WORKSPACE}/${BITBUCKET_REPO_SLUG}/pullrequests    /${PR_NUMBER}/comments" \
+        --header "Content-Type: application/json" \    
+        --request POST \
+        --data '{ "content" : { "raw": "The comment text" }, "inline" : { "to": 101, "path": "path/to/file.txt" } }'
+
+remove the "inline" section to make it a general comment at the top of the PR
+
+
+Also easy in Python:
+    import requests
+    from getpass import getpass
+    
+    BITBUCKET_REPO_OWNER="..."
+    BITBUCKET_WORKSPACE="..."
+    BITBUCKET_REPO_SLUG="..."
+    APP_PASSWORD="..."
+    APP_NAME="..."
+    PR_NUMBER=123
+    LINE_NO=123
+    
+    url = F'https://{BITBUCKET_REPO_OWNER}:{APP_PASSWORD}@api.bitbucket.org/2.0/    repositories/{BITBUCKET_WORKSPACE}/{BITBUCKET_REPO_SLUG}/pullrequests/{PR_NUMBER}/comments'
+    mydata = { "content" : { "raw": "Hello Python" }, 
+               "inline"  : { "to": LINE_NO, "path": "path/to/file.txt" } # "from" : 122 also poss for line range
+             }
+    
+    x = requests.post(url, json = mydata)
+    
+    print("\n\nREQUEST:\n")
+    print(x.request.headers)
+    print(x.request.body)
+    
+    print("\n\nRESPONSE:\n")
+    print(x.status_code, x.reason, x.url)
+    pp.pprint(x.json())</pre>
+    <p></p>
+</div>
+
 <h2>Conferences</h2>
 <div>
 	<pre>https://www.embedded-world.eu

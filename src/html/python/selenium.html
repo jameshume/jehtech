@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+    <meta charset="UTF-8">                                              <!-- HTML 5 -->
+    <title>Selenium | JEHTech</title>
+    <!-- META_INSERT -->
+    <!-- CSS_INSERT -->
+    <!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+    -- This is JEHTech --
+</div>
+
+<div id="sidebar">
+    <h1 class="title">Links...</h1>
+    <div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">Selenium Notes</h1>
+<div style="padding-right:10px;">
+
+<h2>Page Contents</h2>
+<div id="page_contents">
+</div>
+
+<h2>References / useful Links</h2>
+<div>
+<ul>
+    <li>https://stackoverflow.com/a/36896766/1517244</li>
+    <li>https://stackoverflow.com/a/40735204/1517244</li>
+</ul>
+</div> <!-- END References / useful Links -->
+
+<h2>Override WebElement.Click()</h2>
+<div>
+    <p></p>
+    <pre class="prettyprint linenums"># monkey patch the click method :
+from selenium.webdriver.remote.webelement import WebElement
+from selenium.webdriver.remote.command import Command
+def WebElement_click(self):
+    print("### BUTTON CLICK {}".format(self.get_property("id") ))
+    self._execute(Command.CLICK_ELEMENT)
+WebElement.click = WebElement_click</pre>
+    <p></p>
+</div> <!-- End Misc -->
+
+</div> <!-- END H1 padding div -->
+</div>
+</body>
+</html>
+
+

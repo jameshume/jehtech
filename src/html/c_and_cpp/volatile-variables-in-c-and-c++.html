@@ -177,7 +177,7 @@ a:
 <!-- ------------------------------------------------------------------------------------------- -->
 <h3>Using A Memory Barrier To Remove Compiler's Ability To Assume Constantness</h3>
 <p>
-	This one was brought to my attention when I was reading up about the view that the Linux kernel community takes to the <code>volatile</code> keyword within the kernel and in another situation, using <code>volatile</code> to share data between threads. The same effect can be produced, in the above example, by using a &quo;memory barrier&quot; that forces the compiler to assume that registers are &quot;dirty&quot; and that objects must be reloaded from memory. Doing so means that the object must be reloaded on each loop iteration, so again, the compiler cannot hoist it outof the loop.
+	This one was brought to my attention when I was reading up about the view that the Linux kernel community takes to the <code>volatile</code> keyword within the kernel and in another situation, using <code>volatile</code> to share data between threads. The same effect can be produced, in the above example, by using a &quot;memory barrier&quot; that forces the compiler to assume that registers are &quot;dirty&quot; and that objects must be reloaded from memory. Doing so means that the object must be reloaded on each loop iteration, so again, the compiler cannot hoist it outof the loop.
 </p>
 <p>
 	Why might we want to do this?
@@ -249,6 +249,10 @@ a:
 </pre>
 <p style="clear:both">
 	You can <a href="https://godbolt.org/z/wLNs3h" target="_blank">see the above code on Godbolt</a>.
+</p>
+<p>
+	Presumably, if global (cross-compilation-unit) optimisation is turned on this wouldn't necessarily
+	work and the either the called function or the callee would also have to use a memory barrier.
 </p>
 </div>
 

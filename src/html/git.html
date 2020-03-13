@@ -315,6 +315,19 @@ git checkout new-branch-name</pre>
          like it did the last time you committed on that branch.</p>
 
 
+    <h3>Finding A Branch Point With Git</h3>
+    <p>
+        The guy who figured this out <a href="https://stackoverflow.com/a/4991675/1517244" target="_blank">answered this title's question on StackOverflow</a>. Bloody genious!
+    </p>
+    <pre>diff -u <(git rev-list --first-parent topic) \
+             <(git rev-list --first-parent master) | \
+     sed -ne 's/^ //p' | head -1</pre>
+    <p>
+       Or more robustly...
+    </p>
+    <pre>git config --global alias.oldest-ancestor '!zsh -c '\''diff --old-line-format='' --new-line-format='' <(git rev-list --first-parent "${1:-master}") <(git rev-list --first-parent "${2:-HEAD}") | head -1'\'' -'</pre>
+    <p></p>
+
     <!-- ++++++++++++++++++++++++++++++++ -->
     <h3>Adding Files To Your Git Repo</h3>
     You must add files from your workspace into the Git index so that Git knows what to track...
@@ -1488,6 +1501,18 @@ git log --no-merges parent-branch-name..
     <p>The flag <code>--no-merges</code> tells Git not to print commits
     with more than one parent and will make the log stop at the point the
     branch is merged back to the parent branch.</p>
+
+    <h3>Get The Root Repository Directory</h3>
+    <pre>git rev-parse --show-toplevel</pre>
+    <p></p>
+
+    <h3>Get The Branch Name For the Current Repository</h3>
+    <pre>git rev-parse --abbrev-ref HEAD</pre>
+    <p></p>
+
+    <h3>Get The Last Commit ID</h3>
+    <pre>git log --oneline -1 | cut -f1 -d" "</pre>
+    <p></p>
 </div>
 
 <h2>Stashes</h2>

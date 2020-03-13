@@ -946,7 +946,51 @@ signal.signal(signal.SIGINT, signal_handler)
 
 def signal_handler(signal, frame):
    # Clean up etc
-   sys.exit(1)
+   sys.exit(1)</pre>
+</div>
+
+
+<h2>Handle Non-Blocking Key Presses</h2>
+<div>
+<p></p>
+<pre>## Keyboard stuff mostly from https://stackoverflow.com/a/55692274/1517244 with some modifications
+## from https://stackoverflow.com/a/2409034/1517244
+import os
+
+if os.name == 'nt':
+    import msvcrt
+
+    def setup_terminal():
+        pass
+
+    def kbhit():
+        return msvcrt.kbhit()
+
+    def kbchar():
+        return msvcrt.getch().decode("utf-8") 
+
+else:
+
+    import sys, select, tty, termios, atexit
+    
+    def setup_terminal():
+        fd = sys.stdin.fileno()
+        old_settings = termios.tcgetattr(fd)
+        tty.setcbreak(sys.stdin.fileno())
+
+        def restore_terminal():
+            fd = sys.stdin.fileno()
+            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+
+        atexit.register(restore_terminal)
+
+    def kbhit():
+        dr,dw,de = select.select([sys.stdin], [], [], 0)
+        return dr != []
+
+    def kbchar():
+        return sys.stdin.read(1)</pre>
+<p></p>
 </div>
 
 
