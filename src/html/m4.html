@@ -1,0 +1,575 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>M4 | JEHTech</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">M4 - A Macro Expansion Language</h1>
+<div style="padding-right:10px;">
+
+<h2>Page Contents</h2>
+<div id="page_contents">
+</div>
+
+<h2>Macro Names</h2>
+<div>
+	<p>
+		Macro names, or tokens, are any sequence of characters that must start with either an underscore or a letter followed by alphnumerical characters.
+		Anything that does not match this terminates the token and is just passed straight to the output. So <code>TOK1  TOK2</code> are two seperate tokens
+		as are <code>TOK1.TOK2</code>, <code>TOK1()TOK2</code> and so on...
+	</p>
+</div>
+
+<h2>Macro Expansion, Quoting &amp; Parameters</h2>
+<div>
+	<p>
+		Its's worth noting that the following examples are a little contrived but should serve to show how evaluation and expansion of tokens
+		occurs. Aso note that <em>define parameters are usually quoted and preceeded by a dnl, but for these examples we wont do this</em>.
+	</p>
+	<h3>Expansion</h3>
+	<p>
+		As the input is read, each token is checked to see if it is a macro. If it is, it is expanded. The result is then re-scanned and macro
+		expansion is applied recusively. This is also true for macro parameters/arguments: they are recursively expanded before being &quot;passed&quot; to
+		the macro.
+	</p>
+	<p>
+		We can investigate this by turning on M4's debug features. The following examples will demonstrate both recurive macro expansion
+		and recursive macro parameter expansion.
+	</p>
+
+		<h4>The Most Basic Expansion</h4>
+		<pre class="prettyprint lang-m linenums">$ m4 --debug=V -
+<b>define(XXX, joey)</b>
+m4trace:stdin:21: -1- id 23: define ...                    <b>| The token 'define' is seen.</b>
+m4trace:stdin:21: -1- id 23: define(`XXX', `joey') -> ???  <b>| It is a known macro so the following tokens are parameters. What does it expand to?</b>
+m4trace:stdin:21: -1- id 23: define(...)                   <b>| No furher expansion possible to expands to what it is, pass to interpretter.</b>
+                                                           <b>| Mapping XXX -> joey added to macro table</b>
+
+<b>XXX says hello</b>
+m4trace:stdin:22: -1- id 24: XXX ...
+m4trace:stdin:22: -1- id 24: XXX -> ???
+m4trace:stdin:22: -1- id 24: XXX -> `joey'
+joey says hello</pre>
+		<p></p>
+
+		<h4>Recusive Macro Expansion</h4>
+		<p>
+			A slightly different example:
+		</p>
+		<pre class="prettyprint lang-m linenums">$ m4 --debug=V -
+<b>define(play,dodge)</b>
+m4trace:stdin:1: -1- id 1: define ...                           <b>| The normal define stuff here....</b>
+m4trace:stdin:1: -1- id 1: define(`play', `dodge') -> ???
+m4trace:stdin:1: -1- id 1: define(...)
+
+<b>define(dodgeball, HURTS)</b>
+m4trace:stdin:2: -1- id 2: define ...
+m4trace:stdin:2: -1- id 2: define(`dodgeball', `HURTS') -> ???
+m4trace:stdin:2: -1- id 2: define(...)
+
+<b>play()ball</b>
+m4trace:stdin:3: -1- id 3: play ...                             <b>| First token is play</b>
+m4trace:stdin:3: -1- id 3: play(`') -> ???                      <b>| Its identified as a macro and implicity passed the empty string</b>
+m4trace:stdin:3: -1- id 3: play(...) -> `dodge'                 <b>| The macro evaluates to &quot;dodge&quot; and is expanded as such</b>
+m4trace:stdin:3: -1- id 4: dodgeball ...                        <b>| After expansion the input is now &quot;dodgeball&quot;</b>
+m4trace:stdin:3: -1- id 4: dodgeball -> ???                     <b>| <i>Recurively</i> re-evaluate the input for futher expansions</b>
+m4trace:stdin:3: -1- id 4: dodgeball -> `HURTS'                 <b>| A further expansion is possible... the input is now just one token</b>
+HURTS                                                           <b>| For which a mapping exists, so the final output is this!</div>
+		</pre>
+
+		<h4>Recusive Macro Parameter Expansion</h4>
+		<pre class="prettyprint lang-m linenums">$ m4 --debug=V -
+<b>define(james, john)</b>
+m4trace:stdin:1: -1- id 1: define ...                      <b>| The token 'define' is seen.</b><span style="background:BurlyWood;">
+m4trace:stdin:1: -1- id 1: define(`james', `john') -> ???  <b>| It is a known macro so the following tokens are parameters. What does it expand to?</b>
+m4trace:stdin:1: -1- id 1: define(...)                     <b>| No furher expansion possible to expands to what it is, pass to interpretter.</b>
+                                                           <b>| Mapping james -> john added to macro table</b></span>
+<b>define(john, mark)</b>
+m4trace:stdin:2: -1- id 2: define ...                      <b>| The token 'define' is seen.</b><span style="background:Khaki;">
+m4trace:stdin:2: -1- id 2: define(`john', `mark') -> ???   <b>| It is a known macro so the following tokens are parameters. What does it expand to?</b>
+m4trace:stdin:2: -1- id 2: define(...)                     <b>| No furher expansion possible to expands to what it is, pass to interpretter.</b>
+                                                           <b>| Mapping john -> mark added to macro table</b></span>
+<b>define(james, eric)</b>
+m4trace:stdin:3: -1- id 3: define ...                      <b>| The token 'define' is seen.</b><span style="background:BurlyWood ;">
+m4trace:stdin:3: -2- id 4: james ...                       <b>| Now evaluating the first <i>parameter</i>.</b>
+m4trace:stdin:3: -2- id 4: james -> ???                    <b>| Does 1st param expand to anything - consult macro table.</b>
+m4trace:stdin:3: -2- id 4: james -> `john'                 <b>| Mapping found (see ln 2) so do expansion.</b></span><span style="background: Khaki;">
+m4trace:stdin:3: -2- id 5: john ...                        <b>| Recusively evaluate token(s) resulting from previou expansion.</b>
+m4trace:stdin:3: -2- id 5: john -> ???                     <b>| Consult macro table.</b></b>
+m4trace:stdin:3: -2- id 5: john -> `mark'                  <b>| Mapping found (see ln 8) so do expansion.</b></span>
+m4trace:stdin:3: -1- id 3: define(`mark', `eric') -> ???   <b>| All expansions done so re-evaluate input, now the define macro.</b>
+m4trace:stdin:3: -1- id 3: define(...)                     <b>| No furher expansion possible to expands to what it is, pass to interpretter.</b>
+                                                           <b>| Mapping mark -> eric added to macro table</b></pre>
+
+
+		<p>The GNU manual explains it like so:</p>
+		<blockquote>
+			<p>
+				When the arguments, if any, to a macro call have been collected, the macro is expanded, and the expansion text is pushed
+				back onto the input (unquoted), and reread. The expansion text from one macro call might therefore result in more macros
+				being called, if the calls are included, completely or partially, in the first macro calls’ expansion.
+			</p>
+		</blockquote>
+		<p></p>
+
+	<h3>Quoting</h3>
+	<p>
+		The opening quote character is the backtick (<code>`</code>) and the closing quote character is the 
+		apostrophe (<code>'</code>).
+	</p>
+	<p>
+		The main use of quotes is to <b>defer the expansion of tokens/macros</b>, but they are also used to do things like
+		write &quot;james,john&quot; as one single token, which would otherwise be two tokens in a define, for example. 
+	</p>
+	<p>
+		The GNU M4 manual has this to say about quoting:
+	</p>
+	<blockquote>
+		<p>
+			The value of a string token is the text, with one level of quotes stripped off. Thus
+		</p>
+		<pre>`'
+⇒
+is the empty string, and double-quoting turns into single-quoting.
+
+``quoted''
+⇒`quoted'</pre>
+		<p></p>
+	</blockquote>
+	<p>
+		I like the WikiPedia explanation better:
+	</p>
+	<blockquote>
+		<p>
+			Unquoted identifiers which match defined macros are replaced with their definitions. Placing identifiers in quotes suppresses expansion until possibly later, such as when a quoted string is expanded as part of macro replacement.
+		</p>
+	</blockquote>
+	<p>
+		So, bearing this definition in mind, considering our examples so far, without quotes we might write	something like this:
+	</p>
+	<pre class="prettyprint lang-m linenums">$ m4 -
+define(jehtech, bob)dnl
+...
+... A shed load of code later in the file we forgot about the jehtech macro define!... 
+...
+define(bob, eric)dnl  <b>| The intension here is that jehtech should still translate to bob, but this will stop that!</b>
+jehtech               <b>| The user inputs the string jehtech</b>   
+eric                  <b>| But gets eric and not bob as s/he might expect. We have seen why in the above sections</b></pre>
+	<p>
+		The user's intension was probably not to have the string &quot;jehtech&quot; suddenly expand to &quot;eric&quot; as in 
+		this example we imagine there are several pages, perhaps, of code between the define for &quot;jehtech&quot; and the 
+		define for &quot;bob&quot;.
+	</p>
+	<p>
+		This behvaiour is suprising to the user and not particularly useful. So how do we stop this? The answer is <em>using
+		quotes to defer the expansion of tokens</em>. But remember what we saw in the previous section as to how the parameter
+		&quot;bob&quot; was expanded to &quot;jehtech&quot; before it was passed to the define macro. Lets try quoting things
+		and see if we get the expected answer...
+	</p>
+	<pre class="prettyprint lang-m linenums">$ m4 --debug=V -
+m4debug: input read from stdin
+define(`jehtech', `bob')
+m4trace:stdin:1: -1- id 1: define ...
+m4trace:stdin:1: -1- id 1: define(`jehtech', `bob') -> ???<b>| Remember &quot;The value of a string token is the text, with one level of quotes stripped off.&quot;</b>
+m4trace:stdin:1: -1- id 1: define(...)                    <b>| So, the token passed to define is bob without the quotes</b>
+
+define(`bob', `eric')
+m4trace:stdin:2: -1- id 2: define ...
+m4trace:stdin:2: -1- id 2: define(`bob', `eric') -> ???   <b>| AH HA! Look - &quot;bob&quot; was not expanded here because of the quotes!</b>
+m4trace:stdin:2: -1- id 2: define(...)                    <b>| So, we should have stopped the unexpected behaviour right?!</b>
+                                                          <b>| Here the quotes are stripped from the parameters, but they have the effect</b>
+                                                          <b>|    of stopping any more recursive expansion, so it does not happen and therefore</b>
+                                                          <b>|    bob is not re-evaluated (not that there was an expansion available, but if there was...).</b>
+
+
+jehtech                                                   <b>| The user inputs the string &quot;jehtech&quot;</b>
+m4trace:stdin:3: -1- id 3: jehtech ...  
+m4trace:stdin:3: -1- id 3: jehtech -> ???  
+m4trace:stdin:3: -1- id 3: jehtech -> `bob'               <b>| The input token matches a rule and is expanded to &quot;bob&quot;</b>
+m4trace:stdin:3: -1- id 4: bob ...                        <b>| The expansion is recurively re-evaluated.... Because the quotes were stipped</b>
+                                                          <b>|    during the define parameter's evaluation, this can now be re-evaluated.</b>
+m4trace:stdin:3: -1- id 4: bob -> ???                     <b>| The re-evaluated input matches a rule and is expanded...</b>
+m4trace:stdin:3: -1- id 4: bob -> `eric'                  <b>|    ... to &quot;eric&quot;, which cannot be expanded further so is output</b>
+eric                                                      <b>| Oh... we still got an unexpected result, as explained above!</b></pre>
+	<p>
+		So, the quoting didn't change the end result! But, it did stop the suprise expansion of the define parameters. This <em>is 
+			why parameters to define's are generally quoted</em>.
+	</p>
+	<p>
+		So, really this is now behaving how we want it. The expansion should be recusively done like this. What shouldn't happen is
+		the expansion of the define parameters before the define is evaluated, so we've done our job.
+	</p>
+	<p>
+		But, for interest, lets just say we didn't want the recursive expansion to happen. How do we stop that? The answer is
+		still quotes.
+	</p>
+	<pre class="prettyprint linenums lang-m4">$ m4 --debug=V -
+<b>define(`jehtech', ``bob'')</b>
+m4trace:stdin:1: -1- id 1: define ...
+m4trace:stdin:1: -1- id 1: define(`jehtech', ``bob'') -> ???  <b>| NOTE how bob is double quoted</b>
+m4trace:stdin:1: -1- id 1: define(...)                        <b>|   So, the outer quotes will be stipped off so jehtech maps</b>
+                                                              <b>|   to `bob', with single quotes included</b>
+
+<b>define(`bob', `eric')</b>
+m4trace:stdin:2: -1- id 2: define ...
+m4trace:stdin:2: -1- id 2: define(`bob', `eric') -> ???       <b>| In the same way as before the quotes here defer expansion</b>
+m4trace:stdin:2: -1- id 2: define(...)
+
+<b>jehtech</b>                                                       <b>| Now when the user inputs jehtech</b>
+m4trace:stdin:3: -1- id 3: jehtech ...
+m4trace:stdin:3: -1- id 3: jehtech -> ???                     <b>| It is treated as a tocken and mapped to `bob', quotes included</b>
+m4trace:stdin:3: -1- id 3: jehtech -> ``bob''
+bob                                                           <b>| As `bob' is evaluted the outer quotes are stipped off. But not</b>
+																															<b>|    further expansion is deffered because of the quotes just stipped</b>
+																														  <b>|    off. So bob does not get re-evaluated and expanded further to eric!</b></pre>
+
+	<h3>Parameters</h3>
+	<div>
+		<p>
+			A macro can access its parameters using the variables <code>$1</code> through <code>$N</code>. This resembles standard bash syntax.
+			The number of arguments is accessed by <code>$#</code> and all the arguments using <code>$@</code>.
+		</p>
+		<pre class="prettyprint linenums lang-m">$ m4 --debug=V -
+dnl --
+dnl -- Access specific arguments
+dnl --
+define(`mymacro', `$1 -- $2')
+m4trace:stdin:5: -1- id 3: define ...
+m4trace:stdin:5: -1- id 3: define(`mymacro', `$1 -- $2') -> ???
+m4trace:stdin:5: -1- id 3: define(...)
+
+mymacro(jjj, ggg)
+m4trace:stdin:6: -1- id 4: mymacro ...
+m4trace:stdin:6: -1- id 4: mymacro(`jjj', `ggg') -> ???
+m4trace:stdin:6: -1- id 4: mymacro(...) -> `jjj -- ggg'
+jjj -- ggg
+
+dnl --
+dnl -- Show the number of arguments
+dnl --
+define(`james', `$#')dnl
+james
+0
+<b>james()    | This is interesting!! The num args is 1 because
+1             |    a nothing argument becomes the empty string!</b>
+james(1)
+1
+james(1,2,3)
+3
+
+dnl --
+dnl -- Access all the arguments
+dnl --
+define(`john', `$@')
+
+john(1,2,3,4)
+1,2,3,4
+john(`a', `b', `c')
+a,b,c</pre>
+	<p></p>
+</div>
+
+<h2>Why Is There A &quot;dnl&quot; At The End Of So Many &quot;define&quot;s?</h2>
+<div>
+	<p>
+		In M4 the input string is parsed and any macros are expanded (recursively) before being passed to the output and
+		<code>define(sym, val)</code> is itself a macro that expands to the empty string whilse having the important
+		side effect of recording the mapping to <code>sym</code> to <code>val</code>.
+	</p>
+	<p>
+		This means that where <code>define(`some_name', `some_val')</code> appears in the code an empty string results.
+		As a newline normally follows the statement, an empty string and a newline, i.e., a blank line appears in the output,
+		which is often not wanted - want the <code>define</code> to just disappear leaving absolutely no trace.
+	</p>
+	<p>
+		The macro <code>dnl</code> eats all whitespace occuring after it AND the newline. So it can be used like this:
+	</p>
+	<pre class="prettyprint lang-m linenums">$ m4 -
+define('jehtech', 'www.jeh-tech.com')
+	
+dnl This is the next line. As the define evaluates to the empty string a blank line appears in the output.
+dnl We can get around this as follows...
+
+
+define('jehtech', 'www.jeh-tech.com')dnl
+dnl Now this is the next line - no blank line as dnl has eaten all whitespace after it AND the newline</pre>
+		<p></p>
+</div>
+
+<h2>Conditionals</h2>
+<div>
+	<p>Macros can be conditionally expanded using the predefines  <code>ifdef</code>,	which tests if a macro is defined,
+		 <code>ifelse</code>, which is an if-then-else like functionality and <code>shift</code>, which helps enable recursion.
+	</p>
+
+	<h3>Ifdef</h3>
+	<pre class="prettyprint linenums lang-m">$ m4 -
+ifdef(`some_macro', `yes', `no')
+no
+define(`some_macro', `some text')dnl
+ifdef(`some_macro', `yes', `no')
+yes</pre>
+
+		<h3>Ifelse</h3>
+		<pre class="prettyprint linenums lang-m">$ m4 -
+ifelse(`some string', `some string', `matches')
+matches
+ifelse(`some string', `some other string', `matches')
+
+ifelse(`some string', `some other string', `matches', `different')
+different</pre>
+			<p>
+				Above are the most common variations. Note that the does-not-match, 4<sup>th</sup> parameter, is optional. When it
+				is ommitted and no match occurs the <code>ifelse</code> macro expands to the empty string.
+			</p>
+			<p>
+				Note again, <code>ifelse</code> is a macro. It is <em>not</em> a function! It just expands to one of its 
+				parameters condionally.
+			</p>
+			<p>
+				The <code>ifelse</code> block, in the form <code>ifelse(a, b, equal_ab)</code> for can be expanded to
+				<code>ifelse(a, b, equal_ab, c, d, equal_cd, e, f, equal_ef, ....)</code>. In this case it acts like
+				aa <code>if (a == b) equal_ab else if (c == d) equal_cd else if(e == f) equal_ef ... </code>.
+			</p>
+</div>
+
+<h2>Recursion</h2>
+<div>
+	<p>
+		Because macros are continually expanded we can do boneheaded things like this:
+	</p>
+	<pre class="prettyprint linenums lang-m">$ m4 --debug=V -
+define(`test', `test')
+m4trace:stdin:1: -1- id 1: define ...
+m4trace:stdin:1: -1- id 1: define(`test', `test') -> ???
+m4trace:stdin:1: -1- id 1: define(...)
+
+test
+m4trace:stdin:2: -1- id 2: test ...
+m4trace:stdin:2: -1- id 2: test -> ???
+m4trace:stdin:2: -1- id 2: test -> `test'
+m4trace:stdin:2: -1- id 3: test ...
+m4trace:stdin:2: -1- id 3: test -> ???
+m4trace:stdin:2: -1- id 3: test -> `test'
+m4trace:stdin:2: -1- id 4: test ...
+m4trace:stdin:2: -1- id 4: test -> ???
+m4trace:stdin:2: -1- id 4: test -> `test'
+m4trace:stdin:2: -1- id 5: test ...
+m4trace:stdin:2: -1- id 5: test -> ???
+m4trace:stdin:2: -1- id 5: test -> `test'
+m4trace:stdin:2: -1- id 6: test ...
+m4trace:stdin:2: -1- id 6: test -> ???
+m4trace:stdin:2: -1- id 6: test -> `test'
+...
+... continues forever repeating the above
+...</pre>
+
+		<p>
+			That's not useful. But... what if we could get the continual recusive evaluation to end? Now that we
+			have contitional evaluation and expansion, we can do this!
+		</p>
+
+	<p>Lets try and do something that doesn't break the interpretter:</p>
+	<pre class="prettyprint linenums lang-m">$ m4 --debug=V -
+m4debug: input read from stdin
+define(`test', `ifelse(`$1', `aaaaa', `done', `test(`$1a')')')#
+m4trace:stdin:1: -1- id 1: define ...
+m4trace:stdin:1: -1- id 1: define(`test', `ifelse(`$1', `aaaaa', `done', `test(`$1a')')') -> ???
+m4trace:stdin:1: -1- id 1: define(...)
+
+test(`a')
+m4trace:stdin:2: -1- id 2: test ...
+m4trace:stdin:2: -1- id 2: test(`a') -> ???                                            | Evaluate test(`a') and expand
+m4trace:stdin:2: -1- id 2: test(...) -> `ifelse(`a', `aaaaa', `done', `test(`aa')')'   | Expands to this, re-evaluate
+m4trace:stdin:2: -1- id 3: ifelse ...
+m4trace:stdin:2: -1- id 3: ifelse(`a', `aaaaa', `done', `test(`aa')') -> ???           | Evaluate conditional and expand
+m4trace:stdin:2: -1- id 3: ifelse(...) -> `test(`aa')'                                 | Expands to test(`aa')
+m4trace:stdin:2: -1- id 4: test ...
+m4trace:stdin:2: -1- id 4: test(`aa') -> ???                                           | This recursive re-evaluation keeps going until
+m4trace:stdin:2: -1- id 4: test(...) -> `ifelse(`aa', `aaaaa', `done', `test(`aaa')')' |    until the string matches `aaaaa'
+m4trace:stdin:2: -1- id 5: ifelse ...
+m4trace:stdin:2: -1- id 5: ifelse(`aa', `aaaaa', `done', `test(`aaa')') -> ???
+m4trace:stdin:2: -1- id 5: ifelse(...) -> `test(`aaa')'
+m4trace:stdin:2: -1- id 6: test ...
+m4trace:stdin:2: -1- id 6: test(`aaa') -> ???
+m4trace:stdin:2: -1- id 6: test(...) -> `ifelse(`aaa', `aaaaa', `done', `test(`aaaa')')'
+m4trace:stdin:2: -1- id 7: ifelse ...
+m4trace:stdin:2: -1- id 7: ifelse(`aaa', `aaaaa', `done', `test(`aaaa')') -> ???
+m4trace:stdin:2: -1- id 7: ifelse(...) -> `test(`aaaa')'
+m4trace:stdin:2: -1- id 8: test ...
+m4trace:stdin:2: -1- id 8: test(`aaaa') -> ???
+m4trace:stdin:2: -1- id 8: test(...) -> `ifelse(`aaaa', `aaaaa', `done', `test(`aaaaa')')'
+m4trace:stdin:2: -1- id 9: ifelse ...
+m4trace:stdin:2: -1- id 9: ifelse(`aaaa', `aaaaa', `done', `test(`aaaaa')') -> ???
+m4trace:stdin:2: -1- id 9: ifelse(...) -> `test(`aaaaa')'
+m4trace:stdin:2: -1- id 10: test ...
+m4trace:stdin:2: -1- id 10: test(`aaaaa') -> ???
+m4trace:stdin:2: -1- id 10: test(...) -> `ifelse(`aaaaa', `aaaaa', `done', `test(`aaaaaa')')'
+m4trace:stdin:2: -1- id 11: ifelse ...
+m4trace:stdin:2: -1- id 11: ifelse(`aaaaa', `aaaaa', `done', `test(`aaaaaa')') -> ???  | The two strings finally match and expand into our end condition
+m4trace:stdin:2: -1- id 11: ifelse(...) -> `done'                                      |    which when re-evaluated does not expand to anything so
+done                                                                                   |    this processes stops. Recursion done!</pre>
+	</div>
+
+	<h3>Shift</h3>
+	<p>
+		The <code>shift()</code> macro expands to all its arguments except the first:
+	</p>
+	<pre class="prettyprint linenums lang-m">shift()
+
+shift(1)
+
+shift(1,2)
+2
+shift(1,2,3)
+2,3</pre>
+	<p>
+		This macro is pretty central to recusion. Lets have an attempt at making a reverse macro. (Note there is a native reverse
+		macro, so this is just for a play).
+	</p>
+	<p>
+		This was my first attempt:
+	</p>
+	<pre class="prettyprint linenums lang-m">define(`jump', ifelse($#, 1, end, `jump(shift($@)),$1'))
+)</pre>
+		<p>
+			The first attempt just doesn't work, full stop. The reason is that because the <code>ifelse</code> is not
+			quoted, it is immediately expanded due to parameter expansion. A good example of why quoting to defer
+			parameter expansion is needed.
+		</p>
+		<p>
+			So... second attempt... quote the <code>ifelse</code>, so the it is not expanded as a parameter to the 
+			define macro and instead would be expanded after the define expands. (I've added indents to show the
+			level of recusion)
+		</p>
+		<pre class="prettyprint linenums lang-m">define(`jump', `ifelse($#, 1, end, jump(shift($@)),$1'))
+jump(1,2,3)
+jump(1,2,3)
+m4trace:stdin:3: -1- id 2: jump ...
+m4trace:stdin:3: -1- id 2: jump(`1', `2', `3') -> ???
+m4trace:stdin:3: -1- id 2: jump(...) -> `ifelse(3, 1, end, jump(shift(`1',`2',`3')),1'
+                           ^^^^
+                           Jump evaluates to this. Quotes stripped and returned to input and re-evaluated.
+m4trace:stdin:3: -1- id 3: ifelse ...
+                           ^^^^
+                           The new input is unquoted so ifelse is immediately evaluated
+	 m4trace:stdin:3: -2- id 4: jump ...
+                              ^^^
+                              Evaluate ifelse parameters.First expandable param is jump
+			m4trace:stdin:3: -3- id 5: shift ...
+                                 ^^^
+                                 To evaluate jump its parameters must be evaluated
+      m4trace:stdin:3: -3- id 5: shift(`1', `2', `3') -> ???
+			m4trace:stdin:3: -3- id 5: shift(...) -> ``2',`3''
+                                 ^^^
+                                 The shift macro expands to all its parameters bar the first
+	 m4trace:stdin:3: -2- id 4: jump(`2', `3') -> ???
+                              ^^^
+                              All the parameters to jump have been evaluate and expanded, so now jump can
+                              be expanded, because this was the parameter to the ifelse.
+	 m4trace:stdin:3: -2- id 4: jump(...) -> `ifelse(2, 1, end, jump(shift(`2',`3')),2'
+                              ^^^
+                              jump epxands again - this is recursion
+   m4trace:stdin:3: -2- id 6: ifelse ...
+			m4trace:stdin:3: -3- id 7: jump ...
+                                 ^^^
+                                 Again, jump's parameters are evaluated and expanded
+         m4trace:stdin:3: -4- id 8: shift ...
+         m4trace:stdin:3: -4- id 8: shift(`2', `3') -> ???
+				 m4trace:stdin:3: -4- id 8: shift(...) -> ``3''
+                                    ^^^
+                                    The same process occurs with shift
+			m4trace:stdin:3: -3- id 7: jump(`3') -> ???
+                                 ^^^
+                                 Shift was fully expanded to just '3'. That's alll jump's parameters expanded so...
+			m4trace:stdin:3: -3- id 7: jump(...) -> `ifelse(1, 1, end, jump(shift(`3')),3'
+                                 ^^^
+                                 ...Now jump's parameters are fully expanded, jump itself can be expanded
+			m4trace:stdin:3: -3- id 9: ifelse ...
+                                 ^^^
+                                 Again, jump recursively expand into the ifelse macro.
+				 m4trace:stdin:3: -4- id 10: jump ...
+                                     ^^^
+                                     The no-match parameter of the ifelse is evaluated and expanded.
+						m4trace:stdin:3: -5- id 11: shift ...
+                                        ^^^
+                                        It expands into the shift macro
+            m4trace:stdin:3: -5- id 11: shift(`3') -> ???
+						m4trace:stdin:3: -5- id 11: shift(...)
+                                        ^^^
+                                        The shift macro drops the 1st parameter. There are no others so it expands
+                                        into the empty string.
+				 m4trace:stdin:3: -4- id 10: jump(`') -> ???
+                                     ^^^
+                                     All jumps parameters expanded so now expand the jump macro itself<span style="background:darksalmon;">
+				 m4trace:stdin:3: -4- id 10: jump(...) -> `ifelse(1, 1, end, jump(shift(`')),'
+                                     ^^^
+                                     Jump no expands to the above
+                                     !!! This is where one might expect the recusion to end !!! 
+                                     !!! because now 1 == 1 so the ifelse should expand to 'end'. And !!! 
+                                     !!! indeed it would, but before that can happen all its parameters !!! 
+                                     !!! must be expanded and therefore the process will now recurse !!! 
+                                     !!! infinitely !!!</span>
+      m4trace:stdin:3: -4- id 12: ifelse ...
+            m4trace:stdin:3: -5- id 13: jump ...
+               m4trace:stdin:3: -6- id 14: shift ...
+               m4trace:stdin:3: -6- id 14: shift(`') -> ???
+               m4trace:stdin:3: -6- id 14: shift(...)
+... 
+... recurses forever 
+...</pre>
+		<p>
+      Oh dear... this produces infinite recursion. The explanation is highlighted above. The problem was that 
+      the parameters get continually expanded before they are passed to the macro that would do the parameter
+      comparison and end the recursion. Thus, the recursion never ends.
+    </p>
+    <p>
+      So, how can we stop the parameters being continually expanded before being passed to the macro itself?
+      The answer is QUOTING! What we want is for jump to be expanded, but then the arguments to NOT be
+      expanded so that the ifelse macro that jump is expanded to has a change to evaluate and compare the 
+      first two parameters.
+    </p>
+    <p>
+      Lets try with some more quoting...
+    </p>
+    <pre class="prettyprint linenums lang-m">define(`jump', <span style="background:moccasin;">`ifelse($#, 1, end, <span style="background:skyblue;">`jump(shift($@)),$1'</span>)'</span>)</pre>
+    <p>
+      So, now if we input <code>jump(1,2,3)</code>, the macro is expanded to <code>ifelse($#, 1, end, `jump(shift($@)),$1')</code>. BUT NOW
+      the 4<sup>th</sup> parameter does NOT get expanded because the quotes defer expansion.
+    </p>
+    <p>
+      So now, the <code>ifelse</code> macro can be expanded BEFORE the last parameter, which will allow it to compare the number of
+      arguments to 1, giving it a chance to end the recursion. The output is <code>end,2,1</code>.
+    </p>
+    <p>
+      So, the last tweak is to replace &quot;end&quot; with the last parameter. And we'll also use some more quotes to stop
+      other things getting unexpectedly expanded. So the final go is this:
+    </p>
+    <pre class="prettyprint linenums lang-m">define(`jump', `ifelse(`$#', `1', `$1', `jump(shift($@)),$1')')
+
+jump(1,2,3,4)
+4,3,2,1</pre>
+      <p>Sweat :)</p>
+
+</div> <!-- END H1 padding div -->
+</div>
+</body>
+</html>
+
+

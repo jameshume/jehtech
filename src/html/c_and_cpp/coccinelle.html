@@ -473,8 +473,97 @@ T[] E;
 
 <h2>Dots</h2>
 <div>
+	<h3>Basic Dots</h3>
 	<p>
-	</p>
+      Basic dots are like a wild card that matches, in regular expression terms, <code>.*</code>. Consider the following:
+   </p>
+	<pre class="prettyprint linenums" style="float:left;">int main(void)
+{
+   Special_t a = <span style="background:yellow;"> {
+      // Arbitrary initialisation;
+      .m1 = 10,
+      .m2 = 20,
+   }</span>;
+
+   <span style="background:orange">printf("Any amount of arbitrary code can go here!\n") ;
+   a.m3 = rand();
+   if (a.m2 == a.m3) {
+      printf("You got lucky :)\n");
+   }</span>
+
+   some_func(&a, &a);
+
+   return 0;
+}</pre>
+   <pre class="prettyprint linenums" style="float:left;">@@
+Type T;
+identifier var, var2;
+identifier some_func;
+@@
+
+T var = <span style="background:yellow;">...</span>;
+<span style="background:orange">...</span>
+- some_func(&var, &var2);
++ another_newer_func(&var, &var2, false);</pre>
+
+   <p style="clear:both;">
+      In the above snippet you can see how each set of elipses, <code>...</code>, matches an arbitrary length part of the program.
+      Its like a <code>.*</code> in a regular expression. The output is this:
+   </p>
+   <pre>--- test.c
+      +++ /tmp/cocci-output-22579-7874ae-test.c
+      @@ -9,6 +9,6 @@ int main(void)
+              printf("You got lucky :)\n");
+          }
+      
+      -   some_func(&a, &a);
+      +   another_newer_func(&a, &a, false);
+          return 0;
+       }</pre>
+   <p>
+      It does what we wanted, which was to replace the function call to <code>some_func()</code> with <code>another_newer_func()</code> only
+      for invocations thatalso declare the type.
+   </p>
+
+	 <h3>Restrict What &quot;...&quot; matches with &quot;does <em>not</em> match&quot;</h3>
+<!--
+   <p>
+      In the above, terribly contrived example, let's say that we only want to use <code>another_newer_func()</code> when
+      we can be certain the two pointers do <em>not</em> point to the same thing! In other words, we want to restrict the match
+      so that the above transformation would <em>not</em> take place.
+   </p>
+	<pre class="prettyprint linenums" style="float:left;">int main(void)
+      {
+         Special_t a = {
+            // Arbitrary initialisation;
+            .m1 = 10,
+            .m2 = 20,
+         };
+      
+         printf("Any amount of arbitrary code can go here!\n") ;
+         a.m3 = rand();
+         if (a.m2 == a.m3) {
+            printf("You got lucky :)\n");
+         }
+      
+         some_func(&a, &a);
+      
+         return 0;
+      }</pre>
+         <pre class="prettyprint linenums" style="float:left;">@@
+      Type T;
+      identifier var, var2;
+      identifier some_func;
+      @@
+      
+      T var = ...;
+      ...
+      - some_func(&var, &var2);
+      + another_newer_func(&var, &var2, false);</pre>
+-->
+         <p style="clear:both;">
+         </p>
+            
 </div>
 
 

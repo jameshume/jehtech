@@ -285,6 +285,12 @@
 
 		<h2>Charge, Current, Voltage</h2>
 		<div>
+			<h3>References</h3>
+			<ul>
+				<li><a href="https://cleantechnica.com/2015/02/02/power-vs-energy-explanation/" target="_blank">The Great Power vs. Energy Confusion</a>, Rob Lewis.</li>
+				<li><a href="https://youtu.be/elJUghWSVh4" target="_blank">Electric potential energy</a>, Khan Academy.</li>					 
+			</ul>
+
 			<h3>Conventional Current And Charge</h3>
 			<p>
 				<img src="##IMG_DIR##/conventional_current.png" width="150" style="float:left">
@@ -309,11 +315,54 @@
 				Charge, $q$, is measured in Coulombs. One electron has a charge of $-1.6 \times 10^{-19}$ Coulombs. This is the smallest
 				unit of charge possible.
 			</p>
+
 			<h3 style="clear: both;">Voltage</h3>
 			<p>
 				Voltage, $V$, is the amount of work (in Joules) that must be done per unit charge to move between two points in a field.
 				$$V_{ab} = \frac{\mathrm dw}{\mathrm dq}$$
+				I.e. 1 volt is 1 Joule per Coulomb.
 			</p>
+			<p>
+				To help understand this let's revisit the terms energy, work and power.<br/>
+			</p>
+			<p style="padding-left: 16pt;">
+				<b>Energy</b> is the ability to do work.<br/>
+				<b>Work</b> is the force that must be exerted to move a mass a certain distance.<br/>
+				<b>Power</b> is the rate at which energy is generator/consumed.
+			</p>
+			<p>
+				Energy is what makes it possible to move things. Moving things involves doing work and it takes energy to do this. <b>Energy measures
+					the total amount of work done</b>. It does not say how fast the energy was used/produced.
+			</p>
+			<p>
+				<b>Power gives that rate at which energy is used/produced</b>. Power measures how <b>fast</b> the work gets done.
+			</p>
+			<p>
+				<img src="##IMG_DIR##/work_evergy_power.svg" alt="Image showing work and energy vs power"/>
+			</p>
+			<p>
+				Give these definitions we can see how they are defined for electronics. Using some crude (read incorrect as we're using multiplcation not integration to make it seem simpler) we see:
+
+				$$
+				\begin{align}
+				E &= IVt \\
+				  &= \frac{\mathrm dq}{\mathrm dt} \cdot \frac{\mathrm dw}{\mathrm dq} \cdot t\\
+				  &= \frac{\mathrm dW}{\mathrm dt} \cdot t \\
+				  &= W
+				\end{align}
+				$$
+
+				So energy is indeed the total work required to move a charge between two points in an electric field.
+
+				And because 
+
+				$$
+				P = IV = \frac{E}{t}
+				$$
+
+				We can see that electrical power (measured in <b>Watts</b>) is the rate of consumption/generation of electrical energy.
+			</p>
+
 			<h3 style="clear: both;">Ohm's Law</h3>
 			<div>
 				<p>Ohm's law gives the relationship between voltage, current and resistance:
@@ -791,6 +840,12 @@
 				Recall charge time for a cap to charge to 63% of the voltage across is is
 				$\tau = RC$. So by varying either the resistors or the capacitor the period of the
 				pulse train output on pin 3 can be varied.
+			</p>
+			<p>
+				<img src="##IMG_DIR##/chargin_555_cap.png"/>
+			</p>
+			<p>
+				<img src="##IMG_DIR##/555_timer_discharge.png"/>
 			</p>
 		</div>
 
