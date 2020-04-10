@@ -1,0 +1,195 @@
+dnl USEM4
+dnl ---- START M4 MACROS ----
+define(`REF_BALAU', `https://balau82.wordpress.com/2010/10/06/trace-and-profile-function-calls-with-gcc/')dnl
+define(`REF_MELINTE', `https://linuxgazette.net/151/melinte.html')dnl
+define(`REF_ADDR2LINE', `https://github.com/CyberGrandChallenge/binutils/blob/master/binutils/addr2line.c')dnl
+define(`REF_BDFWP', `https://en.wikipedia.org/wiki/Binary_File_Descriptor_library')dnl
+define(`REF_LIBBDF', `https://ftp.gnu.org/old-gnu/Manuals/bfd-2.9.1/html_chapter/bfd_toc.html')dnl
+define(`REF_MELINTE_BOOK', `https://docplayer.net/77962684-Linux-applications-debugging-techniques.html')dnl
+define(`REF', `<a href="$1" target="_blank">$2</a>')dnl
+dnl ---- END M4 MACROS ----
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>Instrumenting All Function Calls | JEHTech</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">Instrumenting All Function Calls</h1>
+<div style="padding-right:10px;">
+
+<h2>Page Contents</h2>
+<div id="page_contents">
+</div>
+
+<h2>References</h2>
+<div>
+    <ul>
+        <li>REF(`REF_BALAU', `Trace and profile function calls with GCC'), Freedom Embedded.</li>
+        <li>REF(`REF_MELINTE', `Monitoring Function Calls'), By Aurelian Melinte.</li>
+        <li>REF(`REF_ADDR2LINE', `The addr2line source code'), GitHub.</li>
+        <li>REF(`REF_BDFWP', `Binary File Descriptor Library'), WikiPedia.</li>
+        <li>REF(`REF_LIBBDF', `LIB BFD, the Binary File Descriptor Library').</li>
+        <li>REF(`REF_MELINTE_BOOK', `Linux ApplicationsDebuggingTechniques'), Aurelian Melinte, see page 20, chapter &quot;The Interposition LIbrary&quot;.</li>
+    </ul>
+</div>
+
+<h2>Why Instrumenting All Function Calls</h2>
+<div>
+    <p>
+        I had a complex program test that failed. I wanted to see what lead up to the failure. Its a long
+        execution path and I wanted to be able to see what the execution path was that lead to the failure.
+    </p>
+</div> <!-- END H2 -->
+
+<h2>Small Modification of Freedom Embedded's Article</h2>
+<div>
+    <p>
+        I was Google'ing about for a way to do this and found Freedom Embedded's Article REF(`REF_BALAU', `[Ref]'). 
+        It almost worked straight out of the box for me, which was good.
+    </p>
+    <p>
+        The problem I was that my program was relocated so the
+        addresses it recorded would not be the same is in the OBJ files because Linux applies a randomised load
+        offset to the program when it loads it.
+    </p>
+    <p>
+        To get around this I modified his constructor function to print the address of <code>main()</code>,
+        so that the first line of <code>trace.out</code> had an address of a known function. By looking
+        up main inthe <code>objdump</code> of the executable I could then figure out the load offset and
+        subtract this from all the addresses in <code>trace.out</code>.
+    </p>
+    <p>
+        I also borrowed from A. Melinte's article and book REF(`REF_MELINTE',`[Ref]')REF(`REF_MELINTE_BOOK', `[Ref]') and
+        added as output the thread ID.
+    </p>
+    <p>
+        The resulting C is this:
+    </p>
+    <pre class="prettyprint linenums">#if defined(__GNUC__) || defined(__GNUG__)
+extern "C" {
+    // See https://balau82.wordpress.com/2010/10/06/trace-and-profile-function-calls-with-gcc/
+    // This is a derivative of the above article.
+    #include &lt;stdio.h&gt;
+    #include &lt;pthread.h&gt;
+
+    static FILE *fp_trace;
+
+    void
+    __attribute__((constructor))
+    trace_begin(void)
+    {
+        fp_trace = fopen("trace.out", "w");
+        if (fp_trace != NULL)
+        {
+            extern int main(int, char **);
+            fprintf(fp_trace, "ADDRESS_OF_MAIN %p\n", main);
+        }
+    }
+
+    void
+    __attribute__((destructor))
+    trace_end(void)
+    {
+        if (fp_trace != NULL) {
+            fclose(fp_trace);
+        }
+    }
+
+    void
+    __cyg_profile_func_enter(void *func, void *caller)
+    {
+        if (fp_trace != NULL) {
+            const pthread_t self = pthread_self();
+            fprintf(fp_trace, "e %p %p %p\n", self, func, caller);
+        }
+    }
+
+    void
+    __cyg_profile_func_exit(void *func, void *caller)
+    {
+        if (fp_trace != NULL) {
+            const pthread_t self = pthread_self();
+            fprintf(fp_trace, "x %p %p %p\n", self, func, caller);
+        }
+    }
+}
+#endif</pre>
+    <p>
+        The shell script became this:
+    </p>
+    <pre class="prettyprint linenums">#/bin/bash
+
+if test ! -f "$1"; then
+ echo "Error: executable $1 does not exist."
+ exit 1
+fi
+
+if test ! -f "$2"; then
+ echo "Error: trace log $2 does not exist."
+ exit 1
+fi
+
+EXECUTABLE="$1"
+TRACELOG="$2"
+
+PMA_MAIN=$(objdump -d "$EXECUTABLE" | grep "&lt;main&gt;:" | cut -d" " -f1 | sed -e 's/^0*\([1-9][0-9]*\)/\1/g')
+VMA_MAIN=$(head -1 "$TRACELOG" | cut -d" " -f2)
+VMA_MAIN=${VMA_MAIN:2:-1}
+VMA_OFFSET=$((16#$VMA_MAIN - 16#$PMA_MAIN))
+
+INDENT=2
+COUNT=0
+
+while read LINETYPE TID FADDR CADDR; do
+    NEWFADDR="$((16#${FADDR:2:-1} - $VMA_OFFSET))"
+    FADDR="$(printf "0x%x", "$NEWFADDR")"
+
+    NEWCADDR="$((16#${CADDR:2:-1} - $VMA_OFFSET))"
+    CADDR="$(printf "0x%x", "$NEWCADDR")"
+
+    FNAME="$(addr2line -f -e ${EXECUTABLE} ${FADDR}|head -1)"
+    if [ "$FNAME" == "??" ]; then FNAME=$FADDR; fi
+
+    if test "${LINETYPE}" = "e"
+    then
+        CNAME="$(addr2line -f -e ${EXECUTABLE} ${CADDR} | head -1)"
+        CLINE="$(addr2line -s -e ${EXECUTABLE} ${CADDR})"
+        SPACES="$(printf "%0.s " $(seq 1 $COUNT))"
+        echo "${TID}: ${SPACES}Enter ${FNAME}, called from ${CNAME} (${CLINE})"
+        COUNT=$((COUNT + INDENT))
+    fi
+    if test "${LINETYPE}" = "x"
+    then
+        COUNT=$((COUNT - INDENT))
+        SPACES="$(printf "%0.s " $(seq 1 $COUNT))"
+        echo "${TID}: ${SPACES}Exit  ${FNAME}"
+    fi
+done < "${TRACELOG}"</pre>
+    <p>
+        Remembering to compile with options <code>-O0 -g -finstrument-functions</code> and it all
+        worked like a charm. Thank you Balua and Melinte!
+    </p>
+</div>
+
+</div> <!-- END H1 padding div -->
+</div>
+</body>
+</html>
+
+

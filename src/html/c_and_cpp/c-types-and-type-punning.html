@@ -82,7 +82,7 @@
 		<p>
 			If a value is copied into
 			an object having no declared type using memcpy or memmove, or is copied as an array of
-			character type, then the effective type of the modiﬁed object for that access and for
+			character type, then the effective type of the modified object for that access and for
 			subsequent accesses that do not modify the value is the effective type of the object
 			from which the value is copied, if it has one.
 		</p>
@@ -116,7 +116,7 @@
 	<blockquote>
 	<p>
 		All declarations that refer to the same object or function shall have compatible type; otherwise,
-		the behavior is undeﬁned.
+		the behavior is undefined.
 	</p>
 	</blockquote>
 
@@ -157,7 +157,7 @@
 				</ol>
 			</li>
 			<li>For two structures, corresponding members shall be declared in the same order.</li>
-			<li>For two structures or unions, corresponding bit-ﬁelds shall have the same widths.
+			<li>For two structures or unions, corresponding bit-fields shall have the same widths.
 			<li>For two enumerations, corresponding	members shall have the same values.</li>
 		</li>
 		<p>
@@ -169,7 +169,7 @@
 	<blockquote>
 		<p>
 			Each enumerated type shall be compatible with char, a signed integer type, or an unsigned
-			integer type. The choice of type is implementation-deﬁned, but shall be capable of
+			integer type. The choice of type is implementation-defined, but shall be capable of
 			representing the values of all the members of the enumeration ...
 		</p>
 	</blockquote>
@@ -178,9 +178,9 @@
 	</p>
 	<blockquote>
 		<p>
-			For two qualiﬁed types to be compatible, both shall have the identically qualified 
-			version of a compatible type; the order of type qualiﬁers within a list of speciﬁers or
-			qualiﬁers does not affect the speciﬁed type. 
+			For two qualified types to be compatible, both shall have the identically qualified 
+			version of a compatible type; the order of type qualifiers within a list of specifiers or
+			qualifiers does not affect the specified type. 
 		</p>
 	</blockquote>
 		<p>
@@ -193,9 +193,9 @@
 		</p>
 		<p>
 			... For two array types to be compatible, both shall have compatible element types, and
-			if both size speciﬁers are present, and are integer constant expressions, then both size
-			speciﬁers shall have the same constant value. If the two array types are used in a context
-			which requires them to be compatible, it is undeﬁned behavior if the two size speciﬁers evaluate
+			if both size specifiers are present, and are integer constant expressions, then both size
+			specifiers shall have the same constant value. If the two array types are used in a context
+			which requires them to be compatible, it is undefined behavior if the two size specifiers evaluate
 			to unequal values ... 
 		</p>
 		<p>
@@ -242,9 +242,9 @@ union MyUnion { ... } # The "tag" is "MyUnion", etc</pre>
 		</p>
 		<ul>
 			<li>a type compatible with the effective type of the object,</li>
-			<li>a qualiﬁed version of a type compatible with the effective type of the object,</li>
+			<li>a qualified version of a type compatible with the effective type of the object,</li>
 			<li>a type that is the signed or unsigned type corresponding to the effective type of the object,</li>
-			<li>a type that is the signed or unsigned type corresponding to a qualiﬁed version of the
+			<li>a type that is the signed or unsigned type corresponding to a qualified version of the
 				effective type of the object,</li>
 			<li>an aggregate or union type that includes one of the aforementioned types among its members
 				(including, recursively, a member of a subaggregate or contained union), or</li>

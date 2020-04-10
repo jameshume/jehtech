@@ -1465,17 +1465,17 @@ APPLY a function to each piece, COMBINE the results.
 lapply() - loop over list and eval func for each element. looping done in C
 split() - splits objects into sub-pieces
 
-lappy(list, function_name, …) returns result for every object in the list as a list in the same order. `function_name` is applies to each element of the list and the return value used for that element in the new list. The … arguments will be passed to your function_name().
+lappy(list, function_name, ) returns result for every object in the list as a list in the same order. 'function_name' is applies to each element of the list and the return value used for that element in the new list. The  arguments will be passed to your function_name().
 
 lappply() generally uses ANONYMOUS FUNCTIONS.
 lapply(x, function(params){...}) 
 
-sapply() - simplifies result of lapply(). Each list might go to vector if every element has length one. If can’t figure out the simplification a list is returned.
+sapply() - simplifies result of lapply(). Each list might go to vector if every element has length one. If cant figure out the simplification a list is returned.
 
 apply(X, margin, fun,...)
-	margin is an int vector indicating which margins should be “retained”
+	margin is an int vector indicating which margins should be retained
 	fun is func to be applied
-	… passed to `fun`
+	 passed to 'fun'
 
 	the margin refers to the DIMENSION number being used. For a matrix 
 1 is rows 2 is columns. 
@@ -1485,14 +1485,14 @@ apply(X, margin, fun,...)
 	rowSums = apply(x,1,sum)
 	colSums = apply(x,2,sum)
 
-	can keep two dims using appy(x, c(1,2,...), …) for multi dim arrays
+	can keep two dims using appy(x, c(1,2,...), ) for multi dim arrays
 	or use rowMeans(..., dim=x)
 
 
-mapply(fun, …, MoreArge=NULL, SIMPLIFY=TRUE, USE.NAMES=TRUE)
+mapply(fun, , MoreArge=NULL, SIMPLIFY=TRUE, USE.NAMES=TRUE)
 	Applies a func in parallel over a set of different arguments.
 
-	Eg two lists where element x in list_1 is param ` of `fun` and element x in list_2 is second param. this is what mapply helps you do.
+	Eg two lists where element x in list_1 is param of 'fun' and element x in list_2 is second param. this is what mapply helps you do.
 
 	Use to VECTORIZE FUNCTIONS that normally act on scalars.
 
@@ -1515,7 +1515,7 @@ tapply(x, index, fun, ...) - apply a function over subsets of a vector.
       with(df, tapply(col1, col2, mean))
    This will group by col1 and take the mean of col2 using that grouping.
 
-split(x, f, drop = false, …)
+split(x, f, drop = false, )
 like tapply() it splits x into groups where f identified which group each element of x is in.
 
 common to split() something then apply a function over the groups:
@@ -1523,7 +1523,7 @@ common to split() something then apply a function over the groups:
 
 split() can be  used on complex data structures like dataframes.
 	e.g. s &lt;- split(dataframe, dataframe$col_name)
-	     lapply(s, function(x) …snip… )
+	     lapply(s, function(x) snip )
 
 	tip: use sapply(... na.rm=TRUE) 
 
@@ -1553,25 +1553,25 @@ Levels: 1 2 3 4 5
     [1] 1.1 1.1 1.2 1.2 1.3 2.3 2.4 2.4 2.5 2.5
 Levels: 1.1 2.1 1.2 2.2 1.3 2.3 1.4 2.4 1.5 2.5
 	
-NOTE: Although it says there are all those levels it appears it uses the returned array, not the levels themselves which is why it returns missing values for some levels… so it has all the levels but not all are used.
+NOTE: Although it says there are all those levels it appears it uses the returned array, not the levels themselves which is why it returns missing values for some levels so it has all the levels but not all are used.
 
 split(x, list(f1,f2), drop=TRUE)
-$`1.1`
+$'1.1'
 [1] 2.0781323 0.7863726
 
-$`1.2`
+$'1.2'
 [1] -0.7285167  0.1410324
 
-$`1.3`
+$'1.3'
 [1] 0.643741
 
-$`2.3`
+$'2.3'
 [1] -0.7616546
 
-$`2.4`
+$'2.4'
 [1] -0.4612373 -0.6063274
 
-$`2.5`
+$'2.5'
 [1]  0.0106792 -0.5811911
 
 
@@ -1754,7 +1754,7 @@ Subsetting columns very different.
       Data tables copied BY REFERENCE so be careful of aliases!
       Create copied explicitly using copy() function
 
-Grouping using `by=` syntax.
+Grouping using 'by=' syntax.
    Special variable .N to count group
       eg. dt[, .N, by=...]
 

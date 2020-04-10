@@ -260,7 +260,7 @@ Series automatically align differently indexed data in arithmetic operations.
 This matching labels have operator applied and labels not in both Series 
 become NaN in the resulting Series.
 
-Series and index have `name` attribute. 
+Series and index have 'name' attribute. 
 
 Can alter index in place. eg Series_obj.index = [...labels...]
 
@@ -534,7 +534,7 @@ eg
 	df.fillna(0) or
 	df.fillna({1: 0.5, 3: -1}) # Fill diff NAs in different cols with different vals
 
-Most return a new object but you can use `inplace=True` to do it inplace on
+Most return a new object but you can use 'inplace=True' to do it inplace on
 the curretn df
 
 The same interpolation methods available for reindexing can be used for fillna()
@@ -598,10 +598,10 @@ in missing values in one object with values from another.
 Merging on column(s)
 ---------------------
 pd.merge(df3, df4, on='key', how='inner|outer|left|right')
-defaul `how` is "inner"
-if no shared key can use options `left_on='lkey', right_on='rkey'`
-use `key=["key1",..., "keyN"]` to join on multiple keys
-use suffixes=(tuple of key suffixes)` to label "on" keys from different frames differently
+defaul 'how' is "inner"
+if no shared key can use options 'left_on='lkey', right_on='rkey''
+use 'key=["key1",..., "keyN"]' to join on multiple keys
+use suffixes=(tuple of key suffixes)' to label "on" keys from different frames differently
 
 WARNING: When joining columns-on-columns, the indexes on the passed Data-
 Frame objects are discarded
@@ -639,7 +639,7 @@ Get from DB
 import pandas.io.sql as sql
 sql.read_frame('select * from test', con)
 
-Where `con` is the Python DB connection object.
+Where 'con' is the Python DB connection object.
 
 
 R style pipes in Python

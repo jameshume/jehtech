@@ -212,48 +212,6 @@ def get_links_insert(currentDirName):
     linksHtml = lxml.etree.tostring(doc.getroot().get_element_by_id("jehtech_contents_div"), pretty_print=True, method='html').decode()
     return linksHtml
 
-def create_references(contents):
-    """
-    ## REF LIST START ##
-    ##Short name@long descr@link##
-    ## REF LIST END ##
-    """
-    start_refs = re.compile(r'^\w*##\w*REF\w+LIST\w*START\w*##')
-    end_refs = re.compile(r'^\w*##\w*REF\w+LIST\w+END\w*##')
-    a_ref = re.compile(r'^\w*##\w*([^@]+)\w*@\w*([^@]+)\w*@\w*([^@]+)##')
-
-    start_found = False
-    end_found = False
-    for lineno, line in enumerate(contents):
-        line = line.strip()
-        if start_refs.match(line) is not None:
-            conents[lineno] = "<ol>"
-            start_found = True
-            break
-
-    if not start_found:
-        print("No reference section found")
-        return
-
-    for line in in_fh:
-        line = line.strip()
-
-        if end_refs.match(line) is not None:
-            conents[lineno] = "</ol>"
-            end_found = True
-            break
-
-        m = a_ref.match(line)
-        if m is not None:
-            if end_found:
-                raise Exception("Reference spec found after reference section end")
-            contents[lineno] = """<li><a name="{}" href="{}" target="_blank">{}</a>.
-       </li>
-    """.format(m.group(0), m.group(2), m.group(1))
-
-    if not end_found:
-        raise Exception("Could not find end of reference section")
-
 
 def getMathjaxNodePageBinPath():
     cmd = "node -e \"console.log(require.resolve('mathjax-node-page'))\""
@@ -319,23 +277,33 @@ def deploy_site(specificFile, generateImages):
             google_sitemap_ref = "http://www.jeh-tech.com/{}".format(pathlib.PurePosixPath(*dirs))
             sitemap_list.append(google_sitemap_ref)
 
-        htmlFile = codecs.open(htmlFileName, 'r', 'utf-8')
-        #htmlFile = open(htmlFileName, 'r')
-        htmlFileContents = htmlFile.read();
-        htmlFile.close()
+
+        # Do we need toass the file through M4?
+        req_m4 = False
+        if fnmatch.fnmatch(filename, '*.html') and filename != "m4.html":
+            with codecs.open(htmlFileName, 'r', 'utf-8') as htmlFile:
+                firstline = htmlFile.readline().strip();
+                req_m4 = firstline == 'dnl USEM4'
+
+        if req_m4:
+            result = subprocess.run(
+                ['m4', htmlFileName], stdout=subprocess.PIPE, universal_newlines=True)
+            htmlFileContents = result.stdout.strip()
+        else:
+            #htmlFile = codecs.open(htmlFileName, 'r', 'utf-8')
+            with codecs.open(htmlFileName, 'r', 'utf-8') as htmlFile:
+                htmlFileContents = htmlFile.read();
+            #htmlFile.close()
 
         # Create and open the file in the deployed folder.
         deployed_dir = os.path.join('..', DEPLOYED_DIR, dirname)
         if (dirname != '.'):
             if not os.path.exists(deployed_dir):
-                #print("Creating directory {}".format(deployed_dir))
                 if specificFile is None:
                     mkdir_p(deployed_dir)
             newFileName = os.path.join('..', DEPLOYED_DIR, dirname, filename)
-            #print("(A) Opening new file {}".format(newFileName))
         else:
             newFileName = os.path.join('..', DEPLOYED_DIR, filename)
-            #print("(B) Opening new file {}".format(newFileName))
 
         # Copy the contents of the curr html to it's deployed file but add in the
         # links page

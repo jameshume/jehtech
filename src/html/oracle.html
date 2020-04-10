@@ -60,7 +60,7 @@ the keyword virtual means that the table never takes physical space.
 
 NULL values
 -----------
-To do arithmetic on NULL values you need to tell the DB how to handle NULL. use `SELECT AVG(NVL(columns_name, 0)) FROM table;`. Probably best to make the arithmetic value NOT NULL and use a default!
+To do arithmetic on NULL values you need to tell the DB how to handle NULL. use 'SELECT AVG(NVL(columns_name, 0)) FROM table;'. Probably best to make the arithmetic value NOT NULL and use a default!
 otherwise NULL values will be ignored.
 
 To insert default values, unlike in MySQL where you would use NULL, in Oracle you specify &quot;default&quot; instead.

@@ -7,6 +7,14 @@
 	<!-- META_INSERT -->
 	<!-- CSS_INSERT -->
 	<!-- JAVASCRIPT_INSERT -->
+
+	<style>
+		.comment {
+			font-style: italic;
+			text-size-adjust: 0.5;
+			color:rebeccapurple;
+		}
+	</style>
 </head>
 
 <body>
@@ -27,13 +35,56 @@
 <div id="page_contents">
 </div>
 
-<h2>Macro Names</h2>
+<h2>Macros</h2>
 <div>
 	<p>
 		Macro names, or tokens, are any sequence of characters that must start with either an underscore or a letter followed by alphnumerical characters.
 		Anything that does not match this terminates the token and is just passed straight to the output. So <code>TOK1  TOK2</code> are two seperate tokens
 		as are <code>TOK1.TOK2</code>, <code>TOK1()TOK2</code> and so on...
 	</p>
+	<p>
+		Macros are defined using the <code>define</code> macro - which note is a macro and <i>not</i> a function! In general a define looks like this:
+	</p>
+	<pre class="prettyprint linenums lang-m">define(`macro-name', `what-macro-expands-to')</pre>
+	<p>
+		Where <code>`</code> (a backtick) is an opening quote and <code>'</code> (an apostophe) is a closing quote. Take the following example. If the m4 is fed the 
+		following input...
+	</p>
+	<pre class="prettyprint linenums lang-m">define(`jehtech', `a notes website coz I forget')
+jehtech</pre>
+	 <p>Then M4 will output:</p>
+	 <pre class="prettyprint linenums lang-m">a notes website coz I forget</pre>
+	 <p>
+		 M4 parses the input. The <code>define</code> block expands to the empty string but has the side effect of adding 
+		 the mapping from &quot;jehtech&quot; to &quot;a notes website coz I forget&quot; to the macro table.
+	 </p>
+	 <p>
+		 Thus, when the next line of input is entered, M4 recognises the token &quot;jehtech&quot; as a macro for expansion,
+		 and expands it to &quot;a notes website coz I forget&quot;. In later sections you will see that it will then recusively
+		 re-evaluate and expand this until no expansion is possible, at which point it is fed to the output.
+	 </p>
+	 <p>
+		 It's worth noting that you can define macros on multiple lines to make reading easier. So, for example, we could
+		 re-write the above to this:
+	 </p>
+   <pre class="prettyprint linenums lang-m">define(
+   `jehtech',
+   `a notes website coz I forget' <i>&lt;- Note this newline is included as part of the string jehtech expands to.</i>
+)</pre>
+		<p>
+			Note, however, that the output when the macro &quot;jehtech&quot; is expanded, will contain an extra newline at
+			the end of the expansion because there is a newline between the trailing end-quote and the macro-terminating 
+			bracket on the last line which M4 interprets to be part of what the macro should expand to.
+		</p>
+		<p>
+			The easiest solution is to just write:
+		</p>
+		<pre class="prettyprint linenums lang-m">define(
+    `jehtech',
+    `a notes website coz I forget') <i>&lt;- Note bracket on same line now</i></pre>
+		<p>
+			To remove a macro definition use the <code>undefine</code> macro.
+		</p>
 </div>
 
 <h2>Macro Expansion, Quoting &amp; Parameters</h2>
@@ -222,9 +273,9 @@ eric                                                      <b>| Oh... we still go
 	<pre class="prettyprint linenums lang-m4">$ m4 --debug=V -
 <b>define(`jehtech', ``bob'')</b>
 m4trace:stdin:1: -1- id 1: define ...
-m4trace:stdin:1: -1- id 1: define(`jehtech', ``bob'') -> ???  <b>| NOTE how bob is double quoted</b>
-m4trace:stdin:1: -1- id 1: define(...)                        <b>|   So, the outer quotes will be stipped off so jehtech maps</b>
-                                                              <b>|   to `bob', with single quotes included</b>
+m4trace:stdin:1: -1- id 1: define(`jehtech', ``bob'') -> ???  <b><span class="nocode comment">| NOTE how bob is double quoted</span></b>
+m4trace:stdin:1: -1- id 1: define(...)                        <b><span class="nocode comment">|   So, the outer quotes will be stipped off so jehtech maps</span></b>
+                                                              <b><span class="nocode comment">|   to `bob', with single quotes included</span></b>
 
 <b>define(`bob', `eric')</b>
 m4trace:stdin:2: -1- id 2: define ...
@@ -266,8 +317,8 @@ dnl --
 define(`james', `$#')dnl
 james
 0
-<b>james()    | This is interesting!! The num args is 1 because
-1             |    a nothing argument becomes the empty string!</b>
+<b>james()    <span class="nocode comment">| This is interesting!! The num args is 1 because...</span>
+1          <span class="nocode comment">| ...a nothing argument becomes the empty string!</span></b>
 james(1)
 1
 james(1,2,3)
@@ -395,14 +446,14 @@ m4trace:stdin:1: -1- id 1: define(...)
 
 test(`a')
 m4trace:stdin:2: -1- id 2: test ...
-m4trace:stdin:2: -1- id 2: test(`a') -> ???                                            | Evaluate test(`a') and expand
-m4trace:stdin:2: -1- id 2: test(...) -> `ifelse(`a', `aaaaa', `done', `test(`aa')')'   | Expands to this, re-evaluate
+m4trace:stdin:2: -1- id 2: test(`a') -> ???                                            <b><span class="nocode comment">| Evaluate test(`a') and expand</span></b>
+m4trace:stdin:2: -1- id 2: test(...) -> `ifelse(`a', `aaaaa', `done', `test(`aa')')'   <b><span class="nocode comment">| Expands to this, re-evaluate</span></b>
 m4trace:stdin:2: -1- id 3: ifelse ...
-m4trace:stdin:2: -1- id 3: ifelse(`a', `aaaaa', `done', `test(`aa')') -> ???           | Evaluate conditional and expand
-m4trace:stdin:2: -1- id 3: ifelse(...) -> `test(`aa')'                                 | Expands to test(`aa')
+m4trace:stdin:2: -1- id 3: ifelse(`a', `aaaaa', `done', `test(`aa')') -> ???           <b><span class="nocode comment">| Evaluate conditional and expand</span></b>
+m4trace:stdin:2: -1- id 3: ifelse(...) -> `test(`aa')'                                 <b><span class="nocode comment">| Expands to test(`aa')</span></b>
 m4trace:stdin:2: -1- id 4: test ...
-m4trace:stdin:2: -1- id 4: test(`aa') -> ???                                           | This recursive re-evaluation keeps going until
-m4trace:stdin:2: -1- id 4: test(...) -> `ifelse(`aa', `aaaaa', `done', `test(`aaa')')' |    until the string matches `aaaaa'
+m4trace:stdin:2: -1- id 4: test(`aa') -> ???                                           <b><span class="nocode comment">| This recursive re-evaluation keeps going until</span></b>
+m4trace:stdin:2: -1- id 4: test(...) -> `ifelse(`aa', `aaaaa', `done', `test(`aaa')')' <b><span class="nocode comment">|    until the string matches `aaaaa'</span></b>
 m4trace:stdin:2: -1- id 5: ifelse ...
 m4trace:stdin:2: -1- id 5: ifelse(`aa', `aaaaa', `done', `test(`aaa')') -> ???
 m4trace:stdin:2: -1- id 5: ifelse(...) -> `test(`aaa')'
@@ -422,9 +473,9 @@ m4trace:stdin:2: -1- id 10: test ...
 m4trace:stdin:2: -1- id 10: test(`aaaaa') -> ???
 m4trace:stdin:2: -1- id 10: test(...) -> `ifelse(`aaaaa', `aaaaa', `done', `test(`aaaaaa')')'
 m4trace:stdin:2: -1- id 11: ifelse ...
-m4trace:stdin:2: -1- id 11: ifelse(`aaaaa', `aaaaa', `done', `test(`aaaaaa')') -> ???  | The two strings finally match and expand into our end condition
-m4trace:stdin:2: -1- id 11: ifelse(...) -> `done'                                      |    which when re-evaluated does not expand to anything so
-done                                                                                   |    this processes stops. Recursion done!</pre>
+m4trace:stdin:2: -1- id 11: ifelse(`aaaaa', `aaaaa', `done', `test(`aaaaaa')') -> ???  <b><span class="nocode comment">| The two strings finally match and expand into our end condition</span></b>
+m4trace:stdin:2: -1- id 11: ifelse(...) -> `done'                                      <b><span class="nocode comment">|    which when re-evaluated does not expand to anything so</span></b>
+done                                                                                   <b><span class="nocode comment">|    this processes stops. Recursion done!</span></b></pre>
 	</div>
 
 	<h3>Shift</h3>
@@ -463,69 +514,69 @@ jump(1,2,3)
 jump(1,2,3)
 m4trace:stdin:3: -1- id 2: jump ...
 m4trace:stdin:3: -1- id 2: jump(`1', `2', `3') -> ???
-m4trace:stdin:3: -1- id 2: jump(...) -> `ifelse(3, 1, end, jump(shift(`1',`2',`3')),1'
+m4trace:stdin:3: -1- id 2: jump(...) -> `ifelse(3, 1, end, jump(shift(`1',`2',`3')),1'<span class="nocode comment">
                            ^^^^
-                           Jump evaluates to this. Quotes stripped and returned to input and re-evaluated.
-m4trace:stdin:3: -1- id 3: ifelse ...
+                           Jump evaluates to this. Quotes stripped and returned to input and re-evaluated.</span>
+m4trace:stdin:3: -1- id 3: ifelse ...<span class="nocode comment">
                            ^^^^
-                           The new input is unquoted so ifelse is immediately evaluated
-	 m4trace:stdin:3: -2- id 4: jump ...
+                           The new input is unquoted so ifelse is immediately evaluated</span>
+   m4trace:stdin:3: -2- id 4: jump ...<span class="nocode comment">
                               ^^^
-                              Evaluate ifelse parameters.First expandable param is jump
-			m4trace:stdin:3: -3- id 5: shift ...
+                              Evaluate ifelse parameters.First expandable param is jump</span>
+      m4trace:stdin:3: -3- id 5: shift ...<span class="nocode comment">
                                  ^^^
-                                 To evaluate jump its parameters must be evaluated
+                                 To evaluate jump its parameters must be evaluated</span>
       m4trace:stdin:3: -3- id 5: shift(`1', `2', `3') -> ???
-			m4trace:stdin:3: -3- id 5: shift(...) -> ``2',`3''
+      m4trace:stdin:3: -3- id 5: shift(...) -> ``2',`3''<span class="nocode comment">
                                  ^^^
-                                 The shift macro expands to all its parameters bar the first
-	 m4trace:stdin:3: -2- id 4: jump(`2', `3') -> ???
+                                 The shift macro expands to all its parameters bar the first</span>
+   m4trace:stdin:3: -2- id 4: jump(`2', `3') -> ???<span class="nocode comment">
                               ^^^
                               All the parameters to jump have been evaluate and expanded, so now jump can
-                              be expanded, because this was the parameter to the ifelse.
-	 m4trace:stdin:3: -2- id 4: jump(...) -> `ifelse(2, 1, end, jump(shift(`2',`3')),2'
+                              be expanded, because this was the parameter to the ifelse.</span>
+   m4trace:stdin:3: -2- id 4: jump(...) -> `ifelse(2, 1, end, jump(shift(`2',`3')),2'<span class="nocode comment">
                               ^^^
-                              jump epxands again - this is recursion
+                              jump epxands again - this is recursion</span>
    m4trace:stdin:3: -2- id 6: ifelse ...
-			m4trace:stdin:3: -3- id 7: jump ...
+      m4trace:stdin:3: -3- id 7: jump ...<span class="nocode comment">
                                  ^^^
-                                 Again, jump's parameters are evaluated and expanded
+                                 Again, jump's parameters are evaluated and expanded</span>
          m4trace:stdin:3: -4- id 8: shift ...
          m4trace:stdin:3: -4- id 8: shift(`2', `3') -> ???
-				 m4trace:stdin:3: -4- id 8: shift(...) -> ``3''
+         m4trace:stdin:3: -4- id 8: shift(...) -> ``3''<span class="nocode comment">
                                     ^^^
-                                    The same process occurs with shift
-			m4trace:stdin:3: -3- id 7: jump(`3') -> ???
+                                    The same process occurs with shift</span>
+      m4trace:stdin:3: -3- id 7: jump(`3') -> ???<span class="nocode comment">
                                  ^^^
-                                 Shift was fully expanded to just '3'. That's alll jump's parameters expanded so...
-			m4trace:stdin:3: -3- id 7: jump(...) -> `ifelse(1, 1, end, jump(shift(`3')),3'
+                                 Shift was fully expanded to just '3'. That's alll jump's parameters expanded so...</span>
+      m4trace:stdin:3: -3- id 7: jump(...) -> `ifelse(1, 1, end, jump(shift(`3')),3'<span class="nocode comment">
                                  ^^^
-                                 ...Now jump's parameters are fully expanded, jump itself can be expanded
-			m4trace:stdin:3: -3- id 9: ifelse ...
+                                 ...Now jump's parameters are fully expanded, jump itself can be expanded</span>
+      m4trace:stdin:3: -3- id 9: ifelse ...<span class="nocode comment">
                                  ^^^
-                                 Again, jump recursively expand into the ifelse macro.
-				 m4trace:stdin:3: -4- id 10: jump ...
+                                 Again, jump recursively expand into the ifelse macro.</span>
+         m4trace:stdin:3: -4- id 10: jump ...<span class="nocode comment">
                                      ^^^
-                                     The no-match parameter of the ifelse is evaluated and expanded.
-						m4trace:stdin:3: -5- id 11: shift ...
+                                     The no-match parameter of the ifelse is evaluated and expanded.</span>
+            m4trace:stdin:3: -5- id 11: shift ...<span class="nocode comment">
                                         ^^^
-                                        It expands into the shift macro
+                                        It expands into the shift macro</span>
             m4trace:stdin:3: -5- id 11: shift(`3') -> ???
-						m4trace:stdin:3: -5- id 11: shift(...)
+            m4trace:stdin:3: -5- id 11: shift(...)<span class="nocode comment">
                                         ^^^
                                         The shift macro drops the 1st parameter. There are no others so it expands
-                                        into the empty string.
-				 m4trace:stdin:3: -4- id 10: jump(`') -> ???
+                                        into the empty string.</span>
+         m4trace:stdin:3: -4- id 10: jump(`') -> ???<span class="nocode comment">
                                      ^^^
-                                     All jumps parameters expanded so now expand the jump macro itself<span style="background:darksalmon;">
-				 m4trace:stdin:3: -4- id 10: jump(...) -> `ifelse(1, 1, end, jump(shift(`')),'
+                                     All jumps parameters expanded so now expand the jump macro itself</span><span style="background:darksalmon;">
+         m4trace:stdin:3: -4- id 10: jump(...) -> `ifelse(1, 1, end, jump(shift(`')),'<span class="nocode comment">
                                      ^^^
                                      Jump no expands to the above
                                      !!! This is where one might expect the recusion to end !!! 
                                      !!! because now 1 == 1 so the ifelse should expand to 'end'. And !!! 
                                      !!! indeed it would, but before that can happen all its parameters !!! 
                                      !!! must be expanded and therefore the process will now recurse !!! 
-                                     !!! infinitely !!!</span>
+                                     !!! infinitely !!!</span></span>
       m4trace:stdin:3: -4- id 12: ifelse ...
             m4trace:stdin:3: -5- id 13: jump ...
                m4trace:stdin:3: -6- id 14: shift ...
@@ -565,11 +616,36 @@ m4trace:stdin:3: -1- id 3: ifelse ...
 
 jump(1,2,3,4)
 4,3,2,1</pre>
-      <p>Sweat :)</p>
+			<p>Sweat :)</p>
+</div>
+
+<h2>Diverting Output</h2>
+<div>
+	<p>
+		You can get M4 to divert output to the standard output, files, a null-like device or the standard error. This can 
+		be used to create multiple file outputs from one M4 script, or even just stop macros creating annoying whitespace in 
+		the output.
+	</p>
+	<p>
+		Use <code>divert(0)</code> or just <code>divert()</code> to divert output to the standard output.
+	</p>
+	<p>
+		Use <code>divert(1-9)</code> to divert output to one of 9 files.		
+	</p>
+	<p>
+		Use <code>divert(-1)</code> to divert output the a null-like device (actually M4 just discards the output its not really a device).
+	</p>
+</div>
+
+<h2>Including Files</h2>
+<div>
+	<p>
+		Use <code>include(filename)</code>. The include macro expands to the file contents which is then recursively re-evaluated null-like
+		an other macro expansion.
+	</p>
+</div>
 
 </div> <!-- END H1 padding div -->
 </div>
 </body>
 </html>
-
-

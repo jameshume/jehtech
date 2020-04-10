@@ -32,9 +32,9 @@
   I found the following series of articles on the <a href="https://blog.vigilcode.com/" target="_blank">Vigil Code blog</a> to be really useful:
 </p>
 <ol>
-  <li><a href="https://blog.vigilcode.com/2011/04/ubuntu-server-initial-security-quick-secure-setup-part-i/" target="_blank">Ubuntu Server Initial Security – Quick Secure Setup Part I</a></li>
-  <li><a href="https://blog.vigilcode.com/2011/05/ufw-with-fail2ban-quick-secure-setup-part-ii/" target="_blank">UFW with Fail2ban – Quick Secure Setup Part II</a></li>
-  <li><a href="https://blog.vigilcode.com/2011/06/using-apparmor-quick-secure-setup-part-iii/" target="_blank">Using AppArmor – Quick Secure Setup Part III</a>.</li>
+  <li><a href="https://blog.vigilcode.com/2011/04/ubuntu-server-initial-security-quick-secure-setup-part-i/" target="_blank">Ubuntu Server Initial Security - Quick Secure Setup Part I</a></li>
+  <li><a href="https://blog.vigilcode.com/2011/05/ufw-with-fail2ban-quick-secure-setup-part-ii/" target="_blank">UFW with Fail2ban - Quick Secure Setup Part II</a></li>
+  <li><a href="https://blog.vigilcode.com/2011/06/using-apparmor-quick-secure-setup-part-iii/" target="_blank">Using AppArmor - Quick Secure Setup Part III</a>.</li>
 </ol>
 
 <a id="SELinux"></a>
@@ -529,7 +529,7 @@ ports=12345/tcp|4321|99,105:110/udp</pre>
     <li><a href="https://www.fail2ban.org/wiki/index.php/Commands" target="_blank">Fail2Ban Command Cheat Sheet</a>, Fail2Ban Wiki.</li>
     <li><a href="https://www.digitalocean.com/community/tutorials/how-to-protect-ssh-with-fail2ban-on-ubuntu-14-04" target="_blank">How To Protect SSH with Fail2Ban on Ubuntu 14.04 </a>, DigitalOcean.</li>
     <li><a href="https://www.the-art-of-web.com/system/fail2ban-log/" target="_blank">System: Monitoring the fail2ban log</a>, The Art Of Web.</li>
-    <li><a href="https://blog.vigilcode.com/2011/05/ufw-with-fail2ban-quick-secure-setup-part-ii/" target="_blank">UFW with Fail2ban – Quick Secure Setup Part II</a>, Vigil Code blog.</li>
+    <li><a href="https://blog.vigilcode.com/2011/05/ufw-with-fail2ban-quick-secure-setup-part-ii/" target="_blank">UFW with Fail2ban - Quick Secure Setup Part II</a>, Vigil Code blog.</li>
     <li><a href="http://johnny.chadda.se/using-fail2ban-with-nginx-and-ufw/" target="_blank">Using Fail2ban with Nginx and UFW</a>, Johnny Chadda in Technology, August 4, 2014</li>
   </ul>
 
@@ -872,8 +872,8 @@ fail2ban-regex systemd-journal /etc/fail2ban/filter.d/sshd.conf</pre>
     <p>
        Specifies that the given port on the local (client) host is to be forwarded to the given host and port on the remote side.  This works by allocating a socket to listen to port on the local side, optionally bound to the specified bind_address. Whenever a connection is made to this port, the connection is forwarded over the secure channel, and a connection is made to host port hostport from the remote machine.  Port forwardings can
        also be specified in the configuration file.  IPv6 addresses can be specified by enclosing the address in square brackets.  Only the superuser can forward privileged ports.  By default, the local port is bound in
-       accordance with the GatewayPorts setting.  However, an explicit bind_address may be used to bind the connection to a specific address.  The bind_address of “localhost” indicates that the listening port be bound for
-       local use only, while an empty address or ‘*’ indicates that the port should be available from all interfaces.
+       accordance with the GatewayPorts setting.  However, an explicit bind_address may be used to bind the connection to a specific address.  The bind_address of -localhost- indicates that the listening port be bound for
+       local use only, while an empty address or -*- indicates that the port should be available from all interfaces.
      </p>
      <p>
         <code><b>-N</b> Do not execute a remote command.  This is useful for just forwarding ports (protocol version 2 only).</code>

@@ -6,6 +6,13 @@ control!
 
 ---
 
+You will need M4. It is installed by default on Linux. On Windows: http://gnuwin32.sourceforge.net/packages/m4.htm
+
+---
+
+
+---
+
 You will need NodeJS. On Ubuntu:
 
 ```

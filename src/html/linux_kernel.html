@@ -359,7 +359,7 @@ https://developer.android.com/ndk/guides/standalone_toolchain.html
 </p>
 <pre>/sys/bus/XXX
 |-- devices
-`-- drivers
+\-- drivers
 </pre>
 <p>
   We're interested in the <code>drivers</code> subdirectory. Let's take a look at a sample directory
@@ -397,7 +397,7 @@ As well as sysfs entries.
 
 getevent and sendevent command:
     system/core/toolbox/(get|send)event.c.
-For example `getevent -l` lists the devices and their human readable names and associated "eventX"
+For example 'getevent -l' lists the devices and their human readable names and associated "eventX"
 
 Both tools seem to use the /dev/input/eventXX to read and write events. To write events you need
 to have root access to make /dev/input/eventXX writeable!
@@ -2017,9 +2017,9 @@ vmlinux is the ELF file that corresponds to the linux kernel as it will be loade
 
 INSTALL_PATH and INSTALL_MOD_PATH are useful and used in installation makefile targets.
 
-Modules are generated througout the build tree so theser have to be grouped to a known location on your ram disk - so use `make modules_install`. Once here must use `depmod -a` to create the files needed for Linux device module to work correctly.
+Modules are generated througout the build tree so theser have to be grouped to a known location on your ram disk - so use 'make modules_install'. Once here must use 'depmod -a' to create the files needed for Linux device module to work correctly.
 
-When compiling out-of-source render the src tree read-only - it is good practice so that you don't screw up your source tree and need to start using make commands such as `distclean` etc. (chmod a=rX)
+When compiling out-of-source render the src tree read-only - it is good practice so that you don't screw up your source tree and need to start using make commands such as 'distclean' etc. (chmod a=rX)
 
 = Linux Modules
 init_module and cleanup_module should have a module specific name. Good practice to print loading and unloading message for module load and unload event. But use short messages because prink() disables interrupts whilst using busy-waiting to poll for characters - eek! Don't use printk() elsewhere for this reason - there are new and better debug options!

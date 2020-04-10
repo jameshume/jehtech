@@ -116,7 +116,7 @@ RUN - to run a command
 	CMD - default command to  instance run.
 		note RUN - build of image
 		CMD - run when instance of image starts up]
-      By default this is run as an argument to `/bin/sh -c`.
+      By default this is run as an argument to '/bin/sh -c'.
       The CMD instruction is being passed in as an argument to and ENTRYPOINT script (see later)
 
 FROM python:2.7-alpine
@@ -182,7 +182,7 @@ Avoid the Kill-build-reload cycle every time you change your code. I.e. you chan
 docker instance, rebuild the image, and re-run it... sigh!
 
 Mount source code from main operating system straight into the running container. To do this use the
-`-v` option.
+'-v' option.
 
    docker container run ... -v abs-path-on-host:path-to-mount-in-target
 
