@@ -1,0 +1,68 @@
+dnl USEM4
+dnl ---- START M4 MACROS ----
+define(`REF_LCLANG_101', `https://shaharmike.com/cpp/libclang/')dnl
+define(`REF_LCLANG_VISIT', `https://clang.llvm.org/doxygen/group__CINDEX__CURSOR__TRAVERSAL.html')dnl
+define(`REF', `<a href="$1" target="_blank">$2</a>')dnl
+dnl ---- END M4 MACROS ----
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>LibClang | JEHTech</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">LibClang</h1>
+<div style="padding-right:10px;">
+
+<h2>Page Contents</h2>
+<div id="page_contents">
+</div>
+
+<h2>References</h2>
+<div>
+    <ul>
+        <li>REF(`REF_LCLANG_101', `Using libclang to Parse C++ (aka libclang 101)'), Shahar Mike.</li>
+        <li>REF(`REF_LCLANG_VISIT', `Traversing the AST with cursors'), Clang Docs.</li>
+    </ul>
+</div>
+
+<h2>Getting LibClang &amp; Linking Against It</h2>
+<div>
+	<p>
+		To install LibClang on Ubuntu is super easy:
+	</p>
+	<pre class="prettyprint linenums">sudo apt install libclang-9-dev</pre>
+	<p>
+		To link against it is just as easy:
+	</p>
+	<pre class="prettyprint linenums">CLANG_INC_DIR=/usr/lib/llvm-9/include
+CLANG_LIB_DIR=/usr/lib/llvm-9/lib
+LDLIBS=-lclang -lstdc++
+LOADLIBES=-L$(CLANG_LIB_DIR)
+CXXFLAGS+=-I$(CLANG_INC_DIR)</pre>
+	<p>
+	</p>
+</div> <!-- End H2 -->
+
+
+</div> <!-- END H1 padding div -->
+</div>
+</body>
+</html>
+
+

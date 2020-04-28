@@ -263,8 +263,6 @@ def deploy_site(specificFile, generateImages):
 
         # Read in the current HTML files contents
         htmlFileName = os.path.join(dirname, filename)
-        #print("Deploying", dirname, filename, htmlFileName)
-
 
         if fnmatch.fnmatch(filename, '*.html'):
             ## dirty hackery
@@ -277,8 +275,7 @@ def deploy_site(specificFile, generateImages):
             google_sitemap_ref = "http://www.jeh-tech.com/{}".format(pathlib.PurePosixPath(*dirs))
             sitemap_list.append(google_sitemap_ref)
 
-
-        # Do we need toass the file through M4?
+        # Do we need to pass the file through M4?
         req_m4 = False
         if fnmatch.fnmatch(filename, '*.html') and filename != "m4.html":
             with codecs.open(htmlFileName, 'r', 'utf-8') as htmlFile:

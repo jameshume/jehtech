@@ -191,6 +191,27 @@ table th	{ font-weight:bold;
 table caption   { background-color: #CAD7E3;
 		}
 
+.jehtable {
+	border: 0px;
+}
+
+.jehtable thead {
+	font-weight:bold;
+	background-color: #7999B9;
+}
+
+.jehtable thead tr td {
+	border-radius: 5px;
+}
+
+.jehtable tbody tr:nth-child(even){
+ 	background-color: #E0E7EE;
+}
+
+.jehtable td {
+	padding: 5px 8px 5px 8px;
+}
+
 #content {
 	margin: 0px;
 	width: 100%;

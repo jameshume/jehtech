@@ -6,6 +6,7 @@ define(`REF_ADDR2LINE', `https://github.com/CyberGrandChallenge/binutils/blob/ma
 define(`REF_BDFWP', `https://en.wikipedia.org/wiki/Binary_File_Descriptor_library')dnl
 define(`REF_LIBBDF', `https://ftp.gnu.org/old-gnu/Manuals/bfd-2.9.1/html_chapter/bfd_toc.html')dnl
 define(`REF_MELINTE_BOOK', `https://docplayer.net/77962684-Linux-applications-debugging-techniques.html')dnl
+define(`REF_JEHTECH_GITHUB', `https://github.com/jameshume/progtrace')
 define(`REF', `<a href="$1" target="_blank">$2</a>')dnl
 dnl ---- END M4 MACROS ----
 <!DOCTYPE HTML>
@@ -45,7 +46,9 @@ dnl ---- END M4 MACROS ----
         <li>REF(`REF_ADDR2LINE', `The addr2line source code'), GitHub.</li>
         <li>REF(`REF_BDFWP', `Binary File Descriptor Library'), WikiPedia.</li>
         <li>REF(`REF_LIBBDF', `LIB BFD, the Binary File Descriptor Library').</li>
-        <li>REF(`REF_MELINTE_BOOK', `Linux ApplicationsDebuggingTechniques'), Aurelian Melinte, see page 20, chapter &quot;The Interposition LIbrary&quot;.</li>
+        <li>REF(`REF_MELINTE_BOOK', `Linux ApplicationsDebuggingTechniques'), Aurelian Melinte, see page 20, chapter &quot;The Interposition LIbrary&
+        quot;.</li>
+        <li>REF(`REF_JEHTECH_GITHUB', `Trace and profile function calls fast'), JehTech code.</li>
     </ul>
 </div>
 
@@ -185,6 +188,36 @@ done < "${TRACELOG}"</pre>
         Remembering to compile with options <code>-O0 -g -finstrument-functions</code> and it all
         worked like a charm. Thank you Balua and Melinte!
     </p>
+    <p>
+        WARNING: This will produce a tonne of debug into. The file <code>trace.out</code> will
+        potentially be many many GIGABYTES of information.
+    </p>
+    <p>
+        NOTE: For anything but really small examples the shell script will be REALLY SLOW.
+    </p>
+</div>
+
+<h2>Parse Function Traces Efficiently</h2>
+<div>
+    <p>
+        As noted Balua's excellent example will run slowly. I liked his idea of just dumping
+        addresses to a trace file as it doesn't require the program-to-be-traced to link against
+        anything new really... the code just slots in. I also like Melinte's use of the thread ID,
+        but didn't want to have all that extra code in by GCC trace functions and also didn't
+        manage to find all his functions.
+    </p>
+    <p>
+        So... I decided to to modify Balua's example in two ways. Firstly, get it to output a
+        binary trace format, to try, in vain it seems, to reduce the <code>trace.out</code>
+        file size. Secondly, to remove the bash script which has to spawn a new <code>addre2line</code>
+        process for each line, to something that looks up the whole trace in one processes, like
+        <code>addr2line</code>, but for the trace output file.
+    </p>
+    <p>
+        The result was a fairly length investigation into how <code>addr2line</code> works, the
+        BFD library and the result is the REF(`REF_JEHTECH_GITHUB', `this GitHub repo'). Enjoy :)
+    </p>
+
 </div>
 
 </div> <!-- END H1 padding div -->

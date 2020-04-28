@@ -1,3 +1,19 @@
+dnl USEM4
+dnl ---- START M4 MACROS ----
+define(`OHM', `&#x2126;')
+define(`REF', `<a href="$1" target="_blank">$2</a>')dnl
+define(`REF_KHAN_CAP_PULSE', `https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/ee-natural-and-forced-response/a/ee-capacitor-equation-in-action')
+define(`REF_KHAN_CAP_EQUATIONS', `https://www.youtube.com/watch?v=gd7caHXKtp8')
+define(`REF_SO_CAP_EQUATIONS', `https://electronics.stackexchange.com/a/264282/26358')
+define(`REF_SO_I_SRC', `https://electronics.stackexchange.com/q/28546/26358')
+define(`REF_BATT_INT_RES', `http://www.learningaboutelectronics.com/Articles/Battery-internal-resistance')
+define(`REF_UTUBE_CIRC_ANAL', `https://youtu.be/sqxzQkAdJm0')
+define(`REF_NPN_CURVES', `http://www.physics.csbsju.edu/trace/NPN.CC.html')
+define(`REF_UDEMY_ROBOTS', `https://www.udemy.com/course/analog-electronics-robotics-learn-by-building/')
+define(`REF_NPN_INTRO', `https://www.theengineeringprojects.com/2018/05/introduction-to-npn-transistor.html')
+define(`REF_TRANS_CONFIGS', `https://www.electronics-notes.com/articles/analogue_circuits/transistor/transistor-circuit-configurations.php')
+define(`REF_2N2222', `https://www.electroschematics.com/wp-content/uploads/2009/04/2n2222-datasheet.pdf')
+dnl ---- END M4 MACROS ----
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -263,7 +279,6 @@
 			jCanvas.render();
 		});
 	</script>
-
 </head>
 
 <body>
@@ -275,7 +290,6 @@
 		<h1 class="title">Links...</h1>
 		<div id="includedContent"></div>
 	</div>
-	  
 
 	<div id="content">
 		<h1 class="title">Electronics Notes...</h1>
@@ -287,8 +301,14 @@
 		<div>
 			<h3>References</h3>
 			<ul>
-				<li><a href="https://cleantechnica.com/2015/02/02/power-vs-energy-explanation/" target="_blank">The Great Power vs. Energy Confusion</a>, Rob Lewis.</li>
-				<li><a href="https://youtu.be/elJUghWSVh4" target="_blank">Electric potential energy</a>, Khan Academy.</li>					 
+				<li>
+					<a href="https://cleantechnica.com/2015/02/02/power-vs-energy-explanation/" target="_blank">The Great Power vs. Energy Confusion</a>, Rob Lewis.
+				</li>
+				<li>
+					<a href="https://youtu.be/elJUghWSVh4" target="_blank">Electric potential energy</a>, Khan Academy.</li>
+				<li>
+					REF(`REF_UTUBE_CIRC_ANAL',`Essential &amp; Practical Circuit Analysis: Part 1- DC Circuits'), Solid State Workship, YouTube.
+				</li> 
 			</ul>
 
 			<h3>Conventional Current And Charge</h3>
@@ -362,6 +382,20 @@
 
 				We can see that electrical power (measured in <b>Watts</b>) is the rate of consumption/generation of electrical energy.
 			</p>
+			<p>
+				Note that electric potential energy is measured with respect to a reference point. In the
+				image below one can see that the voltage either side of the resistor is measured w.r.t ground.
+				Ground is the normal reference point, but any point in a circuit can be used as long as it is
+				used consistently.
+			</p>
+			<p>
+				<img src="##IMG_DIR##/voltage_needs_a_reference.svg" alt="Measuring potential requires a reference voltage, usually ground"/>
+			</p>
+			<p>
+				Note then, that potential <em>difference</em>, is the difference between to points, each of which has
+				a potential <em>energy</em> w.r.t to a reference. The potential <em>difference</em> is the difference between these
+				two points, but <em>only make sense if the potential of each point is measured w.r.t to the same reference</em>.
+			</p>
 
 			<h3 style="clear: both;">Ohm's Law</h3>
 			<div>
@@ -378,10 +412,12 @@
 				<b>Branch</b>: A branch represents a single element such as a resistor. I.e., any two terminal element.
 			</p>
 			<p>
-				<b>Node</b>: A node is the point of connection between 2 or more branches.
+				<b>Node</b>: A node is the point of connection between 2 or more branches. Every point going into the
+				node, at the node, is at the same potential.
 			</p>
 			<p>
-				<b>Loop</b>: A loops is any closed path in a circuit.
+				<b>Loop</b>: A loops is any closed path in a circuit. Starts and ends at the same node
+				and does not pass through a node more than once.
 			</p>
 			<p>
 				<img src="##IMG_DIR##/loops_nodes_branches.png" alt="Branches, loops and nodes in a ciruite"/>
@@ -391,14 +427,28 @@
 			<p>
 				Two important laws: <em>Kirchoff's voltage law</em> and <em>Kirchoff's current law</em>.
 			</p>
+			<h5>KCL</h5>
 			<p>
 				Kirchoff's current law says that the <b>sum of currents flowing into a node must equal the sum of currents leaving</b> a node.
-				This is often expressed in another way: the sum of currents entering a node must always be zero. This works because we
-				label, by convention, all currents entering the node as positive and all currents leaving the node as negative.
+				This is often expressed in another way: the sum of currents entering and leaving a node must always be zero. This works because we label, by convention, all currents entering the node as positive and all currents leaving the node as negative.
 			</p>
 			<p>
 				<img src="##IMG_DIR##/kcl_kvl.png" alt="KCL"/>
 			</p>
+			<p>
+				This can be written most compactly as:
+
+				$$
+					\sum_{j=0}^{n} I_j = 0
+				$$
+			</p>
+			<p>
+				Lets look at the following example REF(`REF_UTUBE_CIRC_ANAL',`[Ref]'):
+			</p>
+			<p>
+
+			</p>
+			<h5>KVL</h5>
 			<p>
 				Kirchoff's voltage law says that the <b>sum of voltages around a closed circuit must be zero</b>.
 			</p>
@@ -406,12 +456,18 @@
 				<img src="##IMG_DIR##/kvl.png" alt="KVL"/>
 			</p>
 			<p>
+				This can be written most compactly as:
+
+				$$
+					\sum_{j=0}^{n} V_j = 0
+				$$
+			</p>
+			<p>
 					Say, for example, that $V_1$ is 12V, R2 is $4 \Omega$, R3 is $6 \Omega$, $V_2$ is 3V and R5 is $1 \Omega$.
 					Then we know $-12 + 4i + 6i - 4 + i = 0$. We can then work out the current in the circuit using KVL
 					by re-arranging the formula.
 			</p>
 		</div>
-		
 
 		<h2>Resistance</h2>
 		<div>
@@ -476,24 +532,34 @@
 					Using <em>Kirchoff's current law</em> we can say that $i_t = i_1 + i_2 + i_3$. Using $V = iR$,
 					we can say the following:
 
-					$$\begin{array}{ccc}
+					$$
+					\begin{array}{ccc}
 						V = i_1R_1 & V = i_2R_2 & V = i_3R_3 \\
 						\therefore i_1 = \frac{V}{R_1} & \therefore i_2 = \frac{V}{R_2} & \therefore i_3 = \frac{V}{R_3}
-					\end{array}$$
+					\end{array}
+					$$
 
 					Subsituting the above back into $i_t = i_1 + i_2 + i_3$, gives us the following.
 
-					$$ i_t = \frac{V}{R_1} + \frac{V}{R_2} + \frac{V}{R_3}$$
+					$$
+					i_t = \frac{V}{R_1} + \frac{V}{R_2} + \frac{V}{R_3}
+					$$
 
 					And, of course, $i_t$ can also be re-written, giving the solution:
 
-					$$\frac{V}{R_t} = \frac{V}{R_1} + \frac{V}{R_2} + \frac{V}{R_3}$$
-					$$\mathbf{\therefore \frac{1}{R_t} = \frac{1}{R_1} + \frac{1}{R_2} + \frac{1}{R_3}}$$
+					$$
+					\frac{V}{R_t} = \frac{V}{R_1} + \frac{V}{R_2} + \frac{V}{R_3}
+					$$
+					$$
+					\mathbf{\therefore \frac{1}{R_t} = \frac{1}{R_1} + \frac{1}{R_2} + \frac{1}{R_3}}
+					$$
+				</p>
 			</div>
 
 			<h3 style="clear:both;">Voltage Divider</h3>
 			<div>
-				<img src="##IMG_DIR##/voltage_divider.png" width="200" style="float:left">
+				<a name="voltage_divider"/>
+				<img src="##IMG_DIR##/voltage_divider.png" width="200" style="float:left"/>
 				<p>
 					Using Ohm's law we know the following.
 					$$V_1 = iR_1 \implies i = \frac{V_1}{R_1}$$
@@ -637,6 +703,105 @@
 					put across/through them without breaking the resistor.
 				</p>
 			</div>
+		</div> <!-- End H2 -->
+
+		<h2>Voltage Sources &amp; Current Sources, Ideal v.s. Real World</h2>
+		<div>
+			<h3>Voltage Sources</h3>
+			<div>
+				<p>
+					An <em>ideal</em> voltage source is one that supplies constant potential, no matter
+					what load is connected to it. I.e., it produces whatever current is necessary to
+					maintain the voltage across it REF(REF_SO_I_SRC, `[Ref]'):
+				</p>
+				<p>
+					<img src="##IMG_DIR##/ideal_voltage_source.svg" alt="Image explaining an ideal voltage source"/>
+				</p>
+				<p>
+					But, <a href="electronics-batteries.html">batteries</a>, even power supplies etc etc
+					are <em>not</em> ideal. In the real world
+					they have a small internal resistance, anywhere between approx 0.1 OHM() to 2 OHM() depending on the battery
+					REF(`REF_BATT_INT_RES', `[Ref]'), which means they are modelled more like this:
+				</p>
+				<p>
+					<img src="##IMG_DIR##/nonideal_voltage_source.svg" alt="Image explaining a non-ideal, real world, voltage source"/>
+				</p>
+				<p>
+					It can be seen that because the internal resistance of the battery, is in series with the circuit it is powering,
+					i.e., the load (simulated by the resistor), the combination acts like a <a href="#voltage_divider">voltage divider</a>,
+					and so the voltage across the load varies with its resistance. I.e.,the battery is not ideal (but its pretty close!)
+				</p>
+				<p>
+					This is why it is always best to measure the voltage across a power supply when it is under load.
+				</p>
+				<p>
+					We can now also understand that an ideal voltage source is one that has zero internal resistance.
+				</p>
+
+			</div>
+
+			<h3>Current Sources</h3>
+			<div>
+				<p>
+					An <em>ideal</em> current source is one that always produces the same current, no matter how
+					the voltage across it or the resistance of the load it is &quot;feeding&quot; varies, REF(REF_SO_I_SRC, `[Ref]').
+				</p>
+				<p>
+					This is why, incidently, in a circuit you cannot have two current sources in series!
+				</p>
+			</div>
+
+			<h3>Source Transformations</h3>
+			<div>
+				<p>
+					It is possible to switch out a voltage source in a circuit for a current source and vice-versa
+					using source transformation using Thevenin and Norton equivalent ciruits REF(`REF_UTUBE_CIRC_ANAL',`[Ref]').
+				</p>
+			</div>
+
+			<h3>Superposition</h3>
+			<div>
+				<p>
+					Circuits can have multiple sources. In this case, to determine voltage levels at nodes, the
+					principle of superposition can be used:
+				</p>
+				<ol>
+					<li>Set all sources to zero except one,</li>
+					<li>Solve the necessary currents and voltages using only that source,</li>
+					<li>Repeat the above step for each source</li>
+					<li>Add the circuit values together - &quot;superimpose&quot; them onto one another.</li>
+				</ol>
+				<p>
+					Take the following example REF(`REF_UTUBE_CIRC_ANAL',`[Ref]'):
+				</p>
+				<p>
+					<img src="##IMG_DIR##/superposition.svg" alt="Circuit analysis using superposition theorem"/>
+				</p>
+				<p>
+					In the above diagram we get:
+					$$
+						\begin{align}
+						I_1 &= I_1' + I_1'' \\
+						I_2 = I_2' + I_2''
+						\end{align}
+					$$
+				</p>
+			</div>
+
+			<h3>References</h3>
+			<div>
+				<ul>
+					<li>
+						REF(REF_SO_I_SRC, `What Exactly Is A Current Source?'), StackOverflow.com.
+					</li>
+					<li>
+						REF(REF_BATT_INT_RES, `Battery Internal Resistance'), LearningAboutElectronics.com.
+					</li>
+					<li>
+						REF(`REF_UTUBE_CIRC_ANAL',`Essential &amp; Practical Circuit Analysis: Part 1- DC Circuits'), Solid State Workship, YouTube.
+					</li> 
+				</ul>
+			</div>
 		</div>
 
 		<h2 style="clear:both;">Switches</h2>
@@ -675,7 +840,7 @@
 					q = Cv \implies C = \frac{q}{v}
 				$$
 				Where $C$ is called the <b>capacitance</b> of the capacitor and is measured in Farads (F).
-				By re-arranging the above we can see that <B>capacitance is the charge per volt that
+				By re-arranging the above we can see that <b>capacitance is the charge per volt that
 				the capacitor can store</b>. Thus, the more charge that the capacitor stores per volt, the
 				higher its capacitance is. This quanitity is dependent on the type of dialectric used,
 				the surface area of each plate and the distance between the plates.
@@ -696,14 +861,8 @@
 				Note that real capacitors dissipate their energy over time - they &quot;leak&quot;
 			</p>
 			<p>
-				Integrate both sides of the above equation to get:
-
-				$$
-					v = \frac{1}{C} \int_{t_o}^t i\ \mathrm{d}t + v(t_0)
-				$$
-
 				<b>Capacitors resist abrupt changes in voltage</b>, which is why the function
-				as low pass filters.
+				as <b>low pass filters</b>.
 			</p>
 			
 			<h3>Charging Through A Resistor</h3>
@@ -715,7 +874,10 @@
 				from the battery and the <em>capacitor stores the current's flowing charge</em> <a href="http://www.columbia.edu/~nas2173/Lab8_CapacitanceAndTheOscilloscopeNS.pdf" target="_blank">[Ref]</a>.
 
 				$$
-				\tau \ \text{(in seconds)} = RC
+					\tau \ \text{(in seconds)} = RC \\
+					\\
+					63\% \text{ charge in } 1\cdot RC \text{ seconds} \\
+					99\% \text{ charge in } 5\cdot RC \text{ seconds}
 				$$
 			</p>
 			<p>
@@ -723,20 +885,65 @@
 			</p>
 			<p>
 				Recall KVL: the sum of voltages around a closed circuit must be zero. The dotted arrow
-				in the diagram above shows a direction around a closed ciruit, which by KVL means that:
+				in the diagram above shows a direction around a closed ciruit, which by KVL means that REF(`REF_SO_CAP_EQUATIONS', `[Ref]'):
 
 				$$
-				+V - IR - \frac{Q}{C} = 0 \implies V = IR + \frac{Q}{C}
+				\begin{array}{l l}
+				+V_s(t) - V_r(t) - V_c(t) = 0&\ \text{from KVL law,} \\
+				\therefore\  V_s(t) = V_r(t) + V_c(t)&\ \text{by rearrangement,} \\
+				\therefore\  V_s(t) = R \cdot I(t) + V_c(t)&\ \text{by substiting from}\ V_r(t) = R \cdot I(t), \\
+				\therefore \ V_s(t) - V_c(t) = R \cdot I(t)&\ \bf{\color{blue}{(1)}} &
+				\end{array}
 				$$
 
-				Recall that $I = \frac{dQ}{dt}$, so therefore,
-				
+				I.e., the current at time $t$ is proportional to the difference
+				in voltages across the supply and the capacitor, the constant of proportionality being the
+				resistance.
+			</p>
+			<p>
+				Now a quick aside to derive something we're going to need:
+			</p>
+			<p style="margin-left:200px;">
+				Recall:
 				$$
-				V = \frac{\mathrm{d}Q}{\mathrm{d}t}R + \frac{Q}{C} \\ 
-				\therefore \  \frac{\mathrm{d}Q}{\mathrm{d}t} = \frac{V}{R} - \frac{Q}{RC}
+				I = \frac{\mathrm{d}Q(t)} {\mathrm{d}t}\ \text{ and }\ Q_c(t) = CV_c(t)
 				$$
 
-				... TODO ...
+				If we differentiate $Q_c(t) = CV_c(t)$ w.r.t time, we get:
+
+				$$
+					\frac{\mathrm{d}Q_c(t)}{\mathrm{d}t} = C\frac{\mathrm{d}V_c(t)}{\mathrm{d}t}
+				$$
+
+				And we know that $I = \frac{\mathrm{d}Q(t)}{\mathrm{d}t}$, so we can write:
+
+				$$
+					I(t) = C\frac{\mathrm{d}V_c(t)}{\mathrm{d}t} \ \bf{\color{blue}{(2)}}
+				$$
+
+				I.e., the current at time $t$ is also proportional to change in voltage across the capacitor,
+				the constant of proportionality being the capacitance.
+			</p>
+
+			<p>
+				Now we can continue by substituting $\bf{\color{blue}{(2)}}$ into $\bf{\color{blue}{(1)}}$ to get:
+
+				$$
+				V_s(t) - V_c(t) = R \cdot C\frac{\mathrm{d}V_c(t)}{\mathrm{d}t}
+				$$
+
+				TODO - FILL REST IN
+			</p>
+			<p>
+				We end up with:
+
+				$$
+				V_c(t) = V_s(1 - e^{\frac{-t}{RC}})
+				$$
+
+				We can see that as the value of RC increases, the exponential value will decrease,
+				which means that <b>the time it takes to charge the capacitor increases with either
+				, or both of, $R$ and $C$</b>.
 			</p>
 
 			<h3>Capacitors In Series</h3>
@@ -751,6 +958,23 @@
 					C_{eq} = C_1 + C_2 + \cdots + C_n
 				$$
 			</p>
+
+
+
+
+			<h3>References</h3>
+			<ul>
+				<li>
+					REF(`REF_KHAN_CAP_PULSE', `Capacitor i-v equation in action'), Willy McAllister, Khan Achademy,
+				</li>
+				<li>
+					REF(`REF_KHAN_CAP_EQUATIONS', `Derivation of Charging and Discharging Equations for RC Circuit'), Khan Achademy,
+				</li>
+				<li>
+					REF(`REF_SO_CAP_EQUATIONS', `Deriving the formula from scratch for charging a capacitor'), Adam Haun's answer on StackOverflow.com,
+				</li>
+			</ul>
+
 		</div>
 
 		<h2>Inductors</h2>
@@ -834,7 +1058,8 @@
 			</p>
 			<p>
 				The total resistance R<sub>A</sub> + R<sub>B</sub> will determine the time it takes
-				for the transistor to charge, assuming we keep capacitance constant.
+				for the transistor to charge, assuming we keep capacitance constant. However, when the capacitor
+				discharges, it only discharges through R<sub>B</sub>.
 			</p>
 			<p>
 				Recall charge time for a cap to charge to 63% of the voltage across is is
@@ -842,15 +1067,66 @@
 				pulse train output on pin 3 can be varied.
 			</p>
 			<p>
-				<img src="##IMG_DIR##/chargin_555_cap.png"/>
+				The diagrams above and below imagine that there is a switch inside the 555, which there is,
+				its just not a mechanical switch like these diagrams suggest (see later below for more details).
+				As the capacitor charges the voltage across it increases. When it hits 2/3 of the reference voltage,
+				the switch in side the 555 closes such that pin 7 is shorted to ground. The capacitor then immediately
+				starts to discharg through R<sub>B</sub> and when the voltage across the capacitor is less than
+				1/3 the reference voltage the switch opens again, starting the charge cycle and so on.
 			</p>
 			<p>
+				As the switch also controls the connection between the reference voltage and the output, this
+				produces a pulse train who's frequency is determined by the two resistors and the capacitor, and 
+				with a duty cycle that is determined by the two resistors.
+			</p>
+			<p style="float: left;">
+				<img src="##IMG_DIR##/chargin_555_cap.png"/>
+			</p>
+			<p style="float: left;">
 				<img src="##IMG_DIR##/555_timer_discharge.png"/>
 			</p>
+			<p style="clear: both;">
+				The following is a silly little animation of the capacitor discharging through
+				R2. Imagine that the 3 red dots represent the flow of electrons from the negatively
+				charged plate to the positive plate of the capacitor as it discharges. I think normally it would
+				be shown using conventional current flow, but this animation uses actual electron flow. meh.
+			</p>
+			<video autoplay loop>
+				<source src="##IMG_DIR##/555_cap_discharge_anim2.mp4" type="video/mp4">
+			</video><br/>
+			<p>
+				Wikimedia has a really nice illustration of the components in the 555, which I've copied below and inserted the components outside the
+				chip that we used above to create an astable vibrator. Here, we can see that the switch shown above is really
+				an RS flip flop combined with a transitor.
+			</p>
+			<p>
+				<img src="##IMG_DIR##/555_timer_copy_of_wikimedia_plus_surrounding_circuit.png" alt="Picture of 555 astable vibrator with internals representation of 555 shown"/>
+			</p>
+			<p>
+				Each of the components, like the RS flip flop, comparitors and other gates can be further broken down into their transitor/resitor combinations, so 
+				the above is just another, slightly more detailed abstraction. The real circuit is far, far more complex when broken down into its &quot;atomic&quot;
+				building blocks!
+			</p>
+
+			<h3>555 References</h3>
+			<ul>
+				<li>
+					<a href="https://howtomechatronics.com/how-it-works/electronics/555-timer-ic-working-principle-block-diagram-circuit-schematics/" target="_blank">555 Timer IC - Working Principle, Block Diagram, Circuit Schematics</a>, Dejan, Mechatronics How To.
+				</li>
+				<li>
+					<a href="https://commons.wikimedia.org/wiki/File:NE555_Bloc_Diagram.svg" title="via Wikimedia Commons" target="_blank">NE555 Block Diagram, BlanchardJ</a> / Public domain.
+				</li>
+				<li>
+					<a href="https://www.electronics-tutorials.ws/sequential/seq_1.html" target="_blank">Sequential Logic Circuits</a>, Electronic Tutorials, SR Flip Flop.
+				</li>
+				<li>
+					<a href="https://en.wikipedia.org/wiki/NAND_gate" target="_blank">NAND gate</a>, WikiPedia.
+				</li>
+			</ul>
 		</div>
 
 
-		<h2 style="clear:both;">Bipolar Transistors</h2>
+		<h2 style="clear:both;">Bipolar Junction Transistors (BJT)</h2>
 		<div>
 			<p>
 				NPN transistors consist of two N-type (negatively doped - excess electroncs) silicon &quot;chunks&quot;
@@ -859,25 +1135,90 @@
 			</p>
 			<p>
 				<img src="##IMG_DIR##/npn_transistor.png"/>
+				REF(`REF_UDEMY_ROBOTS', `[Ref]')
 			</p>
 			<p>
 				By forward biasing the emitter to base junction with even a small current, the
 				transistor's resistance between the emitter and collector quickly decreses, allowing
-				a relatively large current to from from the emitter to collector.
+				a relatively large current to from from the emitter to collector. I.e., <b>base current
+				controls current at emitter and collector</b>.
 			</p>
 			<p>
-				NPN transistors can typically handle up to about 0.8 A. Thus, they are <b>low current</b>
+				The above configuration is called the <b>common emitter</b> configuration and is
+				probably the most widely used REF(`REF_TRANS_CONFIGS', `[Ref]').
+			</p>
+			<p>
+				NPN transistors can <b>typically handle up to about 0.8 A</b>. Thus, they are <b>low current</b>
 				devices. For large currents MOSFETs are used (later section).
 			</p>
 			<p><b>Saturation region</b> is where the maximum collector current flows and the transistor
-			is basically a closed switch from collector to emitter.</p>
+			is basically a closed switch from collector to emitter.
 			</p>
-			<p><b>Active mode / region</b> is where there is an almost lear relationship between the
-				terminal currents at the base, collector and emitter.
+			<p><b>Active mode / region</b> is where there is an almost linear relationship between the
+				terminal currents at the base, collector and emitter. The transistor has some resistance,
+				that is determined by the emitter/base current.
 			</p>
 			<p><b>Cut-off region</b> is where the transistor acts like an open switch.
 			</p>
+			<p>
+				A common NPN transistor is the 2N2222. Looking at the data sheet REF(`REF_2N2222', `[Ref]')
+				we can find the following properties:
+			</p>
+			<table class="jehtable">
+				<thead>
+					<tr><td>Parameter</td><td>Max</td></tr>
+				</thead>
+				<tbody>
+					<tr><td>Collector-base voltage V<sub>CBO</sub></td><td>60 V</td></tr>
+					<tr><td>Collector-emitter voltage V<sub>CEO</sub></td><td>30 V</td></tr>
+					<tr><td>Emitter-base voltage V<sub>EBO</sub></td><td>5 V</td></tr>
+					<tr><td>Peak collector current</td><td>800 mA</td></tr>
+					<tr><td>Peak base current</td><td>200mA</td></tr>
+					<tr><td>Total power disipation</td><td>500 mW</td></tr>
+				</tbody>
+			</table>
+			<p>
+				We can see that this device can handle a maximum of 0.8A though its emitter-collector and
+				only 0.2A at the base. It is however, able to tolerate relatively high voltages, just not
+				high currents, which as we said above, you'd need MOSFETs, or even relays for.
+			</p>
+			<p>
+				Lets represent the above common emitter example as a circuit diagram:
+			</p>
+			<p>
+				<img src="##IMG_DIR##/npn_common_emitter.png" alt="Basic NPN common-emitter curcuit diagram"/>
+			</p>
+			<blockquote>
+				<ul>
+					<li>The <b>base is responsible for initiating transistor action</b>. When a voltage is applied at the base, it gets biased and draws <b>small current which is then used to control large</b> current at the collector and emitter side.</li>
+					<li>The base action is considered as an ON-OFF valve which generates current when a proper bias voltage is applied at this terminal.</li>
+					<li>The small change at the voltage applied at the base terminal shows a large impact at the output terminals. Actually, base acts as an input and collector acts as an output in NPN transistor.</li>
+					<li>In case of <b>silicon transistor emitter-base junction draws voltage around 0.7</b> when there is no voltage at the base terminal, in order to initiate the electron action and put the transistor in running condition, the base voltage must be greater than 0.7 voltage in case of silicon transistor and 0.3 in case of germanium transistor.</li>
+				</ul>
+				<footer>-- REF(`REF_TRANS_CONFIGS', `Transistor Configurations: Circuit Configurations'), emphasis mine.</footer>
+			</blockquote>
+			<p></p>
 
+			<h3>References</h3>
+			<div>
+				<ul>
+					<li>
+						REF(`REF_UDEMY_ROBOTS', `Electricity &amp; Electronics - Robotics, Learn By Building'), Ian Juby on Udemy.
+					</li>
+					<li>
+						REF(`REF_NPN_CURVES', `NPN Characteristic Curves').
+					</li>
+					<li>
+						REF(`REF_NPN_INTRO', `Introduction To The NPN Transistor'), TheEngineeringProjects.com.
+					</li>
+					<li>
+						REF(`REF_TRANS_CONFIGS', `Transistor Configurations: Circuit Configurations'), Electronics-Notes.com.
+					</li>
+					<li>
+						REF(`REF_2N2222', `NPN Transistor 2N2222 DataSheet').
+					</li>
+				</ul>
+			</div>
 		</div>
 
 	</div>

@@ -11,7 +11,7 @@
     </coordinates>
     <panel_attributes>    8      4                               .
 
-7                                              .
+7                                              5
 
 
 6                                              .
@@ -403,7 +403,7 @@ flip-flop set state.</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>760</x>
+      <x>740</x>
       <y>820</y>
       <w>180</w>
       <h>60</h>
@@ -414,8 +414,8 @@ flip-flop set state.</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>1040</x>
-      <y>640</y>
+      <x>940</x>
+      <y>780</y>
       <w>200</w>
       <h>60</h>
     </coordinates>
@@ -578,6 +578,20 @@ fontsize=20</panel_attributes>
 /free run as a multivibrator. The external capacitor charges through RA + RB and/
 /discharges through RB. Thus the duty cycle may be precisely set by the ratio of /
 /these two resistors./</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>960</x>
+      <y>540</y>
+      <w>500</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>Pin 5 controls the threshold and trigger 
+levels. Determines the pulse width of
+the output.
+</panel_attributes>
     <additional_attributes/>
   </element>
 </diagram>

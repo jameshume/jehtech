@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Circuit Diagram 3.1.0  (Build 3), cdlibrary.dll 1.0.0.0 -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" width="600" height="200" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="80" x2="60" y2="82" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <line x1="50" y1="82" x2="70" y2="82" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <line x1="55" y1="88" x2="65" y2="88" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:3" />
+  <line x1="60" y1="88" x2="60" y2="90" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <text x="46" y="85" style="font-family:Arial;font-size:12;text-anchor:end" dy=".3em">+5V</text>
+  <line x1="160" y1="60" x2="160" y2="65" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <rect x="152" y="65" width="16" height="40" style="fill-opacity:0;stroke:rgb(0,0,0);stroke-width:2" />
+  <line x1="160" y1="105" x2="160" y2="110" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <text x="146" y="85" style="font-family:Arial;font-size:10;text-anchor:end" dy=".3em">5 kΩ</text>
+  <line x1="60" y1="90" x2="60" y2="140" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <line x1="60" y1="140" x2="160" y2="140" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <line x1="160" y1="110" x2="160" y2="140" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <line x1="160" y1="30" x2="160" y2="60" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <line x1="60" y1="30" x2="160" y2="30" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <line x1="60" y1="30" x2="60" y2="80" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <line x1="240" y1="30" x2="240" y2="80" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <line x1="240" y1="30" x2="340" y2="30" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <line x1="340" y1="30" x2="340" y2="60" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <line x1="340" y1="110" x2="340" y2="140" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <line x1="240" y1="140" x2="340" y2="140" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <line x1="240" y1="90" x2="240" y2="140" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <line x1="340" y1="60" x2="340" y2="65" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <rect x="332" y="65" width="16" height="40" style="fill-opacity:0;stroke:rgb(0,0,0);stroke-width:2" />
+  <line x1="340" y1="105" x2="340" y2="110" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <text x="326" y="85" style="font-family:Arial;font-size:10;text-anchor:end" dy=".3em">10 kΩ</text>
+  <line x1="240" y1="80" x2="240" y2="82" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <line x1="230" y1="82" x2="250" y2="82" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <line x1="235" y1="88" x2="245" y2="88" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:3" />
+  <line x1="240" y1="88" x2="240" y2="90" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <text x="226" y="85" style="font-family:Arial;font-size:12;text-anchor:end" dy=".3em">+5V</text>
+  <line x1="430" y1="30" x2="430" y2="80" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <line x1="430" y1="30" x2="530" y2="30" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <line x1="530" y1="30" x2="530" y2="60" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <line x1="530" y1="110" x2="530" y2="140" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <line x1="430" y1="140" x2="530" y2="140" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <line x1="430" y1="90" x2="430" y2="140" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <line x1="530" y1="60" x2="530" y2="65" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <rect x="522" y="65" width="16" height="40" style="fill-opacity:0;stroke:rgb(0,0,0);stroke-width:2" />
+  <line x1="530" y1="105" x2="530" y2="110" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <text x="516" y="85" style="font-family:Arial;font-size:10;text-anchor:end" dy=".3em">15 kΩ</text>
+  <line x1="430" y1="80" x2="430" y2="82" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <line x1="420" y1="82" x2="440" y2="82" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <line x1="425" y1="88" x2="435" y2="88" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:3" />
+  <line x1="430" y1="88" x2="430" y2="90" style="stroke:rgb(0,0,0);stroke-linecap:square;stroke-width:2" />
+  <text x="416" y="85" style="font-family:Arial;font-size:12;text-anchor:end" dy=".3em">+5V</text>
+  <text x="110" y="20" style="font-family:Arial;font-size:10;text-anchor:middle" dy=".3em">&gt; I = 5 V/ 5000 Ohm = 0.001A</text>
+  <text x="290" y="20" style="font-family:Arial;font-size:10;text-anchor:middle" dy=".3em">&gt; I = 5 V/ 10000 Ohm = 0.0005A</text>
+  <text x="480" y="20" style="font-family:Arial;font-size:10;text-anchor:middle" dy=".3em">&gt; I = 5 V/ 15000 Ohm = 0.00033...A</text>
+  <text x="290" y="160" style="font-family:Arial;font-size:10;text-anchor:middle" dy=".3em">Note how, as the load across the voltage supply terminals increases,the voltage remains constant,</text>
+  <text x="290" y="170" style="font-family:Arial;font-size:10;text-anchor:middle" dy=".3em">and the current varies. This is an ideal battery. It produces whatever current is needed to maintain</text>
+  <text x="300" y="180" style="font-family:Arial;font-size:10;text-anchor:middle" dy=".3em">the voltage across it.</text>
+</svg>
