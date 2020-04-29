@@ -643,6 +643,15 @@ jump(1,2,3,4)
 		Use <code>include(filename)</code>. The include macro expands to the file contents which is then recursively re-evaluated null-like
 		an other macro expansion.
 	</p>
+	<p>
+		So, for example, if i was using an M4 macro to include a text file with example HTML code in it into my HTML page, I could use:
+	</p>
+	<pre class="prettyprint linenums lang-m">patsubst(patsubst(patsubst(include(`path/to/html-snippet'), `&lt;', `&amp;lt;'), `&gt;', `&amp;gt;'), `&amp;', `&amp;amp;')</pre>
+	<p>
+		This could also be bundled up into a helpful little macro:
+	</p>
+	<pre class="prettyprint linenums lang-m">define(`HTML_SNIPPET', `&lt;pre&gt;patsubst(patsubst(patsubst(include($1), `&lt;', `&amp;lt;'), `&gt;', `&amp;gt;'), `&amp;', `&amp;amp;')&lt;/pre&gt;')dnl</pre>
+	<p></p>
 </div>
 
 </div> <!-- END H1 padding div -->
