@@ -1,0 +1,1021 @@
+INTRO
+=======
+react
+react-dom
+
+babel - translate next gen javascript to browser compatible javascript
+
+
+react component is just a function that has to return the code to render to the dom
+	JSX - needs babel as the preprocessor that converts JSX to normal javascript code
+	JSX - requires one root div!
+
+function Person(props) { // React auto gives me the props parameter - the component properties.
+	return (
+		<div className="person"> // NOTE: use of className not class! This is JSX thing - class is a reserved word in JS so cant be used.
+			<h1>{props.name}</h1>
+			<p>Some stuff: {stuff}</p>
+		</div>
+	);
+}
+ReactDOM.render(<Person name="John" stuff="Whatever"/>, document.querySelector('#p1')); - render a javascript function as a component to the real dom inside div with id "p1"
+
+
+Could also do 
+	app = (
+		<div>
+			<Person name="John" stuff="blah"/>
+			<Person name="Peter" stuff="blah"/>
+		</div>
+	);
+	ReactDOM.render(app, document.querySelector('#app')); # A single page application
+
+React focusus on the what not the how - focus on what you want to see rather than managing individual UI state and keeping track of it all.
+
+
+
+SOME RESOURCES
+==============
+create-react-app: https://github.com/facebookincubator/create-react-app
+Introducing JSX: https://reactjs.org/docs/introducing-jsx.html
+Rendering Elements: https://reactjs.org/docs/rendering-elements.html
+Components & Props: https://reactjs.org/docs/components-and-props.html
+Listenable Events: https://reactjs.org/docs/events.html
+
+
+
+SETUP LOCAL REACT PROJECT
+=========================
+
+Build a workflow - optimize code, lint, make code cross-browser compatible using babel and jsx etc.
+Need - dependency management tool, e.g. npm
+       bundler - put all our JS modules into one file - use webpack
+       compiler - next-gen JS to older-JS = babel + presets
+       dev server to test on
+^^^^
+There is a react-team supported tool that does all this for us! -- `npm install -g create-react-app` -
+only using nodeJS for the package manager and the dev server
+	Use command create-react-app react-complete-guide --scripts-version 1.1.5
+		Creates a folder called `react-complete-guide` in the CWD
+
+CD into `react-complete-guide` and type `npm start` to start the development server. It server
+watches your files so if you change code it will auto-reload it for you!
+	Inside that directory, you can run several commands:
+	  npm start
+	    Starts the development server.
+	
+	  npm run build
+	    Bundles the app into static files for production.
+	
+	  npm test
+	    Starts the test runner.
+	
+	  npm run eject
+	    Removes this tool and copies build dependencies, configuration files
+	    and scripts into the app directory. If you do this, you can’t go back!
+
+
+
+	
+REACT COMPONENT BASICS
+======================
+Every component needs a `render()` method - it returns an object that react can use to render 
+content to the HTML DOM.
+
+> Components are the core building block of React apps. Actually, React
+> really is just a library for creating components in its core.
+> A typical React app therefore could be depicted as a component tree -
+> having one root component ("App") and then an potentially infinite amount
+> of nested child components.
+> Each component needs to return/ render some JSX code - it defines
+> which HTML code React should render to the real DOM in the end.
+
+
+JSX v.s. React
+--------------
+JSX is a syntactic sugar that needs to be translated into javascript code.
+
+For example "<div></div>" would be translated into
+	React.createElement('div', props-object, child1 [,child2[,...]]),
+where the children are also created using React.createElement(...).
+
+JSX restrictions
+1. Cannot use JS reserved keywords
+2. Must have ONE root element, normally a DIV.
+	- The way round this is to use a HOC that just returns its children.
+	- In react > 16.2 you dont have to create this HOC yourself - its is provided and is called
+	  "React.Fragment".
+
+
+Creating Basic Components
+-------------------------
+Directory and file(s) in that directory for each component with same name as componenet, normally
+using capitalised first letter.
+In file
+  - import React from 'react.js';
+  - const component_name = (...) => { return SOME-REACT-ELMENTS-VIA-JSX; }
+  - export default component_name;
+
+In root component file:
+  - import Component_name from './Comonent_name/Component_name.js' <- Name must have upper-case
+    character because elements starting lower case are reserved for HTML reserved node names
+  - then use <Component_name>...</Componeent_name>
+
+To get JSX code to execute and use the output of a JS function (can only use one-line expressions),
+wrap the code in curley braces - {}
+
+	Props
+	-----
+	Allow us to pass attributes (and children) specified in the JSX/HTML code to the JS component so
+	that it can display content dynamically. Note the props object passed to the componenet should 
+	*NOT* be modified by the component.
+
+	If component is constructed using a function, the function gets one parameter - the props obejct.
+		const componenet_name = (props) => {
+			return <div>
+				<p>I am {props.age} years old.</p>
+				<p>I live in the country {props.country}</p>
+			</div>; 
+		};
+	If componeent is constructed using a class then in the render() method use `this.props.age` for
+	example. The props are passed automatically made available as `this.props` for you.
+
+	To access children, e.g. <Component_name>Some text in the middle</Component_name>, use `props.children`,
+	which is created by react for us. It will contain all elements between the opening and closing
+	tags of the component, plain text, or an element tree...
+
+	You can pass METHODS as props so that other componenets can access methods, from say, the main app,
+	for example. This could allow a child componenet to change data in the parent component. It is a
+	useful pattern.
+
+	!!!! Whether you declare a component as a function or a class, it must never modify its own props. !!!!
+
+	State
+	-----
+	Only for classes exending `Component` (and see also React hooks for function based components) PRE React 16.8. 
+		Function based components can, since React 16.8, use the useState() hook
+	Create a class variable named `state`, which should be a JS oject with keys, as you want to define
+	them, mapping to values of interest. The variable is SPECIAL because if it changes it will triger
+	React to re-render the DOM with the updated data BUT ONLY IF YOU USE `this.setState()`.
+
+	!! NOTE you must use `this.setState()` to TRIGGER RE-RENDERING OF DOM !! Do not modify the state variable directly !!
+		setState() takes an object as argument and merges it with the class state object for us.
+
+	!! NOTE THE FOLLOWING !!
+	!!
+	!!	It does not immediately trigger the render, it merely schedules a render, so the state won't be
+	!!	updated until React determines it is a "good time" to do that.
+	!!
+	!!	Because of this, "this.state" in "setState()" is NOT GUARANTEED TO BE THE LASTEST/NEWEST
+	!!	STATE OF THE OBJECT!!!! It could be an older state.
+	!!
+	!!	This means using setState like this can sometimes cause problems:
+	!!		someFunc = () => {
+	!!			setState({something: this.state.something + 1});
+	!!			//                  ^^^^^^^^^^
+	!!			//                  WARNING - this could be a STALE STATE
+	!!		};
+	!!
+	!! The correct way to do this is as follows:
+	!!		someFunc = () => {
+	!!			setState((prevState, props) => {
+	!!				return {
+	!!					something: prevState.something + 1;
+	!!				};
+	!!			});
+	!!		};
+	!!
+	!! This uses the alternative setState syntax which accepts a function that receives the previous
+	!! state and the component's props. React can then call this function when it is ready to set
+	!! a new state. Then prevState that is passed to this function is GUARANTEED BY REACT TO BE THE
+	!! MOST RECENT STATE THAT YOU WOULD NORMALLY EXPECT.
+
+
+	Generally on PROPS and STATE cause react to re-render the DOM.
+
+	Anything using state is a statefull componenet. Otherwise it is stateless. Design to have few as
+	possible statefull and as many as possible stateless (presentation) components.
+
+	!!!! YOU SHOULD NEVER MUTATE THE STATE VARIABLE - ALWAYS TAKE COPIES, ESP FOR ARRAYS ETC, AND THE CALL setState() !!!!
+		It is MUCH BETTER TO TAKE A **COPY** of the arrayMember, mutate it, and then setState()!
+		Instead use slice() with no params to copy array:
+			const arrayMemberRef = this.state.arrayMember.slice(); // Now arrayMemberRef references a COPY of the reactJs-managed state variable
+		OR use ES6 spread operator:
+			const arrayMemberRef = [...this.state.arrayMember]; // Now arrayMemberRef references a COPY of the reactJs-managed state variable
+
+		The same is true if the member is an object - you'd get a reference, not a copy of the object.
+		Take a copy using:
+			const objectmemberRef  = {...this.state.objectReference };
+		OR old-school using Object.assign().
+
+
+
+Events & Handlers
+====================
+All HTML attributes like onclick become onClick in JSX.
+See https://reactjs.org/docs/events.html#supported-events
+
+In a class that extends `Component`, define arrow function for eventHandler (use arrow function to
+correctly capture "this"). Then do , for e.g., <button onClick='this.eventHandler'>...</button>. When
+the button is clicked it will call the function `eventHandler()` of your class, which if it then
+modifies the class state, will cause the component to be re-rendered into the DOM.
+
+To pass data to a handler use the bind() method.
+	<button onClick={this.myHandler.bind(this, param1, param2, ...)>
+If you've used arrow functions the binding to this isn't necessary - the arrow function will have
+captured it, but because we want to bind other parameters, we now have to have this as the first
+parameter to bind(). This is why with arrow functions we don't have to use bind() if there is no
+extra data to pass into the handler.
+
+The other way to accomplish this is to use an arrow function, and it looks a little nicer IMO, BUT BUT
+apparently it can be less efficient and bind() is therefore preferred.
+	<button onClick={() => this.myHandler(param1, param2, ...)}>
+
+Hooks
+======
+All React hooks are called "useXXX".
+	import React, {useXXX, useYYY, ...} from 'react';
+
+
+useState() hook
+---------------
+So, now instead of using class `state` variable, in function-based componenet do:
+	const app = (props) => {
+		const [ theCurrentState, theSetStateFunction ] = useState({... state object defn ...});
+Now, where you would use `this.state` use `theCurrentState` and where you would use `setState()`
+use `theSetStateFunction()`.
+
+And in your handler functions, just put them inside the component defn function and reference the
+function in the JSX returned. NOTE - the handler must be an arrow function so that it is lexically
+scoped and captures `theCurrentState` and `theSetStateFunction` in the enclosing compononent def func.
+
+		const app = (props) => {
+			const [ theCurrentState, theSetStateFunction ] = useState({... state object defn ...});
+			const myHandler = () => {
+				theSetStateFunction({...});
+			}
+			return JSX-which-has-myHandler-as-an-onXXX-function;
+		};
+
+	!!!!BUT CAUTION!!!! theSetStateFunction() does **NOT** do a merge like setState() does. 
+	You must do the merge yourself manually! But you can get around this with many useSate() calls - state "slices".
+
+This is a new way - the class based method is still seemingly the standard.
+
+
+
+CSS
+====
+
+Import into your JS files so that WebPack is aware of its existance. Put CSS for component in
+component's dir and use class name same as component's name.
+
+For things like "box-shadow" it converts this CSS property to the difference browser variables for
+us like "-webkit-box-shadow" and "box-shadow" for us so our CSS can be more brief and generic.
+
+
+	Inline styles
+	-------------
+
+	The style can be modified in the JS using inline styles. The CSS code ports almost directly to a JS
+	object definition except REPLACE "-" WITH CAMEL CASE
+		e.g. 
+		render() {
+			const style = {
+				backgoundColor:'white',
+				border:'1px solid blue',
+				...
+			};
+
+			return ( <div style={style}>.....</div> );
+		}
+
+
+	CSS Modules
+	-----------
+	See https://github.com/css-modules/css-modules
+	See https://css-tricks.com/css-modules-part-1-need/
+	See https://create-react-app.dev/docs/adding-a-css-modules-stylesheet/
+
+	A CSS Module is a CSS file in which all class names and animation names are scoped locally by default.
+	It does this by automatically creating a unique classname of the format [filename]_[classname]__[hash].
+
+	Use CSS module like this:
+		import styles from './Button.module.css'; // Import css modules stylesheet as styles
+		...
+		class Button extends Component {
+			render() {
+				// reference as a js object
+				return <button className={styles.error}>Error Button</button>;
+				//                        ^^^^^^^
+				//                        Gets locally scoped error CSS from sytems imported above.
+				//                        So CSS has a def `.error: {...}`
+			}
+		}
+
+	To enable CSS modules (required for react-scripts < 2.0)
+		1. npn run eject
+			From https://github.com/facebook/create-react-app/blob/master/packages/cra-template/template/README.md:
+				Note: this is a one-way operation. Once you eject, you can’t go back!
+
+				If you aren’t satisfied with the build tool and configuration choices, you can eject
+				at any time. This command will remove the single build dependency from your project.
+
+				Instead, it will copy all the configuration files and the transitive dependencies
+				(webpack, Babel, ESLint, etc) right into your project so you have full control over them.
+				All of the commands except eject will still work, but they will point to the copied scripts
+				so you can tweak them. At this point you’re on your own.
+
+			The eject command will have created a new top level directory, called "config" for you,
+			which has received the above mentioned script copies. The "package.json" file will now
+			also be A LOT larger. You can now see _all_ of your dependencies in detail.
+
+		2. Goto "ROOT/config/webpack.config.dev.js"
+			Search "css-loader". You should see:
+				{
+					test: /\.css$/,
+					use: [
+						require.resolve('style-loader'),
+						{
+							loader: require.resolve('css-loader'),
+							options: {
+								importLoaders: 1,
+							},
+						},
+						...
+
+			Add the following options, under "importLoaders":
+							options: {
+								importLoaders: 1,
+								modules: true,
+								localIdentName: '[name]__[local]__[hash:base64:5]',
+							},
+			
+			Copy these two options into the production build file too!
+
+		This is all that is required. CSS modules should now be good to go!
+
+	Using Web Fonts
+	---------------
+	You can add includes of web fonts to "ROOT/Public/index.html".
+	Goto fonts.google.com, select and customise the font that you like, get the CDN link and shove
+	it into index.html above the title tag.
+
+
+
+
+CONDITIONAL RENDERING
+=====================
+
+In JSX we can execute simple JS expressions in {...}. This means that we could render based on the
+ternary operator "cond ? true-path : false-path". Note cannot use if-else as this is
+too complicated. Could we use a function and immediately evaluate it though? Not sure - need to try.
+E.g.,
+	return (
+		<div>
+			{
+				this.state.someCondition ?
+					<div>
+						... some tags ...
+					</div> : null // "null" means nothing is rendered
+			}
+			...
+		</div>
+	);
+
+^^^
+This gets MESSY fast, especially when multiple conditions are nested. It is BETTER to do the FOLLOWING:
+
+	let myElements = null;
+	if(this.state.someCondition)
+	{
+		myElements = (
+			<div>
+				... some tags ...
+			</div>
+		);
+	}
+
+	...
+
+	return (
+		<div>
+			{myElements}
+		</div>
+	);
+^^^
+This is EASIER TO READ AND MAINTAIN! Keeps our core JSX template CLEAN!
+
+
+
+RENDERING LISTS
+===============
+
+If the state, or whatever other variable has a list of attributes for a list of like-tags we can do this:
+	return (
+		<div>
+			{this.state.listMember.map((member, index) => {
+				return <TheElement
+					somehandler={someHandlerFunction.bind(this, index)}
+					prop1={member.prop1}
+					prop2={member.anotherProp} 
+					key={index} /> // You SHOULD ALWAYS PROVIDE A KEY!!
+			})}
+		</div>
+	);
+
+The map() funciton returns an array - JSX knowns how to render a list of ReactElement objects so this works okay.
+
+NOTE -	arrays are references to an array - so 
+		const arrayMemberRef = this.state.arrayMember; // Gets a reference to the state.arraymember!!
+		arrayMemberRef[0] = 123; // !!!!WARNING!!!! This mutates the reactJs managed state object which can produce UNDERIABLE BEHAVIOUR
+		this.setState({arrayMember : arrayMemberRef});
+	It is MUCH BETTER TO TAKE A **COPY** of the arrayMember, mutate it, and then setState()! Instead use slice() with no params to copy array:
+		const arrayMemberRef = this.state.arrayMember.slice(); // Now arrayMemberRef references a COPY of the reactJs-managed state variable
+	OR use ES6 spread operator:
+		const arrayMemberRef = [...this.state.arrayMember]; // Now arrayMemberRef references a COPY of the reactJs-managed state variable
+
+
+NOTE -	When rendering lists of data ALWAYS USE THE KEY PROP. It helps react know what changed in the list more efficiently.
+
+
+
+USE PSEUDO SELECTORS IN JAVASCRIPT
+==================================
+
+Requires package called "Radium"
+	From your project directory: npn install --save radium
+	Radium lets pseudo selectors and media queries be used from the JS
+	> import Radium from 'radium';
+
+	Then
+		> export default Radium(App)
+		To create a higher order componenet. Radium wraps you App. It can wrap both classes and
+		function-based componenets.
+
+With radium installed you can add the following to your style objects in JS code:
+	const style = {
+		color: 'white',
+		...,
+		':hover': {
+			... set of styles for the hover state ...
+		},
+		':another-pseudo-selector' : {
+			... another set of styles ...
+		},
+	};
+
+You can also do media queries in the same way, EXCEPT you will have to use <StyleRoot> around your App:
+In any componenet(s) you like:
+	const style = {
+		...
+		'@media (min-width: 500px)': {
+			...
+		},
+		...
+	};
+Then in your app:
+	import Radium, { StyleRoot } from 'radium';
+	...
+	class App extends Component {
+		...
+		render() {
+			return (
+				<StyleRoot>
+					... your original app content JSX ...
+				</StyleRoot>
+			);
+		}
+	}
+
+
+
+STYLED COMPONENETS
+=================
+styled-components.com
+Tries to make styling components easy.
+Do:
+	npn install --save styled-componenets
+
+Use:
+	import styled from 'styled-componenets.js';
+
+	const StyledButton = styled.button`
+		../ write regular CSS within the back ticks ...
+	`;
+
+	const StyleDiv = styled.div`
+		../ write regular CSS within the back ticks ...
+		&:hover { // <<<< Special way to add pseudo element styles using styled componenets
+		}
+
+		color: ${props => props.altColour}; //<<< Note use of ${...} to access props
+	`;
+
+	...
+
+	class ....
+	{
+		...
+		render() {
+			...
+			return(
+				<!-- Note how props can be passed to styledComponents for dynamic CSSS -->
+				<StyledDiv altColor={this.state.my_colour_variable}> 
+					<StyledButton onClick={...}/>
+					...
+				</SyledDiv>
+			);
+		}
+		...
+	}
+
+People seem to like this because you get scoped styles - I.e., they apply only to the component not
+to the entire application.
+
+BUT - you are now mixing markup with code, which was the entire point of CSS/HTML seperation in the first place!
+BETTER? - Use CSS Modules - Haven't written notes on this...
+
+
+
+ERROR BOUNDARIES
+================
+See: https://reactjs.org/docs/error-boundaries.html
+Only availabele in ReactJS >= 16
+Allow us to catch errors (exceptions) and handle them gracefully.
+They are a form of Higher Order Component (HOC) they wrap the componenet that may throw an error. Notes on this later.
+	class ErrorBoundary extends Componenet {
+		state = {
+			hasError: false,
+			errorMsg: '',
+		}
+		
+		// this is a special method that react knows to call if any of the children
+		// throw an exception
+		componenetDidCatch(error, info) {
+			this.setState({hasError: true, errorMsg: error});
+		}
+
+		render() {
+			if (this.state.hasError) {
+				// If there was an error render something usful
+				return <h1>{this.state.errorMsg}</h1>;
+			}
+			else {
+				// Otherwise just display the components this component wraps
+				return this.props.children;
+			}
+		}
+	}
+
+Then in your App render or whatever, just wrap any elements that may have failures that are _not_ under
+your control (i.e. dont wrap everything - you want to catch errors that are under your control and
+make sure thay cannot happen) with <ErrorBoundary>....</ErrorBoundary> (class name just an example -
+you can choose).
+
+
+
+CLASS BASED V.S. FUNCTIONAL COMPONENTS
+=======================================
+
+Class based
+	Access to state
+	Lifecycle Hooks
+
+Functional based
+	ReactJS <16 _no_ access to state, but .+ 16 has access to state via useState()
+	_No_ access to lifecycle hooks
+
+
+
+CLASS COMPONENT LIFECYLE
+========================
+See also https://reactjs.org/docs/state-and-lifecycle.html
+         https://reactjs.org/docs/react-component.html
+         https://www.w3schools.com/react/react_lifecycle.asp
+         https://www.freecodecamp.org/news/how-to-understand-a-components-lifecycle-methods-in-reactjs-e1a609840630/
+         https://blog.carbonfive.com/replacing-component-lifecycle-methods-with-react-hooks/
+         >> Good diagram >> http://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/
+
+Functional component have an equivalent but this is for class based components only.
+ReatcJS components have the following LIFE CYCLE HOOKS methods:
+	- constructor(props) (default ES6 class feature, unlike the rest which are React specific)
+	- static getDerivedStateFromProps(props, state)
+              should return updated state
+	- getSnapshotBeforeUpdate(prevProps, prevState)
+	- componenetDidCatch()
+	- componentWillMount() [might be deprecated]
+	- componentWillUnmount()
+		This can be used to do cleanup work like de-register event handlers etc.
+	- shouldComponentUpdate(nextProps, nextState)
+	- componentDidUpdate(prevProps, prevState, snapshot)
+             After the update finished. The one that is most used is this method, e.g., to fetch
+             new data from server.
+	- componentDidMount()
+	- render()
+
+Note: Life-cycle hooks are not, and have nothing to do with, React Hooks.
+
+
+Creation life cycle hooks execute in this sequence:
+CREATION --> constructor(props) [must call super(props). Set state. Must have NO side-effects]
+                constructor(props) {
+                    super(props);
+                    ... do other init stuf ...
+                    // Can init state here - but dont call setState() as there is nothing to merge with yet
+                    this.state = { ... };
+                }
+         --> getDerivedStateFromProps(props, state) [Sync state when props changed - niche. Must have NO side-effects]
+         --> render() [Prepare and structure JSX code. Nothing that blocks!]
+             --> render all child components and run their life cycle hooks...
+         --> componentDidMount() [Do NOT update state (synchronously), but DO cause side effects, eg, HTTP requirets]
+
+
+
+Component update (when props or state change) life cycle hooks execute in this sequence:
+UPDATE --> getDerivedStateFromProps(props, state) [rarely needed]
+       --> shouldComponentUpdate(nextState, nextProps)
+           [Allows us to CANCEL the update process for optimisation. Do NOT cause side effects]
+               Must return either True (do the update) or false (cancel the update)
+       --> render() [constructs virtual DOM for merge into the real DOM]
+           --> render all child components and run their life cycle hooks...
+       --> getSnapshotBeforeUpdate(prevProps, prevState)
+               Must return either null or an object, which will be received in componenetDidUpdate
+               Example might be getting current scroll position so it can be restored in next step.
+       --> componentDidUpdate(prevProps, prevState, snapshot)
+           [NO (synchonous) state update but can cause side effects]
+
+
+shouldComponentUpdate() is the one you will use for OPTIMISATION!
+
+	Optimising using shouldComponentUpdate()
+	----------------------------------------
+
+	If a parent component updates, but the specific child has not updated (another child or the main
+	element might have), then it can use shouldComponentUpdate() to stop itself needlessly being rendered
+	into the ReactJS virtual DOM.
+
+	For example,
+		shouldComponentUpdate(nextProps, nextState) {
+			// Bit note - be careful - this compares references, so if the references dont change
+			// but the contents does, then this wont work! This is a SHALLOW comparison!
+			return nextProps.propsOfInterest !=  this.props.propsOfInterest;
+		}
+
+
+FUNCTIONAL HOOKS
+================
+See: https://reactjs.org/docs/hooks-effect.html
+     https://medium.com/swlh/react-lifecycle-hooks-71547ef4e7a8
+     https://blog.carbonfive.com/replacing-component-lifecycle-methods-with-react-hooks/
+
+	> By using this Hook, you tell React that your component needs to do something after render.
+	> React will remember the function you passed (we’ll refer to it as our “effect”), and call it
+	> later after performing the DOM updates.
+
+Use the "useEffect()" hook.
+	import React, { useEffect } from 'react';
+
+useEffect() is the second most important reactJS hook next to the useState() hook.
+It combines all of the class hooks above into one function. It is _not_ a lifecycle hook, however,
+it is a react hook!
+
+useEffect() takes a function as an argument that is called for each render cycle.
+
+Can be used for all the stuff that would be done in "componentDidUpdate()", e.g., a HTTP req. It
+also does "componentDidMount()" (called for the first render).
+
+You can use "useEffect()" as many times as you like.
+
+	useEffect( () =>  {
+		... do stuff ...
+	}, [list-of-data])
+	   ^^^^^^^^^^^^^^
+	   Secnd argument to useEffect()
+	   It is a list of references to all of the data used in the function. The function will only
+	      run when a data item in this list changes.
+	      So, if we use "props.member", it would only be called when the props change.
+
+	      If you have different effect that depends on different data just use the function more
+	      than once.
+
+	      To make the "useEffect()" run only once, when it is created, just pass a second argument
+	      that is an empty list - []. As there are no dependencies for the func, therefore, it will
+	      never be re-run because a dependency change. But, it will run once at creation.
+
+	> You can tell React to skip applying an effect if certain values haven’t changed between
+	> re-renders. To do so, pass an array as an optional second argument to useEffect
+
+If "useEffect()" returns a function, this function is run after the render cycle. Thus, you can
+return a function if you want to do some cleanup.
+
+	useEffect( () => {
+		... do stuff ...
+		return () = > {... do cleanup work ...};
+	}, []) // The empty list only renders this when the component is created, not on every render cycle
+
+
+	Optimisation
+	------------
+
+	Use React.memo() to wrap your functional component to memo-ise it!
+
+
+
+WHEN TO OPTIMISE
+================
+
+Not always is the answer! If child always updates with parent then no need to optimise and using
+either shouldComponenetUpdate or react.memo() is actually inefficient as they will always find that
+the component changes - so its extra work for no reason.
+
+If you care checking ALL proprties for change, you don't need to override shouldComponentUpdate().
+You can, instead, extend PureComponent. This is just a component that a component that
+implements shouldComponentUpdate() and checks for any change in props.
+
+
+
+HOW REACTJS UPDATES THE DOM
+===========================
+See: https://reactjs.org/docs/faq-internals.html
+See: https://reactjs.org/docs/reconciliation.html
+
+ReactJS render() method does _not_ render to the DOM. It edits a ReactJS internal DOM. React compares
+the old vidtual DOM to the new virtual DOM and diffs them. The virtual DOM is used because it is
+_faster_ than the real DOM. Acessing the deal DOM is s-l-o-w!!
+
+If the diff of the VDOMs shows a difference, only then does React reach
+out to the real DOM and updates it - and _only_ in the places where it updated, it does _not_ re-write
+the entire DOM.
+
+
+
+HIGHER ORDER COMPONENTS (HOCs)
+==============================
+A HOC wraps another component, possibly adding some logic to it etc. For e.g., error handling.
+Convention is to name Hocs with a "With" at the beginning. e.g. "WithExtraInfo".
+
+Create HOC method #1:
+---------------------
+	Use for HOCs that modify the HTML of the component in some way - so you can place it inside
+	your JSX.
+	Do:
+		import React from 'react';
+		const withBlah = props => (
+			<div className="blah">
+				... what ever extra components you want ...
+				{props.children} <!-- <<<< This is what we're wrapping -->
+				... what ever extra components you want ...
+			</div>
+		);
+		export default withBlah;
+
+	Then you use it in another component:
+		import withBlah from 'react';
+		...
+		<WithBlah>
+			...
+		</WithBlah>
+
+Create HOC method #2:
+---------------------
+	Use for HOCs that add behind the scenes logic like error handling.
+	Do:
+		import React from 'react';
+		// Normal JS function
+		const withBlah = (WrappedComponent, param1, param2, ...) = {
+		               // ^
+		               // Must start with a capital
+			// From the normal JSX function, return the React component function.
+			return props => (
+				<div className="blah">
+					<WrappedComponent {...props}/>
+					<!-- NOTE: You cannot use props={props} because the Wrapped component would
+					     receive this as props.props, an child of its props component. Hence
+					     you have to use the spread operator as shown -->
+				</div>
+			);
+		};
+
+	Then you use it to wrap a component in an export:
+		...
+		export default withBlah(App, param1, param2, ...);
+
+
+
+PROP TYPES
+==========
+Allows to specify which props the component accepts and their props.
+	npm install --save prop-types
+It is provided by the react team/community. It is not in react core hence you have to npm install it.
+Then:
+	import PropTypes from 'prop-types';
+Then, after your component definition, whether functional or class based, add another property.
+	class MyComponent {
+		...
+	};
+
+	// React will look for "propTypes" when in development mode and spit out warnings if the prop
+	// types are violated.
+	MyComponent.propTypes = { // Lower case "p" for "propTypes" is important
+		// In here define the props that are used by your component and their types...
+		// The keys will be your prop names and their values the types
+		click: PropTypes.func, // You can even specify the function prototype!
+		prop1: PropTypes.string,
+		prop2: PropTypes.number,
+		...
+	};
+
+Can chain conditions. E.g.
+	prop1: PropTypes.string.isRequired
+
+
+
+USING REACT REFERENCES
+======================
+
+References give us access to our DOM elements.
+
+	IN CLASS BASED COMPONENTS
+	-------------------------
+
+	Can add a "ref" keyword to any components, including your own defined components.
+	It gives you the ability to access an element in the DOM without having
+	to use DOM selectors to find it in the DOM. React magically ties your component class with the
+	object in the DOM. You can use this to call DOM specific stuff like "setFocus()" for example.
+
+	Lets say you have a component:
+		class MyComponent extends Component {
+			constructor() {
+				super(); // Must always capp super()!!
+				this.inputReference = React.createRef();
+			}
+
+			componentDidMount() {
+				this.inputReference.current.focus();
+				//                  ^^^^^^^ ^^^^^
+				//                  ^^^^^^^ We can access the DOM function :)
+				//                  ^^^^^^^
+				//                  Must use the "current" property to get the current reference.
+			}
+
+			render() {
+				<div>
+					...
+					<input
+						ref="this.inputReference"
+						..
+					/>
+					...
+				</div>
+			}
+		};
+
+	IN FUNCTIONAL COMPONENTS
+	------------------------
+	const myFuncComponent = props => {
+		const elementRef = React.useRef(null);
+		//    ^^^^
+		//    elementRef will only be linked to the html_element when the return statement is
+		//    executed. Therefore it can only be accessed after this. To do this, the useEffect()
+		//    hook must be used, as this runs _after_ the compoment JSX has been rendered for the
+		//    first time.
+
+		useEffect( () => {
+			elementRef.someDOMFunction(...);
+			return () => {
+				// This function is run to do cleanup work in useEffect()
+			};
+		}, []);
+		// ^^
+		// RECALL: the empty list means this only runs once when first rendered and _not_ on each
+		//         render!
+
+		return (
+			<div>
+				<html_element ref={elementRef}>...</html_element>
+			</div>
+		);
+	};
+
+
+CONTEXT API & PROP CHAINS
+=========================
+
+Class Based Components
+-----------------------
+
+Prop chains are where a prop is passed down from component A to grand-...-grand-child component X
+via all the intermediate children, some or all of which may not care about the prop.
+
+React offers "contexts" to help tidy what might be a messy load of prop chains.
+
+You can create a context module. The course example is an authentication context. It is created
+in a folder named "context" in a file named "AuthContext".
+	import React from 'react';
+
+	// The context is like a globally available JS object, just hidden inside the react "scope".
+	// const authContext = React.createContext(...default-init-value...)
+	//                                           ^^^^^^^^^^^^^^^^^^
+	//                                           Normally an object but can be a number, string etc
+
+	const authContext = React.createContext({
+		authenticated: false,  // Default values dont really matter, but makes IDE auto complete better
+		login: () => {}
+	});
+
+	export default authContext;
+
+
+So, now in your application or the most parentish component that will "own" the context:
+
+	import 'AuthContext' from '../context/auth-context';
+	// AuthContext is used as a component that MUST WRAP ALL COMPONENTS THAT REQUIRED ACCESS TO IT.
+
+	class App extends Component {
+
+		render() {
+			return
+				<!-- 
+				 -- NOTE here the AuthContext.Provider takes a value prop. That is why the defaults, generally,
+				 -- dont matter.            Outer curlies to enter dynamic content
+				                            v
+				                            vInner curlies define the JS object
+				                            vv  -->
+				<AuthContext.Provider value={{authenticated: this.state.authenticated}}>
+					<div>
+						... All components that need access to the auth context ...
+					</div>
+				</AuthContext.Provider>;
+		}
+	}
+
+NOTE how the state is still managed by, in this case, the App component, not in the Authentication
+context. The reason for this is that React will only update when a state or prop changes, therefore,
+updating it in the context object would _not_ cause a re-render. Hence it is managed and updated
+by the app and just passed as a value to the context object.
+
+
+Then in components that want to use the authentication context we do the following. These components
+can be anywhere in the component hierachy and thats how we skip having to pass down props in trains.
+
+	import AuthContext from '../../context/auth-context';
+
+	class SomeComponent extends Component {
+		render() {
+			return
+				<AuthContext.Consumer>
+				<!--  Return a function which the AuthContext can then call with the context as
+				      a parameter to said function.
+				      vvvvvvv 
+				-->
+					{(context) => {
+						return ... your componenet code ...;
+					}}
+				<!-- ^^^^
+				     You dont have to wrap every component. You could wrap a subset of the
+				     components rendered if only they need the context -->
+				</AuthContext.Consumer>
+		}
+	}
+
+The AuthContext.Consumer is quite clunky and only gives you access to the context in the JSX code
+and nowhere else. The alternative for class based components is this (React >= 16.6):
+
+	class SomeComponent extends Component {
+		static contextType = AuthContext;
+		//^^^  ^^^^
+		//^^^  Must be spelt exactly like this!
+		//Must be a static property
+		//
+		// Allows React to connect your component with this context behind the scenes
+
+		componentDidMount() {
+			this.context.login; //< Access the context with "this.context" which ReactJS creates for us
+		}
+
+		render() {
+			return .. your JSX code {this.context.login ? <p>Logged in</p> : <p>Log in</p> } ...
+			//                       ^^^^^^^^^^^^
+			//                       Can access it here too, without the wrapping consumer element.
+		}
+	}
+
+Functional Based Componenets
+----------------------------
+React hooks can do the same thing for us. Import the "useContext" hook.
+
+
+
+PLANNING A REACT UP
+===================
+Steps:
+  1. Component Tree / Component structure
+  2. Application State (data)
+  3. Components vs Containers
+        Recall: components are "dumb" - just presentational and containers are statefull. Advise
+        separate high-level directories for componenets and containers with subdirectories for
+        each component/container.
+        Recall: component/container subfolders with a Capital first letter.
+
+

@@ -12,6 +12,8 @@ Assume the dir structure has
 Script will delete the directory "__deployed" and will re-create it with the
 site contents. html dir is collapsed into this dir and the css and javascript files
 are too.
+
+This r-e-a-l-l-y needs improving - it is now hack up hack upon hack... oops!
 """
 import os
 import fnmatch
@@ -244,6 +246,7 @@ def deploy_site(specificFile, generateImages):
     prog_js  = re.compile('(<!--\s*JAVASCRIPT_INSERT\s*-->)', re.IGNORECASE)
     prog_img = re.compile('##IMG_DIR##')
     prog_snippet = re.compile('##\s*INCLUDE\s*:\s*([\w.\\/]+)\s*##')
+    prog_escaped_snippet = re.compile('##\s*ESCAPED_INCLUDE\s*:\s*([-_\w.\\/]+)\s*##')
 
     last_dirname = None
     link_to_root = ""
@@ -281,6 +284,10 @@ def deploy_site(specificFile, generateImages):
             with codecs.open(htmlFileName, 'r', 'utf-8') as htmlFile:
                 firstline = htmlFile.readline().strip();
                 req_m4 = firstline == 'dnl USEM4'
+                # Also allow it to be on second line as DOCTYPE might be first
+                if not req_m4:
+                    nextline = htmlFile.readline().strip();
+                    req_m4 = nextline == 'dnl USEM4'
 
         if req_m4:
             result = subprocess.run(
@@ -310,20 +317,28 @@ def deploy_site(specificFile, generateImages):
         htmlFileContents = prog_img.sub('{}{}images/jeh-tech'.format(link_to_root, "" if link_to_root == "" else '/'), htmlFileContents)
 
         # Lazy shitty coding
-        def snippet_replace(matchobj):
+        def _snippet_replace(matchobj, doescape):
             xhtmlFileName = os.path.join(dirname, matchobj.group(1))
             xhtmlFile = codecs.open(xhtmlFileName, 'r', 'utf-8')
             xhtmlFileContents = xhtmlFile.read();
             xhtmlFile.close()
+            
+            # https://wiki.python.org/moin/EscapingHtml
+            if (doescape):
+                html_escape_table = {"&": "&amp;", '"': "&quot;", "'": "&apos;", ">": "&gt;", "<": "&lt;", }
+                xhtmlFileContents = "".join(html_escape_table.get(c,c) for c in xhtmlFileContents)
             return xhtmlFileContents;
-        htmlFileContents = prog_snippet.sub(snippet_replace, htmlFileContents)
+        def snippet_replace(matchobj): return _snippet_replace(matchobj, False)
+        def escapped_snippet_replace(matchobj): return _snippet_replace(matchobj, True)
 
-        #print("Opening {} from {}".format(newFileName, os.getcwd()))
+        htmlFileContents = prog_snippet.sub(snippet_replace, htmlFileContents)
+        htmlFileContents = prog_escaped_snippet.sub(escapped_snippet_replace, htmlFileContents)
+
         newFile = codecs.open(newFileName, 'w', 'utf-8')
         newFile.write(htmlFileContents)
         newFile.close()
 
-        if filename in ['math_revision.html', 'linear_alg.html', 'gaussians.html', 'stats.html', 'notes.html', 'gas-networks.html', 'spin.html']:
+        if filename in ['electronics.html', 'math_revision.html', 'linear_alg.html', 'gaussians.html', 'stats.html', 'notes.html', 'gas-networks.html', 'spin.html']:
             mathjaxPageExe = getMathjaxNodePageBinPath()
             shutil.copyfile(newFileName, newFileName + ".TMP")
             print("   Parsing mathjax...")

@@ -148,7 +148,7 @@
     <h2>Glossary</h2>
     <div>
         <p>
-            <table>
+            <table class="jehtable">
                 <thead>
                     <tr><td>Acronym</td><td>Meaning</td><td>Brief Description</td>
                     </tr>
@@ -503,7 +503,7 @@
         <p>
         	The 3playmedia article <a href="https://www.3playmedia.com/2015/08/11/whats-the-difference-between-cea-608-line-21-captions-cea-708-captions/" target="_blank">[Ref]</a> gives a great comparison of the two:
         </p>
-        <table>
+        <table class="jehtable">
         	<thead style="font-weight: bold;">
         		<tr>
         			<td>CEA-608 (Line 21) Captions</td>
@@ -558,7 +558,12 @@ http://ecee.colorado.edu/~ecen5653/ecen5653/papers/iso13818-1.pdf</pre>
 		<p>
 			Some terms:
 
-			<table>
+			<table class="jehtable">
+				<thead>
+					<tr>
+						<td>Acronym</td><td>Stands For</td><td>Meaning</td>
+					</tr>
+				</thead>
 				<tr><td>STC</td>
 					<td>System Time Clock</td>
 					<td>Time that PU should be decoded and presented to output device. 33-bit. Units of 90kHz.</td>
@@ -834,10 +839,13 @@ http://ecee.colorado.edu/~ecen5653/ecen5653/papers/iso13818-1.pdf</pre>
 			following information if we knew that both clocks had a nominal frequency of 10Hz and a PCR
 			is transmitted every second:
 		</p>
-		<table>
+		<table class="jehtable">
+			<thead>
+				<tr>
+					<td>Decoder counts when PCR arrived</td> <td>PCR count received</td> <td>Difference</td>
+				</tr>
+			</thead>
 			<tr>
-				<td>Decoder counts when PCR arrived</td> <td>PCR count received</td> <td>Difference</td>
-			</tr><tr>
 				<td>0</td> <td>0</td> <td>0</td>
 			</tr><tr>
 				<td>15</td> <td>10</td> <td>5</td>
@@ -872,10 +880,13 @@ http://ecee.colorado.edu/~ecen5653/ecen5653/papers/iso13818-1.pdf</pre>
 			The encoder and decoder clocks are still perfect, but the transmission media has a constant
 			delay. Let's imagine it is 2 clock ticks.
 		</p>
-		<table>
+		<table class="jehtable">
+			<thead>
+				<tr>
+					<td>Decoder counts when PCR arrived</td> <td>PCR count received</td> <td>Difference</td>
+				</tr>
+			</thead>
 			<tr>
-				<td>Decoder counts when PCR arrived</td> <td>PCR count received</td> <td>Difference</td>
-			</tr><tr>
 				<td>0 + 2 = 2</td> <td>0</td> <td>2</td>
 			</tr><tr>
 				<td>15 + 2 = 17</td> <td>10</td> <td>7</td>
@@ -894,10 +905,13 @@ http://ecee.colorado.edu/~ecen5653/ecen5653/papers/iso13818-1.pdf</pre>
 			Now lets make the communications channel zero delay again, but this time with jitter. Lets give it a 4 count jitter. A possible
 			scenario is now shown in the table below. The added values now come from jitter and not delay!
 		</p>
-		<table>
+		<table class="jehtable">
+			<thead>
+				<tr>
+					<td>Decoder counts when PCR arrived</td> <td>PCR count received</td> <td>Difference</td>
+				</tr>
+			</thead>
 			<tr>
-				<td>Decoder counts when PCR arrived</td> <td>PCR count received</td> <td>Difference</td>
-			</tr><tr>
 				<td>0 + 1 = 1</td> <td>0</td> <td>1</td>
 			</tr><tr>
 				<td>15 + 4 = 19</td> <td>10</td> <td>9</td>
@@ -994,7 +1008,7 @@ if (adaption_field_contains_pcr) {
 			One of the most important fields is the PID. PIDs are unique identifiers, which, via the Program Specific Information (PSI)
 			tables, the contents of the TS data packet. Some PIDs are reserved:
 		</p>
-		<table>
+		<table class="jehtable">
 			<tr>
 				<td>Program Association Table</td> <td>TS-PAT</td> <td>0x0000</td>
 			</tr>

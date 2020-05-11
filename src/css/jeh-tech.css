@@ -196,21 +196,28 @@ table caption   { background-color: #CAD7E3;
 }
 
 .jehtable thead {
-	font-weight:bold;
-	background-color: #7999B9;
+	font-weight:bold !important;
+	background-color: #7999B9 !important;
 }
 
 .jehtable thead tr td {
 	border-radius: 5px;
 }
 
-.jehtable tbody tr:nth-child(even){
+
+.jehtable tbody > tr:nth-child(even){
  	background-color: #E0E7EE;
+}
+
+.jehtable tbody > tr:nth-child(odd){
+ 	background-color: #FFFFFF;
 }
 
 .jehtable td {
 	padding: 5px 8px 5px 8px;
 }
+
+
 
 #content {
 	margin: 0px;

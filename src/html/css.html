@@ -1,0 +1,164 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>Cascading Style Sheets (CSS) | JEHTech</title>
+	<style>
+	.jehcodecol1 tbody tr td:nth-child(1) { font-family: monospace;  }
+</style>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">Cascading Style Sheets (CSS)</h1>
+<div style="padding-right:10px;">
+
+<h2>Page Contents</h2>
+<div id="page_contents">
+</div>
+
+<h2>References</h2>
+<div>
+	<p>
+	</p>
+</div> <!-- END References / useful Links -->
+
+
+
+<h2>Selector</h2>
+<div>
+	<p>A great guide is (obvs) <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Attribute_selectors" target="_blank">Mozilla</a>,
+		and the definitive is <a href="https://www.w3.org/TR/selectors/#selectors" target="_blank">W3C</a>.
+	</p>
+	<table class="jehtable jehcodecol1">
+		<thead>
+			<tr><td>Selector example</td><td>Meaning</td></tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>.className</td>
+				<td>Selects all elements with class name &quot;className&quot;</td>
+			</tr>
+			<tr>
+				<td>.className1.className2</td>
+				<td>Selects elements with both classnames &quot;className1&quot; and &quot;className2&quot;. Note that there
+					is <em>no</em> space between the end of the first class name and the subsequent dot.</td>
+			</tr>
+			<tr>
+				<td>element.className</td>
+				<td>Selects the HTML element type with the corresponding class name</td>
+			</tr>
+			<tr>
+				<td>id1<b>,</b> id2</td>
+				<td>Here <code>idX</code> can either be an HTML element tag or a class name (i.e., &quot;.className&quot;.
+					Selects all nodes identified by <code>idx1</code> or <code>idx2</code>.
+				</td>
+			</tr>			
+			<tr>
+				<td>id1 id2</td>
+				<td>Here <code>idX</code> can either be an HTML element tag or a class name (i.e., &quot;.className&quot;.
+					The two identifiers are seperated by a space. This selects all elements identified by <code>id2</code> 
+					that are a descendents (i.e., children, grandchildren and so on) of nodes identified by <code>id1</code>.
+				</td>
+			</tr>
+			<tr>
+				<td>id1 > id2</td>
+				<td>Here <code>idX</code> can either be an HTML element tag or a class name (i.e., &quot;.className&quot;.
+					The two identifiers are seperated by a &gt; symbol. This selects all elements identified by <code>id2</code>
+					that are <em>immediate</em> children of nodes identified by <code>id1</code>.
+				</td>
+			</tr>
+			<tr>
+				<td>[attribute] or [attribute OP value]</td>
+				<td>Selects all nodes with the attribute name specified inside the square br=ackets set. Additionally the attribute selection can be further refined based on its value using the operators = (equals), ~= (containing a whole word), |= (starting with), ^= (begins with), $= (ends with), *= (contains substring). E.g., &quot;<code>[target=_blank]</code> selects node that have a <code>target</code> attribute and then only those where the attribute equals <code>_blank</code>.
+				</td>
+			</tr>
+			<tr>
+				<td>id:first-child(n)</td>
+				<td>Selects any node identified by <code>id</code> that is the first child of its parent. </td>
+			</tr>
+			<tr>
+				<td>id:last-child(n)</td>
+				<td>Selects any node identified by <code>id</code> that is the last child of its parent. </td>
+			</tr>
+			<tr>
+				<td>id:nth-child(n)</td>
+				<td>Selects any node identified by <code>id</code> that is the n-th child of its parent. </td>
+			</tr>
+			<tr>
+				<td>id:nth-col(n)</td>
+				<td>Selects any node identified by <code>id</code> that is a cell belonging to the nth column in a grid/table.</td>
+			</tr>
+		</tbody>
+	</table>
+	<p>
+		There are an absolute load more - see the W3C link above. These tend to be ones I have most often used.
+	</p>
+	<p>
+		Also, note that you can chain some of the pseudo classes. For example <code>button:hover:disabled</code>
+		applies a style to a button that has the mouse cursor over it and that is also disabled.
+	</p>
+</div> <!-- END H2 Box Model -->
+
+<h2>Calculating Element Properties</h2>
+<div>
+	<p></p>
+</div> <!-- END H2 Calculating Properties -->
+
+<h2>Creating Variables</h2>
+<div>
+	<p></p>
+</div> <!-- END H2 Calculating Properties -->
+
+
+<h2>Box Model</h2>
+<div>
+	<p>
+		See the W3C's <a href="https://www.w3.org/TR/css-box-3/" target="_blank">CSS Box Model Module</a>.
+	</p>
+	<p>
+		<img src="##IMG_DIR##/css_box_model.png" alt="Picture showning CSS box model and effect of box-sizing settings content-box, padding-box and border-box"/>
+	</p>
+</div> <!-- END H2 Box Model -->
+
+
+<h2>Positioning Elements</h2>
+<div>
+	<p></p>
+	<h3>References</h3>
+	<ul>
+		<li><a href="https://www.w3.org/TR/2016/WD-css-position-3-20160517/" target="_blank">CSS Positioned Layout Module</a>, W3C.</li>
+		<li><a href="https://css-tricks.com/absolute-relative-fixed-positioining-how-do-they-differ/" target="_blank">Absolute, Relative, Fixed Positioning: How Do They Differ?</a>, Chris Coyier.</li>
+		<li><a href="https://css-tricks.com/absolute-positioning-inside-relative-positioning/" target="_blank">Absolute Positioning Inside Relative Positioning</a>, Chris Coyier.</li>
+		<li><a href="https://css-tricks.com/position-sticky-2/" target="_blank">Position: sticky;</a>, Chris Coyier.</li>
+	</ul>
+	<p>
+	</p>
+</div> <!-- END H2 Calculating Properties -->
+
+<h2>Media Queries</h2>
+<div>
+	<p>
+		See the article <a href="https://www.emailonacid.com/blog/article/email-development/emailology_media_queries_demystified_min-width_and_max-width/" target="_blank">Media Queries Demystified: CSS Min-Width and Max-Width</a>.
+	</p>
+</div> <!-- END H2 Media Queries -->
+
+</div> <!-- END H1 padding div -->
+</div>
+</body>
+</html>
+
+

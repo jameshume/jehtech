@@ -68,6 +68,79 @@ Docker terminal. On the latter you can use local host.
 VM - isolate system
 Docket - isolate application
 
+
+################################################################################
+# Docker and WSL
+Taken from here: https://nickjanetakis.com/blog/setting-up-docker-for-windows-and-wsl-to-work-flawlessly#ensure-volume-mounts-work
+Replicated verbatim:
+
+	Install Docker
+	==============
+
+	# Update the apt package list.
+	sudo apt-get update -y
+
+	# Install Docker's package dependencies.
+	sudo apt-get install -y \
+	    apt-transport-https \
+	    ca-certificates \
+	    curl \
+	    software-properties-common
+
+	# Download and add Docker's official public PGP key.
+	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+	# Verify the fingerprint.
+	sudo apt-key fingerprint 0EBFCD88
+
+	# Add the `stable` channel's Docker upstream repository.
+	#
+	# If you want to live on the edge, you can change "stable" below to "test" or
+	# "nightly". I highly recommend sticking with stable!
+	sudo add-apt-repository \
+	   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+	   $(lsb_release -cs) \
+	   stable"
+
+	# Update the apt package list (for the new apt repo).
+	sudo apt-get update -y
+
+	# Install the latest version of Docker CE.
+	sudo apt-get install -y docker-ce
+
+	# Allow your user to access the Docker CLI without needing root access.
+	sudo usermod -aG docker $USER
+
+
+	Connect to a remote Docker daemon with this 1 liner:
+	====================================================
+	echo "export DOCKER_HOST=tcp://localhost:2375" >> ~/.bashrc && source ~/.bashrc
+	# ALSO make sure in your Docker-for-windows settings that you have enabled the
+	# "Expose daemon on tcp://localhost:2375 without TLS" option.
+
+
+	Ensure Volume Mounts Work
+	=========================
+	When using WSL, Docker for Windows expects you to supply your volume paths in a format that matches this: /c/Users/nick/dev/myapp.
+	But, WSL doesn’t work like that. Instead, it uses the /mnt/c/Users/nick/dev/myapp format.
+
+		Running Windows 10 18.03+ or Newer?
+		-----------------------------------
+		sudo nano /etc/wsl.conf
+
+		# Now make it look like this and save the file when you're done:
+		[automount]
+		root = /
+		options = "metadata"
+
+		# Now reboot your windows device.
+
+		Running Windows 10 17.09?
+		-------------------------
+		udo mkdir /c
+		sudo mount --bind /mnt/c /c
+
+
 ################################################################################
 # Architecture
 Docker daemon, provides REST API, and the docker CLI client, which uses the REST API.

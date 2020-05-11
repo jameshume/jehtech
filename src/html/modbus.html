@@ -72,18 +72,20 @@
 					<li>MODBUS response - <code>mb_rsp_pdu = {function_code, response_data}</code> - Normal response echoes function code back,</li>
 					<li>MODBUS exception response - <code>mb_excep_rsp_pdu = {exception-function_code, exception-code}</code> - Exception response echoes function code | 0x80. Exception code is one of:
 						<p></p>
-						<table style="border: 0px;">
-							<tr><td style="background: #fcba03;">Exception Code</td><td style="background: #fcba03;">Meaning</td></tr>
+						<table class="jehtable">
+							<thead>
+								<tr><td>Exception Code</td><td>Meaning</td></tr>
+							</thead>
 							<tr><td>0x01</td><td>Illegal function</td></tr>
-							<tr><td style="background: #f5efeb;">0x02</td><td style="background: #f5efeb;">Illegal data address</td></tr>
+							<tr><td>0x02</td><td>Illegal data address</td></tr>
 							<tr><td>0x03</td><td>Illegal data value</td></tr>
-							<tr><td style="background: #f5efeb;">0x04</td><td style="background: #f5efeb;">Slave device failure</td></tr>
+							<tr><td>0x04</td><td>Slave device failure</td></tr>
 							<tr><td>0x05</td><td>Acknowledge</td></tr>
-							<tr><td style="background: #f5efeb;">0x06</td><td style="background: #f5efeb;">Slave device busy</td></tr>
+							<tr><td>0x06</td><td>Slave device busy</td></tr>
 							<tr><td>0x07</td><td>n/a</td></tr>
-							<tr><td style="background: #f5efeb;">0x08</td><td style="background: #f5efeb;">Memory parity error</td></tr>
+							<tr><td>0x08</td><td>Memory parity error</td></tr>
 							<tr><td>0x09</td><td>n/a</td></tr>
-							<tr><td style="background: #f5efeb;">0x0A</td><td style="background: #f5efeb;">Gateway path unavailable</td></tr>
+							<tr><td>0x0A</td><td>Gateway path unavailable</td></tr>
 							<tr><td>0x0B</td><td>Gateway target failed to respond</td></tr>
 						</table>
 						<p></p>
@@ -158,42 +160,44 @@
 				</ul>
 				<p>
 					Most commonly recognised ones are:
-					<table style="border:0px;">
-						<tr>
-							<td style="background: #fcba03;">Function Code</td>
-							<td style="background: #fcba03;">Register Type</td>
-						</tr>
+					<table class="jehtable">
+						<thead>
+							<tr>
+								<td>Function Code</td>
+								<td>Register Type</td>
+							</tr>
+						</thead>
 						<tr>
 							<td>1</td>
 							<td>Read Coil</td>
 						</tr>
 						<tr>
-							<td style="background: #f5efeb;">2</td>
-							<td style="background: #f5efeb;">Read Discrete Input</td>
+							<td>2</td>
+							<td>Read Discrete Input</td>
 						</tr>
 						<tr>
 							<td>3</td>
 							<td>Read Holding Reigsters</td>
 						</tr>
 						<tr>
-							<td style="background: #f5efeb;">4</td>
-							<td style="background: #f5efeb;">Read Input Registers</td>
+							<td>4</td>
+							<td>Read Input Registers</td>
 						</tr>
 						<tr>
 							<td>5</td>
 							<td>Write Single Coil</td>
 						</tr>
 						<tr>
-							<td style="background: #f5efeb;">6</td>
-							<td style="background: #f5efeb;">Write Single Holding Register</td>
+							<td>6</td>
+							<td>Write Single Holding Register</td>
 						</tr>
 						<tr>
 							<td>15</td>
 							<td>Write Multiple Coils</td>
 						</tr>
 						<tr>
-							<td style="background: #f5efeb;">16</td>
-							<td style="background: #f5efeb;">Write Multiple Holding Registers</td>
+							<td>16</td>
+							<td>Write Multiple Holding Registers</td>
 						</tr>
 					</table>
 				</p>
@@ -212,26 +216,37 @@
 
 <h2>Some Public 16-bit Access Tables</h2>
 <div>
-	<p>A summary of some of the most common 16-bit tables (read registers):
+	<p>A summary of some of the most common 16-bit tables (aka registers):
 	</p>
-	<table>
+	<table class="jehtable">
+		<thead>
+			<tr>
+				<td>Register Operation</td><td>Code</td><td>Packet Description</td>
+			</tr>
+		</thead>
 		<tr>
 			<td>Read Holding Registers</td> <td>0x03</td> <td>
 			                                              <ul>
 			                                                  <li>Request:
-			                                                      <table><tr><td>Function code</td><td>1 byte</td><td>0x03</td></tr>
+			                                                      <table class="jehtable">
+			                                                             <thead><tr><td>Byte(s) meaning</td><td># bytes</td><td>Content</td></tr></thead>
+			                                                             <tr><td>Function code</td><td>1 byte</td><td>0x03</td></tr>
 			                                                             <tr><td>Start address</td><td>2 bytes</td><td></td></tr>
 			                                                             <tr><td>Num registers</td><td>2 bytes</td><td>0x0001 to 0x007D</td></tr>
 			                                                      </table>
 			                                                  </li>
 			                                                  <li>Response:
-			                                                      <table><tr><td>Function code</td><td>1 byte</td><td>0x03</td></tr>
+			                                                      <table class="jehtable">
+			                                                             <thead><tr><td>Byte(s) meaning</td><td># bytes</td><td>Content</td></tr></thead>
+			                                                             <tr><td>Function code</td><td>1 byte</td><td>0x03</td></tr>
 			                                                             <tr><td>Byte count</td><td>1 byte</td><td>2N</td></tr>
 			                                                             <tr><td>Register value</td><td>2N bytes</td><td></td></tr>
 			                                                      </table>
 			                                                  </li>
 			                                                  <li>RError:
-			                                                      <table><tr><td>Error code</td><td>1 byte</td><td>0x83</td></tr>
+			                                                      <table class="jehtable">
+			                                                             <thead><tr><td>Byte(s) meaning</td><td># bytes</td><td>Content</td></tr></thead>
+			                                                             <tr><td>Error code</td><td>1 byte</td><td>0x83</td></tr>
 			                                                             <tr><td>Exception code</td><td>1 byte</td><td>1, 2, 3 or 4</td></tr>
 			                                                      </table>
 			                                                  </li>
@@ -243,19 +258,25 @@
 			<td>Read Input Register</td> <td>0x04</td> <td>
 			                                              <ul>
 			                                                  <li>Request:
-			                                                      <table><tr><td>Function code</td><td>1 byte</td><td>0x04</td></tr>
+			                                                      <table class="jehtable">
+			                                                             <thead><tr><td>Byte(s) meaning</td><td># bytes</td><td>Content</td></tr></thead>
+			                                                             <tr><td>Function code</td><td>1 byte</td><td>0x04</td></tr>
 			                                                             <tr><td>Start address</td><td>2 bytes</td><td></td></tr>
 			                                                             <tr><td>Num registers</td><td>2 bytes</td><td>0x0001 to 0x007D</td></tr>
 			                                                      </table>
 			                                                  </li>
 			                                                  <li>Response:
-			                                                      <table><tr><td>Function code</td><td>1 byte</td><td>0x04</td></tr>
+			                                                      <table class="jehtable">
+			                                                             <thead><tr><td>Byte(s) meaning</td><td># bytes</td><td>Content</td></tr></thead>
+			                                                             <tr><td>Function code</td><td>1 byte</td><td>0x04</td></tr>
 			                                                             <tr><td>Byte count</td><td>1 byte</td><td>2N</td></tr>
 			                                                             <tr><td>Input registers</td><td>2N bytes</td><td></td></tr>
 			                                                      </table>
 			                                                  </li>
 			                                                  <li>RError:
-			                                                      <table><tr><td>Error code</td><td>1 byte</td><td>0x84</td></tr>
+			                                                      <table class="jehtable">
+			                                                             <thead><tr><td>Byte(s) meaning</td><td># bytes</td><td>Content</td></tr></thead>
+			                                                             <tr><td>Error code</td><td>1 byte</td><td>0x84</td></tr>
 			                                                             <tr><td>Exception code</td><td>1 byte</td><td>1, 2, 3 or 4</td></tr>
 			                                                      </table>
 			                                                  </li>
@@ -267,19 +288,25 @@
 			<td>Write Single Register</td> <td>0x06</td> <td>
 			                                              <ul>
 			                                                  <li>Request:
-			                                                      <table><tr><td>Function code</td><td>1 byte</td><td>0x06</td></tr>
+			                                                      <table class="jehtable">
+			                                                             <thead><tr><td>Byte(s) meaning</td><td># bytes</td><td>Content</td></tr></thead>
+			                                                             <tr><td>Function code</td><td>1 byte</td><td>0x06</td></tr>
 			                                                             <tr><td>Register address</td><td>2 bytes</td><td></td></tr>
 			                                                             <tr><td>Value</td><td>2 bytes</td><td></td></tr>
 			                                                      </table>
 			                                                  </li>
 			                                                  <li>Response:
-			                                                      <table><tr><td>Function code</td><td>1 byte</td><td>0x06</td></tr>
+			                                                      <table class="jehtable">
+			                                                             <thead><tr><td>Byte(s) meaning</td><td># bytes</td><td>Content</td></tr></thead>
+			                                                             <tr><td>Function code</td><td>1 byte</td><td>0x06</td></tr>
 			                                                             <tr><td>Register address</td><td>2 bytes</td><td></td></tr>
 			                                                             <tr><td>Value</td><td>2 bytes</td><td></td></tr>
 			                                                      </table>
 			                                                  </li>
 			                                                  <li>RError:
-			                                                      <table><tr><td>Error code</td><td>1 byte</td><td>0x86</td></tr>
+			                                                      <table class="jehtable">
+			                                                             <thead><tr><td>Byte(s) meaning</td><td># bytes</td><td>Content</td></tr></thead>
+			                                                             <tr><td>Error code</td><td>1 byte</td><td>0x86</td></tr>
 			                                                             <tr><td>Exception code</td><td>1 byte</td><td>1, 2, 3 or 4</td></tr>
 			                                                      </table>
 			                                                  </li>

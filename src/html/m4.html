@@ -616,7 +616,7 @@ m4trace:stdin:3: -1- id 3: ifelse ...<span class="nocode comment">
 
 jump(1,2,3,4)
 4,3,2,1</pre>
-			<p>Sweat :)</p>
+			<p>Sweet :)</p>
 </div>
 
 <h2>Diverting Output</h2>
@@ -640,20 +640,49 @@ jump(1,2,3,4)
 <h2>Including Files</h2>
 <div>
 	<p>
-		Use <code>include(filename)</code>. The include macro expands to the file contents which is then recursively re-evaluated null-like
-		an other macro expansion.
+		Use <code>include(filename)</code>. The include macro expands to the file contents which is then recursively re-evaluated - like
+		any other macro expansion.
 	</p>
 	<p>
-		So, for example, if i was using an M4 macro to include a text file with example HTML code in it into my HTML page, I could use:
+		So, for example, if i was using an M4 macro to include a text file with example HTML/C/C++/whatever code in it into my HTML page, I could use the following to escape HTML special characters:
 	</p>
 	<pre class="prettyprint linenums lang-m">patsubst(patsubst(patsubst(include(`path/to/html-snippet'), `&lt;', `&amp;lt;'), `&gt;', `&amp;gt;'), `&amp;', `&amp;amp;')</pre>
 	<p>
 		This could also be bundled up into a helpful little macro:
 	</p>
 	<pre class="prettyprint linenums lang-m">define(`HTML_SNIPPET', `&lt;pre&gt;patsubst(patsubst(patsubst(include($1), `&lt;', `&amp;lt;'), `&gt;', `&amp;gt;'), `&amp;', `&amp;amp;')&lt;/pre&gt;')dnl</pre>
-	<p></p>
+	<p>
+		BALLS - its doesn't quite work if you have M4 quote characters in the file being included :( We can improve this slightly by
+		disabling quoting whilst parsing the file contents <a href="https://stackoverflow.com/a/29544108/1517244" target="_blank">[Ref]</a>:
+	</p>
+	<pre class="prettyprint linenums lang-m">define(`HTML_SNIPPET', `changequote(`',`')&lt;pre&gt;patsubst(patsubst(patsubst(include($1), `&lt;', `&amp;lt;'), `&gt;', `&amp;gt;'), `&amp;', `&amp;amp;')&lt;/pre&gt;'changequote())dnl</pre>
+	<p>
+		BALLS again - even this isn't quote okay, because any content in the imported file that accidently matches a macro, user or pre-defined,
+		will still wrongly be expanded, because the output of macro evaluations is always rescanned. Doh! It appears that GNU m4 offers several mechanisms or techniques for inhibiting the recognition of names as macro calls <a href="https://www.gnu.org/software/m4/manual/m4-1.4.15/html_node/Inhibiting-Invocation.html" target="_blank">[Ref]</a>, which may be handy (see <code>--prefix-builtins</code>)...
+	</p>
+	<p>
+		...but, then we need to make sure that first, all the M4 builtins are prefixed with &quot;m4_&quot; and that the included
+		snippet does not contain any user defined macros. Mind you, using <code>--prefix-builtins</code> is probably a good idea
+		when using M4 with HTML anyway, just in case you do accidently use an M4 builtin by accident.
+	</p>
+	<p>
+		I have not been able to see a good way around this. What will prove easier is to us <code>syscmd()</code>
+		<a href="https://www.gnu.org/software/m4/manual/m4-1.4.15/html_node/Syscmd.html#Syscmd" target="_blank">[Ref]</a>.
+		This macro will pass the command output straight to the M4 output and <em>evaluate to nothing</em>.
+		So, we can execute something that will correctly escape the HTML snippet for us. The downside is we now need to
+		rely on an external program. If we have to run the M4 script on different platforms, this could get fun.
+	</p>
+	<p>
+		And SIGH, on Windows, at least, my M4 doesn't inherit the environment of shell it's executed from, so woopy-doo it doesn't
+		even recognise the Python executable without it being prefix by it's absolute path... grrr.
+	</p>
+	<p>
+		If you wanted to include a file into the output, with<b>out</b> letting M4 parse the file, i.e., send it straight to output without
+		any more M4 involvement, you can use the GNU M4 extension <code>undivert(`path/to/file')</code>. The macro dumps the file to output but evaluates to nothing, so M4 won't be able to operate of the file contents.
+	</p>
 </div>
 
+<p></p>
 </div> <!-- END H1 padding div -->
 </div>
 </body>

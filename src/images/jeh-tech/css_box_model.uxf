@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>340</x>
+      <y>280</y>
+      <w>170</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>
+Content
+bg=none
+layer=1
+transparency=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>310</x>
+      <y>250</y>
+      <w>230</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>transparency=1
+bg=#CAD7E3
+*Padding*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>300</x>
+      <y>240</y>
+      <w>250</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>transparency=0
+bg=black</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>270</x>
+      <y>210</y>
+      <w>310</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>bg=#C9D5E1
+
+
+
+
+
+
+
+
+
+
+
+
+
+*Margin*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>290</x>
+      <y>220</y>
+      <w>280</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-&gt;&gt;&gt;
+lw=2
+fg=red</panel_attributes>
+    <additional_attributes>10.0;10.0;260.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>550</x>
+      <y>230</y>
+      <w>30</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-&gt;&gt;&gt;
+lw=2
+fg=red</panel_attributes>
+    <additional_attributes>10.0;180.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>730</x>
+      <y>280</y>
+      <w>170</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>
+Content
+bg=none
+layer=1
+transparency=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>700</x>
+      <y>250</y>
+      <w>230</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>transparency=1
+bg=#CAD7E3
+
+
+
+
+
+
+
+
+*Padding*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>690</x>
+      <y>240</y>
+      <w>250</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>transparency=0
+bg=black</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>660</x>
+      <y>210</y>
+      <w>310</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>
+bg=#C9D5E1
+
+
+
+
+
+
+
+
+
+
+
+
+*Margin*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>690</x>
+      <y>250</y>
+      <w>260</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-&gt;&gt;&gt;
+lw=2
+fg=red</panel_attributes>
+    <additional_attributes>10.0;10.0;240.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>900</x>
+      <y>240</y>
+      <w>30</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-&gt;&gt;&gt;
+lw=2
+fg=red</panel_attributes>
+    <additional_attributes>10.0;160.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1130</x>
+      <y>280</y>
+      <w>170</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>
+Content
+bg=none
+layer=1
+transparency=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1100</x>
+      <y>250</y>
+      <w>230</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>transparency=1
+bg=#CAD7E3
+*Padding*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1090</x>
+      <y>240</y>
+      <w>250</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>transparency=0
+bg=black</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1060</x>
+      <y>210</y>
+      <w>310</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>
+bg=#C9D5E1
+
+
+
+
+
+
+
+
+
+
+
+
+*Margin*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1120</x>
+      <y>270</y>
+      <w>200</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-&gt;&gt;&gt;
+lw=2
+fg=red
+layer=2</panel_attributes>
+    <additional_attributes>10.0;10.0;180.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1290</x>
+      <y>270</y>
+      <w>30</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-&gt;&gt;&gt;
+lw=2
+fg=red
+layer=2</panel_attributes>
+    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>700</x>
+      <y>110</y>
+      <w>230</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>*The CSS Box Model*
+fontsize=20</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>330</x>
+      <y>460</y>
+      <w>230</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>box-sizing: border-box
+fontsize=16</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>720</x>
+      <y>470</y>
+      <w>230</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>box-sizing: padding-box
+fontsize=16</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>1120</x>
+      <y>470</y>
+      <w>230</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>box-sizing: content-box
+fontsize=16</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
