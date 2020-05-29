@@ -27,21 +27,99 @@
 <div id="page_contents">
 </div>
 
-<h2>TTL and CMOS</h2>
-<p>When connecting serial lines to equipment different voltage lebels may need to be accounted for. TTL and CMOS are the two types of circuit with associated
-	logic levels that you may need to convert to and from.</p>
-<h3>TTL</h3>
-<p>
-	TTL logic is transistor-to-transitor logic where the ciruits make use of transistors for both the logic and amplification functions. It has a reasonable resistance to noise and a high switching rate. It draws more current than CMOS circuits though <a href="https://whatis.techtarget.com/definition/transistor-to-transistor-logic-TTL" target="_blank">[Ref]</a>.
-</p>
-<p>
-	TTL circuits use 5V. The signal is low between 0V and 0.8V and high above 2V. Between 0.8V and 2V the signal is undefined. When receiving a signal a margin is added to these values to account for possible noise. Normally 0.4Vs of noise accounted for so low is defined as 0V to 0.4V and high as 2.4V or more (up to 5V).
-</p>
-<h3>CMOS</h3>
-<p>
-	Draws less current than TTL. Has wider noise margins normally. Can go from 0V to 5V but can also go from 0V to 3V3 for example, and what constitutes a low or high
-	signal is based on percentages of the high voltage <a href="ftp://ftp.ni.com/evaluation/pxi/Digital_States.pdf" target="_blank">[Ref]</a>.
-</p>
+<h2>RS232, TTL and CMOS Voltage Levels</h2>
+<div>
+	<h3>Serial v.s. Voltage Levels</h3>
+	<p>
+		A serial interface does <b>not</b> necessarily imply a voltage level, which I found quite interesing.
+		RS232, technically, as a standard just defines the voltage levels that represent mark and space, and
+		potentially the type of connector used (9 or 25 pin D connector). Thus, technically, when one says
+		&quot;RS232&quot; one is talking about voltage levels only, but it is usually taken to mean
+		&quot;RS232 voltage levels applied to the serial protocol&quot; - a slight conflation, and one that
+		I realise I make many times later on in this page :/
+	</p>
+	<p>
+		Conversely, the serial protocol defines the meaning of start/stop bits, baud, parity and
+		signals such as &quot;request to send&quot;. It doesn't specify voltage levels.
+	</p>
+	<p>
+		This means that, for example, an Arduino can output a serial-protocol bit stream at 5V (TTL).
+		To connect this to a serial port on a PC (uses RS232 volatage levels) a transceiver chip
+		is required. The serial protocol remains the same, its just the voltage levels that change.
+	</p>
+	<p>
+		This is why, when connecting serial lines to equipment, different voltage levels may need to be accounted for.
+		TTL and CMOS are the two types of circuit with associated logic levels that you may need to convert to and from.
+	</p>
+
+	<h3>RS232</h3>
+	<p>
+		RS232 defines the voltage levels as +5V to +15V for a space and -5V to -15V for a mark at the transmitter, and
+		to account for signal attenuation, +/-3V to +/-13V at the receiver. <a href="https://www.omega.co.uk/techref/pdf/RS-232.pdf" target="_blank">[Ref]</a>.
+	</p>
+
+	<h3>TTL</h3>
+	<p>
+		TTL logic is transistor-to-transitor logic where the ciruits make use of transistors for both the logic and amplification functions. It has a reasonable resistance to noise and a high switching rate. It draws more current than CMOS circuits though <a href="https://whatis.techtarget.com/definition/transistor-to-transistor-logic-TTL" target="_blank">[Ref]</a>.
+	</p>
+	<p>
+		TTL circuits use 5V. The signal is low between 0V and 0.8V and high above 2V. Between 0.8V and 2V the signal is undefined. When receiving a signal a margin is added to these values to account for possible noise. Normally 0.4Vs of noise accounted for so low is defined as 0V to 0.4V and high as 2.4V or more (up to 5V).
+	</p>
+	<p>
+		TTL circuits are constructed using <a href="electronics.html#bjt">NPN and PNP <em>bipolar</em> transistors</a>.
+	</p>
+	<p>
+		I'm not sure if the TTL circuit type and voltage levels defined by &quot;TTL&quot; were ever linked by the type of transistor
+		being used. Nowadays it seems like it is a pure voltage level definitions as CMOS and TTL circuits will normall use
+		TTL voltage levels. As a friend of mine told me, <q>most chips are CMOS now, but ensuring that they comply with 
+		the older &quot;TTL standard&quot; voltage levels means that you can take pretty much anything from any manufacturer
+		and connect them together if the voltage standards match</q>.
+	</p>
+
+	<h3>CMOS</h3>
+	<p>
+		Draws less current than TTL. Has wider noise margins normally. Can go from 0V to 5V but can also go from 0V to 3V3 for example, and what constitutes a low or high signal is based on percentages of the high voltage <a href="ftp://ftp.ni.com/evaluation/pxi/Digital_States.pdf" target="_blank">[Ref]</a>.
+	</p>
+	<p>
+		CMOS circuits are constructed using  <a href="electronics.html#mosfet">NPN and PNP <em>MOSFETs</em></a>.
+	</p>
+	<h3>Summary</h3>
+	<p>
+		<a href="https://www.omega.co.uk/techref/pdf/RS-232.pdf" target="_blank">[Ref]</a><a href="https://en.wikipedia.org/wiki/Logic_level" target="_blank">[Ref]</a>
+	</p>
+	<table class="jehtable">
+		<thead>
+			<tr>
+				<td>Type</td>
+				<td>V<sub>low</sub></td>
+				<td>V<sub>high</sub></td>
+				<td>Notes</td>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr>
+				<td>RS232</td>
+				<td>+3V to +13V</td>
+				<td>-3V to -13V</td>
+				<td>At the receiver</td>
+			</tr>
+			<tr>
+				<td>TTL</td>
+				<td>0V to 0.8V</td>
+				<td>2V to V<sub>CC</sub></td>
+				<td>V<sub>CC</sub> = 5V, tolerance = 10%.</td>
+			</tr>
+			<tr>
+				<td>CMOS</td>
+				<td>0V to 1/3V<sub>DD</sub></td>
+				<td>2/3V<sub>DD</sub> to V<sub>DD</sub></td>
+				<td>V<sub>DD</sub> = supply voltage</td>
+			</tr>
+		</tbody>
+	</table>
+	<p></p>
+</div>
 
 <h2>Single Ended (Unbalanced) v.s. Differential Signals (Balanced)</h2>
 <div>
