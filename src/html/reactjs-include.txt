@@ -1040,6 +1040,11 @@ Fake online REST API for Testing and Prototyping: https://jsonplaceholder.typico
 	XMLHttpRequestObject
 	--------------------
 
+	FETCH
+	-----
+	This is the newer version of XMLHttpRequestObject that is much easier to use and works with
+	promises and asynchronous functions.
+
 	AXIOS
 	-----
 	3rd party JavaScript library promise based HTTP client
@@ -1047,4 +1052,210 @@ Fake online REST API for Testing and Prototyping: https://jsonplaceholder.typico
 		                  ^^^^^^
 		                  Makes it store an entry in the package.json file
 
-	kj
+	TODO - complete section
+
+
+MULTI PAGE IN SINGLE PAGE APP (ROUTING)
+=======================================
+
+React core does not implement routing. A third party defacto-standary package called react-router
+is can be used.
+
+Routing - show different pages to user based on path in URL. User JS to render different pages based
+          on which path the user has navigated to.
+
+Router package helps parse the path to figure out where user wants to go to. We then link these up
+to where we want to point the user.
+
+Server side, the same file is returned no matter what the path is - so has to be setup to do this.
+The paths are only significant on the CLIENT SIDE.
+
+INSTALLATION:
+	npm install --save react-router react-router-dom
+
+	Technically, only react-router-dom  is required for web development. It wraps react-router
+	and therefore uses it as a dependency.
+
+ENABLE:
+	Do in index.js or App.js. In App.js wrap the App div inside "BrowserRouter". All children of
+	the <BrowserRouter> tag will be able to access its routing functionalities:
+
+		import React, {Component} from 'react';
+		import {BrowserRouter} from 'react-router-dom'; // << INCLUDE THIS
+
+		class App extends Component {
+			render() {
+				return (
+					<BrowserRouter>                     <!-- << USE IT LIKE THIS -->
+						<div className="App">
+							<!-- The app contents -->
+						</div>
+					</BrowserRouter>
+				);
+			}
+		}
+
+USE:
+	In components/containers:
+
+		Render small things
+		-------------------
+		import {Route} from 'react-router-dom';
+
+		...
+			render() {
+				<!-- Note how Route tag is self closing -->
+				<Route
+					path="path for which this path should become active"
+					render={some function to render for this path}
+				/>
+
+				<!-- For example: -->
+				<Route
+					path="/"
+					exact   <!-- << NOTE means final slash is necessary to match - means "is my
+					                complete path like this?" vs "does my path start with this?" -->
+					render={() => <div>A test</div>}
+				/> 
+
+				<!-- Route more-or-less replaces itself with the content defined in render.
+				     You can even use multiple route's for the same path -->
+			}
+
+
+		Render components
+		-----------------
+		But if you want to RENDER A COMPONENT,  use the component property like so:
+			<Route
+				path="..."
+				[exact]
+				component={Ref to function or class to use}
+			/>
+
+	Prevent reloads on link navigation:
+	-----------------------------------
+		Reloading a page KILLS THE CURRENT APP STATE!! WE DO NOT WANT THIS
+
+		To prevent links always re-rendering pages, i.e., reloading them, the links must be changed
+		to look like this:
+
+		Don't use <a>, use <Link>!
+		The <a> tag...
+			<a href="...">...</a>
+		... is replaced with a <Link> tag:
+			<Link to="...">...</Link>
+		... or, more completely but with more complexity:
+			<Link to={{
+			   pathname: '/something' <!-- NOTE: This is always treated as an ABSOLUTE path... -->
+			   hash:     '#something' <!-- ...wether or not it has a prefix of '/' -->
+			   search:   '?arg=param'
+			}}>...</Link>
+
+		This allows react to intercept the link click and instead of the page being loaded from
+		fresh, it can just render what changes are needed WITHOUT having to reload the page.
+
+		Note that the link pathname is always treated as an absolute path, so if you want to use
+		a relative path you have to build it up into an absolute one by using the page you are 
+		currently on, given by "this.props.match.url", and appending the target:
+			e.g., pathname: this.props.match.url + "/relative/path";
+
+		If you want to add some styling to the active and non-active links it is bettery to use
+		<NavLink>. This adds an "active" class to the active link for you. Note there can be
+		many "active" links if more than one Link path matches. The reason for this is that the
+		link path is TREATED AS A PREFIX (just like in Router). So to match exact use the exact
+		attribute.
+
+			<NavLink to={{
+			   pathname: '/something'        <!-- << This is always treated as an ABSOLUTE ... -->
+			   [exact]                       <!-- ... path whether or not it has a prefix of '/' -->
+			   [activeClassName="my_active"] <!-- << Override the default active classname -->
+			   [activeStyle={{...}}]         <!-- << Dynamically specify style for active -->
+			   hash:     '#something'
+			   search:   '?arg=param'
+			}}>...</Link>
+
+
+
+	Extra Props We Get From React Router
+	------------------------------------
+
+	Components rendered via a <Route> get some extra attributes that are automatically added
+	to "props" for us.
+		1. history
+		2. location
+		3. match
+	HOWEVER, these props ARE NOT PASSED DOWN THE COMPONENT TREE. To pass these down one would have
+	to explicity pass them down to a child using {...this.props} as an attribute to a child node
+	from the parent node that is being displayed because of a <Route>.
+
+	Another way is to use the HOC withRouter. Use it to wrap the child components you want to have
+	access to the <Route> attributes:
+		import { withRouter } from 'react-router-dom';
+		...
+		export default withRouter(my_component);
+
+
+	Routing Parameters
+	------------------
+
+	If we want to visit links such as "/1", /2" etc routing parameters are rquired:
+		<Route path="/something" /> <!-- << NOTE that routes are used in the order they are defined
+		                                    to, "/something" will match before :id, but rember
+		                                    ALL ROUTES ARE RENDERED IF THEY MATCH THE PATH  -->
+		<Route
+		   path="/:id"
+		   exact 
+		   component={...}/>
+
+	To pass route parameters via our links just do something like
+		<Link to={'/path/' + this.props.id}> ... child elements or text ... </Link>
+
+	To get the value of "id" in the component we need to access the magic props attributes that
+	Router added for us:
+		match.params['id'] // It is called "id" as that was the name in the Route:path definition
+	Can also use
+		match.params.id
+
+	Remember the ALL the Routes that match the path will be rendered. If you want only ONE match
+	to be rendered (the one that is seen first btw), the use <Switch> to wrap the <Route> tags:
+		<Switch>
+			<Route .../>
+			...
+			<Route .../>
+		</Switch>
+
+
+	Search Parameters
+	-----------------
+	These are not the route parameters which come from that _path_ in the URL. These are the 
+	query parameters that occur at the end of the URL after a "?". For example:
+		www.jeh-tech/my_page?my_value=123
+
+	Pass in links using
+		<Link to="www.jeh-tech/my_page?my_value=123"/>
+	Or
+		<link to="www.jeh-tech/my_page" search="?my_value=123"/>
+
+	Can the access using
+		props.location.search
+
+	To parse search string easily use:
+		const query = new URLSearchParams(this.props.location.search);
+		for (let param of query.entries()) {
+			console.log(param);
+		}
+
+	URLSearchParams  is a built-in object, shipping with vanilla JavaScript
+
+
+	Natigating Programatically
+	--------------------------
+	To navigate to a page:
+		props.history.push({pathname: "/my/link/path"});
+	or 	props.history.push("/my/link/path");
+
+	
+
+
+
+
