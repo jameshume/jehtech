@@ -306,12 +306,19 @@ us like "-webkit-box-shadow" and "box-shadow" for us so our CSS can be more brie
 		class Button extends Component {
 			render() {
 				// reference as a js object
-				return <button className={styles.error}>Error Button</button>;
+				return <button className={styles.Error}>Error Button</button>;
 				//                        ^^^^^^^
 				//                        Gets locally scoped error CSS from sytems imported above.
 				//                        So CSS has a def `.error: {...}`
 			}
 		}
+
+	Can also specify an array for `className` to apply many classes to an object, using the normal
+	string with spaces, by joining elements of an array. E.g.:
+		<button className={[styles.Error, styles.Big].join(" ")}>...</button>
+
+	Can specify which style dynamically by using `styles['Big']`, e.g.:
+		<button className={[styles.Error, styles[props.btnSize]].join(" ")}>...</button>
 
 	To enable CSS modules (required for react-scripts < 2.0)
 		1. npn run eject
@@ -1019,3 +1026,25 @@ Steps:
         Recall: component/container subfolders with a Capital first letter.
 
 
+
+ERROR BOUNDARIES
+================
+https://reactjs.org/docs/error-boundaries.html
+
+
+
+HTTP & AJAX
+===========
+Fake online REST API for Testing and Prototyping: https://jsonplaceholder.typicode.com/
+
+	XMLHttpRequestObject
+	--------------------
+
+	AXIOS
+	-----
+	3rd party JavaScript library promise based HTTP client
+		npm install axios --save
+		                  ^^^^^^
+		                  Makes it store an entry in the package.json file
+
+	kj

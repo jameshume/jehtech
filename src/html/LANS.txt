@@ -1,0 +1,38 @@
+VLANS
+======
+
+vlans are implemented at layer 2. To go to different network need to go through a layer 3 device.
+Physical vs logical topology
+	vlan is a seperate locigcal subnet or seperate broadcast domain
+
+As frame hits switch it is tagged with the vlan number of the igress-to-switch port. The broad cast will then only be forwarded to ports in the same vlan. Only the original frame leaves the egress port(s) - no internal tagging leaves the switch.
+
+To construct vlans across more than one switch, the switches must be connected using a TRUNK port. Runs trunking protocol so that VLAN information is transmitted from one switch to another.(Protocol trunk protocol is 802.1Q industry standard).
+
+
+802.1Q trunks have NATIVE VLAN - it is untagged. Trunk ports normally need tagged frames, but anythin untagged automatically belongs to the native VLAN.So the native VLAN is for management protocol stuff as these should never exit the switches to the outside world as untagged. E.g. dynamic trunking protocol.
+
+Trunking = Carrying multiple VLANs over the same physical connection
+
+Ports can be statically assigned to VLANS or dynamically using VMPS where VLAN is assigned based on the MAC of who is connecting through that port.
+
+
+
+
+NAT & PAT
+==========
+
+Network Address Translation
+	Translate a private IP address which cannot be used on the internet to a public one, which can.
+	RFC 1918 - Defined private IP address blocks. Idea was to help preserve scarce IP address space.
+		10.0.0.0 10/8 "24-bit block" Class A
+ 		172.16.0.0 172.16/12 "20-bit block" Class B
+		192.168.0.0 192.168/16 "16-bitblock" Class C
+		^^^
+		Can be used in private networks without IANA coordination
+		But not routable on public internet
+		^^^
+		These addresses ----> NAT ----> Public IP address
+Port Address Translation
+	Overload one IP address. E.g. your ISP public IP address could be used by many many private IP addresses.
+
