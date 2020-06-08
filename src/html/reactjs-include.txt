@@ -1,5 +1,8 @@
+====================================================================================================
+====================================================================================================
 INTRO
-=======
+====================================================================================================
+
 react
 react-dom
 
@@ -34,8 +37,10 @@ React focusus on the what not the how - focus on what you want to see rather tha
 
 
 
+====================================================================================================
+====================================================================================================
 SOME RESOURCES
-==============
+====================================================================================================
 create-react-app: https://github.com/facebookincubator/create-react-app
 Introducing JSX: https://reactjs.org/docs/introducing-jsx.html
 Rendering Elements: https://reactjs.org/docs/rendering-elements.html
@@ -44,8 +49,10 @@ Listenable Events: https://reactjs.org/docs/events.html
 
 
 
+====================================================================================================
+====================================================================================================
 SETUP LOCAL REACT PROJECT
-=========================
+====================================================================================================
 
 Build a workflow - optimize code, lint, make code cross-browser compatible using babel and jsx etc.
 Need - dependency management tool, e.g. npm
@@ -76,9 +83,10 @@ watches your files so if you change code it will auto-reload it for you!
 
 
 
-	
+====================================================================================================
+====================================================================================================	
 REACT COMPONENT BASICS
-======================
+====================================================================================================
 Every component needs a `render()` method - it returns an object that react can use to render 
 content to the HTML DOM.
 
@@ -210,8 +218,11 @@ wrap the code in curley braces - {}
 
 
 
+====================================================================================================
+====================================================================================================
 Events & Handlers
-====================
+====================================================================================================
+
 All HTML attributes like onclick become onClick in JSX.
 See https://reactjs.org/docs/events.html#supported-events
 
@@ -231,11 +242,14 @@ The other way to accomplish this is to use an arrow function, and it looks a lit
 apparently it can be less efficient and bind() is therefore preferred.
 	<button onClick={() => this.myHandler(param1, param2, ...)}>
 
+
+
+====================================================================================================
+====================================================================================================
 Hooks
-======
+====================================================================================================
 All React hooks are called "useXXX".
 	import React, {useXXX, useYYY, ...} from 'react';
-
 
 useState() hook
 ---------------
@@ -264,15 +278,16 @@ This is a new way - the class based method is still seemingly the standard.
 
 
 
+====================================================================================================
+====================================================================================================
 CSS
-====
+====================================================================================================
 
 Import into your JS files so that WebPack is aware of its existance. Put CSS for component in
 component's dir and use class name same as component's name.
 
 For things like "box-shadow" it converts this CSS property to the difference browser variables for
 us like "-webkit-box-shadow" and "box-shadow" for us so our CSS can be more brief and generic.
-
 
 	Inline styles
 	-------------
@@ -370,9 +385,10 @@ us like "-webkit-box-shadow" and "box-shadow" for us so our CSS can be more brie
 
 
 
-
+====================================================================================================
+====================================================================================================
 CONDITIONAL RENDERING
-=====================
+====================================================================================================
 
 In JSX we can execute simple JS expressions in {...}. This means that we could render based on the
 ternary operator "cond ? true-path : false-path". Note cannot use if-else as this is
@@ -415,8 +431,10 @@ This is EASIER TO READ AND MAINTAIN! Keeps our core JSX template CLEAN!
 
 
 
+====================================================================================================
+====================================================================================================
 RENDERING LISTS
-===============
+====================================================================================================
 
 If the state, or whatever other variable has a list of attributes for a list of like-tags we can do this:
 	return (
@@ -447,8 +465,10 @@ NOTE -	When rendering lists of data ALWAYS USE THE KEY PROP. It helps react know
 
 
 
+====================================================================================================
+====================================================================================================
 USE PSEUDO SELECTORS IN JAVASCRIPT
-==================================
+====================================================================================================
 
 Requires package called "Radium"
 	From your project directory: npn install --save radium
@@ -497,8 +517,10 @@ Then in your app:
 
 
 
+====================================================================================================
+====================================================================================================
 STYLED COMPONENETS
-=================
+====================================================================================================
 styled-components.com
 Tries to make styling components easy.
 Do:
@@ -545,8 +567,10 @@ BETTER? - Use CSS Modules - Haven't written notes on this...
 
 
 
+====================================================================================================
+====================================================================================================
 ERROR BOUNDARIES
-================
+====================================================================================================
 See: https://reactjs.org/docs/error-boundaries.html
 Only availabele in ReactJS >= 16
 Allow us to catch errors (exceptions) and handle them gracefully.
@@ -582,8 +606,10 @@ you can choose).
 
 
 
+====================================================================================================
+====================================================================================================
 CLASS BASED V.S. FUNCTIONAL COMPONENTS
-=======================================
+====================================================================================================
 
 Class based
 	Access to state
@@ -595,8 +621,11 @@ Functional based
 
 
 
+====================================================================================================
+====================================================================================================
 CLASS COMPONENT LIFECYLE
-========================
+====================================================================================================
+
 See also https://reactjs.org/docs/state-and-lifecycle.html
          https://reactjs.org/docs/react-component.html
          https://www.w3schools.com/react/react_lifecycle.asp
@@ -670,8 +699,11 @@ shouldComponentUpdate() is the one you will use for OPTIMISATION!
 		}
 
 
+
+====================================================================================================
+====================================================================================================
 FUNCTIONAL HOOKS
-================
+====================================================================================================
 See: https://reactjs.org/docs/hooks-effect.html
      https://medium.com/swlh/react-lifecycle-hooks-71547ef4e7a8
      https://blog.carbonfive.com/replacing-component-lifecycle-methods-with-react-hooks/
@@ -729,8 +761,10 @@ return a function if you want to do some cleanup.
 
 
 
+====================================================================================================
+====================================================================================================
 WHEN TO OPTIMISE
-================
+====================================================================================================
 
 Not always is the answer! If child always updates with parent then no need to optimise and using
 either shouldComponenetUpdate or react.memo() is actually inefficient as they will always find that
@@ -742,8 +776,10 @@ implements shouldComponentUpdate() and checks for any change in props.
 
 
 
+====================================================================================================
+====================================================================================================
 HOW REACTJS UPDATES THE DOM
-===========================
+====================================================================================================
 See: https://reactjs.org/docs/faq-internals.html
 See: https://reactjs.org/docs/reconciliation.html
 
@@ -757,8 +793,10 @@ the entire DOM.
 
 
 
+====================================================================================================
+====================================================================================================
 HIGHER ORDER COMPONENTS (HOCs)
-==============================
+====================================================================================================
 A HOC wraps another component, possibly adding some logic to it etc. For e.g., error handling.
 Convention is to name Hocs with a "With" at the beginning. e.g. "WithExtraInfo".
 
@@ -810,8 +848,10 @@ Create HOC method #2:
 
 
 
+====================================================================================================
+====================================================================================================
 PROP TYPES
-==========
+====================================================================================================
 Allows to specify which props the component accepts and their props.
 	npm install --save prop-types
 It is provided by the react team/community. It is not in react core hence you have to npm install it.
@@ -838,8 +878,10 @@ Can chain conditions. E.g.
 
 
 
+====================================================================================================
+====================================================================================================
 USING REACT REFERENCES
-======================
+==========================================================================================================================
 
 References give us access to our DOM elements.
 
@@ -906,8 +948,11 @@ References give us access to our DOM elements.
 	};
 
 
+
+====================================================================================================
+====================================================================================================
 CONTEXT API & PROP CHAINS
-=========================
+====================================================================================================
 
 Class Based Components
 -----------------------
@@ -1014,8 +1059,10 @@ React hooks can do the same thing for us. Import the "useContext" hook.
 
 
 
+====================================================================================================
+====================================================================================================
 PLANNING A REACT UP
-===================
+====================================================================================================
 Steps:
   1. Component Tree / Component structure
   2. Application State (data)
@@ -1027,36 +1074,86 @@ Steps:
 
 
 
-ERROR BOUNDARIES
-================
-https://reactjs.org/docs/error-boundaries.html
-
-
-
+====================================================================================================
+====================================================================================================
 HTTP & AJAX
-===========
+====================================================================================================
 Fake online REST API for Testing and Prototyping: https://jsonplaceholder.typicode.com/
 
 	XMLHttpRequestObject
 	--------------------
+	Oldest and best supported but I'm gonna ignore it. If browser doesn' support newer Fetch API I
+	assume Axios is the best drop in replacement.
 
 	FETCH
 	-----
 	This is the newer version of XMLHttpRequestObject that is much easier to use and works with
-	promises and asynchronous functions.
+	promises and asynchronous functions:
+	    fetch(URL).next( result => {
+	        console.log(result);
+	        return result.json(); // Returns a promise that should resolve to the JS object created
+	                              // from the JSON string returned by the API.
+	    }).next( jsonObj => {
+	        // Do something with the returned data which is now represented as a JS object for us.
+	    }).catch ( error => {
+	        console.log(`It failed due to ${error}`);
+	    });
+	
+	Or... use await:
+	    async function load_pr_stuff() {
+	        const result = await fetch(URL);
+	        const data = await result.json();
+	        return data; // < Returns a promise!
+	    }
+
+	    load_pr_stuff.then( data => console.log("The final data is " + data) );
+	    // ^^^
+	    // Remember this is the way to get the final promise returned by the async function
+
+	Given the workflow of CreateReactApp, the JS should be transliterated into JS that is also
+	compatible with older browsers - I hope!
 
 	AXIOS
 	-----
 	3rd party JavaScript library promise based HTTP client
+	Given the workflow of CreateReactApp, the Axios JS will be transliterated into JS that is also
+	compatible with older browsers! Happy days!
+
 		npm install axios --save
 		                  ^^^^^^
 		                  Makes it store an entry in the package.json file
 
-	TODO - complete section
+		In a new component file "my-first-axios.js":
+			import axios from 'axios';
+	
+			const instance = axios.create({
+				baseURL: 'https://my/api/end/point/base/address'
+			});
+
+		In existing component that wants to use AJAX:
+			import axios from '../path/to/my-first-axios';
+			...
+			
+			some_handler = () => {
+				... probably set some "I am loading state" ...
+				axios.post(
+					'/endpoint relative to baseURL',
+					javascript-object-repr-json					
+				).then( response => {
+					... probably cancel "I am loading state" and update some components ...
+				}).catch( error => {
+					... probably cancel "I am loading state" and update some components ...
+				});
+			}
+
+		Handle GET requests similarly using axios.get().
 
 
+
+====================================================================================================
+====================================================================================================
 MULTI PAGE IN SINGLE PAGE APP (ROUTING)
-=======================================
+====================================================================================================
 
 React core does not implement routing. A third party defacto-standary package called react-router
 is can be used.
@@ -1086,7 +1183,9 @@ ENABLE:
 		class App extends Component {
 			render() {
 				return (
-					<BrowserRouter>                     <!-- << USE IT LIKE THIS -->
+					<BrowserRouter                      <!-- << USE IT LIKE THIS -->
+						[basename="/first-app"]     <!-- << If served from server.com/first-app, otherwise optional -->
+					>
 						<div className="App">
 							<!-- The app contents -->
 						</div>
@@ -1254,8 +1353,506 @@ USE:
 		props.history.push({pathname: "/my/link/path"});
 	or 	props.history.push("/my/link/path");
 
-	
+
+	Nested Routing
+	--------------
+	Load a component inside another component which is also loaded via routing - you can use the
+	<Route> component wherever you want, as long as the page is a child, grandchild etc of the
+	<BrowserRouter> component.
+
+	WARNING: that nested <Route>s do not resolve relative to their parent route. For example, if
+	the parent was "/pull-requests" and the URL was "/pull-requests/1/" and the child route is
+	"/:id", this does not resolve to "/pull-requests/:id"!
+
+	To solve this in nested routes, get the current path DYNAMICALLY:
+		<Route path={this.props.match.url + '/:id'} />
+
+	WARNING: React router does not always _replace_ the component so it won't always re-render the
+	component. The lifecycle hook componentDidMount() won't get called. But what will be called is
+	componentDidUpdate() so this will also need to be implemented. But be careful - the decision
+	as to wether to re-render must avoid infinite loops!
+
+
+	Redirecting Requests
+	--------------------
+	Rather than having multiple paths to render the same content, you can use special Redirect
+	component from react-router-dom:
+		<Switch>
+			...
+			<Redirect from="/" to="/pull-requests"/> <!-- Can only use "from" inside a Switch -->
+		</Switch>
+
+	Redirect doesn't render content - it redirects the URL which can then be caught by another
+	route and then rendered by the actual route. So as soon as it is "rendered" the page URL will
+	be changed, regardless of any other components that would otherwise have been rendered after it.
+	E.g.,
+		<Redirect to="/pull-requests"/> <!-- No "from" allowed outside of a <Switch> -->
+		<p>Some text</p>                <!-- Will not be rendered because of redirect -->
+
+	Such redirects can be used conditionally using normal JS. E.g.:
+		const redirect = some-condition ? <Redirect to="..."/> : null;
+		<div>
+			{redirect}
+			... some content ...
+			}
+		</div>
+
+	Sometimes, if you want to push a new page onto the history stack (redirect _replaces_ the top
+	of the stack) to maintain navigability use `props.history.push(url)` instead.
+
+
+	Guards
+	------
+	Ways to stop pages being navigated to if they should not be accessilbe - e.g. because they
+	require the user to have authenticated (logged in).
+
+	Just use Javascript!
+		{this.state.auth ? <Route ... /> : null}
+		                                   ^^^^^
+		                                   If definition isn't rendered then this route does not
+		                                   exist.
+
+
+	Handle Unknown Routs - 404
+	--------------------------
+	Make the _last_ Route in your Switch
+		<Route render={() => <h1>Not Found</h1>} />
+
+
+	Lazy Loading
+	------------
+	NOTE: requires react-router >= 4 & create-react-app (Webpack config required)
+
+	For big apps don't want to down load *all* the app code... only code that will be needed. So,
+	for pages etc that are seldomly likely to be visited or components seldomly used, we only want
+	to download their code on demand, not "up front".  loading, a.k.a "code splitting", is the way
+	to address this.
+
+	To do this you need to create a HOC "asyncComponent" - left this for now... come back to it if
+	I ever need it.
+
+	BUT - if React >= 16.6 you can use React Suspense to do this for you :D React Suspense adds a
+	new method to the Component object that you can use to do lazy loading!
+
+
+
+====================================================================================================
+====================================================================================================
+FORM VALIDATION
+====================================================================================================
+
+For inputs when adding an "onChange" event handler remember two way binding! You have to modify
+your state so that the changes made will be rendered.
+
+The submit button does not needto have its "onClick" property used. The form JSX tag has an
+"onSubmit" property which can be used to supply a validator function reference that guards
+form submission.
+
+In submission event handler remember to use
+	event.preventDefault();
+
+IMPORTANT - Use event.preventDefault() otherwise form submission reloads the page!
+
+
+
+====================================================================================================
+====================================================================================================
+REDUX
+====================================================================================================
+See: https://redux.js.org/introduction/getting-started
+
+Redux - 3rd party library. Most often associated with React but not part of React. It is independent.
+
+It provides a clearly defined process on how the state in some central store can change. It provides
+a GLOBAL STATE across the entire app, that ALL components/containers can access in a well defined
+way.
+
+Why not just globals: From this post (https://www.reddit.com/r/reactjs/comments/b4p87h/redux_is_just_money_laundering_for_global/):
+	It's important to remember why we consider global variables bad: because anything can change
+	them at any time and you won't know why during debugging ... Redux solves the visibility problem
+	really well by introducing an event driven paradigm to state.
+	...
+	...
+	the restriction of sending typed actions and then doing work explicitly designed with reducers
+	(instead of having business logic scattered all over the place inside components)
+	...
+	...
+	Use redux for what's really global and for every thing else I would keep state as close as
+	possible to where they are used.
+
+Why not just global, from this post (https://news.ycombinator.com/item?id=13332914)
+	Lots of reasons:
+	- Isolation of "write logic" means you know where to look to see what code is updating a given
+	  chunk of state
+	- Consistent state handling means it's a lot easier to think about what's going on in the
+	  application
+	- The DevTools show you a log of dispatched actions, and enable you to step back and forth
+	  between states to see what the UI looked like at each point
+	- Middleware lets you centralize app-wide logic, such as consistent transformations for AJAX
+	  responses
+	- Redux's constraints (such as wanting state to be serializable) enable a number of other use
+	  cases, such as persisting state across page reloads and synchronizing multiple stores remotely.
+	- There's a rapidly growing ecosystem of addons and utilities for specific use cases
+	  (see https://github.com/markerikson/redux-ecosystem-links )
+	-  I use time-travel debugging on a daily basis, and it's a _huge_ time-saver for me.
+
+
+
+  Action -------------------------------> Reducer(s) 
+    ^                     [Reaches]          |
+    |                                        | [Updates]
+    | [Dispatches]                           |
+    |                                        v
+Component                              Central Store
+    ^                                        |
+    | [Passes updated state]                 | [Triggers]
+    |                                        |
+    +------------ Subscription <-------------+
+
+
+Redux provides a central store, which is the ENTIRE APPLICATION STATE. Most often this will be things
+like the authenticated state of the user, for example.
+
+Actions are a way for a component to tell Redux "I'd like to change the state... here is the plan on
+how to do that". They are just a pre-defined informational package, optional payload, that tells
+Redux about the plan. This is the PUBLISH a.k.a DISPATCHING AN ACTION.
+
+Reducers receive actions and handle the update of the central store. THe reducers must be completley
+SYNCHRONOUS ans have NO SIDE EFFECTS. If there are multiple reducers, they are, in the end, merged
+into one single reducer, which is what gets to modify the central store.
+
+Once the central store is updated it informs all its SUBSCRIBERS of the state change, passing
+the updated state, as props, to its subscribers.
+
+Install Redux in the usual manner:
+	npm install --save redux
+
+
+REDUCER:
+	Gets: State, Action.
+	Returns: Updated state. But original state must NOT be mutated! Just like it setState() func.
+	         NEVER mutate any data!
+		const rootReducer = (state = intialSate, action) => {
+			if (action.type == ...) {
+				...
+			}
+			// and so on...
+
+			return new_state; // new_state must COPY from state. state must NOT be mutated
+		}
+
+STORE:
+	Created with a root reducer.
+		const store = createStore(rootReducer)
+
+ACTION:
+	Just access store and call dispatch(). Func takes action as arg - a JS object that MUST have
+	a "type" property so that we know what type of action was dispatched and what should be done in
+	the reducer.
+		store.dispatch({
+			type: 'CONVENTION_IS_SHORT_UPPER_CASE_DESCRIPTION'
+			value-name-of-choice: value-data,
+			more-values: more-data,
+			...
+			...
+		});
+
+SUBSCRIPTION:
+	Inform us when something changed and we need to re-get the state.
+	Use: store.subscribe(function-executed-whenever-state-updates);
+		store.subscribe( () => { // Subscribe func gets NO args
+			... store.getState(); ...
+		});
+
+
+
+Using Redux With React
+----------------------
+Must install react-redux to "hook up" redux stores to react application:
+	npm install --save react-redux
+
+The Redux store should be created before our App or when it starts - use `index.js`.
+	import { createStore } from 'redux';
+	import { Provider } from 'react-redux'; //NOTE:  Must WRAP the app with <Provider>
+
+	import reducer from './store/reducer';
+
+
+	const store = createStore(reducer); // Define in separate file, reducer.js
+
+	// NOTE: Must WRAP the app with <Provider>
+	ReactDOM.render(<Provider store={store}><App /></Provider>, ...);
+	registerServiceWorker();
+
+
+In reducer.js:
+	const initialSate = {
+		...
+	};
+
+	const reducer = (state = inialState, action) => {
+		// your actions here or just return state if nothing should change.
+		if (action == 'ACTION_TYPE')
+		{
+			return {
+				// Immutably created new state 
+			};
+		}
+		...
+		...
+		return state;
+
+		// Or use switch (action.type) { case 'BLAH': break/return; ... default: return state; }
+	};
+
+	export default reducer;
+
+
+
+In components that required access to the store:
+	import { connect } from 'react-redux';
+
+	class MyComponent ... {
+		...
+		render() {
+			...
+			<!-- Here can access redux state mapped to our props as defined below -->
+			<eg_element clicked={this.props.onSomeEvent}>{this.props.a_props_attribute}</eg_element>
+			//                              ^^^^^^^^^^^              ^^^^^^^^^^^^^^^^^
+			//                              ^^^^^^^^^^^              From mapStateToProps
+			//                              From mapDispatchToProps
+			...
+		}
+	}
+
+	// How state, managed by redux, should be mapped to props that can be accessed in this component
+	// The state parameter is the state as setup in reducedr.js so it will have those propertues.
+	const mapStateToProps = state => {
+		return {
+			a_props_attribute: state.some_state_var
+			...
+			...
+		};
+	}
+
+	// Which actions the container will dispatch
+	const mapDispatchToProps = dispatch => {
+		return {
+			onSomeEvent: () => dispatch({type: 'ACTION_TYPE', ...'}),
+			...
+		};
+	};
+
+	// Either
+	export default connect(mapStateToProps)(MyComponent); // Connect is func that _returns_ a HOC
+
+	// Or
+	export default connect(mapStateToProps)(MyComponent, mapDispatchToProps); // Connect is func that _returns_ a HOC
+
+	// Or
+	export default connect(mapStateToProps)(null, mapDispatchToProps); // Connect is func that _returns_ a HOC
+
+
+Updating state IMMUTABLY
+------------------------
+
+The state object passed into a reducer MUST NOT BE MODIFIED.
+So doing the following is WRONG
+	let newState = state;
+	newState.something += 101; // WARNING - just MUTATED the state!
+	return newState;
+
+Instead MUST COPY THEN MODIFY COPY of state:
+	let newState = Object.assign({}, state); // SHALLOW clones object
+OR
+	let newState = {...state, something: state.something + 101 }; // Still a SHALLOW clone!
+
+CAUTION: With SHALLOW copies you cannot update any reference types in the copy.
+
+
+
+====================================================================================================
+====================================================================================================
+TESTING
+====================================================================================================
+
+Could use Selenium but can also use NodeJS packages which will simulate the browser, which could
+make for faster unit tests.
+
+Jest - Populare JS testing tool often used with ReactJS
+
+Also need a way of emulating React components without having to render an entire DOM. We still need
+some kind of fake DOM but don't want everything. React Test Utils can do this, or use Enzyme as
+developed by Air Bnb - also recommended by React team.
+
+	npm install --save enzyme react-test-renderer enzyme-adaptor-react-16
+	                                              ^^^^^^^^^^^^^^^^^^^^^^^
+	                                              This one has to be specific to your react version
+
+See: https://jestjs.io/docs/en/expect
+     https://jestjs.io/docs/en/jest-object#mock-modules << Good for mocking AJAX calls for e.g.
+     https://enzymejs.github.io/enzyme/
+
+When naming a test for a component, put it in the same directory as the component. If the component
+file name is MyComp.js then the TEST MUST BE NAMED MyComp.test.js, as this will then be
+AUTOMATICALLY picked up and included in the testing.
+
+To run the tests just use
+	npm run test
+
+
+Testing Components
+-----------------
+	In the MyComp.test.js file you do not need to import the test specific libraries - they will be
+	made available automatically by the test command.
+
+		MyComp.test.js
+		--------------
+			import React from 'react';
+			import { configure, shallow } from 'enzyme';
+			//                  ^^^^^^^
+			//                  Does a shallow rendering of the component under test - it will produce
+			//                  kind-of "stubs" for the immediate children and thus PREVENTS rendering
+			//                  an entire subtree - efficient!
+			import Adapter from 'enzyme-adapter-react-16';
+			import MyComp from './MyComp';
+			imoprt OtherComp from '...';
+
+			configure({adpater : new Adapter()}); // Connect Enzyme to our React version
+
+			describe(
+				'Description of thest bundle file holds - just str for console',
+				() => {
+					//
+					// DEFINE setup and teardown for this group of tests
+					beforeAll( () => { ... } );
+					afterAll( () => { ... } );
+
+					//
+					//
+					// DEFINE setup and teardown for each test
+					//
+					let wrapper;
+					beforeEach( () => { wrapper =  hallow(<MyComp/>); } );
+					afterEach( () => { ... } );
+
+					//
+					// DO each test
+					//
+					it(
+						'Should ... describe on individual test - just str for console',
+						() => {
+							// Create instance of component as it would be rendered into the DOM, (without
+							// creating the entire DOM!) and then inspect it. Enzyme allows component to
+							// be "rendered" stand-alone, i.e., without rest of DOM.
+							//
+							// If wrapper wasn't defined in the setup for each test we'd do
+							//   const wrapper = shallow(<MyComp/>);
+							//
+							// But it is so...
+
+							expect(wrapper.find(OtherComp)).toHaveLength(2);
+							//                  ^^^^^^^^^
+							//                  Note this is the JS function, NOT JSX!
+
+						}
+					);
+
+					it(
+						'Should do something else when another property is set',
+						() = {
+							// If wrapper wasn't defined in the setup for each test we'd do
+							//   const wrapper = shallow(<MyComp myAttr=Something/>);
+							//
+							// But it is so...
+
+							wrapper.setProps({myAttr : Something});
+							expect(wrapper.find(...))...();
+						}
+					);
+				}
+			)
+
+
+Testing Containers
+------------------
 
 
 
 
+====================================================================================================
+====================================================================================================
+DEPLOYING TO THE WEB
+====================================================================================================
+
+1. Remeber to add the basename attribute to <BrowserRouter/> if app is not being served from the root
+   of the domain it is hosted on. So if serving from www.jeh-tech.com, no need, but if serving from
+   www.jeh-tech.com/apps/app1, the need <BrowserRouter basename="/apps/app1/">....<.BrowserRouter>.
+2. Build and optimise the site using
+	npm run build (in your project directory)
+3. Server must *always* serve the index.html file, even for 404 cases! Server gets the paths before
+   the react app gets the path and server won't know the app paths!!
+4. Upload build artifacts from step 2 to a static server (Firebase, GitHub pages, AWS S3 etc etc).
+	I.e., the content of the build folder!
+
+
+
+====================================================================================================
+====================================================================================================
+WEBPACK
+====================================================================================================
+
+A bundler, a file optimizer, file transformer and transpiler (ES modern to legacy for eg). Takes
+multiple HTML, JS, image etc etc resources and bundles them together with optimization etc.
+
+1. Create folder to hold project
+2. Get NPM to manage dependencies.
+   In project folder type:
+      npm init
+   Creates "package.json".
+
+
+
+TODO - Complete sectioN!
+
+
+
+====================================================================================================
+====================================================================================================
+THIRD PARTY COMPONENTS
+====================================================================================================
+https://react-bootstrap.github.io/ - Really good - lots of pre-styled components
+https://minicss.org/               - Build websites on any and all devices, beautiful & load fast. < 10KB.
+https://momentjs.com/              - Parse, validate, manipulate and display dates and times in JS
+https://bernii.github.io/gauge.js/ - 
+https://formidable.com/open-source/victory - React.js components for modular charting and data visualization.
+https://uber.github.io/react-vis/examples/showcases/plots
+
+
+
+====================================================================================================
+====================================================================================================
+REACT NATIVE
+====================================================================================================
+
+- Framework reslies on React core
+- Supports iOS and Android. Microsoft also supports a version for Windows. Canonical also seem to
+  support a version for the Ubuntu Desktop.
+
+RNative
+	- Bundles your Javascript
+	- Threads for UI layout and JavaScript, which is different to ReacJS web.
+		- Threads communicate through a "bridge". E.g. JS thread will request elements to be
+		  rendered and the UI thread will render them and so on. This means, unlike in Web React
+		  that the JS thread can block but the UI thread will remain responsive.
+
+SEE snack.expo.io
+    Its a nice little sandbox to play with react native and see how it renders in a fake phone.
+
+Unfortunately it looks like an extra learning curve on top of learning how react works. I wanted to
+try and change a large webapp to react-native but loads of tags need to be re-written. E.g. <div>
+tags become <View> tags, <span> -> <Text> and stuff like this... so there would be some rework.
+Also the proboperty names change too, like onClock becomes onPress. Seems like a faff.
+
+If developing from scratch might have looked at this further, as it looks pretty powerful, but no
+dice here so ending notes on react native.

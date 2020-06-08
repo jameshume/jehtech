@@ -374,7 +374,7 @@ So, to continue with FETCH:
         console.log(`It failed due to ${error}`);
     });
 
-Or... use away:
+Or... use await:
     async function load_pr_stuff() {
         const result = await fetch(URL);
         const data = await result.json();
