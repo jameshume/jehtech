@@ -1,0 +1,432 @@
+===================================================================================================
+===================================================================================================
+IAM - Identity Access Management
+===================================================================================================
+	- See https://d0.awsstatic.com/whitepapers/Security/AWS_Security_Best_Practices.pdf
+
+	- For management of users and their access level to AWS console.
+	- Centralised control of AWS account
+	- Shared access
+	- Granular permissions
+	- Multifactor authentication
+	- Integrates with AWS services
+
+	- Groups - Collection of users with common permission set.
+	- Roles - Define set of permissions that can be assigned to AWS resources/entities.
+		Secure way to grant permissions to entities that you trust. Ex, IAM user in another account
+		or application code running an an EC2 instnace that needs to permorm actions on AWS
+		resources etc.
+		E.g.: Give an EC2 instance permissions to write a file to an S3 bucket.
+			Create role.
+			Select the service that the role will use - EC2 instance in this example.
+			Attach the S3 policy of choice, e.g. write access, to the role.
+			This role can then be applied to any new EC2 instance created.
+
+	- Policies - Document that defines >= 1 permissions that can be assigned user, groups, or roles.
+
+	- In console access under "Security, Identity and Compliance"
+
+	- When creating users you will have
+		- User name
+			For AWS console login.
+		- Access key ID
+			For PROGRAMATIC access. i.e., via CLI, scripts etc.
+		- Secret Access Key.
+			For PROGRAMATIC access. i.e., via CLI, scripts etc.
+			This will only be displayed once. You can download as a CSV if you can keep it securley.
+			Note, once the secret has been hidden you canNOT access it again. You would have to
+			generate a new key.
+		- Password
+			For AWS console login.
+
+
+
+===================================================================================================
+===================================================================================================
+Going Serverless
+===================================================================================================
+
+Lambdas
+-------
+
+See https://aws.amazon.com/lambda/faqs
+
+EC2 launced in 2006. At time of writing it is 14 years old! Infrastructure as a service!
+
+Serverless means you don't need to control the server, you don't need to provision the hardware or
+worry about the OS its running - its no longer something you need to worry about. Also don't have to
+worry about scaling and response to load and keeping them running etc.
+
+Lambda allows you to use your code without any need to provision servers, install software, deploy
+containers or worry about any low level details and can parallelize code. All this is taken care of
+for you. E.g. Alexa is using Lambdas every time you make an Alexa query.
+
+So, don't need any EC2 instances, and EBS instances etc etc - THERE IS NOTHING TO MANAGE!
+
+Use:
+	- Event driven compute service - WAS Lambda runs code in response to events, e.g. changes to
+		data in S2 bucket or DynamoDB table.
+	- Compute service - run code in response to HTTP requests using Amazon API gateway or API calls
+		made using AWS SDKs. This can be massively parallel - many requests launch many Lambdas,
+		which all use the same code but represent difference request instances with associated
+		data etc.
+
+		Each AWS Lambda function runs in its own isolated environment, with its own resources and
+		file system view. AWS Lambda uses the same techniques as Amazon EC2 to provide security and
+		separation at the infrastructure and execution levels.
+
+AWS Lambda natively supports Java, Go, PowerShell, Node.js, C#, Python, and Ruby code, and provides
+a Runtime API which allows you to use any additional programming languages to author your functions.
+
+Priced on #requires and duration.
+
+
+Configure A Lambda Function
+---------------------------
+
+- Click - Services > Compute > Lambda > Create Lambda Function.
+- Create from scratch - Add name and platform. If you've not used Lambda before will need to create
+  a new role to give Lambda permission to execute. Use policy "Simple Microservice Permissions".
+- Click "Create function" .
+- Paste in your Lambda code.
+- Add your trigger... can be sooo many things: including but no where near limited to API Gateway,
+  CloudFront, S3, DynamoDB, and more...
+- 
+- TODO COMPLETE ME!
+
+
+API Gateway
+-----------
+
+Amazon API Gateway 0 full managed service - publish APIs at any scale to act as "front door" for
+apps to access data etc from back-end services, such as apps on EC2 instances, code on Lambdas etc.
+
+- Expose HTTPS enpoints to define a RESTful API
+	API gateway gives us a HTTPS address to make API calls to, and then configure how the API
+	responds to those calls - e.g. get data from a DynamoDB or fire off a Lambda etc etc to
+	return the response.
+- Lets you serveless-ly connect to services like Lambda & DynamoDB.
+- Can send each API endpoint to a different target.
+- Run efficiently with low cost & scales effortlessley.
+- Can track and control usage with API key.
+- Can throttle requests to prevent attacks.
+- Can maintain multiple versions of your API
+
+How to configure?
+	- Define an API (container)
+	- Define Resources and nested Resources (URL paths)
+	- For each resource:
+		- Select supported HTTP methods, POST, GET etc etc
+		- Set security
+		- Choose target- EC2 Lambda etc
+			- Set resquest & response transformations
+	- Deploy API to a Stage
+		- Use APU Gateway domain by default but you can use your own to hide the fact its AWS
+		- !!!Supports AWS Certificate Manager: free SSL/TLS certs!!! WOO!!!
+
+
+API Caching In API Gateway: can enable API caching. Caches enpoint's response to reduce # calls to
+endpoint for repeated requests. Also improves latency.
+
+Need to be aware of XSS and CORS
+
+
+Simple Serverless Website Using Route53, API Gateway, Lambda and S3
+-------------------------------------------------------------------
+Domain name in Route53 and bucket name need to be the same. They MUST BE THE SAME (toplevel exluding
+the .com).
+
+Must enable static website hosting for bucket.
+
+If you don't want to spend money on AWS domain you can just use the S3 bucket address,
+
+
+TODO - Complete ME!
+
+
+
+===================================================================================================
+===================================================================================================
+EC2
+===================================================================================================
+Stands for Elastic Compute Cloud, abreviated to EC2.
+Web service providing resizeable compute capacity in the cloud. Virtual machines in a cloud.
+Pay only for capacity you use - don't have to (over) provision your own kit.
+Isolate from common failure scenarious.
+
+
+EC2 Options
+-----------
+	- On demand - fixed rate per hour/second with no commitment, no upfront payment. Good for app dev
+		or apps with short term, spiky, unpredictable workloads that cannot be interrupted.
+	- Reserved - capacity reservation - pay up front. Good disacounts on hourly charge for and intance.
+		One to three year term.
+		Apps with steady state or predictable usage.
+	- Spot - Allows bidding
+		Apps that have very flexible start and end times
+		For apps that are only feasible at very low compute prices.
+		E.g. use compute during off-peak times for cheaper compute cost.
+	- Dedicated hosts - Physical EC2 server for your use only.
+		Regulatory requirements that do not alow multi-tenant virtulization
+		Licensing which does not support multi-tenancy.
+
+
+EC2 Instance Types
+-------------------
+	There are different "families" of instance types that provide optimisations for specific
+	requirements like hight speed storage, or memory space, or compute power etc.
+
+	Families include.
+		FPGA, High Speed Storage, Graphics Intesive, High Disk Througput, Low Cost,
+		Dense Storage, Memory Optimized, General Purpose, Compute optimize, GPU etc.
+
+	You will mostly use - T2 = Lowest cost, general purpose - Web Servers and Small DBs
+
+
+Elastic Block Store (EBS)
+-------------------------
+	EBS allows you to create storage volumes and attach them to Amazon EC2 instances.
+	Once attched, can create FS on top of these volumes, run DBs etc etc.
+	Protect you from failure of single component.
+
+	Types: General Purpose SSD (GP2),  Provisioned OPS SSD(IO1), Throughput Optimized HDD (ST1)
+	       Cold HDD (SC1).
+
+
+Elastic Load Balancer (ELB)
+---------------------------
+	Types Of Load Balancers
+		- Application Load Balancer.
+			OSI Layer 7. Can make very clever decisions based on application level logic.
+			Application Load Blancers are best suited for load balancing of HTTP and HTTPS
+			traggic. They operate at Lyer 7 and are application-aware. They are intelligent,
+			and you can create advanced request routing, sending specified requests to
+			specific web servers.
+		- Network Load Balancer.
+			Most expensive option. Works at OSI layer 4 (surely 3?!). Fast performance!
+			Best suited for load balancing of TCP traffic where extreme performance is required.
+			Operating at the connection level (Layer 4 - which I think is the transport layer
+			not the network layer, need to double check that), network Load Balancers are
+			capable of halding millioos of requests per secon, while maintaining ultra-low
+			latencies. use for EXTREME PERFORANCE.
+		- Classic Load Balancer (ELB)
+			No longer recommended. Lagacy!
+			Legacy Elastic Load Blanacers. Can ballance layer 7 or 4, but layer 7 is not as
+			intelligent as application load balancer.
+			If your app stops responding ELB returns a 504 error.
+
+	The laod balancer is an extra layer that will "hide" the public IP address of the entity accessing
+	your server. To get the public IP look in the "X-Forwarded-For" header to see the public IP addr.
+
+	To create a load balancer go back to your EC2 instance and select, in the left hand menu
+	pane, LOAD BALANCING > Load Balancers. Then click the "Create Load Balancer Button". Create the
+	HTTP(S) balancer.
+		Assign a security group.
+		Configure Routing.
+			Create new target group on HTTP port 80.
+			Add /index.html as the health check item.
+		Register targets
+		Review
+		Create
+
+
+Route53
+-------
+	- Amazon's DNS service
+	- Allows mapping of domain names to EC2 instances, load balancers and S3 buckets.
+	
+
+	- Log into AWS console, then Services > Network > Route 53
+	- Click Domains > Registered domains
+		Click "Register Domain". Select a domain and choose a name. Add it to your cart and
+		click "Continue"
+	- Fill in registrant information
+	- Domain registration can take up to 3 days to complete.
+
+	- Click Dashboard > "hosted zones" 
+		Should see our registers domains.
+		Click "Goto record sets" to create our DNS records.
+			Create "A" record. Says where you're domain is going to go.
+				There are lots of record set type you can choose. An "A" record points to an
+				IPv4 address, and "AAAA" record points to an IPv6 address etc.
+
+				Create a type "A" record set. Use the NAKED DOMAIN NAME - that is the name without
+				the "www." prefix. This is also sometimes refered to as the "zone apex record". In
+				order to do this HAVE TO USE AN ALIAS. You create an alias for the zone apex. Aliases
+				are only supported by DNS record types A and AAAA.
+
+				Pick the alias target - it can be for an S3 website, an ELB website, Elastic
+				Beanstalk, CloudFront etc. 
+
+				This is why we needed to setup the ELB... doesn't seem to support directly using an
+				EC2 instance. Thus MUST CREATE ELB THEN PUT AN EC2 INSTANCE BEHIND THE ELB.
+
+				Select your ALB from the target list and hit create :)
+
+
+Setup Simple Webserver
+-----------------------
+	- From console goto Services > Compute > EC2
+	- Click on "Launch Service" button.
+	- This will start us on the journey to launching first instance. instances are created from
+	  Amazon Machine Images (AMIs).
+	- Select an AMI of your choice and then choose the type of this instance you want. Here you
+	  select the family type talked aboute in the section above, "EC2 Instance Types". I will want
+	  a T2 instance, probably one eleigable for the free teir.
+	- Choose it, eg "T2 micro" and click the NEXT button to go and configure the instance details.
+	- Then add tags.
+	- Configure security groups. This is like a "virtual firewall" where you can specify what
+	  traffic you allow in and out of your instance. So for websever, for e.g. we need to enable port
+	  80 for TCP.
+		- Create a new security group most porbably and give it a name.
+		- Allow SSH to remote adminthe EC2 instance.
+		- Allow HTTP access, (and HTTPs access if you need it)
+	- Click "Review and Launch" and review details.
+	- Click "Launch"
+		Need to either add or create a key pair that will allow you to access the instance.
+		We store the private key somewhere locally and SECURELY
+		The public key is stored by AWS
+		NEVER SHARE THE PRIVATE KEY otherwise anyone can access the server!
+		Name the key pair and then download it, saving it somewhere safe and secure.
+	- Click "Launch Instance"
+		Can take a little time for instance state to say "running". Once running it will give
+		you your public IP address, which you can then use.
+
+		Go to directory with your downloaded key pair
+		Change permissons. needs to be quite locked down to use with EC2:
+			chmod 400 MyNewKerPair.pem
+			ssh ec2-user@<servier-ip-from-console> -i MyNewKeyPair.pem
+				Inside ssh session
+					sudo su
+					yum update -y #Or use apt depending on server version used
+					
+					# install apache
+					yum install httpd -y
+
+					# start it
+					service httpd start
+
+					# make sure apache auto boots on restart
+					chkconfig httpd on
+
+					# See service status
+					service httpd status
+
+					# Create stub web page
+					echo "<html><body>HELLO</body></html>" > /var/www/html/index.html
+
+
+
+===================================================================================================
+===================================================================================================
+S3
+===================================================================================================
+
+
+
+===================================================================================================
+===================================================================================================
+CloudFront
+===================================================================================================
+
+
+
+===================================================================================================
+===================================================================================================
+Elastic Beanstalk
+===================================================================================================
+
+What Is It?
+-----------
+
+Elastic Beanstalk is a service for deploying and scaling web applications developing in many
+popular languages: Java, .NET, PHP, Node.js, Python, Ruby, Go and Docker onto widely used
+application server platforms like Apache Tomcat, Nginx, Passenger, and IIS.
+
+Developers can focus on writing code and don't need to worry about any of the underlying
+infrastructure needed to run the application.
+
+"Throw it some code in a ZIP file and it will figure it out and configure an environment for you".
+
+Upload the code and EB handles deployment, capacity provisioning, load balancing, auto-scaling and
+app health.
+
+You retain full control of the underlying AWS resource pwoering your app and you pay only for the
+AWS resource required to store and run you app, e.g. the EC2 instances or S3 buckets etc.
+
+In summary:
+	- Fastest/simplest way to deply app in AWS.
+	- Scales resources up and down for you including web application server platform.
+	- EC2 instance type is selectable for opimization.
+	- Managed platform updates auto applies to OS and Java/PHP/NodeJS etc etc.
+
+EB v.s. CloudFormation - EB configure environment through a GUI, CF is scripted config.
+
+
+How To Deploy Apps
+------------------
+	Compute > Elastic Beanstalk
+	Click "Get Started"
+	Create a web app
+		Spec name, platform, "Upload your code"
+		Click "Create application"
+
+	Beanstalk supports several options for processing deployments:
+	- All at once:
+		- Deploys the new version to all instance simultaneously
+		- All of your instances are out of service while the deployment takes place.
+		- You will experience an outage while the deployment is taking place.
+		- If the update fails, you need to roll back the changes by re-deploying the original
+		  version to all you instances.
+
+	- Rolling Deployment Policies:
+		- Deploys in batches: each batch taken out of service whilst deployment takes places
+		- Environment capacity will be reduced by the #instances in a batch while the deployment
+		  takes place.
+		 - If update fails, need to roll back the changes via rolling update.
+		 - Reduced capacity during deplayment but not an outage.
+
+	- Rolling wwith Additional Batch deployment Updates.
+		- Maintains full capacity during deployment process.
+		- Launches an addition batch of instances before deploying new instances.
+
+	- Immutable Deployment Updates;
+		- Deploys new version to a fresh group of instances in new group. On success moved to
+		  the existing group, and old instances killed.
+		- Perferred option for Mission Critical stuff.
+
+
+Configuring Elastic Beanstalk
+-----------------------------
+Environment can be customized using config files - spec packages to install, user groups, shell cmds
+to run etc etc). Files written in YAML or JSON and have a ".config" suffic and be saved in the
+folder ".ebextensions", which must be included in the top-level directory of the app source code
+bundle. Thus, config files can be placed under source control with the rest of the app code.
+
+See also: https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/ebextensions.html
+
+
+Terminating HTTPS on EC2 instances running Ruby
+-----------------------------------------------
+https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/https-singleinstance-ruby.html
+https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/configuring-https.html
+https://medium.com/@jameshamann/ssl-certificates-with-rails-aws-elastic-beanstalk-and-lets-encrypt-8b047d527a60
+
+
+
+===================================================================================================
+===================================================================================================
+DynamoDB
+===================================================================================================
+
+
+===================================================================================================
+===================================================================================================
+CodeCommit / Code Deploy / Code Pipeline
+===================================================================================================
+
+
+===================================================================================================
+===================================================================================================
+Kinesis
+===================================================================================================
