@@ -320,13 +320,52 @@ def deploy_site(specificFile, generateImages):
         def _snippet_replace(matchobj, doescape):
             xhtmlFileName = os.path.join(dirname, matchobj.group(1))
             xhtmlFile = codecs.open(xhtmlFileName, 'r', 'utf-8')
-            xhtmlFileContents = xhtmlFile.read();
+            if (doescape):
+                xhtmlFileContents = xhtmlFile.readlines();
+            else:
+                xhtmlFileContents = xhtmlFile.read();
             xhtmlFile.close()
             
-            # https://wiki.python.org/moin/EscapingHtml
             if (doescape):
-                html_escape_table = {"&": "&amp;", '"': "&quot;", "'": "&apos;", ">": "&gt;", "<": "&lt;", }
-                xhtmlFileContents = "".join(html_escape_table.get(c,c) for c in xhtmlFileContents)
+                print("ESCAPING")
+                ## Replace all ========== titles with <h1> tags
+                ## Replace all HTML special characters with their escaped versions
+                ## https://wiki.python.org/moin/EscapingHtml
+                html_escape_table = {
+                    "&": "&amp;", '"': "&quot;", "'": "&apos;", ">": "&gt;", "<": "&lt;", }
+                foundTitle = 0
+                lookingForFinisher = False
+                seenFirstHeading = False
+                firstHeadingLine = -1
+                for idx, line in enumerate(xhtmlFileContents):
+                    if line.strip()[:40] == ("=" * 40):
+                        if lookingForFinisher:
+                            lookingForFinisher = False
+                            foundTitle = 0
+                            xhtmlFileContents[idx-1] = xhtmlFileContents[idx-1] + "</h2>"
+                            xhtmlFileContents[idx] = "<pre>"
+                        else:
+                            foundTitle += 1
+                    else:
+                        if foundTitle == 2:
+                            xhtmlFileContents[idx] = xhtmlFileContents[idx].title()
+                        foundTitle = 0
+                        xhtmlFileContents[idx] = "".join(
+                            html_escape_table.get(c,c) for c in xhtmlFileContents[idx])
+                    if foundTitle == 2:
+                        if firstHeadingLine == -1:
+                            firstHeadingLine = idx - 1
+                        xhtmlFileContents[idx - 1] = ""
+                        if seenFirstHeading:
+                            xhtmlFileContents[idx] = "</pre><h2>"
+                        else:
+                            xhtmlFileContents[idx] = "<h2>"
+                            seenFirstHeading = True
+                        lookingForFinisher = True
+                if firstHeadingLine == -1 or firstHeadingLine > 0:
+                    xhtmlFileContents = "<pre>" + "".join(xhtmlFileContents) + "</pre>"
+                else:
+                    xhtmlFileContents = "".join(xhtmlFileContents) + "</pre>"
             return xhtmlFileContents;
         def snippet_replace(matchobj): return _snippet_replace(matchobj, False)
         def escapped_snippet_replace(matchobj): return _snippet_replace(matchobj, True)

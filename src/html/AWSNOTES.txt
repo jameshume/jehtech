@@ -144,10 +144,16 @@ If you don't want to spend money on AWS domain you can just use the S3 bucket ad
 TODO - Complete ME!
 
 
+===================================================================================================
+===================================================================================================
+Proxies And Reverse Proxies
+===================================================================================================
+
+
 
 ===================================================================================================
 ===================================================================================================
-EC2
+Elastic Compute Cloud (EC2)
 ===================================================================================================
 Stands for Elastic Compute Cloud, abreviated to EC2.
 Web service providing resizeable compute capacity in the cloud. Virtual machines in a cloud.
@@ -261,7 +267,49 @@ Route53
 				This is why we needed to setup the ELB... doesn't seem to support directly using an
 				EC2 instance. Thus MUST CREATE ELB THEN PUT AN EC2 INSTANCE BEHIND THE ELB.
 
-				Select your ALB from the target list and hit create :)
+				Select your ELB from the target list and hit create :)
+
+		From Wikipedia:
+			A Canonical Name record (abbreviated as CNAME record) is a type of resource record in
+			the Domain Name System (DNS) which maps one domain name (an alias) to another
+			(the canonical name).[1]
+			...
+			Also referred to as a CNAME record, a record in a DNS database that indicates the true,
+			or canonical, host name of a computer that its aliases are associated with.
+			...
+			When referring to IP addressing, canonical means the authoritative host name stored in
+			a DNS database that all of an IP address' aliases resolve to.
+
+		From AWS Certified Solutions Architect Practive Tests Book:
+			A zone apex record is a DNA record at the root, or apex, of a DNS zone. So amazon.com
+			is an apex record (sometimes called a naked domain record).
+
+		From NS1.com:
+			DNS servers create a DNS record to provide important information about a domain or
+			hostname, particularly its current IP address. The most common DNS record types are:
+				- Address mapping record (A Record) - a.k.a DNS host record, stores hostname and its
+				  corresponding IP4 address
+				- IP Version 6 Address record (AAAA Record) - stores a hostname and its corresponding
+				  IPv6 address.
+				- Canonical Name record (CNAME Record) - can be used to alias a hostname to another
+				  hostname. When a DNS client requests a record that contains a CNAME, which points
+				  to another hostname, the DNS resolution process is repeated with the new hostname.
+				- Mail exchanger record (MX Record) - specifies an SMTP email server for the domain,
+				  used to route outgoing emails to an email server.
+				- Name Server records (NS Record) - specifies that a DNS Zone, such as "example.com"
+				  is delegated to a specific Authoritative Name Server, and provides the address of
+				  the name server.
+				- Reverse-lookup Pointer records (PTR Record) - allows a DNS resolver to provide an
+				  IP address and receive a hostname (reverse DNS lookup).
+				...
+				...
+
+
+This can prove convenient when running multiple services (like an FTP server and a web server, each 
+running on different ports) from a single IP address. One can, for example, point ftp.example.com
+and www.example.com to the DNS entry for example.com, which in turn has an A record which points to
+the IP address. Then, if the IP address ever changes, one only has to record the change in one place
+within the network: in the DNS A record for example.com.
 
 
 Setup Simple Webserver
@@ -316,18 +364,24 @@ Setup Simple Webserver
 					echo "<html><body>HELLO</body></html>" > /var/www/html/index.html
 
 
+How To Install LetsEncrypt SSL Certificate in AWS EC2 Instance Notes
+--------------------------------------------------------------------
+Ref: https://www.youtube.com/watch?v=odtG8Cjshvo
+See: https://letsencrypt.org/getting-started/, https://certbot.eff.org/
+
+
+How to Setup SSL certificate in CentOS 7 using LetsEncrypt Notes
+----------------------------------------------------------------
+Ref: https://www.youtube.com/watch?v=qYWhuITSVMc&feature=youtu.be
+See: https://letsencrypt.org/getting-started/, https://certbot.eff.org/
+
+
 
 ===================================================================================================
 ===================================================================================================
 S3
 ===================================================================================================
 
-
-
-===================================================================================================
-===================================================================================================
-CloudFront
-===================================================================================================
 
 
 
@@ -342,6 +396,18 @@ What Is It?
 Elastic Beanstalk is a service for deploying and scaling web applications developing in many
 popular languages: Java, .NET, PHP, Node.js, Python, Ruby, Go and Docker onto widely used
 application server platforms like Apache Tomcat, Nginx, Passenger, and IIS.
+
+From AWS:
+	Amazon Web Services (AWS) comprises over one hundred services, each of which exposes an area of
+	functionality. While the variety of services offers flexibility for how you want to manage your
+	AWS infrastructure, it can be challenging to figure out which services to use and how to
+	provision them.
+
+	With Elastic Beanstalk, you can quickly deploy and manage applications in the AWS Cloud without
+	having to learn about the infrastructure that runs those applications. Elastic Beanstalk
+	reduces management complexity without restricting choice or control. You simply upload your
+	application, and Elastic Beanstalk automatically handles the details of capacity provisioning,
+	load balancing, scaling, and application health monitoring.
 
 Developers can focus on writing code and don't need to worry about any of the underlying
 infrastructure needed to run the application.
@@ -362,16 +428,9 @@ In summary:
 
 EB v.s. CloudFormation - EB configure environment through a GUI, CF is scripted config.
 
-
-How To Deploy Apps
-------------------
-	Compute > Elastic Beanstalk
-	Click "Get Started"
-	Create a web app
-		Spec name, platform, "Upload your code"
-		Click "Create application"
-
-	Beanstalk supports several options for processing deployments:
+Beanstalk Update/Deployment Options
+-----------------------------------
+	Beanstalk supports several options for processing deployments (deployment policies):
 	- All at once:
 		- Deploys the new version to all instance simultaneously
 		- All of your instances are out of service while the deployment takes place.
@@ -396,6 +455,43 @@ How To Deploy Apps
 		- Perferred option for Mission Critical stuff.
 
 
+How To Deploy Apps
+------------------
+	Compute > Elastic Beanstalk
+	Click "Get Started"
+	Create a web app
+		- Spec name and platform and the option "Upload your code" rather than "Sample application",
+			which is the default
+		- Click "Create application"
+		- Select how to load the code
+			- Can be a local file (ZIP) or an S3 bucket.
+			- If you choose to upload a local file, it will create an S3 bucket automatically for
+				you and stash the ZIP there. I was suprised that it doesn't unzip the archive, it
+				just stashes it.
+		- Once you click "Create Application" and environment will be created for your app.
+			If the app was called HelloWorld then the environment is labeled HelloWorld-env.
+			The creation can take up to 5 or 6 minutes so be patient.
+		- When the environment reports itself as successfull launched, in the breadcrumb links
+			select "Applications" to view a list of all applications. Here you should see your
+			new environment, which you can click on to "drill into it".
+		- From the application env you should be able to see recent events and a URL to the
+			website that was created.
+		- From the EBS environment page you can also select from the side menu "Configuration".
+			This is how the environment can be configured. From here you can access security,
+			instances, configure load balacncers, capacity etc and apply these configurations.
+
+	Further Config/Update
+		- Use the breadcrumbs to go back to the "all applications" page and select "application
+			versions". It will show you the cuurent source and date it was deployed.
+		- Can upload new version by clicking on the "Upload button".
+			- If you are using an S3 bucket you can navigate to the S3 bucket management console and
+				view the contents. Inside you will see all the code ZIPs you ever uploaded as well
+				as a .elasticbeanstalk file and resources directory.
+			- The new version becomes visible but HAS NOT BEEN DEPLOYED to an environment.
+			- You can change your deployment policy to the ones described in the previous section.
+			- Click DEPLOY to deploy you new version.
+
+
 Configuring Elastic Beanstalk
 -----------------------------
 Environment can be customized using config files - spec packages to install, user groups, shell cmds
@@ -406,6 +502,11 @@ bundle. Thus, config files can be placed under source control with the rest of t
 See also: https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/ebextensions.html
 
 
+AWS "Getting Started" Elastic Beanstalk Tutorial
+------------------------------------------------
+Ref: https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/GettingStarted.CreateApp.html
+
+
 Terminating HTTPS on EC2 instances running Ruby
 -----------------------------------------------
 https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/https-singleinstance-ruby.html
@@ -413,10 +514,134 @@ https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/configuring-https.html
 https://medium.com/@jameshamann/ssl-certificates-with-rails-aws-elastic-beanstalk-and-lets-encrypt-8b047d527a60
 
 
+How to deploy a smashing dashboard to AWS Elastic Beanstalk with Docker
+-----------------------------------------------------------------------
+Ref: https://ngeor.com/2017/05/09/how-to-deploy-a-smashing-dashboard-to-aws-elastic-beanstalk-with-docker.html
+Meh.
+
+
+Deploying Ruby Applications to AWS Elastic Beanstalk with Git
+-------------------------------------------------------------
+Ref: https://aws.amazon.com/blogs/developer/deploying-ruby-applications-to-aws-elastic-beanstalk-with-git/
+
+EBS is clever - Gems listed in the Gemfile are AUTOMATICALLY INSTALLED FOR YOU. 
+
+To deploy to EBS must download & install AWS Elastic Beanstalk command line tool. Get the install
+scripts from GitHub:
+	1. Make sure the following apps are installed:
+			sudo apt install -y build-essential zlib1g-dev libssl-dev libncurses-dev libffi-dev \
+				libsqlite3-dev libreadline-dev libbz2-dev
+	2. Clone https://github.com/aws/aws-elastic-beanstalk-cli-setup 
+			git clone https://github.com/aws/aws-elastic-beanstalk-cli-setup.git
+			sudo ./aws-elastic-beanstalk-cli-setup/scripts/bundled_installer
+	   Running the install script takes a-g-e-s to install Python, so be patient. It doesn't give
+	   you any indication of progress :/
+
+1. Initialize application with the CLI tool by typing:
+       eb init
+   You will need your AWS acces key ID and secret access key to login.
+   Creates .elasticbeanstalk directory in project root. Add to .gitignore.
+
+   This also creates a Git subcommand - `aws.push`.
+   To deploy app can now just type `aws.push`.
+
+2. Start the environment:
+       eb start
+   Can take minutes - be patient. EBS will be spawning EC2 instances, load balancer etc etc.
+
+
+Beanstalk With RDS
+------------------
+
+RDS = Relational Database Service, which is a web service that makes it easier to set up, operate,
+      and scale a relational database in the AWS Cloud. 
+
+Can launch RDS within EBS console
+	- Good for development
+	- Bad for production
+		- DB lifecyle tied to app lifecyle - termination of env terminats DB too.
+		- Prefer decouple of RDS instance from EBS env. I.e., launch outseide of EBS.
+			- Provides more flexibility.
+			- Can then connect multiple environments to same DB.
+			- Wide choices of DB types.
+			- Can tear down app without interfering with DB.
+
+To connect EBS to outside RDS
+	- Req additional Security Group - add to environments Auto Scaling group.
+	- Provide connection string config info to app servers (endpoint, pwd etc) using EBS properties.
+
+
+Configuring HTTPS for your Elastic Beanstalk environment
+--------------------------------------------------------
+
+Simplest method = assign a server certificate to your environment's load balancer. Client to load
+	balancer secure. Balancer to EC2 instance is not, but is hidden behind balancer so should be
+	secure enough? For end-to-end HTTPS in a load balanced environment, can combine instance and
+	load balancer termination to encrypt both connections. 
+
+With AWS Certificate Manager (ACM), you can create a trusted certificate for your domain names for
+free. BUT domain names are pay-to-own.
+
+
+
 
 ===================================================================================================
 ===================================================================================================
-DynamoDB
+CloudFront
+===================================================================================================
+See: https://aws.amazon.com/cloudfront/#:~:text=Amazon%20CloudFront%20is%20a%20fast,within%20a%20developer%2Dfriendly%20environment.
+
+From AWS Website:
+	Amazon CloudFront is a fast content delivery network (CDN) service that securely delivers data,
+	videos, applications, and APIs to customers globally with low latency, high transfer speeds,
+	all within a developer-friendly environment.
+
+Another AWS page:
+	Amazon CloudFront is a web service that speeds up distribution of your static and dynamic web
+	content, for example, .html, .css, .php, image, and media files, to end users. CloudFront
+	delivers your content through a worldwide network of edge locations. When an end user requests
+	content that you're serving with CloudFront, the user is routed to the edge location that
+	provides the lowest latency, so content is delivered with the best possible performance. If the
+	content is already in that edge location, CloudFront delivers it immediately. If the content is
+	not currently in that edge location, CloudFront retrieves it from an Amazon S3 bucket or an
+	HTTP server (for example, a web server) that you have identified as the source for the
+	definitive version of your content.
+
+
+Cloudfront may allow FREE encryption using TLS via the AWS certificate manager.
+
+- Global content deliver network (CDN)
+- Application acceleration and optimization
+- Distributed scalable integrated security controls
+- Optimised for deliver use cases with intelligent caching.
+- On-demand, full user control. Cost effective.
+
+
+
+===================================================================================================
+===================================================================================================
+LightSail
+===================================================================================================
+Lightsail is an easy-to-use cloud platform that offers everything needed to build an app or website,
+plus a cost-effective, monthly plan. Ideal for simpler workloads, quick deployments, and getting
+started on AWS.
+
+The pricing scheme is way simpler, for example, than EBS. It seems to abstract even further away so
+that we don't even have to worry about what EC2 cost model and S3 cost model we'd use etc.
+
+
+SSL/TLS Certificates In LightSail
+---------------------------------
+Ref: https://lightsail.aws.amazon.com/ls/docs/en_us/articles/understanding-tls-ssl-certificates-in-lightsail-https
+
+Lightsail uses SSL/TLS certificates to handle encrypted web traffic (HTTPS requests). You can create
+certificates, verify domain ownership, and then attach the validated certificates to your Lightsail
+load balancer.
+
+
+===================================================================================================
+===================================================================================================
+Dynamo Database
 ===================================================================================================
 
 
@@ -430,3 +655,20 @@ CodeCommit / Code Deploy / Code Pipeline
 ===================================================================================================
 Kinesis
 ===================================================================================================
+
+
+===================================================================================================
+===================================================================================================
+Which AWS Service To Publish A Website?
+===================================================================================================
+
+Ref: https://adrianhall.github.io/cloud/2019/01/31/which-aws-service-for-hosting/
+
+Options include:
+- Amazon S3
+- Amazon S3 + Amazon Cloudfront
+- AWS Amplify Console
+- Amazon Lightsail
+- AWS Elastic Beanstalk
+- AWS Elastic Beanstalk + Cloudfront
+- AWS EC2 - Do-it-yourself compute / storage / network stack

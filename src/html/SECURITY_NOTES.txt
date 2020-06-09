@@ -1,0 +1,189 @@
+===================================================================================================
+===================================================================================================
+Secure Sockets Layer (SSL) and Transport Layer Security (TLS)
+===================================================================================================
+SSL and TLS are protocols that provide secure communications over a computer network or link.
+
+SSL IS NOW DEPRECATED - IT IS SUPERCEEDED BY TLS
+
+TLS is based on SSL, developed due to vulnerabilities in SSLv3.
+SSL term is commonly used BUT NOW REFERS TO TLS, generally.
+
+TLS provides
+	- Encryption
+		I.e. the message contents are "hidden" - just look like random crap.
+	- Data integrity
+		I.e. can be sure the message contents have not been changed.
+	- Authentication
+		I.e., the message came from the person you think it came from and not some imposter.
+
+Encryption ONLY HIDES the message, but it does not tell you that the message came from the person
+you think it did, or that it hasn't been changed:
+
+	ALICE -------[Encrypted Msg] -------> Bob
+OR
+	ALICE -------[Encrypted Msg] -------> Bad -------> [Different encrypted msg] -----> Bob
+	                                      Guy
+
+To verify the sender and be confident the message didn't change requires SIGNING. I.e.,
+SIGNING PROVIDES AUTHENTICATION.
+
+
+Types Of Keys
+--------------
+	1. Symmetric Keys:
+		The same key encrypts and decrypts the message. E.g. like key to your door - it both locks
+		and opens the door.
+	2. Asymmetric Keys:
+		Two different keys - one encrypts and one decrupts. It would be like having one key to
+		lock your front door. Using the same key wouldn't unlock it, you'd need a different key.
+		The keys are known as PUBLIC and PRIVATE keys and come as a KEY PAIR.
+
+
+SSL/TLS use public/private key encryption.
+
+Public keys can be made available to the world. But, because of this, you can't tell whether the
+public key you have received from your bank, really is the bank's public key and not that of a
+frauster. Enter DIGITAL CERTIFICATES.
+
+
+
+===================================================================================================
+===================================================================================================
+Digital Certficiates &  The Chain Of Trust 
+===================================================================================================
+
+Digital Certificates
+--------------------
+
+A passport links a photo and a person. Link verified by TRUSTED AUTHORITY, in this case the passport
+office. Passport hard to fake so when Alice presents her passport we can match the passport photo
+with her face and then infer that Alice is indeed who she says she is.
+
+Digital certificate does the same thing for a PUBLIC KEY. It LINKS PUBLIC KEY TO AN ENTITY and in
+the same way as a passport, has been VERIFIED (SIGNED) BY A TRUSTED AUTHORITY.
+
+Provides method to DISTRIBUTE TRUSTED PUBLIC KEYS.
+
+To obtain a digital certificate is just like applying for passport. Send appropriate forms, the CA
+does some checks and sends you back your keys enclosed in a certificate. The process of asking a CA
+to verify your keys is called A CERTIFICATE SIGNING REQUEST (CSR).
+
+
+What the Digital Certificate (SSL Cert) Looks Like
+--------------------------------------------------
+
++------------------------------+
+|      +----------------+      | }
+|      |    SSL Cert    |      | } Information describing the mysite.com and the proxy
+|      |   MySite.com   |      | } CA. Also the public key of MySite
+|      |  Proxy CA Info |      | }
+|      | MySite PUB KEY |      | } 
+|      +----------------+      | }
+|                              |
+|                              |
+|    +--------------------+    |                          } The hash verifies that the SSL info
+|    | +----------------+ |    | } A hash of the info     } has not been chaged.
+|    | |      HASH      | |    | } describing mysite.com  } The encryption of the hash ensure that
+|    | +----------------+ |    | } and the proxy          } the hash has not been changed or
+|    |                    |    |                          } proofed.
+|    |   Encrypted with   |    |                          } The encrypted block can be decrypted
+|    |    private key     |    |                          } by anyone with the *public* key, so
+|    |                    |    |                          } is easily verifiable.
+|    +--------------------+    |                          }
+|                              |
+|       SSL Certificate        |
+|                              |
++------------------------------+
+
+
+Types Of Certificates
+---------------------
+	1. Domain Validated Certificates (DVC)
+		X.509 digital certificate for TSL where ID of applicate has been validated by proving some
+		control over a DNS domain.
+		Not as trusted as EVC. It is the LEAST TRUSTED option.
+		Validation process normally fully automated so is CHEAPEST.
+		BAD FOR SENSITIVE DATA.
+	2. Extended Validated Certificates (EVC)
+		Used by HTTPS websites and proves ID of the legal entity that controlls the domain.
+		MORE EXPENSIVE because requires verification of the reqiesting entity's ID by CA (i.e. we
+		used the passport office!). Manual processes required.
+
+Level of encryption the same, its just the degree of trust that differs.
+
+
+Certficate Restrictions
+-----------------------
+Normally valid for use on single fully qualified domain name (FQDN). I.e if certificate issued for
+www.jeh-tech.com, cannot be used on www.subdomain.jeh-tech.com or www.random-domain.com.
+
+From Wikipedia:
+	A fully qualified domain name (FQDN), sometimes also referred to as an absolute domain name,
+	is a domain name that specifies its exact location in the tree hierarchy of the Domain Name
+	System (DNS). It specifies all domain levels, including the top-level domain and the root zone.
+	A fully qualified domain name is distinguished by its lack of ambiguity: it can be interpreted
+	only in one way.
+
+Secure multiple subdomains using WILDCARD CERTIFICATE, which would cover *.jeh-tech.com, for e.g.
+
+NOTE: This ONLY COVERS SUBDOMAINS - it cannot cover totally different domains.
+
+To cover multiple different domans requires a SAN (Subject Alternative Name) Certificate.
+
+
+Root CAs
+---------
+Root CAs keep their private keys under numerous layers of security - they are the "gold standard"
+super trusted, uncompromisable source of trust. We agree to totally trust the root CA and this trust
+is built on their ability to keep their private keys, well, private!
+
+This is super important because if their private keys are compromised then all of root CA's
+certificates are compromised!!
+
+
+Intermediate CAs & The Chain Of Trust
+-------------------------------------
+Act like a "proxy" for Root CAs. The root CA signs their certificates.
+
+E.g. mysite.com makes a CERTIFICATE SIGNING REQUEST (CSR) to an intermediate CA (ICA), which signes
+the cert and returns the SSL cert it to mysite.com. It is signed by the ICA, but another chained
+certificate is provided that is the ICA certificate that is signed by the root CA - we get A CHAIN
+OF CERTIFICATES.
+
+
+mysite.com ---> Site's SSL certificate  AND  ICA's certificate  }
+                       ^                           ^            } A chain of certificates, or trust.
+                       |                           |            } Our SSL is signed by ICA, which
+                   [Signed by]                     |            } vouches for our authenticity.
+                       |                           |            } This certificate is CHAINED to
+ICA ----------> ICA's Certificate -----------------+            } the ICA's own certificate, which
+                       ^                                        } is vouched for by the root CA who
+                       |                                        } everyone completely trusts. This
+                   [Signed by]                                  } is the chain. Its like accepting
+                       |                                        } a recomendation from a friend.
+                    Root CA                                     } 
+
+
+A browser, for example, will have a list of CA authorities it deems as trust worthy. So when it
+receives a certificate, it may not trust the proxy, but as long as it can travel down the chain to
+find a source it does trust, it can decide to trust the proxy, as-if the party it trusts has
+"recommonded" the proxy.
+
+This means that the browser has a list of trusted public keys which it can use to decrypt one of
+the certificates in ther certificate chain it receives, in order to verify it. It can decrypt the
+hash, therefore it knows, if the decrypted hash matches the locally-generated hash for the cert,
+     a) The hash definitely comes from who it says its from,
+     b) The hash has not been tampered with
+
+This means it can trust the public key contained in the cert and use that to decrypt down the chain
+and so on to verify everything.
+
+
+Commercial v.s. Roll-Your-Own
+-----------------------------
+
+Can create your own certificates and they will be just as secure. Only difference is that you will
+have to install your certificate to your browsers list of trusted certificates manually, as opposed
+to a commercial one which should already be, at least indirectly via a chain-of-trust, in your
+browsers trust list.
