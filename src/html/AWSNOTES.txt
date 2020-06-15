@@ -1,43 +1,70 @@
 ===================================================================================================
 ===================================================================================================
+AWS Samples
+===================================================================================================
+https://github.com/aws-samples
+^^
+This GitHub page has a load of AWS examples. Really worth a flick through!
+	E.g. For deploying PHP, Containers and NGinx:
+		https://github.com/aws-samples/eb-docker-nginx-proxy
+
+
+
+
+===================================================================================================
+===================================================================================================
 IAM - Identity Access Management
 ===================================================================================================
-	- See https://d0.awsstatic.com/whitepapers/Security/AWS_Security_Best_Practices.pdf
+- See https://d0.awsstatic.com/whitepapers/Security/AWS_Security_Best_Practices.pdf
 
-	- For management of users and their access level to AWS console.
-	- Centralised control of AWS account
-	- Shared access
-	- Granular permissions
-	- Multifactor authentication
-	- Integrates with AWS services
+- For management of users and their access level to AWS console.
+- Centralised control of AWS account
+- Shared access
+- Granular permissions
+- Multifactor authentication
+- Integrates with AWS services
 
-	- Groups - Collection of users with common permission set.
-	- Roles - Define set of permissions that can be assigned to AWS resources/entities.
-		Secure way to grant permissions to entities that you trust. Ex, IAM user in another account
-		or application code running an an EC2 instnace that needs to permorm actions on AWS
-		resources etc.
-		E.g.: Give an EC2 instance permissions to write a file to an S3 bucket.
-			Create role.
-			Select the service that the role will use - EC2 instance in this example.
-			Attach the S3 policy of choice, e.g. write access, to the role.
-			This role can then be applied to any new EC2 instance created.
+- Groups - Collection of users with common permission set.
+- Roles - Define set of permissions that can be assigned to AWS resources/entities.
+	Secure way to grant permissions to entities that you trust. Ex, IAM user in another account
+	or application code running an an EC2 instnace that needs to permorm actions on AWS
+	resources etc.
+	E.g.: Give an EC2 instance permissions to write a file to an S3 bucket.
+		Create role.
+		Select the service that the role will use - EC2 instance in this example.
+		Attach the S3 policy of choice, e.g. write access, to the role.
+		This role can then be applied to any new EC2 instance created.
+- Policies - Document that defines >= 1 permissions that can be assigned user, groups, or roles.
 
-	- Policies - Document that defines >= 1 permissions that can be assigned user, groups, or roles.
+- In console access under "Security, Identity and Compliance"
 
-	- In console access under "Security, Identity and Compliance"
+- When creating users you will have
+	- User name
+		For AWS console login.
+	- Access key ID
+		For PROGRAMATIC access. i.e., via CLI, scripts etc.
+	- Secret Access Key.
+		For PROGRAMATIC access. i.e., via CLI, scripts etc.
+		This will only be displayed once. You can download as a CSV if you can keep it securley.
+		Note, once the secret has been hidden you canNOT access it again. You would have to
+		generate a new key.
+	- Password
+		For AWS console login.
 
-	- When creating users you will have
-		- User name
-			For AWS console login.
-		- Access key ID
-			For PROGRAMATIC access. i.e., via CLI, scripts etc.
-		- Secret Access Key.
-			For PROGRAMATIC access. i.e., via CLI, scripts etc.
-			This will only be displayed once. You can download as a CSV if you can keep it securley.
-			Note, once the secret has been hidden you canNOT access it again. You would have to
-			generate a new key.
-		- Password
-			For AWS console login.
+
+Instance Profiles
+-----------------
+	EC2
+	---
+	See https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2_instance-profiles.html
+
+	An instance profile is a container for an IAM role that you can use to pass role information to an
+	EC2 instance when the instance starts ... When you then use the Amazon EC2 console to launch an
+	instance with an IAM role, you can select a role to associate with the instance.
+
+	Elastic Beanstalk
+	-----------------
+	See https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/iam-instanceprofile.html
 
 
 
@@ -144,10 +171,55 @@ If you don't want to spend money on AWS domain you can just use the S3 bucket ad
 TODO - Complete ME!
 
 
+
 ===================================================================================================
 ===================================================================================================
-Proxies And Reverse Proxies
+Forward And Reverse Proxies
 ===================================================================================================
+Ref: https://www.cloudflare.com/learning/cdn/glossary/reverse-proxy/
+
+Forward Proxy
+-------------
+TL;DR: A forward proxy sits in front of a client/clients and ensures that no origin server ever
+communicates directly with that specific client / those clients.
+
+Standard Internet communication: A reaches out directly to computer C, with the client sending
+	requests to the origin server and the origin server responding to the client.
+
+With fwd proxy: A sends requests to B (proxy), which forwards the request to C (origin server). C
+	will then send a response to B, which will forward the response back to A.
+
+Why?
+	- Avoid state or instituational browsing restrictions
+		Connect to proxy rather than desired illegal site.
+	- Block access to certain content
+		Proxy intercepts all traffic so can deny some requests.
+	- Protect online identity
+		Servers see the proxy's IP, not the clients.
+
+
+Reverse Proxy
+-------------
+TL;DR: Sits in front of web server(s), intercepting client requests.
+
+A reverse proxy sits in front of an origin server and ensures that no client ever communicates
+directly with that origin server.
+
+With rev proxy: A sends comms to reverse proxy, B. B then sends request to server C, which replies
+	to B, which B forwards back on to A.
+
+Why?
+	- Load balancing.
+		Proxy can forward client requests on to one server from a pool. To client it looks like
+		talking to one server, when it could be one of many.
+	- Security.
+		Server IP is never revelated. Harder to attack it therefore. Reverse proxy generally has
+		higher security and better resource to fend off attack.
+	- Caching.
+		Reverse proxy can cache frequenty requested content.
+	- TLS/SSL encryption.
+		If origin server is low resouce or doesn't support encryption reverse-proxy can do this on
+		the server's behalg.
 
 
 
@@ -221,7 +293,7 @@ Elastic Load Balancer (ELB)
 			intelligent as application load balancer.
 			If your app stops responding ELB returns a 504 error.
 
-	The laod balancer is an extra layer that will "hide" the public IP address of the entity accessing
+	The load balancer is an extra layer that will "hide" the public IP address of the entity accessing
 	your server. To get the public IP look in the "X-Forwarded-For" header to see the public IP addr.
 
 	To create a load balancer go back to your EC2 instance and select, in the left hand menu
@@ -236,11 +308,80 @@ Elastic Load Balancer (ELB)
 		Create
 
 
+DNS Refresher
+-------------
+See: http://social.dnsmadeeasy.com/wp-content/uploads/2016/12/DNS-for-Dummies-ebook-3-min.pdf
+     https://ns1.com/resources/cname
+
+Fully Qualified Domain Name (FQDN) - Domain name has both a HOSTNAME AND DOMAINNAME
+	For example, accessing a server called bob we might goto "bob.my-buiness-name.com". Bob is
+	the hostname and my-buiness-name.com is the domain name.
+
+DNS request:
+	1. Contact ROOT NAME SERVERS (see http://www.iana.org/domains/root/servers) and get the address
+		of the top level domain (TLD) server. So in the bob example we get the COM TLD server
+		address.
+	2. Next contact the COM TLD server(s) to get the name server responsible for "my-buiness-name".
+	3. Next conatact the name server for the address of the hose "bob".
+
+Two types of DNS servers:
+	1. Authoritative
+		Do the actual name -> IP address mapping.
+	2. Recursive (or Caching):
+		Contacted by clients and do the work of the DNS lookup by talking to authoritative servers.
+		They recurse throught the DNS name hierachy to resolve the address for the client.
+
+DOMAIN REGISTRAR - service through which you register a domain name and map an IP address to it.
+	Domain registrar deals with registry operators who deal with master domain lists - overall
+	managed by IANA.
+
+	So, if I register "bob.my-buiness-name.com" the registrar will contact a registry operator,
+	which is overseen by IANA, and adds the name "bob.my-buiness-name.com" to the global list of
+	all domain names (ensuring, of course, that it isn't already registered!).
+
+	That's all the registrar does.
+
+DNS HOSTING PROVIDER - hosts the servers that authoritatively respond to your domain. So,
+	a registrar might have registered "bob.my-buiness-name.com" for me, but it is the DNS hosting
+	provider that has a server that when queried will respond with the IP address for my host!
+
+Sometimes a domain registrar will offer DNS hosting and vice versa, but the 2 functions are separate
+
+
+Your DNS hosting provider has to know, when x.y.z is accessed, what the IP address it should map to
+is. For this is uses something called an "A record". If you own x.y.z, you create, in your hosting
+providers map of x.z.y an "A record" and fill it with your server's IP address.
+
+You can also setup aliases. If for x.y.z you setuup a "CNAME record", you can specificy that when
+x.y.z is resolved by your DHS hosting provider that it should re-direct the querier to another
+url instead.
+		A Canonical Name (CNAME) Record is used in the Domain Name System (DNS) to create an alias
+		from one domain name to another domain name.
+		A common example is the www subdomain which is provided as an alias to the root domain
+		name - users accessing "www.example.com" are referred to the root domain (or DNS zone apex)
+		"example.com".
+
+		For example, to map www.example.com to zone-apex, example.com, the record might look like:
+			www.example.com. CNAME example.com.
+			example.com. A 192.162.100.100
+
+		DNS Resolution Process for CNAME Records
+				- A DNS client (such as a browser or network device) requests the address
+				  www.example.com, and a DNS request is created.
+				- A DNS resolver receives the request and finds the Authoritative Name Server that
+				  holds the DNS Zone file with DNS records for the "example.com" domain.
+				- The DNS request is resolved and the CNAME record is returned to the client.
+				- The client understands www.example.com is only an alias for the real address, 
+				  "example.com", and issues a new DNS query for "example.com"
+				- The process is repeated and the resolver returns the A record for "example.com",
+				  containing the IP address.
+				- The DNS client now connects to “example.com” using its IP address.
+
+
 Route53
 -------
 	- Amazon's DNS service
 	- Allows mapping of domain names to EC2 instances, load balancers and S3 buckets.
-	
 
 	- Log into AWS console, then Services > Network > Route 53
 	- Click Domains > Registered domains
@@ -390,6 +531,10 @@ S3
 Elastic Beanstalk
 ===================================================================================================
 
+MUST READ: https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/concepts.html
+TUTORIALS: https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/tutorials.html
+
+
 What Is It?
 -----------
 
@@ -409,6 +554,16 @@ From AWS:
 	application, and Elastic Beanstalk automatically handles the details of capacity provisioning,
 	load balancing, scaling, and application health monitoring.
 
+[https://adrianhall.github.io/cloud/2019/01/31/which-aws-service-for-hosting/]:
+	On the surface, you will find a lot of similarities between Amazon Lightsail and AWS Elastic
+	Beanstalk with EC2 instances. They both run exactly the same web application sets ... However,
+	AWS Elastic Beanstalk can run within a VPC, which means you can run the web applications in an
+	"internal only" configuration (with no connection to the Internet ...). You also get a whole
+	host of flexibility in terms of settings that you don’t get with Lightsail.
+	...
+	Best for: Your most challenging enterprise apps where access to the underlying OS is required.
+
+
 Developers can focus on writing code and don't need to worry about any of the underlying
 infrastructure needed to run the application.
 
@@ -427,6 +582,34 @@ In summary:
 	- Managed platform updates auto applies to OS and Java/PHP/NodeJS etc etc.
 
 EB v.s. CloudFormation - EB configure environment through a GUI, CF is scripted config.
+
+NOTE: Free tier eligable instances will not have a load balancer
+
+##IMG:aws_elasticbeanstalk_structure_whiteboard.jpg##
+
+
+Nomenclature
+------------
+Application   - Logical collection of Elastic Beanstalk components, including environments,
+                versions, and environment configurations.
+                Think of it like a CLASS definition.
+
+Environment   - Collection of AWS resources running an application version.
+                Each environment runs only 1 app version at a time, however, you can run the same
+                app version or different application versions in many environments simultaneously.
+                When environment created, EBS provisions resources needed to run the app.
+                Think of it as an INSTANCE of a class.
+
+Environment   - Identifies a collection of parameters and settings that define how an environment
+config          and its associated resources behave
+                Think of it like the PARAMETERS passed to the CLASS CONSTRUCTOR.
+
+Saved         - A template that you can use as a starting point for creating unique environment
+config          configurations.
+
+Platform      - Combination of an operating system, programming language runtime, web server,
+                application server, and Elastic Beanstalk components. 
+
 
 Beanstalk Update/Deployment Options
 -----------------------------------
@@ -455,8 +638,32 @@ Beanstalk Update/Deployment Options
 		- Perferred option for Mission Critical stuff.
 
 
+Instance Profiles - "Environment must have instance profile associated with it"
+-------------------------------------------------------------------------------
+See: https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/iam-instanceprofile.html
+See: https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environments-create-api.html
+
+An instance profile is a container for an AWS Identity and Access Management (IAM) role that you
+can use to pass role information to an Amazon EC2 instance when the instance starts. When you launch
+an environment using the Elastic Beanstalk console or the EB CLI, Elastic Beanstalk creates a
+default instance profile, called `aws-elasticbeanstalk-ec2-role`, and assigns managed policies with
+default permissions to it.
+
+If you see the error message, "Environment must have instance profile associated with it", when
+trying to create an environment, you may not have sufficient priviladges or could be trying to
+create the environment in the wrong region.
+
+It appears you will required permission to use the role `aws-elasticbeanstalk-ec2-role`.
+
+
 How To Deploy Apps
 ------------------
+	NOTE: You must, generally, specify an Instance Profile for your EC2 instance 
+		From [https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/iam-instanceprofile.html]:
+			An instance profile is a container for an AWS Identity and Access Management (IAM) role
+			that you can use to pass role information to an Amazon EC2 instance when the instance
+			starts.
+
 	Compute > Elastic Beanstalk
 	Click "Get Started"
 	Create a web app
@@ -468,7 +675,9 @@ How To Deploy Apps
 			- If you choose to upload a local file, it will create an S3 bucket automatically for
 				you and stash the ZIP there. I was suprised that it doesn't unzip the archive, it
 				just stashes it.
-		- Once you click "Create Application" and environment will be created for your app.
+		- Once you click "Create Application" an environment will be created for your app.
+			By creating an environment, AWS Elastic Beanstalk is allowed to manage AWS resources
+			and permissions on your behalf.
 			If the app was called HelloWorld then the environment is labeled HelloWorld-env.
 			The creation can take up to 5 or 6 minutes so be patient.
 		- When the environment reports itself as successfull launched, in the breadcrumb links
@@ -495,36 +704,264 @@ How To Deploy Apps
 Configuring Elastic Beanstalk
 -----------------------------
 Environment can be customized using config files - spec packages to install, user groups, shell cmds
-to run etc etc). Files written in YAML or JSON and have a ".config" suffic and be saved in the
-folder ".ebextensions", which must be included in the top-level directory of the app source code
+to run etc etc). Files written in YAML or JSON and have a ".config" suffix and be saved in the
+folder `.ebextensions`, which must be included in the top-level directory of the app source code
 bundle. Thus, config files can be placed under source control with the rest of the app code.
 
 See also: https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/ebextensions.html
+          https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/customize-containers-ec2.html
+          https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environment-resources.html
 
+Examples of commonly used `.ebextensions`:
+	https://github.com/awsdocs/elastic-beanstalk-samples/tree/master/configuration-files
 
 AWS "Getting Started" Elastic Beanstalk Tutorial
 ------------------------------------------------
 Ref: https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/GettingStarted.CreateApp.html
 
 
-Terminating HTTPS on EC2 instances running Ruby
+Configuring HTTPS & Certbot .ebextensions File
 -----------------------------------------------
 https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/https-singleinstance-ruby.html
 https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/configuring-https.html
 https://medium.com/@jameshamann/ssl-certificates-with-rails-aws-elastic-beanstalk-and-lets-encrypt-8b047d527a60
+https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate-dns.html
+
+Docker multi instance, by default does not have a load balancer. To install one follow this guide:
+	https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features-managing-env-types.html#using-features.managing.changetype
+	In summary: Goto Envionments > your-ebs-envionment > Condig > Capacity (click Edit).
+	            Change environment type to "load balanced", and configure max #instances,
+	            Click "Apply"
+
+This Medium.com article works if you are running an Nginx server. In this case running Smashing in
+the apline container from github, is just running the "normal" thin server.
+
+This will use DNS VALIDATION - You must have control over your DNS entry so that you can add
+a temporary DNS record to, e.g. `_acme-challenge.your.site.address.com` so that the ACME protocol
+can verify that you do indeed have control over your domain.
 
 
-How to deploy a smashing dashboard to AWS Elastic Beanstalk with Docker
------------------------------------------------------------------------
+Getting Certificates From AWS Certificate Manager
+-------------------------------------------------
+https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-validate-dns.html
+
+
+Deploying Docker Images / Web Apps to AWS Elastic Beanstalk
+-----------------------------------------------------------
+MUST READ: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html#standard_container_definition_params
+
 Ref: https://ngeor.com/2017/05/09/how-to-deploy-a-smashing-dashboard-to-aws-elastic-beanstalk-with-docker.html
-Meh.
+Ref: https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/single-container-docker-configuration.html
+Ref: https://www.youtube.com/watch?v=lBu7Ov3Rt-M
+
+Any web application that you deploy to Elastic Beanstalk in a single container Docker environment
+must include a Dockerfile or a Dockerrun.aws.json file. 
+
+Docker images can be deployed to EBS. EBS will setup the EC2 instance for you and can be configured,
+via a Dockerrun.aws.json JSON file, to map volumes from the EC2 instance into the Docker container
+as well as mapping EC2 ports too. Thus the web-app can run in the Docker container.
+
+Docker multi instance, by default does not have a load balancer. To install one follow this guide:
+	https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features-managing-env-types.html#using-features.managing.changetype
+
+vvvvvvvv CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION vvvvvvvv
+
+There is a difference between V1 and V2 of the Dockerrun.aws.json file/
+	V1 = Single container - "AWSEBDockerrunVersion": "1",
+	V2 = Multi container - "AWSEBDockerrunVersion": "2",
+
+The examples below are a little confused... because I was confused whilst looking at them. Some are
+V1 and some are V2, and the two types are not compatible - i.e., you can't use a V1 Dockerrun file
+on a multicontainer (V2) instance and vice vera.
+
+SEE: https://stackoverflow.com/a/61444054/1517244
+SEE: https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create_deploy_docker_v2config.html
+
+The EC2 instances that EBS creates can have environments that only support a single Docker container
+per EC2 instance, or multiple containers.
+
+NOTE: STANDARD AND PRECONFIGURED DOCKER PLATFORMS ON EBS SUPPORT ONLY A SINGLE DOCKER CONTAINER PER
+      ELASTIC BEANSTALK ENVIRONMENT. 
+
+In order to get the most out of Docker, Elastic Beanstalk lets you create an environment where your
+Amazon EC2 instances run multiple Docker containers side by side ... Elastic Beanstalk uses Amazon
+Elastic Container Service (Amazon ECS) to coordinate container deployments to multicontainer Docker
+environments.
+	SEE https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create_deploy_docker_ecs.html#create_deploy_docker_ecs_platform
+
+^^^^^^^^ CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION ^^^^^^^^
+
+
+* Ports:
+To map ports, for example, the JSON configuration would include:
+	"portMappings": [
+	    {
+	        "containerPort": integer,
+	        "hostPort": integer
+	    }
+	    ...
+	]
+Port mappings allow containers to access ports on the host container instance to send or receive
+traffic.
+	containerPort:
+		- The port number on the container that is bound to the user-specified or
+		  automatically assigned host port.
+		- If using containers in a task with the Fargate launch type, exposed ports should be
+		  specified using containerPort.
+		- If using containers in a task with the EC2 launch type and you specify a container port and
+		  not a host port, your container automatically receives a host port in the ephemeral port
+		  range.
+	hostPort:
+		- The port number on the container instance to reserve for your container.
+		- If using containers in a task with the Fargate launch type, the hostPort can either be
+		  left blank or be the same value as containerPort.
+		- If using containers in a task with the EC2 launch type, you can specify a non-reserved
+		  host port for your container port mapping (this is referred to as static host port
+		  mapping), or you can omit the hostPort (or set it to 0) while specifying a containerPort
+		  and your container automatically receives a port (this is referred to as dynamic host port
+		  mapping) in the ephemeral port range for your container instance operating system and
+		  Docker version.
+
+* Volumes:
+To map volumes: specify a list of volumes to be passed to the Docker daemon on a container instance.
+	{
+	  "Volumes": [
+	    {
+	      "HostDirectory": "/path/inside/host",
+	      "ContainerDirectory": "/path/inside/container"
+	    }
+	  ]
+	...
+The following are the types of data volumes that can be used:
+	1. Docker Volumes: Docker-managed volume that is created under /var/lib/docker/volumes on the
+		container instance.
+	2. Bind Mounts:    A file or directory on the host machine is mounted into a container. Bind
+		mount host volumes are supported when using either the EC2 or Fargate launch types.
+		To use bind mount host volumes, specify a host and optional sourcePath value in your task
+		definition. E.g.:
+			"volumes": [
+				{
+					"name": "dashboards",
+					"host": {
+						"sourcePath": "/var/app/current/dashboards"
+					}
+				},
+
+NOTE: /var/app/current is the directory on the host machine that contains the deployment artifact,
+      i.e. the .zip file unzipped.
+
+
+And so on. See the reference link at the top of the sub-section for details.
+
+- Goto EBS on AWS web console.
+- Select "Create New Application"
+	- Give the app a name and description
+	- Environment tier = Web Server
+	  Prodefined config = Docker
+	  Environment type = Load balancing, autoscaling
+	- Select "Upload Your Own"
+		Upload the `Dockerrun.aws.json` file
+
+
+	Terminating HTTPS on EC2 instances running Docker
+	- - - - - - - - - - - - - - - - - - - - - - - - -
+	See: https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/https-singleinstance-docker.html
+	See: Above section "Configuring Elastic Beanstalk"
+
+	Create a file `.ebextensions/https-instance.config`, to configure the NGINX instance. The config
+	will create the following files, which are required by NGINX et al:
+		1. /etc/nginx/conf.d/https.conf - Configures the nginx server. This file is loaded when the
+			nginx service starts.
+		2. /etc/pki/tls/certs/server.crt - Creates the certificate file on the instance.
+		3. /etc/pki/tls/certs/server.key - Creates the private key file on the instance
+
+	!! CAUTION !!
+		Avoid committing a configuration file that contains your private key to source control.
+		After you have tested the configuration and confirmed that it works, store your private key
+		in Amazon S3 and modify the configuration to download it during deployment. For
+		instructions, see Storing private keys securely in Amazon S3.
+
+	To configure EBS to download the private keys from S3 during deployment you will need to
+	create `.ebextensions/privatekey.config`. For example:
+		Resources:
+		  AWSEBAutoScalingGroup:
+		    Metadata:
+		      AWS::CloudFormation::Authentication:
+		        S3Auth:
+		          type: "s3"
+		          buckets: ["MY_BUCKET_NAME"]
+		          roleName: 
+		            "Fn::GetOptionSetting": 
+		              Namespace: "aws:autoscaling:launchconfiguration"
+		              OptionName: "IamInstanceProfile"
+		              DefaultValue: "aws-elasticbeanstalk-ec2-role"
+		files:
+		  # Private key
+		  "/etc/pki/tls/certs/server.key":
+		    mode: "000400"
+		    owner: root
+		    group: root
+		    authentication: "S3Auth"
+		    source: MY_BUCKET_URL/server.key
 
 
 Deploying Ruby Applications to AWS Elastic Beanstalk with Git
 -------------------------------------------------------------
 Ref: https://aws.amazon.com/blogs/developer/deploying-ruby-applications-to-aws-elastic-beanstalk-with-git/
+^^^
+WARNING/NOTE: I think the aricle is out of date. it meansions using the command `eb start`. I have
+	tried this but it does not appear to be a command supported by `eb`:
+		eb: error: unrecognized arguments: start
+	The `eb` help says...
+		To get started type "eb init". Then type "eb create" and "eb open"
+	I have followed its advice and replaced the article's second-half with these suggested steps!
 
-EBS is clever - Gems listed in the Gemfile are AUTOMATICALLY INSTALLED FOR YOU. 
+WARNING/NOTE: I also found that after successfull setup Puma was having problems. I saw the
+	following error message repeated many times in the Puma logs:
+		connect() to unix:///var/run/puma/my_app.sock failed
+
+	Nginx, the web-server, is failing to communicate with Puma, the application server. Why do we
+	need both? 
+		See - https://stackoverflow.com/a/50517532/1517244
+		See - https://www.justinweiss.com/articles/a-web-server-vs-an-app-server/
+			A web server is a program that takes a request to your website from a user and does some
+			processing on it. Then, it might give the request to your Rails app. Nginx and Apache
+			are the two big web servers you’ll run into.
+
+			An app server is the thing that actually runs your Rails app. Your app server loads your
+			code and keeps your app in memory. When your app server gets a request from your web
+			server, it tells your Rails app about it. After your app is done handling the request,
+			the app server sends the response back to the web server (and eventually to the user).
+
+	It seems routing to app is:
+		NGINX ----[pass CGI reg]----> PUMA ----[Query App]----> 
+			----> APP ----[Use sinatra to build/route REST end points]---->[App API endpoint called]
+			---->[Return CGI response]----> PUMA ---->[Return CGI response] ----> NGINX
+	The above should help picture what's going on and what the various names like "Puma",
+	"Sinatra" etc etc mean.
+
+	See this SO thread for solutions: https://stackoverflow.com/q/30355569/1517244. In short the
+	solution seems to be adding the following 2 lines to `config/puma.rb`:
+		bind "unix:///var/run/puma/my_app.sock"
+		pidfile "/var/run/puma/my_app.sock"
+	See also: https://github.com/puma/puma/blob/master/README.md#configuration-file
+	Also, the config file may be `${RAILS_ENV}/puma.rb' is RAILS_ENV is defined.
+
+	Where to find the config? The file is stored in side the app's config directory. The app is a
+	Gem, so I assume we follow this:
+		Use `gem environment` to find out about your gem environment.
+		Look for one of the two lines:
+			- INSTALLATION DIRECTORY: /var/lib/gems/<version a.b.c>
+			- USER INSTALLATION DIRECTORY: /home/<user>/.gem/ruby/<version a.b.c>
+		Then under, probably the global installation directory you will find, for example:
+			/var/lib/gems/2.5.0/gems/puma-4.3.5
+
+	To add these you will need to SSH into your EBS instance:
+		eb ssh
+	URG... FIDDLY AND TIME CONSUMING JUST TO SETUP A DASH... ABANDONING - WILL USE DOCKER IMAGE.
+
+
+EBS is clever - Gems listed in the Gemfile are AUTOMATICALLY INSTALLED FOR YOU (almost anyway!). 
 
 To deploy to EBS must download & install AWS Elastic Beanstalk command line tool. Get the install
 scripts from GitHub:
@@ -535,19 +972,85 @@ scripts from GitHub:
 			git clone https://github.com/aws/aws-elastic-beanstalk-cli-setup.git
 			sudo ./aws-elastic-beanstalk-cli-setup/scripts/bundled_installer
 	   Running the install script takes a-g-e-s to install Python, so be patient. It doesn't give
-	   you any indication of progress :/
+	   you any indication of progress :/ Go make a cup of tea and come back later!
+	3. Follow the "Finishing up" instructions at the end of the EB install to add EB to your PATH!
+		echo 'export PATH="/home/jh/.ebcli-virtual-env/executables:$PATH"' >> ~/.bash_profile && source ~/.bash_profile
 
 1. Initialize application with the CLI tool by typing:
        eb init
    You will need your AWS acces key ID and secret access key to login.
    Creates .elasticbeanstalk directory in project root. Add to .gitignore.
 
-   This also creates a Git subcommand - `aws.push`.
-   To deploy app can now just type `aws.push`.
+   You will also be asked if you want to continue with "CodeCommit". This option will allow you to
+   create and manage Git repositories hosted by AWS CodeCommit with the Elastic Beanstalk:
+      AWS CodeCommit is a fully-managed source control service that makes it easy ... to host ...
+      private Git repositories.
+      ...
+      Get 5 active users per month for free (within limits), after which you pay $1 per additional
+      active user per month. 
 
-2. Start the environment:
-       eb start
-   Can take minutes - be patient. EBS will be spawning EC2 instances, load balancer etc etc.
+   This also creates a Git subcommand - `aws.push`. To use this you must have initialised eb to use
+   CodeCommit!
+
+   To deploy app can now just type `git aws.push` (but don't use it yet - after the eb start).
+
+   If you don't want to use CodeCommit you can upload the code from your local machine, or S3
+   bucket, like you would via the web console by using `eb create` with the `--source` option.
+   Type `eb create --help` for further information.
+
+   Try also `eb init --help` for more init options.
+   For example you can use `eb init --region eu-west-2` to specify the region on the command line.
+   Seems like which application you use is not specifiable from the CLI... need to enter this :/
+
+
+2. Create a new environment:
+      eb create
+   Choose the "application" load balancer
+   Do not enable "Spot Fleet Requests"
+
+   An example of the command output is useful to look at to see what EBS is doing behind the scenes
+   for us in terms of setting up load blancers, EC2 instances, S3 buckets, security groups etc:
+      INFO  createEnvironment is starting.
+      INFO  Using elasticbeanstalk-XXXX as Amazon S3 storage bucket for environment data.
+      INFO  Created target group named: XXXX
+      INFO  Created security group named: XXXX
+      INFO  Created security group named: XXXX
+      INFO  Created Auto Scaling launch configuration named: XXXX
+      INFO  Created Auto Scaling group named: XXXX
+      INFO  Waiting for EC2 instances to launch. This may take a few minutes.
+      INFO  Created Auto Scaling group policy named: XXXX
+      INFO  Created Auto Scaling group policy named:  XXXX 
+      INFO  Created CloudWatch alarm named: XXXX
+      INFO  Created CloudWatch alarm named: XXXX
+      INFO  Created load balancer named: XXXX
+      INFO  Created Load Balancer listener named: XXXX
+      INFO  Application available at XXXX.elasticbeanstalk.com.
+      INFO  Successfully launched environment: XXXX
+
+   Type `eb create --help` for further information. Some of the available options include:
+       --source SOURCE       - source of code to create from directly; example
+                               source_location/repo/branch
+       --region REGION       - use a specific region
+       --profile PROFILE     - use a specific profile from your credential file
+       --elb-type ELB_TYPE   - load balancer type
+       --instance_profile EP - EC2 Instance profile, if you don't want to use the default.
+
+   By DEFAULT, EBS CLI will AUTOMATICALLY PACKAGE YOUR PROJECT DIRECTORY AS A ZIP FILE AND UPLOAD
+   THIS TO A NEW S3 BUCKET THAT IT CREATES ON YOUR BEHALF. I.e. creates an app archive
+   from the application source code in the local project directory.
+
+   To DEPLOY AN ARTIFACT INSTEAD OF THE PROJECT FOLDER:
+      See https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-configuration.html#eb-cli3-artifact
+      The CLI doesn't by default allow you to use `--source` to specify a local ZIP file.
+
+      You can tell the EB CLI to deploy a ZIP file or WAR file that you generate as part of a
+      separate build process by adding the following lines to .elasticbeanstalk/config.yml in your
+      project folder.
+          deploy:
+              artifact: path/to/buildartifact.zip
+
+3. To debug things, under the environment created above, but accessed through the web console you
+   can download server logs.
 
 
 Beanstalk With RDS
@@ -584,7 +1087,6 @@ free. BUT domain names are pay-to-own.
 
 
 
-
 ===================================================================================================
 ===================================================================================================
 CloudFront
@@ -607,6 +1109,16 @@ Another AWS page:
 	HTTP server (for example, a web server) that you have identified as the source for the
 	definitive version of your content.
 
+[https://adrianhall.github.io/cloud/2019/01/31/which-aws-service-for-hosting/]:
+	If your web site is just a collection of HTML, CSS, and JavaScript with no other dependencies,
+	and you receive this from a marketing or design firm, you can just drag and drop the files onto
+	your S3 bucket and get them deployed easily. This option may be for you. It’s simple to
+	understand — you just publish your files to the S3 bucket and CloudFront picks them up and
+	distributes them worldwide, also handling things like HTTPS for you.
+	...
+	Best for: Pre-packaged static sites provided by marketing organizations that are deployed via
+	drag and drop.
+
 
 Cloudfront may allow FREE encryption using TLS via the AWS certificate manager.
 
@@ -615,6 +1127,24 @@ Cloudfront may allow FREE encryption using TLS via the AWS certificate manager.
 - Distributed scalable integrated security controls
 - Optimised for deliver use cases with intelligent caching.
 - On-demand, full user control. Cost effective.
+
+
+
+===================================================================================================
+===================================================================================================
+Amplify Framework
+===================================================================================================
+
+From AWS Website:
+	Provides a set of libraries and UI components and a command line interface to build mobile
+	backends and integrate with your iOS, Android, Web, and React Native apps.
+
+[https://adrianhall.github.io/cloud/2019/01/31/which-aws-service-for-hosting/]:
+
+	an awesome continuous deployment (CD) platform for your web site. It has built in support ...
+	for JavaScript single page applications written in a variety of frameworks like React
+	...
+	Best for: Static site generators, JavaScript based single page applications.
 
 
 
@@ -629,6 +1159,11 @@ started on AWS.
 The pricing scheme is way simpler, for example, than EBS. It seems to abstract even further away so
 that we don't even have to worry about what EC2 cost model and S3 cost model we'd use etc.
 
+[https://adrianhall.github.io/cloud/2019/01/31/which-aws-service-for-hosting/]:
+	If your app relies on a web language backend (like Ruby or PHP) or you use a common web site
+	platform (like WordPress or Magento), then you might want to choose Amazon Lightsail.
+	...
+	Best for: Common web stacks like LAMP, MEAN, and PHP, or common web applications like WordPress
 
 SSL/TLS Certificates In LightSail
 ---------------------------------
@@ -639,10 +1174,106 @@ certificates, verify domain ownership, and then attach the validated certificate
 load balancer.
 
 
+
 ===================================================================================================
 ===================================================================================================
 Dynamo Database
 ===================================================================================================
+NoSQL databases (aka "not only SQL") are non-tabular, and store data differently than relational
+tables. NoSQL databases come in a variety of types based on their data model. The main types are
+document, key-value, ... They provide flexible schemas and scale easily with large amounts of data
+and high user loads.
+
+Dynamo is a NoSQL database. For apps that need single digit millisecond latency at any scale.
+Supports documents (JSON, XML, HTML) and key-value data models.
+
+DOCUMENTS:
+	- See https://aws.amazon.com/nosql/document/
+	- See https://developer.couchbase.com/documentation/server/3.x/developer/dev-guide-3.0/compare-docs-vs-relational.html
+
+	- Class of non-relational (NoSQL) database.
+	- Store data in documents similar to JSON (JavaScript Object Notation) objects
+	- Contain pairs of fields & values.
+	- Values can be many things: strings, numbers, arrays, objects etc.
+	- Structure typically aligns with objects developers work with - think objects serialised to JSON.
+	- Powerful query languages.
+	- Unlike relational DBs does not need a pre-defined schema and does less data normalisation,
+		generally
+
+
+TABLES:
+	Class of non-relational (NoSQL) database.
+	Table rows are called ITEMS.
+	Rows are broken up into columns called ATTRIBUTES.
+
+	TABLE
+	        +--------+---------+-----+---------+
+	        |Attrib1 | Attrib2 | ... | AttribN |
+	        +--------+---------+-----+---------+
+	 Item 1 |        |         |     |         |
+	        +--------+---------+-----+---------+
+	 Item 2 |        |         |     |         |
+	        +--------+---------+-----+---------+
+	  ....  |        |         |     |         |
+	        +--------+---------+-----+---------+
+	 Item M |        |         |     |         |
+	        +--------+---------+-----+---------+
+
+	Each item is basically a set of key-value pairs. Think of each item as a JS object with keys
+	and values or a JSON spec.
+
+Data is stored/retrieved based on a PRIMARY KEY. Two types of primary keys:
+	1. PARTITION KEY
+		Unique attribute. Key is hashed , which determines the partion/physical location where data
+		is stored. No two items can have same partition key. That's why no two items can have same
+		key!
+	2. COMPOSITE KEY (PARTITION KEY + SORT KEY)
+		E.g. same user posts multiple time to forum.
+
+
+
+===================================================================================================
+===================================================================================================
+Amazon Athena
+===================================================================================================
+Serverless interactive query service that makes it easy to analyze data in Amazon S3 using standard
+SQL. Easy to use: point to your data in Amazon S3, define the schema, and start querying using
+standard SQL.
+
+I.e., Query non database data container in things like CSV and JSON with a shim on top to make it
+look like a normal database that can be queried with standard SQL.
+
+Why Athena? - challenges customers faced - had to do work to get to S3 data, e.g. complex
+transformations etc:
+	- Significant amount of work required to analyze data in Amazon S3
+	- Users often only have access to aggregated data sets
+	- Managing a Hadoop clister or data warehouse requires expertise.
+
+What Athena gives:
+	Athena is an INTERACTIVE QUERY SERVICE that makes it EASY to analyse data DIRECTLY FROM
+	AWS S3 using STARTARD SQL. Results come back in seconds. It is NOT a database or a data
+	warehouse - it is designed to enable you to write fast SQL queries with nothing to manage.
+		- No infrastructure or administration
+		- Zero spin up time
+		- Transparent upgrades
+
+Easy to use
+	- Log into console.
+	- Create a table:
+		- Type in a Hive Data Description Language (DDL) statement.
+		- Use console Add Table wizard.
+	- Start querying :)
+	- Query data in its RAW FORMAT!!
+		- Test, CSV, JSON, weblogs, AWS service logs etc.
+	- Stream data directly from S3.
+	- Query using ANSI SQL - well know language most devs are familiar with
+
+Highly available:
+	- Takes afvantage of D3 durability and availability.
+	- Service endpoint or log into console.
+	- 99.999999999% durability.
+	- uses warm compute pools across multiple availability zones.
+
 
 
 ===================================================================================================
@@ -651,24 +1282,114 @@ CodeCommit / Code Deploy / Code Pipeline
 ===================================================================================================
 
 
+
+===================================================================================================
+===================================================================================================
+Elastic Container Service (ECS) / Fargate & EC2
+===================================================================================================
+Lets you run containerised workloads in AWS. Has deep intrgration with AWS services like Route53,
+IAM, VPC etc.
+
+ECS can run containers in 3 different configurations:
+	1. ECS - Run containers on a cluster of virtual machines.
+	2. FARGATE - This is the serverless option - no need to worry about underlying EC2 instances
+	3. EC2 - Used for fine grained control - control the installation, config and management of
+	         the compute environment.
+
+
+Elastic Container Registry (ECR)
+--------------------------------
+Do run Docker services you must create an ECR - Elastic Container Registry.
+ECR is just a place where Docker images are stored.
+ECS connects to the ECR and uses the images to deploy Docker containers.
+
+
+See
+---
+https://docs.aws.amazon.com/AmazonECS/latest/developerguide/docker-basics.html
+https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/single-container-docker-configuration.html
+
+
+Example Using Smashing Docker Image On ECS
+------------------------------------------
+https://ngeor.com/2017/05/09/how-to-deploy-a-smashing-dashboard-to-aws-elastic-beanstalk-with-docker.html
+
+
+Micro Services
+--------------
+Monolothic apps - many distinct parts of an application on one server make it hard to scale because
+	the demands on that one server increase rapidly and the application either has to be duplicated
+	on another server or split up into components which can expand on their own servers. All of this
+	is hard with a monolithic app. You have to SCALE THE ENTIRE APPLICATION.
+
+	E.g. User profile data, photo uploading an editing, thumbnails, photo viewe etc in one app on
+		one server.
+
+	Failures in any one compnent of the app would probably bring down the whole application.
+
+With microservices you ONLY HAVE TO SCALE THE PARTS THAT NEED IT.
+	Serperates the jobs of an independent server into INDEPENDENT SMALLER services.
+	Gives ability to use smaller resources to handle large tasks. Each service does just its workload.
+
+	So, now in e.g. requests for auth goto the auth micro service, Photo uploads processes by the
+	upload micro service, the editing by the edit service and so on.
+
+	Containers are an excellent way to serve micro services.
+
+
+Far Gate
+--------
+
+Running containers on EC2 is good. But need to keep track of all the pieces you needto manage. 
+You have to manage:
+	1. The EC2 instances (your cluster) on which the containers sit
+		For example you might have to commision several EC2 instances, have them in different
+		subnets and then connect the subnets together in a Virtual Private Cloud (VPC)
+		- Have to contunaly patch/update the instances and evaluate secutiry robustness
+		- Have to setup autoscaling
+		- Have to have Docker installed on each instance
+		- You will interact with the DOcker instances using ECS - Elastic Continer Service.
+
+
+	2. The containers themselves
+		Each EC2 will have multiple Docker containers running in it.
+
+Fargate answers the question HOW CAN YOU RUN CONTAINERS WITHOUT HAVING TO WORRY ABOUT SETTING UP
+ALL THIS INFRASTRUCTURE??
+	AWS Fargate is a serverless computing engine and hosting option for container based workloads.
+
+Fargate abstracts away the infrastructure management issue. You no longer have to "see" the EC"
+instance details. You just see fargate clusters and ECS.
+
+You only pay when your containers are running.
+
+
+
 ===================================================================================================
 ===================================================================================================
 Kinesis
 ===================================================================================================
 
 
+
 ===================================================================================================
 ===================================================================================================
 Which AWS Service To Publish A Website?
 ===================================================================================================
-
 Ref: https://adrianhall.github.io/cloud/2019/01/31/which-aws-service-for-hosting/
+Brilliant article that quotes have been made from in above sections. Summary here:
 
 Options include:
-- Amazon S3
 - Amazon S3 + Amazon Cloudfront
+	Best for: Pre-packaged static sites provided by marketing organizations that are deployed via
+	drag and drop.
 - AWS Amplify Console
+	Best for: Static site generators, JavaScript based single page applications.
 - Amazon Lightsail
+	Best for: Common web stacks like LAMP, MEAN, and PHP, or common web applications like WordPress,
+	MediaWiki, and Magento.
 - AWS Elastic Beanstalk
-- AWS Elastic Beanstalk + Cloudfront
+	Best for: Your most challenging enterprise apps where access to the underlying OS is required.
 - AWS EC2 - Do-it-yourself compute / storage / network stack
+	Best for: Your most challenging enterprise apps where you can use a variety of AWS services to
+	augment your service offering.

@@ -247,6 +247,7 @@ def deploy_site(specificFile, generateImages):
     prog_img = re.compile('##IMG_DIR##')
     prog_snippet = re.compile('##\s*INCLUDE\s*:\s*([\w.\\/]+)\s*##')
     prog_escaped_snippet = re.compile('##\s*ESCAPED_INCLUDE\s*:\s*([-_\w.\\/]+)\s*##')
+    prog_img_in_escaped_snip = re.compile('##\s*IMG\s*:\s*([-_\w.\\/]+)\s*##')
 
     last_dirname = None
     link_to_root = ""
@@ -311,6 +312,9 @@ def deploy_site(specificFile, generateImages):
 
         # Copy the contents of the curr html to it's deployed file but add in the
         # links page
+
+        BASE_IMG_DIR = '{}{}images/jeh-tech/'.format(link_to_root, "" if link_to_root == "" else '/')
+
         htmlFileContents = prog.sub(r'\1' + linksHtml, htmlFileContents)
         htmlFileContents = prog_css.sub('<link rel="stylesheet" href="{}{}jeh-monolith.css" type="text/css" />'.format(link_to_root, "" if link_to_root == "" else '/'), htmlFileContents)
         htmlFileContents = prog_js.sub('<script src="{}{}jeh-monolith.js"></script>'.format(link_to_root, "" if link_to_root == "" else '/'), htmlFileContents)
@@ -327,7 +331,7 @@ def deploy_site(specificFile, generateImages):
             xhtmlFile.close()
             
             if (doescape):
-                print("ESCAPING")
+                print("   Including escaped snippet")
                 ## Replace all ========== titles with <h1> tags
                 ## Replace all HTML special characters with their escaped versions
                 ## https://wiki.python.org/moin/EscapingHtml
@@ -366,6 +370,8 @@ def deploy_site(specificFile, generateImages):
                     xhtmlFileContents = "<pre>" + "".join(xhtmlFileContents) + "</pre>"
                 else:
                     xhtmlFileContents = "".join(xhtmlFileContents) + "</pre>"
+                ## Replace ##IMG:...## with </pre><img src="..."/><pre>
+                xhtmlFileContents = prog_img_in_escaped_snip.sub(lambda mobj: f'</pre><img src="{BASE_IMG_DIR}{mobj.group(1)}"/><pre>', xhtmlFileContents)
             return xhtmlFileContents;
         def snippet_replace(matchobj): return _snippet_replace(matchobj, False)
         def escapped_snippet_replace(matchobj): return _snippet_replace(matchobj, True)
