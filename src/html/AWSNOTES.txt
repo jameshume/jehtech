@@ -520,8 +520,96 @@ See: https://letsencrypt.org/getting-started/, https://certbot.eff.org/
 
 ===================================================================================================
 ===================================================================================================
-S3
+S3 (Simple Storage Service)
 ===================================================================================================
+
+* Object based storage - secure, scalable, durable. Data spread across multiple device and facilities.
+* Files are stored in Buckets (like a folder)
+	* Key/Value store (with Version ID optional & Metadata)
+* Universal namespace - names must be unique globally!
+* Data consistency model
+	* PUTS of new objects - read after write consistency. A read after a write is immediately valid
+	* Overwrite PUTs and DELETEs - eventual consistency - can take some time to propogate
+* Subresources - bucket specific config
+	* Bucket polocies, acess control lists)
+	* Cross Origin Resource Sharing (CORS) - files located in one bucket can be allowed to access
+		files in other buckets
+	* Transfer acceleration for multiple uploads
+* Guarantee 99.9% availability (i.e., service uptime), 99.999999999% durability!
+* Tiered storage available
+* Lifecycle management (automatic movement between tiers)
+* Versioning
+* Encryption
+* Max file size 5 TB!!
+
+Storage Tiers:
+	* Regular - Stored across multiple devices and facilities. Can sustatin loss of 2 data centers!
+	            Guarantee 99.9% availability (i.e., service uptime), 99.999999999% durability!
+	* IA (Infrequently Accessed) - Less frequent access but rapid. Charged per retrieval.
+	* S3 One Zone IA - Less availablility than IA. Less cost. 20% less.
+	* Reduced Redundancy Storage - Durability down to 99.99%. Use for data that can be re-created
+		if lost. E.g. thumbnails.
+	* Glacier - Very cheap but archival only. Takes 3-5 hours to restore from Glacier!!
+	* Intelligent Tiering - Data has unknown or unpredictable access patterns
+		Auto moves your data to most cost-effective tier.
+		2 tiers - frequency and infrequent access.
+		If obj not accessed for 30 consecutive days it goes to infrequent tier. When accessed goes
+		back to frequent tier. Same durability and reliability as regular.
+
+Charges
+	* Storage per GB.
+	* Requests.
+	* Storage Management Pricing - e.g. for analytics.
+	* Data Management Pricing - moving data OUT of S3.
+	* Transfer Acceleration - extra charges for accelleration.
+
+
+S3 Security
+-----------
+* Default - new buckets are PRIVATE
+	* Can configure public access if required.
+* Use
+	* Bucket policies - bucket level, JSON
+	* Access Control lists - object level
+* Can create access logs, written to this/another bucket
+
+
+S3 Access Policies
+-------------------
+From AWS S3 console, select bucket, select "Permissions" tab.
+Can control public accessibility using ACLs and enable/disable on a file by file basis.
+
+The "Bucket Policy" tab just exposes a policy editor. Below the text box is a link to the
+"Policy generator", which can help you build up your bucket policy.
+In the generator:
+	* Select type of policy - "S3 Bucket Policy"
+	* Select effect - "allow" or "deny"
+	* Add "Principal" - this is the entity to which you are allowing/denying access to. I.e., who
+		this policy applies to. Could be an IAM user, another S3 bucket or other AWS resource.
+		If it is a user you must enter the uer's ARN, which you get from the Users section in IAM.
+	* AWS service - "Amzon S3"
+	* Actions - 
+	* ARN - Enter as displayed at the top of the editor text box.
+	* Hit "Generate policy", and copy and paste the policy code into the editor.
+
+
+S3 Encryption
+-------------
+1. In transit - TLS/SSL
+2. At rest -
+	* S3 managed keys (SSE-S3)
+		Each object encrypted using strong multi-factor encryption. Key also encrypted with master
+		keys. AES-265 bit encryption.
+	* AWS Key Management Service managed keys (SSE-KMS)
+		Uses SSE key management service. Get separate permission for "envelope key", which is the
+		key that encrypts your key. Also get AUDIT TRAIL.
+	* Customer provided keys (SSE-C)
+		AWS manage the encryption/decryption but YOU mange the keys, their rotation and lifetime etc
+3. Client side
+	User enecrypts file herself before upload
+
+
+
 
 
 
@@ -1229,6 +1317,32 @@ Data is stored/retrieved based on a PRIMARY KEY. Two types of primary keys:
 		key!
 	2. COMPOSITE KEY (PARTITION KEY + SORT KEY)
 		E.g. same user posts multiple time to forum.
+
+
+IAM Conditions
+--------------
+They are CONDITIONS which are added to an IAM POLICY.
+These can be used to restrict a uer's access to only certain items (rows) in a table!
+
+IAM conditions contain the following important keys:
+		* "Sid" - STATEMENT IDENTIFIER - A unique identifying name for the policy 
+		* "Effect" - Are we allowing/denying etc
+		* "Action"- The actions that this policy allows/denies (see "effect"). For example
+			"dynamodb:GetItem", "dynamodb:PutItem", "dynamodb:UpdateItem"
+		* "Resource" - The unique Amazon resource name for your dynamo db table
+		* "Condition" - This is where you specify the conditions on which the policy applies, e.g.,
+			allowing users to acces only the items where the Parition Key value matches their user
+			ID.
+				* "ForAllValues:StringEquals"
+				* "dynamodb:Attributes"
+
+
+Consistency Models
+------------------
+1. Strongly consistent - Any write that occur before read are reflected in the read consistent
+	across all locations.
+2. Eventuall consistent - Can take up to 1 second for new writes to be reflected in a read across
+	all locations.
 
 
 
