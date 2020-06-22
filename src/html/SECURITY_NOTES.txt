@@ -1,5 +1,101 @@
 ===================================================================================================
 ===================================================================================================
+URL, URI or URN?
+===================================================================================================
+
+Summary...
+-----------
+
+URL: 	Uniform Resource Locator.
+			[Scheme]://[Domain]:[Port]/[Path]?[QueryString]#[FragmentId]
+		URL points to something "real", i.e., a resource on a network which can be located using
+		the URL.
+
+URN:	Uniform Resource Name.
+			urn:[namespace identifier]:[namespace specific string]
+		"Namespace identifier" is just a string that identifies how the "namespace specific string"
+		should be evaluated. It is usually registered with IANA. E.g. isbn:1234567891234
+
+URI:	Uniform Resource Identifier == URLs + URNs.
+		It is a superset of URL and includes URLs and URNs. URI is just a unique string that
+		identifies something and does not have to have any other meaning other than that. I.e., it
+		does not have to "point" to anything real. Some example of URIs are, taken verbatim from the RFC:
+			ftp://ftp.is.co.za/rfc/rfc1808.txt
+			http://www.ietf.org/rfc/rfc2396.txt
+			ldap://[2001:db8::7]/c=GB?objectClass?one
+			mailto:John.Doe@example.com
+			news:comp.infosystems.www.servers.unix
+			tel:+1-816-555-1212
+			telnet://192.0.2.16:80/
+			urn:oasis:names:specification:docbook:dtd:xml:4.1.2
+
+URLs both identify objects and tell you how to find them.
+URIs just identify objects (so are a superset of URLs), and URNs are just URIs that may persists
+through time.
+
+More Detail...
+---------------
+The following StackOverflow thread [https://stackoverflow.com/a/176274] gives many really good
+expanations. You can read the RFC here.
+
+From the RFC an "identifier" is defined as follows:
+	An identifier embodies the information required to distinguish what is being identified from all
+	other things within its scope of identification.
+
+So how is a URL different from a URI. The RFC also explains that:
+	A URI can be further classified as a locator, a name, or both. The term "Uniform Resource
+	Locator" (URL) refers to the subset of URIs that, in addition to identifying a resource, provide
+	a means of locating the resource by describing its primary access mechanism (e.g., its network
+	"location")
+
+So, a _locator_ is something that will provide a means of locating the resource. A URL is therefore
+an identifier and a locator, whereas a URI is an identifier, but not necessarily a locator.
+
+I.e., URIs uniquely identify things but may not tell you how to find them. URLs are the subset of
+URIs that tell you how to find the objects identified.
+
+And what about URNs?
+	The term "Uniform Resource Name" (URN) ... refer[s] to both URIs ... which are required to
+	remain globally unique and persistent even when the resource ceases to exist or becomes
+	unavailable, and to any other URI ...
+
+So URNs are just URIs that may or may not persist even when the resource has ceased to exist. Kind
+of a permanent URI which is more heavily regulated, usually by IANA.
+
+So, to summarise we could say that URLs both identify objects and tell you how to find them. URIs
+just identify objects, and URNs are just URIs that may persists through time.
+
+
+
+===================================================================================================
+===================================================================================================
+Common Website Attack Types / Policies / Terminology
+===================================================================================================
+
+Same Origin Policy (SOP)
+------------------------
+
+
+Content Security Policy (CSP)
+-----------------------------
+
+
+Cross Site Scripting (XSS)
+--------------------------
+https://owasp.org/www-community/attacks/xss/
+
+
+Cross Site Request Forgery (CSRF)
+---------------------------------
+
+
+Cross Origin Resource Sharing (CORS)
+---------------------------------
+
+
+
+===================================================================================================
+===================================================================================================
 Secure Sockets Layer (SSL) and Transport Layer Security (TLS)
 ===================================================================================================
 SSL and TLS are protocols that provide secure communications over a computer network or link.
@@ -21,9 +117,16 @@ Encryption ONLY HIDES the message, but it does not tell you that the message cam
 you think it did, or that it hasn't been changed:
 
 	ALICE -------[Encrypted Msg] -------> Bob
+	             [With Bob Pub Key]       [Decrypt with Bob Prv Key]
 OR
-	ALICE -------[Encrypted Msg] -------> Bad -------> [Different encrypted msg] -----> Bob
-	                                      Guy
+	ALICE -------[Encrypted Msg] -------> Bad Guy -------> [New encrypted msg] -----> Bob
+	             [With Bob Pub Key]                        [With Bob Pub Key]
+
+To communicate with Bob, Alice encrypts her messages with Bob's public key. No one should be
+able (reasonably to decrypt this message without Bob's private key. Thus, the message contents
+are secret. But, as can be seen, nothing prevents a "bad guy" encrypting his own message with
+Bob's public key, sending it to be Bob, whilst claiming to be Alice. Bob has no way to know he is
+actually talking with the real Alice!
 
 To verify the sender and be confident the message didn't change requires SIGNING. I.e.,
 SIGNING PROVIDES AUTHENTICATION.
@@ -84,17 +187,36 @@ What the Digital Certificate (SSL Cert) Looks Like
 |                              |
 |    +--------------------+    |                          } The hash verifies that the SSL info
 |    | +----------------+ |    | } A hash of the info     } has not been chaged.
-|    | |      HASH      | |    | } describing mysite.com  } The encryption of the hash ensure that
+|    | |      HASH      | |    | } describing mysite.com  } The encryption of the hash ensures that
 |    | +----------------+ |    | } and the proxy          } the hash has not been changed or
 |    |                    |    |                          } proofed.
 |    |   Encrypted with   |    |                          } The encrypted block can be decrypted
 |    |    private key     |    |                          } by anyone with the *public* key, so
-|    |                    |    |                          } is easily verifiable.
+|    |       of CA        |    |                          } is easily verifiable.
 |    +--------------------+    |                          }
 |                              |
 |       SSL Certificate        |
 |                              |
 +------------------------------+
+
+MySite's certficiate contains MySite's public key. This means that anyone can send MySite private
+data - they encrypt with MySite's public key, and only MySite can decrypt this by using the private
+key.
+
+But when Alice accesses MySite, how does she know that the certificate she receives is actually
+from MySite, and not an imposter? The answer lies in the encrypted hash of the certificate info.
+
+The CA uses its private key to encrypt a hash of the certificate information that it has issued.
+The CA, as a trusted thrid party, promises that they have verified that MySite is who it claims to
+be.
+
+Because the CA encrypts the hash with its private key, anyone can decrypt it with the CA's public
+key. But, for this decryption to work, the encryption MUST have been done by the CA's private key,
+so we know, assuming no compromised keys, that it definitely is the CA that generated the hash.
+
+Then, as long as the decrypted hash matches the client generated hash of the certificate info, it
+then can be sure that the certificate has been signed by the trusted third party, and so the
+certificate and thus MySite, can be trusted to be who they say they are... nice!
 
 
 Types Of Certificates
@@ -187,3 +309,226 @@ Can create your own certificates and they will be just as secure. Only differenc
 have to install your certificate to your browsers list of trusted certificates manually, as opposed
 to a commercial one which should already be, at least indirectly via a chain-of-trust, in your
 browsers trust list.
+
+
+
+===================================================================================================
+===================================================================================================
+Let's Encrypt and CertBot
+===================================================================================================
+
+Let's encrypt (https://letsencrypt.org/) "is a free, automated, and open certificate authority (CA),
+run for the public’s benefit."
+
+It provides digital certificates for free to enable the prolific use of TLS for websites. To
+verify that the domain it issues a certificate for belongs to the person requesting the certificate
+it uses the ACME protocol. This basically requires the domain owner to demonstrate that s/he owns
+the domain by creating subdomains that the ACME can challenge (see 
+https://tools.ietf.org/html/draft-ietf-acme-acme-03#section-7).
+
+CertBot (https://certbot.eff.org/) is a little tool that helps automate the ACME protocol to make
+it easier for website owners to generate their own certificates. Requires SSH access to the server.
+
+CertBot can, if you are using modern Linux and servers like Apache, NginX etc do both the obtaining
+_and_ the installing of the certificates for you.
+   See: https://certbot.eff.org/docs/using.html#certbot-commands
+
+At the end of the issuance process you should obtain the following files:
+   - The public SSL certificate (certificate.crt)
+   - The private key (private.key)
+   - Optionally, a list of intermediate SSL certificates or an intermediate SSL certificate bundle.
+     (chain.pem and/or certificate_and_chain.pem)
+
+
+Generic Cerbit *Nix Installation
+--------------------------------
+See: https://certbot.eff.org/lets-encrypt/pip-other
+
+wget https://dl.eff.org/certbot-auto && \
+sudo mv certbot-auto /usr/local/bin/certbot-auto && \
+sudo chown root /usr/local/bin/certbot-auto && \
+sudo chmod 0755 /usr/local/bin/certbot-auto
+
+
+Manual Certificate Request
+--------------------------
+See: https://certbot.eff.org/docs/using.html#manual
+
+To make the request on any machine other than your webserver you can perform the steps for domain
+validation yourself.
+
+Use CertBot in MANUAL MODE.
+
+It can do an HTTP or DNS challenge. In the former you upload a specific file to you website to
+demonstrate ownership and in the latter you add a DNS entry to demonstrate ownership. Similar to
+webroot plugin:
+	"... If you’re running a local webserver for which you have the ability to modify the content
+	being served, and you’d prefer not to stop the webserver during the certificate issuance
+	process, you can use the webroot plugin...""
+		-- https://certbot.eff.org/docs/using.html#webroot
+
+But, would this mean you could own the website hosting but not the domain name? I suppose that
+situation is unlikey.
+
+Use:
+	sudo /usr/local/bin/certbot-auto certonly --manual
+	^^^
+	Installs dependencies for you which is why it needs sudo. Takes forever!
+
+After the install the manual process is deliciously easy :) It defaults to HTTP challenges by
+default. It will ask you to create 2 files with certain contents that can be publically accessed
+from your website. When it can read back these challenges it knows you have control of the site and
+can issue the certificate. You should see output similar to the following:
+IMPORTANT NOTES:
+     - Congratulations! Your certificate and chain have been saved at:
+           /etc/letsencrypt/live/www.jehtech.com/fullchain.pem
+       Your key file has been saved at:
+           /etc/letsencrypt/live/www.jehtech.com/privkey.pem
+       Your cert will expire on 2020-09-15. To obtain a new or tweaked
+       version of this certificate in the future, simply run certbot-auto
+       again. To non-interactively renew *all* of your certificates, run
+       "certbot-auto renew"
+     - If you like Certbot, please consider supporting our work by:
+    
+       Donating to ISRG / Let's Encrypt:   https://letsencrypt.org/donate
+       Donating to EFF:                    https://eff.org/donate-le
+
+
+
+===================================================================================================
+===================================================================================================
+OAuth 2.0 And Open ID Connect
+===================================================================================================
+
+Ref: https://www.youtube.com/watch?v=996OiexHze0
+
+Internet logins began with the standard "form login": username and password home-grown login on
+a website that stashed session info in a cookie after successful login. The website and owner are
+responsible for:
+	1. Security: Have to be aware of best practices and how they change over time
+	2. Maintenance: Testing auth system over time
+
+OAuth and Open ID Connect are industry best practices at the time of writing to overcome the above
+disadvantages.
+
+Pre mobile era commonly identity use cases included
+	1. Simple login (forms and cookies)
+	2. Single Sign On (SSO) using a protocol called (SAML)
+
+Now, post 2010, two more use cases arise:
+	1. Mobile app login 
+	2. Delegated authentication.
+
+DELEGATED AUTHENTICATION is where you allow a 3rd party access to your data/platform, probably in
+a restricted manner, WITHOUT giving the 3rd party you password.
+	Example of the "good old bad old days" were websites that asked for you email account password
+	so that they could send invite emails to your friends. This was GIVING AWAY THE KEYS TO THE
+	CASTLE! E.g. your bank password reset flow probably does back there!!
+	What we want to do is say "Email provider, I authorize ABC.com to send emails on my behalf from
+	my account, as long as your authenticate them when they try to do this". This is delegated
+	authentication, and is what OAuth cam out of. So ABC can send emails from my account, but,
+	importantly wouldn't be authorized to read my emails, for example, or add/delete contacts etc.
+
+
+	ABC says login to your email account -> Redirect me to email account. I trust my email provider
+	more than ABC so I am happy(er) to log into my email provider. The email provider then
+	authenticates me (makes sure its me and not Stevil). It then should warn me about the permissions
+	that ABC is seeking. If I say its OK it should then accept the instruction that it
+	should authorise ABC to send emails. It then returns a token to ABC, which ABC can then use
+	in requests to send emails that it sends to my email provider.
+
+
+Nomenclature
+------------
+- Resource Owner - You - The person who owns the data that the application wants access to. e.g. You
+	own your email resource - see above example.
+
+- Client - Just refers to the application that wants access to your data.
+
+- Authorization Server - System the resource owner uses to authorize the client - to say "yes".
+
+- Resource Server - API that holds the data that the client wants to get to. Sometimes resource
+	server and auth server are same but oftentimes they are seperate.
+
+- Authorization Grant - The "thing" that prooves that the resource owner has consented to a certain
+	level of client access to the resource. This authorization grant allows the client to go
+	back to the resource server and get the access token. The authorization code is exchanged for
+	the access token.
+
+- Redirect URI - When auth server redirects back to the client application it redirects to the
+	redirect URI
+
+- Access Token - The client needs an access token - the key they use to get into the data resource
+	owner granted access to.
+	See also https://www.youtube.com/watch?v=BNEoKexlmA4:
+	The access token is like the electronic RFID key card for a hotel room. You sign in at the front
+	desk, which is where you validate using your credentials, and once you have the key you only
+	need to present that to get into your room (the resource).
+
+- Scope - The subset of permissions that the access token gives the client
+	Auth server will have a list of scopes it understands, e.g. contacts.read. Any types of
+	permissions that make sense for the particular resource being accessed.
+	E.g. Google scopes tend to be really long URL strings.
+
+- Back Channel - Highly secure channel. API req or HTTP req from my server to Google over HTTPS
+	SSL/TLS encrypted - this is a back channel. From my backend server to another system. We
+	completely trust our server and code.
+
+- Front Channel - Less secure than back channel.
+	E.g. Browser requested website. They can see my JS/HTML code or someone could look over my
+		shoulder and see my password as I type it in. We don't completely trust the browser.
+
+
+Why Exchange Access Code For Access Token - Why The Extra Step?
+---------------------------------------------------------------
+Why do we get a code rather than the token right away? The reason for the extra step is to take
+advantage of the "best things about the front channel and the best things about the back chanell".
+
+The authorisation code is returned to the browser, i.e., over the front end channel. You can
+see the code openly in the redirect URL.
+
+This code is then given to the client backend, which then gets the actual access token using this
+code over the more secure backend channel. That is why there is the second step so that the thing
+that really grants the client access to a resource is only ever communicated over the more secure
+and thus more trusted channel.
+
+
+One Downside To OAuth
+---------------------
+One downside to OAuth is that the login page can be easily "spoofed". Thus it is up to the user
+to figure out whether the login page they are redirected to is genuine, e.g. by examining the
+page address. But this can be harder/impossible if the login is embedded in another page.
+
+From RFC6749 (The OAuth 2.0 Authorization Framework), section 9:
+		An embedded user-agent poses a security challenge because resource
+		owners are authenticating in an unidentified window without access
+		to the visual protections found in most external user-agents.  An
+		embedded user-agent educates end-users to trust unidentified
+		requests for authentication (making phishing attacks easier to
+		execute).
+
+And also in section 10.11 (Phishing Attacks):
+		Wide deployment of this and similar protocols may cause end-users to
+		become inured to the practice of being redirected to websites where
+		they are asked to enter their passwords.  If end-users are not
+		careful to verify the authenticity of these websites before entering
+		their credentials, it will be possible for attackers to exploit this
+		practice to steal resource owners' passwords.
+
+		Service providers should attempt to educate end-users about the risks
+		phishing attacks pose and should provide mechanisms that make it easy
+		for end-users to confirm the authenticity of their sites.  Client
+		developers should consider the security implications of how they
+		interact with the user-agent (e.g., external, embedded), and the
+		ability of the end-user to verify the authenticity of the
+		authorization server.
+
+
+
+===================================================================================================
+===================================================================================================
+Secure Quick Reliable Login (SQRL)
+===================================================================================================
+https://www.youtube.com/watch?v=Y6J1Yt8YYj0
+
+

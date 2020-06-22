@@ -68,6 +68,50 @@ Instance Profiles
 
 
 
+Cognito
+--------
+	Web Identity Federation
+	-----------------------
+	Lets you five your users access to AWS resources after they have successfuly authenticated with a
+	web-based identity provider like Amazon, FB or Google. After authentication, user gets auth code
+	from Web ID provider, which they trade for temporary AWS security credentials.
+	
+	Cognity provides Web Identity Federation with following fetures:
+		- Sign up and sign in
+		- Access for guests
+		- ID broker between app and Web ID providers so no need to write additional code
+		- Sync user data for multiple devices
+	
+	Acts as broker handling all interactions with Web ID providers.
+
+	E.g. user can login to FB, get an authcode which it exchanges with AWS for a temporary access
+	credential (which maps to an IAM rolw allowing specific access rights), which it can then use to
+	access an S3 bucket, for example, or parts of a database or event a website behind an ALB acting as
+	a reverse authentication proxy.
+	
+
+	Cognito User Pools
+	------------------
+	- User pools are USER DIRECTORIES used to MANAGE SIGN-UP/IN in functionality for web apps.
+	- Can sign-in directly to pool or via Web ID provider (FB, Google, Amazon etc).
+	  Successfull auth generates a number of JSON Web Tokens (JWTs)
+	- Enable creation of unique IDs for users and ability to authenticate users with ID pools.
+
+	- APP CLIENT - Is what we use to call the various APIs on our behalf. E.g. API to reg a new
+		user or sign in an existing etc.
+
+		In app client settings:
+			Need to configure an identity provider. Click "Cognito User Pool"
+			Then configure callback URLs - The URL the user is redirected to after they have
+				successfull signed in or signed up.
+			The logout URL will invlidate the access tokens supplied after a successful login.
+
+
+
+
+
+
+
 ===================================================================================================
 ===================================================================================================
 Going Serverless
@@ -237,7 +281,7 @@ EC2 Options
 -----------
 	- On demand - fixed rate per hour/second with no commitment, no upfront payment. Good for app dev
 		or apps with short term, spiky, unpredictable workloads that cannot be interrupted.
-	- Reserved - capacity reservation - pay up front. Good disacounts on hourly charge for and intance.
+	- Reserved - capacity reservation - pay up front. Good discounts on hourly charge for an instance.
 		One to three year term.
 		Apps with steady state or predictable usage.
 	- Spot - Allows bidding
@@ -273,13 +317,17 @@ Elastic Block Store (EBS)
 
 Elastic Load Balancer (ELB)
 ---------------------------
+See https://docs.aws.amazon.com/elasticloadbalancing/latest/userguide/load-balancer-getting-started.html
+
 	Types Of Load Balancers
 		- Application Load Balancer.
 			OSI Layer 7. Can make very clever decisions based on application level logic.
 			Application Load Blancers are best suited for load balancing of HTTP and HTTPS
-			traggic. They operate at Lyer 7 and are application-aware. They are intelligent,
+			traffic. They operate at Lyer 7 and are application-aware. They are intelligent,
 			and you can create advanced request routing, sending specified requests to
 			specific web servers.
+			For setup see: https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environments-cfg-alb.html
+			For authentication see: https://aws.amazon.com/blogs/aws/built-in-authentication-in-alb/
 		- Network Load Balancer.
 			Most expensive option. Works at OSI layer 4 (surely 3?!). Fast performance!
 			Best suited for load balancing of TCP traffic where extreme performance is required.
@@ -306,6 +354,28 @@ Elastic Load Balancer (ELB)
 		Register targets
 		Review
 		Create
+
+Can config ELB to terminate HTTPS connections and deliver messages to backend of HTTP. ELB will
+handle encrypt/decrypt.
+	- See https://aws.amazon.com/blogs/aws/elastic-load-balancer-support-for-ssl-termination/
+	- Upload certificate to AWS account using the AWS Management Console or the
+	  `iam-servercertupload` command, then retrieve the ID of the uploaded certificate.
+	- Create new load balancer which includes an HTTPS listener, and supply the certificate ID
+	  from prev step.
+
+ELBs can also act as AUTHENTICATING REVERSE PROXIES!
+	See https://aws.amazon.com/blogs/aws/built-in-authentication-in-alb/
+	ALB can now securely authenticate users as they access applications, letting developers
+	eliminate the code they have to write to support authentication and offload the responsibility
+	of authentication from the backend
+
+	MUST USE AN APPLICATION LOAD BALANCER. At time of writing when creating a load balancer
+	classic seems to be the default option.
+
+	To setup an ALB see:
+		https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environments-cfg-alb.html
+
+	Happy, happy days :D
 
 
 DNS Refresher
@@ -788,6 +858,9 @@ How To Deploy Apps
 			- You can change your deployment policy to the ones described in the previous section.
 			- Click DEPLOY to deploy you new version.
 
+	Where is the app stored on the EB instance?
+		It's in the /tmp/deployment/application folder during deployment and the moved to
+		/var/app/current afterward.
 
 Configuring Elastic Beanstalk
 -----------------------------
@@ -842,6 +915,8 @@ Ref: https://ngeor.com/2017/05/09/how-to-deploy-a-smashing-dashboard-to-aws-elas
 Ref: https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/single-container-docker-configuration.html
 Ref: https://www.youtube.com/watch?v=lBu7Ov3Rt-M
 
+TO ACCESS DOCKER VIA EB SSH SESSION: `sudo usermod -aG docker ${USER} && su -s ${USER}`
+
 Any web application that you deploy to Elastic Beanstalk in a single container Docker environment
 must include a Dockerfile or a Dockerrun.aws.json file. 
 
@@ -878,7 +953,6 @@ environments.
 	SEE https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create_deploy_docker_ecs.html#create_deploy_docker_ecs_platform
 
 ^^^^^^^^ CAUTION CAUTION CAUTION CAUTION CAUTION CAUTION ^^^^^^^^
-
 
 * Ports:
 To map ports, for example, the JSON configuration would include:
@@ -992,6 +1066,68 @@ And so on. See the reference link at the top of the sub-section for details.
 		    authentication: "S3Auth"
 		    source: MY_BUCKET_URL/server.key
 
+	Private Repositories
+	- - - - - - - - - - -
+	You don't have to use just DockerHub images. You can configure it to deploy images from your
+	own private repos. 
+	[https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create_deploy_docker.container.console.html]
+		The Docker and Multicontainer Docker platforms for Elastic Beanstalk support the use of Docker
+		images stored in a public OR PIRVATE online image repository.
+		Specify images by name in Dockerrun.aws.json. Note these conventions:
+			- Images in official repositories on Docker Hub use a single name (for example, ubuntu or
+				mongo).
+			- Images in other repositories on Docker Hub are qualified with an organization name (for
+				example, amazon/amazon-ecs-agent).
+			- Images in other online repositories are qualified further by a domain name (for example,
+				quay.io/assemblyline/ubuntu or account-id.dkr.ecr.us-east-2.amazonaws.com/ubuntu:trusty).
+	[https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/single-container-docker-configuration.html]
+		Add the information about the Amazon S3 bucket that contains the authentication file in the
+		Authentication parameter of the Dockerrun.aws.json file. Make sure that the Authentication
+		parameter contains a valid Amazon S3 bucket and key. The Amazon S3 bucket must be hosted in the
+		same AWS Region as the environment that is using it.
+
+		For V1 (single Docker container)
+		{
+			"AWSEBDockerrunVersion": "1",
+			...
+			"Authentication": {
+				"Bucket": "my-bucket",
+				"Key": "mydockercfg"
+			},
+			"Image": {
+				"Name": "quay.io/johndoe/private-image",
+				"Update": "true"
+			},
+			...
+		}
+
+		For V2 (multi Docker)
+			{
+				"AWSEBDockerrunVersion": 2,
+				...
+				"authentication": {
+					"bucket": "my-bucket",
+					"key": "mydockercfg"
+				},
+				...
+			}
+	[https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/create_deploy_docker.container.console.html#docker-images-private]
+		To use a Docker image in a private repository hosted by an online registry, you must provide an
+		authentication file that contains information required to authenticate with the registry.
+		
+		Generate an authentication file with the docker login command. For repositories on Docker Hub,
+		run docker login:
+			docker login registry-server-url
+		Upload a copy named .dockercfg of the authentication file to a secure Amazon S3 bucket.
+
+
+	Build Docker Image On Deployment
+	- - - - - - - - - - - - - - - - -
+	You can also get the deployment to BUILD your Docker image for you, rathen than pull it from a
+	repository: 
+	[https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/single-container-docker-configuration.html]
+		Create a Dockerfile when you don't already have an existing image hosted in a repository.
+
 
 Deploying Ruby Applications to AWS Elastic Beanstalk with Git
 -------------------------------------------------------------
@@ -1043,6 +1179,8 @@ WARNING/NOTE: I also found that after successfull setup Puma was having problems
 			- USER INSTALLATION DIRECTORY: /home/<user>/.gem/ruby/<version a.b.c>
 		Then under, probably the global installation directory you will find, for example:
 			/var/lib/gems/2.5.0/gems/puma-4.3.5
+
+		Can also use `bundle info <gem name>` to see where the GEM is installed.
 
 	To add these you will need to SSH into your EBS instance:
 		eb ssh
@@ -1172,6 +1310,38 @@ Simplest method = assign a server certificate to your environment's load balance
 
 With AWS Certificate Manager (ACM), you can create a trusted certificate for your domain names for
 free. BUT domain names are pay-to-own.
+
+SEE https://aws.amazon.com/premiumsupport/knowledge-center/elastic-beanstalk-https-configuration/
+
+NOTE - TO TERMINATE AT LOAD BALANCER
+	When configurating the load balancer, make sure it listens on port 443 using HTTPS but
+	*forwards* traffic to the backend using port 80, HTTP if you whish to terminate the HTTPS
+	connection at the load balancer.
+
+	Terminate HTTPS on the load balancer
+		1. Open the Elastic Beanstalk console, and then select your environment.
+		2. In the navigation pane, choose Configuration.
+		3. In the Load balancer category, choose Modify.
+		4. To add the listener for port 443, choose one of the following sets of steps based on
+		   the type of load balancer that your Elastic Beanstalk environment has.
+
+	To add a listener for a Classic Load Balancer:
+		1.  Choose Add Listener.
+		2.  For Port, enter the incoming traffic port (typically 443).
+		3.  For Protocol, choose HTTPS.
+		4.  For Instance Port, enter 80.
+		5.  For Instance Protocol, choose HTTP.
+		6.  For SSL certificate, choose your certificate, and then choose the SSL policy that you
+		    want to use from the drop-down menu.
+		7.  Choose Add, and then choose Apply.
+
+	To add a listener for an Application Load Balancer:
+		1.  Choose Add Listener.
+		2.  For Port, enter the incoming traffic port (typically 443).
+		3.  For Protocol, choose HTTPS.
+		4.  For SSL certificate, choose your certificate, and then choose the SSL policy that you
+		    want to use from the drop-down menu.
+		5.  Choose Add, and then choose Apply.
 
 
 
