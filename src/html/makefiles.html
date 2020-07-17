@@ -142,7 +142,8 @@ prequisite_7:
 	<p>
 		By doing this kind of traversal make ensures that everything that is need to be
 		built is built, but not more than this. I.e., if some dependencies do not need to
-		be refreshed, they are not rebuilt, helping to produce an efficient build.
+		be refreshed, they are not rebuilt, helping to produce an efficient build. It is also the
+		case that targets that are as new as all of their dependencies are not rebuilt.
 	</p>
 	<p>
 		The basic make process can be described like this:
@@ -156,6 +157,34 @@ prequisite_7:
 			attempt to make the prequisite(s) first.
 		</li>
 	</ul>
+
+	<h3>PHONY targets</h3>
+	<div>
+		<p>
+			A special type of target is a <em><code>.PHONY</code> target</em>, which is always out of date and
+			thus always rebuilt.
+		</p>
+	</div>
+
+	<h3>How Make Locates Source Files</h3>
+	<div>
+		<p>
+			When a rule references a file without a path Make looks in the <em>current working directory</em>.
+		</p>
+		<p>
+			Fre projects are housed in a single directory. One solution is to use <code>VPATH</code> to instruct
+			Make to look in other directories for files.
+		</p>
+		<pre class="prettyprint linenums">VPATH = dir1 dir2 dir3 ...</pre>
+		<p>
+			This works for source files, i.e. <code>*.c, *.cpp</code> etc but not includes. For those modifdy <code>CPPFLAGS</code>.
+		</p>
+		<p>
+			<b>Beware</b> of same-named files in different directories. Make just uses the first one it sees,
+			so this can cause problems!
+		</p>
+	</div>
+
 </div> <!-- END: Makefile Basics -->
 
 <h2>Makefile Automatic Variables</h2>
@@ -187,7 +216,7 @@ prequisite_7:
             </tr>
             <tr>
                 <td><code>$^</code></td>
-                <td>The names of all the prerequisites. Memory peg: it's pointing up, so all of the above prerequisite.</td>
+                <td>The names of all the prerequisites (duplicated removed). Memory peg: it's pointing up, so all of the above prerequisite.</td>
             </tr>
         </tbody>
     </table>
@@ -232,9 +261,142 @@ my-target: fileA.o fileB.o ... fileZ.o</pre>
         is newer than the target <code>fileA.o</code>.
     </p>
     <p>
-        If two or more rules match Make will prefer more specific rules over more generic ones.
+        If two or more rules match Make will <em>prefer more specific rules over more generic ones</em>.
+    </p>
+
+    <h3>Limiting Scope Of Pattern Rules</h3>
+    <div>
+        <p>
+            To limit the scope of a pattern rule that includes wild cards to a set of files use the
+            following:
+        </p>
+        <pre class="prettyprint linenums">$(OBJECTS) : %.o : %.c</pre>
+        <p>
+            In the above the <code>%.o</code> will only match object filesnames in the variable
+            <code>OBJECTS</code>and thus the pre-requisites will only match the corresponding objects
+            from <code>OBJECTS</code>.
+        </p>
+    </div>
+
+    <h3>Implicit Rules</h3>
+    <div>
+        <p>
+            Make includes a set of default rules for commonly required types of dependencies. For
+            example, you will generally not need to tell make how to compile a C or C++ program as
+            its default rule database already has this information.
+        </p>
+        <p>
+            See the default rule database by typing (you can ommit the pipe to vim if you want, but
+            the output is many screens long):
+        </p>
+        <pre class="prettyprint linenums">make -p -q | vim -
+      ^  ^
+      ^  Don't execute any commands
+      Print rule database</pre>
+        <p>
+            If you search the output for C/C++ rules you will find the following rules, amougst others,
+            which are presented here possibly out-of-order wrt to the Make db print out:
+        </p>
+        <pre class="prettyprint linenums">OUTPUT_OPTION = -o $@
+
+LINK.c = $(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH)
+LINK.o = $(CC) $(LDFLAGS) $(TARGET_ARCH)
+
+LINK.cpp = $(LINK.cc)
+LINK.cc = $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH)
+
+COMPILE.cpp = $(COMPILE.cc)
+COMPILE.cc = $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
+COMPILE.c = $(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
+
+%: %.o
+        $(LINK.o) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+%: %.c
+        $(LINK.c) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+%.o: %.c
+        $(COMPILE.c) $(OUTPUT_OPTION) $&lt;</pre>
+    </div>
+    <p>
+        So, if a Makefile has a rule <code>file1.o: file1.c</code>,
+        Make will find the rule <code>%.o: %.c</code> and execute the rule <code>$(COMPILE.c) $(OUTPUT_OPTION) $&lt;</code>.
+        This expands to <code>$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c -o $@ $&lt;</code>, which expands to
+        <code>$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c -o file1.o file1.c</code>.
+    </p>
+    <p>
+        So, what do the variables such as <code>CFLAGS</code> and <code>CPPFLAGS</code> expand to? These must be
+        set by the makefile creator to meet the needs of their compilation!
+    </p>
+    <table class="jehtable">
+        <thead>
+            <tr>
+                <td>Variable</td>
+                <td>Meaning</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>CC</code></td>
+                <td>By default this is set to <code>cc</code>, but if a different compiler was required this could
+                be overriden.</td>
+            </tr>
+            <tr>
+                <td><code>CFLAGS</code></td>
+                <td>Flags/Switches that should be added to the C compiler command line only, i.e., not shared with C++ compiler. </td>
+            </tr>
+            <tr>
+                <td><code>CPPFLAGS</code></td>
+                <td>Flags that should be passed to either or both of the C/C++ compilers. This generally means that they
+                are preprocessor flags as they are generally the only thing that would be passed to bothcompilers.</td>
+            </tr>
+            <tr>
+                <td><code>LDFLAGS</code></td>
+                <td>Flags to pass to the linker. Normall add the library search pathes here: <code>-L</code>.</td>
+            </tr>
+            <tr>
+                <td><code>LOADLIBES</code></td>
+                <td>Itsa <em>deprecated</em>, but still supported, alternative to <code>LDLIBS</code>.</td>
+            </tr>
+            <tr>
+                <td><code>LDLIBS</code></td>
+                <td>Specifies the libraries to link against and possibly other flags.</td>
+            </tr>
+            <tr>
+                <td><code>CXXFLAGS</code></td>
+                <td>Flags/Switches that should be passed to the C++ compiler command line only, i.e., not shared with C compiler.</td>
+            </tr>
+            <tr>
+                <td><code>TARGET_ARCH</code></td>
+                <td>Use to select a specific architecture being compiled for <a href="https://www-uxsup.csx.cam.ac.uk/courses/moved.Building/notes_day2.pdf" target="_blank">[Ref]</a>. For example, default PC comilation produces code that can run on any x86 architectire. So here one might add <code>-march=...</code> to build for a specific architecture like i686 to take advantage of machine instructions enabled for that architecture. Note binary will not be as portable.</td>
+            </tr>
+        </tbody>
+    </table>
+    <p></p>
+</div> <!-- END: Makefile Pattern Rules -->
+
+<h2>Including Other Make Files Into The Main Makefile</h2>
+<div>
+    <p>
+        Can include functionality from other Makefiles into the main Makefile using the <code>include</code> directive.
+        Importantly <b>if any include file is updated by a file, make clears its internal database and re-reads the
+        entire makefile</b>! This is especially important for <em>dependency generation</em>.
+    </p>
+    <p>
+        The flow of logic that dictates when a Makefile is re-processed due to a rule-based update to an include
+        target is shown below:
+    </p>
+    <p>
+        <img src="##IMG_DIR##/makefile_include_directive.png" alt="Makefile include directive processing workflow"/>
+    </p>
+    <p>
+        This process is especially important for dependency generation which is covered in its own section.
     </p>
 </div> <!-- END: Makefile Pattern Rules -->
+
+<h2>Dependency Generation</h2>
+<div>
+</div>
 
 </div> <!-- END H1 padding div -->
 </div>

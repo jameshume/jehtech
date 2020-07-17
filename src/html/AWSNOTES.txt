@@ -35,6 +35,15 @@ IAM - Identity Access Management
 		Attach the S3 policy of choice, e.g. write access, to the role.
 		This role can then be applied to any new EC2 instance created.
 - Policies - Document that defines >= 1 permissions that can be assigned user, groups, or roles.
+	For example, a policy could define the read permisison on a dynamoDB table and then read/write
+	on a specific S3 bucket and so on. Its a collection of permissions of varying specificity.
+
+
+USERS           GROUP              POLICY
+James --------> Supper Group ----> Eat policy
+John -------/                `---> Drink policy 
+Paul ------/
+
 
 - In console access under "Security, Identity and Compliance"
 
@@ -70,9 +79,16 @@ Instance Profiles
 
 Cognito
 --------
+	USER POOLS: user directories that provide sign-up and sign-in options for your ... app users
+		... app users can sign in either directly through a user pool, or federate through a 
+		third-party identity provider (IdP) ... After a successful authentication, your ... app
+		will receive user pool tokens from Amazon Cognito ...
+	IDENTITY POOLS:  provide AWS credentials to grant your users access to other AWS services.
+
+
 	Web Identity Federation
 	-----------------------
-	Lets you five your users access to AWS resources after they have successfuly authenticated with a
+	Lets you give your users access to AWS resources after they have successfuly authenticated with a
 	web-based identity provider like Amazon, FB or Google. After authentication, user gets auth code
 	from Web ID provider, which they trade for temporary AWS security credentials.
 	
@@ -99,6 +115,12 @@ Cognito
 
 	- APP CLIENT - Is what we use to call the various APIs on our behalf. E.g. API to reg a new
 		user or sign in an existing etc.
+
+		See https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-settings-client-apps.html
+			An app is an entity within a user pool that has permission to call unauthenticated APIs
+			(APIs that do not have an authenticated user), such as APIs to register, sign in, and
+			handle forgotten passwords. To call these APIs, you need an app client ID and an
+			optional client secret
 
 		In app client settings:
 			Need to configure an identity provider. Click "Cognito User Pool"
@@ -790,7 +812,7 @@ Beanstalk Update/Deployment Options
 		- Maintains full capacity during deployment process.
 		- Launches an addition batch of instances before deploying new instances.
 
-	- Immutable Deployment Updates;
+	- Immutable Deployment Updates.
 		- Deploys new version to a fresh group of instances in new group. On success moved to
 		  the existing group, and old instances killed.
 		- Perferred option for Mission Critical stuff.
@@ -1565,6 +1587,62 @@ Highly available:
 CodeCommit / Code Deploy / Code Pipeline
 ===================================================================================================
 
+Code Deploy
+-----------
+Can deploy to EC2 or on-premises systems!
+
+2 approaches:
+	1. IN PLACE
+		- The app is stopped on each instance and the new release is installed,
+		- AKA ROLLING UPDATE,
+		- Capacity is rediced during deployment,
+		- Lambda no supported,
+		- Roll-back involves a re-deploy,
+		- Good for 1st time deployment.
+	2. BLUE / GREEN
+		- New instance are provisioned and the new release is installed on the new instances.
+			BLUE == active deployment
+			GREEN == new release
+		  The ELB will be configured to route traffic to the green environment, but importantly the
+		  blue environment is left in tact. Therefore, rolling back to the previous version is
+		  super easy and no down-time on either step is experienced. When green is validated, the
+		  blue is just deleted and the green becomes blue,
+		- No capcity reduction during deployment,
+		- You pay for 2 environments until you terminate the old servers,
+		- Safest option!
+
+AppSpec File - CodeDeploy Config
+- - - - - - - - - - - - - - - - 
+The AppSpec file configures the CodeDeploy environment by defining the parameters to be used
+during deployment.
+
+The file specifies 4 main topics:
+	1. Version (reserved for future use)
+	2. OS - Which OS should you run
+	3. Files - the location of application files to be copied and where to copy to
+	4. HOOKS - Lifecycle event hooks specify scripts that need to be run at set points in the
+	   deployment lifecycle. They have a very specific order. Hooks include the following and
+	   are used to run scripts. The following shows a few of them in the RUN ORDER.
+	   	- BeforeInstall
+	   	- After install
+	   	- ApplicationStart
+	   	- ValidateService
+
+Doing A Deploment
+- - - - - - - - -
+	#Install CodeDeploy agent on your EC2 instance:
+	sudo yum update
+	sudo yum install ruby
+	sudo yum install wget
+	cd /home/ec2-user
+	wget https://aws-codedeploy-eu-central-1.s3.amazonaws.com/latest/install
+	chmod +x ./install
+	sudo ./install auto
+	sudo service codedeploy-agent status
+
+	#Create your application.zip and load it into CodeDeploy:
+	aws deploy create-application --application-name mywebapp
+	aws deploy push --application-name mywebapp --s3-location s3://<MY_BUCKET_NAME>/webapp.zip --ignore-hidden-files
 
 
 ===================================================================================================
@@ -1587,6 +1665,26 @@ Do run Docker services you must create an ECR - Elastic Container Registry.
 ECR is just a place where Docker images are stored.
 ECS connects to the ECR and uses the images to deploy Docker containers.
 
+Startup:      aws configure
+Login:        eval $(aws ecr get-login --no-include-email --region eu-west-2)
+Create repo:  aws ecr create-repository --repository-name my-repo-name --region eu-west-2
+              Command will return the RESPOSITORY_URL. E.g.:
+              jh@jehtech$ aws ecr create-repository --repository-name JEHTech --region eu-west-2
+              {
+                  "repository": {
+                      "repositoryArn": "arn:aws:ecr:eu-west-2:300012345678:repository/JEHTech",
+                      "registryId": "300012345678",
+                      "repositoryName": "JEHTech",
+                      "repositoryUri": "300012345678.dkr.ecr.eu-west-2.amazonaws.com/JEHTech", << THIS IS REPOSITORY_URL
+                      "createdAt": 1593780814.0,
+                      "imageTagMutability": "MUTABLE",
+                      "imageScanningConfiguration": {
+                          "scanOnPush": false
+                      }
+                  }
+              }
+Upload:       docker tag image-i-want-to-upload:version-tag RESPOSITORY_URL/image-i-want-to-upload:version-tag
+              docker push RESPOSITORY_URL/image-i-want-to-upload:version-tag
 
 See
 ---

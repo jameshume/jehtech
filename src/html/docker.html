@@ -47,6 +47,11 @@ https://www.flexiant.com/2014/02/05/what-does-a-hypervisor-do/
 https://blackberry.qnx.com/content/dam/qnx/whitepapers/2017/what-is-a-hypervisor-and-how-does-it-work-pt1.pdf ### REALLY GOOD
 https://community.atlassian.com/t5/Bitbucket-questions/Caching-a-public-Docker-Hub-image/qaq-p/1045777
 https://confluence.atlassian.com/bitbucket/configure-bitbucket-pipelines-yml-792298910.html#Configurebitbucket-pipelines.yml-ci_cachescaches
+
+
+>> USEFUL QA - https://sudo-bmitch.github.io/presentations/dc2018/faq-stackoverflow-lightning.html
+
+>> INVESTIGATE LAYER SPACE USAGE - https://github.com/wagoodman/dive
 </pre>
 
 
@@ -289,6 +294,22 @@ image as one single FS.
 Docker adds one writable layer on top of your image so you can modify the FS, store things etc.
 BUT TAKE CARE - this is not persistent by default and any data stored/chaged etc is lost when the
 container is shutdown.
+
+
+Cleanup / File System Size Easy Wins
+------------------------------------
+1. Purge any apps you installed to setup but won't need for the image to run:
+       apt-get purge -y 
+2. Do a general house clean:
+       apt-get autoremove -y
+       apt-get clean -y
+       rm -rf /var/lib/apt/lists/*
+       rm -rf /var/cache/apt/archives
+       rm -fr /var/cache/debconf/*
+ 3. Get rid of man pages
+       rm -rf /usr/share/doc/
+       rm -rf /usr/share/man/
+       rm -rf /usr/share/locale/
 </pre>
 
 
