@@ -166,24 +166,46 @@ prequisite_7:
 		</p>
 	</div>
 
-	<h3>How Make Locates Source Files</h3>
+	<h3>How Make Locates Source Files: <code>VPATH</code> &amp; <code>vpath</code></h3>
 	<div>
 		<p>
 			When a rule references a file without a path Make looks in the <em>current working directory</em>.
 		</p>
 		<p>
-			Fre projects are housed in a single directory. One solution is to use <code>VPATH</code> to instruct
+			Few projects are housed in a single directory. One solution is to use <code>VPATH</code> to instruct
 			Make to look in other directories for files.
 		</p>
 		<pre class="prettyprint linenums">VPATH = dir1 dir2 dir3 ...</pre>
 		<p>
 			This works for source files, i.e. <code>*.c, *.cpp</code> etc but not includes. For those modifdy <code>CPPFLAGS</code>.
+            Only targets and dependencies are searched using <code>VPATH</code>. Paths in commands are not!
 		</p>
 		<p>
 			<b>Beware</b> of same-named files in different directories. Make just uses the first one it sees,
 			so this can cause problems!
 		</p>
+        <p>
+            The <code>VPATH</code> special variable is course-grained. It applies to all files. To be more <em>specific</em>
+            use <code>vpath</code>:
+        </p>
+        <pre class="prettyprint linenums">vpath pattern dir-list</pre>
+        <p>
+            For example, to search for C files only under the <code>src</code> directory and headers
+            only under the <code>include</code> directory one could write the following:
+        </p>
+        <pre class="prettyprint linenums">vpath %.h include
+vpath %.c src</pre>
 	</div>
+
+    <h3>Make Phases</h3>
+    <div>
+        <p>Make does its work in two phases:</p>
+        <ol>
+            <li>Reads Makefile and all included makefiles. Load vars and rules into internal DB. Simple-expanded vars expanded. Create DAG.</li>
+            <li>Analyse DAG, recursively-expanded vars expanded, determined targets to update, update include targets first and possibly restart, then execute commands for all other rules.</li>
+        </ol>
+        <p></p>
+    </div>
 
 </div> <!-- END: Makefile Basics -->
 
@@ -375,6 +397,64 @@ COMPILE.c = $(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
     <p></p>
 </div> <!-- END: Makefile Pattern Rules -->
 
+<h2>Variables</h2>
+<div>
+    <h3>Naming conventions</h3>
+    <p>
+        Constants or environment variables in upper snake case.
+    </p>
+    <p>
+        Variables internam to the make file, lower snake case.
+    </p>
+
+    <h3>Types</h3>
+    <p>
+        Variables are either <em>simple expanded</em> or <em>recursively expanded</em>.
+    </p>
+    <h4>Simple Expanded</h4>
+    <p>Simple expanded variables are declared like so:</p>
+    <pre class="prettyprint linenums">SIMPLE_EXPANDED := some-value
+#               ^^
+#               Note the colon before the equals!
+#               some-value is expanded IMMEDIATELY upon reading this line</pre>
+    <p>
+        Simple expanded variables have their RHS expression expanded immediately upon being
+        encountered, during the 1st make phase, and have the value of the expansion assigned to the variable.
+    </p>
+
+    <h4>Recursively Expanded</h4>
+    <p>Recursively expanded variables are declared like so: </p>
+<pre class="prettyprint linenums">RECUSIVE_EXPANDED = some-value
+#              ^^
+#              Note ONLY the equals!
+#              some-value is not expanded. just stored as-is in the variable without evaluating it!</pre>
+    <p>
+        A recusively expanded variable just has the RHS stored as-is in the variable without any
+        evaluation what so ever. The value is only ever expanded when the variable is <em>USED</em>.
+    </p>
+
+    <h3>When Expansion Occurs</h3>
+    <ul>
+        <li>LHS of variable assignments immediately expanded</li>
+        <li>RHS of <code>=</code> and <code>?=</code> expansion deferred until second phase</li>
+        <li>RHS of <code>:=</code> immediately expanded</li>
+        <li>RHS of <code>+=</code> immediately expanded for variables declared with <code>:=</code>,
+        otherwise expansion/evaluation deferred until use</li>
+        <li>Rule targets and prerequisites immediately expanded. Commands deferred.</li>
+    </ul>
+
+    <h3>Target Specific Variables</h3>
+    <p>
+        Can append to or create variables specifically for a given target:
+    </p>
+    <pre class="prettyprint linenums">target: my_variable (=|:=|?=|+=) value
+target: prerequisites
+&lt;tab&gt;    commands
+#        ^^
+#        my_variable now has a value specific to this target.</pre>
+    <p></p>
+</div> <!-- END: Variables -->
+
 <h2>Including Other Make Files Into The Main Makefile</h2>
 <div>
     <p>
@@ -396,11 +476,59 @@ COMPILE.c = $(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
 
 <h2>Dependency Generation</h2>
 <div>
+    <p>
+        Notes taken from <a href="http://make.mad-scientist.net/papers/advanced-auto-dependency-generation/" target="_blank">this article</a>.
+    </p>
+    <pre class="prettyprint linenums">DEPDIR := .deps
+DEPFLAGS = -MT $@   -MMD   -MP   -MF $(DEPDIR)/$*.d
+#          ^^^^^^   ^^^^   ^^^   ^^^^^^^^^^^^^^^^^^
+#          ^^^^^^   ^^^^   ^^^   Specify files to write the dependencies to
+#          ^^^^^^   ^^^^   ^^^
+#          ^^^^^^   ^^^^   Instructs CPP to add a phony target for each dependency
+#          ^^^^^^   ^^^^   other than the main file, causing each to depend on nothing.
+#          ^^^^^^   ^^^^   These dummy rules work around errors make gives if you remove
+#          ^^^^^^   ^^^^   header files without updating the Makefile to match.
+#          ^^^^^^   ^^^^
+#          ^^^^^^   Instead of outputting the result of preprocessing, output a rule
+#          ^^^^^^   suitable for make describing the dependencies of the main source
+#          ^^^^^^   file. Do NOT include system header files as dependencues.
+#          ^^^^^^   AND
+#          ^^^^^^   Generate dependency information as a side-effect of compilation, 
+#          ^^^^^^   not instead of compilation.
+#          ^^^^^^
+#          Change target of generated rule to $@ rather than the default that would 
+#          otherwise be the name of the main input file with directories deleted and
+#          suffix replaced with platform specific object suffix.
+
+COMPILE.c = $(CC) $(DEPFLAGS) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
+
+%.o : %.c
+%.o : %.c $(DEPDIR)/%.d | $(DEPDIR)
+        $(COMPILE.c) $(OUTPUT_OPTION) $<
+
+$(DEPDIR): ; @mkdir -p $@
+
+DEPFILES := $(SRCS:%.c=$(DEPDIR)/%.d)
+$(DEPFILES):
+
+include $(wildcard $(DEPFILES))
+# ^^
+# As seen in prev section if any of the include targets (i.e., the DEPFILES) were 
+# updated by the rules the makefile is reloaded with a cleared db.
+</pre>
 </div>
+
+<h2>Separate Source And Binary</h2>
+<div>
+    <p>CMake calls this sort of the out-of-source-builds. Need these to cope with multiple
+    targets and multiple builds per target, for example. To accomplish need to have source
+    and output binaries in separate locations!</p>
+</div> <!-- End Separate source and binary -->
 
 </div> <!-- END H1 padding div -->
 </div>
 </body>
 </html>
+
 
 
