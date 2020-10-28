@@ -1,0 +1,104 @@
+dnl USEM4
+dnl ---- START M4 MACROS ----
+define(`REF', `<a href="$1" target="_blank">$2</a>')dnl
+define(`REF_TXT_TERM_HOW2', `http://www.linux-tutorial.info/modules.php?name=Howto&pagename=Text-Terminal-HOWTO/Text-Terminal-HOWTO-6.html')
+define(`REF_TERMIOS', `https://blog.nelhage.com/2009/12/a-brief-introduction-to-termios/')
+dnl ---- END M4 MACROS ----
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>Linux Terminals &amp; Pseudo Terminals | JEHTech</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">Linux Terminals &amp; Pseudo Terminals </h1>
+<div style="padding-right:10px;">
+
+<h2>References</h2>
+<div>
+    <ul>
+        <li>REF(`REF_TXT_TERM_HOW2', `Text-Terminal-HOWTO'), The Linux Tutorial.</li>
+        <li>REF(`REF_TERMIOS', `A Brief Introduction to termios: termios(3) and stty').</li>
+
+    </ul>
+</div> <!-- End H2 section "References" -->
+
+<h2>Terminal Devices (TTY) &amp; Serial Devices (TTYS)</h2>
+<div>
+    <p>
+        Terminal devices were historically just dumb terminals that could accept input and send it
+        to a server, and then display the resonse. They basicall <em>move characters to and from user
+        space to a physical I/O device</em>.
+    </p>
+    <p>
+        Serial devices can be found under the <code>/dev</code> folder. They are normally called
+        something like <code>/dev/ttyUSB*</code> (USB to serial adaptors) or <code>/dev/ttyS*</code> etc. They correspond
+        directly to a bit of hardware. Writing to the serial device's file will send that data
+        out on the wire (RS232), and data received on the wire can be read from the device.
+    </p>
+    <p>
+        Why is the string &quot;tty&quot; used for serial devices? TTY is an abbreviation for &quot;teletype&quot; Its a historical thing
+        where terminals where usually dumb - almost like typewriters. They just communicated to a server by sending
+        the user input to the server and displaying the server's output (text only of course) - they moved text from user space
+        to and from the serial device. Because serial was historically
+        used by terminal devices, the serial devices are still refered to as TTY or terminal devices even though they
+        are not usuall connected to terminals these days.
+    </p>
+    <p>
+        So this is why derial devices are called terminal devices and are generally refered to as TTYS&lt;num&gt;, the S
+        indicating it is a serial terminal (because not all terminals need to use serial).
+    </p>
+</div>
+
+<h2>Pseudo Terminals</h2>
+<div>
+    <p>
+        Can be explained pretty well just from the man page (emphasis mine) ;)
+    </p>
+    <blockquote>
+        <p>
+            A pseudoterminal (sometimes abbreviated "pty") is a <b>pair of virtual character devices</b> that provide a <b>bidirectional communication channel</b>. One end of the channel is called the <b>master</b>; the other end is called the <b>slave</b>. The slave end of the pseudoterminal provides an interface that behaves exactly like a classical terminal. A <b>process that expects to be connected to a terminal, can open the slave end of a pseudoterminal</b> and then be <b>driven by a program that has opened the master</b> end. Anything that is written on the master end is provided to the process on the slave end as though it was input typed on a terminal. For example, writing the interrupt character (usually control-C) to the master device would cause an interrupt signal (SIGINT) to be generated for the foreground process group that is connected to the slave. Conversely, anything that is written to the slave end of the pseudoterminal can be read by the process that is connected to the master end. Pseudoterminals are used by applications such as network login services (ssh(1), rlogin(1), telnet(1)), terminal emulators, script(1), screen(1), and expect(1).
+        </p>
+        <footer>-- Linux Man Page - pty(7)</footer>
+    </blockquote>
+    <p>
+        Take the following example:
+    </p>
+    <p>
+        <img src="##IMG_DIR##/pty_pair.png"/>
+    </p>
+    <p>
+        As bash is forked, it is connected to the slave end of the PTY pair that the sshd controls. As bash displays the prompt,
+        it outputs serial to the PTY slave end, which is output from the master end, read by sshd and sent to the user over the
+        network. As the user replies, the replies are written by sshd to the master end of the PTY pair, which appears to
+        the bash processes as input on its terminal (or what it thinks is a terminal - it doesn't know that it is a
+        pseudo device). And so the process continues, with bash thinking it is reading and writing to a terminal device of
+        some kind, when, in fact, it is being controlled by the sshd process, which is sending and receiving input from a
+        remote user over the LAN or WAN.
+    </p>
+    <p>
+        The block in the middle is termios REF(`REF_TERMIOS', `[Ref]'). Termios is a general terminal interface that is provided
+        to control asynchronous communications ports.
+    </p>
+</div>
+
+
+</div> <!-- END padding div -->
+</div> <!-- END content div -->
+</body>
+</html>

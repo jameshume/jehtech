@@ -51,6 +51,62 @@ dnl ---- END M4 MACROS ----
     </ul>
 </div> <!-- End H2 section "References" -->
 
+<h2>Send Serial From Desktop Windows PC To Linux Device</h2>
+<div>
+    <p>
+        I have a program on my Windows laptop that opens a COM device to communicate with a bit of kit. Normally it is
+        connected directly to the kit using a USB to serial device. However, now I want to work downstairs so the kit
+        is now connected to a Linux desktop upstairs using the same USB to serial device.
+    </p>
+    <p>
+        So, I want the Windows program to open a pseudo COM device, which forwards the serial data over Ethernet to
+        the Linux destop. The desktop should receive the serial data over Ethernet and write it to the real serial
+        device, and send any replies back.
+    </p>
+    <p>
+        How can this be accomplished? A way that worked for me is this:
+    </p>
+    <p>
+        On the Windows laptop, run the com0com utility and create a pseudo COM port pair. Call them COM10 and COM11.
+        My windows program can now connect to COM10.
+    </p>
+    <p>
+        On the laptop, using WSL, run the following socat command:
+    </p>
+    <pre>socat FILE:/dev/ttyS11,cfmakeraw UDP4:&lt;my-desktop-IP&gt;:&lt;random-port-number&gt;</pre>
+    <p>
+        I'm using UDP because the serial protocol being used has error recovery anyway. &quot;UDP&quot; can
+        be replaced with &quot;TCP&quot;.
+    </p>
+    <p>
+        On the Linux box, type the following:
+    </p>
+    <pre>socat UDP-LISTEN:5004,reuseaddr,fork FILE:/dev/ttyUSB0,cfmakeraw,b38400,parenb=0,nonblock=1</pre>
+    <p>
+        Note, if you get permission denied error that you user must be part of the <code>dialout</code> group.
+        The paremeter meanings <a href="https://linux.die.net/man/3/cfmakeraw" target="_blank">[Ref]</a>
+        used with the TTY device are as follows:
+    </p>
+    <table class="jehtable">
+        <thead><tr><td>Parameter</td><td>Meaning</td></tr></thead>
+        <tbody>
+            <tr><td>cfmakeraw</td>
+                <td>Sets the terminal to something like the &quot;raw&quot; mode of the old Version 7 terminal driver: input 
+                    is available character by character, echoing is disabled, and all special processing of terminal input
+                    and output characters is disabled. 
+                </td>
+            </tr>
+            <tr><td>b38400</td>
+                <td>Sets the baud rate</td>
+            </tr>
+            <tr><td>parenb=0</td>
+                <td>Disables parity generation on output and parity checking for input.
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
 </div> <!-- END padding div -->
 </div> <!-- END content div -->
 </body>

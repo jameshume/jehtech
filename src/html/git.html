@@ -460,9 +460,20 @@ git log --all --grep='your-regexp-here' -i</pre>
     <p>To search for tags with names matching a given pattern:</p>
     <pre>get tag -l &lt;pattern&gt;</pre>
 
+    <p>To see/search for tags on remote:</p>
+    <pre>git ls-remote --tags /some/url/to/repo ["refs/tags/MyTag^{}"]
+#                                       ^                  ^
+#                                       Quotes are required here!</pre>
+
     <p>An important point to note is that <b><code>git push</code> does NOT transfer tags to remote servers!</b>
     You must do this explicity using <code>git push origin &lt;tagname&gt;</code>
     </p>
+
+    <p>Delete tags locally:</p>
+    <pre>git tag -d tag_name</pre>
+
+    <p>Delete tags on remote:</p>
+    <pre>git push --delete origin tag_name</pre>
 
     <!-- ++++++++++++++++++++++++++++++++ -->
     <h3>Undoing Things</h3>
@@ -1695,6 +1706,7 @@ https://adaptivepatchwork.com/2012/03/01/mind-the-end-of-your-line/ ## << Really
     <ul>
         <li><a href="https://git-scm.com/book/en/v2/Git-Tools-Submodules" target="_blank">The official &quot;Git Tools - Submodules&quot;</a>.</li>
         <li><a href="http://www.speirs.org/blog/2009/5/11/understanding-git-submodules.html" target="_blank">Understanding Git Submodules</a>, Fraser Speirs.</li>
+        <li><a href="https://www.atlassian.com/git/tutorials/git-submodule" target="_blank">Git Submodules</a>, Atlassian</li>
         <li><a href="https://www.atlassian.com/blog/git/git-submodules-workflows-tips" target="_blank">Git submodules: core concept, workflows, and tips, Nicola Paolucci</a></li>
     </ul>
     <p>
@@ -1714,11 +1726,59 @@ https://adaptivepatchwork.com/2012/03/01/mind-the-end-of-your-line/ ## << Really
         <footer>--<a href="http://www.speirs.org/blog/2009/5/11/understanding-git-submodules.html" target="_blank">Understanding Git Submodules</a>, Fraser Speirs.</footer>
     </blockquote>
     <p>
+        The Atliassian page on the subject says it nicely:
+    </p>
+    <blockquote>
+        <p>
+            Git submodules allow you to keep a git repository as a subdirectory of another git
+            repository. Git submodules are simply a reference to another repository at a particular
+            snapshot in time. ...
+        </p>
+        <p>
+            ... A git submodule is a record within a host git repository that points to a specific
+            commit in another external repository. Submodules are very static and only track
+            specific commits. Submodules do not track git refs or branches and are not automatically
+            updated when the host repository is updated ...
+        </p>
+        <footer>-- <a href="https://www.atlassian.com/git/tutorials/git-submodule" target="_blank">Git Submodules</a>, Atlassian Tutorials
+        </footer>
+    </blockquote>
+    <p></p>
+
+    <h3>Add A Git Submodule To Your Project</h3>
+    <p>
+        From directory in your project into which you want to add the submodule:
+    </p>
+    <pre class="prettyprint linenums">
+git submodule add [-b BRANCH_NAME] GIT-URL</pre>
+    <p>
+        This adds the file <code>.gitmodules</code> and <code>your-submodule-name</code> into your
+        repo. Note that the new directory is <i>seen as a file</i> by Git, even though on your local
+        machine it is realy a directory. Commit your changes to add these two files.
+    </p>
+    <p>
+        To track a specific branch use the <code>-b</code> option.
+    </p>
+    <p>
+        Or, to retrospecitively track a different branch, edit the <code>.gitmodules</code> file
+        in your repository base directory and add a branch key like so:
+    </p>
+    <pre class="prettyprint linenums">[submodule my-sub-module"]
+    path = path/relative/to/repo/base/where/submodule/is/cloned
+    url = https://git@bitbucket.org/my.repository.git
+    branch = my/branch</pre>
+    <p>
+        Or, probably better, use:
+    </p>
+    <pre class="prettyprint linenums">git config -f .gitmodules submodule.my-sub-module.branch branch-name</pre>
+
+    <h3>Clone a Git Project With Submodules</h3>
+    <p>
         To clone a project with submodules do:
     </p>
     <pre>git clone https://the-project
 git submodule init   # You only get submodule directories but not code so run
-git submodule update # these to get the data!</pre>
+git submodule update [--recursive] [--remote] # these to get the data!</pre>
     <p>Or...</p>
     <pre>git clone <b>--recurse-submodules</b> https://the-project</pre>
     <p>As the submodule is a repository-in-a-repository you can check out any branch of the
@@ -1732,7 +1792,25 @@ git submodule update # these to get the data!</pre>
     </p>
     <pre>git push --recurse-submodules=check # Or...
 git push --recurse-submodules=on-demand</pre>
-    <p></p>
+    <h3>Working On Git Submodules</h3>
+    <p>
+        To checkout a branch or revision of the submodules:
+    </p>
+    <pre class="prettyprint linenums">
+cd you-submodule-directory
+git checkout [-b] some-branch
+#            ^^^^
+#            Only if you are creating a new branch, rather than checking out an existing one.
+
+# ... make some changes ...
+
+git add -u
+git commit -m "..."
+
+cd submodule-parent-directory
+git add -u
+git commit -m "updated the submodule reference"</pre>
+<p></p>
 </div>
 
 <h2>Super Error Recovery</h2>

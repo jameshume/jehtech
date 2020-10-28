@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>Raspberry Pi Notes | JEHTech</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">Raspberry Pi Notes</h1>
+<div style="padding-right:10px;">
+
+	<h2>Setup Headless Wifi Mode</h2>
+	<div>
+		<p>
+			In headless mode you don't need to attach a monitor or keyboard/mouse to your Pi. Just
+			SSH into it <a href="https://www.tomshardware.com/uk/reviews/raspberry-pi-headless-setup-how-to,6028.html" target="_blank">[Ref]</a>!
+		</p>
+		<ol>
+			<li>Use Raspberry Pi Imager to flash a micro SD card with Raspberry Pi OS</li>
+			<li>Create emtpy file in flash root called <code>ssh</code>. RPi OS sees this and enables
+				SSH with password logins.
+			</li>
+			<li>Create file <code>wpa_supplicant.conf</code> in flash root. Add contents:
+				<pre>country=GB
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+
+network={
+scan_ssid=1
+ssid="your_wifi_ssid"
+psk="your_wifi_password"
+}</pre>
+			</li>
+			<li>SSH into <code>raspberrypi.local</code> using username <code>pi</code> and passwrod <code>raspberry</code>.
+			</li>
+		</ol>
+	</div>
+
+	<h2>Install Docker</h2>
+	<div>
+		<p>
+			Since Raspbian Jesse installing Docker is as easy as <a href="https://www.raspberrypi.org/blog/docker-comes-to-raspberry-pi/#:~:text=If%20you're%20not%20already,without%20a%20lot%20of%20setup." target="_blank">[Ref]</a>:
+		</p>
+
+		<pre>curl -fsSL https://get.docker.com  | sudo sh # Get offical Docker install script and run it
+sudo ./get-docker.sh                                # Create the docker group
+sudo groupadd docker                                # Add user to the docker group
+su -s ${USER}                                       # Log out and log back in so that group membership is re-evaluated
+sudo usermod -aG docker ${USER}                     # Add non-root user to docker group. Default user is "pi" on RPi OS.
+sudo shutdown -r now                                # For some reason YOU HAVE TO REBOOT!</pre>
+
+		<p>Later, to upgrade Docker, don't re-run the script, just do:</p>
+		<pre>sudo apt-get upgrade</pre>
+		<p>If you ever need to uninstall your Docker install do:</p>
+		<pre>sudo apt-get purge docker-ce docker-ce-cli
+sudo rm -rf /var/lib/docker</pre>
+		<p></p>
+	</div>
+
+
+
+
+
+</div> <!-- END H1 padding div -->
+</div>
+</body>
+</html>
+
+

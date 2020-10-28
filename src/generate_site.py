@@ -39,7 +39,6 @@ def CopyImagesDir(srcDir, destDir):
     # watermarked, everything else, minus a few exceptions (the icons directory
     # and some specific files) will get watermarked as they're copied over -
     # original images not modified...
-
     if not os.path.exists(destDir):
         os.makedirs(destDir)
 
@@ -68,11 +67,9 @@ def CopyImagesDir(srcDir, destDir):
             file_extension = os.path.splitext(file)[1]
             if first or file_extension.lower() not in [".png", ".jpg"] or file in no_watermark_imgs:
                 # just copy file
-                #print("COPY" , os.path.join(root, file), "==>", os.path.join(destDir, relativeRoot, file))
                 shutil.copy(os.path.join(root, file), os.path.join(destDir, relativeRoot, file))
             else:
                 # create a watermarked copy
-                #print("WATERMARK" , os.path.join(root, file), "==>", os.path.join(destDir, relativeRoot, file))
                 watermark.WatermarkImage(os.path.join(root, file), os.path.join(destDir, relativeRoot, file))
 
         first = False
@@ -398,6 +395,7 @@ def deploy_site(specificFile, generateImages):
         with codecs.open(os.path.join(DEPLOYED_DIR, "sitemap.txt"), "w", "utf-8") as sitemap_file:
             sitemap_file.writelines("%s\n" % line for line in sitemap_list)
 
+    if specificFile is None:
         #
         # Now copy across all other important files
         nonHtmlFiles = [ #'reCaptchaSecret.txt',
@@ -409,6 +407,8 @@ def deploy_site(specificFile, generateImages):
         for filename in nonHtmlFiles:
             if os.path.exists(filename):
                 if filename == 'images' and generateImages:
+                    print("-- Generating images...")
+                    print(f"CopyImagesDir({filename}, {target})")
                     target = os.path.join(DEPLOYED_DIR, filename)
                     CopyImagesDir(filename, target)
                 else:
@@ -423,7 +423,12 @@ def deploy_site(specificFile, generateImages):
                         raise Exception('### WARNING: {} not copied!'.format(filename))
             else:
                 raise Exception('### WARNING: {} does not exist!'.format(filename))
-
+    elif generateImages:
+        # specificFile is set
+        print("-- Generating images...")
+        target = os.path.join(DEPLOYED_DIR, 'images')
+        print(f"CopyImagesDir(images, {target})")
+        CopyImagesDir('images', target)
 
 if __name__ == "__main__":
     import argparse

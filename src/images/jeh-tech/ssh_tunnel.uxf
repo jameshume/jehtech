@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>12</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>360</x>
+      <y>72</y>
+      <w>420</w>
+      <h>276</h>
+    </coordinates>
+    <panel_attributes>My Local
+Computer</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>828</x>
+      <y>96</y>
+      <w>276</w>
+      <h>252</h>
+    </coordinates>
+    <panel_attributes>customelement=
+drawArc(80,140,30,40,180,180,true) transparency=100
+drawArc(110,140,30,40,180,180,true) transparency=100
+drawArc(140,135,30,40,200,180,true) transparency=100
+drawArc(167,117, 30,40,220,180,true) transparency=100
+drawArc(179,86, 30,40,270,180,true) transparency=100
+drawArc(175,48, 30,40,300,180,true) transparency=100
+drawArc(151,28, 30,40,350,180,true) transparency=100
+drawArc(121,28, 30,40,350,180,true) transparency=100
+drawArc(90,28, 30,40,10,180,true) transparency=100
+drawArc(60,37, 30,40,30,180,true) transparency=100
+drawArc(35,57, 30,40,50,180,true) transparency=100
+drawArc(30,94, 30,40,80,180,true) transparency=100
+drawArc(30,130, 30,40,120,180,true) transparency=100
+drawArc(52,150, 34,40,165,180,true) transparency=100
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>384</x>
+      <y>192</y>
+      <w>120</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>Insecure App
+valign=center
+halign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>636</x>
+      <y>192</y>
+      <w>120</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>SSH
+valign=center
+halign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>492</x>
+      <y>204</y>
+      <w>168</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-&gt;&gt;&gt;</panel_attributes>
+    <additional_attributes>120.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>912</x>
+      <y>324</y>
+      <w>132</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>The InterWebs</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>744</x>
+      <y>204</y>
+      <w>72</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;&gt;
+lw=2</panel_attributes>
+    <additional_attributes>40.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>792</x>
+      <y>204</y>
+      <w>372</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lt=.
+lw=2</panel_attributes>
+    <additional_attributes>10.0;10.0;290.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1140</x>
+      <y>204</y>
+      <w>72</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-
+lw=2</panel_attributes>
+    <additional_attributes>40.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1164</x>
+      <y>72</y>
+      <w>420</w>
+      <h>288</h>
+    </coordinates>
+    <panel_attributes>Server</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1188</x>
+      <y>192</y>
+      <w>120</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>SSH
+valign=center
+halign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1428</x>
+      <y>192</y>
+      <w>132</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>Insecure Server
+valign=center
+halign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1296</x>
+      <y>204</y>
+      <w>156</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-&gt;&gt;&gt;</panel_attributes>
+    <additional_attributes>110.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>780</x>
+      <y>192</y>
+      <w>396</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lw=2</panel_attributes>
+    <additional_attributes>10.0;10.0;310.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>780</x>
+      <y>216</y>
+      <w>396</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lw=2</panel_attributes>
+    <additional_attributes>10.0;10.0;310.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>1140</x>
+      <y>204</y>
+      <w>24</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lw=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>780</x>
+      <y>204</y>
+      <w>24</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lw=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>348</x>
+      <y>384</y>
+      <w>276</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+*Rather than connect directly to server, instead connect to a localhost port, which SSH is listening too.*
+bg=black
+fg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>492</x>
+      <y>228</y>
+      <w>168</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lw=2
+fg=gray</panel_attributes>
+    <additional_attributes>120.0;10.0;10.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>780</x>
+      <y>216</y>
+      <w>72</w>
+      <h>192</h>
+    </coordinates>
+    <panel_attributes>lw=2
+fg=gray</panel_attributes>
+    <additional_attributes>10.0;10.0;40.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>720</x>
+      <y>384</y>
+      <w>276</w>
+      <h>156</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+*SSH then relays traffic received through a "tunnel" by encrypting data received from the app and forwarding it to the other end of the tunnel,and decrypting data received from the server and forwarding it to the app.*
+bg=black
+fg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1176</x>
+      <y>384</y>
+      <w>324</w>
+      <h>132</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+*Rather than listen to a publicly accessible address/port the server listens to a localhost port on which it sends and receives traffic that is encrypted and decrypted, respectively, by SSH through the SSH tunnel.*
+bg=black
+fg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1308</x>
+      <y>228</y>
+      <w>144</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lw=2
+fg=gray</panel_attributes>
+    <additional_attributes>100.0;10.0;10.0;130.0</additional_attributes>
+  </element>
+</diagram>

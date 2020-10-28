@@ -18,9 +18,9 @@
 			var box2 = jC.addObject(new jCanv.Box(jC, 100, 30, 50, 50, {lineColour: "blue", fillColour: "orange", lineWidth:2}));
 			var box2_end = new jCanv.Box(jC, 30, 25, 100, 100, {lineColour: "blue", fillColour: "orange", lineWidth:2, rotateDeg: -45});
 			var box2_end2 = new jCanv.Box(jC, 100, 30, 50, 50, {lineColour: "blue", fillColour: "orange", lineWidth:2});
-			
+
 			var anim_step = 0;
-			
+
 			jC.render();
 
 			var anim_func = function() {
@@ -103,6 +103,16 @@
 			</li>
 		</ol>
 	</div> <!-- END H2 div -->
+
+	<h2>Useful Resources</h2>
+	<div>
+		<ul>
+			<li>https://jsconf.com/</li>
+			<li>https://javascriptweekly.com/</li>
+			<li>https://frontendfoc.us/</li>
+			<li>http://jstherightway.org/</li>
+		</ul>
+	</div>
 
 	<h2>Testing</h2>
 	<div>
@@ -358,11 +368,18 @@ console.log(o2.newAttr): // o2.newAttr == o1.newAttr == "J"</pre>
 		<h3>Declaring Objects</h3>
 		<div>
 			<p>
+				Javascript objects are just dictionaries that map keys to values. A property is the key name
+				that maps to its value.
+			</p>
+			<h4>New Operator</h4>
+			<p>
 			Use the <em>new operator</em>:
 			</p>
 			<pre class="prettyprint linenums">var o1 = <b>new</b> Object();
 o1.prop1 = "something";
 o1.prop2 = 101;</pre>
+
+			<h4>Object Literals</h4>
 			<p>
 				Using <em>object literals</em> we can create the exact equivalent
 				of the above:
@@ -376,6 +393,17 @@ o1.prop2 = 101;</pre>
 				languages like python, and in fact we can use an object in that
 				manner most of the time.
 			</p>
+
+			<h4>Object.create()</h4>
+			Allows the prototype object for the object being create to be specified:
+			<pre class="prettyprint linenums">var LiteralClassDef = {
+    myFunc: function() { console.log(this); }
+}
+
+var blah = Object.create(LiteralClassDef);
+blah.myFunc();
+</pre>
+
 
 		</div> <!-- END: H3 -->
 

@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>18</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>234</x>
+      <y>360</y>
+      <w>648</w>
+      <h>576</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>360</x>
+      <y>486</y>
+      <w>288</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>lw=2
+fg=blue
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>288</x>
+      <y>414</y>
+      <w>540</w>
+      <h>468</h>
+    </coordinates>
+    <panel_attributes>DIV
+lw=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>342</x>
+      <y>468</y>
+      <w>432</w>
+      <h>360</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>756</x>
+      <y>576</y>
+      <w>342</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;170.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>1062</x>
+      <y>558</y>
+      <w>198</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>fontsize=20
+Content</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>774</x>
+      <y>504</y>
+      <w>324</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;160.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>1062</x>
+      <y>486</y>
+      <w>198</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>fontsize=20
+Padding
+fg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>810</x>
+      <y>432</y>
+      <w>288</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;140.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>1062</x>
+      <y>414</y>
+      <w>198</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>fontsize=20
+Border</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>846</x>
+      <y>360</y>
+      <w>252</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;120.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>1062</x>
+      <y>342</y>
+      <w>198</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>fontsize=20
+Margin</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>342</x>
+      <y>468</y>
+      <w>324</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fg=blue
+fg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>378</x>
+      <y>504</y>
+      <w>252</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>fg=blue
+lt=.
+Position: absolute</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>270</x>
+      <y>396</y>
+      <w>54</w>
+      <h>144</h>
+    </coordinates>
+    <panel_attributes>fg=red
+lw=3</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>270</x>
+      <y>396</y>
+      <w>162</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>fg=red
+lw=3</panel_attributes>
+    <additional_attributes>10.0;10.0;70.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>270</x>
+      <y>216</y>
+      <w>306</w>
+      <h>234</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-
+fg=red
+lw=2</panel_attributes>
+    <additional_attributes>10.0;110.0;150.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>558</x>
+      <y>144</y>
+      <w>648</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>fontsize=20
+For an element positioned absolute,
+containing block is the PADDING box 
+of the first ancestral block level
+element.
+fg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

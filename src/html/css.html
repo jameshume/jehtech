@@ -1,25 +1,48 @@
+dnl USEM4
+dnl ---- START M4 MACROS ----
+define(`REF', `<a href="$1" target="_blank">$2</a>')dnl
+
+define(`REF_CSS_BEM', `https://css-tricks.com/bem-101/'')
+
+dnl --- Cascading  / Inheritance / Specificity ---
+define(`REF_MOZ_CASCADE', `https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Cascade_and_inheritance')
+define(`REF_MOZ_SPECIFICITY', `https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity')
+
+dnl --- Positioning ---
+define(`REF_WC3_POSITION', `https://www.w3.org/TR/css-position-3/')
+define(`REF_POS_REL_VS_FIX', `https://css-tricks.com/absolute-relative-fixed-positioining-how-do-they-differ/')
+define(`REF_POS_REL_DETAILED', `https://css-tricks.com/absolute-positioning-inside-relative-positioning/')
+define(`REF_POS_STICKY', `https://css-tricks.com/position-sticky-2/')
+define(`REF_FLOW_NORM', `https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Normal_Flow')
+define(`REF_MOZ_POS', `https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Positioning')
+define(`REF_CONTAIN_BLOCKS', `https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#Identifying_the_containing_block')
+define(`REF_REM_VS_EM', `https://zellwk.com/blog/rem-vs-em/'')
+
+dnl --- Flexbox ---
+define(`REF_FLEX_BASICS_MDN', `https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout/Basic_Concepts_of_Flexbox')
+dnl ---- END M4 MACROS ----
 <!DOCTYPE HTML>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
-	<meta charset="UTF-8">                                              <!-- HTML 5 -->
-	<title>Cascading Style Sheets (CSS) | JEHTech</title>
-	<style>
-	.jehcodecol1 tbody tr td:nth-child(1) { font-family: monospace;  }
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+    <meta charset="UTF-8">                                              <!-- HTML 5 -->
+    <title>Cascading Style Sheets (CSS) | JEHTech</title>
+    <style>
+    .jehcodecol1 tbody tr td:nth-child(1) { font-family: monospace;  }
 </style>
-	<!-- META_INSERT -->
-	<!-- CSS_INSERT -->
-	<!-- JAVASCRIPT_INSERT -->
+    <!-- META_INSERT -->
+    <!-- CSS_INSERT -->
+    <!-- JAVASCRIPT_INSERT -->
 </head>
 
 <body>
 <div id="header">
-	-- This is JEHTech --
+    -- This is JEHTech --
 </div>
 
 <div id="sidebar">
-	<h1 class="title">Links...</h1>
-	<div id="includedContent"></div>
+    <h1 class="title">Links...</h1>
+    <div id="includedContent"></div>
 </div>
 
 <div id="content">
@@ -30,129 +53,607 @@
 <div id="page_contents">
 </div>
 
-<h2>References</h2>
+<h2>Useful Tools</h2>
 <div>
-	<p>
-	</p>
-</div> <!-- END References / useful Links -->
+    <ul>
+        <li><a href="caniuse.com" target="_blank">CanIUse.com</a></li>
+        <li><a href="htmlcheatsheet.com/css/" target="_blank">Interactive CSS Cheat Sheet</a></li>
+    </ul>
+</div>
 
+<h2>A Naming Convention: Block, Element, Modifer (BEM)</h2>
+<div>
+    <h3>References</h3>
+    <ol>
+        <li>REF(`REF_CSS_BEM',`BEM 101'), Robin Rendle, Mar 9, 2016.</li>
+    </ol>
 
+    <h3>Summary</h3>
+    <p>
+        Provides a consistent naming convention for CSS classes. The names provide a meaningful
+        context from which the the relationship between the HTML and CSS can be more easily
+        understood when reading through the code...
+    </p>
+    <pre class="prettyprint linenums"> .a-well-named-block { ... }
+.a-well-named-block__element-in-block { ... }
+.a-well-named-block__element-in-block--attribute { ... }
+</pre>
+    <p></p>
+</div>
+
+<h2>Cascading, Inheritance, Specificity</h2>
+<div>
+    <p>
+        CSS style sheets use cascading + inheritance rules and the specificity rule to
+        figure out what styles should be applied to an element.
+    </p>
+
+    <h3>References</h3>
+    <ol>
+        <li>REF(`REF_MOZ_CASCADE',`Cascade and inheritance'), MDN Web Docs.</li>
+        <li>REF(`REF_MOZ_SPECIFICITY',`Specificity'), MDN Web Docs.</li>
+    </ol>
+
+    <h3>Specificity</h3>
+    <p>
+        When different rules could apply the the same element. E.g:
+    </p>
+    <pre class="prettyprint linenums">&lt;!-- HTML --&gt;
+&lt;h1 class="jeh"&gt;My Title&lt;/h1&gt;
+
+&lt;!-- CSS --&gt;
+h1 { color: red; }     &lt;&lt; THIS IS APPLIED (ITS THE MOST SPECIFIC) EVEN THOUGH...
+.jeh { color: blue; }  &lt;&lt; ...THIS WAS DECALRED LATER (IT IS LESS SPECIFIC)</pre>
+
+    <p>
+            Specificity most specifict to least. Most specific rule applies:
+    </p>
+    <ol>
+        <li>HIGHEST: Inline rules</li>
+        <li>HIGH:    ID selectos (#the_id)</li>
+        <li>MED:     Class selectors (.myClass etc) and attribute selectors ([type="radio" etc])</li>
+        <li>LOW:     Type selectors (h1 etc) and pseudo-elements (::before etc)</li>
+    </ol>
+    <p>
+        Universal selector (*) has no effect on specificity. Like its the lowest.
+    </p>
+
+    <h3>Inheritance</h3>
+    <p>
+    Some child elements can inherit CSS properties from their parents.
+    The "width" property is not inherited, for example. You can see a full list <a href="https://www.w3.org/TR/CSS21/propidx.html" target="_b;ank">here</a>.
+    </p>
+    <p>
+    Properties can accept one of "inherit", "initial", and "unset".
+    </p>
+    <ul>
+        <li>Inherit - Gets property value from its parent</li>
+        <li>Initial - Gets the initial (i.e., DEFAULT) value of that property</li>
+        <li>Unset   - Resets the property to its natural value, which means that if the property is
+                          naturally inherited it acts like inherit, otherwise it acts like initial.</li>
+    </ul>
+
+    <h3>Cascading</h3>
+    <p>
+        Order of rules with same specificity detmines which is applied - last defined used.
+    </p>
+    <pre class="prettyprint linenums">h1 { color: red; }
+...
+h1 { color: yellow; } &lt;&lt; THIS IS APPLIED </pre>
+    <p>
+        Cascading also has to consider specificity and inheritance. The application of rules is
+        done using the following importance:
+    </p>
+    <ul>
+        <li>HIGH: Importance</li>
+        <li>MID:  Specificity</li>
+        <li>LOW:  Source order</li>
+    </ul>
+    <p></p>
+</div>
 
 <h2>Selector</h2>
 <div>
-	<p>A great guide is (obvs) <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Attribute_selectors" target="_blank">Mozilla</a>,
-		and the definitive is <a href="https://www.w3.org/TR/selectors/#selectors" target="_blank">W3C</a>.
-	</p>
-	<table class="jehtable jehcodecol1">
-		<thead>
-			<tr><td>Selector example</td><td>Meaning</td></tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>.className</td>
-				<td>Selects all elements with class name &quot;className&quot;</td>
-			</tr>
-			<tr>
-				<td>.className1.className2</td>
-				<td>Selects elements with both classnames &quot;className1&quot; and &quot;className2&quot;. Note that there
-					is <em>no</em> space between the end of the first class name and the subsequent dot.</td>
-			</tr>
-			<tr>
-				<td>element.className</td>
-				<td>Selects the HTML element type with the corresponding class name</td>
-			</tr>
-			<tr>
-				<td>id1<b>,</b> id2</td>
-				<td>Here <code>idX</code> can either be an HTML element tag or a class name (i.e., &quot;.className&quot;.
-					Selects all nodes identified by <code>idx1</code> or <code>idx2</code>.
-				</td>
-			</tr>			
-			<tr>
-				<td>id1 id2</td>
-				<td>Here <code>idX</code> can either be an HTML element tag or a class name (i.e., &quot;.className&quot;.
-					The two identifiers are seperated by a space. This selects all elements identified by <code>id2</code> 
-					that are a descendents (i.e., children, grandchildren and so on) of nodes identified by <code>id1</code>.
-				</td>
-			</tr>
-			<tr>
-				<td>id1 > id2</td>
-				<td>Here <code>idX</code> can either be an HTML element tag or a class name (i.e., &quot;.className&quot;.
-					The two identifiers are seperated by a &gt; symbol. This selects all elements identified by <code>id2</code>
-					that are <em>immediate</em> children of nodes identified by <code>id1</code>.
-				</td>
-			</tr>
-			<tr>
-				<td>[attribute] or [attribute OP value]</td>
-				<td>Selects all nodes with the attribute name specified inside the square br=ackets set. Additionally the attribute selection can be further refined based on its value using the operators = (equals), ~= (containing a whole word), |= (starting with), ^= (begins with), $= (ends with), *= (contains substring). E.g., &quot;<code>[target=_blank]</code> selects node that have a <code>target</code> attribute and then only those where the attribute equals <code>_blank</code>.
-				</td>
-			</tr>
-			<tr>
-				<td>id:first-child(n)</td>
-				<td>Selects any node identified by <code>id</code> that is the first child of its parent. </td>
-			</tr>
-			<tr>
-				<td>id:last-child(n)</td>
-				<td>Selects any node identified by <code>id</code> that is the last child of its parent. </td>
-			</tr>
-			<tr>
-				<td>id:nth-child(n)</td>
-				<td>Selects any node identified by <code>id</code> that is the n-th child of its parent. </td>
-			</tr>
-			<tr>
-				<td>id:nth-col(n)</td>
-				<td>Selects any node identified by <code>id</code> that is a cell belonging to the nth column in a grid/table.</td>
-			</tr>
-		</tbody>
-	</table>
-	<p>
-		There are an absolute load more - see the W3C link above. These tend to be ones I have most often used.
-	</p>
-	<p>
-		Also, note that you can chain some of the pseudo classes. For example <code>button:hover:disabled</code>
-		applies a style to a button that has the mouse cursor over it and that is also disabled.
-	</p>
+    <p>A great guide is (obvs) <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Attribute_selectors" target="_blank">Mozilla</a>,
+        and the definitive is <a href="https://www.w3.org/TR/selectors/#selectors" target="_blank">W3C</a>.
+    </p>
+    <table class="jehtable jehcodecol1">
+        <thead>
+            <tr><td>Selector example</td><td>Meaning</td></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>.className</td>
+                <td>Selects all elements with class name &quot;className&quot;</td>
+            </tr>
+            <tr>
+                <td>.className1.className2</td>
+                <td>Selects elements with both classnames &quot;className1&quot; and &quot;className2&quot;. Note that there
+                    is <em>no</em> space between the end of the first class name and the subsequent dot.</td>
+            </tr>
+            <tr>
+                <td>element.className</td>
+                <td>Selects the HTML element type with the corresponding class name</td>
+            </tr>
+            <tr>
+                <td>id1<b>,</b> id2</td>
+                <td>Here <code>idX</code> can either be an HTML element tag or a class name (i.e., &quot;.className&quot;.
+                    Selects all nodes identified by <code>idx1</code> or <code>idx2</code>.
+                </td>
+            </tr>           
+            <tr>
+                <td>id1 id2</td>
+                <td>Here <code>idX</code> can either be an HTML element tag or a class name (i.e., &quot;.className&quot;.
+                    The two identifiers are seperated by a space. This selects all elements identified by <code>id2</code> 
+                    that are a descendents (i.e., children, grandchildren and so on) of nodes identified by <code>id1</code>.
+                </td>
+            </tr>
+            <tr>
+                <td>id1 > id2</td>
+                <td>Here <code>idX</code> can either be an HTML element tag or a class name (i.e., &quot;.className&quot;.
+                    The two identifiers are seperated by a &gt; symbol. This selects all elements identified by <code>id2</code>
+                    that are <em>immediate</em> children of nodes identified by <code>id1</code>.
+                </td>
+            </tr>
+            <tr>
+                <td>[attribute] or [attribute OP value]</td>
+                <td>Selects all nodes with the attribute name specified inside the square br=ackets set. Additionally the attribute selection can be further refined based on its value using the operators = (equals), ~= (containing a whole word), |= (starting with), ^= (begins with), $= (ends with), *= (contains substring). E.g., &quot;<code>[target=_blank]</code> selects node that have a <code>target</code> attribute and then only those where the attribute equals <code>_blank</code>.
+                </td>
+            </tr>
+            <tr>
+                <td>id:first-child(n)</td>
+                <td>Selects any node identified by <code>id</code> that is the first child of its parent. </td>
+            </tr>
+            <tr>
+                <td>id:last-child(n)</td>
+                <td>Selects any node identified by <code>id</code> that is the last child of its parent. </td>
+            </tr>
+            <tr>
+                <td>id:nth-child(n)</td>
+                <td>Selects any node identified by <code>id</code> that is the n-th child of its parent. </td>
+            </tr>
+            <tr>
+                <td>id:nth-col(n)</td>
+                <td>Selects any node identified by <code>id</code> that is a cell belonging to the nth column in a grid/table.</td>
+            </tr>
+        </tbody>
+    </table>
+    <p>
+        There are an absolute load more - see the W3C link above. These tend to be ones I have most often used.
+    </p>
+    <p>
+        Also, note that you can chain some of the pseudo classes. For example <code>button:hover:disabled</code>
+        applies a style to a button that has the mouse cursor over it and that is also disabled.
+    </p>
+    <p>
+        <img src="##IMG_DIR##/css_selectors.png"/>
+    </p>
 </div> <!-- END H2 Box Model -->
 
 <h2>Calculating Element Properties</h2>
 <div>
-	<p></p>
+    <p></p>
 </div> <!-- END H2 Calculating Properties -->
 
 <h2>Creating Variables</h2>
 <div>
-	<p></p>
+    <p></p>
 </div> <!-- END H2 Calculating Properties -->
 
 
 <h2>Box Model</h2>
+<a name="box_model"/>
 <div>
-	<p>
-		See the W3C's <a href="https://www.w3.org/TR/css-box-3/" target="_blank">CSS Box Model Module</a>.
-	</p>
-	<p>
-		<img src="##IMG_DIR##/css_box_model.png" alt="Picture showning CSS box model and effect of box-sizing settings content-box, padding-box and border-box"/>
-	</p>
+    <p>
+        See the W3C's <a href="https://www.w3.org/TR/css-box-3/" target="_blank">CSS Box Model Module</a>.
+    </p>
+    <p>
+        <img src="##IMG_DIR##/css_box_model.png" alt="Picture showning CSS box model and effect of box-sizing settings content-box, padding-box and border-box"/>
+    </p>
 </div> <!-- END H2 Box Model -->
 
+<h2>Sizes</h2>
+<div>
+    <p>
+        Absolute sizes like pixels (<code>px</code>) or percentages don't scale well if, for example, the user
+        zooms in. When the user zooms in the default font size will change so anything we didn't spec a font size
+        for will get larger, but stuff we did spec a font size for using pixels or points will not change size,
+        which mucks up the design.
+    </p>
+    <p>
+        Other units can be used.
+    </p>
+    <ol>
+        <li><code>em</code>: A font relative size. It is calculated from the inherited size (from one of 
+            the ancestors, or if not inherited the default text size). The resulting size is 
+            <code>inherited-size-px * em's</code>. I.e. <em><code>em</code> is relative to inherited size</em>. BUT, BE CAREFUL:
+            <code>em</code> <em>inherits the previous sizes</em> so if the oldest ancestor is <code>20px</code>, the parent <code>1.5em</code> and
+            the element <code>2em</code>, it's size is <code>20px * 1.5 * 2</code>!</li>
+        <li><code>rem</code>: Root em. A font relative size. Like <code>em</code> except that the size does not &quot;stack&quot; up
+                like it does with <code>em</code>. Instead the text size of the root element (the <code>html</code> element) 
+                is always used and multipled by the <code>rem</code> factor.
+                If the <code>html</code> tag does not have a size set then the default browser size is used.</li>
+        <li><code>vh</code>: Viewport (visible portion of website in browser window) height. Units in percentage: 0vh to 100vh. Allows the use of the viewport height, rather than using a relative unit against the containing block!</li>
+        <li><code>vw</code>: Viewport width. Units in percentage: 0vw to 100vw.</li>
+        <li><code>vmin</code>: Viewport min: takes the minimum of viewport width and height. I.e. <code>vmin = min(vh,vw)</code>. Units still percentage.</li>
+        <li><code>vmax</code>: Viewport max: takes the maximum of viewport width and height. I.e. <code>vmin = max(vh,vw)</code>. Units still percentage.</li>
+    </ol>
+
+    <h3>REM v.s. EM</h3>
+    <p>
+        The pros of <code>rem</code>: Simplifies the calculations, rather than having to stack <code>em</code>s.<br/>
+        The cons of <code>rem</code>: Hinders making components modular
+    </p>
+    <p>
+        The pros of <code>em</code>: Allows us to make modular components.<br/>
+        The cons of <code>em</code>: Complex to calculate the &quot;stacking&quot; of scaling factors.
+    </p>
+</div> <!-- END H2 Sizes -->
 
 <h2>Positioning Elements</h2>
 <div>
-	<p></p>
-	<h3>References</h3>
-	<ul>
-		<li><a href="https://www.w3.org/TR/2016/WD-css-position-3-20160517/" target="_blank">CSS Positioned Layout Module</a>, W3C.</li>
-		<li><a href="https://css-tricks.com/absolute-relative-fixed-positioining-how-do-they-differ/" target="_blank">Absolute, Relative, Fixed Positioning: How Do They Differ?</a>, Chris Coyier.</li>
-		<li><a href="https://css-tricks.com/absolute-positioning-inside-relative-positioning/" target="_blank">Absolute Positioning Inside Relative Positioning</a>, Chris Coyier.</li>
-		<li><a href="https://css-tricks.com/position-sticky-2/" target="_blank">Position: sticky;</a>, Chris Coyier.</li>
-	</ul>
-	<p>
-	</p>
+    <p></p>
+    <h3>References</h3>
+    <ul>
+        <li>REF(`REF_WC3_POSITION',`CSS Positioned Layout Module Level 3'), W3C Working Draft, 19 May 2020.</li>
+        <li>REF(`REF_POS_REL_VS_FIX',`Absolute, Relative, Fixed Positioning: How Do They Differ?'), Chris Coyier, Apr 24 2020.</li>
+        <li>REF(`REF_POS_REL_DETAILED',`Absolute Positioning Inside Relative Positioning'), Chris Coyier, Jul 24 2020.</li>
+        <li>REF(`REF_POS_STICKY',`position: sticky;'), Chris Coyier, Jun 21 2017.</li>
+        <li>REF(`REF_FLOW_NORM',`Normal Flow'), MDN Web Docs.</li>
+        <li>REF(`REF_MOZ_POS',`Positioning'), MDN Web Docs.</li>
+        <li>REF(`REF_CONTAIN_BLOCKS', `Layout and the containing block'), MDN Web Docs.</li>
+        <li>REF(`REF_REM_VS_EM', `REM vs EM – The Great Debate')</li>
+    </ul>
+
+    <h3>Flow and Types Of Positioning</h3>
+    <p>
+        Normal flow specs how block and inline elements interact - how they are placed inside the browser's viewport.
+    </p>
+    <p>
+        Block level elements occupy the entire space in the row in which they are positioned. They follow the "document flow".
+        They have 100% width of parent element and are as tall as their content. Thus block elements laid out vertically and
+        appear on new lines.
+    </p>
+
+    <p>
+        Inline elements as wide and as tall as their content. Cannot have width or height set - only for block level. Inline
+        elements sit on same line as one another and adjacent text elements. They can be wrapped to next line if space runs
+        out.
+    </p>
+    <p>
+        <b>Margin collapsing</b>: If two adjacent elements both have the margin set on them and the two margins touch, the larger
+        of the two remains, and the smaller one disappears.
+    </p>
+    <p>
+        Types of positioning:
+    </p>
+    <table class="jehtable">
+        <thead><tr><td>Types</td><td>Descr</td></tr></thead>
+        <tbody>
+            <tr>
+                <td>STATIC</td>
+                <td>
+                    <p style="margin-top:0px;">Means "put the element into its normal position in the document layout flow".
+                    </p><p>
+                        Position percentages apply only to the content of the ancestor, and unlike, absolte positioned
+                        elements, the padding of the ancenstor is <em>not</em> included in the calculation. Ancestor
+                        is the closest one that is a block level element.
+                     </p>
+                </td>
+            </tr>
+            <tr>
+                <td>RELATIVE</td>
+                <td>
+                    <p style="margin-top:0px;">
+                        Similar to static positioning, except that once the positioned element has taken its place in
+                        the normal layout flow, you can then modify its final position, including making it overlap
+                        other elements on the page.
+                     </p><p>
+                        Position percentages apply only to the content of the ancestor, and unlike, absolte positioned
+                        elements, the padding of the ancenstor is <em>not</em> included in the calculation. Ancestor
+                        is the closest one that is a block level element.
+                     </p><p>
+                        Note there is an <em>issue when using % with height!</em>. If the containing element - i.e.,
+                        the first ancestor that is block level, does not have a height defined, it may not be able
+                        to use the heightand you'll get a height of zero! Whatch out for this!
+                     </p>
+                </td>
+             </tr>
+            <tr>
+                <td>ABSOLUTE</td>
+                <td>
+                    <p style="margin-top:0px;">
+                        Takes element OUT of the normal flow - where the element would be in normal flow, other
+                        elements will now take its place.
+                    </p><p>
+                        An absolutely positioned element no longer exists in the normal document layout flow. Instead,
+                        it sits on its own layer separate from everything else.
+                    </p><p>
+                        The containing block is now the <em>ancestor</em>, so the sizing is related to the
+                        ancestor content <b>plus the padding!</b>. See section on containing blocks. It is the closest
+                        parent, grandparent etc with a position that is <em>not</em> static. Otherwise it
+                        is the window if no such parent exists.
+                    </p>
+                 </td>
+             </tr>
+            <tr>
+                <td>FIXED</td>
+                <td>
+                    <p style="margin-top:0px;">Like absolute positioning, except that where absolute positioning fixes an element in place
+                        relative to its nearest positioned ancestor, fixed positioning fixes an element in place
+                        relative to the BROWSER VIEWPORT.
+                    </p><p>
+                        Sizing using percentages are thus relative to the browser viewport. I.e. the <em>containing block
+                        is the viewport</em>.
+                    </p>
+                </td>
+             </tr>
+             <tr>
+                <td>STICKY</td>
+                <td>
+                    <p style="margin-top:0px;">
+                        Hybrid between relative and fixed position. Allows a positioned element to act like it is
+                        relatively positioned until it is scrolled to a certain threshold point, after which it
+                        becomes fixed.
+                    </p>
+                </td>
+             </tr>
+         </tbody>
+     </table>
+     <p></p>
+
+    <h3>Relative &amp; Absolute Positioning - Positioning Contexts &amp; Containing Blocks</h3>
+    <p>
+        Relative positioning does NOT take objects out of the document flow, where as,
+        absolute positioning takes objects OUT of the document flow.
+    </p>
+
+    <p>
+        Every element is drawn inside a box - see <a href="#box_model">the section on the box model</a>. Size and
+        position often determined by the <b>content area</b> of the <b>containing block</b> - the nearest ancestral block-level element, but not
+        always (e.g. above we saw that absolute positions elements take the padding of the containing block into account).
+    </p>
+
+    <blockquote>
+        <p><b>Identifying the containing block</b></p>
+        <p>The process for identifying the containing block depends entirely on the value of the element's position property:</p>
+        <ol>
+            <li><p>If the position property is static, relative, or sticky, the containing block is formed by the edge of the
+                content box of the nearest ancestor element that is either a block container (such as an inline-block, block,
+                or list-item element) or establishes a formatting context (such as a table container, flex container, grid container,
+                or the block container itself).</p>
+            </li>
+            <li><p>If the position property is absolute, the containing block is formed by the edge of the padding box of the nearest
+                ancestor element that has a position value other than static (fixed, absolute, relative, or sticky).</p>
+            </li>
+            <li><p>If the position property is fixed, the containing block is established by the viewport (in the case of continuous media)
+                or the page area (in the case of paged media).</p>
+            </li>
+            <li><p>If the position property is absolute or fixed, the containing block may also be formed by the edge of the padding box of
+                the nearest ancestor element that has the following:</p>
+                <ol>
+                    <li>A transform or perspective value other than none</li>
+                    <li>A will-change value of transform or perspective</li>
+                    <li>A filter value other than none or a will-change value of filter (only works on Firefox).</li>
+                    <li>A contain value of paint (e.g. contain: paint;)</li>
+                </ol>
+            </li>
+        </ol>
+        <p></p>
+        <footder>-- REF(`REF_CONTAIN_BLOCKS', `Layout and the containing block'), MDN Web Docs.</footder>
+    </blockquote>
+
+    <p>
+        <b>Containing block for static/relative/sticky:</b><br/>
+        <img src="##IMG_DIR##/containing_block_relative_static_fixed.png"/>
+    </p>
+
+    <p>
+        <b>Containing block for absolute</b><br/>
+        <img src="##IMG_DIR##/containing_box_absolute.png"/>
+    </p>
+
+
+    <p>Positioning context is defined in 2 cases:</p>
+    <ol>
+       <li>If no ancestor has position property applied then context is the <code>&lt;html&gt;</code> element</li>
+       <li>Else, the closest ancestor with a position property becomes the positioning context.
+              So, normally the closes ancestor will have a "relative" position property.</li>
+    </ol>
+    <p>
+        In the example below, div 2a is positioned absolute, and its positioning context is
+        div 2. Div 3a is also positioned absoute, but because no parent has an absolute or relative
+        position its positioning context is the <code>&lt;html&gt;</code> element.
+    </p>
+    <p>
+        <img src="##IMG_DIR##/css_relative_absolute_position.png"/>
+    </p>
+    <p>
+        For "fixed" positioning the positioning context is the VIEWPORT.
+    </p>
+
+    <h3>Centering With <code>auto</code></h3>
+    <p>
+        Use <code>margin: auto;</code> to center <em>block level</em> elements that have a defined
+        width. It won't work if width isn't defined or for floating, inline or absolutely elements.
+    </p>
+    <blockquote>
+        <p>
+            This is the most common use of margin auto we come across often. By assigning auto to the
+            left and right margins of an element, they take up the available horizontal space in the
+            element's container equally – and thus the element gets centered.
+        </p>
+        <footer>-- CSS - margin:auto; - How it Works By Preethi Ranjit</footer>
+    </blockquote>
+    <p></p>
 </div> <!-- END H2 Calculating Properties -->
+
+<h2>Flexbox</h2>
+<div>
+    <p>
+        References:
+    </p>
+    <ul>
+        <li>REF(`REF_FLEX_BASICS_MDN', `Basic concepts of flexbox'), MDN Web Docs.</li>
+    </ul>
+    <p>
+        Use <code>display: flex;</code> or <code>display: inline-flex;</code> to create a
+        <em>flex container</em>. Its child elements become, you guessed it, <em>flex items</em>.
+    </p>
+    <p>
+        Useful flex container properties:
+    </p>
+    <ul>
+        <li><code>flex-direction:</code> Can be <code>row[-reverse]</code>, <code>column[-reverse]</code>.</li>
+        <li><code>flex-wrap:</code> Can be <code>nowrap</code>, <code>wrap</code>, <code>wrap-reverse</code>.</li>
+        <li><code>flex-flow:</code></li>
+        <li><code>justify-content:</code></li>
+        <li><code>align-content:</code></li>
+        <li><code>align-items:</code></li>
+    </ul>
+    <p>
+        Useful flex item properties:
+    </p>
+    <ul>
+        <li><code>order:</code></li>
+        <li><code>flex:</code></li>
+        <li><code>align-self:</code></li>
+    </ul>
+
+    <h3>Flex Containers</h3>
+    <p>
+        A flex container has two axis: the main axis and the cross-axis, which is perpendicular to the main.
+        The <code>flex-direction</code> property dictates the origin and direction of the main axis.
+    </p>
+    <p>
+        Note also that the direction of flow along the axis is language dependent: in English it is left-to-right,
+        but in Arabic it would be left-to-right (assuming not a <code>...-reversed</code> direction).
+    </p>
+    <p>
+        <img src="##IMG_DIR##/flex_diirection.png"/>
+    </p>
+    <p>
+        The following defaults for <code>display: flex;</code> apply:
+    </p>
+    <ul>
+        <li>Items display in a row (the <code>flex-direction</code> property's default is <code>row</code>).</li>
+        <li>The items start from the start edge of the main axis.</li>
+        <li>The items do not stretch on the main dimension, but can shrink.</li>
+        <li>The items will stretch to fill the size of the cross axis (unless they have height specified).</li>
+        <li>The <code>flex-basis</code> property is set to auto.</li>
+        <li>The <code>flex-wrap</code> property is set to nowrap.</li>
+    </ul>
+    <p>
+        The property <code>flex-wrap:...</code> can be set to produce the following (default is <code>nowrap</code>):
+    </p>
+    <p>
+        <img src="##IMG_DIR##/flex_wrapping.png"/>
+    </p>
+    <p>
+        We can also dictate how items align using the <code>align-items</code> CSS property. Default is
+        <code>stretch</code>. This makes the elements that do not have a height that is expicitly set
+        expand or <em>stretch</em> to fill the space available. The property <code>align-items</code>
+        <em>always refers to the CROSS axis</em>:
+    </p>
+    <p>
+        <img src="##IMG_DIR##/flex_align_items.png"/>
+    </p>
+    <p>
+        Other property values include <code>baseline</code>, which will align the flex items to
+        their content and not their box.
+    </p>
+    <p>
+        There is also the the property <code>align-content</code> that <q>sets the distribution of space
+        between and around content items along a flexbox's cross-axis</q>.
+    </p>
+    <p>
+        To align content w.r.t to the <em>MAIN axis</em> use <code>justify-content</code>. It takes
+        the same property values as <code>align-items</code> and they broadly have the same effect
+        except w.r.t to the MAIN axis.
+    </p>
+
+    <h3>Flex Items</h3>
+    <p>
+        The same sort of properties that we saw above for flex containers, that apply to all items,
+        can be overriden by the items themselves.
+    </p>
+    <p>
+        For example, flex items can use <code>align-self: flex-start/end|center|stretch|...;</code> etc.
+    </p>
+    <p>
+        The flex item property <code>flex-grow</code> can be used to make an item take up the remaining
+        space so that all of the main axis is taken up. The value of the property is zero by default,
+        which is like &quot;off&quot; Other values give the proprtion of the space to take up taking
+        into account other items that also grow.
+    </p>
+    <p>
+        The opposite of <code>flex-grow</code> is <code>flex-shrink</code>.
+    </p>
+</div>
+
+<h2>Grid</h2>
+<div>
+    <p>
+        Create a grid container using <code>display: grid;</code> and specify the column widthss using 
+        <code>grid-template-columns</code> and row heights using <code>grid-template-rows</code>.
+    </p>
+    <pre class="prettyprint linenums">.my_grid {
+    display:               grid;
+    grid-template-columns: col-width-1 col-width-2 ... col-width-n;
+    grid-template-rows: row-height1 row-height-2 ... row-height-m;
+}</pre>
+    <p>
+        Widths can be specified in any unit. There is a special unit, &quot;<b>fracton</b>&quot; (<code>fr</code>).
+        This unit allows the column to take up the remaining space available. When multiple columns have
+        <code>fr</code> units then they each take up their own proportion of the total fraction. E.g., if
+        col 1 has <code>1 fr</code> and col 2 has <code>3 fr</code>, then col 1 has a width of
+        25% and col2 has a width of 75%.
+    </p>
+    <p>
+        Elements will be laid out in the first row, column by column, and then onto the second
+        row and so on unless specifically positioned using <code>grid-column-start: col-num</code>.
+        To make it span more than one column add <code>grid-column-end: col-num</code>.
+        For example, to make a grid item start in column two and span two columns use:
+    </p>
+    <pre class="prettyprint linenums">.my_grid_item {
+        grid-column-start: 2;
+        grid-column-end: 4; /*< This is non-inclusive and also may be 1 past the last col */
+        /* OR */
+        grid-column-end: span 2;
+}</pre>
+    <p>
+        The same applies for rows using <code>grid-row-start</code> and <code>grid-row-end</code>:
+    </p>
+    <pre class="prettyprint linenums">.my_grid_item {
+        grid-row-start: 2;
+        grid-row-end: 4; /*< This is non-inclusive and also may be 1 past the last row */
+        /* OR */
+        grid-row-end: span 2;
+}</pre>
+    <p>
+        Of course, these can be combined to span multiple rows and columns together. You can also
+        use negative numbers!They start counting fromt the other side. So to span the remaining
+        space in a row could specific <code>grid-end-column: -1</code>, for example.
+    </p>
+    <p>
+        NOTE that grid elements <em>can overlap</em> if you specifically set the column and rows
+        to overlap. Otherwise grid will try to avoid this. When overlapping it is the <em>DOM order</em>
+        that determins which element is on top.
+    </p>
+    <p>
+        Useful CSS functions fordefining grids include:
+    </p>
+    <ul>
+        <li><code>minmax()</code>: defines a size range greater than or equal to min and less than or equal to max. It is used with CSS Grids.</li>
+        <li><code>repeat()</code>:epresents a repeated fragment of the track list, allowing a large number of columns or rows that exhibit a recurring pattern to be written in a more compact form.</li>
+    </ul>
+    <p></p>
+</div>
 
 
 <h2>Rough n' Ready Notes</h2>
 <div>
-	##ESCAPED_INCLUDE:CSSNOTES.txt##
+    ##ESCAPED_INCLUDE:CSSNOTES.txt##
 </div>
 
 

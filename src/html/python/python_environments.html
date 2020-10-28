@@ -1,0 +1,151 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>Python Environments | JEHTech</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">Python Environments</h1>
+<div style="padding-right:10px;">
+
+    <h2>Page Contents</h2>
+    <div id="page_contents">
+    </div>
+
+    <h2>Virtual Environments</h2>
+    <div>
+        <p>References:<p>
+        <ol>
+            <li><a href="https://www.dabapps.com/blog/introduction-to-pip-and-virtualenv-python/"
+                target="_blank">A non-magical introduction to Pip and Virtualenv for Python beginners</a> by Jamie Matthews.
+            </li>
+            <li><a href="http://docs.python-guide.org/en/latest/dev/virtualenvs/" target="_blank">Pipenv & Virtual Environments</a>, Hitchhier's Guide to Python.</li>
+            <li><a href="https://realpython.com/python-virtual-environments-a-primer/" target="_blank">Python Virtual Environments: A Primer</a></li>
+            <li><a href="https://pipenv-fork.readthedocs.io/en/latest/" target="_blank">Pipenv: Python Dev Workflow for Humans</a></li>
+        </ol>
+
+        <p><b>Note: Recommend PipEnv - superceeds virtualenv - see next secion!</b></p>
+    
+        <h3>VirtualEnv</h3>
+        <div>
+            <pre><b># Install</b>
+pip install virtualenv
+
+<b># Create project virtual env for Python 2</b>
+cd my_project_folder
+virtualenv my_project # virtualenv my_project will create a folder in the current
+                      # directory which will contain everything you need for this
+                      # private environment
+
+<b># Create for Python 3</b>
+python3 -m venv env
+
+<b># Use the venv</b>
+source my_project/bin/activate
+# ... Your prompt should become prefixed with your environment name
+# ... After activating, a new path to the Python interpretter in your
+# ... environment folder takes precedence so it will be used. Same for
+# ... the python package path lookup etc...
+
+<b># Install packages as usual</b>
+pip install &lt;package-name&gt;
+
+<b># When finished...</b>
+deactivate
+
+<b># Delete a venv</b>
+rm -fr my_project
+
+<b># Snapshot of current state:</b>
+pip freeze > requirements.txt
+
+<b># Load snapshot</b>
+pip install -r requirements.txt
+            </pre>
+        </div>
+    
+        <h3>AutoEnv</h3>
+        <div>
+            <p>
+                <a href="https://github.com/kennethreitz/autoenv" target="_blank">On GitHub.</a>
+            </p>
+            <p>You can supplement VirtualEnv with something called AutoEnv. It is a little utility that
+                will monitor your change-directory commands. When you <code>cd</code> into a directory
+                that contains a <code>.env</code> file it will try to source that file. So, if inside that
+                file you have the line <code>source my_project/bin/activate</code>, when you change into
+                that directory, it will automatically activate your project for you. Happy days!
+            </p>
+        </div>
+    
+        <h3>DirEnv</h3>
+        <div>
+            <p>The author of AutoEnv actually recommends trying this above AutoEnv. TODO.
+            </p>
+        </div>
+    </div> <!-- END Virtual Environments -->
+
+    <h2>Pipenv: Python Dev Workflow for Humans</h2>
+    <div>
+        <p>
+            See <a href="https://realpython.com/pipenv-guide/" target="_blank">Pipenv: A Guide to the New Python Packaging Tool</a>.
+        </p>
+        <blockquote>
+            <p>
+                Pipenv is a tool that aims to bring the best of all packaging worlds (bundler, composer, npm, cargo, yarn, etc.)
+                to the Python world ...
+            </p>
+            <p>
+                ... It automatically creates and manages a virtualenv for your projects, as well as
+                adds/removes packages from your Pipfile as you install/uninstall packages ...
+            </p>
+            <p>
+                ... The problems that Pipenv seeks to solve are multi-faceted:
+            </p>
+            <ul>
+                <li>You no longer need to use pip and virtualenv separately. They work together.</li>
+                <li>Managing a requirements.txt file can be problematic, so Pipenv uses Pipfile and Pipfile.lock to separate abstract dependency declarations from the last tested combination.</li>
+                <li>...</li>
+            </ul>
+            <p>
+                ... Pipfiles contain information for the dependencies of the project, and supersedes the requirements.txt file used in most Python projects.
+            </p>
+            <footer>-- <a href="https://pipenv-fork.readthedocs.io/en/latest/" target="_blank">Pipenv: Python Dev Workflow for Humans</a></footer>
+        </blockquote>
+        <p>
+            Install using <code>pip3 install pipenv</code> and create a new virtualenv using <code>pipenv --python 3[.minor]</code>.
+        </p>
+        <p>
+            Now, to add packages to your project use <code>pipenv install &lt;package&gt;[~=maj.min[.patch]]</code>
+        </p>
+        <p>
+            Like the original environments, it needs tobe actived: <code>pipenv shell</code>. Creates virtual environment if one doesn't exist. Note, pipenv creates all virtual environments in a default location.
+        </p>
+        <p>
+            To push to production, lock your environment: <code>pipenv lock</code>. Creates/updates the <code>Pipfile.lock</code> file (never edit this!).
+            To install from your lock file use <code>pipenv install --ignore-pipfile</code>.
+        </p>
+        <p>
+            To leave a pipenv virtual environment just exit the current shell: pipenv starts a new shell session with the
+            virtualenv pathing instead of changing the pathing in the current shell session.
+        </p>
+    </div>
+
+</div> <!-- END padding div -->
+</div> <!-- END content div -->
+</body>
+</html>

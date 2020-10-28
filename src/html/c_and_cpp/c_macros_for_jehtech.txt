@@ -1,0 +1,9 @@
+/*!
+ * \brief Retrieve pointer to parent structure
+ */
+#define CONTAINER_OF(ptr, type, field_name) ((type *)(((uint8_t *)ptr) - offsetof(type, field_name)))
+
+/*!
+ * \brief Retrieve array size
+ */
+#define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))

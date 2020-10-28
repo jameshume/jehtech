@@ -236,7 +236,7 @@ JS:
    const my_promise = new Promise( executor );
                                    ^^^^^^^^
                             This is a function that is called as soon as the promise is
-                            created
+                            created and usually executes something ASYNCHRONOUS like a Fetch.
 
                             The executor function takes two arguments:
                                  1. A CALLBACK function for when the executor wants to inform the
@@ -254,16 +254,21 @@ JS:
       // CREATE a promise
       //
       const get_pr_requests = new Promise((resolve, reject) => {
-         ask_server_for_pr_reqs()
-             server_address, account_details,
-             (status, pr_list) => {
-                  if (status == OK) { resolve(pr_list); }
-                  else { reject(status); }
+         ask_server_for_pr_reqs(      //< This is the async function our executor will run
+             server_address,
+             account_details,
+             (status, pr_list) => {   //< This is the function "ask_server_for_pr_reqs" calls back
+                                      // when it has finished doing its work.
+                  if (status == OK) { resolve(pr_list); } //< We then call the Promise resolve() or
+                  else              { reject(status); }   //  reject() depending on whether
+                                                          //  "ask_server_for_pr_reqs" succeeded.
              }
          )
       });
 
-      // Create another promise
+      //
+      // Create another promise, this time as a function that returns a promise.
+      //
       const get_pr_deets = pr_id => {
           return new Promise( (resolve, reject) => {
               ask_server_for_pr_details(
@@ -280,12 +285,12 @@ JS:
       // then() is the callback to execute when the promise is RESOLVED
       // catch() is the callback to execute when the promise is REJECTED
       //
-      get_pr_requests.next( pr_list => {
+      get_pr_requests.then( pr_list => { // pr_list is what get_pr_requests passed to resolve()
           // The promise was RESOLVED - it completed successfully.
-          return get_pr_deets(pr_list[0]); // Return a NEW PROMISE allows us to CHAIN promises
+          return get_pr_deets(pr_list[0]); // Return a NEW PROMISE allows us to **CHAIN** promises
                                            // (rather than using the previous pattern of continually
                                            // nesting callbacks, which is what lead to callback hell)
-      }).next( (pr_deets) => {
+      }).then( (pr_deets) => {
           // Handle the promise returned by the previous next() - this is CHAINING!
       }).catch( error => {
           // The promise was REJECTED
@@ -298,7 +303,10 @@ ASYN / AWAIT (>= ES8)
 
 Makes it easier to _consume_ promises. The promise creation still remains the same...
 
-    async function func_name(...) { ... } // New type of JS function that us asynchonrous
+    async function func_name(...) { ... } // New type of JS function that is asynchonrous
+                                          // so will keep running in the background on another thread
+                                          // the result of which will be popped back into the event
+                                          // Q when its ready.
 
 An async function keeps running the the background, and importantly only in async functions can
 await's be used. Importantly, like the previous promise consumption, the call to the asyn function
@@ -311,7 +319,7 @@ does not block... instead it just chuggs away in the background.
            const pr_reqs = await get_pr_requests; // CONSUME promise using await.
            //    ^^^^                             // instead of .next()
            //    ^^^^
-           //    pr_reqs gets the result of the promise.
+           //    pr_reqs gets the RESULT of the promise.
  
            const pr_deets = await get_pr_deets(pr_reqs[0]); // Like the chained .next() above.
         }
@@ -327,6 +335,40 @@ and is therefore a lot easier to grok! NICE NICE NICE!
 An async function returns a promise. So if, inside the async you return something of interest, you
 can get at it using the .next() method:
        load_pr_stuff().next(...)
+
+
+Basically async functions let us go from
+    X.then(
+        a => {
+            return someFuncA(a); // Return new promise
+        }
+    ).then (
+        b => {
+            return someFuncB(b); // Return new promise
+        }
+    )
+    ...
+    .then (
+        z => {
+            return someFuncZ(z); // Return new promise
+        }
+    )
+
+To:
+    async function A() {
+        const a = await X()
+        ...
+        const b = await someFuncA(a);
+        ...
+        const c = await someFuncB(b);
+        ...
+        const z = await someFuncY(y);
+
+        return z;
+    }
+
+Which is a little neater and allows our reasoning to be more "linear" and flow, rather than having
+to think about the "house keeping" of callbacks.
 
 
 

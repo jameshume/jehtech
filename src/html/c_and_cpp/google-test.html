@@ -42,6 +42,9 @@
         <li>
             <a href="https://github.com/google/googletest/blob/master/googlemock/docs/ForDummies.md" target="_blank">What Is Google C++ Mocking Framework?</a>.
         </li>
+        <li>
+            <a href="https://www.sandordargo.com/blog/2019/04/24/parameterized-testing-with-gtest" target="_blank">Parameterized testing with GTest</a>, Sando Dargo.
+        </li>
     </ul>
 </div>
 
@@ -71,6 +74,7 @@ sudo rm -fr build</pre>
 
 <h2>Basic Test Structure</h2>
 <div>
+    <h3>Simple Tests</h3>
     <p>
         When there is nothing to do to prepare for your tests, i.e., no setup or tear down, 
         just use the <code>TEST()</code> macro to define the tests:
@@ -78,6 +82,8 @@ sudo rm -fr build</pre>
     <pre class="prettyprint linenums">TEST(TestCaseName, ThisTestName) {
     ...
 }</pre>
+
+    <h3>Test Fixtures</h3>
     <p>
         If you have some preparation for each test, i.e., you require some test setup and tear down,
         then use the <code>TEST_F()</code> macro. To use this macro you need to create a test-fixture
@@ -114,8 +120,37 @@ TEST_F(MyTestFixture, ThisTestName)
 {
     // You can refer to all the members and functions in the class MyTestFixture here directly.
     // For example:
-    std::cout << "Dummy is " << m_dummy << "\n";
+    std::cout &lt;&lt; "Dummy is " &lt;&lt; m_dummy &lt;&lt; "\n";
 }</pre>
+
+<h3>Parameterised Tests</h3>
+<p>
+    Replace for loops that repeat a test over a data range with parameterised tests. Loops
+    stop each test case being independent as when one fails the loop stops so that latter cases
+    are not tested.
+</p>
+<pre class="prettyprint linenums">INSTANTIATE_TEST_CASE_P( // OR INSTANTIATE_TEST_SUITE_P??
+    MyTests,
+    MyParameterizedTestFixture,
+    ::testing::Values(
+            1, 2, 3, 4, 5,...
+    )
+);
+
+class MyParameterizedTestFixture : public ::testing::TestWithParam&lt;int&gt; {
+    ...
+};
+
+TEST_P(MyParameterizedTestFixture, SomeTestCase) {
+    int test_value = GetParam();
+    ...
+    ASSERT_TRUE(some_predicate(..., test_value, ...));
+    ...
+}</pre>
+    <p>To pass multiple values just used <code>std::make_tuple</code> for the data items
+        and then use <code>std::get&lt;n&gt;(GetParam())</code>, where <code>n</code> is the
+        index into the parameter tuple.
+    </p>
 </div>
 
 <h2>Basic Test Assertions</h2>

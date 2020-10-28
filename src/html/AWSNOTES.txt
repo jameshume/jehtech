@@ -157,7 +157,7 @@ for you. E.g. Alexa is using Lambdas every time you make an Alexa query.
 So, don't need any EC2 instances, and EBS instances etc etc - THERE IS NOTHING TO MANAGE!
 
 Use:
-	- Event driven compute service - WAS Lambda runs code in response to events, e.g. changes to
+	- Event driven compute service - AWS Lambda runs code in response to events, e.g. changes to
 		data in S2 bucket or DynamoDB table.
 	- Compute service - run code in response to HTTP requests using Amazon API gateway or API calls
 		made using AWS SDKs. This can be massively parallel - many requests launch many Lambdas,
@@ -191,7 +191,27 @@ Configure A Lambda Function
 API Gateway
 -----------
 
-Amazon API Gateway 0 full managed service - publish APIs at any scale to act as "front door" for
+Use API Gateway to create RESTful APIs endpoints. These are services your web app etc need from a
+backend server. For example, a login management endpoint. This could be implemented using your
+own server, or a server running on an EC2 instance. But why bother managing your own service?! Lets
+AWS do that fo you and instead just give you some end point URLs and things that can happen based
+on someone accessing them!
+
+So, API Gateway gives you an end point URL to use. You get to say what happends when the end point
+is accessed: use another AWS service or run a Lambda.
+
+See:
+	https://aws.amazon.com/api-gateway/
+	https://aws.amazon.com/documentation/apigateway/
+
+Watch out for costs!!
+	https://aws.amazon.com/api-gateway/pricing/
+	Free tier (as seen on 03-Oct-2020):
+		The Amazon API Gateway free tier includes one million API calls received for REST APIs, one
+		million API calls received for HTTP APIs, and one million messages and 750,000 connection
+		minutes for WebSocket APIs per month for up to 12 months.
+
+Amazon API Gateway - fully managed service - publish APIs at any scale to act as "front door" for
 apps to access data etc from back-end services, such as apps on EC2 instances, code on Lambdas etc.
 
 - Expose HTTPS enpoints to define a RESTful API
@@ -224,6 +244,44 @@ endpoint for repeated requests. Also improves latency.
 Need to be aware of XSS and CORS
 
 
+Example:
+- - - -
+Choose the REST API type.
+##IMG:aws_create_rest_api.png##
+
+Now you can define the resources you are doing to use and the HTTP methods we want to react to.
+
+Create a resource, which is like a URL SEGMENT, like so:
+##IMG:aws_gateway_create_resource.png##
+
+You can select to enable Cross-Origin Resource Sharing (CORS). CORS is a mechanism that uses additional
+HTTP headers to tell browsers to give a web application running at one origin, access to selected
+resources from a different origin.
+	See: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
+
+###IMG:aws_api_gateway_create_resource.png##
+
+Now we have created a URL segment, which is a resource. It can't be used, however, until the
+requests that it should handle are defined. To do this, select the end point resource and then
+from the actions menu select "Create Method". Then you can define which HTTP method you want the
+resource to respond to (ANY, DELETE, PUT, PUSH, GET etc etc). E.g if a GET method was created:
+
+###IMG:aws_gateway_add_get_helper.png##
+
+A mock will allow you to create a dummy response.
+If you create a mock you can use the integration response to return dummy data.
+
+##IMG:aws_gateway_add_get_helper_response_1.png##
+
+Add some dummy response data like this:
+
+##IMG:aws_gateway_add_get_helper_response_2.png##
+
+Next goto ACTIONS > DEPLOY API. It will then ask you to deply your API. You can deploy to an
+existing or new stage. Stages allow management of different versions of the API, e.g. dev v.s.
+production versions.
+
+
 Simple Serverless Website Using Route53, API Gateway, Lambda and S3
 -------------------------------------------------------------------
 Domain name in Route53 and bucket name need to be the same. They MUST BE THE SAME (toplevel exluding
@@ -233,8 +291,38 @@ Must enable static website hosting for bucket.
 
 If you don't want to spend money on AWS domain you can just use the S3 bucket address,
 
-
-TODO - Complete ME!
+Steps:
+1. In the Bucket name list, choose the bucket that you want to use for your static website.
+   1.1. Choose Properties.
+   1.2. Choose Static website hosting.
+   1.3. Choose "Use this bucket to host a website".
+   1.4. Note down the end point. E.g. my last endpint was
+        Endpoint : http://epicplanner.jehtech.com.s3-website.eu-west-2.amazonaws.com
+2. Edit block public access settings
+   2.1 Choose the Permissions tab, and edit,
+	 2.2 Clear Block all public access, and choose Save -- anyone on the internet can access
+	     your bucket!!
+3. Add Bucket Policy: To make the objects in your bucket publicly readable, you must write a bucket
+   policy that grants everyone s3:GetObject permission.
+	 3.1 Choose "Bucket Policy" under "Permissions" tab for your S3 bucket,
+	 3.2 Add the following:
+	     {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Sid": "PublicReadGetObject",
+                "Effect": "Allow",
+                "Principal": "*",
+                "Action": [
+                    "s3:GetObject"
+                ],
+                "Resource": [
+                    "arn:aws:s3:::example.com/*" << PUT YOUR S3 BUCKET ARN HERE
+                ]
+            }
+        ]
+       }
+4. (Optional) Add Route53 entry for your domain to point to S3 endpoint.
 
 
 
@@ -619,6 +707,13 @@ S3 (Simple Storage Service)
 * Files are stored in Buckets (like a folder)
 	* Key/Value store (with Version ID optional & Metadata)
 * Universal namespace - names must be unique globally!
+	From AWS website:
+      Buckets and objects are the primary resources, and objects are stored in buckets. Amazon S3 has a
+	    flat structure instead of a hierarchy like you would see in a file system.
+	    However, for the sake of organizational simplicity, the Amazon S3 console supports the folder
+	    concept as a means of grouping objects. Amazon S3 does this by using a shared name prefix for
+	    objects (that is, objects have names that begin with a common string). Object names are also
+	    referred to as key names.
 * Data consistency model
 	* PUTS of new objects - read after write consistency. A read after a write is immediately valid
 	* Overwrite PUTs and DELETEs - eventual consistency - can take some time to propogate
@@ -701,9 +796,25 @@ S3 Encryption
 	User enecrypts file herself before upload
 
 
+Install & Configure The CLI
+----------------------------
+apt install awscli
+aws configure set aws_access_key_id <AWS_ACCESS_KEY> [--profile <PROF_NAME>]
+aws configure set aws_secret_access_key <AWS_SECRET_KEY> [--profile <PROF_NAME>]
+aws configure set region "eu-west-1" --profile ci
 
+The access key and secret access key will have been created previously in the IAM settings.
 
-
+Then you can do things like:
+   aws [--profile <PROF_NAME>] s3 ls s3://SOME/DIR/
+                                                  ^
+                                                  NOTE: Trailing "/" is important if you want to list
+                                                  the directory contents and not just the directory
+                                                  itself.
+   aws [--profile <PROF_NAME>] s3 mv|cp LOCAL_FILE s3://SOME/DIR/
+                                                                ^
+                                                                NOTE: Trailing "/" is important!
+   aws [--profile <PROF_NAME>] s3 mv|cp s3://SOME/DIR/FILE LOCAL_FILE
 
 
 ===================================================================================================

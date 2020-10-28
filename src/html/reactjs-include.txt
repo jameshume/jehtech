@@ -39,6 +39,15 @@ React focusus on the what not the how - focus on what you want to see rather tha
 
 ====================================================================================================
 ====================================================================================================
+TODO / TO READ
+====================================================================================================
+
+https://blog.bitsrc.io/understanding-react-render-props-and-hoc-b37a9576e196
+
+
+
+====================================================================================================
+====================================================================================================
 SOME RESOURCES
 ====================================================================================================
 create-react-app: https://github.com/facebookincubator/create-react-app
@@ -175,7 +184,10 @@ wrap the code in curley braces - {}
 	!!	updated until React determines it is a "good time" to do that.
 	!!
 	!!	Because of this, "this.state" in "setState()" is NOT GUARANTEED TO BE THE LASTEST/NEWEST
-	!!	STATE OF THE OBJECT!!!! It could be an older state.
+	!!	STATE OF THE OBJECT!!!! It could be an older state. This is because React may batch multiple
+	!!	setState() calls into a single update for performance.
+	!!
+	!!  See: https://reactjs.org/docs/state-and-lifecycle.html
 	!!
 	!!	This means using setState like this can sometimes cause problems:
 	!!		someFunc = () => {
@@ -241,6 +253,30 @@ extra data to pass into the handler.
 The other way to accomplish this is to use an arrow function, and it looks a little nicer IMO, BUT BUT
 apparently it can be less efficient and bind() is therefore preferred.
 	<button onClick={() => this.myHandler(param1, param2, ...)}>
+
+
+Handling Events
+---------------
+https://reactjs.org/docs/events.html
+https://reactjs.org/docs/handling-events.html
+
+* React events are named using camelCase, rather than lowercase.
+* React event handlers are passed instances of SyntheticEvent, a cross-browser wrapper around the 
+  browser's native event. Same interface as the browser’s native event.
+    * 'nativeEvent' attribute to get underlying browser event object.
+* SyntheticEvents are pooled. 
+* With JSX you pass a function as the event handler, rather than a string.
+* Cannot return false to prevent default behavior in React. You must call preventDefault explicitly.
+
+From https://stackoverflow.com/a/53500357:
+	Wrapping native event instances can cause performance issues since every synthetic event wrapper
+	that's created will also need to be garbage collected at some point, which can be expensive in
+	terms of CPU time.
+
+	React deals with this problem by allocating a synthetic instance pool. Whenever an event is triggered,
+	it takes an instance from the pool and populates its properties and reuses it. When the event
+	handler has finished running, all properties will be nullified and the synthetic event instance is
+	released back into the pool. Hence, increasing the performance.
 
 
 
@@ -314,6 +350,9 @@ us like "-webkit-box-shadow" and "box-shadow" for us so our CSS can be more brie
 
 	A CSS Module is a CSS file in which all class names and animation names are scoped locally by default.
 	It does this by automatically creating a unique classname of the format [filename]_[classname]__[hash].
+	This automatically creates CSS names that would look a lot like the names you might create if you are
+	using the BEM CSS naming in a non-react project where you need to name you classes to identify the
+	blocks they refer to etc.
 
 	Use CSS module like this:
 		import styles from './Button.module.css'; // Import css modules stylesheet as styles
@@ -335,7 +374,9 @@ us like "-webkit-box-shadow" and "box-shadow" for us so our CSS can be more brie
 	Can specify which style dynamically by using `styles['Big']`, e.g.:
 		<button className={[styles.Error, styles[props.btnSize]].join(" ")}>...</button>
 
-	To enable CSS modules (required for react-scripts < 2.0)
+	NOTE: react-scripts >= 2.0 you do NOT have to eject and CSS modules must be  `*.module.css`.
+
+	For react -scripts < 2.0, to enable CSS modules (required for react-scripts < 2.0). 
 		1. npn run eject
 			From https://github.com/facebook/create-react-app/blob/master/packages/cra-template/template/README.md:
 				Note: this is a one-way operation. Once you eject, you can’t go back!
@@ -852,6 +893,8 @@ Create HOC method #2:
 ====================================================================================================
 PROP TYPES
 ====================================================================================================
+See https://reactjs.org/docs/typechecking-with-proptypes.html
+
 Allows to specify which props the component accepts and their props.
 	npm install --save prop-types
 It is provided by the react team/community. It is not in react core hence you have to npm install it.
@@ -875,6 +918,8 @@ Then, after your component definition, whether functional or class based, add an
 
 Can chain conditions. E.g.
 	prop1: PropTypes.string.isRequired
+
+Can also be applied to function components in exactly the same way.
 
 
 
@@ -1460,10 +1505,21 @@ IMPORTANT - Use event.preventDefault() otherwise form submission reloads the pag
 REDUX
 ====================================================================================================
 See: https://redux.js.org/introduction/getting-started
+     https://redux.js.org/introduction/core-concepts
+     https://redux.js.org/basics/actions
+     https://redux.js.org/basics/reducers
+		 https://redux.js.org/advanced/middleware/
+		 https://github.com/gaearon/redux-thunk
+		 https://redux.js.org/advanced/async-actions
 
 Redux - 3rd party library. Most often associated with React but not part of React. It is independent.
 
-It provides a clearly defined process on how the state in some central store can change. It provides
+One of the benefits of Redux is that it makes state changes predictable and transparent. Every time
+an action is dispatched, the new state is computed and saved. The state cannot change by itself,
+it can only change as a consequence of a specific action.
+  -- From redux online docs
+
+It provides a _clearly defined process_ on how the _state in some central store_ can change. It provides
 a GLOBAL STATE across the entire app, that ALL components/containers can access in a well defined
 way.
 
@@ -1497,17 +1553,21 @@ Why not just global, from this post (https://news.ycombinator.com/item?id=133329
 	-  I use time-travel debugging on a daily basis, and it's a _huge_ time-saver for me.
 
 
-
-  Action -------------------------------> Reducer(s) 
-    ^                     [Reaches]          |
-    |                                        | [Updates]
-    | [Dispatches]                           |
-    |                                        v
-Component                              Central Store
-    ^                                        |
-    | [Passes updated state]                 | [Triggers]
-    |                                        |
-    +------------ Subscription <-------------+
+                                    +---> Reducer -----+
+                                    :                  :
+                                    :                  :
+                                    +---> Reducer -----+-----> ROOT reducer
+                                    |                  |           |
+  Action ------> MiddleWare --------+---> Reducer------+           |
+    ^                                                              |
+    |                                                              | [Updates]
+    | [Dispatches]                                                 |
+    |                                                              v
+Component                                                    Central Store
+    ^                                                              |
+    | [Passes updated state]                                       | [Triggers]
+    |                                                              |
+    +------------ Subscription <------------------------------------+
 
 
 Redux provides a central store, which is the ENTIRE APPLICATION STATE. Most often this will be things
@@ -1532,8 +1592,14 @@ REDUCER:
 	Gets: State, Action.
 	Returns: Updated state. But original state must NOT be mutated! Just like it setState() func.
 	         NEVER mutate any data!
-		const rootReducer = (state = intialSate, action) => {
+
+		const rootReducer = (surrentState = intialSate, action) => {
+			//                              ^^^^^^^^^^^^
+			//                              Useful because when reducer created it wont be passed a state
 			if (action.type == ...) {
+				... do something for this type
+			}
+			else if (action.type == ...) {
 				...
 			}
 			// and so on...
@@ -1543,12 +1609,15 @@ REDUCER:
 
 STORE:
 	Created with a root reducer.
-		const store = createStore(rootReducer)
+		createStore = redux.createStore;
+		const store = createStore(rootReducer);
+		let currentState = store.getState();
 
 ACTION:
 	Just access store and call dispatch(). Func takes action as arg - a JS object that MUST have
 	a "type" property so that we know what type of action was dispatched and what should be done in
 	the reducer.
+
 		store.dispatch({
 			type: 'CONVENTION_IS_SHORT_UPPER_CASE_DESCRIPTION'
 			value-name-of-choice: value-data,
@@ -1560,6 +1629,7 @@ ACTION:
 SUBSCRIPTION:
 	Inform us when something changed and we need to re-get the state.
 	Use: store.subscribe(function-executed-whenever-state-updates);
+
 		store.subscribe( () => { // Subscribe func gets NO args
 			... store.getState(); ...
 		});
@@ -1571,21 +1641,29 @@ Using Redux With React
 Must install react-redux to "hook up" redux stores to react application:
 	npm install --save react-redux
 
-The Redux store should be created before our App or when it starts - use `index.js`.
+The Redux store should be created before or when our App or when it starts - use `index.js`!
+
 	import { createStore } from 'redux';
 	import { Provider } from 'react-redux'; //NOTE:  Must WRAP the app with <Provider>
 
-	import reducer from './store/reducer';
-
+	import reducer from './store/reducer'; // Generally may have many complex Reducers
+	                                       // so these will be stored in their own files in their
+	                                       // own folders in our app. Perhaps a "store" folder next
+	                                       // to the containers and components files.
 
 	const store = createStore(reducer); // Define in separate file, reducer.js
 
 	// NOTE: Must WRAP the app with <Provider>
 	ReactDOM.render(<Provider store={store}><App /></Provider>, ...);
+	//              ^^^^^^^^^^^^^^^^^^^^^^^
+	//              Wrap app with Provider, which provids our store. "injects" our store into the
+	//              reactor components in the app.
+
 	registerServiceWorker();
 
 
-In reducer.js:
+In reducer.js
+- - - - - - -
 	const initialSate = {
 		...
 	};
@@ -1595,21 +1673,37 @@ In reducer.js:
 		if (action == 'ACTION_TYPE')
 		{
 			return {
-				// Immutably created new state 
+				// Immutably created new state
 			};
 		}
 		...
 		...
-		return state;
+		return state; // LAST RETURN handles unrecognised actions and returns state unchanged.
 
 		// Or use switch (action.type) { case 'BLAH': break/return; ... default: return state; }
 	};
 
 	export default reducer;
 
+In the reducer you can replace the if-else blocks with a switch statement:
+   switch(action.type) {
+      case 'SOME_TYPE_1':
+         return {
+            new_state_member: new_value,
+            ...
+         }
+      case 'SOME_TYPE_2::
+         return { ... }
+      ...
+   }
+
+WARNING WARNING WARNING: The state returned from the reducer is, unlike in react, NOT merged with
+the existing state. It just becomes the state. This means YOU HAVE TO DO THE MERGE YOURSELF by
+DEEP copying th existing state (current state is IMMUTABLE) and modifying the copy as appropriate.
 
 
 In components that required access to the store:
+- - - - - - - - - - - - - - - - - - - - - - - - -
 	import { connect } from 'react-redux';
 
 	class MyComponent ... {
@@ -1618,27 +1712,31 @@ In components that required access to the store:
 			...
 			<!-- Here can access redux state mapped to our props as defined below -->
 			<eg_element clicked={this.props.onSomeEvent}>{this.props.a_props_attribute}</eg_element>
-			//                              ^^^^^^^^^^^              ^^^^^^^^^^^^^^^^^
-			//                              ^^^^^^^^^^^              From mapStateToProps
-			//                              From mapDispatchToProps
+			//                        ^^^^^ ^^^^^^^^^^^              ^^^^^^^^^^^^^^^^^
+			//                        ^^^^^  ^^^^^^^^^^^              From mapStateToProps
+			//                        ^^^^^ From mapDispatchToProps
+			//                        ^^^^^
+			//                        NOTE HOW WHAT WAS THE STATE IS NOW ACCESSED AS PROPS!
 			...
 		}
 	}
 
 	// How state, managed by redux, should be mapped to props that can be accessed in this component
 	// The state parameter is the state as setup in reducedr.js so it will have those propertues.
-	const mapStateToProps = state => {
+	const mapStateToProps = state => { // Func that expects the state, stored in redux and returns a map
 		return {
 			a_props_attribute: state.some_state_var
+			//                 ^^^^^
+			//                 The state passed into the function which is the state provided by redux!
 			...
 			...
 		};
 	}
 
-	// Which actions the container will dispatch
+	// Which actions the container will DISPATCH
 	const mapDispatchToProps = dispatch => {
 		return {
-			onSomeEvent: () => dispatch({type: 'ACTION_TYPE', ...'}),
+			onSomeEvent: (param1) => dispatch({type: 'ACTION_TYPE', actionParam1: param1, ...}),
 			...
 		};
 	};
@@ -1668,6 +1766,277 @@ OR
 	let newState = {...state, something: state.something + 101 }; // Still a SHALLOW clone!
 
 CAUTION: With SHALLOW copies you cannot update any reference types in the copy.
+
+SEE SEE SEE: https://redux.js.org/recipes/structuring-reducers/immutable-update-patterns/
+
+
+
+Updating Arrays IMMUTABLY
+-------------------------
+I was doing it by deep copying the array with object and then doing a splice().
+
+Another method is to use the Array.filter() method as filter returns a NEW array.
+
+Eg, to delete a particular index in an array in a react state, as we need to copy the array before
+modifying it, rather than doing it manually, can do it using filter:
+
+newArrayWithDeletedItem = state.member.filter(
+	(arrayItem, itemIndexInArray) => itemIndexInArray != itemIndexToDelete
+);
+
+SEE SEE SEE: https://redux.js.org/recipes/structuring-reducers/immutable-update-patterns/
+
+
+
+Using Mulltiple Reducers
+------------------------
+In `index.js`:
+
+   ...
+	 import { createStore, combineReducers } from 'redux';
+	 //                    ^^^^^^^^^^^^^^^
+	 //                    Need this extra new import; Combines the state all all sub-reducers into
+	 //                    ONE state... therefore sub-reducers can still access state from other
+	 //                    subreducers, as there is really only one root reducers with the one state
+	 //                    that combines the sub-states of all the sub-reducers.
+   ...
+   import myFirstReducer from '...';
+	 import mySecondReducer from '...';
+	 ...
+	 ...
+	 // Construct the root reducer
+	 const rootReducer = combineReducers({
+	    appAreaName1 : myFirstReducer,
+	    appAreaName2 : mySecondReducer,
+	  // ^^^^^^^^^^^
+		// There names gives us access to the substates in our app. In our app, to access these sub states
+		// must do const
+		// mapStateToProps = state => {
+		//     return {
+		//     	a_props_attribute: state.appAreaName1.some_state_var
+		//                               ^^^^^^^^^^^^
+		//                               NOTE extra layer of nesting in state
+		//     	...
+		//     };
+	  // }
+	    ...
+	 });
+	 const store = createStore(rootReducer);
+	 //                        ^^^^^^^^^^^
+	 //                        NOTE: Now the ROOT reducer is passed in as in Redux there is really
+	 //                              only ONE reducer.
+   ...
+	 ReactDOM.render(<Provider store={store}><App/></Provider>);
+
+BUT WARNING WARNING WARNING
+	The sub-reducers can NO LONGER ACCESS THE GLOBAL REDUCER STATE!!! They cannot "see" the state
+	in the other sub-reducers. Thus, if they need state from another reducer they SHOULD RECEIVE IT
+	AS PART OF THE ACTION PAYLOAD INSTEAD.
+
+
+
+You CAN MIX Redux With Local React State
+----------------------------------------
+You CAN use redux and still have local state in component and use reacts.setState(). For example,
+local UI state, like whether a modal should be displayed etc, is usually more appropriately stored
+as local state and NOT in redux.
+
+Local state, can then be passed to Redux actions if they are required by other parts of the app.
+
+
+
+Middleware
+----------
+SEE: https://redux.js.org/advanced/middleware
+		Middlware provides a third-party extension point between dispatching an action, and the moment
+		it reaches the reducer.
+
+// This whole set of nested functions (function tree) IS a middleware!
+//             Redux will call this middleware function and pass it the store!
+//             vvvvv
+const myMiddleWare = store => {
+   // Middleware function returns a function. This function lets the action continue on its
+   // journey to a reducer. This function will also, eventualy, be executed by redux.
+   return next => {
+     // Return yet another function that received the action that was dispatched as its parameter
+     return action => {
+       // Here can access store, next and action. This code is run inbetween the action and the
+       // reducer.
+       const result = next(action); //<<< Lets action continue to the reducer
+       ...
+       return result;
+     };
+   };
+};
+
+To use the middleware must import applyMiddleware from Redux:
+
+		import { createStore, combineReducers, applyMiddleware } from 'redux';
+		//                                     ^^^^^^^^^^^^^^^
+
+		...
+
+		const store = createStore(rootReducer, applyMiddleware(myMiddleWare, ...));
+		//                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+		//                                     NEW second argument here applys an "enhancer" to the
+		//                                     store, which in this case is our middleware.
+		//                                     The function applyMiddleware accepts a list of middlewares
+		//                                     that will get executed in order.
+
+
+
+Redux DevTools
+---------------
+Help debug the store!
+
+
+
+Asynchronous Code and Redux Using Redux-Thunk
+---------------------------------------------
+
+RECALL: REDUCERS CAN **NOT** RUN ASYNCHRONOUS CODE! This is because the reducer returns immediately,
+so what ever state modification are dependent on the async code can't be comminucated back to react
+via this reducer - the reducer would finish before the async result was ready!
+
+USE ACTION CREATORS to overcome this problem. Action creators can be good for both sync and async
+code. For sync code they make the action object creation centralised into one function that accepts
+arguments rather than having the action object potentially created in many places.
+
+eg:
+  // This is a SYNC action creator
+	export const MY_ACTION = "MY_ACTION";
+	export const myAction = (payload) => {
+		return {
+			type: MY_ACTION,
+			payload: payload,
+			...
+		};
+	};
+
+	// And we use it in our Redux compoent's mapDispatchToProps like so.
+	const mapDispatchToProps = dispatch => {
+		return {
+			// onSomeEvent is NO LONGER LIKE BELOW
+			// onSomeEvent: (param1) => dispatch({type: 'ACTION_TYPE', actionParam1: param1, ...}),
+			//
+			// It is now written like
+			onSomeEvent: (param1) => dispatch(myAction()),
+			//                                ^^^^^^^^^^
+			//                                Action creator function returns, synchronously, the action
+			//                                rather than creating the object in each instance the
+			//                                action is created - more DRY!
+			...
+		};
+	};
+
+Thunk allows the action creators to, instead of returning an action object, return a function that
+will eventually dispatch an action. The "eventually dispatch" means that this ENABLE ASNC CODE.
+
+DO:
+	npm install --save redux-thunk
+
+In your app you now add:
+
+	import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
+	// NEW vvvvv
+	import thunk from 'redux-thunk';
+
+	...
+
+	const store = createStore(rootReducer, applyMiddleware(myMiddleWare, thunk));
+	//                                                                   ^^^^^
+	//                   Thunk added to the list of middleware added to our app's store.
+
+
+Then create the ASYNC action creator as follows:
+In action creaters, no longer return action, but RETURN A FUNCTION that will EVENTUALLY DISPATCHING AN ACTION!
+
+Eg, with the myAction action creator from above:
+
+	export const myAction = (payload) => {
+		return {
+			type: MY_ACTION,
+			payload: payload,
+			...
+		};
+	};
+
+BECOMES
+
+	export const myActionSync = (payload) => {
+		return {
+			type: MY_ACTION,
+			payload: payload,
+			...
+		};
+	};
+
+	export const myActionAsync = (payload) => {
+		//                         Can pass getState - but it is optional... we don't have to use it.
+		//                         It can be called to retrieve the current state, if we need to use it.
+		//                         This is the state PRIOR to us re-dispatching the action.
+		//                         vvvvvvvv
+		return function(dispatch[, getState]) {
+			setTimeout( () => {
+				dispatch(myActionSync(payload))
+				//       ^^^^^^^^^^^^
+				//       NOTE must call sync action, not async version, otherwise create infinite loop!
+			}, 2000);
+		};
+	};
+
+This works because in our React component we have:
+	const mapDispatchToProps = dispatch => {
+		return {
+			onSomeEvent: (param1) => dispatch(myActionAsync()),
+			//                               ^^^^^^^^^^^^^^
+			//                               NOTE action creator is not the async version...
+			...
+
+Because the action creator now returns a function, the thunk middleware detects this when the
+action is dispatched and DELAYS the action, by calling our function, through which we can do
+something asynchronously, and then call the real, non-delayed, Redux dispatch method, which will
+make it to the reducer, when we are ready.
+
+
+
+Data transformations
+--------------------
+Action reducers are FREE TO MODIFY AND ADD ANY DATA TO THE ACTION PAYLOAD:
+
+	export const myActionSync = (payload) => {
+			const newPayload = someTransform(payload);
+			return {
+				type: MY_ACTION,
+				payload: newPayload,
+				...
+			};
+		};
+
+You can also do this in the reducer itself. Better to do in action as its more flexible - different
+transformations for different actions that modify the same data item in the store. (my opinion)
+
+Remember: Reducers run SYNCHRONOUS CODE only, but part of core redux,
+          Action creators CAN RUN AYSCHONOUS CODE as well as synchronous code, require thunk add on.
+
+
+Some utility functions:
+-----------------------
+const updateObject = (oldObject, updatedValues) => {
+	return {
+		...oldObject,
+		...updateValues
+	};
+};
+
+
+
+====================================================================================================
+====================================================================================================
+AUTHENTICATION
+====================================================================================================
+Typically, rather than a session, get a TOKEN, in a SPA as the server is generally a stateless
+REST API. Token is stored in local browser storage.
 
 
 
@@ -1779,6 +2148,335 @@ Testing Containers
 
 
 
+====================================================================================================
+====================================================================================================
+REACT HOOKS (React >= 16.8)
+====================================================================================================
+Do not confuse with life-cycle hooks like didComponentMount() which are associaed soley with class
+based components.
+
+React hooks allow functional components to be used *everywhere*. React-hooks do for functional
+components what state and the lifecycle hooks do for class based components. I.e., HOOKS REPLACE
+CLASS-ONLY FUNCTIONALITY.
+	- Add state
+	- Share logic across components
+	- Implement functional lifecycle-like functionality.
+	- Can build custom hooks
+
+React hooks are just JS functions that can only be used inside a functional component or other hooks
+(you can write your own).
+
+All hooks are called useXXX(). Eg useState() etc.
+
+See https://reactjs.org/docs/hooks-intro.html for motivation for hooks. From that page:
+		It’s hard to reuse stateful logic between components
+		React doesn’t offer a way to “attach” reusable behavior to a component (for example, connecting
+		it to a store). If you’ve worked with React for a while, you may be familiar with patterns like
+		render props and higher-order components that try to solve this. But these patterns require you
+		to restructure your components when you use them, which can be cumbersome and make code harder
+		to follow. If you look at a typical React application in React DevTools, you will likely find a
+		"wrapper hell" of components surrounded by layers of providers, consumers, higher-order
+		components, render props, and other abstractions. While we could filter them out in DevTools,
+		this points to a deeper underlying problem: React needs a better primitive for sharing stateful logic.
+
+		With Hooks, you can extract stateful logic from a component so it can be tested independently and
+		reused. Hooks allow you to reuse stateful logic without changing your component hierarchy.
+		This makes it easy to share Hooks among many components or with the community.
+
+
+
+Important Rules
+===============
+See: https://reactjs.org/docs/hooks-rules.html
+
+RULE 1: Only Call Hooks at the Top Level
+*** Don’t call Hooks inside loops, conditions, or nested functions. ***
+Instead, always use Hooks at the top level of your React function. By following this rule, you
+ensure that Hooks are called in the same order each time a component renders. That’s what allows
+React to correctly preserve the state of Hooks between multiple useState and useEffect calls.
+This is because React relies on the order in which Hooks are called to know which state corresponds
+to which useState call
+
+By "calling hook" it means the functions useState(), useEffect() etc. It does NOT refer to using
+the state and state-setting-function they return! These can be used as per normal!
+
+RULE 2: Only Call Hooks from React Functions
+You can only call Hooks from React function components and from custom Hooks.
+
+
+USE eslint-plugin-react-hooks to help you enforce these rules.
+    npm install eslint-plugin-react-hooks --save-dev
+
+Read also: https://stackoverflow.com/questions/53845595/wrong-react-hooks-behaviour-with-event-listener
+
+
+
+useState()
+==========
+See: https://reactjs.org/docs/hooks-state.html
+
+import React, { useState } from 'react';
+...
+const defaultState = ...; // Any value - unlike class state does not have to be an object
+...
+const MyFunctionalComponent = (props) => {
+   // The state will survive re-renders
+   // Returns an array with *2* elements
+   // 0: the current state snapshot
+   // 1:function to use to update the current state
+   const [myState, mySetState] = useState(defaultState);
+   ...
+   // Use myState exactly as you would have used this.state in class component
+   // Use mySetState like you would have used this.setState() in class component BUT WARNING, it
+	 //   does NOT MERGE STATE FOR YOU!!!
+   ...
+   return (...);
+};
+
+
+WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
+vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+WARNING - useState's setState-like function DOES NOT MERGE STATE, IT **REPLACES** THE CURRENT
+          STATE WITH THE ONE YOU GIVE IT!
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
+
+Just like setState(), the useState()'s update function accepts a function instead of an object when
+you need to update state based on previous state, except that it obv doesn't receive any props.
+
+e.g.
+    onChange = {
+        (event) => mySetState(
+            (prevMyState) => (
+                {newVal: prevMyState.val + X}
+            )
+        )
+    }
+
+
+WARNING - BE CAREFUL NOT TO CAPTURE PARAMETERS IN CLOSURE
+
+    onChange = {
+        (event) => mySetState(
+            (prevMyState) => (
+                {
+                    something: event.target.value, // <<<< ERROR. See description below code.
+                    newVal: prevMyState.val + X
+                }
+            )
+        )
+    }
+
+Problem is this:
+1. First onChange event fires and the onChange handler is called. It is passed a React synthetic
+   event object, which is POOLED. The handler returns a function, which closes over the outer
+   scope's environment, capturing the instance of event from the event pool. It is this inner function
+	 that is the "problem" and creates the closure over the pooled synthetic event.
+2. The second onChange event fires and executes the handler, passing in a different synthetic event
+   object, which too gets captured in the closure created.
+3. At some point React will deal with these events, but it can do so when it chooses. React may
+   re-use the event object that we have closed over in a previous handler
+	 that is yet to be called and when it is it will see the new event state, not the one it is
+	 supposed to see. There is no way to "release" event Reacts synthetic event objects, so it has
+	 no way to know if we are "holding" on to one in this way.
+
+The solution is:
+In the outer function, create const variables that copy the pertinant event data and use these in
+the inner function. This way the event can be safely re-used by react.
+
+
+Overcoming complexities of setting state
+----------------------------------------
+Remember that useState::setState function DOES NOT MERGE THE STATE OBJECT FOR YOU. Each time you
+must set the ENTIRE state.
+
+You can make life simpler by registering multiple state objects.
+Just do
+	const [state1, state1SetFunc] = useState('');
+	....
+	const [stateN, stateNSetFunc] = useState('');
+
+This prevents having to use one big state object - you can have many little state objects.
+Another way would be to write your own merge function for state update, but this would be
+harder to do.
+
+
+State Update Batching
+- - - - - - - - - - - -
+React will batch calls to setState hook functions to avoid unnecessary render cycles.
+
+All state updates from one SYNCRHONOUS event handler are BATCHED TOGETHER.
+
+Thus, after setting state, a lot like in class components, you can't immediately use the state
+to get the new value.
+
+
+
+useEffect()
+===========
+SEE: https://reactjs.org/docs/hooks-effect.html
+
+import React, {useState, useEffect} from 'react';
+
+Use effect allows one to manage side effects:
+
+	The Effect Hook lets you perform side effects in function components.
+	...
+	Data fetching, setting up a subscription, and manually changing the DOM in React components are
+	all examples of side effects
+	...
+	 you can think of useEffect Hook as componentDidMount, componentDidUpdate, and
+	 componentWillUnmount combined.
+
+Side effects = Logs that runs and does effect the application but not in the current render cycle,
+i.e., a future cycle.
+
+useEffect() gets used AFTER EVERY render cycle.
+
+You need useEffect() for exactly the same reason you dont trigger side effects in a class based
+render function - you enter an infinite loop where each time you render you create a side effect
+that modifies the state and triggers a re-render and so on...
+
+Use it like this:
+	useEffect(FUNCTION, DEPENDENCIES-OF-FUNCTION);
+
+So, your function is only run when the dependencies are modified. This is how you can get it to
+act like componentDidMount or componenetDidUpdate etc. The default, is, as mentioned for every
+render cycle, but using dependencies, you can change this...
+
+Dependencies are variables you use outside of useEffect in your function. React hook functions
+used in useEffect do not have to be considered external dependencies.
+
+If you ommit DEPENDENCIES-OF-FUNCTION then it runs FOR EVERY render cycle.
+
+If you make it an empty list then it only runs for the very FIRST render - i.e., like
+componentDidMount().
+
+You can have multiple useEffect() calls, just like you do with useState().
+
+To use dependencies:
+
+	let [myState, setMyState] = useState(myDefaultState);
+
+	...
+
+	useEffect( ()=> {...}, [myState] ); //<<< This only executes when myState is changed.
+
+This can allow us to split logic more elegantly. For example, if we fetch data based on whether
+a checkbox is selected, our onChange event function can just manage the checked state and we can
+split out the fetch logic into a useEffect() call with a dependency on the checkbox state.
+
+If you rely on props in an effect then declare them as a dependency - PROPS ARE ALSO DEPENDENCIES
+if you use them.
+
+	This effect is called whn ANY prop changes:
+		useEffect( () => {...}, [..., props]);
+
+	This effect will be called only when a certain key in the props changes:
+		const { keyName } = props;
+		...
+		useEffect( () => {...}, [..., keyValue]);
+
+Clean Up With useEffect():
+- - - - - - - - - - - - - -
+useEffect() can return a FUNCTION. A return value is not required, but if provided MUST be a func!
+The function returned is a CLEANUP function that will run before the next time useEffect() runs. Note,
+this is NOT after the useEffect() runs, but BEFORE the next useEffect() is run.
+
+If useEffect() has [] as its dependency, and therefore only runs once when the component is first
+rendered then the returned function is equivalent to componentWillUnmount()!
+
+
+useCallback()
+=============
+SEE: https://reactjs.org/docs/hooks-reference.html#usecallback
+
+	Pass an inline callback and an array of dependencies. useCallback will return a memoized version
+	of the callback that only changes if one of the dependencies has changed. This is useful when
+	passing callbacks to optimized child components that rely on reference equality to prevent
+	unnecessary renders (e.g. shouldComponentUpdate).
+
+This can be very useful to get out of entering infinite loops in render cycles. The course example
+was where a parent passes a callback function, X, to a child that uses an effect that depends on XMLHttpRequestObject
+and calls X, which modidifies the parent state. Because, when the parent re-renders, the callback function
+is redefined, the child will trigger its effect again creating this infinite loop. The way to stop this is
+to preserve the callback function across render cycles, so that it doesn't change due to a render and
+therefore the child won't call X because of the prop callback function change.
+
+
+useMemo()
+=========
+
+
+useRef()
+========
+Allows use of references as you might do in class components.
+	const myRef = useRef();
+	...
+	<SomeElement ref={myRef}/ ...>
+
+Remember to add the ref as a DEPENDENCY if you use it in an effect!
+
+
+
+
+useReducer()
+============
+SEE: https://reactjs.org/docs/hooks-reference.html#usereducer
+     const [state, dispatch] = useReducer(reducer, initialArg, init);
+     An alternative to useState. Accepts a reducer of type (state, action) => newState, and returns
+		 the current state paired with a dispatch method. (If you’re familiar with Redux, you already
+		 know how this works, altough NOT related to Redux otherwise).
+
+The reducer functions that you define are a lot like Redux reducers because they accept the
+current state and an action. Based on the action and current state, the reducer must return the
+new state.
+
+	const myReducerForSomeThing = (currentThingState, action) => {
+		switch(action.type) { // << The action is whatever we dispatched - its type isdnt predefined
+			case 'SOME ACTION:
+				return newStateBasedOnCurrentThingStateForSomeAction;
+			...
+			default:
+				throw new Error("Should never happen - all actions should be handled");
+		}
+	};
+
+	...
+
+	const MyElement = () => {
+		const [myThingState, dispatch	] = useReducer(myReducerForSomeThing, initial-state);
+
+		const someHandler = () => {
+			dispatch({type: "SOME ACTION", ...});
+		}
+	}
+
+React will re-render the component WHENEVER YOUR REDUCER RETURNS NEW STATE.
+
+Reducers can make things cleaner as all of the update logic is located in one place. Makes a
+clearer flow of data.
+
+For HTTP requrests
+	Sending the request is an action. Action = SEND. (But update state dont do the actual send)
+	Handling the reply. Action = RESPONSE.
+	Handling any errors. Action = ERROR.
+
+Reducers must be PURE FUNCTIONS:
+	A pure function is a function which:
+		Given the same input, will always return the same output.
+		Produces no side effects.
+	A dead giveaway that a function is impure is if it makes sense to call it without using its
+	return value. For pure functions, that’s a noop.
+	A pure function produces no side effects, which means that it can’t alter any external state.
+	Therefore, you can't do AJAX requests from a reducer. Instead use ACTION CREATORS.
+
+
+useContext()
+============
+
+
+
 
 ====================================================================================================
 ====================================================================================================
@@ -1828,6 +2526,130 @@ https://bernii.github.io/gauge.js/ -
 https://formidable.com/open-source/victory - React.js components for modular charting and data visualization.
 https://uber.github.io/react-vis/examples/showcases/plots
 
+
+
+====================================================================================================
+====================================================================================================
+REACT FIBER
+====================================================================================================
+Prev (before React 16) reconcillation algorithm was "Stack Reconciler". It was entirely synchronous
+and has only one phase.
+
+Reconcillation - The algorithm React uses to diff one tree with another to determine which parts
+                 need to be changed.
+
+When state changes, react generates an intermediate virtual DOM and compares it against the previous
+virtual DOM before the state change. It uses this diff to update select portions of the browser DOM,
+as opposed to updating the whole browser DOM - efficient.
+
+The virtual DOMs are generated from Fiber's INTERNAL INSTANCE TREE, which is a tree of React
+component instances and DOM nodes.
+
+React Fibre is the new reconcillation algorithm included since React 16.
+
+Reconcillation saves the developer from the need to keep track of what has changed and change the
+browser DOM appropriately. All this "house keeping" is now done for the developer.
+
+Virtual DOM- The tree of IMMUTABLE React elements returned from the render methods
+
+Why the new reconcillation algorithm? Previously, when the rendering process started, it could not
+be paused - the whole process had to be done in one go, in the browser main thread. Result can
+be laggy user experience.
+
+Unlike previous alg, Fiber has ability to minimize and batch DOM changes to minimise how long the
+main thread is held for. It manipulates the main thread to enable async behaviour.
+
+Once a render method returns its sub-tree of react components, they are merged into the tree of
+fiber nodes - fiber analyses the components and creates corresponding fiber nodes that it inserts
+into its own tree. I.e., every react element has a corresponding fiber node. Unlike React elements,
+FIBERS ARE NOT RE-CREATED ON EVERY RENDER! The Fibre data structures, are, unlike the React
+components, mutable. They hold component state and DOM state.
+
+Fiber uses a LINKED LIST TREE TRAVERSAL ALGORITHM and an ASYNCHONOUS model that uses this list to
+peocess elements that have pending work associated with them.
+
+The Fiber process has TWO TREES:
+1. Current tree
+   After the very first render, represents state of app used to render to UI
+2. Work-in-progress tree
+   Built for the current update. Reflects the future app state that should eventually appear in the
+	 browser.
+
+It has TWO main PHASES:
+1. Reconcile
+   Mark fiber nodes with (side) effects asynchronously.
+   Build up the WIP tree and the list of changes to be made but do NOT make those changes.
+   This can be done asynchronously so that the main browser thread is not held for too long. It
+   can be repeated/restarted multiple times as updates come in.
+
+   It relies on a new browser API called `requestIdCallback`, which queues a function to be called
+   during a browser's idle periods. It enables developers to perform background and low priority work
+   on the main event loop, without impacting latency-critical events such as animation and input
+   response. See https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback
+
+   Of course, IE doesn't support this at the time of writing, but Chrome, Edge, Firefox and Opera do.
+
+   Using this API, React can do the reconcillation phase during the browser's idle period by
+	 splitting up its work into chunks and doing a chunk at a time. As it is
+   called back, on each callback it can decide what chunk of work it wants to do, a lot like an OS
+   scheduler would. The proprities are as follows:
+      - synchonous    << HIGH
+      - task
+      - animation
+      - high
+      - low
+      - offscreen     << LOW
+
+   During this phase lifecycle hooks will be called:
+      (UNSAFE_)componentWillMount
+      (UNSAFE_)componentWillReceiveProps
+      getDerivedStateFromProps
+      shouldComponentUndpate
+      (UNSAFE_)componentWillUpdated
+      render
+
+   Essentially, because, reca;;, JS is a single-threaded processes, using `requestIdCallback` React
+   is able to fake a multi-threaded process using COOPERATIVE  MULTITASKING (a.k.a. NON-PREEMTIVE
+   MULTITASKING).
+
+   From WikiPedia:
+      Cooperative multitasking, also known as non-preemptive multitasking, is a style of computer
+      multitasking in which the operating system never initiates a context switch from a running
+      process to another process. Instead, processes voluntarily yield control periodically or when
+      idle or logically blocked in order to enable multiple applications to be run concurrently.
+      This type of multitasking is called "cooperative" because all programs must cooperate for the
+      entire scheduling scheme to work. In this scheme, the process scheduler of an operating system
+      is known as a cooperative scheduler, having its role reduced down to starting the processes
+      and letting them return control back to it voluntarily.
+
+2. Commit
+   This phase still has to be done synchronously, BUT the heavy lifting has been done in the prev
+   phase, so this minimises the amount of time that the main browser thread is held for.
+   This does the changes in the DOM - visible to user
+
+   The following lifecycle hooks will be called:
+      getSnapshotBeforeUpdate
+      componentDidMount
+      componentDidUpdate
+      componentWillUnmount
+
+
+Future?
+Improve CPU utilisation using TIME SLICING
+   - Rendering is NON BLOCKING - yields to use input
+   - Multiple updates at different priorities
+   - Pre render so as not to slow visiblecontent
+Improve IO using React Suspense.
+   - Access async data (e.g. from server) as easily as accessing sync data from member
+   - Pause componentrender without blocking siblings
+   - Precising control loading states to reduce jitter
+
+React Suspense
+--------------
+https://reactjs.org/docs/concurrent-mode-suspense.html
+    From Website:
+		React 16.6 added a <Suspense> component that lets you "wait" for some code to load and
+		declaratively specify a loading state (like a spinner) while waiting...
 
 
 ====================================================================================================

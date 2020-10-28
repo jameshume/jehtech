@@ -6,53 +6,6 @@ A viewport represents the area in computer graphics being currently viewed. In w
 same as the browser window, excluding the UI, menu bar, etc. That is, the part of the document you are viewing.
 
 
-POSITIONING
-===========
-See https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Normal_Flow
-    https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Positioning
-
-Normal flow specs how block and inline elements interact - how they are placed inside the browser's viewport.
-
-Block level elements occupy the entire space in the row in which they are positioned. They follow the "document flow".
-They have 100% width of parent element and are as tall as their content. Thus block elements laid out vertically and
-appear on new lines.
-
-Inline elements as wide and as tall as their content. Cannot have width or height set - only for block level. Inline
-elements sit on same line as one another and adjacent text elements. They can be wrapped to next line if space runs
-out.
-
-MARGIN COLLAPSING: If two adjacent elements both have the margin set on them and the two margins touch, the larger
-of the two remains, and the smaller one disappears.
-
-Types of positioning:
-	1. STATIC:   Means "put the element into its normal position in the document layout flow".
- 	2. RELATIVE: Similar to static positioning, except that once the positioned element has taken its place in
-	             the normal layout flow, you can then modify its final position, including making it overlap
-	             other elements on the page.
-	3. ABSOLUTE: Takes element OUT of the normal flow - where the element would be in normal flow, other
-	             elements will now take its place.
-	             An absolutely positioned element no longer exists in the normal document layout flow. Instead,
-	             it sits on its own layer separate from everything else.
-        4. FIXED:    Like absolute positioning, except that where absolute positioning fixes an element in place
-	             relative to its nearest positioned ancestor, fixed positioning fixes an element in place
-	             relative to the BROWSER VIEWPORT.
-        5. STICKY:   Hybrid between relative and fixed position. Allows a positioned element to act like it is
-                     relatively positioned until it is scrolled to a certain threshold point, after which it
-	             becomes fixed.
-
-	RELATIVE/ABSOLUTE POSITIONING - POSITIONING CONTEXTS
-	----------------------------------------------------
-	Relative positioning does NOT take objects out of the document flow.
-	Absolute positioning takes objects OUT of the document flow.
-	
-	Positioning context is defined in 2 cases:
-	   1. If no ancestor has position property applied then context is the <htmL> element
-	   2. Else, the closest ancestor with a position property becomes the positioning context.
-	      So, normally the closes ancestor will have a "relative" position property.
-	
-	For "fixed" positioning the positioning context is the VIEWPORT.
-
-
 
 GRIDS
 =====
