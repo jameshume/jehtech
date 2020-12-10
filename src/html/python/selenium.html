@@ -35,6 +35,15 @@
 </ul>
 </div> <!-- END References / useful Links -->
 
+<h2>Debug Page: Get All Elements With IDs</h2>
+<div>
+    <pre>print([
+    x.get_attribute("id")
+    for x
+    in self.driver.execute_script("return document.querySelectorAll('*[id]');")
+])</pre>
+</div>
+
 <h2>Override WebElement.Click()</h2>
 <div>
     <p></p>

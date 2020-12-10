@@ -1,0 +1,406 @@
+====================================================================================================
+====================================================================================================
+INTRO
+====================================================================================================
+
+OAuth 2.0 is not backward compatible with 1.0. Do not use 1.0.
+
+Ref: https://www.youtube.com/watch?v=996OiexHze0
+
+Internet logins began with the standard "form login": username and password home-grown login on
+a website that stashed session info in a cookie after successful login. The website and owner are
+responsible for:
+	1. Security: Have to be aware of best practices and how they change over time
+	2. Maintenance: Testing auth system over time
+
+OAuth and Open ID Connect are industry best practices at the time of writing to overcome the above
+disadvantages.
+
+Pre mobile era commonly identity use cases included
+	1. Simple login (forms and cookies)
+	2. Single Sign On (SSO) using a protocol called (SAML)
+
+Now, post 2010, two more use cases arise:
+	1. Mobile app login 
+	2. Delegated authentication.
+
+
+The client should never get the resource owner's password. This is because the password is generally
+the "keys to the kingdom". For example, an app that wants to share a post on my facebook page. If I
+give it my FB password it can share the post, but it can also get my friends list, send them messages,
+block them, make other unauthoized posts and critically access ANY other service which I access using
+my FB credentials!
+
+So, I must avoid giving any third party my password. This is where OAuth comes in.
+
+
+DELEGATED AUTHENTICATION is where you allow a 3rd party access to your data/platform, probably in
+a restricted manner, WITHOUT giving the 3rd party you password.
+	Example of the "good old bad old days" were websites that asked for you email account password
+	so that they could send invite emails to your friends. This was GIVING AWAY THE KEYS TO THE
+	CASTLE! E.g. your bank password reset flow probably goes back there!!
+	What we want to do is say "Email provider, I authorize ABC.com to send emails on my behalf from
+	my account, as long as you authenticate them when they try to do this". This is delegated
+	authentication, and is what OAuth came out of. So ABC can send emails from my account, but,
+	importantly wouldn't be authorized to read my emails, for example, or add/delete contacts etc.
+
+	ABC says login to your email account -> Redirect me to email account. I trust my email provider
+	more than ABC so I am happy(er) to log into my email provider. The email provider then
+	authenticates me (makes sure its me and not Stevil). It then should warn me about the permissions
+	that ABC is seeking. If I say its OK it should then accept the instruction that it
+	should authorise ABC to send emails. It then returns a token to ABC, which ABC can then use
+	in requests to send emails that it sends to my email provider.
+
+
+Nomenclature
+------------
+- Resource Owner - You - The person who owns the data that the application wants access to. e.g. You
+	own your email resource - see above example.
+
+- Client - Just refers to the application that wants access to your data.
+
+- Authorization Server - System the resource owner uses to authorize the client - to say "yes".
+
+- Resource Server - API that holds the data that the client wants to get to. Sometimes resource
+	server and auth server are same but oftentimes they are seperate.
+
+- Authorization Grant - The "thing" that prooves that the resource owner has consented to a certain
+	level of client access to the resource. This authorization grant allows the client to go
+	back to the resource server and get the access token. The authorization code is exchanged for
+	the access token.
+
+- Redirect URI - When auth server redirects back to the client application it redirects to the
+	redirect URI
+
+- Access Token - The client needs an access token - the key they use to get into the data resource
+	owner granted access to.
+	See also https://www.youtube.com/watch?v=BNEoKexlmA4:
+	The access token is like the electronic RFID key card for a hotel room. You sign in at the front
+	desk, which is where you validate using your credentials, and once you have the key you only
+	need to present that to get into your room (the resource).
+
+- Scope - The subset of permissions that the access token gives the client
+	Auth server will have a list of scopes it understands, e.g. contacts.read. Any types of
+	permissions that make sense for the particular resource being accessed.
+	E.g. Google scopes tend to be really long URL strings.
+
+- Back Channel - Highly secure channel. API req or HTTP req from my server to Google over HTTPS
+	SSL/TLS encrypted - this is a back channel. From my backend server to another system. We
+	completely trust our server and code.
+
+- Front Channel - Less secure than back channel.
+	E.g. Browser requested website. They can see my JS/HTML code or someone could look over my
+		shoulder and see my password as I type it in. We don't completely trust the browser.
+
+
+Why Exchange Access Code For Access Token - Why The Extra Step?
+---------------------------------------------------------------
+Why do we get a code rather than the token right away? The reason for the extra step is to take
+advantage of the "best things about the front channel and the best things about the back chanell".
+
+The authorisation code is returned to the browser, i.e., over the front end channel. You can
+see the code openly in the redirect URL.
+
+This code is then given to the client backend, which then gets the actual access token using this
+code over the more secure backend channel. That is why there is the second step so that the thing
+that really grants the client access to a resource is only ever communicated over the more secure
+and thus more trusted channel.
+
+
+One Downside To OAuth
+---------------------
+One downside to OAuth is that the login page can be easily "spoofed". Thus it is up to the user
+to figure out whether the login page they are redirected to is genuine, e.g. by examining the
+page address. But this can be harder/impossible if the login is embedded in another page.
+
+From RFC6749 (The OAuth 2.0 Authorization Framework), section 9:
+		An embedded user-agent poses a security challenge because resource
+		owners are authenticating in an unidentified window without access
+		to the visual protections found in most external user-agents.  An
+		embedded user-agent educates end-users to trust unidentified
+		requests for authentication (making phishing attacks easier to
+		execute).
+
+And also in section 10.11 (Phishing Attacks):
+		Wide deployment of this and similar protocols may cause end-users to
+		become inured to the practice of being redirected to websites where
+		they are asked to enter their passwords.  If end-users are not
+		careful to verify the authenticity of these websites before entering
+		their credentials, it will be possible for attackers to exploit this
+		practice to steal resource owners' passwords.
+
+		Service providers should attempt to educate end-users about the risks
+		phishing attacks pose and should provide mechanisms that make it easy
+		for end-users to confirm the authenticity of their sites.  Client
+		developers should consider the security implications of how they
+		interact with the user-agent (e.g., external, embedded), and the
+		ability of the end-user to verify the authenticity of the
+		authorization server.
+
+
+Flow In Brief
+-------------
+
+App wants to access my FB account
+	* It asks the OAuth server for a token
+	* OAuth asks me (the resource owner) if I want to give permission for a SUBSET of operations on
+	  my resource (FB account)
+	* I authorize by giving my user name and password to the OAuth servier
+		OAuth servier validates this information either itself or by asking another third party
+		(OAuth server and resource sever can be seperate)
+	* Token is sent back to the app (client)
+		Thus the client never sees our password. It only gets a "passport" or "permissions slip"
+		that it can give to FB to access a SUBSET of the services that I can access on FB - only
+		those services I want the client to access
+	* Client asks the resource server for access to a service and gives token to resource server.
+		Resource server doesn't know anything about the token.
+		It contacts the Oauth server, gives it the token, and asks "is this token valid?".
+			OAuth server looks it up - is it still active? has it been revoked? etc etc
+			Tells the resource server whether it is valid or not, and WHAT TYPE OF ACCESS
+			WAS GRANTED.
+	* If token valid resource server gives client access to the requested service.
+
+
+
+OAuth is used for DELEGATION and not authorization or authentication. It is the resource server that does
+the authorization as to what resources can be accessed based on the OAuth token presented. Authentication
+is done by the external component such as the login page - OAuth server triggers authentication but does
+not do it itself. Thus everything is delegated.
+
+
+SEE the RFC here: https://tools.ietf.org/html/rfc6749
+
+
+
+====================================================================================================
+====================================================================================================
+ACTORS
+====================================================================================================
+
+Actor #1: OAuth Provider
+	OAuth server has 3 components:
+		Authentication component
+			Login page etc. Identity provider Oauth is the front end of the IAM
+		Consent component
+			Get consent for the delegation of access rights to the client 
+			User is logged in. This page says "do you really want to provide this subset
+			to the app
+		Token management infra structure
+			Basically the token DB
+
+	The OAuth server generally provides 2 enpoints: their function is standard but the URL
+	need not be.
+		1. Authorization endpoint
+			/authorize [GET]
+				For "auth code grant" gives AUTHORIZATION CODE
+				For "implicit grant" gives ACCESS TOKEN
+		2. Token endpoint
+			/token [POST]
+			It is a protected enpoint so requires the client ID and secret, that would
+			have been delivered to the client via the autorize process. Uses HTTP BASIC
+			protection.
+
+			Produces an ACCESS TOKEN and a REFRESH TOKEN for "auth code grant", "client
+			credentials grant", "resource owner credentials grant".
+
+
+Actor #2: Resource Provider (Server)
+	Makes a protected resource available over HTTPS. Often via a RESTful API which ensures only allowed
+	clents can access the data (access token), which it does via the OAuth token.
+
+	Provides the resources owned by the resource owner, that are requested by the client (3rd party)
+	using the access tokens provided by the Oauth provider.
+
+	Provides the resource EP
+
+	
+Actor #3: Resource Owner
+	Owner of the protected resource. S/he can access their data directly. Wih OAuth the resource owner
+	is giving a client permissions to indirectly access their data via the OAuth authentication mechanism
+	(owner delegates his access rights, or a subset of them, to the client) and can specify restricted
+	access to the protected resource, i.e., only allow access to a subset of the resource or restrict the
+	things that can be done with or to that resource.
+
+Actor #4: Client
+	Third party tring to access protected resources of the resource owner. E.g. an app trying to access
+	my FB page etc.
+
+	The OAuth server will provide the client with an ID and a secret by which the client can then
+	identify itself.
+
+	Client provides the redirect EP.
+
+
+A component can have the role of several actors. Eg Words with friends wants access to my FB friends list.
+"Words with friends" is the client. I am the resource owner, FB is both the resource provider and the
+OAuth provider.
+
+Another example. I want to login to PrintMyPhotos.com. FB is the OAuth provider. PrintMyPhotos.com is
+both the client. But who is the resource owner? It is PrintMyPhotos.com... in this case the OAuth
+provider is just authenticating that I am who I say I am. The protected resource is the photos stored
+on PrintMyPhotos.com.
+
+
+
+====================================================================================================
+====================================================================================================
+END POINTS
+====================================================================================================
+	1. Authorization EP (OAuth server)
+	2. Token EP (OAuth server)
+	3. Redirect EP (Client)
+	4. Resource EP(s) (Resource server)
+
+
+
+====================================================================================================
+====================================================================================================
+TOKENS
+====================================================================================================
+
+CAUTION WITH OAUTH TOKENS: Tokens grant access but do NOT verify who the user is! So, if Bob has access
+to Alice's token, he will be able to access everything Alice can, whether or not Alice has given him
+permission or not (imagine Bob somehow stole the token, for example!).
+	Thus it is important to keep any kind of token CONFIDENTIAL!
+	This means USE TLS EXCLUSIVELY for any token transmission
+
+	Access Tokens (AT):
+		Used by client to access resources. AT valididty is time limited. Stored and sent
+		by the client. Sent to resource server generally.
+		The holder of the token has the access rights associated with the token BUT the token
+		holder is not authenticated after the initial issue, so tokens must be kept
+		confidential!
+
+	Refresh Token (RT):
+		Time limited validity, longer than AT validity. Used to request new AT after AT expired.
+		When RT used the credentials of the resource owner do NOT have to be checked again.
+		Stored and sent by the client. Never sent to the resource server, only to OAuth server.
+		Thus, only used to refresh ATs and never used to actually access resources themselves.
+
+	Authorization Code (AC):
+		Send by auth server to client after authenticating the resource owner (i.e. getting
+		the consent of the resource owner for delegating the access). The AC is just a code
+		that represents the authentication and consent of the resource owner that the client
+		should be able to access the resource. It is not, the AT! At AC validity is normally
+		only valid for a couple of minutes. The AC can then be used to get an AT!
+
+
+
+====================================================================================================
+====================================================================================================
+CLIENT REGISTRATION
+====================================================================================================
+
+When new client wants access to resources. OAuth server needs some information about the client and
+returns, in exchange, a client ID and a client secret.
+
+When new client is registered, must provide
+1. Redirect URI
+2. Required scopes (what type/subset of resource is going to be used)
+
+
+Dynamic client registration protocol: https://tools.ietf.org/html/rfc7591
+
+Explanation taken from https://ldapwiki.com/wiki/OAuth%202.0%20Client%20Registration:
+
+	OAuth Clients must register with the Authorization Server before any transactions
+	may occur. Before an OAuth Client can request access to Protected Resource on a
+	Resource Server, the OAuth Client must first register with the Authorization Server
+	associated with the Resource Server.
+
+	OAuth 2.0 Client Registration is typically a one-time task. Once registered, the
+	registration remains valid, unless the OAuth Client registration is revoked.
+
+	At OAuth 2.0 Client Registration the OAuth Client is assigned a Client_id and a
+	Client Secret (password) by the Authorization Server.
+
+	The Client_id and Client Secret is unique to the OAuth Client on that Authorization Server.
+
+	If a OAuth Client registers with multiple Authorization Servers (e.g. both Facebook, Twitter
+	and Google), each Authorization Server will probably issue a different and unique Client ID
+	to the OAuth Client application.
+
+	Whenever the OAuth Client requests access to resources stored on that same Resource Server,
+	the OAuth Client needs to Authenticate itself by sending the Client ID and the Client Secret 
+	to the Authorization Server.
+
+	During the registration the OAuth Client also registers a redirect_uri. This redirect_uri is
+	used when a Resource Owner grants Authorization to the OAuth Client. When a Resource Owner
+	has successfully Authorized the OAuth Client via the Authorization Server, the Resource Owner
+	is redirected back to the OAuth Client's redirect_uri.
+
+	OAuth 2.0 Client Registration must be done outside of the The OAuth 2.0 Authorization
+	Framework.
+
+
+
+====================================================================================================
+====================================================================================================
+FLOWS
+====================================================================================================
+
+OAuth Flows Overview
+--------------------
+
+1. Authorizaton Code Flow
+	A.k.a. "three-legged ouath"
+	Most secure flow
+	Client must be able to securley store client ID/secret and tokens
+
+2. Implicit Flow
+	Used when client can NOT securley store client ID/secret or OAuth tokens
+	E.g. When client written in client side JavaScript
+	Cons: Short validity of tokens and refreshing AT very difficult
+
+3. Client Credential Flow
+	A.k.a "two-legged OAuth"
+	Used when client is also the resource owner
+	Uses ONLY the /token EP
+
+4. Resource Owner Password Credentials Flow
+	When resource owner can entrust password to client
+
+
+
+Authorizaton Code Flow
+-----------------------
+Checks the identity of the 3 involved actors (why its called "3-legged")
+
+OAuth server authenticates the resource owner using his/her username/password that
+are provided interactively via the login mechanism that the OAuth server provides.
+
+OAuth server authenticates the client using its client ID and secret.
+
+Identity of the Auth server is checked by its certificate.
+
+Flow should only be used when CLIENT PROVIDES SECURE STORAGE FOR ID, SECRET AND
+TOKENS!
+
+
+Resource  ------------> OAuth  <----------- Resource -----------> Resources
+ Owner    <------------ Server ----------->  Server  <----------/
+                           |                   ^
+                          / \                  |
+                     /auth   /token            |
+                         ^  ^                  |
+                         |  |                  | 
+                         v  v                  |
+                        Client <---------------+
+
+
+Advantages:
+	Relatively high security level 
+	AT does NOT flow through browser
+	Username/pwd of resource owner not known to client
+	Convenience - Use of RT allows access for longer periods of time without
+		requiring re-authentication
+
+		Identities of all 3 participants is ensured
+
+
+Authorization code grant:
+	1. Get the auth code: Client requrests auth-code from the /auth EP of the OAuth
+	   provider.
+		
+	2. Get the token: Client uses auth-code to get AT.
+	3. Use AT to access resource

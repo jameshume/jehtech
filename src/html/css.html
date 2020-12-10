@@ -177,27 +177,42 @@ h1 { color: yellow; } &lt;&lt; THIS IS APPLIED </pre>
             </tr>
             <tr>
                 <td>id1<b>,</b> id2</td>
-                <td>Here <code>idX</code> can either be an HTML element tag or a class name (i.e., &quot;.className&quot;.
+                <td>Select both. Here <code>idX</code> can either be an HTML element tag or a class name (i.e., &quot;.className&quot;.
                     Selects all nodes identified by <code>idx1</code> or <code>idx2</code>.
                 </td>
-            </tr>           
+            </tr>
             <tr>
                 <td>id1 id2</td>
-                <td>Here <code>idX</code> can either be an HTML element tag or a class name (i.e., &quot;.className&quot;.
+                <td>Any descendant. Here <code>idX</code> can either be an HTML element tag or a class name (i.e., &quot;.className&quot;.
                     The two identifiers are seperated by a space. This selects all elements identified by <code>id2</code> 
                     that are a descendents (i.e., children, grandchildren and so on) of nodes identified by <code>id1</code>.
                 </td>
             </tr>
             <tr>
                 <td>id1 > id2</td>
-                <td>Here <code>idX</code> can either be an HTML element tag or a class name (i.e., &quot;.className&quot;.
+                <td>Immediate child. Here <code>idX</code> can either be an HTML element tag or a class name (i.e., &quot;.className&quot;.
                     The two identifiers are seperated by a &gt; symbol. This selects all elements identified by <code>id2</code>
                     that are <em>immediate</em> children of nodes identified by <code>id1</code>.
                 </td>
             </tr>
             <tr>
+                <td>id1 + id2</td>
+                <td>Immediate sibling.
+                </td>
+            </tr>
+            <tr>
+                <td>id1 ~ id2</td>
+                <td>General sibling.
+                </td>
+            </tr>
+            <tr>
                 <td>[attribute] or [attribute OP value]</td>
-                <td>Selects all nodes with the attribute name specified inside the square br=ackets set. Additionally the attribute selection can be further refined based on its value using the operators = (equals), ~= (containing a whole word), |= (starting with), ^= (begins with), $= (ends with), *= (contains substring). E.g., &quot;<code>[target=_blank]</code> selects node that have a <code>target</code> attribute and then only those where the attribute equals <code>_blank</code>.
+                <td>Selects all nodes with the attribute name specified inside the square br=ackets set.
+                    Additionally the attribute selection can be further refined based on its value using
+                    the operators = (equals), ~= (containing a whole word), |= (starting with), ^= (begins with),
+                    $= (ends with), *= (contains substring). E.g., &quot;<code>[target=_blank]</code>
+                    selects node that have a <code>target</code> attribute and then only those where the
+                    attribute equals <code>_blank</code>.
                 </td>
             </tr>
             <tr>
@@ -594,7 +609,7 @@ h1 { color: yellow; } &lt;&lt; THIS IS APPLIED </pre>
 <h2>Grid</h2>
 <div>
     <p>
-        Create a grid container using <code>display: grid;</code> and specify the column widthss using 
+        Create a grid container using <code>display: grid;</code> and specify the column widthss using
         <code>grid-template-columns</code> and row heights using <code>grid-template-rows</code>.
     </p>
     <pre class="prettyprint linenums">.my_grid {
@@ -626,7 +641,7 @@ h1 { color: yellow; } &lt;&lt; THIS IS APPLIED </pre>
     </p>
     <pre class="prettyprint linenums">.my_grid_item {
         grid-row-start: 2;
-        grid-row-end: 4; /*< This is non-inclusive and also may be 1 past the last row */
+        grid-row-end: 4; /*&lt; This is non-inclusive and also may be 1 past the last row */
         /* OR */
         grid-row-end: span 2;
 }</pre>
@@ -641,13 +656,53 @@ h1 { color: yellow; } &lt;&lt; THIS IS APPLIED </pre>
         that determins which element is on top.
     </p>
     <p>
-        Useful CSS functions fordefining grids include:
+        Useful CSS functions for defining grids include:
     </p>
     <ul>
-        <li><code>minmax()</code>: defines a size range greater than or equal to min and less than or equal to max. It is used with CSS Grids.</li>
-        <li><code>repeat()</code>:epresents a repeated fragment of the track list, allowing a large number of columns or rows that exhibit a recurring pattern to be written in a more compact form.</li>
+        <li>
+            <p>
+                <code>minmax()</code>: give tracks a minimum size, but also ensure they expand to fit
+                any content that is added. E.g. <code>minmax(100px, auto)</code> means automatically
+                created rows/cols will be a minimum of 100 pixels tall, and a maximum of auto. Using
+                auto means that the size will look at the content size and will stretch to give space
+                for the tallest item in a cell, in this row.
+            </p>
+        </li>
+        <li>
+            <p>
+                <code>repeat()</code>: represents a repeated fragment of the track list, allowing a
+                large number of columns or rows that exhibit a recurring pattern to be written in a more
+                compact form. E.g., <code>repeat(3, 1fr)</code> is equivalent to <code>1fr 1fr 1fr</code>.
+            </p>
+            <p>
+                <code>repeat(auto-fill, 200px)</code>: create as many 200px rows/cols as will fit in container.
+            </p>
+            <p>
+                The function <code>minmax</code> can be used with <code>repeat</code>:
+                <code>repeat( 12, minmax(250px, 1fr) );</code>. This specifies a minimum width
+                for each row/col. With only <code>1fr</code> the cell will squish depending on
+                the size of the container. But with the <code>minmax</code> addition it will never
+                squish to a size less then <code>250px</code>. This will <em>not</em> wrap, justify
+                overflow the container if its not big enough.
+            </p>
+            <blockquote>
+                <p>
+                    auto-fill FILLS the row with as many columns as it can fit. So it creates implicit columns whenever a new column can fit, because it's trying to FILL the row with as many columns as it can. The newly added columns can and may be empty, but they will still occupy a designated space in the row.
+                </p>
+                <p>
+                    auto-fit FITS the CURRENTLY AVAILABLE columns into the space by expanding them so that they take up any available space. The browser does that after FILLING that extra space with extra columns (as with auto-fill ) and then collapsing the empty ones.
+                </p>
+                <footer>-- https://css-tricks.com/auto-sizing-columns-css-grid-auto-fill-vs-auto-fit/</footer>
+            </blockquote>
+        </li>
     </ul>
-    <p></p>
+    <p>
+        Gaps between rows and columns are defined using <code>column-gap</code> and
+        <code>row-gap</code>.
+    </p>
+    <p>
+        Align items inside a cell using <code>align-items: (start|end|stretch);</code>.
+    </p>
 </div>
 
 

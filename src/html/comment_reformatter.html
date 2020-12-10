@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>Code Reformatter | JEHTech</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">Code Reformatter</h1>
+<div style="padding-right:10px;">
+    <p>
+        You've just updated a comment and now it is over the maximum column width allowed by
+        your coding standard. But, to tidy it up you now have to modify each line below it...
+        hassle no more! Paste it in here and let the page reformat it for you! It will only
+        narrow the width, not expand it.
+    </p>
+    <textarea id="code" style="width:100%; height: 30vh;"></textarea>
+
+    <input id="char_width" value="100"/>
+    <button id="reformat" style="margin-top: 10px;">Reformat</button>
+    <p>You'll see the output here:</p>
+    <textarea id="code2" style="width:100%; height: 30vh;"></textarea>
+
+    <script>
+        const findWordBoundaryToLeft = (line, endIdx) => {
+            while ((endIdx >= 0) && (line[endIdx] !== " ")) {
+                endIdx -= 1;
+            }
+            return endIdx;
+        };
+
+        document.getElementById("reformat").addEventListener("click", () => {
+            const commentStr = "//";
+            const desiredWidth = document.getElementById("char_width").value;
+            const commentText = document.getElementById("code").value;
+            let newLines = [];
+            let prevOverflow = "";
+            let commentStartIndex = 0;
+
+            for(let [idx, line] of commentText.split("\n").entries()) {
+                commentStartIndex = line.indexOf("//");
+                if (commentStartIndex !== -1) {
+                    newLine = line.slice(0, commentStartIndex + commentStr.length) +
+                              (prevOverflow.length ?  prevOverflow + " " : "") +
+                              line.slice(commentStartIndex + commentStr.length);
+
+                    if (newLine.length > desiredWidth) {
+                        snipIdx = findWordBoundaryToLeft(newLine, desiredWidth);
+                        prevOverflow = newLine.slice(snipIdx);
+                        newLine = newLine.slice(0, snipIdx);
+                    }
+                    else {
+                        prevOverflow = "";
+                    }
+                    newLines.push(newLine)
+                }
+            }
+
+            console.table(prevOverflow.length)
+
+            while (prevOverflow.length) {
+                let newLine = " ".repeat(commentStartIndex) + commentStr + prevOverflow;
+                if (newLine.length > desiredWidth) {
+                    snipIdx = findWordBoundaryToLeft(newLine, desiredWidth);
+                    if (snipIdx <= commentStartIndex + commentStr.length) {
+                        prevOverflow = "";
+                        newLine = "ERROR - DESIRED WIDTH TOO SMALL!"
+                    }
+                    else {
+                        prevOverflow = newLine.slice(snipIdx);
+                        newLine = newLine.slice(0, snipIdx);
+                    }
+                }
+                else {
+                    prevOverflow = "";
+                }
+                console.log(newLine)
+                newLines.push(newLine)
+            }
+
+            document.getElementById("code2").value = newLines.join("\n");
+        });
+    </script>
+</div>
+</body>
+</html>
+
+
