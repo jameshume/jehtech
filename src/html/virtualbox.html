@@ -1,0 +1,105 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>Virtual Box | JEHTech</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">Virtual Box Notes</h1>
+<div style="padding-right:10px;">
+
+	<h2>Page Contents</h2>
+	<div id="page_contents">
+	</div>
+
+	<h2>Headless Mode</h2>
+	<div>
+		<p>
+			When run in headless mode, Virtual Box runs as a daemon with no graphical interface.
+			I've used this to allow it to be auto-started during the my host OS's boot.
+		</p>
+		<p>
+			To setup headless mode:
+		</p>
+		<pre class="prettyprint linenums">"C:\Program Files\Oracle\VirtualBox\VBoxManage.exe" startvm THE_VBOX_NAME --type headless</pre>
+		<p>
+			To connect to the headless VBox a host-only network should be setup.
+		</p>
+		<blockquote>
+			<p>
+				With host-only networking, virtual box doesn't try to use a physical network adapter on the host. Instead in VirtualBox you can create one or more (up to 8) virtual adapters for connections between the host and virtual machines created in VirtualBox on the host.
+			</p>
+			<p>
+				When host-only networking is used, Oracle VM VirtualBox creates a new software interface on the host which then appears next to your existing network interfaces. In other words, whereas with bridged networking an existing physical interface is used to attach virtual machines to, with host-only networking a new loopback interface is created on the host. And whereas with internal networking, the traffic between the virtual machines cannot be seen, the traffic on the loopback interface on the host can be intercepted.
+			</p>
+		</blockquote>
+		<p>
+			The guest can then be accessed using <code>ssh -l USER-NAME 192.168.56.101</code>
+		</p>
+	</div>
+
+	<h2>Networking Modes</h2>
+	<div>
+		<p>
+			References:
+		</p>
+		<ul>
+			<li>
+				<a href="https://technology.amis.nl/platform-technology/virtualization-and-oracle-vm/virtualbox-networking-explained" target="_blank">VirtualBox networking explained</a>, Maarten Smeets, July 27, 2018.
+			</li>
+			<li>
+				<a href="https://www.virtualbox.org/manual/ch06.html" target="_blank">Chapter 6. Virtual Networking</a>, Virtual Box manual.
+			</li>
+			<li>
+				<a href="https://www.nakivo.com/blog/virtualbox-network-setting-guide/" target="_blank">VirtualBox Network Settings: Complete Guide</a>, Naviko [Good!].
+			</li>
+		</ul>
+
+		<h3>NAT</h3>
+		<p>
+			From the Virtual Box manual we read:
+		</p>
+		<blockquote>
+			<p>A virtual machine with NAT enabled acts much like a real computer that connects to the Internet through a router. The router, in this case, is the Oracle VM VirtualBox networking engine, which maps traffic from and to the virtual machine transparently ... <em>placed between each virtual machine and the host</em> ... by default virtual machines cannot talk to each other ...</p>
+			<p>... The network frames sent out by the guest operating system are received by Oracle VM VirtualBox's NAT engine, which extracts the TCP/IP data and resends it using the host operating system... </p>
+			<p>... The virtual machine receives its network address ... on the private network from a DHCP server integrated into Oracle VM VirtualBox ... </p>
+			<footer>-- <a href="https://www.virtualbox.org/manual/ch06.html#network_nat" target="_blank">Virtual Box Manual</a>.</footer>
+		</blockquote>
+		<p>
+			This can be represented as so (taking inspiration from the Naviko guide).
+		</p>
+		<p>
+			<img src="##IMG_DIR##/vbox_nat.png"/>
+		</p>
+
+		<h3>Bridged</h3>
+		<p>
+		</p>
+		<blockquote>
+			<p>With bridged networking, Oracle VM VirtualBox uses a <em>device driver on your host system that filters data from your physical network adapter</em>. This driver is therefore called a <em>net filter driver</em>. This enables Oracle VM VirtualBox to <em>intercept data</em> from the physical network and <em>inject data</em> into it, effectively creating a new network interface in software. When a guest is using such a new software interface, it <em>looks to the host system as though the guest were physically connected to the interface using a network cable</em>. The host can send data to the guest through that interface and receive data from it.</p>
+			<footer>-- <a href="https://www.virtualbox.org/manual/ch06.html#network_nat" target="_blank">Virtual Box Manual</a>.</footer>
+		</blockquote>
+		<p>
+		</p>
+	</div>
+</div> <!-- END H1 padding div -->
+</div>
+</body>
+</html>
+
+

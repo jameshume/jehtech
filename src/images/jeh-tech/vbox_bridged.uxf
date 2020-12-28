@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>110</x>
+      <y>160</y>
+      <w>140</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>Guest
+valign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>400</x>
+      <y>160</y>
+      <w>140</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>NAT
+bg=white
+transparency=1
+valign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>20</x>
+      <y>80</y>
+      <w>720</w>
+      <h>330</h>
+    </coordinates>
+    <panel_attributes>Host
+lw=3</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>70</x>
+      <y>130</y>
+      <w>410</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>Virtual Box
+lw=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>270</x>
+      <y>190</y>
+      <w>150</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-&gt;&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;130.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>670</x>
+      <y>160</y>
+      <w>140</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>NIC
+bg=white
+transparency=1
+layer=1
+valign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>530</x>
+      <y>190</y>
+      <w>160</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-&gt;&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;140.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>350</x>
+      <y>280</y>
+      <w>110</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>DHCP
+bg=white
+transparency=1
+valign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>270</x>
+      <y>190</y>
+      <w>100</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-&gt;&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;10.0;50.0;110.0;80.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>510</x>
+      <y>210</y>
+      <w>90</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;70.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>530</x>
+      <y>280</y>
+      <w>240</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>Take Ethernet frame from Guest
+and re-send as "app" on Host via
+NIC and translate back when
+response received.
+layer=1
+transparency=1
+bg=yellow
+lt=..</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>220</x>
+      <y>180</y>
+      <w>60</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>Virtual
+NIC
+bg=white
+transparency=1
+layer=2
+valign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>20</x>
+      <y>20</y>
+      <w>790</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>*Virtual Box - NAT*
+fg=white
+bg=black</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
