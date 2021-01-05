@@ -1032,6 +1032,36 @@ Directly from the docs:
 		})
 	};
 
+It seems one can kinda use PropTypes with contexts: Ref: https://codesandbox.io/s/1z1oxpx02j:
+const TestingContext = React.createContext("light");
+
+	TestingContext.Provider.propTypes = {
+		value: PropTypes.oneOf(["light", "dark"])
+	};
+
+	const Testing = () => (
+		<TestingContext.Consumer>{value => <h1>{value}</h1>}</TestingContext.Consumer>
+	);
+
+	const App = () => (
+		<div>
+			<TestingContext.Provider value="light">
+				<Testing />
+			</TestingContext.Provider>
+			<TestingContext.Provider value="dark">
+				<Testing />
+			</TestingContext.Provider>
+
+			{/* PropTypes warning since value 'asdf' doesn't match propTypes rule */}
+			<TestingContext.Provider value="asdf">
+				<Testing />
+			</TestingContext.Provider>
+
+			{/* default value used since it's not wrapped in a Provider */}
+			<Testing />
+		</div>
+	);
+
 
 
 ====================================================================================================
@@ -1110,6 +1140,11 @@ References give us access to our DOM elements.
 CONTEXT API & PROP CHAINS
 ====================================================================================================
 
+Good reads:
+   - https://www.jackfranklin.co.uk/blog/context-in-reactjs-applications/
+
+Note - if you see stuff with "childContextTypes" in it, it is the LEGACY API!
+
 Class Based Components
 -----------------------
 
@@ -1144,7 +1179,7 @@ So, now in your application or the most parentish component that will "own" the 
 
 		render() {
 			return
-				<!-- 
+				<!--
 				 -- NOTE here the AuthContext.Provider takes a value prop. That is why the defaults, generally,
 				 -- dont matter.            Outer curlies to enter dynamic content
 				                            v
@@ -1175,7 +1210,7 @@ can be anywhere in the component hierachy and thats how we skip having to pass d
 				<AuthContext.Consumer>
 				<!--  Return a function which the AuthContext can then call with the context as
 				      a parameter to said function.
-				      vvvvvvv 
+				      vvvvvvv
 				-->
 					{(context) => {
 						return ... your componenet code ...;
@@ -1212,6 +1247,11 @@ and nowhere else. The alternative for class based components is this (React >= 1
 Functional Based Componenets
 ----------------------------
 React hooks can do the same thing for us. Import the "useContext" hook.
+
+PropTypes For Contexts
+----------------------
+See the PropTypes section for an example of how this can be done. It seems okay but if the context
+is dynamic it is still hard to test it on a per-component basis.
 
 
 
@@ -1852,14 +1892,12 @@ In components that required access to the store:
 		};
 	};
 
+	// `connect` returns a new function that accepts the component to wrap:
 	// Either
 	export default connect(mapStateToProps)(MyComponent); // Connect is func that _returns_ a HOC
 
 	// Or
-	export default connect(mapStateToProps)(MyComponent, mapDispatchToProps); // Connect is func that _returns_ a HOC
-
-	// Or
-	export default connect(mapStateToProps)(null, mapDispatchToProps); // Connect is func that _returns_ a HOC
+	export default connect(mapStateToProps, mapDispatchToProps)(MyComponent); // Connect is func that _returns_ a HOC
 
 
 Updating state IMMUTABLY
@@ -2679,6 +2717,17 @@ DEPLOYING TO THE WEB
    the react app gets the path and server won't know the app paths!!
 4. Upload build artifacts from step 2 to a static server (Firebase, GitHub pages, AWS S3 etc etc).
 	I.e., the content of the build folder!
+
+
+Remove &quot; Download the React DevTool...&quot Message
+------------------------------------------------------
+See: https://stackoverflow.com/a/42196820/1517244
+    __REACT_DEVTOOLS_GLOBAL_HOOK__ = {
+      supportsFiber: true,
+      inject: function() {},
+      onCommitFiberRoot: function() {},
+      onCommitFiberUnmount: function() {},
+    };
 
 
 
