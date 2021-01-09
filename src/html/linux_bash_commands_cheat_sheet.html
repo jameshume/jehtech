@@ -232,6 +232,10 @@
               <td><code>sudo chmod [ogu]+[rwx] &lt;resource&gt;</code></td>
             </tr>
             <tr>
+              <td>Create a new user:</td>
+              <td><code>adduser USER-NAME PASSWORD</code></td>
+            </tr>
+            <tr>
               <td>Add a user to a group:</td>
               <td><code>sudo adduser &lt;new-username&gt; &lt;group-name&gt;</code></td>
             </tr>
@@ -258,6 +262,23 @@
             <tr>
               <td>Change password:</td>
               <td><code>sudo passwd &lt;username&gt;</code> or just for yourself <code>passwrd</code></td>
+            </tr>
+            <tr>
+              <td>Example - create new user account:</td>
+              <td><pre># Create a new user...
+sudo <em>adduser</em> the_new_guy new_guys_password
+
+# Setup SSH Access...
+# Must have a private/public keypair on your local machine and copy the public
+# key onto the server's authorized-keys file for the user.
+sudo <em>mkdir</em> /home/the_new_guy/.ssh/
+sudo <em>chmod</em> 0700 /home/the_new_guy/.ssh/
+sudo -- sh -c "echo 'ssh-ed25519 AAAA ... rest of pub key ...' > /home/the_new_guy/.ssh/authorized_keys"
+sudo <em>chown</em> -R the_new_guy:the_new_guy /home/vivek/.ssh/
+
+# Setup sudoer ability [optional]
+sudo <em>usermod</em> -a -G sudo the_new_guy</pre>
+            </td>
             </tr>
           </table>
         </p>
