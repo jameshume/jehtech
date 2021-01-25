@@ -39,10 +39,17 @@ React focusus on the what not the how - focus on what you want to see rather tha
 
 ====================================================================================================
 ====================================================================================================
-TODO / TO READ
+TODO / TO READ / GOOD READS
 ====================================================================================================
 
 https://blog.bitsrc.io/understanding-react-render-props-and-hoc-b37a9576e196
+https://kentcdodds.com/blog/application-state-management-with-react
+https://www.youtube.com/watch?v=3XaXKiXtNjw&ab_channel=ReactTraining
+https://kentcdodds.com/blog/prop-drilling
+https://kentcdodds.com/blog/state-colocation-will-make-your-react-app-faster
+https://kentcdodds.com/blog/how-to-use-react-context-effectively
+https://pagepro.co/blog/how-to-use-memoization-in-js-and-react/#:~:text=First%20things%20first%2C%20Memoization%20in,same%20arguments%20are%20supplied%20again.
+https://reactjs.org/blog/2016/07/13/mixins-considered-harmful.html
 
 
 
@@ -1144,6 +1151,26 @@ Good reads:
    - https://www.jackfranklin.co.uk/blog/context-in-reactjs-applications/
 
 Note - if you see stuff with "childContextTypes" in it, it is the LEGACY API!
+
+Take care
+---------
+Although the docs say that "Context is designed to share data that can be considered 'global' for
+a tree of React components ...", note that the 'global' data being shared is relatively STATIC,
+generally, as far as the child component is concerned - it won't update that data and cannot decide
+whether it should render based on changes in the context. This is why, for example, lifecyle
+methods haven't been expanded to see the previous context in the same way that one can see the
+previous props in functions like shouldComponenetUpdate() - i.e., the context doesn't appear to be
+designed to hold volatile state - obvs it might not be totally static, but just be aware. It's also
+NOT A GREAT WAY TO RESOLVE PROP DRILLING, for the same reson: when deciding when to re-render the
+context consumer cannot see the prevous context.
+
+The docs have this to say:
+
+    "If you only want to avoid passing some props through many levels, component composition is
+     often a simpler solution than context."
+
+VERY MUCH WORTH TAKING NOTE OF https://reactjs.org/docs/context.html#before-you-use-context
+
 
 Class Based Components
 -----------------------

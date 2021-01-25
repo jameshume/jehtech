@@ -170,8 +170,8 @@ not do it itself. Thus everything is delegated.
 
 SEE the RFC here: https://tools.ietf.org/html/rfc6749
 
-
-
+The following is an annotated version of the abstract protocol flow from the RFC:
+##IMG:oauth_abstract_protocol_flow.png##
 ====================================================================================================
 ====================================================================================================
 ACTORS
@@ -182,7 +182,7 @@ Actor #1: OAuth Provider
 		Authentication component
 			Login page etc. Identity provider Oauth is the front end of the IAM
 		Consent component
-			Get consent for the delegation of access rights to the client 
+			Get consent for the delegation of access rights to the client
 			User is logged in. This page says "do you really want to provide this subset
 			to the app
 		Token management infra structure
@@ -213,13 +213,14 @@ Actor #2: Resource Provider (Server)
 
 	Provides the resource EP
 
-	
+
 Actor #3: Resource Owner
 	Owner of the protected resource. S/he can access their data directly. Wih OAuth the resource owner
 	is giving a client permissions to indirectly access their data via the OAuth authentication mechanism
 	(owner delegates his access rights, or a subset of them, to the client) and can specify restricted
 	access to the protected resource, i.e., only allow access to a subset of the resource or restrict the
 	things that can be done with or to that resource.
+
 
 Actor #4: Client
 	Third party tring to access protected resources of the resource owner. E.g. an app trying to access
@@ -229,6 +230,12 @@ Actor #4: Client
 	identify itself.
 
 	Client provides the redirect EP.
+
+	Clients come in two types:
+	   1. CONFIDENTIAL - Client can securely store client credentials or is capable of secure
+        client authentication using other means.
+	   2. PUBLIC - Incapable of maintaining the confidentiality of their credentials. E.g. client
+		    app in web browser, and incapable of secure client authentication via any other means.
 
 
 A component can have the role of several actors. Eg Words with friends wants access to my FB friends list.
@@ -246,8 +253,14 @@ on PrintMyPhotos.com.
 ====================================================================================================
 END POINTS
 ====================================================================================================
-	1. Authorization EP (OAuth server)
-	2. Token EP (OAuth server)
+	1. Authorization EP (OAuth server): The authorization endpoint is used to interact with the
+	   resource owner and obtain an authorization grant.
+	      Verify identity of resource owner.
+	      Because requests to the authorization endpoint result in user authentication and the
+	      transmission of clear-text credentials (in the HTTP response), the authorization server MUST
+	      require the use of TLS.
+	2. Token EP (OAuth server): Used by the client to obtain an access token by presenting its
+	   authorization grant or refresh token.
 	3. Redirect EP (Client)
 	4. Resource EP(s) (Resource server)
 
@@ -336,18 +349,24 @@ Explanation taken from https://ldapwiki.com/wiki/OAuth%202.0%20Client%20Registra
 
 ====================================================================================================
 ====================================================================================================
-FLOWS
+FLOWS OVERVIEW
 ====================================================================================================
 
 OAuth Flows Overview
 --------------------
 
-1. Authorizaton Code Flow
+From RFC:
+	To request an access token, the client obtains authorization from the
+	resource owner.  The authorization is expressed in the form of an
+	authorization grant, which the client uses to request the access
+	token.
+
+1. Authorizaton Grant Flow
 	A.k.a. "three-legged ouath"
 	Most secure flow
 	Client must be able to securley store client ID/secret and tokens
 
-2. Implicit Flow
+2. Implicit Grant Flow
 	Used when client can NOT securley store client ID/secret or OAuth tokens
 	E.g. When client written in client side JavaScript
 	Cons: Short validity of tokens and refreshing AT very difficult
@@ -362,9 +381,23 @@ OAuth Flows Overview
 
 
 
-Authorizaton Code Flow
------------------------
-Checks the identity of the 3 involved actors (why its called "3-legged")
+====================================================================================================
+====================================================================================================
+AUTHORIZATION GRANT FLOW
+====================================================================================================
+
+Checks the identity of the 3 involved actors (why its called "3-legged"). The authorization code
+grant type is used to obtain both access tokens and refresh tokens and is optimized for
+confidential clients.
+
+From RFC:
+    The authorization code grant type is used to obtain both access
+    tokens and refresh tokens and is optimized for confidential clients.
+    Since this is a redirection-based flow, the client must be capable of
+    interacting with the resource owner’s user-agent (typically a web
+    browser) and capable of receiving incoming requests (via redirection)
+    from the authorization server.
+
 
 OAuth server authenticates the resource owner using his/her username/password that
 are provided interactively via the login mechanism that the OAuth server provides.
@@ -383,13 +416,13 @@ Resource  ------------> OAuth  <----------- Resource -----------> Resources
                           / \                  |
                      /auth   /token            |
                          ^  ^                  |
-                         |  |                  | 
+                         |  |                  |
                          v  v                  |
                         Client <---------------+
 
 
 Advantages:
-	Relatively high security level 
+	Relatively high security level
 	AT does NOT flow through browser
 	Username/pwd of resource owner not known to client
 	Convenience - Use of RT allows access for longer periods of time without
@@ -398,9 +431,26 @@ Advantages:
 		Identities of all 3 participants is ensured
 
 
-Authorization code grant:
-	1. Get the auth code: Client requrests auth-code from the /auth EP of the OAuth
-	   provider.
-		
-	2. Get the token: Client uses auth-code to get AT.
-	3. Use AT to access resource
+##IMG:authorization_code_grant.png##
+
+
+
+====================================================================================================
+====================================================================================================
+IMPLICIT GRANT FLOW
+====================================================================================================
+From the RFC:
+   The implicit grant is a simplified authorization code flow optimized
+   for clients implemented in a browser ...
+	 ... In the implicit flow, instead of issuing the client
+   an authorization code, the client is issued an access token directly
+   (as the result of the resource owner authorization).  The grant type
+   is implicit, as no intermediate credentials (such as an authorization
+   code) are issued (and later used to obtain an access token).
+	 ...
+	 ...
+   The implicit grant type does not include client authentication, and
+   relies on the presence of the resource owner and the registration of
+   the redirection URI.  Because the access token is encoded into the
+   redirection URI, it may be exposed to the resource owner and other
+   applications residing on the same device.

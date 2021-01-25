@@ -1,0 +1,994 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>710</x>
+      <y>290</y>
+      <w>140</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>*_Client_*
+fg=white
+bg=black</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>910</x>
+      <y>290</y>
+      <w>140</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>*_Resource Owner's_*
+*_User Agent_*
+*_(I.e, their browser)_*
+fg=white
+bg=black</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>1110</x>
+      <y>290</y>
+      <w>140</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>*_Resource Owner_*
+*_I.e. YOU sitting_*
+*_at your computer_*
+fg=white
+bg=black</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>1310</x>
+      <y>290</y>
+      <w>140</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>*_Auth Server_*
+fg=white
+bg=black</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>1510</x>
+      <y>290</y>
+      <w>140</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>*_Resource Server_*
+fg=white
+bg=black</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>770</x>
+      <y>340</y>
+      <w>30</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>970</x>
+      <y>340</y>
+      <w>30</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1170</x>
+      <y>340</y>
+      <w>30</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1370</x>
+      <y>340</y>
+      <w>30</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1570</x>
+      <y>340</y>
+      <w>30</w>
+      <h>390</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;370.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>770</x>
+      <y>390</y>
+      <w>20</w>
+      <h>420</h>
+    </coordinates>
+    <panel_attributes>
+bg=black</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>970</x>
+      <y>390</y>
+      <w>20</w>
+      <h>300</h>
+    </coordinates>
+    <panel_attributes>
+bg=black</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>780</x>
+      <y>380</y>
+      <w>210</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+Direct browser to to auth EP
+Includes:
+client ID,
+requested scope,
+local state
+redirection URI</panel_attributes>
+    <additional_attributes>190.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>980</x>
+      <y>400</y>
+      <w>410</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+Redirect causes browser to fetch  AUTH EP passing 
+client ID etc.</panel_attributes>
+    <additional_attributes>390.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>1370</x>
+      <y>390</y>
+      <w>20</w>
+      <h>360</h>
+    </coordinates>
+    <panel_attributes>
+bg=black</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>980</x>
+      <y>440</y>
+      <w>410</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+Login page displayed</panel_attributes>
+    <additional_attributes>10.0;20.0;390.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>1170</x>
+      <y>470</y>
+      <w>20</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>
+bg=black</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>980</x>
+      <y>480</y>
+      <w>210</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+Resource owner
+enters their credentials</panel_attributes>
+    <additional_attributes>10.0;20.0;190.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>980</x>
+      <y>530</y>
+      <w>410</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+Authenticate user with servr</panel_attributes>
+    <additional_attributes>390.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>980</x>
+      <y>570</y>
+      <w>410</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+Redirect user agent back to the client</panel_attributes>
+    <additional_attributes>10.0;20.0;390.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>780</x>
+      <y>590</y>
+      <w>210</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+Redirect user agent
+back to the client</panel_attributes>
+    <additional_attributes>10.0;20.0;190.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>780</x>
+      <y>630</y>
+      <w>610</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+Request access token using the grant credentials from TOKEN EP.
+Includes the authorization code from prev step + the redirection URI
+that was used.</panel_attributes>
+    <additional_attributes>590.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>780</x>
+      <y>700</y>
+      <w>610</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+Responds with access code and possibly refresh token</panel_attributes>
+    <additional_attributes>10.0;20.0;590.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>1570</x>
+      <y>710</y>
+      <w>20</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>
+bg=black</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>780</x>
+      <y>750</y>
+      <w>810</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+Use access code to access resources</panel_attributes>
+    <additional_attributes>790.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>780</x>
+      <y>770</y>
+      <w>810</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+</panel_attributes>
+    <additional_attributes>10.0;20.0;790.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>770</x>
+      <y>800</y>
+      <w>30</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1570</x>
+      <y>800</y>
+      <w>30</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1230</x>
+      <y>400</y>
+      <w>60</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>fg=red
+bg=none</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1210</x>
+      <y>630</y>
+      <w>80</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>fg=red
+bg=none</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1280</x>
+      <y>250</y>
+      <w>50</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>fg=red</panel_attributes>
+    <additional_attributes>30.0;10.0;10.0;70.0;10.0;150.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1310</x>
+      <y>90</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>response_type
+fontsize=12
+halign=left</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1310</x>
+      <y>120</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>client_id
+fontsize=12
+halign=left</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1310</x>
+      <y>150</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>redirect_uri
+fontsize=12
+halign=left</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1310</x>
+      <y>180</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>scope
+fontsize=12
+halign=left</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1310</x>
+      <y>210</y>
+      <w>100</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>state
+fontsize=12
+halign=left</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1410</x>
+      <y>90</y>
+      <w>240</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>REQ | Value MUST be set to "code".
+fontsize=12
+halign=left</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1410</x>
+      <y>120</y>
+      <w>240</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>REQ | The client identifier.
+fontsize=12
+halign=left</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1410</x>
+      <y>150</y>
+      <w>240</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>OPT | The client identifier.
+fontsize=12
+halign=left</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1410</x>
+      <y>180</y>
+      <w>240</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>OPT | The scope of the access request
+fontsize=12
+halign=left</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1410</x>
+      <y>210</y>
+      <w>240</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>OPT | Opaque value used by the client to 
+maintain state between the request and 
+callback
+fontsize=12
+halign=left</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1320</x>
+      <y>870</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>grant_type
+fontsize=12
+halign=left</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1320</x>
+      <y>900</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>code
+fontsize=12
+halign=left</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1320</x>
+      <y>930</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>redirect_uri
+fontsize=12
+halign=left</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1320</x>
+      <y>960</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>client_id
+fontsize=12
+halign=left</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1420</x>
+      <y>870</y>
+      <w>260</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>REQ | Value MUST be "authorization_code"
+fontsize=12
+halign=left</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1420</x>
+      <y>900</y>
+      <w>260</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>REQ | The auth code from auth server.
+fontsize=12
+halign=left</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1420</x>
+      <y>930</y>
+      <w>260</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>OPT | The client identifier.
+fontsize=12
+halign=left</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1420</x>
+      <y>960</y>
+      <w>260</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>OPT | If client is not authenticating with server
+fontsize=12
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1280</x>
+      <y>620</y>
+      <w>60</w>
+      <h>270</h>
+    </coordinates>
+    <panel_attributes>fg=red</panel_attributes>
+    <additional_attributes>10.0;10.0;40.0;40.0;40.0;250.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1320</x>
+      <y>870</y>
+      <w>360</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>fg=red
+layer=11</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1310</x>
+      <y>90</y>
+      <w>340</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>fg=red
+layer=11</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>1640</x>
+      <y>560</y>
+      <w>340</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>A redirect is to the resource owner's user agent,
+probably a broswer. A redirect is sent back because
+it cannot send something back directly to the client:
+it can only do so by asking the browser to visit the
+client's "callback" or redirection URI, that was
+sent in the original auto request.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1060</x>
+      <y>570</y>
+      <w>60</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>fg=red
+bg=none</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1110</x>
+      <y>490</y>
+      <w>550</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>fg=red</panel_attributes>
+    <additional_attributes>530.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1640</x>
+      <y>480</y>
+      <w>100</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>code
+fontsize=12
+halign=left</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1740</x>
+      <y>480</y>
+      <w>240</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>REQ | Auth code generated by the auth
+           server.
+fontsize=12
+halign=left</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1640</x>
+      <y>520</y>
+      <w>100</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>state
+fontsize=12
+halign=left</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1740</x>
+      <y>520</y>
+      <w>240</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>REQ | If "state" included in requested it is
+           passed back, unmodified.
+fontsize=12
+halign=left</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1640</x>
+      <y>480</y>
+      <w>340</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>fg=red
+layer=11</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>650</x>
+      <y>470</y>
+      <w>120</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>*Auth Code*
+*Grant*
+*/auth*
+/*&lt;&lt;Front Channel&gt;&gt;*/</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>840</x>
+      <y>850</y>
+      <w>330</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>_Example ACCESS TOKEN RESPONSE:_
+ HTTP/1.1 200 OK
+     Content-Type: application/json;charset=UTF-8
+     Cache-Control: no-store
+     Pragma: no-cache
+
+     {
+       "access_token":"2YotnFZFEjr1zCsicMWpAA",
+       "token_type":"example",
+       "expires_in":3600,
+       "refresh_token":"tGzv3JOkF0XG5Qx2TlKWIA",
+       "example_parameter":"example_value"
+     }</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1000</x>
+      <y>700</y>
+      <w>90</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>fg=red
+bg=none</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>990</x>
+      <y>710</y>
+      <w>30</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>fg=red</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>1320</x>
+      <y>1000</y>
+      <w>400</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>_Example ACCESS TOKEN REQUEST:_
+POST /token HTTP/1.1
+Host: server.example.com
+Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=authorization_code&amp;code=SplxlOBeZQQYbYS6WxSbIA
+&amp;redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2Fcb</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>830</x>
+      <y>850</y>
+      <w>340</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>fg=red
+layer=11</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>1640</x>
+      <y>390</y>
+      <w>330</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>_Example AUTHORIZATION RESPONSE:_
+HTTP/1.1 302 Found
+Location: https://client.example.com/cb?
+   code=SplxlOBeZQQYbYS6WxSbIA&amp;
+   state=xyz</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>640</x>
+      <y>370</y>
+      <w>980</w>
+      <h>260</h>
+    </coordinates>
+    <panel_attributes>valign=center
+halign=left
+bg=yellow
+fg=none
+transparency=75</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>640</x>
+      <y>630</y>
+      <w>980</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>valign=center
+halign=left
+bg=orange
+fg=none
+transparency=75</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>1330</x>
+      <y>0</y>
+      <w>440</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>_Example AUTHORIZATION REQUEST:_
+GET /authorize?response_type=code&amp;
+   client_id=s6BhdRkqt3&amp;state=xyz &amp;
+   redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2Fcb 
+   HTTP/1.1
+Host: server.example.com</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>650</x>
+      <y>640</y>
+      <w>120</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>*XChange Auth*
+*Code For*
+*Access Token*
+layer=1
+*/token*
+/*&lt;&lt;Back Channel&gt;&gt;*/</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>640</x>
+      <y>740</y>
+      <w>980</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>valign=center
+halign=left
+fg=none
+bg=pink
+transparency=75</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>650</x>
+      <y>750</y>
+      <w>110</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>*Resource*
+*Access Using*
+*AccessToken*
+layer=1
+transparency=75</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>440</x>
+      <y>410</y>
+      <w>190</w>
+      <h>390</h>
+    </coordinates>
+    <panel_attributes>*Front v.s. Back Channel*
+Secure, but not considered
+as secure as the back
+channel. As we are going
+via the browser, we can't
+store secure app keys in
+the HTML on the browser
+as anyone could see them.
+But, we need the browser
+to do the authentication of
+the resource owner. So do
+the authentication in the less
+secure front channel: its
+secure in terms of
+authenticating the user, just
+not secure enough to hold
+application secrets, which is
+why the auth token is
+exchanged for the access
+token via the back channel,
+which, as it is more secure
+for the client, can be used to
+transmit client secrets to the
+auth server.</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

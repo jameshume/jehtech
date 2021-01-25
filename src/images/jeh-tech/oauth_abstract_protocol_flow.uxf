@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>710</x>
+      <y>250</y>
+      <w>100</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>Resource
+Owner
+valign=center
+halign=center
+bg=black
+fg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>330</x>
+      <y>250</y>
+      <w>100</w>
+      <h>400</h>
+    </coordinates>
+    <panel_attributes>Client
+valign=center
+halign=center
+bg=black
+fg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>710</x>
+      <y>400</y>
+      <w>100</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>Auth
+Server
+valign=center
+halign=center
+bg=black
+fg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>710</x>
+      <y>550</y>
+      <w>100</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>Resource
+Server
+valign=center
+halign=center
+bg=black
+fg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>420</x>
+      <y>240</y>
+      <w>310</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-
+*(1) Auth Request*
+Can I have the resource?</panel_attributes>
+    <additional_attributes>290.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>420</x>
+      <y>320</y>
+      <w>310</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-
+*(2) Auth Grant*
+Yes you can have it!
+Here's my authorization...</panel_attributes>
+    <additional_attributes>10.0;20.0;290.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>420</x>
+      <y>390</y>
+      <w>310</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-
+*(3) Auth Grant*
+Can I have an access token?
+Here's the authorization the
+resource owner gave me.
+</panel_attributes>
+    <additional_attributes>290.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>420</x>
+      <y>470</y>
+      <w>310</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-
+*(4) Access Token*
+Ok, you're authentic and the owner's auth
+looks good. Here's an access token...</panel_attributes>
+    <additional_attributes>10.0;20.0;290.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>420</x>
+      <y>540</y>
+      <w>310</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-
+*(5) Access Token*
+Can I access the resource?
+Here's my access token.</panel_attributes>
+    <additional_attributes>290.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>420</x>
+      <y>620</y>
+      <w>310</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-
+*(8) Protected Resource*
+The access token was valid so
+here's the resource you requested...</panel_attributes>
+    <additional_attributes>10.0;20.0;290.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>800</x>
+      <y>460</y>
+      <w>180</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-
+*(6) Access Token*
+Is this access
+token valid?</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;10.0;50.0;120.0;10.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>800</x>
+      <y>410</y>
+      <w>300</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-
+*(7) Access Token*
+Yes the token
+is valid.</panel_attributes>
+    <additional_attributes>10.0;210.0;170.0;210.0;170.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>750</x>
+      <y>180</y>
+      <w>30</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLActor</id>
+    <coordinates>
+      <x>700</x>
+      <y>10</y>
+      <w>120</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>/YOU are the/
+/resource owner/
+/(generally) The/
+/resource could/
+/be, for e.g.,your/
+/emails/</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>710</x>
+      <y>660</y>
+      <w>170</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>/In this case the resource/
+/server will be GMail, It/
+/may or may not be a/
+/physically different server/
+/in this eg/
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>800</x>
+      <y>340</y>
+      <w>90</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;60.0;70.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>160</x>
+      <y>430</y>
+      <w>170</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>/The client is the program/
+/that wants access to your/
+/resource, e.g. to your/
+/emails to, for e.g., scan/
+/them for phishing emails./</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>880</x>
+      <y>300</y>
+      <w>170</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>/In this case the auth/
+/server will be Google,/
+/but it doesn't need to/
+/be the same organisation/
+/that also owns the/
+/resource serrver, just/
+/happens to be in this eg./</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
