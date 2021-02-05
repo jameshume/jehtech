@@ -97,6 +97,9 @@ watches your files so if you change code it will auto-reload it for you!
 	    Removes this tool and copies build dependencies, configuration files
 	    and scripts into the app directory. If you do this, you can’t go back!
 
+			tip: Try out `Rescripts`, which is used to modify create-react-app's webpack configuration,
+			without ejecting the app... woop woop! (https://github.com/harrysolovay/rescripts)
+
 
 
 ====================================================================================================
@@ -1105,8 +1108,8 @@ References give us access to our DOM elements.
 				<div>
 					...
 					<input
-						ref="this.inputReference"
-						..
+						ref={this.inputReference}
+						...
 					/>
 					...
 				</div>
@@ -2941,3 +2944,102 @@ Also the proboperty names change too, like onClock becomes onPress. Seems like a
 
 If developing from scratch might have looked at this further, as it looks pretty powerful, but no
 dice here so ending notes on react native.
+
+
+====================================================================================================
+====================================================================================================
+ELECTRON & REACT
+====================================================================================================
+Electron is a neat way of creating a NodeJS app that includes the Chromium browser to run
+web apps on the desktop. It allows one to create CROSS PLATFORM apps.
+
+Resources / References:
+-----------------------
+https://www.electronjs.org/docs/tutorial/quick-start
+https://medium.com/@brockhoff/using-electron-with-react-the-basics-e93f9761f86f
+https://www.freecodecamp.org/news/building-an-electron-application-with-create-react-app-97945861647c/
+https://github.com/electron/windows-installer/issues/219#issuecomment-448188395
+https://msanatan.com/2020/04/19/accessing-nodejs-modules-with-create-react-app-and-electron/
+
+
+From the Electron docs:
+	Electron consists of three main pillars:
+		1. Chromium for displaying web content.
+		2. Node.js for working with the local filesystem and the operating system.
+		3. Custom APIs for working with often-needed OS native functions.
+	Developing an application with Electron is like building a Node.js app with a web interface or
+	building web pages with seamless Node.js integration.
+
+Example:
+--------
+Had a little play with Elctron by embedding my little toy epic-planner app
+(https://github.com/jameshume/epic_planner) using the the resources referenced above.
+
+1. npm install --save-dev electron
+2. add src/electron-main.js as described in the tutorials. including the freeCodeCamp's instructions
+   on adding the ability to run from the NPM server for development and packaged build files for
+	 release:
+       const startUrl = process.env.ELECTRON_START_URL || url.format({
+           pathname: path.join(__dirname, '../build/index.html'),
+           protocol: 'file:',
+           slashes: true
+       });
+       mainWindow.loadURL(startUrl);
+   remember to set nodeIntegration to true in the BrowserWindow's webPreferences option:
+      mainWindow = new BrowserWindow({
+          ...
+          webPreferences: { nodeIntegration: true }
+      });
+2. add the following additions to the package.json file:
+	      ...
+	+     "main": "src/electron-main.js",
+	+     "homepage": "./",
+	+     "author": "James Hume",
+	+     "description": "A bare-bones epic planning application",
+	      ...
+	      "scripts": {
+	          ....
+	+         "electron": "electron .",
+	+         "electron-dev": "set ELECTRON_START_URL=http://localhost:3000 && electron .",
+	      }
+	2.a The development version of the Electron app can be run by starting the NPM development server:
+	    `npm start` and by then running the Electron app: `npm run electron-dev`.
+	2.b The production version of the Electron app requires Electron forve... continue...
+3. install Electron-Forge: (Needs Git, so on Windows run from Git Bash console)
+	     npx @electron-forge/cli import
+4. `npm run build` the application in preparation
+5. on windows it appears, to get the the build to work correctly the following addition must be
+   made to the forge config in the package.json file:
+	     "config": {
+	         "forge": {
+	            "packagerConfig": {
+	+               "asar": true
+	            },
+6. On windows, from Git bash terminal, `npm run make`.
+7. Find your app in the "out" folder under the directory containing package.json.
+
+Pretty frikin' awesome!!
+
+Just note, Electron Forge might change the "start" script in your package.json file to
+`"start": "electron-forge start",`... just be aware.
+
+
+If you want to access Node.js modules do the following:
+	(https://stackoverflow.com/a/44454923/1517244)
+	use `window.require()` instead of `require()`:
+	const fs = window.require('fs');
+
+
+Access full filenames from HTML input element
+---------------------------------------------
+From https://stackoverflow.com/a/38549837/1517244
+	Electron adds a path property to File objects, so you can get the real path from the input
+	element using:
+		document.getElementById("myFile").files[0].path
+
+	In react just use a ref instead of getElementById!
+
+
+Using Electron dialogs from React App
+-------------------------------------
+
