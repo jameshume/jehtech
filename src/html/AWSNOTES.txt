@@ -795,6 +795,8 @@ S3 Encryption
 3. Client side
 	User enecrypts file herself before upload
 
+Example syncing dir to encrypted folder:
+aws s3 sync . s3://your/dir --sse
 
 Install & Configure The CLI
 ----------------------------

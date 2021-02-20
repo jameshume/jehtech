@@ -52,6 +52,15 @@ a restricted manner, WITHOUT giving the 3rd party you password.
 	in requests to send emails that it sends to my email provider.
 
 
+Summary
+-------
+From Udemy Course https://www.udemy.com/course/learn-oauth-2:
+    The OAuth standard ensures that there is no unintended leakage of information about the resource owner
+	to the app. The app may access only specific resources with the explicit consent of the resource owner.
+	The app does not get the resource owner's credentials, which would be wildcard access to all of the user's
+	data. By protecting the resource owner's data, especially the personal and profile data of the resource
+	owner, the OAuth standard can be used to ensure the privacy of the resource owner.
+
 Nomenclature
 ------------
 - Resource Owner - You - The person who owns the data that the application wants access to. e.g. You
@@ -454,3 +463,18 @@ From the RFC:
    the redirection URI.  Because the access token is encoded into the
    redirection URI, it may be exposed to the resource owner and other
    applications residing on the same device.
+
+Used for clients that cannot securely store the client ID and client secret as well as the refresh
+token: no refresh tokens are issued in this flow.
+
+Use case is mainly client side JavaScript applications.
+
+Does not used /token EP.
+
+/auth EP gives the access token directly - dont need the token EP - but no refresh token.
+The access tokens have a SHORT VALIDITY time. This is because the client has not been
+authenticated and a short validity period tries to hedge against the danger this introduces.
+
+Thus implicit grant has a REDUCED LEVEL OF SECURITY COMPARED TO THE AUTHORIZATION GRANT from
+the previous section.
+

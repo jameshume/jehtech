@@ -494,14 +494,6 @@ IMPORTANT NOTES:
 
 
 
-
-===================================================================================================
-===================================================================================================
-OAuth 2
-===================================================================================================
-
-
-
 ===================================================================================================
 ===================================================================================================
 Secure Quick Reliable Login (SQRL)
@@ -509,3 +501,118 @@ Secure Quick Reliable Login (SQRL)
 https://www.youtube.com/watch?v=Y6J1Yt8YYj0
 
 
+
+
+===================================================================================================
+===================================================================================================
+Coursera Course Notes
+===================================================================================================
+CIA Triad:
+	1. Confidentiality
+		I.e., privacy - prevent unorthorized access to data. I.e., only the sender and the
+		receiver, can understand the message. 
+	2. Information security
+		Can involve authentication where the sender and receiver want to confirm each others
+		identity in order to securly communicate.
+	3. Integrity
+		Ensure information is a accurate and not corrupted/spoofed etc in any way over its entire
+		lifecyle. I.e., a message in transity, has it been tampered with?!
+	4. Availability
+		Requires routine manintenance and upgrades.
+
+	The protection of information systems from unorthorized access, use, disclosure, distruption,
+	modification, or destruvtion in order to provide CIA - confidentiality, information
+	secutiry, integrity and availablility.
+
+Vunerability: Flaw, loophole, oversight, or error that can be exploited to violate system
+              security policy.
+Exploit:      Defined way to breach secutiry of an IT system through a vunerability.
+Threat:       Event, natural or man-made, able to cause negative impact to a system.
+Risk:         Siutation involving exposure to danger.
+
+THREATS ------> NATRUAL FACTORS ------> Lightning, hurricane etc
+       \------> HUMAN FACTORS   ------> INTERNAL FACTORS  ------> Current employees
+	                         \                           \------> Former employees
+							  \ ------> EXTERNAL FACTORS  ------> Malicious events ------> Hackers/Crackers ------> Virus/Trojan/Worm
+										 
+Early cyber security operations:
+	* Clipper Chip
+		Gov was going to try and put chips into all US phones to spy.
+	* Moonlight Maze
+		Attempted to collect passwords from *nix servers.
+		Attackers used lots of proxies and tools.
+	* Solar Sunrise
+		Series of attacks to department of defense networks. Exploited a known OS vunerability.
+		Left a backdoor and sniffer in the network!
+		Many attacks launched in this way and on other countries and organisations.
+		Attack was launched by two teenagers in California, not a nation state!!
+	* Buckshoot Yankee
+		he Buckshoot Yankee was categorized as the most significant breach of the US military
+		computers ever by the Secretary of Defense, Willian J. Lynn.
+	* Desert Storm
+		Some of the radars are destroyed or are tampered with fake formation. So that's one of the
+		things that the US military command used to successfully attack some of their key military
+		buildings of Saddam Hussein.
+	* Bosnia
+		On Bosnia, there was a lot of cyber operations. But things like, for example, fake news,
+		fake information delivered to the militaries in the field
+	* Stuxnet (https://en.wikipedia.org/wiki/Stuxnet) - delivered into Iran nuclear plans. The worm
+		is widely understood to be a cyberweapon built jointly by the United States and Israel in a
+		collaborative effort known as the "Olympic Games".
+
+In 2016 forbes estimated $400bn losses from cyber attacks. $100bn via cyber crime, $2.1bn data loss.
+
+See also: IBM X-Force Threat Intellegence Index.
+
+CYBER SECURITY PROGRAM
+   |
+   + ---- SECURITY PROGRAM: Evaluate, create teams, baselines, risks etc for monitoring and control
+   |
+   + ---- ASSET MANAGEMENT: Documents, for example, as assets. Classify assets and protect.
+   |
+   + ---- ADMIN CONTROLS: Policies, proceedures, standards, DR, compliance and physical security.
+   |
+   + ---- TECH CONTROLS: Network infrastructure such as fire walls, monitoring, logging etc.
+
+Security challenges:
+	* Simple high level requirements can turn into complex access management implementations...
+	* Security solutions themselves can be attacked if they expose structures as targets
+	* Protection of assets can cause complexity. E.g. program is easy to create for the
+		purpose it is needed for but making it secure can add great complication.
+	* Key management is hard
+	* Protectors have to be right all the time, attackers just once!
+	* No one likes the hassle of security until it is needed (seat belt philosophy)
+
+Critical thinking - 5 key skills:
+    1. Challenge assumption
+	    - Systematically list and challenge
+	2. Consider alternatives
+		- Brainstorm
+		- Break into components: who/what/how/when/why/where
+		    - Who is involved? Who are the stakeholders? Who is effected by the outcome?
+			- What is at stake? What is the problem or desired outcome?
+	3. Evaluate data
+		- Does it fit the hypothesis
+	4. Identify key drivers
+    5. Understand context
+
+Terminology:
+Black Hats - Black hats are criminals
+White Hats - White hats are security researchers or hackers who, when they discover a
+             vulnerability in software, notify the vendor so that the hole can be patched.
+Gray hats  - Gray hats fall into the middle ground between these two other hacker categories.
+             Gray hats sell or disclose their zero-day vulnerabilities not to criminals, but
+			 to governments, i.e., law enforcement agencies, intelligence agencies or militaries.
+
+Some resources:
+https://www.sans.org/critical-security-controls/
+	The CIS Critical Security Controls are a recommended set of actions for cyber defense
+	that provide specific and actionable ways to stop today's most pervasive and dangerous
+	attacks.
+https://wiki.owasp.org/index.php/Category:OWASP_Project#tab=Project_Inventory
+https://www.issa.org/
+	ISSA is the community of choice for international cybersecurity professionals
+	dedicated to advancing individual growth, managing technology risk and protecting
+	critical information and infrastructure..
+https://www.first.org/membership/benefits
+https://cybersecurityventures.com/cybersecurity-associations/#home/?view_1_page=1
