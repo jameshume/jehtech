@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>Python Cheat Sheets | JEHTech</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">Python Cheat Sheets</h1>
+<div style="padding-right:10px;">
+
+<h2>Page Contents</h2>
+<div id="page_contents">
+</div>
+
+<h2>Date/Time</h2>
+<pre class="prettyprint linenums"># Date/time as a string using time module
+import time
+time.strftime('%Y%m%d%H%M%S')
+
+# Date/time as a string using datetime module
+import datetime
+datetime.datetime.today().strftime('%Y%m%d%H%M%S')</pre>
+<p></p>
+
+<h2>Files/Directories</h2>
+<pre class="prettyprint linenums"># Find all .txt files under /some/dir
+for rootDir, subDirs, files in os.walk(dirToScan):
+   for fname in files:
+      if fnmatch.fnmatch(fname, mask):
+         yield (rootDir, fname)
+for dir, file in YieldFiles("/some/dir", "*.txt")
+   print file</pre>
+<p></p>
+
+<h2>Signals</h2>
+<pre class="prettyprint linenums">import signal
+
+# Somewhere in your initialisation
+signal.signal(signal.SIGINT, signal_handler)
+
+def signal_handler(signal, frame):
+   # Clean up etc
+   sys.exit(1)</pre>
+<p></p>
+
+</div> <!-- End padding div -->
+</div> <!-- End content div -->
+
+</body>
+</html>
+
+

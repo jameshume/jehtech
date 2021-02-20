@@ -45,6 +45,12 @@ Giuseppa Barresi on YouTube.
 			How Does a Direct-Operated Pressure Regulator Work? (Part 1)
 		</a>
 	</li>
+	<li><a href="https://www.emerson.com/documents/automation/manuals-guides-complete-technical-section-fisher-en-140704.pdf" target="_blank">
+		Technical Referance On Regulator Theory
+		</a>, Fisher.
+	</li>
+	<li><a href="https://blog.craneengineering.net/pressure-regulator-droop-and-5-ways-to-minimize-it" target="_blank">Pressure Regulator Droop and 5 Ways To Minimize It</a>, Josh Van Ryzin.
+	</li>
 </ul>
 </div> <!-- END References / useful Links -->
 
@@ -66,6 +72,10 @@ Giuseppa Barresi on YouTube.
 		$T$ is the temperature in Kelvins.<br/>
 		$V$ is the volume in litres.<br/>
 	</div>
+
+	<p>
+		This tells us that if volume is constant, the more gas that is pushed into a network, the higher the pressure.
+	</p>
 </p>
 </div>
 
@@ -97,6 +107,24 @@ Giuseppa Barresi on YouTube.
 
 <h2>A Basic Govenor Valve</h2>
 <div>
+
+<p>
+The Fisher guide gives a nice summary of a governor's pupose:
+</p>
+<blockquote>
+	<p>
+		The primary function of any gas regulator is to match the flow of the fas through the regulator
+		to the demand for gas placed upon the system. At the same time, the regulator must maintain
+		the system pressure within certain acceptable limits...
+	</p>
+	<p>
+		...If the load flow decreases, the regulator flow must decrease also. Otherwise, the regulator
+		would put too much gas ... into the system and the pressure would tend to increase. On the other hand,
+		if the load flow increases, the the regulator must increase also in order to keep ... [pressure]
+		from decreasing due to a shortage of gas in the [network]...
+	</p>
+</blockquote>
+
 <p>
 	<img src="##IMG_DIR##/gas_govenor_concept.png"/>
 </p>
@@ -104,6 +132,35 @@ Giuseppa Barresi on YouTube.
 	Theoretically, for force excerted on the govenor's pilot spring can be related to the gas
 	outlet pressure using the above equations.
 </p>
+<p>
+	The Fisher's guide also gives some useful terminology that is important to know:
+</p>
+<blockquote>
+	<p><b>Setpoint</b></p>
+	<p>The constant pressure desired is represented by the setpoint. but no regulator is ideal ...
+		The setpoint is determined by the initial compressure of the regulator spring ...
+	</p>
+	
+	<p><b>Droop</b></p>
+	<p>Droops, proportional band, and offset are terms used to describe the phenomenon of pressure
+		dropping below setpoint as flow increases. Droop is the amount of deviation from setpoint at
+		a given flow, epxressed as a percentage of setpoint...
+	</p>
+
+	<p><b>Accuracy</b></p>
+	<p>The accuracy of a regulator is determined by the amount of flow it can pass for a given amount of droop.
+		The closer the regulator is to the idea regulator curve (setpoint), the more accurate it is.
+	</p>
+
+	<p><b>Lockup</b></p>
+	<p>Lockup is the pressure aboe setpoint that is required to shut the regulator off tight...
+	</p>
+
+	<p>
+		<img src="##IMG_DIR##/droop-in-gas-networks.png" alt="drop in gas networks"/>
+	</p>
+</blockquote>
+<p></p>
 </div> <!-- END A Basic Govenor Valve -->
 
 <h2>Adding Redundancy/Backup Valves</h2>
