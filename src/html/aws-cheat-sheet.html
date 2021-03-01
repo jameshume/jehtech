@@ -1,0 +1,57 @@
+dnl USEM4
+dnl ---- START M4 MACROS ----
+dnl ---- END M4 MACROS ----
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>Amazon Web Services (AWS) Cheet Sheet | JEHTech</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">Amazon Web Services (AWS) Cheet Sheet</h1>
+<div style="padding-right:10px;">
+
+<h2>Page Contents</h2>
+<div id="page_contents">
+</div>
+
+<h2>AWS CLI</h2>
+<div>
+	<h3>Profiles</h3>
+	<div>
+		<h3>List Available Profiles
+		<pre class="prettyprint linenums">$ cat ~/.aws/credentials
+# OR
+$ aws configure list
+		</pre>
+	</div>
+
+	<h3>S3</h3>
+	<pre class="prettyprint linenums"># Sync local directory to AWS location. Use -sse only if stored encrypted.
+aws s3 sync . s3://your/dir --sse
+</pre>
+</div>
+
+
+
+</div> <!-- END H1 padding div -->
+</div>
+</body>
+</html>
+
+

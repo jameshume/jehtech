@@ -4,12 +4,14 @@
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>220</x>
-      <y>550</y>
+      <x>300</x>
+      <y>80</y>
       <w>140</w>
       <h>60</h>
     </coordinates>
     <panel_attributes>*_Client_*
+E.g. JavaScript on
+Browser...
 fg=white
 bg=black</panel_attributes>
     <additional_attributes/>
@@ -17,8 +19,8 @@ bg=black</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>420</x>
-      <y>550</y>
+      <x>500</x>
+      <y>80</y>
       <w>140</w>
       <h>60</h>
     </coordinates>
@@ -32,8 +34,8 @@ bg=black</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>620</x>
-      <y>550</y>
+      <x>700</x>
+      <y>80</y>
       <w>140</w>
       <h>60</h>
     </coordinates>
@@ -47,8 +49,8 @@ bg=black</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>820</x>
-      <y>550</y>
+      <x>900</x>
+      <y>80</y>
       <w>140</w>
       <h>60</h>
     </coordinates>
@@ -60,8 +62,8 @@ bg=black</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>1020</x>
-      <y>550</y>
+      <x>1100</x>
+      <y>80</y>
       <w>140</w>
       <h>60</h>
     </coordinates>
@@ -73,8 +75,8 @@ bg=black</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>280</x>
-      <y>600</y>
+      <x>360</x>
+      <y>130</y>
       <w>30</w>
       <h>70</h>
     </coordinates>
@@ -84,8 +86,8 @@ bg=black</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>480</x>
-      <y>600</y>
+      <x>560</x>
+      <y>130</y>
       <w>30</w>
       <h>70</h>
     </coordinates>
@@ -95,19 +97,19 @@ bg=black</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>680</x>
-      <y>600</y>
+      <x>760</x>
+      <y>130</y>
       <w>30</w>
-      <h>150</h>
+      <h>190</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;130.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;170.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>880</x>
-      <y>600</y>
+      <x>960</x>
+      <y>130</y>
       <w>30</w>
       <h>70</h>
     </coordinates>
@@ -117,21 +119,21 @@ bg=black</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1080</x>
-      <y>600</y>
+      <x>1160</x>
+      <y>130</y>
       <w>30</w>
-      <h>390</h>
+      <h>340</h>
     </coordinates>
     <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;370.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;320.0</additional_attributes>
   </element>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>280</x>
-      <y>650</y>
+      <x>360</x>
+      <y>180</y>
       <w>20</w>
-      <h>420</h>
+      <h>440</h>
     </coordinates>
     <panel_attributes>
 bg=black</panel_attributes>
@@ -140,10 +142,10 @@ bg=black</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>480</x>
-      <y>650</y>
+      <x>560</x>
+      <y>180</y>
       <w>20</w>
-      <h>300</h>
+      <h>430</h>
     </coordinates>
     <panel_attributes>
 bg=black</panel_attributes>
@@ -152,10 +154,10 @@ bg=black</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>880</x>
-      <y>650</y>
+      <x>960</x>
+      <y>180</y>
       <w>20</w>
-      <h>360</h>
+      <h>260</h>
     </coordinates>
     <panel_attributes>
 bg=black</panel_attributes>
@@ -164,8 +166,8 @@ bg=black</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>680</x>
-      <y>730</y>
+      <x>760</x>
+      <y>300</y>
       <w>20</w>
       <h>60</h>
     </coordinates>
@@ -176,10 +178,10 @@ bg=black</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>1080</x>
-      <y>970</y>
+      <x>1160</x>
+      <y>450</y>
       <w>20</w>
-      <h>100</h>
+      <h>70</h>
     </coordinates>
     <panel_attributes>
 bg=black</panel_attributes>
@@ -188,30 +190,8 @@ bg=black</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>280</x>
-      <y>1060</y>
-      <w>30</w>
-      <h>70</h>
-    </coordinates>
-    <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>1080</x>
-      <y>1060</y>
-      <w>30</w>
-      <h>70</h>
-    </coordinates>
-    <panel_attributes>lt=.</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>290</x>
-      <y>640</y>
+      <x>370</x>
+      <y>170</y>
       <w>210</w>
       <h>110</h>
     </coordinates>
@@ -227,8 +207,8 @@ redirection URI</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>490</x>
-      <y>650</y>
+      <x>570</x>
+      <y>180</y>
       <w>410</w>
       <h>40</h>
     </coordinates>
@@ -237,186 +217,127 @@ Browser fetches AUTH EP passing client ID etc.</panel_attributes>
     <additional_attributes>390.0;20.0;10.0;20.0</additional_attributes>
   </element>
   <element>
-    <id>UMLClass</id>
+    <id>Relation</id>
     <coordinates>
-      <x>640</x>
-      <y>650</y>
-      <w>70</w>
-      <h>20</h>
+      <x>570</x>
+      <y>390</y>
+      <w>410</w>
+      <h>60</h>
     </coordinates>
-    <panel_attributes>fg=red
-bg=none</panel_attributes>
-    <additional_attributes/>
+    <panel_attributes>lt=&lt;-
+Success: redirect user-agent back to client
+*with ACCESS TOKEN but NO REFRESH TOKEN!*
+with redirection instructions</panel_attributes>
+    <additional_attributes>10.0;20.0;390.0;20.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>700</x>
-      <y>500</y>
-      <w>140</w>
-      <h>170</h>
-    </coordinates>
-    <panel_attributes>fg=red</panel_attributes>
-    <additional_attributes>120.0;10.0;70.0;100.0;10.0;150.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>670</x>
-      <y>340</y>
-      <w>100</w>
-      <h>30</h>
-    </coordinates>
-    <panel_attributes>response_type
-fontsize=12
-halign=left</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>670</x>
-      <y>370</y>
-      <w>100</w>
-      <h>30</h>
-    </coordinates>
-    <panel_attributes>client_id
-fontsize=12
-halign=left</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>670</x>
-      <y>400</y>
-      <w>100</w>
-      <h>30</h>
-    </coordinates>
-    <panel_attributes>redirect_uri
-fontsize=12
-halign=left</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>670</x>
-      <y>430</y>
-      <w>100</w>
-      <h>30</h>
-    </coordinates>
-    <panel_attributes>scope
-fontsize=12
-halign=left</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>670</x>
-      <y>460</y>
-      <w>100</w>
+      <x>370</x>
+      <y>410</y>
+      <w>210</w>
       <h>50</h>
     </coordinates>
-    <panel_attributes>state
-fontsize=12
-halign=left</panel_attributes>
-    <additional_attributes/>
+    <panel_attributes>lt=&lt;-
+Redirect to client
+*with AT*</panel_attributes>
+    <additional_attributes>10.0;20.0;190.0;20.0</additional_attributes>
   </element>
   <element>
-    <id>UMLClass</id>
+    <id>Relation</id>
     <coordinates>
-      <x>770</x>
-      <y>340</y>
-      <w>240</w>
-      <h>30</h>
+      <x>570</x>
+      <y>270</y>
+      <w>410</w>
+      <h>40</h>
     </coordinates>
-    <panel_attributes>REQ | Value MUST be set to "code".
-fontsize=12
-halign=left</panel_attributes>
-    <additional_attributes/>
+    <panel_attributes>lt=&lt;-
+Send authentication challenge</panel_attributes>
+    <additional_attributes>10.0;20.0;390.0;20.0</additional_attributes>
   </element>
   <element>
-    <id>UMLClass</id>
+    <id>Relation</id>
     <coordinates>
-      <x>770</x>
-      <y>370</y>
-      <w>240</w>
-      <h>30</h>
+      <x>570</x>
+      <y>300</y>
+      <w>210</w>
+      <h>40</h>
     </coordinates>
-    <panel_attributes>REQ | The client identifier.
-fontsize=12
-halign=left</panel_attributes>
-    <additional_attributes/>
+    <panel_attributes>lt=&lt;-
+Display auth challenge</panel_attributes>
+    <additional_attributes>190.0;20.0;10.0;20.0</additional_attributes>
   </element>
   <element>
-    <id>UMLClass</id>
+    <id>Relation</id>
     <coordinates>
-      <x>770</x>
-      <y>400</y>
-      <w>240</w>
-      <h>30</h>
+      <x>570</x>
+      <y>320</y>
+      <w>210</w>
+      <h>40</h>
     </coordinates>
-    <panel_attributes>OPT | The client identifier.
-fontsize=12
-halign=left</panel_attributes>
-    <additional_attributes/>
+    <panel_attributes>lt=&lt;-
+Enter credentials</panel_attributes>
+    <additional_attributes>10.0;20.0;190.0;20.0</additional_attributes>
   </element>
   <element>
-    <id>UMLClass</id>
+    <id>Relation</id>
     <coordinates>
-      <x>770</x>
-      <y>430</y>
-      <w>240</w>
-      <h>30</h>
+      <x>570</x>
+      <y>360</y>
+      <w>410</w>
+      <h>40</h>
     </coordinates>
-    <panel_attributes>OPT | The scope of the access request
-fontsize=12
-halign=left</panel_attributes>
-    <additional_attributes/>
+    <panel_attributes>lt=&lt;-
+Reply to authentication challenge</panel_attributes>
+    <additional_attributes>390.0;20.0;10.0;20.0</additional_attributes>
   </element>
   <element>
-    <id>UMLClass</id>
+    <id>Relation</id>
     <coordinates>
-      <x>770</x>
-      <y>460</y>
-      <w>240</w>
+      <x>570</x>
+      <y>450</y>
+      <w>610</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+Follow redirection instructions</panel_attributes>
+    <additional_attributes>590.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>570</x>
+      <y>480</y>
+      <w>610</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+Returns web-page/script capable of extracting AT</panel_attributes>
+    <additional_attributes>10.0;20.0;590.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>570</x>
+      <y>530</y>
+      <w>310</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+Executes script, which extracts AT</panel_attributes>
+    <additional_attributes>10.0;50.0;80.0;50.0;80.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>370</x>
+      <y>580</y>
+      <w>210</w>
       <h>50</h>
     </coordinates>
-    <panel_attributes>OPT | Opaque value used by the client to 
-maintain state between the request and 
-callback
-fontsize=12
-halign=left</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>670</x>
-      <y>340</y>
-      <w>340</w>
-      <h>170</h>
-    </coordinates>
-    <panel_attributes>fg=red
-layer=11</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Text</id>
-    <coordinates>
-      <x>670</x>
-      <y>230</y>
-      <w>440</w>
-      <h>110</h>
-    </coordinates>
-    <panel_attributes>_Example AUTHORIZATION REQUEST:_
-GET /authorize?response_type=code&amp;
-   client_id=s6BhdRkqt3&amp;state=xyz &amp;
-   redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2Fcb 
-   HTTP/1.1
-Host: server.example.com</panel_attributes>
-    <additional_attributes/>
+    <panel_attributes>lt=&lt;-
+Redirect to client
+*with ACCESS TOKEN*</panel_attributes>
+    <additional_attributes>10.0;20.0;190.0;20.0</additional_attributes>
   </element>
 </diagram>

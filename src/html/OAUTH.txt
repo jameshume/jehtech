@@ -24,7 +24,6 @@ Now, post 2010, two more use cases arise:
 	1. Mobile app login 
 	2. Delegated authentication.
 
-
 The client should never get the resource owner's password. This is because the password is generally
 the "keys to the kingdom". For example, an app that wants to share a post on my facebook page. If I
 give it my FB password it can share the post, but it can also get my friends list, send them messages,
@@ -32,7 +31,6 @@ block them, make other unauthoized posts and critically access ANY other service
 my FB credentials!
 
 So, I must avoid giving any third party my password. This is where OAuth comes in.
-
 
 DELEGATED AUTHENTICATION is where you allow a 3rd party access to your data/platform, probably in
 a restricted manner, WITHOUT giving the 3rd party you password.
@@ -51,6 +49,12 @@ a restricted manner, WITHOUT giving the 3rd party you password.
 	should authorise ABC to send emails. It then returns a token to ABC, which ABC can then use
 	in requests to send emails that it sends to my email provider.
 
+DELEGATED AUTHENTICATION is also known as IDENTITY FEDERATION:
+	Identity Federation is the process of delegating an individual’s or entity’s authentication
+	responsibility to a trusted external party. Each partner in federation plays the role of either
+	an identity provider(IdP) or a service provider(SP). In identity federation, an IdP vouches for
+	the identity of the users, and an SP provides services to the users.
+	(https://dinika-15.medium.com/identity-federation-a-brief-introduction-f2f823f8795a)
 
 Summary
 -------
@@ -439,9 +443,18 @@ Advantages:
 
 		Identities of all 3 participants is ensured
 
-
 ##IMG:authorization_code_grant.png##
 
+Refresh tokens
+--------------
+Quicker renewal of AT than having to go through entire auth flow again...
+
+The refresh token lasts for longer than the access token (AT). Refresh token (RT) used to get a new
+access token and refresh tokens with new TTL. The AT has a TTL. The RT does not have an explicit
+TTL, it is just set, by the system, to some time (much) longer than the AT with the assumption the client
+uses it as soon as needed.
+
+Only the /token EP is required and the authentication of the resource owner is not needed.
 
 
 ====================================================================================================
@@ -478,3 +491,20 @@ authenticated and a short validity period tries to hedge against the danger this
 Thus implicit grant has a REDUCED LEVEL OF SECURITY COMPARED TO THE AUTHORIZATION GRANT from
 the previous section.
 
+##IMG:oauth_implicit_grant.png##
+
+
+====================================================================================================
+====================================================================================================
+BOOK OF FACE!
+====================================================================================================
+Register app at developers.facebook.com
+Things to record:
+	1. App ID (a.k.a. Client ID)
+	2. App SECRECT (do not expose this to anyone!!)
+
+Things to enter:
+	1. Redirect URI. Note FB auto puts a slash at the end for you and the URI you send in your
+	   request must match the one FB has stored, so you must send it with a terminating slash.
+	   When you send the URI you will, of course, URL ENCODE it because it will be a parameter
+	   of your request.
