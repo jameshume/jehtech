@@ -6,6 +6,7 @@ INTRO
 OAuth 2.0 is not backward compatible with 1.0. Do not use 1.0.
 
 Ref: https://www.youtube.com/watch?v=996OiexHze0
+     https://www.oauth.com/
 
 Internet logins began with the standard "form login": username and password home-grown login on
 a website that stashed session info in a cookie after successful login. The website and owner are
@@ -480,7 +481,14 @@ From the RFC:
 Used for clients that cannot securely store the client ID and client secret as well as the refresh
 token: no refresh tokens are issued in this flow.
 
-Use case is mainly client side JavaScript applications.
+Use case is mainly client side JavaScript applications but also native apps as its relatively easy
+to pull the app secret out of the binary.
+From https://www.oauth.com/oauth2-servers/oauth-native-apps/:
+     Like browser-based apps, native apps can’t maintain a confidential client secret after the
+		 developer registers one, as that would require that the developer ship the secret in their
+		 binary distribution of the application. It has been proven to be relatively easy to decompile
+		 and extract the secret. As such, native apps must use an OAuth flow that does not require a
+		 secret.
 
 Does not used /token EP.
 
@@ -499,17 +507,100 @@ fragment (bit after the # in the URL) through the redirect.
     See: https://trac.ietf.org/trac/httpbis/ticket/6
          https://stackoverflow.com/a/2305927/1517244
 
+
+====================================================================================================
+====================================================================================================
+REDIRECTS FOR APPS
+====================================================================================================
+See: https://www.oauth.com/oauth2-servers/redirect-uris/redirect-uris-native-apps/
+^^^
+The authorization endpoint normally redirects the user back to the client’s registered redirect URL.
+Depending on the platform, native apps can either claim a URL pattern, or register a custom URL
+scheme that will launch the application. For example, an iOS application may register a custom
+protocol such as myapp:// and then use a redirect_uri of myapp://callback.
+
+
 ====================================================================================================
 ====================================================================================================
 BOOK OF FACE!
 ====================================================================================================
-Register app at developers.facebook.com
-Things to record:
-	1. App ID (a.k.a. Client ID)
-	2. App SECRECT (do not expose this to anyone!!)
+SEE: https://developers.facebook.com/
+     https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow/
 
-Things to enter:
-	1. Redirect URI. Note FB auto puts a slash at the end for you and the URI you send in your
-	   request must match the one FB has stored, so you must send it with a terminating slash.
-	   When you send the URI you will, of course, URL ENCODE it because it will be a parameter
-	   of your request.
+Register app at developers.facebook.com
+    Things to record:
+      1. App ID (a.k.a. Client ID)
+      2. App SECRECT (do not expose this to anyone!!)
+
+    Things to enter:
+      1. Redirect URI. Note FB auto puts a slash at the end for you and the URI you send in your
+         request must match the one FB has stored, so you must send it with a terminating slash.
+         When you send the URI you will, of course, URL ENCODE it because it will be a parameter
+         of your request.
+
+The following is an AUTHORIZATION GRANT FLOW emulation as the secret app key is "stored securely"
+by us at the command line (in fact to be super secure you read it in at command line so it wont
+even be stored in the bash history - or just regenerate a secret after playing).
+
+Auth EP
+    Seems at time of writing its v10: https://www.facebook.com/v10.0/dialog/oauth?client_id={app-id}
+                                                                                 &redirect_uri={redirect-uri}
+                                                                                 &state={state-param}
+    You will use your URL encoded redirect URI you entered when registering you app for
+    {redirect-uri} and state, as we've learnt, can be any data you like.
+
+    When your redirect URL is called it will have "code" as a URL parameter. This should be
+    stored - it is the AUTH CODE.
+
+    To test, visit that link in your browser... the browser will show the FB login and auth
+    then redirect back to your redirect URI, from which you can extract the AUTH CODE.
+
+Token EP
+    The AUTH CODE must be exchanged for the ACCESS TOKEN.
+
+    From FB Docs: To get an access token, make an HTTP GET request to the following OAuth endpoint:
+        GET https://graph.facebook.com/v10.0/oauth/access_token?
+            client_id={app-id}
+            &redirect_uri={redirect-uri}
+            &client_secret={app-secret}
+            &code={code-parameter}
+    This is a little no standard as it is a GET not a POST.
+
+    Non-standard: it is a GET instead of a POST
+
+    Can do with CURL to SIMULATE USING THE BACK CHANNEL:
+        curl -ik "https://graph.facebook.com/10.0/oauth/access_token?...." (see above link template)
+
+           -i, --include
+              Include the HTTP response headers in the output. The HTTP response headers can include
+              things like server name, cookies, date of the document, HTTP version and more...
+              To view the request headers, consider the -v, --verbose option.
+
+           -k, --insecure
+              (TLS) By default, every SSL connection curl makes is verified to be secure. This
+              option allows curl to proceed and operate even for server connections otherwise
+              considered insecure.
+
+              The server connection is verified by making sure the server's certificate contains the
+              right name and verifies successfully using the cert store.
+
+        The response will look like:
+            {"access_token":"... very long string ...","token_type":"bearer","expires_in":5183057}
+
+        Notice there is no refresh token.
+
+To do AN IMPLICIT GRANT FLOW note that the FB auth EP (https://www.facebook.com/v10.0/dialog/oauth)
+has the following optional parameter:
+    * response_type. Determines whether the response data included when the redirect back to the
+                     app occurs is in URL parameters or fragments.
+        * code.  Response data is included as URL parameters and contains code parameter (an encrypted
+                 string unique to each login request). This is the default behavior if this parameter
+                 is not specified. It's most useful when your server will be handling the token.
+        * token. Response data is included as a URL fragment and contains an access token. Desktop
+                 apps must use this setting for response_type. This is most useful when the client
+                 will be handling the token.
+^^
+Set this to "token".
+
+
+
