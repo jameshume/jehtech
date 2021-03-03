@@ -493,6 +493,11 @@ the previous section.
 
 ##IMG:oauth_implicit_grant.png##
 
+The OAuth RFC talks about the AT being dropped in the redirect because it is part of the URL
+fragment. This appears to now be out of date as redirects of this nature can propogate the
+fragment (bit after the # in the URL) through the redirect.
+    See: https://trac.ietf.org/trac/httpbis/ticket/6
+         https://stackoverflow.com/a/2305927/1517244
 
 ====================================================================================================
 ====================================================================================================
