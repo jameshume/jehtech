@@ -8,6 +8,11 @@ OAuth 2.0 is not backward compatible with 1.0. Do not use 1.0.
 Ref: https://www.youtube.com/watch?v=996OiexHze0
      https://www.oauth.com/
 
+MUST READS: https://oauth.net/2/oauth-best-practice/
+                 -> https://tools.ietf.org/html/draft-ietf-oauth-security-topics-16
+            https://oauth.net/2/browser-based-apps/
+                -> https://tools.ietf.org/html/draft-ietf-oauth-browser-based-apps-07
+
 Internet logins began with the standard "form login": username and password home-grown login on
 a website that stashed session info in a cookie after successful login. The website and owner are
 responsible for:
@@ -22,7 +27,7 @@ Pre mobile era commonly identity use cases included
 	2. Single Sign On (SSO) using a protocol called (SAML)
 
 Now, post 2010, two more use cases arise:
-	1. Mobile app login 
+	1. Mobile app login
 	2. Delegated authentication.
 
 The client should never get the resource owner's password. This is because the password is generally
@@ -175,7 +180,6 @@ App wants to access my FB account
 	* If token valid resource server gives client access to the requested service.
 
 
-
 OAuth is used for DELEGATION and not authorization or authentication. It is the resource server that does
 the authorization as to what resources can be accessed based on the OAuth token presented. Authentication
 is done by the external component such as the login page - OAuth server triggers authentication but does
@@ -186,6 +190,13 @@ SEE the RFC here: https://tools.ietf.org/html/rfc6749
 
 The following is an annotated version of the abstract protocol flow from the RFC:
 ##IMG:oauth_abstract_protocol_flow.png##
+
+Authentication v.s. Authorization
+---------------------------------
+Authorization == WHAT you can do
+Authentication == WHO you are
+
+
 ====================================================================================================
 ====================================================================================================
 ACTORS
@@ -381,6 +392,9 @@ From RFC:
 	Client must be able to securley store client ID/secret and tokens
 
 2. Implicit Grant Flow
+  *** WARNING - IT IS NOT LONGER RECOMMENDED TO USE THIS FLOW - SEE PKCE ***
+	*** WARNING - DO NOT USE ANYMORE! ***
+
 	Used when client can NOT securley store client ID/secret or OAuth tokens
 	E.g. When client written in client side JavaScript
 	Cons: Short validity of tokens and refreshing AT very difficult
@@ -393,6 +407,10 @@ From RFC:
 4. Resource Owner Password Credentials Flow
 	When resource owner can entrust password to client
 
+5 ** SEE PKCE ** - Authorization Grange Flow WITH PKCE as a replacement for the implicit grant flow.
+
+For a really good guide on choosing which flow to use see:
+https://auth0.com/docs/authorization/which-oauth-2-0-flow-should-i-use
 
 
 ====================================================================================================
@@ -462,6 +480,17 @@ Only the /token EP is required and the authentication of the resource owner is n
 ====================================================================================================
 IMPLICIT GRANT FLOW
 ====================================================================================================
+
+*** WARNING THIS SHOULD NOT BE USED ANYMROE - SEE SECTION PKCE ***
+*** From best practices RFC:
+*** The implicit grant (response type "token") and other response types causing the authorization
+*** server to issue access tokens in the authorization response are vulnerable to access token
+*** leakage and access token replay ...
+*** In order to avoid these issues, Clients SHOULD NOT use the implicit grant and any other
+***  response type causing the authorization server to issue an access token in the authorization
+*** response.
+*** SEE https://medium.com/oauth-2/why-you-should-stop-using-the-oauth-implicit-grant-2436ced1c926
+
 From the RFC:
    The implicit grant is a simplified authorization code flow optimized
    for clients implemented in a browser ...
@@ -507,6 +536,38 @@ fragment (bit after the # in the URL) through the redirect.
     See: https://trac.ietf.org/trac/httpbis/ticket/6
          https://stackoverflow.com/a/2305927/1517244
 
+Further explanation about the insecurity of the access token and why it can't be refreshed
+was excellently explained at:
+https://www.scottbrady91.com/OpenID-Connect/Silent-Refresh-Refreshing-Access-Tokens-when-using-the-Implicit-Flow:
+		When using the implicit authentication flow refresh tokens cannot be requested or used, since
+		the client application cannot be explicitly or securely authenticated and therefore cannot be
+		trusted with such a sensitive token. This also applies to any flow on a public client incapable
+		of keeping a secret or making secure back channel requests. If a refresh token intended for a
+		such a client was stolen, the thief could use it to request access tokens for that user, without
+		their knowledge or consent.
+
+		When using a client application running in the browser ... we expect the user to be present at
+		the client application. They might be currently in a different tab ... but the session is still
+		active. This means that if their access token expires, they should still be around to authorize
+		another to be issued. ...
+
+So, I wondered, how to web apps keep users signed in if they are not permitted to use refresh
+tokens? The answer was also given in the above article by Scott Brady.
+		Silent refresh uses the assumption that the user is still logged into the OpenID Provider to
+		automatically make another OpenID Connect authorization request and receive new tokens. This is
+		done behind the scenes without interrupting the user experience.
+
+		This request is typically made in an iFrame, too small for the user to see, with the request
+		looking very similar to the authorization request that the client application made to initially
+		authenticate the user, albeit with a few tweaks.
+
+
+Interestingly from here: https://auth0.com/docs/authorization/which-oauth-2-0-flow-should-i-use
+		If the Client is a Single-Page App (SPA), an application running in a browser using a scripting
+		language like JavaScript, there are two grant options: the Authorization Code Flow with Proof
+		Key for Code Exchange (PKCE) and the Implicit Flow with Form Post. For most cases, we recommend
+		using the Authorization Code Flow with PKCE because the Access Token is not exposed on the
+		client side, and this flow can return Refresh Tokens.
 
 ====================================================================================================
 ====================================================================================================
@@ -566,7 +627,7 @@ Token EP
             &code={code-parameter}
     This is a little no standard as it is a GET not a POST.
 
-    Non-standard: it is a GET instead of a POST
+    NOTE: This is non-standard: it is a GET instead of a POST.
 
     Can do with CURL to SIMULATE USING THE BACK CHANNEL:
         curl -ik "https://graph.facebook.com/10.0/oauth/access_token?...." (see above link template)
@@ -589,6 +650,7 @@ Token EP
 
         Notice there is no refresh token.
 
+** NOTE IMPLICIT GRANT FLOW NO LONGER RECOMMENDED!! **
 To do AN IMPLICIT GRANT FLOW note that the FB auth EP (https://www.facebook.com/v10.0/dialog/oauth)
 has the following optional parameter:
     * response_type. Determines whether the response data included when the redirect back to the
@@ -602,5 +664,47 @@ has the following optional parameter:
 ^^
 Set this to "token".
 
+For the token EP, if it requires, as is standard, a POST request, you can change the curl command
+to:
+    curl -ik -X POST https://the/token/endpoint/address \
+        -d grant_type=authorization_code \
+        -d code={auth code as returned by auth server} \
+        -d redirect_uri=... \
+        -d client_id=... \
+        -d client_secret=....
 
 
+====================================================================================================
+====================================================================================================
+Proof Key for Code Exchange by OAuth Public Clients
+====================================================================================================
+SEE: https://tools.ietf.org/html/rfc7636
+	QUOTE: OAuth 2.0 [RFC6749] public clients are susceptible to the
+		authorization code interception attack.
+
+		In this attack, the attacker intercepts the authorization code [WHAT you can do]
+		returned from the authorization endpoint within a communication path
+		not protected by Transport Layer Security (TLS), such as inter-
+		application communication within the client's operating system.
+
+		Once the attacker has gained access to the authorization code, it can
+		use it to obtain the access token.
+
+So why is it problematic that the authz code is intercepted? This just says WHAT the owner of the
+token is allowed to do. It is not the authentication token (the app secret) which verifies WHO
+the app is. It's problematic for flows that do not use the authentication EP - I.e. do not have an
+app secret to act as the authentication mechanism.
+
+SEE ALSO: https://auth0.com/docs/flows/authorization-code-flow-with-proof-key-for-code-exchange-pkce
+          https://developer.okta.com/blog/2019/08/22/okta-authjs-pkce#:~:text=PKCE%20works%20by%20having%20the,is%20called%20the%20Code%20Challenge
+          https://medium.com/identity-beyond-borders/what-the-heck-is-pkce-40662e801a76
+
+Terms:
+------
+    CODE VERIFIER: A random value generated by the app. (RFC describes it as a "a dynamically
+                   created cryptographically random key"). A UNIQUE code verifier must be used for
+                   every authorization request.
+    CODE CHALLENGE: A hash of the code verifier.
+
+
+##IMG:oauth_pkce.png##

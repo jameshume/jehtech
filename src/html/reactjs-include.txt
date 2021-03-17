@@ -24,7 +24,7 @@ function Person(props) { // React auto gives me the props parameter - the compon
 ReactDOM.render(<Person name="John" stuff="Whatever"/>, document.querySelector('#p1')); - render a javascript function as a component to the real dom inside div with id "p1"
 
 
-Could also do 
+Could also do
 	app = (
 		<div>
 			<Person name="John" stuff="blah"/>
@@ -198,6 +198,7 @@ wrap the code in curley braces - {}
 	!!	setState() calls into a single update for performance.
 	!!
 	!!  See: https://reactjs.org/docs/state-and-lifecycle.html
+	!!  See rationale for async setState: https://github.com/facebook/react/issues/11527#issuecomment-360199710
 	!!
 	!!	This means using setState like this can sometimes cause problems:
 	!!		someFunc = () => {
@@ -2216,6 +2217,13 @@ AUTHENTICATION
 ====================================================================================================
 Typically, rather than a session, get a TOKEN, in a SPA as the server is generally a stateless
 REST API. Token is stored in local browser storage.
+
+User local browser storage:
+	localStorage.getItem("string key")
+	localStorage.setItem("string key", "sting value")
+
+Not browser local storage is not super secure. It could be accessed using XSS attacks, but otherwise
+should only be accessable by code served in your domain (single origin policy).
 
 
 
