@@ -156,6 +156,9 @@ And also in section 10.11 (Phishing Attacks):
 		ability of the end-user to verify the authenticity of the
 		authorization server.
 
+For an introduction to some of the VULNERABILITIES common in OAuth implementations see
+https://portswigger.net/web-security/oauth
+
 
 Flow In Brief
 -------------
@@ -195,6 +198,35 @@ Authentication v.s. Authorization
 ---------------------------------
 Authorization == WHAT you can do
 Authentication == WHO you are
+
+
+
+====================================================================================================
+====================================================================================================
+How to prevent OAuth authentication vulnerabilities
+====================================================================================================
+From https://portswigger.net/web-security/oauth/preventing:
+	For OAuth client applications
+		1. Make sure you fully understand the details of how OAuth works before implementing it. Many
+		   vulnerabilities are caused by a simple lack of understanding of what exactly is happening at
+			 each stage and how this can potentially be exploited.
+		2. Use the state parameter even though it is not mandatory.
+		   The state parameter should ideally contain an unguessable value, such as the hash of
+			 something tied to the user's session when it first initiates the OAuth flow. This value is
+			 then passed back and forth between the client application and the OAuth service as a form of
+			 CSRF token for the client application.
+		3. Send a redirect_uri parameter not only to the /authorization endpoint, but also to the /token
+		   endpoint.
+		4. When developing mobile or native desktop OAuth client applications, it is often not possible
+		   to keep the client_secret private. In these situations, the PKCE (RFC7638) mechanism may be 
+			 used to provide additional protection against access code interception or leakage.
+		5. If you use the OpenID Connect id_token, make sure it is properly validated according to the
+		   JSON Web Signature, JSON Web Encryption, and OpenID specifications.
+		6. Be careful with authorization codes - they may be leaked via Referer headers when external
+		   images, scripts, or CSS content is loaded. It is also important to not include them in the
+			 dynamically generated JavaScript files as they may be executed from external domains via
+			 <script> tags.
+
 
 
 ====================================================================================================
@@ -708,3 +740,17 @@ Terms:
 
 
 ##IMG:oauth_pkce.png##
+
+
+
+====================================================================================================
+====================================================================================================
+OpenID Connect
+====================================================================================================
+From https://portswigger.net/web-security/oauth/openid:
+	OpenID Connect extends the OAuth protocol to provide a dedicated identity and authentication
+	layer that sits on top of the basic OAuth implementation. It adds some simple functionality that
+	enables better support for the authentication use case of OAuth.
+	...
+	OpenID Connect .. [adds] standardized, identity-related features to make authentication via OAuth
+	work in a more reliable and uniform way.
