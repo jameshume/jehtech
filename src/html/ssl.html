@@ -145,6 +145,121 @@
 			</p>
 		</div> <!-- End H2 div -->
 
+		<h2>Manage Multiple Keys</h2>
+		<div>
+			<p>On *nix systems you private &amp; public keys are generally stored in your home directory
+				in the <code>~/.ssh/</code> directory. You can have multiple key pairs that you use for access
+				to different services. And, in fact, you should have multiple key pairs as using the same key
+				to access different services is generally considered to be weak security. Why? If you use
+				multiple keys and one is compromised, only one of the services you use is compromised. If
+				the same key were used for multiple services then, <em>all</em> those services could be
+				compromised by the one key being discovered!
+			</p>
+			<p>
+				To manage multiple keys on *nix systems use <code>ssh-agent</code>:
+			</p>
+			<blockquote>
+				<p>
+					ssh-agent is a key manager for SSH. It holds your keys and certificates in memory, 
+					unencrypted, and ready for use by ssh. It saves you from typing a passphrase every time 
+					you connect to a server. It runs in the background on your system, separately from ssh, 
+					and it usually starts up the first time you run ssh after a reboot.
+				</p>
+				<p>
+					The SSH agent keeps private keys safe because of what it doesn’t do:
+				</p>
+				<ul>
+					<li>It doesn’t write any key material to disk.</li>
+					<li>It doesn’t allow your private keys to be exported.</li>
+				</ul>
+				<p>Private keys stored in the agent can only be used for one purpose: signing a message.</p>
+				<footer>-- <a ahref="https://smallstep.com/blog/ssh-agent-explained" target="_blank">SSH Agent Explained</a>, Carl Tashian, 2020-05-19</footer>
+			</blockquote>
+			<p></p>
+			<p>
+				The following is cribbed and annotated/extended from
+					<a href="https://dev.to/josephmidura/how-to-manage-multiple-ssh-key-pairs-1ik" target="_blank">
+						How To Manage Multiple SSH Key Pairs
+					</a> by Joseph Midura
+			</p>
+			<pre class="prettyprint linenums"># Generate a public/private key pair
+# Best practice is to protect the key with a STRONG passphrase. RSA currently recommended key length
+# at time of writing is 4096. Also consider using Ed25519 instead (see later section)
+#    See: https://medium.com/risan/upgrade-your-ssh-key-to-ed25519-c6e8d60d3c54
+# If you can link with a password manager than generates long, random, strong passphrases event better!
+# E.g. for LastPass
+#    CLI: https://github.com/lastpass/lastpass-cli
+#    Random guide: https://svkt.org/~simias/lpass/
+ssh-keygen -t rsa -f key-name -b 4096
+
+# Create known hosts file. Joseph Midura's article recommends creating a known hosts file for each
+# key. The file stores all hosts you connect to using this profile - easier debugging that putting
+# all keys in one known hosts file and jumbling them all up!
+touch known_hosts_github (~/.ssh/known_hosts_github)
+
+# Create / append to config File (~/.ssh/config). This is an example for github...
+Host github.com
+   Hostname github.com
+   User git
+   AddKeysToAgent yes        # Specifies whether keys should be automatically added to a running
+                             # ssh-agent(1). If this option is set to yes and a key is loaded from a
+                             # file, the key and its passphrase are added to the agent...
+   IgnoreUnknown UseKeychain # Only for macOS Sierra 10.12.2 or later to load the keys automatically
+   UseKeychain yes           # Only for macOS Sierra 10.12.2 or later to load the keys automatically
+   IdentifyFile ~/.ssh.github_key
+   UserKnownHostsFile ~/.ssh/known_hosts_github # Specifies a file to use for the user host key
+                                                # database instead of ~/.ssh/known_hosts.
+   IdentitiesOnly yes        # Specifies that ssh should only use the identity keys configured in
+                              # the ssh_config files, even if ssh-agent offers more identities.
+
+# Add keys to ssh agent so you dont have to keep entering your password
+eval "$(ssh-agent -s)"
+#                  ^
+#                  Generate Bourne shell commands on stdout. Use eval to execute in current shell
+# Outputs something like this:
+#    SSH_AUTH_SOCK=/tmp/ssh-FkzuDlePs3bV/agent.75; export SSH_AUTH_SOCK;
+#    SSH_AGENT_PID=76; export SSH_AGENT_PID;
+#    echo Agent pid 76;
+
+# Add PRIVATE key
+ssh-add -K path-to-prv-key
+
+# Copy PUB key to clip board and paste into relevany service
+cat key_file | pbcopy
+</pre>
+			<p></p>
+
+			<h3>Keep Your Keys Fresh</h3>
+			<p>
+				Good practice to re-generate your keys at least yearly. Also regenerate to the currently
+				recommended key length and algorithms. For example, 2048 is no long a sufficient key length
+				for RSA, 4096 recommended at the time of writing. Also, could be worth using ED25519 instead
+				of RSA:
+			</p>
+			<blockquote>
+				<p>
+					The Ed25519 was introduced on OpenSSH version 6.5 ... It's using elliptic curve cryptography
+					that offers a better security with faster performance ...
+				</p>
+				<p>
+					...
+				</p>
+				<p>
+					Today, the RSA is the most widely used public-key algorithm for SSH key. But compared to
+					Ed25519, it's slower and even considered not safe if it's generated with the key smaller
+					than 2048-bit length ...
+				</p>
+				<footer>-- 
+					<a href="https://medium.com/risan/upgrade-your-ssh-key-to-ed25519-c6e8d60d3c54#:~:text=Today%2C%20the%20RSA%20is%20the,Ed25519%20public%2Dkey%20is%20compact.&text=It's%20also%20fast%20to%20perform%20batch%20signature%20verification%20with%20Ed25519." target="_blank">
+						Upgrade Your SSH Key to Ed25519
+					</a>, Risan Bagja Pradana, Jan 2018.
+				</footer>
+			</blockquote>
+			<p>E.g.:</p>
+			<pre class="prettyprint linenums">ssh-keygen -o -a 100 -t ed25519 -f ~/.ssh/id_ed25519 -C "john@example.com"</pre>
+		</div>
+
+
 		<div>
 		##ESCAPED_INCLUDE:SECURITY_NOTES.txt##
 		</div>

@@ -138,6 +138,10 @@
 <h2>Time Zones & Daylight Saving Hours</h2>
 <div>
 	<p>
+		The <a href="https://stackoverflow.com/tags/timezone/info" target="_blank">Stack Overflow &quot;timezone&quot; tag</a>
+		has an excellent explanation and is well worth a read!
+	</p>
+	<p>
 		The world uses UTC. By agreement we've all said we'll use UTC to agree on the same standard of time. The added complexity to the
 		mix is time zones. At a UTC time of X in some parts of the world it will be day and in others it will be night, so in regions
 		of the world the UTC time is offset so that 12pm is roughly what we would perceive as midday in terms of sun position.
@@ -150,20 +154,49 @@
 		<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/World_Time_Zones_Map.png/1920px-World_Time_Zones_Map.png" style="width:75%;"/>
 	</p>
 	<p>
-		From the above, we can see that if we lived in, for example, Malta, we would use UTC+1 as our time base. We can also
+		From the above, we can see that if we lived in, for example, Malta, we would use UTC+1 as our time base. But,
+		note that <em>a time zone is not the same as an offset</em>! We can also
 		see that timezones are as much political as they are geographic.
 	</p>
 	<p>
-		To make life even more complicated there are daylight saving hours to consider. In countries where the potion of the dat
+		To make life even more complicated there are daylight saving hours to consider. In countries where the potion of the day
 		that is light moves depending on season an offset of +/- 1 hour (or fractional or multiple) can be applied to the time. This
 		is purely a human thing so that we get more of the &quot;day&quot; time in the light!
 	</p>
 	<p>
-		Figuring out your machine's local time zone can be <a href="https://regebro.wordpress.com/2008/05/13/thanks-for-the-testing-help-conclusions/" target="_blank">suprisingly difficult</a>. The same authot's first blog about the <a href="https://regebro.wordpress.com/2007/12/18/python-and-time-zones-fighting-the-beast/" target="_blank">problems with Python and timezones</a> is a good read too.
+		Figuring out your machine's local time zone can be
+		<a href="https://regebro.wordpress.com/2008/05/13/thanks-for-the-testing-help-conclusions/" target="_blank">suprisingly difficult</a>.
+		The same author's first blog about the
+		<a href="https://regebro.wordpress.com/2007/12/18/python-and-time-zones-fighting-the-beast/" target="_blank">problems with Python and timezones</a>
+		is a good read too.
 	</p>
 	<p>
 		Of particular note is the <a href="https://en.wikipedia.org/wiki/Tz_database" target="_blanK">TZ Database</a>.
 	</p>
+	<h3>Time Zone != Offset</h3>
+	<p></p>
+	<blockquote>
+		<p>A time zone can not be represented solely by an offset from UTC. Many time zones have more
+			than one offset due to daylight saving time (aka "summer time") rules. The dates that offsets
+			change are also part of the rules for the time zone, as are any historical offset changes...
+		</p>
+		<ul>
+			<li>An offset is just a number that represents how far a particular date/time value is ahead or behind UTC...</li>
+			<li> A time zone contains much more:
+				<ul>
+					<li>A name or ID that can be used to identify the zone.</li>
+					<li>One or more offsets from UTC</li>
+					<li>The specific dates and times that the zone transitions between offsets...</li>
+				</ul>
+			</li>
+		</ul>
+		<p>One can determine the correct offset, given a time zone and a datetime. But one cannot
+			determine the correct time zone given just an offset.
+		</p>
+		<footer>-- <a href="https://stackoverflow.com/tags/timezone/info" target="_blank">Stack Overflow &quot;timezone&quot; tag description</a>.
+		</footer>
+	</blockquote>
+	<p></p>
 </div>
 
 <h2>Using Dates &amp; Times in Python</h2>
