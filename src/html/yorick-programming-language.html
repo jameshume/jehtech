@@ -261,7 +261,7 @@ echo $YORICK_HOME</pre>
 		<p>
 			Given the description so far I would intuitively expect C to access 
 			the array using this syntax: <code>array[DEPTH][ROW][COL]</code>. I would
-			expect Yorick to access the array using this sytax: <code>array(COL, ROW, DEPTH)</code>.
+			expect Yorick to access the array using this syntax: <code>array(COL, ROW, DEPTH)</code>.
 		</p>
 
 		<h4>In C: <code>array[DEPTH][ROW][COL]</code></h4>
@@ -440,7 +440,7 @@ being indexed</q>... which is very true, but I still needed a pretty picture :)
 			<p>
 				<div class="box_container"><div class="info">
 					<p>
-						In Python's NumPy assigning one array (or non primative) variable to 
+						In Python's NumPy assigning one array (or non primitive) variable to 
 						another copies a <em>reference</em> and not the value. In
 						Yorick however, in the specific case of array = array, the
 						<em>entire array is copied</em>... Beware of this as for 
@@ -945,7 +945,7 @@ WARNING source code unavailable (try dbdis function)
 		<p>
 			Now we move on to the more complex examples... as always, remember to
 			keep in mind that Yorick is column-major, so the indices are 
-			<tt>M(row, col)</tt>.
+			<tt>M(col, row)</tt>.
 		</p>
 
 		<h4>LHS column vectors and RHS row vectors</h4>
@@ -958,7 +958,7 @@ WARNING source code unavailable (try dbdis function)
 			the others. 
 		</p>
 		<p>
-			Munro describes the plus sybol as &quot;marking an index for use in an inner product&quot;. 
+			Munro describes the plus symbol as &quot;marking an index for use in an inner product&quot;. 
 			But what exactly do we mean? It means that the index used is the one that we iterate over by
 			summing the multiplication of each element with it's respective &quot;partner&quot; in the
 			dot product. Thus <tt>a(, +)</tt> means iterate over the row indices in the dot product
@@ -982,7 +982,7 @@ WARNING source code unavailable (try dbdis function)
 		</p>
 		<div class="box_container"><div class="info">
 				<p>
-					Munro describes the plus sybol as &quot;marking an index for use in an inner product&quot;. I prefer 
+					Munro describes the plus symbol as &quot;marking an index for use in an inner product&quot;. I prefer 
 					to think of it as  &quot;selecting the dimension to be iterated over in the summation of the inner product&quot;.
 					<br>
 					<b>I.e., for the + sign we select the vectors in the other dimensions and 
@@ -1023,7 +1023,7 @@ WARNING source code unavailable (try dbdis function)
 		<p>
 			<div class="box_container"><div class="info">
 				<p>
-					Indicies marked  with the <tt>+</tt> sign <em>must have the same 
+					Indices marked with the <tt>+</tt> sign <em>must have the same 
 					length</em>.
 				</p>
 			</div></div>
@@ -1155,7 +1155,7 @@ WARNING source code unavailable (try dbdis function)
 
 			
 
-		<h3>Rubber Indicies In Yorick</h3>
+		<h3>Rubber Indices In Yorick</h3>
 		<p>
 			<q>Yorick has one other indexing syntax which has proven useful, which I
 				call <em>rubber indices</em>.  They address the problem of writing
@@ -1205,7 +1205,7 @@ WARNING source code unavailable (try dbdis function)
 [[1,2,3],[11,22,33]]  ## array itself, from the first element in the middle
                       ## array from all elements in the outermost array.</pre>
 			<img src="##IMG_DIR##/YorickRubberIndex.png"/>
-		</div> <!-- END H3: Rubber Indicies In Yorick -->
+		</div> <!-- END H3: Rubber Indices In Yorick -->
 	</div> <!-- END H2: Yorick Arrays -->
 
 	<!-- YORICK OXY OBJECTS ------------------------------------------------ -->
@@ -1273,19 +1273,19 @@ object [1]: group
 			copy-of-reference problem would occur if <tt>q</tt> has been another OXY object.
 		</p>
 		<p>
-			You make have done a double-take here because previosly, when describing arrays,
+			You make have done a double-take here because previously, when describing arrays,
 			we said array assignment copies the array <em>values</em>, i.e. a complete copy of the array
 			is made. This is clearly not the case when saving an OXY object member as an
 			array. OXY object members appear always to be references unless the member stores
-			a non-array primative.
+			a non-array primitive.
 		</p>
 		<p>
 			<div class="box_container"><div class="info">
 				<p>
 					OXY object members appear always to be references unless the member stores
-					a non-array primative. Be cautious, when setting an OXY object 
+					a non-array primitive. Be cautious, when setting an OXY object 
 					member to equal an array: remember, unlike vanilla array to array copy, the OXY object member stores a 
-					<em>reference</em> to the asignee!
+					<em>reference</em> to the assignee!
 				</p>
 			</div></div>
 		</p>
@@ -1308,7 +1308,7 @@ object [1]: group
 [1,2,3]</pre>
 		<p>
 			To fully, deep copy, an OXY object your therefore have to build a new object from scratch,
-			and copy in all primative types and then recursively copy in all member OXY objects and also
+			and copy in all primitive types and then recursively copy in all member OXY objects and also
 			take care to copy the arrays correctly.
 		</p>
 	</div>  <!-- END "Oxy Objects" H2 Div -->
@@ -1421,7 +1421,7 @@ my_new_namespace, blah_oops, []</pre>
 		exists - otherwise Yorick will <tt>error</tt> out!).
 	</p>
 	<p>
-		Also note the that <tt>my_module.i</tt> asigns <tt>a</tt> to <tt>b</tt> but
+		Also note the that <tt>my_module.i</tt> assigns <tt>a</tt> to <tt>b</tt> but
 		in this case it is accessing <tt>my_module.i</tt>'s symbol <tt>a</tt>. This
 		is because the evaluation of this bit of code is immediate and occurs before
 		the <tt>restore()</tt>.
