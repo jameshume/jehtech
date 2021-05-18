@@ -23,8 +23,28 @@
 <h1 class="title">Raspberry Pi Notes</h1>
 <div style="padding-right:10px;">
 
+
+
+	<h2>Install OS</h2>
+	<div>
+		<p>
+			See: <a href="https://www.raspberrypi.org/software/" target="_blank">
+			Raspberry Pi OS / Raspberry Pi Imager</a>.
+		</p>
+		<p>
+			Download the imager setup file for your OS and install the tool. With the tool
+			all you need to do is choose the type of OS you want to install, select the
+			Micro SD card to install to and click the &quot;Write&quot; button.
+		</p>
+	</div>
+
+
+
 	<h2>Setup Headless Wifi Mode</h2>
 	<div>
+		<p>
+			See: <a href="https://www.raspberrypi.org/documentation/remote-access/ssh/README.md" target="_blank">SSH (Secure Shell)</a>, RaspPi documentation.
+		</p>
 		<p>
 			In headless mode you don't need to attach a monitor or keyboard/mouse to your Pi. Just
 			SSH into it <a href="https://www.tomshardware.com/uk/reviews/raspberry-pi-headless-setup-how-to,6028.html" target="_blank">[Ref]</a>!
@@ -34,7 +54,9 @@
 			<li>Create emtpy file in flash root called <code>ssh</code>. RPi OS sees this and enables
 				SSH with password logins.
 			</li>
-			<li>Create file <code>wpa_supplicant.conf</code> in flash root. Add contents:
+			<li>Create file <code>wpa_supplicant.conf</code> in flash root. Add the following
+				contents, making sure that you use Linux-style newlines, &quot;\n&quot;, if editing
+				on Windows, which uses CRLF, or, &quot;\n\r&quot;:
 				<pre>country=GB
 ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
 update_config=1
@@ -48,7 +70,21 @@ psk="your_wifi_password"
 			<li>SSH into <code>raspberrypi.local</code> using username <code>pi</code> and passwrod <code>raspberry</code>.
 			</li>
 		</ol>
+		<p>
+			Upon first boot the ssh and wpa_supplicant.conf files will be deleted. Once the RPi boots, everything should be persistent and the network and ssh available on subsequent boots.
+		</p>
 	</div>
+
+
+
+	<h2>Setup VNC</h2>
+	<div>
+				<p>
+			See: <a href="https://www.raspberrypi.org/documentation/remote-access/vnc/README.md" target="_blank">VNC (Virtual Network Computing)</a>, RaspPi documentation.
+		</p>
+	</div>
+
+
 
 	<h2>Install Docker</h2>
 	<div>
@@ -72,6 +108,13 @@ sudo rm -rf /var/lib/docker</pre>
 	</div>
 
 
+
+	<h2>Setup I2C &amp; SPI</h2>
+	<div>
+		<p>
+			Run <code>sudo raspi-config</code> and select <code>Interfacing Options &gt; I2C | SPI</code>. Select enable, save and exit.
+		</p>
+	</div>
 
 
 

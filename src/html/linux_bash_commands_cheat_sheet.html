@@ -177,7 +177,20 @@
           <table class="jehtable">
             <tr>
               <td>Mount</td>
-              <td><code>sudo mkdir my-mount-directory; sudo mount /dev/sdb1 my-mount-directory</code></td>
+              <td>
+                <p>
+                    Mount a device:<br/>
+                    <code>sudo mkdir my-mount-directory; sudo mount /dev/sdb1 my-mount-directory</code>
+                </p>
+                <p>
+                    Mount a Windows share:<br/>
+                    <code>sudo mount -t cifs -o username=USERNAME,uid=$(id -u),gid=$(id -g),forceuid,forcegid //192.168.7.20/ut.ids.base /mnt/laptop</code><br/>
+                    You can also add <code>password</code> and <code>domain</code> objects
+                    if required. The <code>force(uid|gid)</code> option override any ownership info
+                    that may be sent by the server and the <code>(uid|gid)</code> specifiers give
+                    your user permission to r/w the mount.
+                </p>
+              </td>
             </tr>
             <tr>
               <td>Unmount</td>

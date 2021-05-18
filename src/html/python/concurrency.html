@@ -472,6 +472,30 @@ cv.release()
 <div>
 </div> <!-- END H2 DIV -->
 
+<h2>Catching Unhandled Exceptions In Threads</h2>
+<div>
+<p>Example (requires Python >= 3.8):</p>
+<pre class="prettyprint linenums">import threading
+import traceback
+_orig_excepthook = threading.excepthook
+
+def tf():
+    raise Exception("OOPS")
+
+def myhook(args):
+    # Do something better than just print values out!
+    print("OVERRIDEN")
+    print(f"ARGS={args}")
+    print(f"EXC_VALUE={args.exc_value}")
+    print(f"THREAD={args.thread.name}")
+    print("\n".join(traceback.extract_tb(args.exc_traceback).format()))
+    _orig_excepthook(args)
+
+threading.excepthook = myhook
+threading.Thread(target=tf, name="jehtech").start()</pre>
+</div> <!-- END H2 DIV -->
+
+
 </div> <!-- End content div -->
 </body>
 </html>

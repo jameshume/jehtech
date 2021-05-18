@@ -43,6 +43,9 @@ $ aws configure list</pre>
 	<h3>S3</h3>
 	<pre class="prettyprint linenums"># Sync local directory to AWS location. Use -sse only if stored encrypted.
 aws s3 sync . s3://your/dir --sse
+
+# Cat file to STDOUT
+s3 cp s3://mybucket/stream.txt -.
 </pre>
 </div>
 

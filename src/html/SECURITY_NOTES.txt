@@ -110,7 +110,7 @@ From https://portswigger.net/web-security/cors/same-origin-policy:
 	allows a domain to issue requests to other domains, but not to access the responses.
 
 
-Same origin == same port, URl scheme (HTTP != HTTPS for example) and domain.
+Same origin == same port, URL scheme (HTTP != HTTPS for example) and domain.
 
 
 Cross origin genarally applied to what JS code can access. For e.g. JS code from jeh-tech.com
@@ -410,6 +410,33 @@ to a commercial one which should already be, at least indirectly via a chain-of-
 browsers trust list.
 
 
+Certificate Pinning
+-------------------
+From : https://owasp.org/www-community/controls/Certificate_and_Public_Key_Pinning
+    Pinning is the process of associating a host with their expected X509 certificate or public key.
+    Once a certificate or public key is known or seen for a host, the certificate or public key is
+    associated or "pinned" to the host.
+
+    Pinning effectively removes the "conference of trust". An application which pins a certificate
+    or public key no longer needs to depend on others - such as DNS or CAs - when making security
+    decisions relating to a peer's identity. For those familiar with SSH, you should realize that
+    public key pinning is nearly identical to SSH's StrictHostKeyChecking option.
+        [From https://www.ibm.com/docs/en/zos/2.2.0?topic=SSLTBW_2.2.0/com.ibm.zos.v2r2.foto100/sconfigf.htm:
+             If [StrictHostKeyChecking is set to "yes"] ssh will never automatically add host keys
+             to the ~/.ssh/known_hosts file and will refuse to connect to a host whose host key has
+             changed. This provides maximum protection against trojan horse attacks, but can be
+             troublesome when the /etc/ssh/ssh_known_hosts file is poorly maintained or connections
+             to new hosts are frequently made. This option forces the user to manually add all
+             new hosts.
+        ]
+
+    Pinning leverages knowledge of the pre-existing relationship between the user and an
+    organization or service to help make better security related decisions. Because you already have
+    information on the server or service, you don't need to rely on generalized mechanisms meant to
+    solve the key distribution problem. That is, you don't need to turn to DNS for name/address
+    mappings or CAs for bindings and status.
+
+
 
 ===================================================================================================
 ===================================================================================================
@@ -488,10 +515,19 @@ IMPORTANT NOTES:
        again. To non-interactively renew *all* of your certificates, run
        "certbot-auto renew"
      - If you like Certbot, please consider supporting our work by:
-    
+
        Donating to ISRG / Let's Encrypt:   https://letsencrypt.org/donate
        Donating to EFF:                    https://eff.org/donate-le
 
+
+
+===================================================================================================
+===================================================================================================
+Key Formats
+===================================================================================================
+See: https://www.codeproject.com/Articles/25487/Cryptographic-Interoperability-Keys
+    https://www.ssl.com/guide/pem-der-crt-and-cer-x-509-encodings-and-conversions/
+    https://www.ssl.com/faqs/what-is-an-x-509-certificate/
 
 
 ===================================================================================================

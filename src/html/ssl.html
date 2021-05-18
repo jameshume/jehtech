@@ -222,11 +222,10 @@ eval "$(ssh-agent -s)"
 #    echo Agent pid 76;
 
 # Add PRIVATE key
-ssh-add -K path-to-prv-key
+ssh-add path-to-prv-key
 
 # Copy PUB key to clip board and paste into relevany service
-cat key_file | pbcopy
-</pre>
+cat key_file | pbcopy # or clip.exe in WSL</pre>
 			<p></p>
 
 			<h3>Keep Your Keys Fresh</h3>

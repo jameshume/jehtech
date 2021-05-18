@@ -1,0 +1,121 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>WSL Notes</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+	<div id="header">
+		-- This is JEHTech --
+	</div>
+
+	<div id="sidebar">
+		<h1 class="title">Links...</h1>
+		<div id="includedContent"></div>
+	</div>
+
+	<div id="content">
+		<h1 class="title">WSL Notes</h1>
+
+		<h2>Page Contents</h2>
+		<div id="page_contents">
+		</div>
+
+		<h2>Windows WSL CLI Reference</h2>
+		<div>
+			<p></p>
+			<pre class="prettyprint linenums">wsl -d distro-name --user user-name
+wsl --list --verbose</pre>
+			<p></p>
+		</div>
+
+		<h2>What Version Of WSL Am I Running On?</h2>
+		<div>
+			<p>To find out your version use:</p>
+			<pre class="prettyprint linenums">cat /proc/version</pre>
+			<p>
+				The differences between the versions can be <a href="https://docs.microsoft.com/en-us/windows/wsl/compare-versions" target="_blank">found here</a>.
+			</p>
+		</div>
+
+		<h2>Use GUI Apps</h2>
+		<div>
+			<p></p>
+			<blockquote>
+				<p>
+					The networking subsystem in WSL2 is different than the used in WSL1...
+				</p>
+				<ul>
+					<li>
+						In WSL1, Linux uses the same IP addresses than the Windows host, then, you can access the applications using localhost or 127.0.0.1
+					</li>
+					<li>
+						In WSL2, Linux runs on a lightweight virtual machine and has a different IP address. To access networking apps running on the Windows Host you must use the Windows IP address.
+					</li>
+				</ul>
+				<footer>
+					--
+					<a href="https://stackoverflow.com/a/66398613/1517244" target="_blank">
+						WSL 2: Run Graphical Linux Desktop Applications from Windows 10...
+					</a>, SO.
+				</footer>
+			</blockquote>
+			<p></p>
+
+			<h3>WSL1</h3>
+			<p>
+				Just run XMing, VcXsrv, or some other app on Windows and in WSL bash:
+			</p>
+			<pre class="prettyprint linenums">export DISPLAY=127.0.0.1:0.0</pre>
+			<p>
+				As a side note, for kdiff3 on Ubuntu 20 on WSL1, had to do:
+			</p>
+			<pre  class="prettyprint linenums">sudo strip --remove-section=.note.ABI-tag /usr/lib/x86_64-linux-gnu/libQt5Core.so.5</pre>
+			<p>
+				No idea why but it fixed the issue!
+			</p>
+
+			<h3>WSL2</h3>
+			<p>
+				"Just" run XMing, VcXsrv, or some other app on Windows and in WSL bash:
+			</p>
+			<pre class="prettyprint linenums">export DISPLAY=$(grep nameserver /etc/resolv.conf | awk '{print $2}'):0.0</pre>
+			<p>
+				This didn't work for me... the app seemed to &quot;run&quot; but just hung with no GUI
+				being displayed. Used WSL1 instead :/
+			</p>
+
+			<h3>Generic Script</h3>
+			<p></p>
+			<blockquote>
+				<pre class="prettyprint linenums"># set DISPLAY to use X terminal in WSL
+# in WSL2 the localhost and network interfaces are not the same than windows
+if grep -q WSL2 /proc/version; then
+    # execute route.exe in the windows to determine its IP address
+    DISPLAY=$(route.exe print | grep 0.0.0.0 | head -1 | awk '{print $4}'):0.0
+
+else
+    # In WSL1 the DISPLAY can be the localhost address
+    if grep -q icrosoft /proc/version; then
+        DISPLAY=127.0.0.1:0.0
+    fi
+
+fi</pre>
+				<footer>
+					--
+					<a href="https://stackoverflow.com/a/66398613/1517244" target="_blank">
+						WSL 2: Run Graphical Linux Desktop Applications from Windows 10...
+					</a>, SO.
+				</footer>
+			</blockquote>
+			<p></p>
+		</div>
+	</div> <!-- End Content Div -->
+</body>
+</html>
+
