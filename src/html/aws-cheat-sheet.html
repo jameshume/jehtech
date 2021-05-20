@@ -32,6 +32,14 @@ dnl ---- END M4 MACROS ----
 
 <h2>AWS CLI</h2>
 <div>
+	<h3>Setup</h3>
+	<div>
+		<pre class="prettyprint linenums">apt install awscli
+aws configure set aws_access_key_id &lt;AWS_ACCESS_KEY&gt; [--profile &lt;PROF_NAME&gt;]
+aws configure set aws_secret_access_key &lt;AWS_SECRET_KEY> [--profile &lt;PROF_NAME&gt;]
+aws configure set region "eu-west-1" [--profile &lt;PROF_NAME&gt;]</pre>
+	</div>
+
 	<h3>Profiles</h3>
 	<div>
 		<h4>List Available Profiles</h4>

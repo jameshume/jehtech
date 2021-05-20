@@ -803,7 +803,7 @@ Install & Configure The CLI
 apt install awscli
 aws configure set aws_access_key_id <AWS_ACCESS_KEY> [--profile <PROF_NAME>]
 aws configure set aws_secret_access_key <AWS_SECRET_KEY> [--profile <PROF_NAME>]
-aws configure set region "eu-west-1" --profile ci
+aws configure set region "eu-west-1" [--profile <PROF_NAME>]
 
 The access key and secret access key will have been created previously in the IAM settings.
 
