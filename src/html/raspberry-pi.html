@@ -22,6 +22,9 @@
 <div id="content">
 <h1 class="title">Raspberry Pi Notes</h1>
 <div style="padding-right:10px;">
+	<h2>Page Contents</h2>
+	<div id="page_contents">
+	</div>
 
 
 
@@ -167,6 +170,26 @@ sudo rm -rf /var/lib/docker</pre>
 				<em>not</em> be able to see any of the new user's real files!
 			</li>
 		</ol>
+	</div>
+
+
+
+	<h2>Mount Remote Windows Directory</h2>
+	<div>
+		<p>
+			If you want to use your local machine for development and the Pi to simply run the code you
+			can use the following instructions.
+		</p>
+		<ol>
+			<li>On your Windows machine, share your local development directory.</li>
+			<li>
+				On the Pi, execute the following. You will be asked for a password. This will be your
+				Windows login password.
+				<pre class="prettyprint linenums">sudo mkdir /mnt/a-mount-dir-name
+sudo mount -t cifs -o username=&lt;Windows user name&gt;,uid=$(id -u),gid=$(id -g),forceuid,forcegid //&lt;PC's IP address&gt;/&lt;Windows folder share name&gt; /mnt/a-mount-dir-name</pre>
+			</li>
+		</ol>
+		<p></p>
 	</div>
 
 

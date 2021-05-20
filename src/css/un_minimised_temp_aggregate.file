@@ -23,6 +23,18 @@
 	     url(https://fonts.gstatic.com/s/spinnaker/v8/W7zI5bHqD9Cyn2evfF7Qnz8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
 }
 
+#jehtech_contents_div ul {
+	padding-inline-start: 25px;
+}
+
+#jehtech_contents_div ul ul {
+	padding-inline-start: 15px;
+}
+
+#jehtech_contents_div ul ul ul {
+	padding-inline-start: 15px;
+}
+
 .ui-dialog .ui-dialog-content {
 	padding: 0;
 }
