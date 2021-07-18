@@ -801,6 +801,21 @@ if [ $? -ne 0 ]; then exit 1; fi</pre>
 				DER refers to the Distinguished Encoding Rules for ASN.1. The rules are a subset of BER, and give exactly one way to represent any ASN.1 value as an octet string. DER is intended for applications in which a unique octet string encoding is needed, as is the case when a digital signature is computed on an ASN.1 value.
 				<a href="http://luca.ntop.org/Teaching/Appunti/asn1.html" target="_blank">[7]</a>
 			</p>
+			<p>
+				Another good resource is the <a href="https://luca.ntop.org/Teaching/Appunti/asn1.html" target="_blank">Layman's Guide to a Subset of ASN.1, BER, and DER</a>.
+				It has the following to say:
+			</p>
+			<blockquote>
+				<p>
+					... a service at one layer may require transfer of certain abstract objects between computers; a lower layer may provide transfer services for strings of ones and zeroes, using encoding rules to transform the abstract objects into such strings ...
+				</p>
+				<p>
+					... OSI's method of specifying abstract objects is called ASN.1 (Abstract Syntax Notation One, defined in X.208), and one set of rules for representing such objects as strings of ones and zeros is called the BER (Basic Encoding Rules, defined in X.209). ASN.1 is a flexible notation that allows one to define a variety data types, from simple types such as integers and bit strings to structured types such as sets and sequences, as well as complex types defined in terms of others. BER describes how to represent or encode values of each ASN.1 type as a string of eight-bit octets. There is generally more than one way to BER-encode a given value. Another set of rules, called the Distinguished Encoding Rules (DER), which is a subset of BER, gives a unique encoding to each ASN.1 value ...
+				</p>
+			</blockquote>
+			<p></p>
+
+
 
 			<h3>PEM Files</h3>
 			<p>

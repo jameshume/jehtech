@@ -538,15 +538,92 @@ https://www.youtube.com/watch?v=Y6J1Yt8YYj0
 
 
 
+===================================================================================================
+===================================================================================================
+Attack (-Defense) Trees
+===================================================================================================
+From https://www.youtube.com/watch?v=oi_CfBe_umU&ab_channel=Z.CliffeSchreuders
+begin with hazard of interest eg. access to our system and work down tree through levels of
+cause and events until we meet fundamental events. e.g. cause/event is an attack
+
+From http://www.sti.uniurb.it/events/fosad05/attacktrees.pdf:
+An attack tree is a tree in which the nodes represent attacks. The root node of the
+tree is the global goal of an attacker. Children of a node are refinements of this goal,
+and leafs therefore represent attacks that can no longer be refined
+...
+The purpose of an attack tree is to define and analyze possible attacks on a system in
+a structured way. This structure is expressed in the node hierarchy, allowing one to
+decompose an abstract attack or attack goal into a number of more concrete attacks
+or sub-goals.
+
+See: https://www.youtube.com/watch?v=ig0oLBzAXdQ&ab_channel=OWASPOttawaOWASPOttawa
+     https://www.schneier.com/academic/archives/1999/12/attack_trees.html
+     https://www.gmv.com/DocumentosPDF/checker/PoEM-2016.pdf
+     https://satoss.uni.lu/members/piotr/adtool/
+     https://link.springer.com/chapter/10.1007%2F978-3-642-19751-2_6
+     https://satoss.uni.lu/members/barbara/papers/slides.pdf
+
+Useful free tool is ADTree
+
+Quantitative analysis of an attack-defense scenario:
+	* Standard questions
+		* What is the minimal cost of an attack?
+		* What is the expected impact of a considered attack?
+		* Is special equipment required to attack?
+	* Bivariate questions
+		* How long does it take to secure a system, when the attacker
+		* has a limited budget?
+		* How does the scenario change if both, the attacker and the
+		  defender are affected by a power outage?
+
+An attack tree only looks at the likelihood of an attack, not the impact.
+Tend to only do attack trees for things that would cause significant damage.
+For the L, M, H, E domain, the tool combines the scores in a relatively straight-forward way.
+For nodes with 'AND' children, the node score is the highest of the child scores. For nodes with or
+'OR' children, the node score is the lowest of the child scores. e.g. if a goal can be attained with
+an 'L' child OR a 'H' child, then the goal is given an 'L' difficulty (because the attacker would do
+the low-difficulty thing).  If a goal can be attaioned with an 'L' child AND an 'H' child, then the
+goal is given an 'H' difficulty, because it's the most difficult thing to achieve. These just
+propagate up the hierarchy. Hence... for a goal with OR children, you need to address ALL of the
+lowest goal ratings in order to raise the rating of the goal.  With AND children you need to
+address ANY of the lowest goal ratings in order to raise the rating of the goal. Hence the attack
+tree helps you target mitigations to those things that are most worth doing. i.e. if a goal can be
+achieved with an 'L' OR an 'M' child, there's little point in adding a mitigation that increases the
+'M' to 'H' because the 'L' still dominates the goal... etc.
+
+Attacker objects have
+   - Clear motivation
+   - Clear impacts (severities) on company / organisation / stakeholders
+
+To list attacker objectives:
+   - Make a list of types of attacker
+   - Make a list of objectives
+   - Ask, what affects the bottom line? E.g. revenue loss, theft, brand damage
+
+Do a tree for each attacker and objective combination
+Worry about WHAT not how.
+Use the tree:
+   - Summaries all attacker objectives
+   - Detailed look at attack vectors
+   - Anaylisis of risk based on likelihood
+   - PRIORITISED list of mitigations
+
+What should come out of the attack tree should be a list of actions that *need* to be done as being
+necessary to appropriately secure the resource in question, relative to its positions/importance
+withing the system context.
+
 
 ===================================================================================================
 ===================================================================================================
-Coursera Course Notes
+Coursera Course Notes - Introduction to Cybersecurity Tools & Cyber Attacks by IBM
 ===================================================================================================
+NIST - Info security is the protection of informations systems from unorthorized access, use, disclosure,
+disruption, modification, or destruction in order to provide confidentiality, integrity, and availablilty.
+
 CIA Triad:
 	1. Confidentiality
 		I.e., privacy - prevent unorthorized access to data. I.e., only the sender and the
-		receiver, can understand the message. 
+		receiver, can understand the message.
 	2. Information security
 		Can involve authentication where the sender and receiver want to confirm each others
 		identity in order to securly communicate.
@@ -560,6 +637,7 @@ CIA Triad:
 	modification, or destruvtion in order to provide CIA - confidentiality, information
 	secutiry, integrity and availablility.
 
+Vocab:
 Vunerability: Flaw, loophole, oversight, or error that can be exploited to violate system
               security policy.
 Exploit:      Defined way to breach secutiry of an IT system through a vunerability.
@@ -570,7 +648,7 @@ THREATS ------> NATRUAL FACTORS ------> Lightning, hurricane etc
        \------> HUMAN FACTORS   ------> INTERNAL FACTORS  ------> Current employees
 	                         \                           \------> Former employees
 							  \ ------> EXTERNAL FACTORS  ------> Malicious events ------> Hackers/Crackers ------> Virus/Trojan/Worm
-										 
+
 Early cyber security operations:
 	* Clipper Chip
 		Gov was going to try and put chips into all US phones to spy.
@@ -592,7 +670,7 @@ Early cyber security operations:
 	* Bosnia
 		On Bosnia, there was a lot of cyber operations. But things like, for example, fake news,
 		fake information delivered to the militaries in the field
-	* Stuxnet (https://en.wikipedia.org/wiki/Stuxnet) - delivered into Iran nuclear plans. The worm
+	* Stuxnet (https://en.wikipedia.org/wiki/Stuxnet) - delivered into Iran nuclear plants. The worm
 		is widely understood to be a cyberweapon built jointly by the United States and Israel in a
 		collaborative effort known as the "Olympic Games".
 
@@ -619,26 +697,93 @@ Security challenges:
 	* Protectors have to be right all the time, attackers just once!
 	* No one likes the hassle of security until it is needed (seat belt philosophy)
 
-Critical thinking - 5 key skills:
-    1. Challenge assumption
-	    - Systematically list and challenge
-	2. Consider alternatives
+- Challenge assumptions - ass/u/me
+	- Eplicitly list all assumptions as they are thoughts/ideas that lead us to predict (incorrectly) outcomes
+		- Invite all stakeholders
 		- Brainstorm
-		- Break into components: who/what/how/when/why/where
-		    - Who is involved? Who are the stakeholders? Who is effected by the outcome?
-			- What is at stake? What is the problem or desired outcome?
-	3. Evaluate data
-		- Does it fit the hypothesis
-	4. Identify key drivers
-    5. Understand context
+		- Look for phrases like "Will always/never...", "Generally the case..."
+	- Examine each:
+		- Why do I think this is correct?
+		- When could this be false?
+		- How confidentam I that it is valid?
+		- If it were invalid, what impact would it have and what is the severity?
+	- Categorise based on evidence:
+		- Solid & well supported
+		- Correct, with caveats
+		- Unsupported / questionable (doesn't necessarily mean wrong - need more data and iterate)
+	- If any need more data, gather and re-do.
+- Consider alternatives
+	- Failure to consider missing data, which we may be assuming or interpolating unconciously, can lead to bad decisions
+		- Brainstorm
+		- Who/What/Why/Where/When/How
+			- Who is involved and effected by the outcome
+			- What is at stake? What could happen? Whats the problem? Whats the desired outcome?
+			- Where did this take place? Where are the stakeholders? Where's the infrastructure? Does geography make a difference?
+			- When did it take place? Does timing make a difference? WHen are the key dates?
+			- Why are we doing this? What are the benifits? Key drivers? Motives?
+			- How will we appoach this? Is it feasible? Be detailed and specific and think through all alternatives.
+		- AVOID becoming engrossed in one explanation - always consider alternatives - brainstorm!!
+			- Get different perspectives.
+		- Consider the oposite of your assumption - the null hypothesis.
+- Evaluate data
+	- What does normal look like? This is the key to anomoly detection.
+	- Establish basline for whats normal: web traffic, network sensors, endpoint activity, source/dest/ volume/velocity.
+	- Lookout for inconsistent data
+	- Test data against each hypothesis and discard those that dont fit.
+- Identify key drivers
+	- Technology
+	- Regulatory - ISO27001 / GDPR / HIPAA / CyberEssentials
+			- https://www.ncsc.gov.uk/cyberessentials/overview
+				- Cyber Essentials is a simple but effective, Government backed scheme that will help you
+				  to protect your organisation
+			- https://www.iso.org/isoiec-27001-information-security.html
+				- ISO/IEC 27001:2013 (also known as ISO27001) is the international standard for information
+					security. It sets out the specification for an information security management system (ISMS).
+					- ISO27001 includes things like screening employees on joining, etc, as well as other IT
+						security measures that help address social engineering.
+					- Provides requirements for establishing, implementing, maintaining and continually
+						improving an information security management system by preserving the confidentiality,
+						integrity and availability of information by applying a risk management process.
+				- ISO/IEC 27000:2018 INFORMATION TECHNOLOGY
+					Security for any kind of digital information, ISO/IEC 27000 is designed for any size of
+					organization.
+				- ISO/IEC 27001:2013 INFORMATION TECHNOLOGY
+					Security for any kind of digital information, ISO/IEC 27000 is designed for any size of
+					organization.
+				- ISO/IEC 27002:2013 INFORMATION TECHNOLOGY
+					Security techniques - Code of practice for information security controls.
+	- Society
+	- Supply Chain
+	- Employees
+	- Threat actors. WHat are they're technical capabilities and drivers etc.
+- Understand context [most important![
+	- The operation environment in which you are working
+	- Consider the PERSPECTIVE of other stakeholders, managers, colleagues,clients.
+		- Put yourself in other peoples shoes...
+	- Framing techniques - does it need to be set in broader context.
+		E.g. Slow elevator
+		Problem framing: "Elevator too old and slow" ---> "Waiting is boring"
+		Solutioon space: replace elevator            ---> Reduce perception of wait time.
 
 Terminology:
-Black Hats - Black hats are criminals
-White Hats - White hats are security researchers or hackers who, when they discover a
-             vulnerability in software, notify the vendor so that the hole can be patched.
-Gray hats  - Gray hats fall into the middle ground between these two other hacker categories.
-             Gray hats sell or disclose their zero-day vulnerabilities not to criminals, but
-			 to governments, i.e., law enforcement agencies, intelligence agencies or militaries.
+Black Hats  - Black hats are criminals
+White Hats  - White hats are security researchers or hackers who, when they discover a
+              vulnerability in software, notify the vendor so that the hole can be patched.
+Gray hats   - Gray hats fall into the middle ground between these two other hacker categories.
+              Gray hats sell or disclose their zero-day vulnerabilities not to criminals, but
+              to governments, i.e., law enforcement agencies, intelligence agencies or militaries.
+Red hat     - Like white hat hackers, red hat hackers also want to save the world from evil hackers.
+              But they choose extreme and sometimes illegal routes to achieve their goals.
+Greenhat    - Newbie unskilled hacker
+Hacktivists - The likes of Anonymous, LulzSec or AntiSec. Their mission is largely politically
+              motivated or ideological.
+Insider     - Insiders are made up of disgruntled employees, whistleblowers or contractors.
+              Oftentimes their mission is payback
+State Sponsored Hackers - unlimited potential resources to target systems such as national
+                          infrastructure, in order to achieve political or military goals
+Cyber Terrorists - Motivations based on political or paramilitary goals
+Cyber Criminal - Money motivated
+
 
 Some resources:
 https://www.sans.org/critical-security-controls/
@@ -652,3 +797,314 @@ https://www.issa.org/
 	critical information and infrastructure..
 https://www.first.org/membership/benefits
 https://cybersecurityventures.com/cybersecurity-associations/#home/?view_1_page=1
+
+
+2019 Ponemon Institute Study on the Cyber Resilient Organization:
+https://www.ibm.com/account/reg/us-en/signup?formid=urx-37792&cm_mmc=Search_Google-_-Security_Resilient-_-WW_NA-_-%2Bponemon%20%2Binstitute_b_OV64453&cm_mmca1=000024FH&cm_mmca2=10006542&cm_mmca7=9021964&cm_mmca8=kwd-294934641027&cm_mmca9=_k_EAIaIQobChMI5OLK2tv_4QIVDp7ACh1sHwNWEAAYASAAEgL2w_D_BwE_k_&cm_mmca10=326203471649&cm_mmca11=b&gclid=EAIaIQobChMI5OLK2tv_4QIVDp7ACh1sHwNWEAAYASAAEgL2w_D_BwE
+
+	High automation organizations are better able to prevent security incidents and disruption
+	Computer Security Incidence Response Plan (CSIRP) that is applied consistently across the entire enterprise
+	Communication with senior leaders about the state of cyber resilience occurs more frequently
+	Senior management in high performing organizations are more likely to understand the correlation between cyber resilience and their reputation in the marketplace
+	High performers are more likely to have streamlined their IT infrastructure and reduced complexity
+	Steps taken to significantly improve cyber resilience
+		Hiring skilled personnel
+		Visibility into applications and data assets
+		Improved information governance practices
+		Implementation of new technology, including cyber automation tools such as artificial intelligence and machine learning
+		Elimination of silo and turf issues
+			https://www.lightercapital.com/blog/what-are-organizational-silos/
+		Engaging a managed security services provider
+		Training and certification for Cybersecurity staf
+		Training for end-users
+		C-level buy-in and support for the cybersecurity
+		Board-level reporting on the organization’s cyber resilience
+	High performers are more likely to reduce complexity in their IT infrastructures. A
+
+	The eight most effective security technologies
+		Identity management & authentication
+		Security information & event management
+		Incident response platform
+		Cryptographic technologies
+		Anti-malware solution (AVAM)
+			Anti-malware and antivirus definitely aren’t the same. Antivirus depends more on the
+			signatures of known viruses to detect specifics viruses or types of viruses, much like
+			a flu shot. In comparison, anti-malware is made up of nonsignature-based anomalies that
+			detect unknown anomalies (malware that may not have been detected before).
+		Intelligence and threat sharing
+		Network traffic surveillance
+		Intrusion detection & prevention
+
+
+Security threats +-------> Human Factors
+                 |              +-----------> Internal
+                 |                               +----------> Former employees
+                 |                               +----------> Current employees
+                 |              +-----------> Exernal - Malicious events - hackers - viruses,
+                 |                                      trojans worms (malware)
+                 -------> Natural Factors - Lightnigh, hurricane, floods etc
+
+
+Examples of tools hacks use:
+	SeaDaddy and SeaDuke (CyberBears US Election)
+	BlackEnergy 3,0 (Russion Hackers)
+	Shamoon
+	Duqu and Flame
+	DarkSeoul
+	WaanaCry
+
+
+See X.800 : Security architecture for Open Systems Interconnection for CCITT applications
+
+
+Attack Classification
+	Passive Attacks
+		Eavesdropping - Can go undetected for a *long* time
+		Traffic analysis - Frequency and size of messages.
+			- Attacks confidentiality by infering data from traffic analysis
+	Active Attacks
+		Explicit interception and modification
+		- masquerade - impersonation of an authorized user or known user
+		- replay - copy of legitimate message captured and re-trasmitted. Attacks
+		  integrity of system's data.
+			- e.g replay the API call to transfer money from account A to account B.
+		- modification
+		- frabrication - a fake message from A to B, but really sent by C
+		- destruction/corruption - destruction/corruption of data and/or other resources
+		- denial/interruption of service
+		- disclosure of sensitive information - an attack on the confidentiality of a message
+
+Security services
+	- Protect a system resource.
+	- Security Analysis - Any analysis must take into account likely attacker goals and motivation to
+	  put it in the appropriate context to provide input for prioritisation of issues and mitigations.
+	- Security objectives are a statement from the perspective of what needs to be protected in
+	  the system. Categorise into CIA.
+		- must consider the breadth of confidentiality, integrity and availability issues in the
+		  context of the associated business risk.
+		- split into primary and secondary objectives and what in the CIA they are focussed on.
+	- Analysis methodologies - ADTrees, STRIDE / Secure Development Lifecycle (SDL)
+		- E.g. Microsoft Threat Modeling Tool 2016:
+		  https://www.microsoft.com/en-us/download/details.aspx?id=49168
+		- Thread risk scoring
+			- Microsoft DREAD: https://docs.microsoft.com/en-gb/archive/blogs/david_leblanc/dreadful
+				- Damage Potential
+				- Reproducibility
+				- Exploitability
+				- Affected Users
+				- Discoverability
+			- CVSSv3 - Common Vunerability Scoring System
+				- Has average of 3 levels to score against 8 criteria:
+					- Attack Vector (AV): Network (N) Adjacent (A) Local (L) or Physical (P)
+					- Attack Complexity (AC): Low (L) or High (H)
+					- Privileges Required (PR): None (N) Low (L) or High (H)
+					- User Interaction (UI): None (N) or Required (R)
+					- Scope (S): Unchanged (U) or Changed (C)
+					- Confidentiality Impact (C): None (N) Low (L) or High (H)
+					- Integrity Impact (I): None (N) Low (L) or High (H)
+					- Availability Impact (A): None (N) Low (L) or High (H)
+			- See also: https://owasp.org/www-community/Application_Threat_Modeling
+			            OWASP Security Knowledge Framework:
+			               https://demo.securityknowledgeframework.org/
+	- Intended to counter security attacks by securing transfers of data.
+	- Implement security policies, which themselves are implemented by security mechanisms
+		- Security policy is derived from the business policy
+			E.g. business policy is no unauthorized data movements so a security policy may
+			be protocol supression, the mechanism being disabling FTP, for ex.
+		- the mechanism implements a policy, like ID & authentication, digital signatures,
+		  access controls, etc
+	- X.800
+		- Authentication - I am who I say I am
+		- Access Control - Only authorized people can access resource
+		- Data Confidentiality - No unauthoirized disclosure
+		- Data Integrity - Tamper proof
+		- Non-Repudation - Can't be denied by one pary in the communications
+		- Availability
+
+A watering hole attack works by identifying a website that's frequented by
+users within a targeted organisation, or even an entire sector, such as defence,
+government or healthcare.That website is then compromised to enable the
+distribution of malware.
+
+Spectra class attacks exploit flaws in the interfaces between wireless cores in which one
+core can achieve denial of service (DoS), information disclosure and even code execution
+on another core.
+
+MALWARE AND TYPES OF MALWARE:
+-----------------------------
+Malware: Short for malicious software. Any software used to disrupt computer or mobile operations,
+gather sensitive information, gain access to private computer systems or display unwanted
+advertising.
+
+Many malware attacks attempt to remain hidden on the host using resources for potential uses
+such as launching service attacks, hosting elicit data, accessing personal or business information.
+
+Virus = malware that spreads from computer by computer via HUMAN INTERACTION. Tactics to "hide"
+like polymorphic code etc.
+
+Worm = self replication that does NOT RELY ON HUMAN INTERACTION.
+
+Tojan = malware that damages system or gives access to host. spread by posing as a legitimate
+piece of s/w, e.g. a game
+
+Spyware = Track and report host usage or get files/browsing info etc
+
+Adware = Duh!
+
+RATS = Remote Access Tojans/Tools -  let attacker gain access and control of host
+
+Ransomware = Restricts access to data on host to only attackers.
+	- See https://securityintelligence.com/ransomware-response-guide/
+	- See also https://www.ibm.com/downloads/cas/EV6NAQR4
+	- most ransomware does NOT require administrative privileges
+	- End users are often the first line of defense. If they are unable to recognize a
+	  security event and report issues via effective channels, the attack may continue
+	  uninterrupted and spread throughout the network
+	- Most malware uses DNS to connect to control server - try https://www.quad9.net/ as
+	  counter measure.
+			Quad9 is a free service that replaces your default ISP or enterprise Domain Name Server (DNS)
+			configuration. When your computer performs any Internet transaction that uses the DNS (and
+			most transactions do), Quad9 blocks lookups of malicious host names from an up-to-the-minute
+			list of threats.
+	- Consider disabling windows scripting host
+			Create the following registry key and value to disable:
+				HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Script Host\
+					Settings\ Enabled and set the ‘Value data’ field of Enabled to ‘0’
+				(That is a zero without the quotes).
+	- Develop and rehearse an incident response plan:
+		- NIST Incident Response Process, contain four major steps:
+			1. Preparation
+			2. Detection and Analysis
+			  - Detection
+					- Identify any and all infected systems and those in imminent danger of
+						becoming infected.
+					- Contain the spread of the infection as soon as possible: isolate infected systems
+					- CAUTION: just because only one infected host encrypting filesis found, it does not mean
+						others have not! Remain vigilant.
+					- Do not reboot or restart an infected system.
+						The infected system should be hibernated and disconnected from the network immediately
+						and IT security staff should be notified been affected
+				- Analysis
+					- Identifying the specific variant of ransomware in action
+					- Determining how the malware entered the organization (root cause analysis)
+			3. Containment, Eradication, and Recovery
+			4. Post-Incident Activity
+
+
+Protection against attacks:
+	- Anti virus software
+	- Inter-operation systems / Intrusion detection systems / Unified threat management systems
+	- Updating / Patching - use latest versions to address security holes
+	- IAM etc
+	- Training staff
+	- Policy
+
+
+Internet Securty Threats
+------------------------
+
+1. Network Mapping (Casing the joint!)
+	- Find out what services are implemented on the network.
+	- Use ping to determine hosts on network
+	- Port-scanning: try to connect to each port in sequence and see what happens
+	- nmap
+
+	- Counter measures:
+		- Traffic monitoring and analysis
+		- Use host scanners to record network structure and alert if unexpected computers
+		  appear on network.
+		- White list of MAC addresses to be allowed on network.
+2. Packet sniffing
+3. IP Spoofing
+	- Any IP address can be put in the source address in the IP packet as well as any MAC in the
+	  Ethernet frame etc.
+
+	- Counter measures:
+		- Doesn't counter everything but can use INGRESS FILTERING.
+		  Routers should not forward outgoing packets with invalid source addresses - e.g. datagram
+		  with IP source address not in router's network. Cannot be applied to every network.
+4. [Distributed] Denial of Service (DDoS)
+	- Counter measures:
+		- filter out flooded packets (e.g. SYN) before they reach the network
+		  but throws good out with bad.
+		- Traceback to source of floods.
+		- Neither options very effective short or long term
+5. Host Insertions
+	- Generally an INSIDER THREAT
+	- Malicious computer placed on network
+	- Countermeasures:
+		- Network monitoring and profiling.
+			- Host scanning to discover hosts against MAC address inventory.
+		- Maintain inventory of computers on netowkr by MAC address
+		- Missing hosts ok but new unknown hosts are BAD.
+
+	- Rouge software processes
+		- A malicious program on an authorized computer or good process co-opted for malicious puposes.
+			- Used to gain access to sensitive info (exflitration of sensitive data)
+			- Used to monitor network
+			- Etc.
+
+
+KILL CHAIN
+----------
+The set of work that needs to be done to compromise a victim.
+1. Reconnaissance - Research, identification and selection of targets
+2. Weaponization - Pairing remote access malware with exploit into a delivery payload - eg word doc
+3. Delivery - Transport weapon to target (e.g. email with doc attachment)
+4. Exploitation - Once delivered it is triggered to exploit vulnerable apps or systems.
+5. Installation - Weapon installs backdoor on system allowing persistent access
+6. Command and Control - Outside server comms with the weapons to provide "hands on keyboard access"
+                         inside the target's network.
+7. Actions on Objective
+
+
+Social engineering
+------------------
+Fool victim into voluntarily giving attacker information
+Toolkits like SET - Social Engineering Toolkit (SET) - (Kali Linux but independently installable
+and available on GitHub!!) allow attacker to clone websites to create lookalikes.
+
+Phishing & Vishing
+------------------
+Open source campaign tools like "Go Fish" allow you to guage your cybersecurity training program
+inside your company is something that's adding value to the knowledge of the users, for example.
+
+
+
+X-Force Research
+----------------
+IBM X-Force Threat Intelligence research reports can help you keep pace with an evolving threat
+landscape and learn how to protect your networks and data from the latest threats and attack vectors.
+
+https://www.ibm.com/security/data-breach/threat-intelligence
+https://www.ibm.com/security/data-breach/mss-security-threat-research
+
+	- More linux malware discovered in 2020 - 56 new malware families.
+	- Ransomeware the biggest threat: 23% of all events X-Force responded to, $123m+ made by attackers!
+	- Citrix flaw used in 25% of all attacks in first 3 months of 2020
+
+
+
+MITRE ATT&CK FRAMEWORK
+----------------------
+https://attack.mitre.org/
+
+MITRE ATT&CK is a globally-accessible knowledge base of adversary tactics and techniques based on
+real-world observations. The ATT&CK knowledge base is used as a foundation for the development of
+specific threat models and methodologies in the private sector, in government, and in the
+cybersecurity product and service community.
+
+
+
+Security event manager
+----------------------
+Security event management (SEM), and the related SIM and SIEM, are computer security disciplines
+that use data inspection tools to centralize the storage and interpretation of logs or events
+generated by other software running on a network.
+
+Security information management (SIM): Long-term storage as well as analysis and reporting of
+    log data.
+Security event manager (SEM): Real-time monitoring, correlation of events, notifications and
+    console views.
+Security information and event management (SIEM): Combines SIM and SEM and provides real-time
+    analysis of security alerts generated by network hardware and applications.[

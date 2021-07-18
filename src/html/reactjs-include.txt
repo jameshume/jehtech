@@ -843,6 +843,37 @@ If the diff of the VDOMs shows a difference, only then does React reach
 out to the real DOM and updates it - and _only_ in the places where it updated, it does _not_ re-write
 the entire DOM.
 
+million.js.org has a good explanation of a VDOM:
+	The virtual DOM is a tree of virtual nodes that represents what the DOM looks like. virtual nodes
+	are light, stateless, and are strings or JavaScript objects that only contain necessary fields.
+	Virtual nodes can be assembled into trees, and "diffed" to make pinpoint changes to the DOM.
+
+	The reasoning behind this is because modification and access of DOM nodes is computationally
+	expensive. A diff between virtual nodes, accessing the DOM only for modification, is the premise
+	of virtual DOM. It avoids the DOM as much as possible, favoring plain JavaScript objects instead,
+	making reading and writing much cheaper.
+
+react docs, of course, also gave good explanation:
+	The virtual DOM (VDOM) is a programming concept where an ideal, or "virtual", representation of
+	a UI is kept in memory and synced with the "real" DOM by a library such as ReactDOM. This
+	process is called reconciliation.
+
+	This approach enables the declarative API of React: You tell React what state you want the UI
+	to be in, and it makes sure the DOM matches that state. This abstracts out the attribute
+	manipulation, event handling, and manual DOM updating that you would otherwise have to use
+	to build your app.
+
+	Since "virtual DOM" is more of a pattern than a specific technology, people sometimes say
+	it to mean different things. In React world, the term “virtual DOM” is usually associated with
+	React elements (elements are the smallest building blocks of React app and describe what you
+	want to see on the screen. eg. const el = <b>Me</b>) since they are the objects representing the
+	user interface. React, however, also uses internal objects called "fibers" to hold additional
+	information about the component tree. They may also be considered a part of "virtual DOM"
+	implementation in React.
+
+	Fiber is the new reconciliation engine in React 16. Its main goal is to enable incremental
+	rendering of the virtual DOM.
+
 
 
 ====================================================================================================
@@ -2541,6 +2572,11 @@ to get the new value.
 useEffect()
 ===========
 SEE: https://reactjs.org/docs/hooks-effect.html
+
+An "effect" or "side effect" is anything that lies outside React's responsibilities of rendering
+the app, responding to user events and re-rendering. I.e. they are tasks that happen outside of the
+normal component evaluation and render cycle. So, for example, an AJAX query is something
+that happens outside of React's purview. Or, storing something in browser storage etc.
 
 import React, {useState, useEffect} from 'react';
 

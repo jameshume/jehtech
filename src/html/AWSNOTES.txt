@@ -41,7 +41,7 @@ IAM - Identity Access Management
 
 USERS           GROUP              POLICY
 James --------> Supper Group ----> Eat policy
-John -------/                `---> Drink policy 
+John -------/                `---> Drink policy
 Paul ------/
 
 
@@ -80,7 +80,7 @@ Instance Profiles
 Cognito
 --------
 	USER POOLS: user directories that provide sign-up and sign-in options for your ... app users
-		... app users can sign in either directly through a user pool, or federate through a 
+		... app users can sign in either directly through a user pool, or federate through a
 		third-party identity provider (IdP) ... After a successful authentication, your ... app
 		will receive user pool tokens from Amazon Cognito ...
 	IDENTITY POOLS:  provide AWS credentials to grant your users access to other AWS services.
@@ -91,20 +91,20 @@ Cognito
 	Lets you give your users access to AWS resources after they have successfuly authenticated with a
 	web-based identity provider like Amazon, FB or Google. After authentication, user gets auth code
 	from Web ID provider, which they trade for temporary AWS security credentials.
-	
-	Cognity provides Web Identity Federation with following fetures:
+
+	Cognito provides Web Identity Federation with following fetures:
 		- Sign up and sign in
 		- Access for guests
 		- ID broker between app and Web ID providers so no need to write additional code
 		- Sync user data for multiple devices
-	
+
 	Acts as broker handling all interactions with Web ID providers.
 
 	E.g. user can login to FB, get an authcode which it exchanges with AWS for a temporary access
 	credential (which maps to an IAM rolw allowing specific access rights), which it can then use to
 	access an S3 bucket, for example, or parts of a database or event a website behind an ALB acting as
 	a reverse authentication proxy.
-	
+
 
 	Cognito User Pools
 	------------------
@@ -130,17 +130,10 @@ Cognito
 
 
 
-
-
-
-
 ===================================================================================================
 ===================================================================================================
-Going Serverless
-===================================================================================================
-
 Lambdas
--------
+===================================================================================================
 
 See https://aws.amazon.com/lambda/faqs
 
@@ -188,8 +181,11 @@ Configure A Lambda Function
 - TODO COMPLETE ME!
 
 
+
+===================================================================================================
+===================================================================================================
 API Gateway
------------
+===================================================================================================
 
 Use API Gateway to create RESTful APIs endpoints. These are services your web app etc need from a
 backend server. For example, a login management endpoint. This could be implemented using your
@@ -245,7 +241,7 @@ Need to be aware of XSS and CORS
 
 
 Example:
-- - - -
+--------
 Choose the REST API type.
 ##IMG:aws_create_rest_api.png##
 
@@ -281,9 +277,155 @@ Next goto ACTIONS > DEPLOY API. It will then ask you to deply your API. You can 
 existing or new stage. Stages allow management of different versions of the API, e.g. dev v.s.
 production versions.
 
+Whats in resources isn't live - To make it live you must select "Deploy API"
+When deploying must select stage. What is a stage? It is a deployed snapshot of the API.
+Authorizers - add guards to the API so only authenticated users can access it
+Models - define the shape of the data you work with in your API - its is optional
+	define how JSON data you receive should be shaped and validate against it
+Binary support - send files to your end points
 
+
+
+Request response cycle:
+-----------------------
+	End-point is resource (the path) and the type of method (GET/POST etc)
+	- Method request - GATEKEEPER
+		- How requests reaching the end point should look like.
+		- It is a gate keeper. We can reject requests if they don't match a schema
+		- E.g. can setup authorization
+		- E.g. can validate -do the query parameters match what we expect?
+	- Integration request
+		- Optionally map/transform incoming data (headers, meta, body etc) into the
+		  shape that we want to use it in the end point it will reach
+		- And... trigger the end point
+		- When configured as a PROXY it forwards the *entire* request data to the
+		  endpoint, so for a Lambda, for ex, the event parameter holds the entire
+		  request data - headers body etc, whereas, when not a proxy the event object
+		  would hold the request body only.
+	- Integration response.
+		- Triggered when the end point action is done
+		- Optionally map/transfer outgoing data into a shape the client should receive.
+		- Can assign values to permitted headers allowed in "Method response"
+	- Method response
+		- Defines the shape the response should have.
+		- E.g. specify the headers a reponse can have etc.
+		- Never blocks a response
+		- If headers are not permitted/added in method response they cannot be used
+		  in the integration response.
+
+
+
+When creating a new resource:
+-----------------------------
+	- Proxy resource - means it is a catch *all* resource. Catches all other paths and
+	  methods.
+		- E.g. Run express app on a lambda function and fwd all requests to it and
+		 let it do the handling. Full stack app with serverless approach.
+
+	- Enable API Gateway CORS. Configure endpoint to send back correct CORS headers.
+	  CORS - Cross Original Resource Sharing. Not allowed to access resources on a
+	  server from another server. E..g server our app on A and try to access an API
+ 	  on B - default CORS means we can't do this. B must send response server to the
+	  browser so that the browser doesn't stop this access.
+		- Modern browsers send pre-flight requests except for GET to check if the
+		  resource is available and *allowed*.
+		- This extra request will hit your API of type OPTIONS and you must handle
+		  it - you need an OPTION endpoint that will return the correct headers to
+		  the browser.
+		- Note both the pre-flight OPTIONS and the request, PUT, POST etc must also
+		  send the correct CORS headers back to the client.
+	- Note tests via the console will not report CORS errors. There must be a fully web
+	  based test.
+	- Remember to enable CORS for preflight but also to add headers to your normal
+	  enpoint methods, for ex:
+		Access-Control-Allow-Headers: 'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'
+		Access-Control-Allow-Methods: 'DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT'
+		Access-Control-Allow-Origin: '*'
+	  BUT THE EASIEST WAY IS TO SELECT `ACTIONS > ENABLE CORS` in the console as this
+	  will add the headers to all enpoints automatically for us.
+
+	  SECURITY: Generally not the best idea to use '*' if you can avod it!
+
+
+
+Setting up APIs:
+----------------
+	Lambda proxy integration - move the logic of the integration and method response
+		into your lambda function. Normally dont need this.
+
+
+
+Body mapping templates:
+-----------------------
+	Extract data from the request and pass it to lambda in a different representation.
+	For ex, take the request body and only pass a subset of it, perhaps extracting only
+	a grandchild of a specific node etc and so giving the lambda ONLY THE INFO IT NEEDS
+	so that the Lambda doesn't have to care about the specific format of the request
+	body - the body mapping template is an ADAPTOR.
+
+	Body mapping template language defined by Amazon, which uses the Apache Velocity Language
+		https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html
+
+	eg. If request body is a JSON object { a: { b: { c: 123 }, d: 123 } }, then to give the
+	Lambda an event object of {c : 123} the body mapping template becomes:
+		{ "c": $input.json('$.a.b.c') }
+	Lambda can now use `event.c` to get the value 123.
+		- $input is a reserved variable, provided by AWS which gives you access to the
+		  input payload (request body, params, headers) of your request.
+		- $ stands for the request body as a whole.
+		- Wrap $input.json() in quotes to convert to string
+
+
+
+Map response data:
+------------------
+	Does the same as boddy mapping template but for the reponse data. Now the variables
+	like $input refer to the data the enpoint passed back and $ stands for the body
+	of the data.
+
+
+
+Validate Requests With Models:
+------------------------------
+	https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-method-request-validation.html#api-gateway-request-validation-basic-definitions
+	API Gateway can perform the basic validation. This enables you, the API developer, to focus on
+	app-specific deep validation in the backend. For the basic validation, API Gateway verifies
+	either or both of the following conditions:
+	- The required request parameters in the URI, query string, and headers of an incoming request
+	  are included and non-blank.
+	- The applicable request payload adheres to the configured JSON schema request model of the
+	  method.
+
+	https://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html
+	https://json-schema.org/understanding-json-schema/index.html
+
+
+
+Variable resource names
+-----------------------
+	Create a (child) resource as per normal but instead of using a name, enclose the name
+	in CURLEY BRACES.
+		e.g. create /myapp/{blah}
+
+	In the Lambda we want to know what {blah} represents. E.g. if the user calls
+	/myapp/james, we want to know that blah == james.
+
+	To do this must set up a body mapping. (Btw, a GET has no body in the
+	request but the body mapping can still create this).
+		use $input.params() function
+	Out body mapping tempalte would become
+		{
+			"my_variable_name" : "$input.params("blah")"
+		}
+	Not enclosed $input.params(...) in quotes to make it a string in this case
+
+
+
+===================================================================================================
+===================================================================================================
 Simple Serverless Website Using Route53, API Gateway, Lambda and S3
--------------------------------------------------------------------
+===================================================================================================
+
 Domain name in Route53 and bucket name need to be the same. They MUST BE THE SAME (toplevel exluding
 the .com).
 

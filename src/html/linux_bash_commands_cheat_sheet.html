@@ -509,6 +509,37 @@ sudo <em>usermod</em> -a -G sudo the_new_guy</pre>
                 </table>
               </td>
             </tr>
+            <tr>
+              <td>Routes:</td>
+              <td>
+                <table class="jehtable">
+                  <tr>
+                    <td>Check routing table:</td>
+                    <td><code>route [-n]</code></td>
+                  </tr>
+                  <tr>
+                    <td>Check routing table:</td>
+                    <td><code>route [-n]</code></td>
+                  </tr>
+                  <tr>
+                    <td>Add route:</td>
+                    <td><code>sudo route add -net 192.168.a.b gw 192.168.a.1 netmask 255.255.255.0 dev ethX</code></td>
+                  </tr>
+                  <tr>
+                    <td>Add default route:</td>
+                    <td><code>sudo route add default gw 192.168.a.1</code></td>
+                  </tr>
+                  <tr>
+                    <td>Delete route:</td>
+                    <td><code>sudo route del -net 192.168.a.b gw 192.168.a.1 netmask 255.255.255.0 dev ethX</code></td>
+                  </tr>
+                  <tr>
+                    <td>Delete default route:</td>
+                    <td><code>sudo route del default gw 192.168.a.1</code></td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
           </table>
         </p>
 
