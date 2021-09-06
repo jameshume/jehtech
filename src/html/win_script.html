@@ -140,7 +140,7 @@ The system cannot move the file to a different disk drive.
 
 C:\&gt;rem junctions to different <b>local</b> volumes allowed
 C:\&gt;mklink <b>/J</b> jehtech.py E:\jehtech.py
-Junction created for jehtech.py <<===>> E:\jehtech.py</pre>
+Junction created for jehtech.py &lt;&lt;===&gt;&gt; E:\jehtech.py</pre>
 			<p>
 				Note that junction points still can't point to remote shares. You need symbolic links for that!
 			</p>
@@ -151,7 +151,7 @@ Junction created for jehtech.py <<===>> E:\jehtech.py</pre>
                 <footer><a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa365006(v=vs.85).aspx" target="_blank">-- Windows Dev Center</a></footer>
             </blockquote>
             <p>
-                Junctions also appear to be implemented through reparse points <a href="https://msdn.microsoft.com/en-us/library/ms995846.aspx" target="_blank">[Ref]</a>:
+                Junctions also appear to be implemented through re-parse points <a href="https://msdn.microsoft.com/en-us/library/ms995846.aspx" target="_blank">[Ref]</a>:
             </p>
             <blockquote>
                 <p>
@@ -292,6 +292,60 @@ Usage: set address [name=]<string>
 				</p>
 				<pre>netsh interface ipv4 set address name="Local Area Connection" source=dhcp</pre>
 			</div> <!-- End H3 Div -->
+		</div> <!-- End H2 Div -->
+
+
+
+		<h2>Analyse Crash Dumps</h2>
+		<div>
+			<h3>References</h3>
+			<ol>
+				<li>https://keithbabinec.com/2018/06/12/how-to-capture-and-debug-net-application-crash-dumps-in-windows/</li>
+				<li>https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/getting-started-with-windbg</li>
+			</ol>
+			<h3>Enable Windows Error Reporting</h3>
+			<ol>
+				<li>Using regedit create key <code>HKLM:\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps</code></li>
+				<li>For you app, <code>MyApp.exe</code>
+					<ol>
+							<li>Create key <code>HKLM:\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps\MyApp.exe</code></li>
+							<li>Add value of type <code>REG_EXPAND_SZ</code> as DumpFolder with value set to path
+								where you want dump files to be stored</li>
+							<li>Add value of type <code>REG_DWORD</code> as DumpType with value 1 for mini dumps
+								and 2 for full dumps</li>
+							<li>Add value of type <code>REG_DWORD</code> as DumpCount with value as number of
+								dumps to keep in dump folder before overwriting oldest. Default 10.</li>
+					</ol>
+				</li>
+			</ol>
+			<h3>Analyse Dump File</h3>
+			<ol>
+				<li>Open WinDbg - make sure it is the correct type for you application: x86 or x64</li>
+				<li>Select File &gt; Open Crash Dump</li>
+				<li>Enable verbose logging: <code>!sym noisy</code></li>
+				<li>Specify where symbol files exist:
+					<pre>.sympath srv*https://msdl.microsoft.com/download/symbols
+.sympath+ cache*C:\debug\symbols
+.sympath+ C:\Path\To\Project\Exe\MyApp\MyApp\bin\Debug</pre>
+				</li>
+				<li>Force symbol reload:
+					<pre>.reload
+ld*</pre>
+				</li>
+				<li>Load the SOS extension
+					<ol>
+						<li>May have to copy <code>SOS.dll</code> from to relevant path in <code>C:\debug\symbols</code>
+							(you'll see path from errors in the following steps if WinDbg cant find the SOS dll) from either
+							<code>C:\Windows\Microsoft.NET\Framework64\v4.0.30319</code> or
+							<code>C:\Windows\Microsoft.NET\Framework\v4.0.30319</code>
+							depending on whether app is x64 or x86 respectively.
+						</li>
+						<li>Load extension: <code>.loadby sos clr</code></li>
+						<li>Check extension loaded: <code>.chain</code></li>
+					</ol>
+				</li>
+				<li>Run analysis: <code>!analyze -v</code></li>
+			</ol>
 		</div> <!-- End H2 Div -->
 	</div> <!-- End Content Div -->
 </body>

@@ -54,12 +54,10 @@ def CopyImagesDir(srcDir, destDir):
         if os.path.isfile(no_watermark_filename):
             with open(no_watermark_filename) as fh:
                 no_watermark_imgs = [x.strip() for x in fh.readlines()]
-                #print(no_watermark_imgs)
 
         for currdir in dirs:
             destD = os.path.join(destDir, relativeRoot, currdir)
             if not os.path.exists(destD):
-                #print("CREATING", destD)
                 os.makedirs(destD)
 
         for file in files:
@@ -78,7 +76,6 @@ def GenerateRunningCheckSum(data, value):
     return zlib.adler32(data, value) & 0xffffffff
 
 def combine_files(base_dir, dest_file, is_debug=False):
-    #print("COMBINING", base_dir, dest_file)
     un_minimised_temp_aggregate_file = os.path.join(base_dir, "un_minimised_temp_aggregate.file")
     minimised_aggregate_file = os.path.join(base_dir, "minimised_aggregate.file")
     indexFileName     = os.path.join(base_dir, "contents.txt")
@@ -95,7 +92,6 @@ def combine_files(base_dir, dest_file, is_debug=False):
     foundPrevRunningCRC = False
     prevRunningCRC = 0
     if os.path.isfile(indexInfoFilename):
-        #print("Loading {}".format(indexInfoFilename))
         prevRunningCRC = pickle.load(open(indexInfoFilename, 'rb'))
         foundPrevRunningCRC = True
 
@@ -322,11 +318,11 @@ def deploy_site(specificFile, generateImages):
             xhtmlFileName = os.path.join(dirname, matchobj.group(1))
             xhtmlFile = codecs.open(xhtmlFileName, 'r', 'utf-8')
             if (doescape):
-                xhtmlFileContents = xhtmlFile.readlines();
+                xhtmlFileContents = xhtmlFile.readlines()
             else:
-                xhtmlFileContents = xhtmlFile.read();
+                xhtmlFileContents = xhtmlFile.read()
             xhtmlFile.close()
-            
+
             if (doescape):
                 print("   Including escaped snippet")
                 ## Replace all ========== titles with <h1> tags

@@ -106,6 +106,8 @@
                     <td><code>${var:pos}       # Expand from offset pos.</code><br/>
                         <code>${var:pos:len}   # Expand from offset pos max len chars.</code><br/>
                         <code>${var/pat/repl}  # Replace first match of pat with repl. If repl blank, delete.</code><br/>
+                        <code>${var/#pat/repl} # Replace if matched <b>front</b> end of pat with repl. If repl blank, delete.</code><br/>
+                        <code>${var/%pat/repl} # Replace if matched <b>back</b> end of pat with repl. If repl blank, delete.</code><br/>
                         <code>${var//pat/repl} # As above but global over all matches of pat.</code>
                     </td>
                   </tr>
@@ -446,7 +448,11 @@ sudo <em>usermod</em> -a -G sudo the_new_guy</pre>
             </tr>
             <tr>
               <td>List USB:</td>
-              <td><code>lsusb -tv</code></td>
+              <td><code>lsusb -tv</code><br/><code>udevadm info --name=/dev/ttyUSBx --attribute-walk</code></td>
+            </tr>
+            <tr>
+              <td>List USB Serial Devices:</td>
+              <td><code>sudo cat /proc/tty/driver/usbserial</code></td>
             </tr>
             <tr>
               <td>Free memory:</td>

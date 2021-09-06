@@ -42,6 +42,21 @@
 	</div>
 
 
+	<h2>Get Software/Hardware Versions</h2>
+	<div>
+		<p>
+			See also: <a href="https://elinux.org/RPi_HardwareHistory" target="_blank">RPi Hardware History</a>.
+		</p>
+		<table>
+			<tr><td>Debian version:</td> <td><code>cat /etc/debian_version</code></td></tr>
+			<tr><td>OS release:</td> <td><code>cat /etc/os-release</code></td></tr>
+			<tr><td>Kernel version:</td> <td><code>uname -a</code></td></tr>
+			<tr><td>Hardware:</td> <td><code>cat /proc/cpuinfo</code></td></tr>
+		</table>
+		<p></p>
+	</div>
+
+
 
 	<h2>Setup Headless Wifi Mode</h2>
 	<div>
@@ -95,12 +110,11 @@ psk="your_wifi_password"
 			Since Raspbian Jesse installing Docker is as easy as <a href="https://www.raspberrypi.org/blog/docker-comes-to-raspberry-pi/#:~:text=If%20you're%20not%20already,without%20a%20lot%20of%20setup." target="_blank">[Ref]</a>:
 		</p>
 
-		<pre>curl -fsSL https://get.docker.com  | sudo sh # Get offical Docker install script and run it
-sudo ./get-docker.sh                                # Create the docker group
-sudo groupadd docker                                # Add user to the docker group
-su -s ${USER}                                       # Log out and log back in so that group membership is re-evaluated
-sudo usermod -aG docker ${USER}                     # Add non-root user to docker group. Default user is "pi" on RPi OS.
-sudo shutdown -r now                                # For some reason YOU HAVE TO REBOOT!</pre>
+		<pre>curl -fsSL https://get.docker.com  | sudo sh  # Get official Docker install script and run it
+sudo groupadd docker                          # Create the docker group
+su -s ${USER}                                 # Log out and log back in so that group membership is re-evaluated
+sudo usermod -aG docker ${USER}               # Add non-root user to docker group. Default user is "pi" on RPi OS.
+sudo shutdown -r now                          # For some reason YOU HAVE TO REBOOT!</pre>
 
 		<p>Later, to upgrade Docker, don't re-run the script, just do:</p>
 		<pre>sudo apt-get upgrade</pre>
@@ -117,6 +131,16 @@ sudo rm -rf /var/lib/docker</pre>
 		<p>
 			Run <code>sudo raspi-config</code> and select <code>Interfacing Options &gt; I2C | SPI</code>. Select enable, save and exit.
 		</p>
+		<p>
+			To automate the use of <code>raspi-config</code> in scripts does not appear to be the default
+			way of using the util, but if can be done
+			<a href="https://www.raspberrypi.org/forums/viewtopic.php?t=21632" target="_blank">[Ref]</a>
+			<a href="https://www.raspberrypi.org/forums/viewtopic.php?t=21632"  target="_blank">[Ref]</a>:
+		</p>
+		<pre>
+			raspi-config nonint do_i2c 0 # Enable I2C
+			raspi-config nonint do_spi 0 # Enable SPI
+		</pre>
 	</div>
 
 

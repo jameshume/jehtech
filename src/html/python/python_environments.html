@@ -39,8 +39,8 @@
             <li><a href="https://pipenv-fork.readthedocs.io/en/latest/" target="_blank">Pipenv: Python Dev Workflow for Humans</a></li>
         </ol>
 
-        <p><b>Note: Recommend PipEnv - superceeds virtualenv - see next secion!</b></p>
-    
+        <p><b>Note: Recommend PipEnv - supersedes virtualenv - see next section!</b></p>
+
         <h3>VirtualEnv</h3>
         <div>
             <pre><b># Install</b>
@@ -53,7 +53,7 @@ virtualenv my_project # virtualenv my_project will create a folder in the curren
                       # private environment
 
 <b># Create for Python 3</b>
-python3 -m venv env
+python3 -m venv env # Now part of the distro and doesn't need virtualenv to be installed
 
 <b># Use the venv</b>
 source my_project/bin/activate
@@ -78,7 +78,7 @@ pip freeze > requirements.txt
 pip install -r requirements.txt
             </pre>
         </div>
-    
+
         <h3>AutoEnv</h3>
         <div>
             <p>
@@ -91,7 +91,7 @@ pip install -r requirements.txt
                 that directory, it will automatically activate your project for you. Happy days!
             </p>
         </div>
-    
+
         <h3>DirEnv</h3>
         <div>
             <p>The author of AutoEnv actually recommends trying this above AutoEnv. TODO.
@@ -99,7 +99,7 @@ pip install -r requirements.txt
         </div>
     </div> <!-- END Virtual Environments -->
 
-    <h2>Pipenv: Python Dev Workflow for Humans</h2>
+    <h2>Pipenv - Python Virtual Environments and Package Management In One</h2>
     <div>
         <p>
             See <a href="https://realpython.com/pipenv-guide/" target="_blank">Pipenv: A Guide to the New Python Packaging Tool</a>.
@@ -143,7 +143,94 @@ pip install -r requirements.txt
             To leave a pipenv virtual environment just exit the current shell: pipenv starts a new shell session with the
             virtualenv pathing instead of changing the pathing in the current shell session.
         </p>
+
+        <h3>Cheat Sheet</h3>
+        <table class="jehtable">
+            <thead>
+                <tr><th>Command</th><th>Meaning</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>check</td>
+                    <td>Checks for PyUp Safety security vulnerabilities and against PEP 508 markers
+                        provided in Pipfile.</td>
+                </tr>
+                <tr><td>clean</td>
+                    <td>Uninstalls all packages not specified in Pipfile.lock.</td>
+                </tr>
+                <tr><td>graph</td>
+                    <td>Displays currently-installed dependency graph information.</td>
+                </tr>
+                <tr><td>install [--ignore-pipfile]</td>
+                    <td>Installs provided packages and adds them to Pipfile, or (if no packages are
+                        given), installs all packages from Pipfile. Use ignore option to install
+                        from lock file.</td>
+                </tr>
+                <tr><td>lock</td>
+                    <td>Generates Pipfile.lock</td>
+                </tr>
+                <tr><td>run</td>
+                    <td>Spawns a command installed into the virtualenv.</td>
+                </tr>
+                <tr><td>shell</td>
+                    <td>Spawns a shell within the virtualenv.</td>
+                </tr>
+                <tr><td>sync</td>
+                    <td>Installs all packages specified in Pipfile.lock.</td>
+                </tr>
+                <tr><td>update</td>
+                    <td>Runs lock, then sync.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p></p>
     </div>
+
+    <h2>Pipenv Competitors</h2>
+    <div>
+        <p>
+            There are a couple of competitors to pipenv that I've found at the time of writing
+            (Aug 2021). The two that seem to pop up are Poetry and PDM. Pipenv is more mature than
+            them, and Poetry is more mature than PDM.
+        </p>
+        <p>
+            Some rough notes comparing the various options:
+        </p>
+        <pre>venv + pip
+    - Built in to Python 3
+    - Pip freeze does the dependency freezing recursively
+    - Updating all package dependencies - no built in command but there are one
+            liners - e.g. https://stackoverflow.com/a/3452888/1517244. However these
+            will not figure out the correct set of dependencies between all required
+            packages to ensure they all work together - need likes of pipenv/poetry
+            for that I think.
+        - No PyUp integration but easy to pip install util for this
+    - Needs multiple commands IIRC: need to env\Scripts\activate on window
+            then pip install, pip freeze, pip install -r requirements.txt and so on,
+            but this is hardly a hardship lol
+
+pipenv
+    - venv and pip functionality under one command
+    - Updating all packages to appropriate versions seems easier
+    - Complains about caching speed
+    - More mature than poetry
+    - Can only spec one version of python - not able to do ranges.
+    - liked built in hook for pyup - need more info about who curates DB driving it.
+
+poetry
+    - Like pipenv but newer with better cache performance
+    - Can do python &gt;= and &lt; (pipenv can't)
+    - Dependency management seems more stringent than pipenv
+    - small pedantry with ansi terminals but as --no-ansi option
+    - install outside of pip to avoid any global dependency damage - nice
+        - No PyUp integration but easy to pip install util for this
+
+PDM
+    - Even faster in benchmarks - uses local packages - no venv at all!
+    - uses same TOML file format and seems like it can coexist with poetry
+    - **** Didn't work out the box for me on Windows :'( ****</pre>
+    <p></p>
+    </div>
+
 
 </div> <!-- END padding div -->
 </div> <!-- END content div -->

@@ -472,8 +472,14 @@ git log --all --grep='your-regexp-here' -i</pre>
     <p>Delete tags locally:</p>
     <pre>git tag -d tag_name</pre>
 
+    <p>List tags on remote:</p>
+    <pre>git ls-remote --tags origin</pre>
+
     <p>Delete tags on remote:</p>
     <pre>git push --delete origin tag_name</pre>
+
+    <p>Push commits <em>and</em> tags in one go:</p>
+    <pre>git push --follow-tags</pre>
 
     <!-- ++++++++++++++++++++++++++++++++ -->
     <h3>Undoing Things</h3>
@@ -1237,12 +1243,12 @@ git commit --amend</pre>
         UH OH! We get a conflict:
     </p>
     <pre>First line
-<<<<<<< HEAD
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
 Second line
 =======
 Second line with an error
 Third line
->>>>>>> de5fcb1... Third commit about something</pre>
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; de5fcb1... Third commit about something</pre>
     <p>Ah, the change we made conflicts with the change made in the final commit
     on our branch. At this point the rebase has again &quot;paused&quot;,
     but this time the branch is in the state it would be when the third commit
@@ -1380,6 +1386,7 @@ e310460 First commit</pre>
     </p>
 
     <h3>Cherry Picking</h3>
+    <h4>Single Commit</h4>
     <p>
         When you want to take a single commit from one branch and apply it to
         another. Note, this is different from merging or rebasing because you
@@ -1388,6 +1395,13 @@ e310460 First commit</pre>
         where these changes came from as it will look like you just made these
         edits yourself!
     </p>
+    <p>
+        In essance, <code>git cherry-pick A</code> does this:
+    </p>
+    <ol>
+        <li>Note change set between A and its parent.</li>
+        <li>Apply change set to HEAD and commit result with A's commit message.</li>
+    </ol>
     <pre>git checkout branch-to-apply-commit-to
 git cherry-pick [-e] [-x] &lt;commit-ish&gt;</pre>
     <p>Note: this does the commit for you!</p>
@@ -1399,6 +1413,26 @@ git cherry-pick [-e] [-x] &lt;commit-ish&gt;</pre>
         will append a line that says &quot;(cherry picked from commit ...)&quot;
         to your commit message.</p>
 
+    <h4>Range Of Commits</h4>
+    <p>
+        To cherry pick a range that is inclusive, i.e. [A, B] use the following
+        <a href="https://www.tollmanz.com/git-cherry-pick-range/" target="_blank">[Ref]</a>:
+    </p>
+    <pre>git cherry-pick A^..B</pre>
+    <p>
+        The usual syntax does not include the oldest commit, so is (A,B]. This would be specified
+        as:
+    </p>
+    <pre>git cherry-pick A..B</pre>
+
+    <h4>Merge Commits</h4>
+    <p>
+        If a cherry-picked revision is a merge commit, then Git needs to know which parent to take
+        the diff against to apply to HEAD.
+    </p>
+    <p>
+        <img src="##IMG_DIR##/git-cherry-pick-merge-commit.png" alt="Git cherry-pick a merge commit"/>
+    </p>
 </div>
 
 <h2>Hunting Down Bugs: Git Bisect</h2>

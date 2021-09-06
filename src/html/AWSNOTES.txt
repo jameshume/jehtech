@@ -129,6 +129,109 @@ Cognito
 			The logout URL will invlidate the access tokens supplied after a successful login.
 
 
+	Cognito JS API
+	------------------
+	amazon-cognito-identity-js
+	SEE: github.com/aws/amazon-cognito-identity-js/
+
+	import {CognitoUserPool, CognitoUserAttribute, CognitoUser} from 'amazon-cognito-identity-js';
+
+	const POOL_DATA = {
+			UserPoolId: '...',
+			ClientId: '...'
+	};
+	const userPool = new CognitoUserPool(POOL_DATA);
+
+
+	// On sign up Cognito should be sending the user an email with a confirm-yourself
+	// code that they can then enter into your site to proove they own that email
+	// address
+	signUp(...) {
+		const user = {
+				username: ...,
+				email, ...,
+				password: ....
+		};
+
+		// Must also add any attributes that were specified in the user pool "attributes"
+		// section... username and password are default, everything else isnt...
+		const attrList = [];
+		const emailAttribute = {
+				Name: 'email', //< Not I found this needed to be lower case 'e' and NOT 'E'!!
+				Value: user.email
+		};
+		attrList.push(new CognitoUserAttribute(emailAttribute));
+		userPool.signup(user.username, user.password, attrList, null, (err, result) => {
+				if (err) { ... }
+				else { ... }
+		});
+	}
+
+
+	confirmUser(username, code) {
+		...
+		const userData = {
+				Username: username,
+				Pool: userPool, // THe global above
+		};
+		const cognitoUser = new CognitoUser(userData);
+		cognitoUser.confirmRegistration(code, true, (err, result) => {
+				if (err) { ... }
+				else { ... }
+		});
+	}
+
+
+	signIn(username, password) {
+		const authData = {
+				Username: username,
+				Password: password
+		};
+
+		const authDetails = new AuthenticationDetails(authData);
+		const userData = {
+				Username: username,
+				Pool: userPool
+		};
+		const cognitoUser = new CognitoUser(userData);
+		const that = this;
+		cognitoUser.authenticateUser(authDetails, ...);
+	}
+
+
+	To get the authenticated user from the userPool object use
+		userPool.getCurrentUser();
+	If no on logged in it returns null. But this is locally authenticated so to reach out
+	to the back end to check do...
+		userPool.getCurrentUser()?.getSession((err, session) => {
+				if(!err && session.isValid()) {
+					this.http.post(address, data, {
+								headers: new Headers({Authorization': session.getIdToken().getJwtToken())
+							}
+					)
+				}
+		});
+
+
+
+	To sign out the user do
+		userPool.getCurrentUser()?.signOut();
+
+
+	Integrating with AWS API Gateway:
+	---------------------------------
+
+	Under your-api > you-end-point > authorizers > Create > Create Cognito User Pool Authorizer
+
+	Once authorizer is created can go back to HTTP Method Request part of the API gateway, and change
+	authorization to your cognito user pool authorizer.
+	You have to do that for all the other options except the OPTIONS pre-flight request end point.
+
+	NOTE: In the body mapping template: you cannot use $context.authorizer.principleId with cognito.
+	You MUST USE $context.authorizer.claims.sub. This is the userId.
+
+
+
 
 ===================================================================================================
 ===================================================================================================
@@ -186,6 +289,7 @@ Configure A Lambda Function
 ===================================================================================================
 API Gateway
 ===================================================================================================
+https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html
 
 Use API Gateway to create RESTful APIs endpoints. These are services your web app etc need from a
 backend server. For example, a login management endpoint. This could be implemented using your
@@ -289,11 +393,13 @@ Binary support - send files to your end points
 Request response cycle:
 -----------------------
 	End-point is resource (the path) and the type of method (GET/POST etc)
-	- Method request - GATEKEEPER
+	- Method request - *** GATEKEEPER ***
 		- How requests reaching the end point should look like.
 		- It is a gate keeper. We can reject requests if they don't match a schema
 		- E.g. can setup authorization
 		- E.g. can validate -do the query parameters match what we expect?
+			- Done by adding to "URL Query String Parameters" section with with the "Request Validator"
+			  set to "Validate query string parameters and headers".
 	- Integration request
 		- Optionally map/transform incoming data (headers, meta, body etc) into the
 		  shape that we want to use it in the end point it will reach
@@ -308,7 +414,7 @@ Request response cycle:
 		- Can assign values to permitted headers allowed in "Method response"
 	- Method response
 		- Defines the shape the response should have.
-		- E.g. specify the headers a reponse can have etc.
+		- E.g. specify the headers a response can have etc.
 		- Never blocks a response
 		- If headers are not permitted/added in method response they cannot be used
 		  in the integration response.
@@ -418,6 +524,34 @@ Variable resource names
 			"my_variable_name" : "$input.params("blah")"
 		}
 	Not enclosed $input.params(...) in quotes to make it a string in this case
+
+
+
+Customer Authorizer
+-------------------
+In the Method request (GATEKEEPER) you can create a customer authorizer, as opposed to using the
+more out-of-the-box cognito functionality.
+
+The authorizer is given enough info to decide whether the user is valid and must return a
+temporary IAM policy { "Effect": "Allow", "Action": "execute-api" } and a user ID, called a
+"Principal user ID". Can also return an optional context object { ...any data you like... }.
+
+To create authorizer: Lambda Console > Create New Function > Blank function (no trigger)
+
+The Lambda receives an *identity token*. The default location of this token is in the header
+of the request - in the authorization header.
+	From https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization)
+		The HTTP Authorization request header contains the credentials to authenticate a user agent
+		with a server, usually, but not necessarily, after the server has responded with a 401
+		Unauthorized status
+		...
+		Syntax:
+			Authorization: <type> <credentials>
+
+See also: https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication
+See also:https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-use-lambda-authorizer.html
+
+The security token is found in `event.authorizationToken` and is provided by the API gateway.
 
 
 
@@ -1761,14 +1895,48 @@ Data is stored/retrieved based on a PRIMARY KEY. Two types of primary keys:
 	1. PARTITION KEY
 		Unique attribute. Key is hashed , which determines the partion/physical location where data
 		is stored. No two items can have same partition key. That's why no two items can have same
-		key!
+		key! It is also advisable to have well distributed keys as the better the disstribution
+		the more efficient the retrieval of multple keys can be. For example the primary key
+		might be the user ID.
+
+		Must be a number, binary or a string type.
+
 	2. COMPOSITE KEY (PARTITION KEY + SORT KEY)
-		E.g. same user posts multiple time to forum.
+		E.g. same user posts multiple time to forum. E.g., sort key might be a timestamp
+
+Both types of key are akin to a primary key.
+
+You can 5 global indicies per table. They can make non-primary key based retrieval more
+efficient.
+
+Provisioned capacity is your predicted reads/writes PER SECOND and their size. If you exceed
+your provisioned capacity IT FAILS - IT DOES NOT AUTO SCALE!
+	There is also the ON DEMAND provisioning mode. It is not as cheap as specifcying in demand
+	but is useful if you do not know how much capcity you need.
+	See http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ProvisionedThroughput.html
+
+	Also...
+	From https://aws.amazon.com/blogs/aws/amazon-dynamodb-on-demand-no-capacity-planning-and-pay-per-request-pricing/
+		 Amazon DynamoDB on-demand, [is] a flexible new billing option for DynamoDB capable of serving
+		 thousands of requests per second without capacity planning.
+
+You can only have one Dynamo DB - usage is aggregate across all regions - in one region you can
+only have multiple tables.
+
+Tables can have TIME TO LIVE attached to data, which defined how long they should live before they
+are deleted. But by default this is disabled so data is persistent for ever.
+
+
 
 
 IAM Conditions
 --------------
-They are CONDITIONS which are added to an IAM POLICY.
+By default a service does not have permissions to access otehr resources. Therefore when acccessing
+Dynamo, from, for example a Lambda, remember to give the lambda the correct permissions by
+attatching a policy to it. Easiest, but more relaxed in terms of security is, the predefined
+AWS policy AmazonDynamoDBFullAccess policy.
+
+Other IAM features you can use with Dynamic include CONDITIONS, which are added to an IAM POLICY.
 These can be used to restrict a uer's access to only certain items (rows) in a table!
 
 IAM conditions contain the following important keys:
@@ -1790,6 +1958,12 @@ Consistency Models
 	across all locations.
 2. Eventuall consistent - Can take up to 1 second for new writes to be reflected in a read across
 	all locations.
+
+
+Using With Lambdas
+------------------
+- Can be the event source that triggers a lambda
+- Can access Dynamo from a lambda as a data repository
 
 
 
