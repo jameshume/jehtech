@@ -1702,16 +1702,102 @@ FORM VALIDATION
 For inputs when adding an "onChange" event handler remember two way binding! You have to modify
 your state so that the changes made will be rendered.
 
-The submit button does not needto have its "onClick" property used. The form JSX tag has an
+The submit button does not need to have its "onClick" property used. The form JSX tag has an
 "onSubmit" property which can be used to supply a validator function reference that guards
-form submission.
+form submission. This is part of the basic functionality of forms in HTML
 
 In submission event handler remember to use
 	event.preventDefault();
+IMPORTANT - Use event.preventDefault() otherwise form submission reloads the page! This is the
+default form behavior.
 
-IMPORTANT - Use event.preventDefault() otherwise form submission reloads the page!
+submitHandler = (event) => {
+	event.preventDefault();
+}
+
+<form onSubmit={submitHandler}>
+</form>
+
+There are two ways to validate the form. At the end, when the form is submitted, or whilst values
+in the form elements change.
+
+To validate on final submission one way is to useRef()
+
+    const myFormThing = (props) => {
+        const myEl = useRef();
+        ...
+        const myhandler = (event) => {
+            event.preventDefault();
+            const elData = myEl.current.value; //< Use of REF
+            ...
+        }
+        ...
+        <form onSubmit={myhandler}>
+            ...
+            <input ref={myEl} .../>
+            ...
+        </form>
+    }
+
+However, if you intend to set the value of any of the inputs then classic setState style and not
+refs will be preferable as to manipulate the DOM you should really use state and not modify refs
+directly. React should be the only thing manipulate the DOM!
+
+When validating on the fly the usual onChange etc two way binding can be used. onBlur() and
+on key press can also be used in combination to set errors when an input looses focus and to
+clear the error as soon as it is rectified.
+
+Useful **custom hook** pattern:
+
+import {useState } from'react';
+
+const useInput = (validateValue) => {
+	const [enteredValue, setEnteredValue] = useState('');
+	const [isTouched, setisTouched] = useState(false);
+
+	const valueIsValid = validateValue(enteredValue);
+	const hasError = isTouched && !valueIsValid;
+
+	const valueChangeHandler = (event) => {
+		setEnteredValue(event.target.value);
+	}
+
+	const inputBlurHandler = (event) => {
+		setIsTouched(true);
+	}
+
+	const reset = () => {
+		setEnteredValue('');
+		setIsTouched(false);
+	}
+
+	return {
+		value: enteredValue,
+		hasError,
+		valueChangeHandler,
+		inputBlurHandler,
+		reset
+	}
+};
 
 
+This can then be used in the form component:
+const myForm = (props) => {
+	const {
+		value: value1,
+		hasError: hasError1,
+		valueChangedHandler: valueChangeHandler1,
+		inputBlurHandler: inputBlurHandler1
+	} = useInput((value) => some-predicate);
+
+	...
+
+	return (
+		<form>
+			<input onChange={valueChangeHandler1} onBlur={valueBlurHandler1} value={value1}/>
+		</form>
+	);
+}
 
 ====================================================================================================
 ====================================================================================================
@@ -2708,7 +2794,7 @@ current state and an action. Based on the action and current state, the reducer 
 new state.
 
 	const myReducerForSomeThing = (currentThingState, action) => {
-		switch(action.type) { // << The action is whatever we dispatched - its type isdnt predefined
+		switch(action.type) { // << The action is whatever we dispatched - its type isd't predefined
 			case 'SOME ACTION:
 				return newStateBasedOnCurrentThingStateForSomeAction;
 			...
