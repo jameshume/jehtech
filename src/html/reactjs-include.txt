@@ -2513,7 +2513,7 @@ All hooks are called useXXX(). Eg useState() etc.
 
 See https://reactjs.org/docs/hooks-intro.html for motivation for hooks. From that page:
 		It’s hard to reuse stateful logic between components
-		React doesn’t offer a way to “attach” reusable behavior to a component (for example, connecting
+		React doesn’t offer a way to "attach" reusable behavior to a component (for example, connecting
 		it to a store). If you’ve worked with React for a while, you may be familiar with patterns like
 		render props and higher-order components that try to solve this. But these patterns require you
 		to restructure your components when you use them, which can be cumbersome and make code harder
@@ -2653,11 +2653,44 @@ All state updates from one SYNCRHONOUS event handler are BATCHED TOGETHER.
 Thus, after setting state, a lot like in class components, you can't immediately use the state
 to get the new value.
 
+Also it means the same applies for state that depends on previous state.
+	const [counter, setCounter] = useState(0);
+	...
+	setCount(counter + 1); //< BAD BAD BAD BAD
+	setCounter( prevCounter => prevCounter + 1); // Way better
+
+
+Lazy Eval and Gotcha When Storing Functions As State
+- - - - - - - - - - - - - - - - - - - - - - - - - - -
+If the initial value is expensive to calculate it can be provided as a function that will only
+be executed on the *first render* to setup the state.
+
+This has the impact that if you use a state variable to store a callback function it wont work
+as expected (although this might be an anti-pattern?!).
+
+	// In the parent...
+	[callback, setCallback] = useState(()=>{});
+
+	// Then a child component might
+	setCallback(() => someFunction(...));
+
+	// Then back in the parent
+	callback(); //<<< Error callback is whatever someFunction(...) returns or undefined if its a method!
+
+To overcome this use
+
+	setCallback(() => () => someFunction(...))
+	//          ^^^^^
+	//          Note the extra indirection. Needed because the passed in function is called by
+	//          react to calculate the state, and as this returns a function the inner function can
+	//          then be the state
+
 
 
 useEffect()
 ===========
 SEE: https://reactjs.org/docs/hooks-effect.html
+also https://sebhastian.com/react-hooks-useeffect/
 
 An "effect" or "side effect" is anything that lies outside React's responsibilities of rendering
 the app, responding to user events and re-rendering. I.e. they are tasks that happen outside of the

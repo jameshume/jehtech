@@ -103,6 +103,7 @@ pip install -r requirements.txt
     <div>
         <p>
             See <a href="https://realpython.com/pipenv-guide/" target="_blank">Pipenv: A Guide to the New Python Packaging Tool</a>.
+            See also <a href="https://opensource.com/article/18/2/why-python-devs-should-use-pipenv" target="_blank">Why Python devs should use Pipenv</a>.
         </p>
         <blockquote>
             <p>
@@ -118,30 +119,39 @@ pip install -r requirements.txt
             </p>
             <ul>
                 <li>You no longer need to use pip and virtualenv separately. They work together.</li>
-                <li>Managing a requirements.txt file can be problematic, so Pipenv uses Pipfile and Pipfile.lock to separate abstract dependency declarations from the last tested combination.</li>
+                <li>Managing a <code>requirements.txt</code> file can be problematic, so Pipenv
+                    uses Pipfile and Pipfile.lock to separate abstract dependency declarations
+                    from the last tested combination.
+                </li>
                 <li>...</li>
             </ul>
             <p>
-                ... Pipfiles contain information for the dependencies of the project, and supersedes the requirements.txt file used in most Python projects.
+                ... Pipfiles contain information for the dependencies of the project, and supersedes
+                the requirements.txt file used in most Python projects.
             </p>
             <footer>-- <a href="https://pipenv-fork.readthedocs.io/en/latest/" target="_blank">Pipenv: Python Dev Workflow for Humans</a></footer>
         </blockquote>
         <p>
-            Install using <code>pip3 install pipenv</code> and create a new virtualenv using <code>pipenv --python 3[.minor]</code>.
+            Install using <code>pip3 [--user] install pipenv</code> and create a new virtualenv
+            using <code>pipenv --python 3[.minor]</code>.
         </p>
         <p>
             Now, to add packages to your project use <code>pipenv install &lt;package&gt;[~=maj.min[.patch]]</code>
         </p>
         <p>
-            Like the original environments, it needs tobe actived: <code>pipenv shell</code>. Creates virtual environment if one doesn't exist. Note, pipenv creates all virtual environments in a default location.
+            Like the original environments, it needs tobe actived: <code>pipenv shell</code>.
+            Creates virtual environment if one doesn't exist. Note, pipenv creates all virtual
+            environments in a default location.
         </p>
         <p>
-            To push to production, lock your environment: <code>pipenv lock</code>. Creates/updates the <code>Pipfile.lock</code> file (never edit this!).
-            To install from your lock file use <code>pipenv install --ignore-pipfile</code>.
+            To push to production, lock your environment: <code>pipenv lock</code>. Creates/updates
+            the <code>Pipfile.lock</code> file (never edit this!). To install from your lock file
+            use <code>pipenv install --ignore-pipfile</code>.
         </p>
         <p>
-            To leave a pipenv virtual environment just exit the current shell: pipenv starts a new shell session with the
-            virtualenv pathing instead of changing the pathing in the current shell session.
+            To leave a pipenv virtual environment just exit the current shell: pipenv starts a new
+            shell session with the virtualenv path instead of changing the path in the current shell
+            session.
         </p>
 
         <h3>Cheat Sheet</h3>
@@ -193,11 +203,16 @@ pip install -r requirements.txt
             them, and Poetry is more mature than PDM.
         </p>
         <p>
+            Not sure that they give an amazing amount over pip + venv, especially given you have
+            to install another tool and then maintain and keep that up to date. Perhaps for larger
+            projects they are more useful or if you are publishing to PyPi?
+        <p>
             Some rough notes comparing the various options:
         </p>
         <pre>venv + pip
     - Built in to Python 3
-    - Pip freeze does the dependency freezing recursively
+    - Pip freeze does the dependency freezing recursively so you can restore *full* dependencies
+      uasing a requirements.txt from pip freeze - dont need pipenv for this!
     - Updating all package dependencies - no built in command but there are one
             liners - e.g. https://stackoverflow.com/a/3452888/1517244. However these
             will not figure out the correct set of dependencies between all required
@@ -227,7 +242,9 @@ poetry
 PDM
     - Even faster in benchmarks - uses local packages - no venv at all!
     - uses same TOML file format and seems like it can coexist with poetry
-    - **** Didn't work out the box for me on Windows :'( ****</pre>
+    - **** Didn't work out the box for me on Windows :'( ****
+    - Worked okay on WSL for me although I had to apt install an extra python package for
+      virtual envs - python3-venv</pre>
     <p></p>
     </div>
 
