@@ -293,10 +293,17 @@ dnl ---- END M4 MACROS ----
 
 	<div id="content">
 		<h1 class="title">Electronics Notes...</h1>
+
+
+
+		<!-- --------------------------------------------------------------------------------------- -->
 		<h2>Page Contents</h2>
 		<div id="page_contents">
 		</div>
 
+
+
+		<!-- --------------------------------------------------------------------------------------- -->
 		<h2>Charge, Current, Voltage</h2>
 		<div>
 			<h3>References</h3>
@@ -323,7 +330,7 @@ dnl ---- END M4 MACROS ----
 			</p>
 			<p>
 				Note that voltages are relative, which is why the negative terminal of the battery can be negative - it depends what
-				the reference voltage you are measuring agains is - e.g. if ground is midway between the two terminals then they will
+				the reference voltage you are measuring against is - e.g. if ground is midway between the two terminals then they will
 				have voltages -A and +A respectively.
 			</p>
 			<p>
@@ -335,12 +342,19 @@ dnl ---- END M4 MACROS ----
 				Charge, $q$, is measured in Coulombs. One electron has a charge of $-1.6 \times 10^{-19}$ Coulombs. This is the smallest
 				unit of charge possible.
 			</p>
+			<p>
+				We can integrate the above to get $I = \frac{Q}{t}$ and therefore $Q = It$.
+			</p>
 
 			<h3 style="clear: both;">Voltage</h3>
 			<p>
 				Voltage, $V$, is the amount of work (in Joules) that must be done per unit charge to move between two points in a field.
 				$$V_{ab} = \frac{\mathrm dw}{\mathrm dq}$$
 				I.e. 1 volt is 1 Joule per Coulomb.
+			</p>
+			<p>
+				If we integrate both sides of the abote w.r.t to charge we get:
+				$$VQ = W\ \therefore W = QV$$
 			</p>
 			<p>
 				To help understand this let's revisit the terms energy, work and power.<br/>
@@ -361,7 +375,7 @@ dnl ---- END M4 MACROS ----
 				<img src="##IMG_DIR##/work_evergy_power.svg" alt="Image showing work and energy vs power"/>
 			</p>
 			<p>
-				Give these definitions we can see how they are defined for electronics. Using some crude (read incorrect as we're using multiplcation not integration to make it seem simpler) we see:
+				Give these definitions we can see how they are defined for electronics. Using some crude (read incorrect as we're using multiplication not integration to make it seem simpler) we see:
 
 				$$
 				\begin{align}
@@ -469,6 +483,9 @@ dnl ---- END M4 MACROS ----
 			</p>
 		</div>
 
+
+
+		<!-- --------------------------------------------------------------------------------------- -->
 		<h2>Resistance</h2>
 		<div>
 			<p>
@@ -492,7 +509,7 @@ dnl ---- END M4 MACROS ----
 				Some popular ways of remembering the resistor colour codes include 
 				&quot;<u>B</u>ad <u>B</u>oys <u>R</u>avish <u>O</u>ur <u>Y</u>oung <u>G</u>irls <u>B</u>ut <u>V</u>iolet <u>G</u>ives <u>W</u>illingly&quot; 
 				and my fav, 
-				&quot;<u>B</u>ad <u>B</u>ooze <u>R</u>ots <u>O</u>ur <u>Y</u>oug <u>G</u>uts, <u>B</u>ut <u>V</u>odka <u>G</u>oes <u>W</u>ell&quot;.
+				&quot;<u>B</u>ad <u>B</u>ooze <u>R</u>ots <u>O</u>ur <u>Y</u>oung <u>G</u>uts, <u>B</u>ut <u>V</u>odka <u>G</u>oes <u>W</u>ell&quot;.
 				</p>
 			</div>
 			<h3 style="clear:both;">Resistor's In Series</h3>
@@ -539,7 +556,7 @@ dnl ---- END M4 MACROS ----
 					\end{array}
 					$$
 
-					Subsituting the above back into $i_t = i_1 + i_2 + i_3$, gives us the following.
+					Substituting the above back into $i_t = i_1 + i_2 + i_3$, gives us the following.
 
 					$$
 					i_t = \frac{V}{R_1} + \frac{V}{R_2} + \frac{V}{R_3}
@@ -558,7 +575,7 @@ dnl ---- END M4 MACROS ----
 
 			<h3 style="clear:both;">Voltage Divider</h3>
 			<div>
-				<a name="voltage_divider"/>
+				<a name="voltage_divider"></a>>
 				<img src="##IMG_DIR##/voltage_divider.png" width="200" style="float:left"/>
 				<p>
 					Using Ohm's law we know the following.
@@ -648,7 +665,7 @@ dnl ---- END M4 MACROS ----
 					$$V_{out} = \left(\frac{1}{2} - \frac{R_k}{R_u+R_k}\right) \times V_t$$
 
 					Where $R_k$ is the known resistance and $R_u$ is the unknown resistance. This assumes that $R_u$ is roughly equal to $R_1$
-					and that all $R_k$ resistors are very closely matched. 
+					and that all $R_k$ resistors are very closely matched.
 				</p>
 
 				<p>
@@ -658,7 +675,7 @@ dnl ---- END M4 MACROS ----
 				</p>
 				<p>
 					In the above, $V_{out}$, $V_t$, and $R_k$ are all known. We know $V_{out}$ because we can measure it and the
-					other known parameters are already set apriori. With more simple re-arrangement we get...
+					other known parameters are already set a-priori. With more simple re-arrangement we get...
 
 					$$0.5V_t - V_{out} = \frac{R_k}{R_u+R_k} \times V_t $$
 					$$\therefore \frac{0.5V_t - V_{out}}{V_t} = \frac{R_k}{R_u+R_k} $$
@@ -674,7 +691,7 @@ dnl ---- END M4 MACROS ----
 					It could be a thermistor, LDR, or whatever... something that changes resistance due to the thing we're trying to measure.
 				</p>
 				<p>
-					One thing to note is that the $V_{out}$ of the Wheatstone Bridge is non-linear as the figure to the 
+					One thing to note is that the $V_{out}$ of the Wheatstone Bridge is non-linear as the figure to the
 					left shows: $V_{out}$ does not change linearly with changes in the unknown resistance $R_u$! In the figure I just
 					picked pretty arbitrary values for the various knowns.
 				</p>
@@ -687,8 +704,8 @@ dnl ---- END M4 MACROS ----
 
 			<h3 style="clear:both;">Power</h3>
 			<div>
-				<p>When current flows through a resistor it disipates power in the form of heat. When it flows
-					through an LED it disipates power in the form of both heat and light.
+				<p>When current flows through a resistor it dissipates power in the form of heat. When it flows
+					through an LED it dissipates power in the form of both heat and light.
 				</p>
 				<p>
 					Power, measured in <b>watts</b>, is defined as:
@@ -697,7 +714,7 @@ dnl ---- END M4 MACROS ----
 					$$
 				</p>
 				<p>
-					Resitors usually have a power rating (the power they can disipate) associated with them.
+					Resistors usually have a power rating (the power they can dissipate) associated with them.
 					This means that if you know
 					the resistor's power rating you can calculate the maximum voltage or current you can
 					put across/through them without breaking the resistor.
@@ -705,6 +722,9 @@ dnl ---- END M4 MACROS ----
 			</div>
 		</div> <!-- End H2 -->
 
+
+
+		<!-- --------------------------------------------------------------------------------------- -->
 		<h2>Voltage Sources &amp; Current Sources, Ideal v.s. Real World</h2>
 		<div>
 			<h3>Voltage Sources</h3>
@@ -799,11 +819,14 @@ dnl ---- END M4 MACROS ----
 					</li>
 					<li>
 						REF(`REF_UTUBE_CIRC_ANAL',`Essential &amp; Practical Circuit Analysis: Part 1- DC Circuits'), Solid State Workship, YouTube.
-					</li> 
+					</li>
 				</ul>
 			</div>
 		</div>
 
+
+
+		<!-- --------------------------------------------------------------------------------------- -->
 		<h2 style="clear:both;">Switches</h2>
 		<div>
 			<p>
@@ -822,10 +845,13 @@ dnl ---- END M4 MACROS ----
 		</div>
 
 
+
+
+		<!-- --------------------------------------------------------------------------------------- -->
 		<h2 style="clear:both;">Capacitance</h2>
 		<div>
 			<p>
-				A capacitor consists of two conducting plates separated by an insulator (a.k.a. a dialectric).
+				A capacitor consists of two conducting plates separated by an insulator (a.k.a. a dielectric).
 			</p>
 			<p>
 				When connected to a voltage source, the source creates a positive charge on one plate
@@ -835,24 +861,32 @@ dnl ---- END M4 MACROS ----
 				<img src="##IMG_DIR##/capacitor.png" alt="Pici of a capacitor with charge on both plates"/>
 			</p>
 			<p>
-				Charge stored is proportional to applied voltage:
+				Charge stored is <b>proportional</b> to applied voltage:
 				$$
-					q = Cv \implies C = \frac{q}{v}
+					Q = CV \implies C = \frac{Q}{V}
 				$$
 				Where $C$ is called the <b>capacitance</b> of the capacitor and is measured in Farads (F).
+				Note that $C$ is the <b>constant of proportionality</b> here!
+			</p>
+			<p>
+				Although, for equations etc., Farads are the expected units, in electronics capacitors in the
+				range of nano-Farads to milli-Farads are used. Even milli-Farads are less common. More common
+				are nano and micro-Farads.
+			</p>
+			<p>
 				By re-arranging the above we can see that <b>capacitance is the charge per volt that
 				the capacitor can store</b>. Thus, the more charge that the capacitor stores per volt, the
-				higher its capacitance is. This quanitity is dependent on the type of dialectric used,
+				higher its capacitance is. This quantity is dependent on the type of dielectric used,
 				the surface area of each plate and the distance between the plates.
 			</p>
 			<p>
 				Recall that current is the amount of charge that moves past a point per unit time. Thus,
 				by differentiating w.r.t time, the above, we get the current-voltage relationship of a cap:
 				$$
-					i = C\frac{\mathrm{d}v}{\mathrm{d}t}
+					I = C\frac{\mathrm{d}V}{\mathrm{d}t}
 				$$
 				This gives us in important property of caps. Because for DC current the voltage does not change,
-				$\frac{\mathrm{d}q}{\mathrm{d}t}$ is zero, so a <b>capacitor is an open circuit to DC</b>! (But it
+				$\frac{\mathrm{d}Q}{\mathrm{d}t}$ is zero, so a <b>capacitor is an open circuit to DC</b>! (But it
 				does charge).
 				Because of the definition of a derivative, we also know that the voltage across a cap must
 				be smooth - i.e., it cannot change abruptly.
@@ -864,7 +898,53 @@ dnl ---- END M4 MACROS ----
 				<b>Capacitors resist abrupt changes in voltage</b>, which is why the function
 				as <b>low pass filters</b>.
 			</p>
+
+			<h3>Energy And Work</h3>
+			<p>
+				We had previously defined work as $W = QV$, but this assumes a <em>constant voltage and current flow</em>.
+				But, as a capacitor charges the voltage and current change with time. At time $t=0$, the charge stored
+				by the capacitor is zero, and as the capacitor charges, the voltage across it increases too.
+			</p>
+			<p>
+				Thus, the work required to charge a capacitor is
+				$$W = \frac{1}{2}QV$$
+				We have also said that $Q = CV$, therefore we can re-write the above as,
+				$$W = \frac{1}{2}CV^2$$
+				And because $V=\frac{Q}{C}$, we can re-write it again as,
+				$$W= \frac{1}{2}\frac{Q^2}{C}$$
+			</p>
+
+			<h3>Charging Without A Resistor Means Trouble</h3>
+			<p>
+				If a capacitor is charged without a resistor to limit current the circuit will, at the
+				beginning of the charge, be a <b><i>short circuit</i></b>. In the diagrams above, a spark will be seen
+				at the switch which will dissipate some of the energy. As we will see below, exactly half of
+				the energy is dissipated in the spark and that the maths kinda fails for this scenario...
+			</p>
+			<p>
+				Take the following example...
+			</p>
+			<p>
+				<img src="##IMG_DIR##/cap_5uf_10V_supply_short_citcuit.png" alt="5 micro Farad capacitor short-circuit connected to 10V batt"/>
+			</p>
+			<p>
+				We know the work done by the battery is defined as follows, giving the following result.
+				$$
+				\begin{align}
+					W &= \frac{1}{2}CV^2 \\
+            &= \frac{1}{2}\cdot 5\cdot 10^{-6} \cdot 10^2 \\
+						&= 2.5\cdot 10^{-4} \text{Joules}
+				\end{align}
+				$$
+				We should now be able to plug the value for $W$, and $V$ back into the equation $W = \frac{1}{2}QV$:
+				$$
+					2.5\cdot 10^{-4} = \frac{1}{2}Q\cdot 10 \\
+					\therefore Q = 5\cdot 10^{-5} \text{Coulombs}
+				$$
 			
+			</p>
+
+
 			<h3>Charging Through A Resistor</h3>
 			<p>
 				When a capacitor, with a capacitance $C$, charges in series through a resistor of resistance $R$ ohms,
@@ -977,6 +1057,9 @@ dnl ---- END M4 MACROS ----
 
 		</div>
 
+
+
+		<!-- --------------------------------------------------------------------------------------- -->
 		<h2>Inductors</h2>
 		<div>
 			<p>
@@ -1020,6 +1103,8 @@ dnl ---- END M4 MACROS ----
 		</div>
 
 
+
+		<!-- --------------------------------------------------------------------------------------- -->
 		<h2 style="clear:both;">Diodes</h2>
 		<div>
 			<p>
@@ -1051,6 +1136,9 @@ dnl ---- END M4 MACROS ----
 			</ul>
 		</div>
 
+
+
+		<!-- --------------------------------------------------------------------------------------- -->
 		<h2 style="clear:both;">555 Timer</h2>
 		<div>
 			<p>
@@ -1126,6 +1214,8 @@ dnl ---- END M4 MACROS ----
 		</div>
 
 
+
+		<!-- --------------------------------------------------------------------------------------- -->
 		<a name="bjt"/>
 		<h2 style="clear:both;">Bipolar Junction Transistors (BJT)</h2>
 		<div>
@@ -1222,6 +1312,9 @@ dnl ---- END M4 MACROS ----
 			</div>
 		</div>
 
+
+
+		<!-- --------------------------------------------------------------------------------------- -->
 		<a name="mosfet"/>
 		<h2 style="clear:both;">Metal Oxide Semiconductor Field Effect Transistor (MOSFET)</h2>
 		<div>

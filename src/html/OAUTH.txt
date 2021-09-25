@@ -747,6 +747,8 @@ Terms:
 ====================================================================================================
 OpenID Connect
 ====================================================================================================
+OpenID Connect supersedes and obsoletes OpenId 2.0 * OpenId 1.0/
+
 From https://portswigger.net/web-security/oauth/openid:
 	OpenID Connect extends the OAuth protocol to provide a dedicated identity and authentication
 	layer that sits on top of the basic OAuth implementation. It adds some simple functionality that
@@ -754,3 +756,19 @@ From https://portswigger.net/web-security/oauth/openid:
 	...
 	OpenID Connect .. [adds] standardized, identity-related features to make authentication via OAuth
 	work in a more reliable and uniform way.
+
+SEE SPEC: https://openid.net/specs/openid-connect-core-1_0.html
+	The primary extension that OpenID Connect makes to OAuth 2.0 to enable End-Users to be
+	Authenticated is the ID Token data structure. The ID Token is a security token that contains
+	Claims about the Authentication of an End-User by an Authorization Server when using a Client,
+	and potentially other requested Claims. The ID Token is represented as a JSON Web Token (JWT).
+	For JWT see https://datatracker.ietf.org/doc/html/draft-ietf-oauth-json-web-token.
+
+From nice big-picures tutorial: https://developer.okta.com/blog/2019/10/21/illustrated-guide-to-oauth-and-oidc
+	OAuth 2.0 is designed only for authorization, for granting access to data and features from one
+	application to another. OpenID Connect (OIDC) is a thin layer that sits on top of OAuth 2.0 that
+	adds login and profile information about the person who is logged in. Establishing a login
+	session is often referred to as authentication, and information about the person logged in
+	(i.e. the Resource Owner) is called identity. When an Authorization Server supports OIDC, it is
+	sometimes called an identity provider, since it provides information about the Resource Owner
+	back to the Client.

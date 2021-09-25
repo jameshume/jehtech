@@ -206,7 +206,7 @@ Cognito
 		userPool.getCurrentUser()?.getSession((err, session) => {
 				if(!err && session.isValid()) {
 					this.http.post(address, data, {
-								headers: new Headers({Authorization': session.getIdToken().getJwtToken())
+								headers: new Headers({'Authorization': session.getIdToken().getJwtToken())
 							}
 					)
 				}
@@ -218,8 +218,27 @@ Cognito
 		userPool.getCurrentUser()?.signOut();
 
 
+	Using Tokens:
+	-------------
+	SEE: https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-with-identity-providers.html
+	* The ID token contains claims about the identity of the authenticated user, such as name
+	  and email.
+	* The Access token contains claims about the authenticated user, a list of the user's groups,
+	  and a list of scopes.
+	* Use body mapping templates to automatically get the user id from the JWT into your lambda,
+	  for example, rather than trying to decode the JWT in you lambda yourself. I.e., there is no
+		need to have to use https://github.com/awslabs/aws-support-tools/blob/master/Cognito/decode-verify-jwt/decode-verify-jwt.py.
+
+	From https://github.com/aws-amplify/amplify-cli/issues/456
+	     https://stackoverflow.com/a/64341689/1517244
+	     https://stackoverflow.com/a/48544379/1517244
+	It looks like the ID token should **NOT** be sent to access API end points. Use the access token.
+	The main reason is that the ID token is not as short lived as the access token and canNOT be
+	revoked.
+
 	Integrating with AWS API Gateway:
 	---------------------------------
+	SEE: https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-integrate-with-cognito.html
 
 	Under your-api > you-end-point > authorizers > Create > Create Cognito User Pool Authorizer
 
@@ -230,6 +249,10 @@ Cognito
 	NOTE: In the body mapping template: you cannot use $context.authorizer.principleId with cognito.
 	You MUST USE $context.authorizer.claims.sub. This is the userId.
 
+	The use poll *has* to be called COGNITO_USER_POOLS for it to appear in Method Request tab.
+
+	For Token source, type Authorization as the header name to pass the identity or access token that's
+	returned by Amazon Cognito when a user signs in successfully.
 
 
 
@@ -284,6 +307,11 @@ Configure A Lambda Function
 - TODO COMPLETE ME!
 
 
+Lambda Re-use
+--------------
+SEE: https://aws.amazon.com/blogs/compute/container-reuse-in-lambda/
+
+
 
 ===================================================================================================
 ===================================================================================================
@@ -314,13 +342,13 @@ Watch out for costs!!
 Amazon API Gateway - fully managed service - publish APIs at any scale to act as "front door" for
 apps to access data etc from back-end services, such as apps on EC2 instances, code on Lambdas etc.
 
-- Expose HTTPS enpoints to define a RESTful API
+- Expose HTTPS endpoints to define a RESTful API
 	API gateway gives us a HTTPS address to make API calls to, and then configure how the API
 	responds to those calls - e.g. get data from a DynamoDB or fire off a Lambda etc etc to
 	return the response.
-- Lets you serveless-ly connect to services like Lambda & DynamoDB.
+- Lets you serverless-ly connect to services like Lambda & DynamoDB.
 - Can send each API endpoint to a different target.
-- Run efficiently with low cost & scales effortlessley.
+- Run efficiently with low cost & scales effortlessly.
 - Can track and control usage with API key.
 - Can throttle requests to prevent attacks.
 - Can maintain multiple versions of your API
@@ -443,21 +471,21 @@ When creating a new resource:
 	- Note tests via the console will not report CORS errors. There must be a fully web
 	  based test.
 	- Remember to enable CORS for preflight but also to add headers to your normal
-	  enpoint methods, for ex:
+	  endpoint methods, for ex:
 		Access-Control-Allow-Headers: 'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'
 		Access-Control-Allow-Methods: 'DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT'
 		Access-Control-Allow-Origin: '*'
 	  BUT THE EASIEST WAY IS TO SELECT `ACTIONS > ENABLE CORS` in the console as this
-	  will add the headers to all enpoints automatically for us.
+	  will add the headers to all endpoints automatically for us.
 
-	  SECURITY: Generally not the best idea to use '*' if you can avod it!
+	  SECURITY: Generally not the best idea to use '*' if you can avoid it!
 
 
 
 Setting up APIs:
 ----------------
 	Lambda proxy integration - move the logic of the integration and method response
-		into your lambda function. Normally dont need this.
+		into your lambda function. Normally don't need this.
 
 
 
@@ -481,12 +509,21 @@ Body mapping templates:
 		- $ stands for the request body as a whole.
 		- Wrap $input.json() in quotes to convert to string
 
+	Even more usefully, the body mapping template can be used to get the user id from a cognito JWT
+	from the authorizer and inject it into the event data:
+		{
+			...
+			"userId": "$context.authorizer.claims.sub"
+			...
+		}
+	This will save you having to try to decode JWTs yourself.
+
 
 
 Map response data:
 ------------------
-	Does the same as boddy mapping template but for the reponse data. Now the variables
-	like $input refer to the data the enpoint passed back and $ stands for the body
+	Does the same as body mapping template but for the response data. Now the variables
+	like $input refer to the data the endpoint passed back and $ stands for the body
 	of the data.
 
 
@@ -505,6 +542,21 @@ Validate Requests With Models:
 	https://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html
 	https://json-schema.org/understanding-json-schema/index.html
 
+
+
+Routing Lambda function errors to API Gateway HTTP responses
+------------------------------------------------------------
+SEE: https://aws.amazon.com/blogs/compute/error-handling-patterns-in-amazon-api-gateway-and-aws-lambda/
+SEE: https://docs.aws.amazon.com/apigateway/latest/developerguide/handle-errors-in-lambda-integration.html
+
+- In Lambda, function error messages are always surfaced in the “errorMessage” field in the response.
+      def lambda_handler(event, context):
+          raise Exception('[BadRequest] Some kind of input validation failure')
+  The routing of Lambda function errors to HTTP responses in API Gateway is achieved by pattern
+  matching against this “errorMessage” field in the Lambda response. Add the regex as so to the
+  integration response:
+      Selection pattern: “^\[BadRequest\].*”
+- The Lambda function must exit with an error in order for the response pattern to be evaluated.
 
 
 Variable resource names
@@ -552,6 +604,51 @@ See also: https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication
 See also:https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-use-lambda-authorizer.html
 
 The security token is found in `event.authorizationToken` and is provided by the API gateway.
+
+
+Lambdas With API Gateway
+- - - - - - - - - - - - -
+SEE: https://docs.aws.amazon.com/lambda/latest/dg/services-apigateway.html
+SEE: https://docs.aws.amazon.com/lambda/latest/dg/services-apigateway-tutorial.html
+
+A Lambda integration maps a path and HTTP method combination to a Lambda function.
+
+
+Debug With CloudWatch
+- - - - - - - - - - -
+SEE: https://aws.amazon.com/premiumsupport/knowledge-center/api-gateway-cloudwatch-logs/
+
+
+Serverless Framework
+--------------------
+SEE: https://serverless.com/
+     https://serverless.com/framework/docs/providers/aws/guide/quick-start/
+     https://serverless.com/framework/docs/providers/aws/guide/credentials/
+
+This framework can simplify setting up an API gateway/Lambda/etc combination. The alternative would
+be to write your own AWS cloudformation stuff, or use SAM (see below). It looks like its basically
+a slightly easier to user wrapper (might not be a wrapper, just looks like it) around cloudformation...
+
+TEST LOCALLY using https://github.com/dherault/serverless-offline
+
+Serverless Application Models (SAM)
+-----------------------------------
+SEE: https://github.com/awslabs/serverless-application-model
+     https://github.com/awslabs/serverless-application-model/blob/master/HOWTO.md
+     http://docs.aws.amazon.com/lambda/latest/dg/deploying-lambda-apps.html
+
+The official AWS answer to the Serverless Framework app talked about above.
+Builds upon cloudformation.
+
+
+LOCAL STACK - Test Locally Before Deploying
+-------------------------------------------
+See Atlassian's localstack: https://github.com/localstack/localstack
+                            https://localstack.cloud/
+
+> LocalStack provides an easy-to-use test/mocking framework for developing Cloud applications. It
+> spins up a testing environment on your local machine that provides the same functionality and APIs
+> as the real AWS cloud environment.
 
 
 
@@ -1926,7 +2023,7 @@ only have multiple tables.
 Tables can have TIME TO LIVE attached to data, which defined how long they should live before they
 are deleted. But by default this is disabled so data is persistent for ever.
 
-
+If you use the SDK then noSQL injection protection is built in :)
 
 
 IAM Conditions
@@ -1965,6 +2062,11 @@ Using With Lambdas
 - Can be the event source that triggers a lambda
 - Can access Dynamo from a lambda as a data repository
 
+
+Distributed Locking
+-----------------
+https://aws.amazon.com/blogs/database/building-distributed-locks-with-the-dynamodb-lock-client/
+https://blog.revolve.team/2020/09/08/implement-mutex-with-dynamodb/
 
 
 ===================================================================================================

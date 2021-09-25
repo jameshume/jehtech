@@ -164,6 +164,8 @@ ssh -vT address-of-server</pre>
 		permanent.
 	</p>
 	<pre>ssh-add ~/.ssh/some_key_name</pre>
+    <p>If the SSH agent isn't running use:</p>
+    <pre>eval $(ssh-agent)</pre>
 	<p>
 		So to make the addition permanent I consulted
 		<a href="http://stackoverflow.com/questions/3466626/add-private-key-permanently-with-ssh-add-on-ubuntu" target="_blank">this SO thread</a>.
