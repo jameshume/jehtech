@@ -72,7 +72,7 @@
 			<li>Create emtpy file in flash root called <code>ssh</code>. RPi OS sees this and enables
 				SSH with password logins.
 			</li>
-			<li>Create file <code>wpa_supplicant.conf</code> in flash root. Add the following
+			<li>Create file <code>wpa_supplicant.conf</code> in flash root (boot (D:)). Add the following
 				contents, making sure that you use Linux-style newlines, &quot;\n&quot;, if editing
 				on Windows, which uses CRLF, or, &quot;\n\r&quot;:
 				<pre>country=GB
@@ -144,58 +144,82 @@ sudo rm -rf /var/lib/docker</pre>
 	</div>
 
 
-
-	<h2>Encrypt Your Home Folder</h2>
+	<h2>Security</h2>
 	<div>
-		<p>See <a target="_blank" href="https://technicalustad.com/how-to-encrypt-raspberry-pi-home-folder/">How to Encrypt Raspberry Pi home folder</a>, 
-			by Syed Balal Rumy (April 26, 2018).
-		</p>
-		<ol>
-			<li>
-				Type <code>sudo nano /etc/lightdm/lightdm.conf</code>. Comment out line reading
-				<code>autologin-user=pi</code>. Ctrl+X, then Y, and then &lt;Return&gt; to save and exit.
-			</li>
-			<li>
-				Install: <code>sudo apt-get install ecryptfs-utils lsof cryptsetup</code>.
-			</li>
-			<li>
-				Reboot and log back in using default user <code>pi</code>.
-			</li>
-			<li>
-				Add new user: <code>sudo adduser NEW-USER-NAME</code>.
-			</li>
-			<li>
-				Encrypt new user home: <code>sudo ecryptfs-migrate-home -u NEW-USER-NAME</code>.
-			</li>
-			<li>
-				Give new user sudo: <code>sudo visudo</code>. Copy line reading <code>root ALL=(ALL:ALL) ALL</code>
-				as <code>NEW-USER-NAME ALL=(ALL:ALL) ALL</code>. Ctrl+X, then Y, and then &lt;Return&gt; to save and exit.
-			</li>
-			<li>
-				Login as new user and migrate data. Disable swap: <code>sudo swapoff -a -v</code>.
-			</li>
-			<li>
-				Secure delete data in <code>pi</code> home folder using <code>shred -zu FILENAME</code>.
-			</li>
-			<li>
-				Fix permissions and user/group errors if need be: <code>sudo chmod 0750 ...</code>,
-				<code>chown NEW-USER-NAME ...</code>, <code>chgrp NEW-USER-NAME ...</code> and so on.
-			</li>
-			<li>
-				Set the root user password: <code>sudo passwd root</code>.
-			</li>
-			<li>
-				Reboot Pi and login with default. Type <code>su</code> and enter root passwrd set in previous
-				set.
-			</li>
-			<li>
-				Type <code>cd /home/NEW-USER-NAME && ls</code>. You should only be able to see 
-				<code>Access-Your-Private-Data.desktop</code> and <code>README.txt</code>. You should
-				<em>not</em> be able to see any of the new user's real files!
-			</li>
-		</ol>
-	</div>
+		<h3>Encrypt Your Home Folder &amp; Disable Swap</h3>
+		<div>
+			<p>See <a target="_blank" href="https://technicalustad.com/how-to-encrypt-raspberry-pi-home-folder/">How to Encrypt Raspberry Pi home folder</a>, 
+				by Syed Balal Rumy (April 26, 2018).
+			</p>
+			<ol>
+				<li>
+					Type <code>sudo nano /etc/lightdm/lightdm.conf</code>. Comment out line reading
+					<code>autologin-user=pi</code>. Ctrl+X, then Y, and then &lt;Return&gt; to save and exit.
+				</li>
+				<li>
+					Install: <code>sudo apt-get install ecryptfs-utils lsof cryptsetup</code>.
+				</li>
+				<li>
+					Reboot and log back in using default user <code>pi</code>.
+				</li>
+				<li>
+					Add new user: <code>sudo adduser NEW-USER-NAME</code>.
+				</li>
+				<li>
+					Encrypt new user home: <code>sudo ecryptfs-migrate-home -u NEW-USER-NAME</code>.
+				</li>
+				<li>
+					Give new user sudo: <code>sudo visudo</code>. Copy line reading <code>root ALL=(ALL:ALL) ALL</code>
+					as <code>NEW-USER-NAME ALL=(ALL:ALL) ALL</code>. Ctrl+X, then Y, and then &lt;Return&gt; to save and exit.
+				</li>
+				<li>
+					Login as new user and migrate data. Disable swap: <code>sudo swapoff -a -v</code>.
+				</li>
+				<li>
+					Secure delete data in <code>pi</code> home folder using <code>shred -zu FILENAME</code>.
+				</li>
+				<li>
+					Fix permissions and user/group errors if need be: <code>sudo chmod 0750 ...</code>,
+					<code>chown NEW-USER-NAME ...</code>, <code>chgrp NEW-USER-NAME ...</code> and so on.
+				</li>
+				<li>
+					Set the root user password: <code>sudo passwd root</code>.
+				</li>
+				<li>
+					Reboot Pi and login with default. Type <code>su</code> and enter root passwrd set in previous
+					set.
+				</li>
+				<li>
+					Type <code>cd /home/NEW-USER-NAME && ls</code>. You should only be able to see
+					<code>Access-Your-Private-Data.desktop</code> and <code>README.txt</code>. You should
+					<em>not</em> be able to see any of the new user's real files!
+				</li>
+			</ol>
+			<p>
+				It is also advisable to disable the on-disk swap file usage as these will no be encrypted
+				by ecryptfs:
+			</p>
+			<pre>sudo dphys-swapfile swapoff
+sudo dphys-swapfile uninstall
+sudo systemctl disable dphys-swapfile
+sudo shutdown -r now</pre>
+		</div>
 
+		<h3>Disable The Default Pi User</h3>
+		<div>
+			<p></p>
+			<pre>sudo passwd --lock pi
+sudo usermod --expiredate 1 pi</pre>
+			<p></p>
+		</div>
+
+		<h3>Malware</h3>
+		<div>
+			<p>Try the <a href="https://en.wikipedia.org/wiki/Linux_Malware_Detect" taget="_blank">Linux Malware Detect</a>
+				(LMD or maldet).
+			</p>
+		</div>
+	</div>
 
 
 	<h2>Mount Remote Windows Directory</h2>

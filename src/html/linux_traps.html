@@ -1,0 +1,118 @@
+dnl USEM4
+dnl ---- START M4 MACROS ----
+define(`REF', `<a href="$1" target="_blank">$2</a>')dnl
+define(`REFNAME', `http://link')
+dnl ---- END M4 MACROS ----
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <!-- HTML 4 -->
+	<meta charset="UTF-8">                                              <!-- HTML 5 -->
+	<title>Linux Error Handling Using Traps | JEHTech</title>
+	<!-- META_INSERT -->
+	<!-- CSS_INSERT -->
+	<!-- JAVASCRIPT_INSERT -->
+</head>
+
+<body>
+<div id="header">
+	-- This is JEHTech --
+</div>
+
+<div id="sidebar">
+	<h1 class="title">Links...</h1>
+	<div id="includedContent"></div>
+</div>
+
+<div id="content">
+<h1 class="title">Linux Error Handling Using Traps</h1>
+<div style="padding-right:10px;">
+
+<h2>References</h2>
+<div>
+    <ul>
+        <li>REF(`REFNAME', `Text-Terminal-HOWTO'), The Linux Tutorial.</li>
+    </ul>
+</div> <!-- End H2 section "References" -->
+
+<h2>TODO</h2>
+<div>
+    <pre>
+        https://unix.stackexchange.com/questions/385030/are-exit-debug-return-and-err-signals
+        https://stackoverflow.com/questions/26260581/what-is-the-actual-signal-behind-err
+        https://tldp.org/LDP/Bash-Beginners-Guide/html/sect_12_02.html
+        https://medium.com/@dirk.avery/the-bash-trap-trap-ce6083f36700
+
+    </pre>
+    <pre>
+function script_exit()
+{
+    local EXIT_CODE LINENOS LINENOS_ARRAY FUNCTIONS FUNCTIONS_ARRAY
+    EXIT_CODE=$1; shift
+    TRAPPED_LINENO=$1; shift
+    LINENOS=$1; shift
+    FUNCTIONS=$1; shift
+
+    # NOTE: set -o errtrace must have been set so that errors in functions are correctly trapped!
+    #
+    # The line numbers and function arrays need to be treated a little cautiously. The first item
+    # in the LINENOS_ARRAY does _not_ correspond to the first item in FUNCTIONS_ARRAY. The first
+    # item in FUNCTIONS_ARRAY corresponds to TRAPPED_LINENO, so this needs to be added to the
+    # LINENOS_ARRAY to correctly "line up" both arrays.
+    #
+    # The last line number always appears to be zero... don't know why but we don't need that as
+    # it doesn't correspond to even the root script, aka "main".
+    #
+    # Then, interestingly, if this is triggered from the root script, or 'main', then there will be
+    # no function name in FUNCTIONS_ARRAY. Still need to fudge LINENOS_ARRAY as before, but now need
+    # to add 'main' to FUNCTIONS_ARRAY.
+    #
+    # Buuuut, then, the length of LINNOS_ARRAY will be 1, and for some reason, which is not
+    # understood, `let "num_items=${#LINENOS_ARRAY[*]}-1"` will cause a premature exit in the
+    # trap handler, so this must also be tested for! ... Eeesh!
+    read -r -a LINENOS_ARRAY &lt;&lt;&lt; "${LINENOS}"
+    LINENOS_ARRAY=("${TRAPPED_LINENO}" "${LINENOS_ARRAY[@]}")
+    unset "LINENOS_ARRAY[-1]"
+    read -r -a FUNCTIONS_ARRAY &lt;&lt;&lt; "${FUNCTIONS}"
+
+    if [ "${#FUNCTIONS_ARRAY[*]}" -eq 0 ]; then
+      FUNCTIONS_ARRAY=(main)
+    fi
+
+    if [ "${EXIT_CODE}" == "SIGINT" ]
+    then
+      echo -e "\\n\\nCTRL-C received. Script aborted"
+      exit 1
+    elif [ "${EXIT_CODE}" -ne 0 ]
+    then
+      local num_items
+      echo -e "\\n\\n"
+      echo "### ERROR: An unexpected error occurred: EXIT_CODE=${EXIT_CODE}:"
+      num_items=0
+      [ "${#LINENOS_ARRAY[*]}" -gt 1 ] && (( num_items="${#LINENOS_ARRAY[*]}"-1 ))
+      echo "### Stack trace:"
+      for idx in $(seq 0 "${num_items}")
+      do
+          echo -e "###     ${idx}: ${FUNCTIONS_ARRAY[$idx]}@${LINENOS_ARRAY[$idx]}"
+      done
+      echo -e "\\n\\n"
+      exit 1
+    else
+        echo "Script ended successfully"
+        exit 0
+    fi
+}
+
+trap 'script_exit $? ${LINENO} "${BASH_LINENO[*]}" "${FUNCNAME[*]}"' ERR
+trap 'script_exit SIGINT ${LINENO} "${BASH_LINENO[*]}" "${FUNCNAME[*]}"' SIGINT
+set -o pipefail  ## Propagate error status through pipes
+set -o errtrace  ## Ensure ERR is trapped in functions too
+    </pre>
+    <p></p>
+</div>
+
+
+</div> <!-- END padding div -->
+</div> <!-- END content div -->
+</body>
+</html>

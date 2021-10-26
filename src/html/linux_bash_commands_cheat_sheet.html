@@ -58,8 +58,15 @@
                     </td>
                   </tr>
                   <tr>
-                    <td>Append:</td>
-                    <td><code>myarray+=( 4 5 )</code>
+                    <td>Add:</td>
+                    <td>Append: <code>myarray+=( 4 5 )</code><br/>
+                        To index: <code>arr=( "${arr[@]:0:2}" "new_element" "${arr[@]:2}" )</code>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Delete:</td>
+                    <td>Last element: <code>unset arr[-1]</code>, or before Bash 4.3 <code>unset 'arr[${#arr[@]}-1]'</code><br/>
+                      From index (e.g. 2): <code>arr=( "${arr[@]:0:2}" "${arr[@]:3}" )</code> or <code>unset -v 'arr[2]'</code>
                     </td>
                   </tr>
                   <tr>

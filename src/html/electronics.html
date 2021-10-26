@@ -906,7 +906,7 @@ dnl ---- END M4 MACROS ----
 				by the capacitor is zero, and as the capacitor charges, the voltage across it increases too.
 			</p>
 			<p>
-				Thus, the work required to charge a capacitor is
+				Thus, the work required to charge a capacitor, i.e., the work done by the power source, is:
 				$$W = \frac{1}{2}QV$$
 				We have also said that $Q = CV$, therefore we can re-write the above as,
 				$$W = \frac{1}{2}CV^2$$
@@ -928,7 +928,7 @@ dnl ---- END M4 MACROS ----
 				<img src="##IMG_DIR##/cap_5uf_10V_supply_short_citcuit.png" alt="5 micro Farad capacitor short-circuit connected to 10V batt"/>
 			</p>
 			<p>
-				We know the work done by the battery is defined as follows, giving the following result.
+				We know the work done by the capacitor when it discharges is defined as follows, giving the following result.
 				$$
 				\begin{align}
 					W &= \frac{1}{2}CV^2 \\
@@ -936,7 +936,7 @@ dnl ---- END M4 MACROS ----
 						&= 2.5\cdot 10^{-4} \text{Joules}
 				\end{align}
 				$$
-				We should now be able to plug the value for $W$, and $V$ back into the equation $W = \frac{1}{2}QV$:
+				We should now be able to plug the value for $W$, and $V$ back into the equation for the work done by the battery, $W = \frac{1}{2}QV$:
 				$$
 					2.5\cdot 10^{-4} = \frac{1}{2}Q\cdot 10 \\
 					\therefore Q = 5\cdot 10^{-5} \text{Coulombs}
@@ -1038,6 +1038,54 @@ dnl ---- END M4 MACROS ----
 					C_{eq} = C_1 + C_2 + \cdots + C_n
 				$$
 			</p>
+
+			<h3>Reactance</h3>
+			<p>
+				See <a href="https://www.daviddarling.info/encyclopedia/C/current_lag_and_lead.html" target="_blank">Current Lead And Lag, David Darling</a>.
+			</p>
+			<p>
+				The opposition to the flow of <b>alternating</b> current due to capacitance is called "capacitive reactance.".
+				In capacitors, the <b>current leads voltage</b> by 90 degrees. Resistance is measure using real numbers
+				but reactance is measured in the <b>complex plane</b>.
+			</p>
+			<p>
+				When a capacitor is uncharged, the voltage across it is zero. The increasing voltage from the AC supply
+				will therefore, at the start, deliver the maximum amount of current. As the voltage across the capacitor
+				grows in opposition to the supply, the current flow will decrease. Therefore at the start there must be
+				minimum voltage across the capacitor, bu maximum current flow from the battery. Because the AC
+				voltage is sinusoidal, this means that the current and voltage must be 90 degrees out of phase and
+				the <b>current leads the voltage</b>.
+			</p>
+			<p>
+				We know $V = iR$, so, of course,
+				$$
+				R = \frac{V}{i}
+				$$
+				Given the above reasoning we know that voltage across the capacitor must be a sine wave and
+				therefore current must be a cosine.
+				We also saw the equation for current in a section above:
+				$$
+					i = C\frac{\mathrm{d}V}{\mathrm{d}t}
+				$$
+				Therefore we can say that, if the input voltage is is $\sin(\omega t)$, then:
+				$$
+					i = C \omega \cos(\omega t)
+				$$
+				Therefore, using Ohm's law.
+				$$
+				R = \frac{\sin(\omega t)}{C \omega \cos(\omega t)}
+				$$
+				So, what's a sine divided a cosine? We can avoid some maths by recalling that multiplying
+				by $j$ rotates a complex number by 90 degrees anticlockwise and how the sine and cosine can
+				be seen as the values of a phasor on the imaginary and real axes respectively:
+			</p>
+			<p>
+				<img src="##IMG_DIR##/sine_cosine_from_complex_axes1.png" alt="sine and cosine can be seen as the values of a phasor on the imaginary and real axes "/>
+			</p>
+			<p>
+				So, to eliminate the sinusoids, we could express sine as a rot
+			</p>
+
 
 
 
@@ -1216,7 +1264,7 @@ dnl ---- END M4 MACROS ----
 
 
 		<!-- --------------------------------------------------------------------------------------- -->
-		<a name="bjt"/>
+		<a name="bjt"></a>
 		<h2 style="clear:both;">Bipolar Junction Transistors (BJT)</h2>
 		<div>
 			<p>

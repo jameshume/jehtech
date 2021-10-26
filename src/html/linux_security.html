@@ -436,8 +436,15 @@ sudo ufw status verbose</pre>
         <td><code>ufw enable</code></td>
       </tr>
       <tr>
-        <td>Deny All Incoming:</td>
+        <td>Deny/Block All Incoming:</td>
         <td><code>ufw deny incoming</code></td>
+      </tr>
+      <tr>
+        <td>Deny/Block A Specific IP:</td>
+        <td>IP: <code>ufw deny from 1.2.3.4</code><br/>
+          IP &amp; Subnet: <code>ufw deny from 1.2.3.4/24</code><br/>
+          Incoming TCP to pert 80: <code>ufw deny proto tcp to any port 80</code>
+        </td>
       </tr>
       <tr>
         <td>Allow All Outgoing:</td>
@@ -494,6 +501,29 @@ sudo ufw status verbose</pre>
     for example.
   </p>
 
+
+  <h3>UFW Rule Order</h3>
+  <p>
+    To view the order of the rules in the UFW table type:
+  </p>
+  <pre>sudo ufw status numbered</pre>
+  <p>
+    Rules are applied in order, starting at rule 1. The first rule that matches will be used and
+    the others will not be evaluated. this is why <b>specific rules should be put first and generic
+      rules second</b>.
+  </p>
+  <p>
+    To insert rules at a specific index use the following:
+  </p>
+  <pre>sudo ufw insert INDEX allow from IP_ADDR [port PORT] [to IP_ADDR [port PORT] [proto PROTO]]</pre>
+  <p>
+    To delete a rule at a specific idex use:
+  </p>
+  <pre>sudo ufw delete INDEX</pre>
+  <p>Where, in both cases, INDEX is the number with which the rule is listed by the numbered
+    status command shown above.
+  </p>
+
   <h3>UFW Apps</h3>
   <p>
     When you see commands like &quot;<code>ufw allow OpenSSH</code>&quot;, the &quot;<code>OpenSSH</code>&quot;
@@ -518,6 +548,21 @@ ports=12345/tcp|4321|99,105:110/udp</pre>
     <code>ufw reload</code>.
   </p>
 
+  <h3>Logs</h3>
+  <p>
+    UFW logs can be found using <code>dmesg</code> or in <code>/var/logs/ufw*</code>.
+  </p>
+  <h4>MAC Addresses</h4>
+  <p>
+    You will see MAC addresses like the following. The string is split into the 6-octet destination MAC,
+    6-octet source MAC and 2-octet EtherType.
+  </p>
+  <pre>[UFW BLOCK] IN=wlan0 OUT= MAC=b8:27:eb:ed:4c:77:6e:ad:3b:c2:8e:60:08:00...
+                              ^^^^^^^^^^^^^^^^^ ||||||||||||||||| ^^^^^
+                              ^^^^^^^^^^^^^^^^^ ||||||||||||||||| Ether type (80:00 == IPv4)
+                              ^^^^^^^^^^^^^^^^^ Destination MAC
+                              Source MAC</pre>
+    <p></p>
 </div>
 
 <a id="fail2ban"></a>

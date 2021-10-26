@@ -1891,6 +1891,10 @@ git push                  # Push back to your remote</pre>
 	<p>
 		Ref: <a href="https://git-lfs.github.com/" target="_blank">https://git-lfs.github.com/</a>: <q>Git Large File Storage (LFS) replaces large files such as audio samples, videos, datasets, and graphics with text pointers inside Git, while storing the file contents on a remote server...</q>.
 	</p>
+    <p>
+        Git LFS can store large files as &quot;pointers&quot; to separate binary storage in your repo. The repo can thus
+        be smaller.
+    </p>
 	<p>
 		In your repository directory, to start using LFS type:
 	</p>
@@ -1903,6 +1907,57 @@ git push                  # Push back to your remote</pre>
 		For general help:
 	</p>
 	<pre>git lfs help</pre>
+    <p></p>
+
+    <h3>Encountered X file(s) that should have been pointers, but weren't:</h3>
+    <p>
+        Bah! Encountered this on occasion. This can happen when you do a checkout that contains
+        files which should have been been tracked by LFS as specified in .gitattributes but somehow
+        they've been committed directly instead! Or there is, in fact, a genuine conflict where
+        on one branch the file is raw binary and on another it is Git LFS managed.
+    </p>
+    <p>
+        See the Git LFS status:
+    </p>
+    <pre>git lfs status</pre>
+    <p>
+        List the files that are under LFS control:
+    </p>
+    <pre>git lfs ls-files</pre>
+    <p>
+        See the files that match the LFS filters:
+    </p>
+    <pre>git ls-files ':(attr:filter=lfs)'</pre>
+    <p>
+        Another way to programmatically test if a file is managed by LFS
+        <a href="https://github.com/git-lfs/git-lfs/issues/2748" target="_blank">[Ref]</a> is to
+        compare the file size of the file on disk with the block size in Git. The Git blob size
+        should be about 130 bytes and the file on disk should be significantly bigger:
+    </p>
+    <pre>git ls-tree HEAD -rl | grep some-file-name-pattern</pre>
+    <p>
+        The following can also help <a href="https://stackoverflow.com/a/54804224/1517244" target="_bank">[Ref]</a>:
+    </p>
+    <pre>git lfs uninstall
+git reset --hard
+git lfs install
+git lfs pull</pre>
+    <p>And if that doesn't work you can try:</p>
+    <pre>git rm --cached -r .
+git reset --hard
+git rm .gitattributes
+git reset .
+git checkout .</pre>
+    <p>It is also possible to migrate files to LFS <a href="https://stackoverflow.com/a/57820265/1517244" target="_bank">[Ref]</a>:</p>
+    <pre>git lfs migrate import --no-rewrite "broken file.jpg" "another broken file.png" ...
+# This "migrates" files to git lfs which should be in lfs as per .gitattributes, but aren't
+# at the moment (which is the reason for your error message).
+#
+# --no-rewrite prevents git from applying this to older commits, it creates a single new
+# commit instead.</pre>
+    <p></p>
+
+
 </div>
 
 </div> <!-- END H1 Git Notes -->
