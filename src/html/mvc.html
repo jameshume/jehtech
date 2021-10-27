@@ -22,25 +22,23 @@
 
 	<div id="content">
 		<h1 class="title">Model View Controller/Presenter (MVC/P) Notes</h1>
-		<h2>Introduction</h2>
+		<h2>The Origins Of MVC (Classic MVC)</h2>
 
-		<p style="text-align:center;">
-			<img src="##IMG_DIR##/SimpleDB_MVC_Problem.png" style="max-width:100%;"/>
-		</p>
 		<h3>References</h3>
-		<p>
-			MVC seems to have been conceived of in the world of SmallTalk, not a language I know anything about apart from 
-			hearing it mentioned here and there. Reading about it from this historical perspective did clear a few things up for me.
-			I ended up reading the following articles, which appear to be written by folks who were intimately involved in 
-			coming up with these patterns. Apparently Trygve Reenskaug was the originator (according to Pattern Oriented Software
-			Architecture For Dummies) but it was first widley seen by people in SmallTalk.
-		</p>
 		<ol>
-			<li><a href="http://heim.ifi.uio.no/~trygver/1979/mvc-1/1979-05-MVC.pdf" target+"_blank">Thing-Model-View-Editor</a> by Trygve Reenskaug. [Last accessed 10-Feb-2015]</li>
+			<li><a href="http://heim.ifi.uio.no/~trygver/1979/mvc-1/1979-05-MVC.pdf" target="_blank">Thing-Model-View-Editor</a> by Trygve Reenskaug. [Last accessed 10-Feb-2015]</li>
 			<li><a href="http://www.itu.dk/courses/VOP/E2005/VOP2005E/8_mvc_krasner_and_pope.pdf" target="_blank">A Description of the MVC User Interface Paradigm in the SmallTalk-80 System</a>. [Last accessed 09-Feb-2015]</li>
 			<li><a href="http://www.object-arts.com/downloads/papers/TwistingTheTriad.PDF" target="_blank">Twisting the Triad, the Evolution of the Dolphin SmallTalk MVP Application Framework</a>. [Last accessed 09-Feb-2015]</li>
 		</ol>
-		<h3>Summary</h3>
+
+		<h3>Model View Controller (MVC)</h3>
+		<p>
+			MVC seems to have been conceived of in the world of SmallTalk. Reading about it from this
+			historical perspective did clear a few things up for me.
+			I ended up reading the following articles, which appear to be written by folks who were intimately involved in
+			coming up with these patterns. Apparently Trygve Reenskaug was the originator (according to Pattern Oriented Software
+			Architecture For Dummies) but it was first widely seen by people in SmallTalk.
+		</p>
 		<p>
 			The general strategy of MVC is to split up the responsibility for storing the data (the model), displaying the data
 			(the view), and managing the user interaction between the two (the controller) into separate modules. A programmer can then modify one
@@ -54,16 +52,9 @@
 			Or as another example, a view on an address book retrieves a list of all names beginning with 'L' through the model. The model
 			stores the addresses in a raw binary file. Now the software is to be upgraded to store the address book in XML. Because the view is
 			separate from the model the storage can easily be changed without having to touch a single line of code in the view.
-		</p><p>
-			The split of responsibilities is easy enough to understand, but it was the description of the controller that elucidated things
-			for me. In my development so far the controller seemed to be waifer thin and wasn't really doing a lot other than forwarding
-			messages between the view and model. I couldn't really see the point of it... until I read both the articles. In the SmallTalk world the 
-			controller would do things like detect the key press, or detect the mouse click and figure out if the key press would modify the model or whether
-			the mouse click was inside the view etc. Now, however, in modern OS architectures, most of this controller functionality already exists so the 
-			controller starts to become rather thin. As Andrew Bower et al say, &quot;...the idea of a controller did not fit neatly ... most modern graphical 
-			operating systems, provide a set of native widgets ... [which] already include most of the controller functionality embodied as part of the underlying 
-			operating system control...&quot;.
-		</p><p>
+		</p>
+		
+		<p>
 			In summary then, we have 3 components:
 		</p>
 		<ol>
@@ -80,7 +71,7 @@
 		<p style="text-align: center;">
 			<img src="##IMG_DIR##/MVC_From_SmallTalk_Article.png" style="max-width:100%"/>
 		</p><p>
-			The diagram above shows roughly how the interactions would take place. A user does something like hitting a key. The
+			The diagram above, from the second reference, shows roughly how the interactions would take place. A user does something like hitting a key. The
 			controller interprets the key press. Is it the enter key? Is it a normal character? I.e., the controller has knowledge
 			about what the key does/signifies and starts a set of events.
 		</p><p>
@@ -91,11 +82,31 @@
 		</p><p>
 			On the press of the return key, on the other hand, the controller might not ask the model to update its string store. It might
 			instead signal the view to do something special, or signal another controller that the user has finished entering data.
-		</p><p>
-			TODO - COMPLETE ARTICLE
 		</p>
-
-
+		<p>
+			The split of responsibilities is easy enough to understand, but it was the description of the controller in &quot;Twisting the Triad&quot; that elucidated things
+			for me. In my development so far the controller seemed to be wafer thin and wasn't really doing a lot other than forwarding
+			messages between the view and model. In the SmallTalk world the
+			controller would do things like detect the key press, or detect the mouse click and figure out if the key press would modify the model or whether
+			the mouse click was inside the view etc. Now, however, in modern OS architectures, most of this controller functionality already exists so the 
+			controller starts to become rather thin. As Andrew Bower et al say, &quot;...the idea of a controller did not fit neatly ... most modern graphical 
+			operating systems, provide a set of native widgets ... [which] already include most of the controller functionality embodied as part of the underlying 
+			operating system control...&quot;. I.e., the controller wasn't applicable to modern systems as there is no need to listen for
+			key presses, mouse clicks etc: the OS does this for us.
+		</p>
+		
+		<h3>Model View Presenter (MVP)</h3>
+		<p>
+			It was for this reason that Twisting The Triad came up with MVP (Model View Presenter).
+		</p>
+		<p>TODO: Finish description...</p>
+		
+		<h2>MVC As Described By The &quot;Gang Of Four&quot;</h2>
+		<div>
+			<p><img style="width: 90%;" src="##IMG_DIR##/MVC_whiteboard_1.png"></p>
+			<p><img style="width: 90%;" src="##IMG_DIR##/MVC_whiteboard_2.png"></p>
+		</div>
+		
 	</div>
 </body>
 </html>

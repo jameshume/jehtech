@@ -1,8 +1,3 @@
-dnl USEM4
-dnl ---- START M4 MACROS ----
-define(`REF', `<a href="$1" target="_blank">$2</a>')dnl
-define(`REFNAME', `http://link')
-dnl ---- END M4 MACROS ----
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -28,89 +23,219 @@ dnl ---- END M4 MACROS ----
 <h1 class="title">Linux Error Handling Using Traps</h1>
 <div style="padding-right:10px;">
 
-<h2>References</h2>
+<h2>Unexpected Behaviors</h2>
 <div>
-    <ul>
-        <li>REF(`REFNAME', `Text-Terminal-HOWTO'), The Linux Tutorial.</li>
-    </ul>
-</div> <!-- End H2 section "References" -->
+    <h3>Error Propagation Through Pipes</h3>
+    <div>
+        <p>
+            By default errors will not propagate through pipes, so if the latter most section of the
+            pip succeeds but previous sections fail, those failures will not get trapped. Take the
+            simple example script below:
+        </p>
+        <pre class="prettyprint linenums">trap 'echo "ERROR"; exit 1' ERR
+false | echo "latter most command in pipe"
+echo "Completed without a problem"</pre>
+        <p>
+            If this script is run the following output is seen.
+        </p>
+        <pre class="prettyprint linenums">Completed without a problem</pre>
+        <p>
+            Oops! To rectify the problem we must tell bash to propagate the error status through
+            the pipe:
+        </p>
+        <pre class="prettyprint linenums">set -o pipefail  ## Propagate error status through pipes
+trap 'echo "ERROR"; exit 1' ERR
+echo "Completed without a problem"
+false | echo "latter most command in pipe"</pre>
+        <p>
+            Now the script will behave as expected and output the error message because we used
+            <code>set -o pipefail</code>. When this is set <q>the return value of a pipeline is the
+                status of the last command to exit with a non-zero status, or zero if no command
+                exited with a non-zero status</q>.
+        </p>
+    </div>
 
-<h2>TODO</h2>
-<div>
-    <pre>
-        https://unix.stackexchange.com/questions/385030/are-exit-debug-return-and-err-signals
-        https://stackoverflow.com/questions/26260581/what-is-the-actual-signal-behind-err
-        https://tldp.org/LDP/Bash-Beginners-Guide/html/sect_12_02.html
-        https://medium.com/@dirk.avery/the-bash-trap-trap-ce6083f36700
 
-    </pre>
-    <pre>
-function script_exit()
-{
-    local EXIT_CODE LINENOS LINENOS_ARRAY FUNCTIONS FUNCTIONS_ARRAY
-    EXIT_CODE=$1; shift
-    TRAPPED_LINENO=$1; shift
-    LINENOS=$1; shift
-    FUNCTIONS=$1; shift
-
-    # NOTE: set -o errtrace must have been set so that errors in functions are correctly trapped!
-    #
-    # The line numbers and function arrays need to be treated a little cautiously. The first item
-    # in the LINENOS_ARRAY does _not_ correspond to the first item in FUNCTIONS_ARRAY. The first
-    # item in FUNCTIONS_ARRAY corresponds to TRAPPED_LINENO, so this needs to be added to the
-    # LINENOS_ARRAY to correctly "line up" both arrays.
-    #
-    # The last line number always appears to be zero... don't know why but we don't need that as
-    # it doesn't correspond to even the root script, aka "main".
-    #
-    # Then, interestingly, if this is triggered from the root script, or 'main', then there will be
-    # no function name in FUNCTIONS_ARRAY. Still need to fudge LINENOS_ARRAY as before, but now need
-    # to add 'main' to FUNCTIONS_ARRAY.
-    #
-    # Buuuut, then, the length of LINNOS_ARRAY will be 1, and for some reason, which is not
-    # understood, `let "num_items=${#LINENOS_ARRAY[*]}-1"` will cause a premature exit in the
-    # trap handler, so this must also be tested for! ... Eeesh!
-    read -r -a LINENOS_ARRAY &lt;&lt;&lt; "${LINENOS}"
-    LINENOS_ARRAY=("${TRAPPED_LINENO}" "${LINENOS_ARRAY[@]}")
-    unset "LINENOS_ARRAY[-1]"
-    read -r -a FUNCTIONS_ARRAY &lt;&lt;&lt; "${FUNCTIONS}"
-
-    if [ "${#FUNCTIONS_ARRAY[*]}" -eq 0 ]; then
-      FUNCTIONS_ARRAY=(main)
-    fi
-
-    if [ "${EXIT_CODE}" == "SIGINT" ]
-    then
-      echo -e "\\n\\nCTRL-C received. Script aborted"
-      exit 1
-    elif [ "${EXIT_CODE}" -ne 0 ]
-    then
-      local num_items
-      echo -e "\\n\\n"
-      echo "### ERROR: An unexpected error occurred: EXIT_CODE=${EXIT_CODE}:"
-      num_items=0
-      [ "${#LINENOS_ARRAY[*]}" -gt 1 ] && (( num_items="${#LINENOS_ARRAY[*]}"-1 ))
-      echo "### Stack trace:"
-      for idx in $(seq 0 "${num_items}")
-      do
-          echo -e "###     ${idx}: ${FUNCTIONS_ARRAY[$idx]}@${LINENOS_ARRAY[$idx]}"
-      done
-      echo -e "\\n\\n"
-      exit 1
-    else
-        echo "Script ended successfully"
-        exit 0
-    fi
+    <h3>ERR Trap Is Not Inherited By Shell Functions</h3>
+    <div>
+        <p>
+            Sigh, this is a gotcha too! Have a look at the following test script.
+        </p>
+        <pre class="prettyprint linenums">trap 'echo "ERROR"; exit 1' ERR
+function test() {
+    false
+    echo "Function completed"
 }
+test
+echo "Completed without a problem"</pre>
+        <p>
+            When the script is run, the following output is seen.
+        </p>
+        <pre class="prettyprint linenums">Function completed
+Completed without a problem</pre>
+        <p>
+            The error generated in the function has not been trapped!!
+        </p>
+        <p>
+            The Bash man page has the following to say about shell functions:
+        </p>
+        <ol>
+            <li>
+                <q>When executed, the exit status of a function is the exit status of the last
+                    command executed in the body.
+                </q>
+            </li>
+            <li>
+                <q>Functions are executed in the context of the current shell
+                    ... [most] aspects of the shell execution environment are identical between a
+                    function and its caller with these exceptions: ... the ERR trap is not inherited
+                    unless the -o errtrace shell option has been enabled
+                </q>
+            </li>
+        </ol>
+        <p>
+            So, we see both the reason and the solution. It is the combination of both points.
+            Note that if the function <code>test()</code> was defined as follows that the ERR
+            would be trapped.
+        </p>
+        <pre class="prettyprint linenums">function test() {
+    echo "Function completed"
+    false
+}</pre>
+        <p>
+            The reason that it is trapped in this case is that the return value of a shell
+            function is <q>is the exit status of the last command executed</q>. The ERR is trapped
+            at the main script level.
+        </p>
+        <p>
+        </p>In the original case, however, the last command was <code>echo ...</code>, so the
+            function's exit code would be 0. So, no error could be trapped at the main script level.
+            The trapping of the ERR has to be inherited by the function, which is not what one would
+            expect. To fix this use <code>set -o errtrace</code>:
+        </p>
+        <pre class="prettyprint linenums">set -o errtrace  ## Ensure ERR is trapped in functions too
+trap 'echo "ERROR"; exit 1' ERR
+function test() {
+        false
+        echo "Function completed"
+}
+test
+echo "Completed without a problem"</pre>
+        <p>
+            Now, when the script is run, the expected output is seen.
+        </p>
+        <pre class="prettyprint linenums">ERROR</pre>
+        <p>
+            Note, that you also have to <code>exit</code> from the ERR handler, if you do not want
+            to essentially ignore the error, otherwise the script
+            will call the ERR handler and then continue.
+        </p>
+    </div>
 
-trap 'script_exit $? ${LINENO} "${BASH_LINENO[*]}" "${FUNCNAME[*]}"' ERR
-trap 'script_exit SIGINT ${LINENO} "${BASH_LINENO[*]}" "${FUNCNAME[*]}"' SIGINT
-set -o pipefail  ## Propagate error status through pipes
-set -o errtrace  ## Ensure ERR is trapped in functions too
-    </pre>
-    <p></p>
+    <h3>DEBUG &amp; RETURN Traps Are Not Inherited By Shell Functions</h3>
+    <div>
+        <p>In exactly the same way as ERR is not inherited by shell functions neither are
+            the DEBUG and RETURN traps. To allow these to be inherited use <code>set -o functrace</code>.
+        </p>
+    </div>
 </div>
 
+
+
+<h2>A Generic Error Handler With Stack Trace</h2>
+<div>
+    <p>
+        Bash has some magic array variables, <code>FUNCNAME</code>, <code>BASH_LINENO</code> and
+        <code>BASH_SOURCE</code> as well as a builtin function <code>caller</code>.
+    </p>
+    <p>
+        The builtin <code>caller</code> provides the easiest way to create a stack trace.
+    </p>
+    <pre class="prettyprint linenums">function testA() {
+    caller
+    echo "--------"
+    i=0; while caller $i; do (( i=i+1 )); done
+}
+
+function testB() {
+    testA
+}
+
+function testC() {
+    testB
+}
+
+testC</pre>
+    <p>
+        The output of this script is:
+    </p>
+    <pre class="prettyprint linenums">8 ./test6.sh
+--------
+8 testB ./test6.sh
+12 testC ./test6.sh
+15 main ./test6.sh</pre>
+    <p>
+        Its not a pretty stack trace, but it is a stack trace.
+    </p>
+    <p>
+        Lets put this into a trap handler:
+    </p>
+    <pre class="prettyprint linenums">function err_handler() {
+    echo -e "\\n-----------------------------------------"
+    echo "An error occurred with status $1"
+    echo "Stack trace is:"
+    i=0; while caller $i; do (( i=i+1 )); done
+}
+trap "err_handler $?" ERR
+set -o pipefail
+set -o errtrace
+
+false
+
+function a1() {
+    false
+}
+
+function a2() {
+    a1
+}
+
+a2</pre>
+    <p>
+        The error handler deliberately does not <code>exit</code> so that we can see how all the
+        errors are processed. The output of the script is as follows, annotated with linux style
+        comments:
+    </p>
+    <pre class="prettyprint linenums">-----------------------------------------
+An error occurred with status 0
+Stack trace is:
+11 main test6.sh    #&lt: This is the false before the function definitions
+
+-----------------------------------------
+An error occurred with status 0
+Stack trace is:
+14 a1 test6.sh      #&lt: This is the fail from the function chain main -&gt; a2 -&gt; a1
+18 a2 test6.sh
+21 main test6.sh
+
+-----------------------------------------
+An error occurred with status 0
+Stack trace is:
+18 a2 test6.sh      #&lt: This is _interesting_! The error handler in a2 has trapped the
+21 main test6.sh    #&lt: error generated by a1... this could execute because the handler
+                    #&lt: did not exit()
+-----------------------------------------
+An error occurred with status 0
+Stack trace is:
+21 main test6.sh    #&lt: This is _interesting_! The error handler main has trapped the
+21 main test6.sh    #&lt: error generated by a2... this could execute because the handler
+                    #&lt: did not exit()</pre>
+    <p>
+        Yay! We have an ERR trap handler that prints out a stack trace. Wonderful! We could
+        make the stack trace prettier either by parsing the <code>caller</code> output or
+        by using the builtin Bash variables mentioned above.
+    </p>
+</div>
 
 </div> <!-- END padding div -->
 </div> <!-- END content div -->
