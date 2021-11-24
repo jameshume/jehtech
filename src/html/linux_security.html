@@ -564,11 +564,41 @@ ports=12345/tcp|4321|99,105:110/udp</pre>
                               Source MAC</pre>
     <p></p>
 
-    <h3>Routing Rules (IpTables)</h3>
+    <h3>Routing</h3>
     <div>
+      <p>
+        As UFW is a friendly wrapper for IpTables, it is worth understanding something About
+        the IpTables structure <a href="https://www.karlrupp.net/en/computer/nat_tutorial" target="_blank">[Ref]</a>:
+      </p>
       <p>
         <img src="##IMG_DIR##/iptables.png"/>
       </p>
+      <p>
+        Having said that, maybe not that necessary. The following are notes from this SO thread
+        <a href="https://askubuntu.com/a/1130516/475473" target="_blank">[Ref]</a>.
+        Some rules examples:
+      </p>
+      <pre class="prettyprint linenums")># Allow all traffic routed to eth2 and coming in on eth1 to traverse the firewall:
+ufw route allow in on eth1 out on eth2
+
+# Allow any packets coming in on eth0 to traverse the firewall out on eth1 to tcp port 80
+# on 12.34.45.67.
+ufw route allow in on eth0 out on eth1 to 12.34.45.67 port 80 proto tcp</pre>
+      <p>
+        Must also setup IP formwarding by setting the following in <code>/etc/ufw/sysctl.conf</code>:
+      </p>
+      <pre class="prettyprint linenums">net/ipv4/ip_forward=1
+net/ipv6/conf/default/forwarding=1
+net/ipv6/conf/all/forwarding=1</pre>
+      <p>
+        Then restart UFW. You can then check if IP forwarding is enabled by typing:
+      </p>
+      <pre class="prettyprint linenums"># Either
+sysctl net.ipv4.ip_forward
+
+# Or
+cat /proc/sys/net/ipv4/ip_forward</pre>
+        <p></p>
     </div>
 
 </div>
