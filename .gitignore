@@ -1,5 +1,7 @@
 __deployed
 __test
+built
+deps
 *~
 *.swp
 *.pyc

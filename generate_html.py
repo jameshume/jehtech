@@ -24,25 +24,29 @@ def getMathjaxNodePageBinPath():
 	return exepath
 
 # Regex to put in the links into all the HTML pages
-prog     = re.compile('(<\s*div\s+id\s*=\s*"includedContent"\s*>)', re.IGNORECASE)
+prog_add_links_to_page = re.compile('(<\s*div\s+id\s*=\s*"includedContent"\s*>)', re.IGNORECASE)
 # Regexs to put in JS and CSS
 prog_css = re.compile('(<!--\s*CSS_INSERT\s*-->)', re.IGNORECASE)
 prog_js  = re.compile('(<!--\s*JAVASCRIPT_INSERT\s*-->)', re.IGNORECASE)
 prog_img = re.compile('##IMG_DIR##')
 
+
 # Open and read in the source file
-htmlFile = codecs.open(SRC_FILE, 'r', 'utf-8')
-htmlFileContents = htmlFile.read();
-htmlFile.close()
+htmlFileContents = ""
+with codecs.open(SRC_FILE, 'r', 'utf-8') as htmlFile:
+	htmlFileContents = htmlFile.read();
+
 
 # Open and read in the links file
-linksFile = codecs.open(os.path.join(ROOT_DIR, "_links.html"), 'r', 'utf-8')
-linksHtml = linksFile.read();
-linksFile.close()
+linksHtml = ""
+with codecs.open(os.path.join(ROOT_DIR, "_links.html"), 'r', 'utf-8') as linksFile:
+	linksHtml = linksFile.read();
+
 
 # Copy the contents of the curr html to it's deployed file but add in the
 # links page
-htmlFileContents = prog.sub(r'\1' + linksHtml, htmlFileContents)
+htmlFileContents = prog_add_links_to_page.sub(r'\1' + linksHtml, htmlFileContents)
+
 
 # Insert a link to the CSS file. If we are in a subdir the link needs to
 # adjusted to a relative path.
