@@ -1,3 +1,7 @@
+// Now see https://github.com/mathjax/MathJax-demos-node/blob/master/simple/tex2chtml-page
+
+
+
 // https://github.com/pkra/mathjax-node-page
 // https://github.com/mathjax/MathJax-node
 // https://github.com/mathjax/mathjax-node-cli/
