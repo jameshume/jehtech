@@ -1,3 +1,5 @@
+# WSL Ubuntu 20
+
 # Build System
 The build system now assumes a Linux (like) environment. For me, this normally means WSL. The
 Makefile will take the source from the "src" directory and create a "built" directory containing all
