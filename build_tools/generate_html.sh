@@ -15,18 +15,17 @@ else
     cp "${SRC}" "${DST}"
 fi
 
-
 # All files that use M4 preprocessor must include the line "dnl USEM4".
 if grep --ignore-case "dnl USEM4" "${DST}" > /dev/null
 then
-    echo "   Running M4 macro expansion for ${SRC}"
+    echo "   Running M4 macro expansion for ${DST}"
     TMP=$(mktemp)
     m4 "${DST}" > "${TMP}"
-    cp "${TMP}" "${DST}"
+    mv "${TMP}" "${DST}"
 fi
 
 # Process snippet inserts - must be done before all other in-place sed'ing
-python3 process_snippets.py "${SRC}" "${DST}" "images/jeh-tech"
+python3 process_snippets.py "${DST}" "${DST}" "images/jeh-tech"
 
 # Each file contains a marker that must be replaced with the contents of the _link.html page
 # NOTE: <div id="includedContent"> must have the closing tag on the SAME LINE and be one a

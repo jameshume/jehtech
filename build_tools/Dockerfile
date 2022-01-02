@@ -1,7 +1,7 @@
 FROM node
 
-RUN npm install uglify-js   -g
-RUN npm install @babel/core @babel/cli  -g
+RUN npm install @node-minify/core @node-minify/cli @node-minify/cssnano @node-minify/uglify-es -g
+RUN npm install @babel/core @babel/cli -g
 RUN npm install @babel/preset-env -g
 RUN npm install esm -g
 RUN npm install mathjax@3 -g
