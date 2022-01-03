@@ -19,10 +19,9 @@ from snippet_regular_expressions import (
 )
 
 
-SRC_FILENAME = Path(sys.argv[1])
-DST_FILENAME = Path(sys.argv[2])
+FILENAME = Path(sys.argv[1])
+SNIPPET_DIRNAME = Path(sys.argv[2])
 BASE_IMG_DIR = Path(sys.argv[3])
-DIRNAME = SRC_FILENAME.parent
 
 
 def split_pre_tags_for_images(xhtmlFileContents):
@@ -38,7 +37,7 @@ def inject_raw_snippet(match_object_for_snippet_placeholder):
     """ Include snippets - these are files who's contents are just dumped, raw, into a <pre>
     tag.
     """
-    raw_snippet_filename =  DIRNAME / match_object_for_snippet_placeholder.group(1)
+    raw_snippet_filename =  SNIPPET_DIRNAME / match_object_for_snippet_placeholder.group(1)
     with codecs.open(raw_snippet_filename, 'r', 'utf-8') as raw_snippet_file:
         return raw_snippet_file.read()
 
@@ -49,7 +48,7 @@ def inject_processed_snippet(match_object_for_snippet_placeholder):
     ##IMG:...## with </pre><img src="..."/><pre> so that <ore> tags can be split to
     accomodate images.
     """
-    xhtmlFileName = DIRNAME / match_object_for_snippet_placeholder.group(1)
+    xhtmlFileName = SNIPPET_DIRNAME / match_object_for_snippet_placeholder.group(1)
     xhtmlFileContents = ""
     html_escape_table = {"&": "&amp;", '"': "&quot;", "'": "&apos;", ">": "&gt;", "<": "&lt;"}
 
@@ -100,10 +99,10 @@ if __name__ == '__main__':
         prog_escaped_snippet = re.compile(ESCAPED_FILE_INSERT_REGEX)
 
         htmlFileContents = ""
-        with codecs.open(SRC_FILENAME, 'r', 'utf-8') as htmlFile:
+        with codecs.open(FILENAME, 'r', 'utf-8') as htmlFile:
             htmlFileContents = prog_snippet.sub(inject_raw_snippet, htmlFile.read())
             htmlFileContents = prog_escaped_snippet.sub(inject_processed_snippet, htmlFileContents)
             htmlFileContents = split_pre_tags_for_images(htmlFileContents)
 
-        with codecs.open(DST_FILENAME, 'w', 'utf-8') as htmlFile:
+        with codecs.open(FILENAME, 'w', 'utf-8') as htmlFile:
             htmlFile.write(htmlFileContents)

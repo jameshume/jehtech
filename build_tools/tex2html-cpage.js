@@ -75,7 +75,9 @@ MathJax = {
         load: ['adaptors/liteDOM']
     },
     tex: {
-        packages: argv.packages.replace('\*', PACKAGES).split(/\s*,\s*/)
+        packages: argv.packages.replace('\*', PACKAGES).split(/\s*,\s*/),
+        // Added by jehtech to expand inline math.
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
     },
     chtml: {
         fontURL: argv.fontURL,

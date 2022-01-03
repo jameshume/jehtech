@@ -46,7 +46,7 @@ $(patsubst $(1)%,$(DEP_DIR)%,$(2))/%.d:
         "$$@"
 
 $(patsubst $(1)%,$(3)%,$(2))/%.html: $(2)/%.html $(1)/_links.html $(patsubst $(1)%,$(DEP_DIR)%,$(2))/%.d | $(patsubst $(1)%,$(3)%,$(2)) $(patsubst $(1)%,$(DEP_DIR)%,$(2))
-	@./generate_html.sh "$$<" "$$@"
+	@./generate_html.sh "$$<" "$$@" "$(3)"
 
 $(patsubst $(1)%,$(3)%,$(2)):
 	@mkdir --parents "$$@"
@@ -70,7 +70,7 @@ endef
 
 
 .PHONY: all
-all: images html javascript css | $(OUTPUT_DIR)
+all: images html javascript css fonts sitemap | $(OUTPUT_DIR)
 	@echo DONE
 
 
@@ -83,11 +83,20 @@ html: $(DST_HTML_FILES)
 
 
 .PHONY: javascript
-javascript: $(DST_HTML_ROOT_DIR)/jeh-monolith.js
+javascript: $(DST_HTML_ROOT_DIR)/jeh-monolith.js $(DST_HTML_ROOT_DIR)/animatron_player.js 
 
 
 .PHONY: css
 css: $(DST_HTML_ROOT_DIR)/jeh-monolith.css
+
+
+.PHONY: sitemap
+sitemap:
+	@echo Sitemap is a TODO
+
+.PHONY: fonts
+fonts:
+	@cp -r $(SRC_DIR)/fonts $(DST_HTML_ROOT_DIR)/fonts
 
 
 .PHONY: clean_html
@@ -132,6 +141,10 @@ $(DST_HTML_ROOT_DIR)/jeh-monolith.js: $(SRC_JAVASCRIPT_FILES)
 	@node-minify --compressor uglify-es --input "$@" --output "$@" --silence
 
 
+$(DST_HTML_ROOT_DIR)/animatron_player.js: $(SRC_HTML_ROOT_DIR)/animatron_player.js
+	@cp "$<" "$@"
+
+
 # The CSS monolith is supposed to reduce the number of seperate requrest that the browser
 # has to make to get all the different CSS components required by the pages. It
 # consists of a loads of CSS files concatenated together and then minified.
@@ -154,6 +167,7 @@ $(foreach html_dir,$(SRC_HTML_DIRS),$(eval $(call generate_html_rules,$(SRC_HTML
 # Make sure output dir exists
 $(OUTPUT_DIR):
 	mkdir --parents "$(OUTPUT_DIR)"
+
 
 # Include the dependency files. These give a mapping from HTML files to any imported snippets
 # If any of the include targets (i.e., the DEP_FILES) were updated by the rules the 
