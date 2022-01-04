@@ -65,13 +65,19 @@ define generate_images_rules
 $(patsubst $(SRC_IMAGE_DIR)%,$(DST_IMAGE_DIR)%,$(1)): $(1)
 	@echo "Generating $$@"
 	@mkdir --parents "$$$$(dirname "$$@")" 1>/dev/null 2>&1 || true
-	@cp "$$<" "$$@"
+	@IMG_FILENAME=$$$$(basename "$$<"); \
+        IMG_EXT="$$$${IMG_FILENAME##*.}"; \
+        if [ "$$$${IMG_EXT}" != "mp4" ] && [ "$$$${IMG_EXT}" != "svg" ]; then \
+            python3 watermark_image.py "$$<" "../src/fonts/GoudyStM-webfont.ttf" "$$@"; \
+        else \
+            cp "$$<" "$$@"; \
+        fi
 endef
 
 
 .PHONY: all
 all: images html javascript css fonts sitemap | $(OUTPUT_DIR)
-	@echo DONE
+	@python3 site_hasher.py create_hash_file "${DST_HTML_ROOT_DIR}" "${OUTPUT_DIR}/site_hashes.dat"
 
 
 .PHONY: images
