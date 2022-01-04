@@ -10,4 +10,4 @@ RUN npm install html-linter -g
 RUN npm install html-validate -g
 RUN apt-get update
 RUN apt-get install -y python3-pip
-RUN pip3 install lxml pillow pyhash awscli boto3
+RUN pip3 install lxml pillow pyhash awscli boto3 markdown

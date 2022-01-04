@@ -13,9 +13,10 @@ import codecs
 import re
 import sys
 from pathlib import Path
+import markdown
 
 from snippet_regular_expressions import (
-    PRE_TAG_IMG_SPLIT_REGEX, RAW_FILE_INSERT_REGEX, ESCAPED_FILE_INSERT_REGEX
+    PRE_TAG_IMG_SPLIT_REGEX, RAW_FILE_INSERT_REGEX, ESCAPED_FILE_INSERT_REGEX, MARKDOWN_FILE_REGEX
 )
 
 
@@ -40,6 +41,13 @@ def inject_raw_snippet(match_object_for_snippet_placeholder):
     raw_snippet_filename =  SNIPPET_DIRNAME / match_object_for_snippet_placeholder.group(1)
     with codecs.open(raw_snippet_filename, 'r', 'utf-8') as raw_snippet_file:
         return raw_snippet_file.read()
+
+
+def inject_markdown_snippet(match_object_for_snippet_placeholder):
+    """ Include a markdown file, converted to HTML, as a snippet """
+    md_filname = SNIPPET_DIRNAME / match_object_for_snippet_placeholder.group(1)
+    with codecs.open(md_filname, 'r', 'utf-8') as md_file:
+        return markdown.markdown(md_file.read())
 
 
 def inject_processed_snippet(match_object_for_snippet_placeholder):
@@ -97,11 +105,13 @@ def inject_processed_snippet(match_object_for_snippet_placeholder):
 if __name__ == '__main__':
         prog_snippet = re.compile(RAW_FILE_INSERT_REGEX)
         prog_escaped_snippet = re.compile(ESCAPED_FILE_INSERT_REGEX)
+        prog_markdown_snippet = re.compile(MARKDOWN_FILE_REGEX)
 
         htmlFileContents = ""
         with codecs.open(FILENAME, 'r', 'utf-8') as htmlFile:
             htmlFileContents = prog_snippet.sub(inject_raw_snippet, htmlFile.read())
             htmlFileContents = prog_escaped_snippet.sub(inject_processed_snippet, htmlFileContents)
+            htmlFileContents = prog_markdown_snippet.sub(inject_markdown_snippet, htmlFileContents)
             htmlFileContents = split_pre_tags_for_images(htmlFileContents)
 
         with codecs.open(FILENAME, 'w', 'utf-8') as htmlFile:
