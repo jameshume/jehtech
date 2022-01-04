@@ -74,6 +74,9 @@ $(patsubst $(SRC_IMAGE_DIR)%,$(DST_IMAGE_DIR)%,$(1)): $(1)
         fi
 endef
 
+.PHONY: deploy
+deploy: all
+	@python3 deploy_to_aws.py
 
 .PHONY: all
 all: images html javascript css fonts sitemap | $(OUTPUT_DIR)
