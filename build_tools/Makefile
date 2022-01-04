@@ -79,9 +79,8 @@ deploy: all
 	@python3 deploy_to_aws.py
 
 .PHONY: all
-all: images html javascript css fonts sitemap | $(OUTPUT_DIR)
+all: images html javascript css fonts | $(OUTPUT_DIR)
 	@python3 site_hasher.py create_hash_file "${DST_HTML_ROOT_DIR}" "${OUTPUT_DIR}/site_hashes.dat"
-
 
 .PHONY: images
 images: $(DST_IMAGE_FILES)
