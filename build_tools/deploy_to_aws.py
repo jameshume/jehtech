@@ -1,5 +1,7 @@
 import datetime
 import json
+import mimetypes
+import sys
 from tempfile import NamedTemporaryFile
 import boto3
 import botocore.exceptions
@@ -26,18 +28,22 @@ cf = boto3.client(
     aws_secret_access_key=aws_credentials['access_key']
 )
 
-with NamedTemporaryFile() as tmp_file:
-    try:
-        print("Downloading remote site hash file... ", end="")
-        s3.download_file('jehtech.com', 'site_hashes.dat', tmp_file.name)
-        print("Done")
-        s3_hash_dict = site_hasher.LoadHashDict(tmp_file.name)
-    except botocore.exceptions.ClientError as exc:
-        if exc.response['Error']['Code'] == '404':
-            print("NOTE: The remote site hash data file did not exist")
-            s3_hash_dict = {}
-        else:
-            raise exc
+if len(sys.argv) > 1 and sys.argv[1] == "refresh":
+    print("NOTE: Forcing refresh")
+    s3_hash_dict = {}
+else:
+    with NamedTemporaryFile() as tmp_file:
+        try:
+            print("Downloading remote site hash file... ", end="")
+            s3.download_file('jehtech.com', 'site_hashes.dat', tmp_file.name)
+            print("Done")
+            s3_hash_dict = site_hasher.LoadHashDict(tmp_file.name)
+        except botocore.exceptions.ClientError as exc:
+            if exc.response['Error']['Code'] == '404':
+                print("NOTE: The remote site hash data file did not exist")
+                s3_hash_dict = {}
+            else:
+                raise exc
 
 local_hash_dict = site_hasher.LoadHashDict('../output/site_hashes.dat')
 
@@ -64,8 +70,8 @@ if remote_files_not_in_local:
         )
     print("Creating CloudFront invalidations for deleted files...")
     cf.create_invalidation(
-        "E1CW0OHDVEVITS",
-        {
+        DistributionId="E1CW0OHDVEVITS",
+        InvalidationBatch={
             'Paths': {
                 'Quantity': len(remote_files_not_in_local),
                 'Items': list(f'/{x}' for x in remote_files_not_in_local)
@@ -79,12 +85,20 @@ else:
 # Upload the new & changed files
 if files_for_upload:
     for file_path in files_for_upload:
-        print(f'Uploading {file_path}')
-        s3.upload_file(f'../output/site/{file_path}', 'jehtech.com', file_path)
+        file_mime_type =  mimetypes.guess_type(file_path)[0]
+        print(f'Uploading {file_path} as {file_mime_type}')
+        s3.upload_file(
+            f'../output/site/{file_path}',
+            'jehtech.com',
+            file_path,
+            ExtraArgs={
+                'ContentType': file_mime_type
+            }
+        )
     print("Creating CloudFront invalidations for uploaded files...")
     cf.create_invalidation(
-        "E1CW0OHDVEVITS",
-        {
+        DistributionId="E1CW0OHDVEVITS",
+        InvalidationBatch={
             'Paths': {
                 'Quantity': len(files_for_upload),
                 'Items': list(f'/{x}' for x in files_for_upload)
