@@ -57,7 +57,7 @@ Ineffective communication | Poor comms means high risk of fail. DSDM emphasises 
 Late delivery | Focus on delivery on time - revise scope of delivery ahead of extending deadline.
 Does not meet business needs | Includes business representatives as part of SDT (solution dev team).
 Wrong thing built | Enables change through iterative development.
-Unused features | Keep business priorites at core and using PRL only produce whats wanted.
+Unused features | Keep business priorites at core and using [PRL](#prioritised-requirements-list-prl) only produce whats wanted.
 Delayed / Late ROI | Incremental deliver to do most important features first.
 Over-engineering | Avoid diminishing returns by producing "must haves" first "should/could haves" second/third.
 "Fragile" agile | Place agile concepts in structured/controlled framework.
@@ -206,28 +206,44 @@ There are 6 main lifecyle phases:
 
 1. Pre-Project.
       * Ensure only right projects started.
-      * Setup up correctly.
+      * Setup up correctly based.
       * Based on clearly defined objective - high level definition and over-arching business driver defined + top-level objectives.
+      * No PM yet, generally. Done by leadership team.
+      * Short!
       * **Milestone Output**: Terms of reference 
 2. Feasibility.
       * Estiblish if project success likely - technical & cost-effective (business) perspectives.
-      * Just enough effort to decide if foundations phase is justified.
+      * Just enough effort to decide if foundations phase is justified. Plan to resource the foundations phase.
+          * Few days or week max.
+      * Creates 1 to 10 EPICS. EPIC is placeholder for set of user stories.
+      * The visionary owns the business process so s/he approves the feasability phase. Is the project feasible from a business/technical perspective and cost?
+      * What are the business requirements and EPICS. EPICS are the feature or functionality originating from the business - placeholders for more granular requirements generated later.     
       * **Milestone Output**: Feasibility assesment.
-      * **Evolving Outputs**: Business case, PRL, SAD, DAD, Delivery plan, MMAD
+      * **Evolving Outputs**: Business case, [PRL](#prioritised-requirements-list-prl), [SAD](#solution-architecture-definition-sad), DAD, Delivery plan, MMAD
 3. Foundations.
       * Preliminary investigation: fundamental, *not detailed*, undestanding of business need.
       * High-level business solution proposition.
       * How development and delivery will be managed.
       * *Avoid* low-level detail - avoid contraining evolutionary phase!
+      * Drill down into user stories with more detailed acceptance criteria and the priorities.
+	  * Flesh out the 6 docs created in feasability phase.
+	  * Could be weeks. 3 - 4 weeks planning workshops. Flexible not rule.
+	  * *No* development. This is just readiness and planning, understanding the MoSCoW's. Do people understand the standards? Is the tool access there? Etc.
+      	  * User stories are *not* technical tasks
+      	  * *Detailed* acceptance requirements. How many time boxes to complete ev dev for stage 1?
+      	  * Timeboxes and length decided for first iteration.
+  	  * Product Roles - RACI (Responsible/Accountable/Consulted/Informed) defined.
+  	  * SDT added here. Create 100's or user stories.
       * **Milestone Output**: Foundations summary.
-      * **Evolving Outputs**: Business case, PRL, SAD, DAD, Delivery plan, MMAD
+      * **Evolving Outputs**: Business case, [PRL](#prioritised-requirements-list-prl), [SAD](#solution-architecture-definition-sad), DAD, Delivery plan, MMAD
 4. Evolutionary Development.
       * Built on firm foundations - evolve/grow the solution - converge over time.
+      * The technical phase: break the user stories into technical tasks.
       * Apply iterative development, MoSCoW prioritisation, use modelling and facilitated workshops.
       * Timebox: explore low-level detail & deliver on time.
       * Feedback and demos to ensure right solution meets business needs.
       * **Milestone Output**: Timebox review record.
-      * **Evolving Outputs**: Business case, PRL, SAD, DAD, Delivery plan, MMAD
+      * **Evolving Outputs**: Business case, [PRL](#prioritised-requirements-list-prl), [SAD](#solution-architecture-definition-sad), DAD, Delivery plan, MMAD
 5. Deployment.
       1. Assemble.
            * Make sure deliverable is coherent. E.g. gather supporting information. 
@@ -288,7 +304,7 @@ each stage and can be either milestones or evolving in nature:
     * Communicating business vision to all
     * Monitor progress
     * Contributes to **key** requirements, desgn, review.
-    * Define and approve changes to PRL
+    * Define and approve changes to [PRL](#prioritised-requirements-list-prl)
     * Stakeholder collaboration
     * Business resource availablility to project
     * Empower business roles
@@ -300,7 +316,7 @@ each stage and can be either milestones or evolving in nature:
 * Technical equivalent of BV.
 * Owns:
     * Technical risks.
-    * SAD - Software Architecture Definition.
+    * [Solution Architecture Definition (SAD)](#solution-architecture-definition-sad).
 * Responsibilities:
     * Agree/control technical architecture.
     * Determine technical architecture.
@@ -344,7 +360,7 @@ each stage and can be either milestones or evolving in nature:
 
 ### Business Ambasador (BAmb)
 * Represent business needs in SDT
-* Significant input into PRL during foundations, then day-to-day detail of requirements during timeboxes.
+* Significant input into [PRL](#prioritised-requirements-list-prl) during foundations, then day-to-day detail of requirements during timeboxes.
 * During dev, main decision maker on behalf of business - must be empowered.
 * Responsibilities:
     * Contribute to **all** requirements
@@ -406,4 +422,198 @@ Tests it!
 * Tasks in evolutionary development: may be 1000s.
 * Detail (depth) emerges over time
 * Scope changes (breadth), i.e. add/remove/change high level requirements needs *formal control*!
-* 
+
+TODO - pici
+
+### Solution Architecture Definition (SAD)
+* Evolutionary
+* High level design framework - business & technical aspects of solution.
+* Detail makes solution scope clear but *does not restrict ev dev*.
+
+### Development Approach Definition (DAD)
+* Evolutionary
+* High level definitions of things applied to ev dev:
+    * Tools
+    * Techniques
+    * Customs
+    * Practices
+    * Standards
+        * Describes how quality is assued - test strategy and review etc.
+  
+### Delivery Plan
+
+### Management Approach Definition (MAD)
+
+### Feasibility Assesment
+
+### Foundations Summary
+
+### Evolving Solution
+
+### Timebox Plan
+
+### Timebox Review Record
+
+### Project Review Report
+
+### Benefits Assessment
+
+## Workshops
+
+## MoSCoW Prioritisation
+<pre style="border: 0;">
+Must have = MUST = Minimum Usable SubseT...
+                   ^       ^      ^    ^
+    Without no point in project - customer will reject project.
+    PM or BA may challenge less obvious must haves
+        - Can a requirement be broken down further
+        to have a smaller must have with one or more
+        should/could have.
+
+Should have...
+    Important byt not vital
+    Painful to leave out - needs workarounds
+Could have...
+    Wanted or desirable bu less important
+    Less impact if not done compared to should have.
+Wont have this time...
+    Will not be delivered in this timeframe.
+
+Prioritisation
+    BV and BAmb have the final say
+    Start with all requirements ans wont have and then justify any
+        priority increment
+Business sponsor
+    - Expects ALL must haves
+    - Typically expects most/all should haves
+    - DSDM recommends 20% contingency for could haves
+        but 10% can be "more normal" sometimes.
+
+Team needs to ask questions to relevant stakeholders to determine the priority.
+</pre>
+
+## Iterative Development
+
+## Modelling
+
+## Timeboxing
+<pre style="border: 0">
+DEMOs and end of each TIMEBOX - thats why mix MH, CH, SH in one single timebox.
+Investigation -  phase is couple of hours - do we understand requirements and acceptable criteria
+Refinement - iterative development and testing - dailies and burn down charts etc.
+Consolidation - Try to tie up loose ends and UATs and prep for demos.
+
+Generic def of done for timebox:
+    All requirements implemented
+    Code compiles cleanly
+    All requirements tested
+    Regression tests pass
+    Code reviewed and comments addressed
+    Code merged into development line
+
+For Epic:
+    All stores are complete (they meet their definition of done).
+    All epic-level acceptance criteria are met, and these are listed in the epic record as complete.
+    All epic-level acceptance criteria have associated tests (new or existing), which all pass.
+    In source control, the epic branch has been merged with an appropriate development branch.
+    Any user guides / manuals / procedures impacted by the epic have been updated
+    Any maintained design documentation impacted by the epic has been updated
+
+
+Generic def of ready for epics:
+    Epic has been created in Jira and linked to its parent Portfolio Project
+    Epic page exists in Confluence in the correct location (e.g. in the UPM 2.0 Backlog section)
+    Goals of the Epic are clear
+    The originators (Product Owner, Product Manager, Chief Architect) have captured all their requirements and constraints related to the epic. As a minimum, if you care about it, write it down.
+    All relevant customer inputs have been captured
+    Any open questions are captured, "known unknowns"
+    Epic Acceptance Criteria are described... these will be used to determine if the goals of the epic have been achieved
+    If the Epic involves a major architectural initiative or change this has been described in sufficient detail to allow work to progress appropriately
+    The epic has been split into estimated stories 
+    The Epic has been reviewed by the Product Owner and Chief Architect and any issues arising have been addressed.
+    All parties are satisfied that the Epic is "Ready"
+
+Standups
+    RAID
+    Risks
+    Assumptions
+    Issues
+    Dependencies
+</pre>
+
+
+## People, Teams and Interactions
+
+## Requirements and User Stories
+<pre style="border: 0">
+EPICS - placeholders for user stories and then technical breakdown - at feas and found levels.
+	Functional
+		What the solition does. What not how.
+	Non functional.
+		How well solition performs against defined behaviour.
+		Warantee testing - security, work load etc testing
+
+EPICS - high level acceptance criteria, which is more detailed as go into foundations.
+
+EPICS ----> USER STORIES ----> TICKETS
+Each has an acceptance criteria against which testers can perform tests.
+Epic colelction of user stories linked with the business req that we received from vis phase.
+Break them down into 100s of user stories in workshops which are then further broken into
+tech tasks in timebox kickoffs.
+
+USER STORIES
+	Requirements to drive the project expressed from ((perspective of an end-user goal**.
+	All have the same format
+	3 C's
+		Card, Conversation, Confirmation
+		^
+		Size of a sticky note with 2 or 3 lines of info based on good convo with user
+		with some acceptance criteria.
+
+		FRONT of card:
+		+------------------------------------------------------+
+		| (1) STK001     Customer Order (2)                    |
+		+------------------------------------------------------+
+		| (3) AS A: Customer                                   |
+		| (4) I WANT TO: place an order                        |
+		| (5) SO THAT: I can have goods deliveries to my house |
+		+------------------------------------------------------+
+
+		(1) Unique ID
+		(2) Story title - clear and explicit
+		(3) Role - may also be another system or component
+		(4) Requirement, problem or opportunity (not the solution!)
+		(5) Business value derive
+
+		BACK of card (testing):
+		+------------------------------------------------------+
+		| STK001     Acceptance Criteria                       |
+		+------------------------------------------------------+
+		|Functional:                                           |
+		|    Can I save my order and com back to it later?     |
+		|    Can I change my order before I pay for it?        |
+		|    Etc                                               |
+		|Nonfunctional Requirements (NFRs) - Availability      |
+		|   ...                                                |
+		|Nonfunctional Requirements (NFRs) - Security          |
+		|   ...                                                |
+		| ...                                                  |
+		+------------------------------------------------------+
+
+
+	Follow INVEST model - BA or PM if not BA
+		I Independent
+		N Negotiable    - Its not a contract. It's a placeholder for stories to be negoitated.
+		V Valuable      - Business visonary can help with this - Get clear direction.
+		E Estimable     - Small | Medium | Large | XL - relative very course grained estimate.
+		                - "T-shirt sizing" method. Top down, relative/comparative estimation.
+		                - "Bucketting" method.
+		                - Fibonacci numbers.
+		S Small Enough  -
+		T Testable      -
+</pre>
+
+## Project Planning & Control
+
+## Tailoring the DSDM Approach
+

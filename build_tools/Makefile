@@ -1,3 +1,5 @@
+.DEFAULT_GOAL:=all
+
 SRC_DIR:=../src
 SRC_HTML_ROOT_DIR:=$(SRC_DIR)/html
 SRC_HTML_DIRS:=$(shell find "$(SRC_HTML_ROOT_DIR)" -type d)
@@ -74,13 +76,16 @@ $(patsubst $(SRC_IMAGE_DIR)%,$(DST_IMAGE_DIR)%,$(1)): $(1)
         fi
 endef
 
-.PHONY: deploy
-deploy: all
-	@python3 deploy_to_aws.py
 
 .PHONY: all
 all: images html javascript css fonts | $(OUTPUT_DIR)
 	@python3 site_hasher.py create_hash_file "${DST_HTML_ROOT_DIR}" "${OUTPUT_DIR}/site_hashes.dat"
+
+
+.PHONY: deploy
+deploy: all
+	@python3 deploy_to_aws.py
+
 
 .PHONY: images
 images: $(DST_IMAGE_FILES)
