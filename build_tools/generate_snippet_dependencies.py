@@ -7,30 +7,42 @@ import re
 import sys
 from pathlib import Path
 
-from snippet_regular_expressions import (RAW_FILE_INSERT_REGEX, ESCAPED_FILE_INSERT_REGEX)
-
-SRC_ROOT = Path(sys.argv[1])
-DST_ROOT = Path(sys.argv[2])
-SRC_FILENAME = Path(sys.argv[3])
-DEP_FILENAME = Path(sys.argv[4])
-SRC_DIRNAME = SRC_FILENAME.parent
-
+from snippet_regular_expressions import (
+    RAW_FILE_INSERT_REGEX, ESCAPED_FILE_INSERT_REGEX, MARKDOWN_FILE_REGEX
+)
 
 if __name__ == '__main__':
+    SRC_ROOT = Path(sys.argv[1])
+    DST_ROOT = Path(sys.argv[2])
+    SRC_FILENAME = Path(sys.argv[3])
+    DEP_FILENAME = Path(sys.argv[4])
+    SRC_DIRNAME = SRC_FILENAME.parent
+
     dependee_filenames = []
     prog_snippet = re.compile(RAW_FILE_INSERT_REGEX)
     prog_escaped_snippet = re.compile(ESCAPED_FILE_INSERT_REGEX)
+    md_escaped_snippet = re.compile(MARKDOWN_FILE_REGEX)
+
+    print(f"Generating dependencies for {SRC_FILENAME}")
 
     with codecs.open(SRC_FILENAME, 'r', 'utf-8') as htmlFile:
         htmlFileContents = htmlFile.read()
         
         matches = prog_snippet.search(htmlFileContents)
         if matches is not None:
+            print(f"    Found {str(SRC_DIRNAME / matches.group(1))}")
             dependee_filenames.append(str(SRC_DIRNAME / matches.group(1)))
         
         matches = prog_escaped_snippet.search(htmlFileContents)
         if matches is not None:
+            print(f"    Found {str(SRC_DIRNAME / matches.group(1))}")
             dependee_filenames.append(str(SRC_DIRNAME / matches.group(1)))
+
+        matches = md_escaped_snippet.search(htmlFileContents)
+        if matches is not None:
+            print(f"    Found {str(SRC_DIRNAME / matches.group(1))}")
+            dependee_filenames.append(str(SRC_DIRNAME / matches.group(1)))
+
 
     DEP_FILENAME.parent.mkdir(parents=True, exist_ok=True)
     with open(DEP_FILENAME, 'w', encoding='ascii') as dependencyFile:
