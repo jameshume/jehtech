@@ -70,8 +70,14 @@ The DSDM philosophy is that
 > goals, deliver frequently and involve the collaboration of motivated and
 > empowered people
 
+An organization amenable to **incremental delivery** of solutions ***into live use*** will benefit from **early return 
+on investment**. 
+
 ### Composition of DSDM
-1. Common sense: sound practical judgment independent of specialised knowledge or training; normal native intelligence.
+1. Common sense: 
+      1. Sound judgment independent of specialised knowledge or training
+      2. Practical judgment
+      3. Normal native intelligence.
 2. Pragmatism: action or policy dictated by consideration of the immediate practical consequences rather than by theory or dogma.
 3. [Process](#dsdm-process)
 4. [People](#dsdm-roles)
@@ -113,6 +119,8 @@ DSDM:
 ![DSDM v.s. Waterfall: What can be negotiated on](##IMG_DIR##/dsdm_vs_waterfall_what_can_be_negotiated.jpg)
 
 ## 8 DSDM Principles
+**Designed to shape the attitude and mindset of a DSDM team**...
+
 1. Focus on the business need.
      * Understand business priorities,
      * Create business case,
@@ -156,6 +164,7 @@ DSDM:
      * Approriate level of formality for tracking and reporting
 
 **Memory peg:** 
+
 * **I2C3** - **i**ncremental build, **i**terative dev, **c**ommunicate continuously, **c**ontrol demonstrated, **c**ollaborate.
 * **BTQ**  - **b**usiness need, **t**imely delivery, **q**uality never compromised.
 
@@ -171,7 +180,7 @@ DSDM:
                         **Manage by exception**.
          * Stability: Don't swap in/out team members over iterations.
          * Skills: Technical but also good "soft skills" like communication.
-         * Size: Optimal is 7 +/- 2 people. At this size comms can be done with minimum formality, overhead, rish and maximum benifit/ownership.
+         * Size: Optimal is 7 +/- 2 people. At this size comms can be done with minimum formality, overhead, risk, and maximum benifit/ownership.
 3. Business engagement - active and ongoing,
      * Commitment of business time throughout
      * Active Involvement of the business roles
@@ -179,7 +188,7 @@ DSDM:
 5. Interative development, integrated testing and incremental deliver,
 6. Transparency
      * Build confidence in *evolving solution*. 
-7. PAQ - **P**roject **A**proach **Q**uestionnaire - assessing options and risks. The questions include:
+7. PAQ - **P**roject **A**proach **Q**uestionnaire - assessing options and risks. The questions are answered "strongly agree", "agree", "neutral", "disagree" and "strongly disagree". They include:
      * All members of the project understand and accept the DSDM approach (Philosophy, Principles and Practices)
      * The Business Sponsor and the Business Visionary demonstrate clear and proactive ownership of the project.
      * The business vision driving the project is clearly stated and understood by all members of the project team
@@ -206,8 +215,8 @@ There are 6 main lifecyle phases:
 
 1. Pre-Project.
       * Ensure only right projects started.
-      * Setup up correctly based.
-      * Based on clearly defined objective - high level definition and over-arching business driver defined + top-level objectives.
+      * Setup up correctly based on clearly defined objective:
+          * High level definition and over-arching business driver defined + top-level objectives.
       * No PM yet, generally. Done by leadership team.
       * Short!
       * **Milestone Output**: Terms of reference 
@@ -253,6 +262,7 @@ There are 6 main lifecyle phases:
            *  Retrospective + formal feview feedback into *project review report* to help guide next increment.
       2. Deploy.
            * Solution deployed into *active* use.
+           * Final end-to-end testing during Deployment allows for the testing of back-out procedures.
            * **Milestone Output**: Project review report.
 6. Post-Project.
       * Checks how well the expected business benefits have been met
@@ -286,7 +296,10 @@ each stage and can be either milestones or evolving in nature:
     * Ensure managing by exception effective and rapid,
     * Empower business roles,
     * Keep self informed of progress and issues. E.g. attend demos.
+    * Budget for feasibility investigation
+    * Return on investment.
 * Project champion
+* Person with budget for the feasibility investigation.
 * Must be senior enough to resolve financial and business issues.
   
 ### Business Visionary (BV)
@@ -294,13 +307,17 @@ each stage and can be either milestones or evolving in nature:
 * More involvement than BS
 * Interpret needs of BS and communicate these to team - ensure represented in business case
 * Ensures:
-    * Solution enables benifits described in business case
+    * Solution enables benifits described in business case:
+        * Ensure that the solution delivered will enable the benefits described in the Business Case to be achieved!
 * Owns:
     * Deployed solution abd realisation of benifits
     * Implications of business change
     * Business based risk
 * Responsible for:
     * Define business vision - what changed business will look like
+        * Ensuring that requirments align with business vision.
+        * Ensure delivery of the required business change successful (fit for purpose).
+        * Ensure incremental delivery of business value is optimal for business as whole.
     * Communicating business vision to all
     * Monitor progress
     * Contributes to **key** requirements, desgn, review.
@@ -320,9 +337,11 @@ each stage and can be either milestones or evolving in nature:
 * Responsibilities:
     * Agree/control technical architecture.
     * Determine technical architecture.
+    * Define technical standards and ensure development best practices applied.
     * With BA, turn business requirements into technical solution.
     * Empower techincal roles.
     * Final arbter of technical differences between SDT members.
+    * Ensure incremental delivery of business value is optimal for business as whole.
 
 ### Project Manager (PM)
 * High level agile-style leadership to SDT.
@@ -335,13 +354,18 @@ each stage and can be either milestones or evolving in nature:
     * Manage risk and issues.
     * Empower teams.
     * Attend stand-up meetings, as appropriate.
+    * Ensure project properly set up for predictable delivery of products.
+    * Ensure products of the project are delivered.
+      * Ensure increments are delivered, predictably within afreed budget/time constraints.
 
 ### Business Analyst (BA)
 * Support project level roles
 * Fully integrated with SDT
 * Facilitate relationship between business and technical roles.
+    * Not intermidiary - business roles need to be fully involved themselves!
 * Ensures business needs modelled, analysed and correctly reflected in solution.
-     * Not intermidiary - business roles need to be fully involved themselves!
+    * Has the skills and experience with eliciting and defining requirements.
+    * Resposible for overall design of business process and organisation change.
   
 ### Team Leader (TL)
 * Servant-leader:
@@ -369,10 +393,12 @@ each stage and can be either milestones or evolving in nature:
     * Create business user and support docs.
 
 ### Solution Developer
-Builds it!
+* Builds it, within the framework setup for the project (Development Approach Definition, for e.g).
+* Responsible for creatin solution that satisfies requirements in PRL.
 
 ### Solution Tester
-Tests it!
+* Tests it!
+* Provides testing knowledge and expertise.
 
 ### Business Advisor (Badv)
 * Often peer of BAmb - only called on for specific/specialist input.
@@ -381,6 +407,7 @@ Tests it!
 
 ### Technical Advisor (TA)
 * Suport SDT with specialist technical input. Requirements/design/review sessions etc.
+* Provides specific input to the project from the *perspective of those who will maintain* the solution.
 
 ### Workshop Facilitator (WF)
 * Manage workshop process and catalyst for prep and comms.
@@ -401,6 +428,7 @@ Tests it!
 * High-level definition of over-arching business drivers & top-level objectives.
 * Scope and justify feasablity phase.
 * Governance product: prioritise project within portfolio.
+
 ![Who produces, approves and uses Terms Of Reference](##IMG_DIR##/dsdm_terms_of_reference_people.jpeg)
 
 ### Business Case
@@ -411,6 +439,7 @@ Tests it!
 * Outlined in feasability.
 * Basis for development at end of foundations.
 * Formally reviewed at end of each invrement to determine if continue.
+
 ![Who produces, approves and uses Business Case](##IMG_DIR##/dsdm_business_case_people_involved.jpeg)
 
 ### Prioritised Requirements List (PRL)
@@ -423,12 +452,15 @@ Tests it!
 * Detail (depth) emerges over time
 * Scope changes (breadth), i.e. add/remove/change high level requirements needs *formal control*!
 
-TODO - pici
+![Who produces, approves and uses PRL](##IMG_DIR##/dsdm_prl_people.jpeg)
 
 ### Solution Architecture Definition (SAD)
 * Evolutionary
 * High level design framework - business & technical aspects of solution.
 * Detail makes solution scope clear but *does not restrict ev dev*.
+* Contains *both business and technical* aspects of the solution.
+
+![Who produces, approves and uses SAD](##IMG_DIR##/dsdm_sad_peops.jpeg)
 
 ### Development Approach Definition (DAD)
 * Evolutionary
@@ -439,24 +471,96 @@ TODO - pici
     * Practices
     * Standards
         * Describes how quality is assued - test strategy and review etc.
+
+![Who produces, approves and uses DAD](##IMG_DIR##/dsdm_dad_peop.jpeg)
   
 ### Delivery Plan
+* Evolutionary product.
+* *High*-level schdule of increments
+    * For at least 1st itecrement timeboxes also defined.
+  
+![Who produces, approves and uses DAD](##IMG_DIR##/dsdm_delivery_plan_peop.jpeg)
 
 ### Management Approach Definition (MAD)
+* Evolutionary product
+* Defines how:
+    * project organised/planned,
+    * stakeholders engaged, 
+    * how progress demonstrated/reported.
+* Outlined in feasability and beaslined at ehd of foundations.
+    * Generally not modified after.
+* *CREATED BY*: PM
+* *FOR*: all project participants/stakeholders
+* *APPROVED BY*: BS
 
 ### Feasibility Assesment
+* Milestone.
+* Snapshot of solution and products at end of phase.
+    * Either executive summary or baselined collection of products.
+    * Each product mature enough to allow decision to continue to foundations.
+* *BY*: PM
+* *FOR*: Project governance authority
+* *APPROVED BY*: BS
 
 ### Foundations Summary
+* Milestone
+* For helping to decide whether the investment in the project is worthwhile.
+* Snapshot of solution and products at end of phase.
+    * Either executive summary or baselined collection of products.
+    * Each product mature enough to allow decision to continue to foundations.
+* *BY*: PM
+* *FOR*: Project governance authority
+* *APPROVED BY*: BS
 
 ### Evolving Solution
+* Evolutionary
+* Components of final solution + intermediate deliverables exploring detail of reqs/solution
+    * Components can be complete/baseline/work-in-progress
+    * Can include: models, prototypes, supporting materials, test/review artefacts etc.
+* At end of each increment solution deployed into live use.
+* *BY*: SDT
+* *FOR*: BS, Solution particicants
+* *APPROVED BY*: BV, TC
 
 ### Timebox Plan
+* Evolutionary
+* Depth and detailfor rach timebox in delivery okan
+* Elaborates on objectves for timebox and details deliverables - activities and resources req.
+* Often represented as Team Board - work todo, in-progress, done.
+    * Updated daily in standups
+* *BY*: SDT
+* *FOR*: SDT
+* *APPROVED BY*: PM, TC
 
 ### Timebox Review Record
+* Evolutionary
+* Capture feedback from each timebox review.
+    * What is acheived + feedback
+    * If regulated env - formal auditable record of review compoents from expert BAs.
+        * Becomes governance product in this case
+* *BY*: Team Leader
+* *FOR*: Governance authority, PM
+* *APPROVED BY*: BV, TC (Acknowledge solution continues to be fit for purpose)
 
 ### Project Review Report
+* Milestone.
+* Updated at end of *each increment*.
+* Purpose:
+    * Capture review of solution feedback.
+    * Confirm whats delivered and what is not.
+    * Capture learning points from retros.
+    * Describe business benefits that should now accrue.
+* At end of project review report informs the project closure retrospective.
+* *BY*: PM
+* *FOR*: All project participants/stakeholders.
+* *APPROVED BY*: BV, TC, TL
 
 ### Benefits Assessment
+* Milestone
+* Describes how benefits actually accrued following *period of live use*.
+* *BY*: BV, BA
+* *FOR*: Governance authority
+* *APPROVED BY*: BS
 
 ## Workshops
 
@@ -521,7 +625,7 @@ For Epic:
 
 
 Generic def of ready for epics:
-    Epic has been created in Jira and linked to its parent Portfolio Project
+    Epic has been created in management solution and linked to its parent Portfolio Project
     Epic page exists in Confluence in the correct location (e.g. in the UPM 2.0 Backlog section)
     Goals of the Epic are clear
     The originators (Product Owner, Product Manager, Chief Architect) have captured all their requirements and constraints related to the epic. As a minimum, if you care about it, write it down.

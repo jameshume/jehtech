@@ -238,7 +238,7 @@ table caption   { background-color: #CAD7E3;
 
 @media screen {
 	#header { 
-		background-image: url(images/jeh-tech/PCB_bkdg.jpg);
+		background-image: url(images/PCB_bkdg.jpg);
 		background-position: 0px 0px;
 	}
 
@@ -270,13 +270,13 @@ table caption   { background-color: #CAD7E3;
 	}
 
 	#content h1 {
-		background-image: url(images/jeh-tech/PCB_bkdg.jpg);
+		background-image: url(images/PCB_bkdg.jpg);
 		background-position: -251px -40px;
 		z-index: 1000;
 	}
 
 	#sidebar h1 {
-		background-image: url(images/jeh-tech/PCB_bkdg.jpg);
+		background-image: url(images/PCB_bkdg.jpg);
 		background-position: 10px -40px;
 	}
 

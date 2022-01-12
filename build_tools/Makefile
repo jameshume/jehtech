@@ -5,7 +5,10 @@ SRC_HTML_ROOT_DIR:=$(SRC_DIR)/html
 SRC_HTML_DIRS:=$(shell find "$(SRC_HTML_ROOT_DIR)" -type d)
 SRC_HTML_FILES:=$(shell find "$(SRC_HTML_ROOT_DIR)" -type f -name "*.html")
 
-SRC_IMAGE_DIR:=$(SRC_DIR)/images
+SRC_NO_WATERMARK_IMAGE_DIR:=$(SRC_DIR)/images
+SRC_NO_WATERMARK_IMAGE_FILES:=$(shell find "$(SRC_NO_WATERMARK_IMAGE_DIR)" -maxdepth 1 -type f)
+SRC_NO_WATERMARK_IMAGE_FILES:=$(filter %.png %.gif %.mp4 %.svg %.jpg %.jpeg %.tif,$(SRC_NO_WATERMARK_IMAGE_FILES))
+SRC_IMAGE_DIR:=$(SRC_DIR)/images/jeh-tech
 SRC_IMAGE_FILES:=$(shell find "$(SRC_IMAGE_DIR)" -type f)
 SRC_IMAGE_FILES:=$(filter %.png %.gif %.mp4 %.svg %.jpg %.jpeg %.tif,$(SRC_IMAGE_FILES))
 
@@ -20,7 +23,10 @@ OUTPUT_DIR=../output
 DST_HTML_ROOT_DIR:=$(OUTPUT_DIR)/site
 DST_HTML_DIRS:=$(patsubst $(SRC_HTML_ROOT_DIR)%,$(DST_HTML_ROOT_DIR)%,$(SRC_HTML_DIRS))
 DST_HTML_FILES:=$(patsubst $(SRC_HTML_ROOT_DIR)%,$(DST_HTML_ROOT_DIR)%,$(SRC_HTML_FILES))
-DST_IMAGE_DIR:=$(DST_HTML_ROOT_DIR)/images
+
+DST_NO_WATERMARK_IMAGE_DIR:=$(DST_HTML_ROOT_DIR)/images
+DST_NO_WATERMARK_IMAGE_FILES:=$(patsubst $(SRC_NO_WATERMARK_IMAGE_DIR)%,$(DST_NO_WATERMARK_IMAGE_DIR)%,$(SRC_NO_WATERMARK_IMAGE_FILES))
+DST_IMAGE_DIR:=$(DST_HTML_ROOT_DIR)/images/jeh-tech
 DST_IMAGE_FILES:=$(patsubst $(SRC_IMAGE_DIR)%,$(DST_IMAGE_DIR)%,$(SRC_IMAGE_FILES))
 
 DEP_DIR:=$(OUTPUT_DIR)/deps
@@ -76,6 +82,13 @@ $(patsubst $(SRC_IMAGE_DIR)%,$(DST_IMAGE_DIR)%,$(1)): $(1)
         fi
 endef
 
+define generate_unwatermarked_image_rules
+$(patsubst $(SRC_NO_WATERMARK_IMAGE_DIR)%,$(DST_NO_WATERMARK_IMAGE_DIR)%,$(1)): $(1)
+	@echo "Generating $$@ without watermark"
+	@mkdir --parents "$$$$(dirname "$$@")" 1>/dev/null 2>&1 || true
+	@cp "$$<" "$$@";
+endef
+
 
 .PHONY: all
 all: images html javascript css fonts | $(OUTPUT_DIR)
@@ -88,7 +101,7 @@ deploy: all
 
 
 .PHONY: images
-images: $(DST_IMAGE_FILES)
+images: $(DST_IMAGE_FILES) $(DST_NO_WATERMARK_IMAGE_FILES)
 
 
 .PHONY: html
@@ -171,6 +184,7 @@ $(DST_HTML_ROOT_DIR)/jeh-monolith.css: $(SRC_CSS_FILES)
 # The HTML file build rules. The macro is evaluated for each source HTML file so that a rule
 # dest-html: src-html src-html-dep is created.
 $(foreach image_file,$(SRC_IMAGE_FILES),$(eval $(call generate_images_rules,$(image_file))))
+$(foreach image_file,$(SRC_NO_WATERMARK_IMAGE_FILES),$(eval $(call generate_unwatermarked_image_rules,$(image_file))))
 
 
 # The CSS file build rules. Macro evaluation similar to how HTML rule macro eval works.
@@ -187,6 +201,6 @@ $(OUTPUT_DIR):
 # makefile is reloaded with a cleared db.
 #
 # Note dependency files must be marked as SECONDARY so that make does not think they are
-# normal intermediary files that should be clean up at the end of a build.
+# normal intermediary files that should be cleaned up at the end of a build.
 .SECONDARY: $(DEP_FILES)
 include $(DEP_FILES)
