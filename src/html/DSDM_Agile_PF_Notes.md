@@ -49,6 +49,9 @@ It is important not to ignore processes, tools, documentation, contracts and pla
 to ensure that they are only created where they add value, and only to the level of detail that
 adds value.
 
+DSDM is iterative and incremental, with the most important business needs typically being addressed
+early while less important features are delivered later.
+
 ### Traditional Project Problems
 
 Problem | Solution DSDM Offers
@@ -188,24 +191,26 @@ DSDM:
 5. Interative development, integrated testing and incremental deliver,
 6. Transparency
      * Build confidence in *evolving solution*. 
-7. PAQ - **P**roject **A**proach **Q**uestionnaire - assessing options and risks. The questions are answered "strongly agree", "agree", "neutral", "disagree" and "strongly disagree". They include:
-     * All members of the project understand and accept the DSDM approach (Philosophy, Principles and Practices)
-     * The Business Sponsor and the Business Visionary demonstrate clear and proactive ownership of the project.
-     * The business vision driving the project is clearly stated and understood by all members of the project team
-     * All project participants understand and accept that on-time delivery of an acceptable solution is the primary measure of success for the project
-     * The requirements can be prioritised and there is confidence that cost and time commitments can be met by flexing the scope of what's delivered.
-     * All members of the project team accept that requirements should only be defined at a high level in the early phases of the project and that detail will emerge as development progresses.
-     * All members of the project team accept that change in requirements is inevitable and that it is only by embracing change that the right solution will be delivered.
-     * The Business Sponsor and Business Visionary understand that active business involvement is essential and have the willingness and authority to commit appropriate business resources to the project.
-     * It is possible for the business and solution development members of the Solution Development Team to work collaboratively throughout the project.
-     * Empowerment of all members of the Solution Development Teaam is appropriate and sufficient to support the day-to-day decision-making needed to rapidly evolve the solution in short, focussed Timeboxes
-     * The DSDM roles and responsibilities are appropriately allocated and all role holders understand and accept the responsibilities associated with their role.
-     * The Solution Development team has the appropriate collective knowledge and skills (soft skills and technical skills) to collaboratively evolve an optimal business solution.
-     * Solution Development Team members are allocated to the project at an appropriate and consistent level sufficient to fully support the DSDM timeboxing practice
-     * Tools and collaborative working practices within the Solution Development Team are sufficient to allow effective Iterative Development of the solution.
-     * All necessary review and testing activity is fully integrated within the Iterative Development practice.
-     * Project progress is measured primarily through the incremental, demonstrable delivery of business value.
-     * There are no mandatory standards or other constraints in place that will prevent the application of the DSDM Philosophy and Practices on this project.
+7. PAQ - **P**roject **A**proach **Q**uestionnaire - assessing options and risks. 
+     * It's first filled in during the feasibility phase and then revised at the end of the foundations phase
+     * The questions are answered "strongly agree", "agree", "neutral", "disagree" and "strongly disagree". They include:
+         * All members of the project understand and accept the DSDM approach (Philosophy, Principles and Practices)
+         * The Business Sponsor and the Business Visionary demonstrate clear and proactive ownership of the project.
+         * The business vision driving the project is clearly stated and understood by all members of the project team
+         * All project participants understand and accept that on-time delivery of an acceptable solution is the primary measure of success for the project
+         * The requirements can be prioritised and there is confidence that cost and time commitments can be met by flexing the scope of what's delivered.
+         * All members of the project team accept that requirements should only be defined at a high level in the early phases of the project and that detail will emerge as development progresses.
+         * All members of the project team accept that change in requirements is inevitable and that it is only by embracing change that the right solution will be delivered.
+         * The Business Sponsor and Business Visionary understand that active business involvement is essential and have the willingness and authority to commit appropriate business resources to the project.
+         * It is possible for the business and solution development members of the Solution Development Team to work collaboratively throughout the project.
+         * Empowerment of all members of the Solution Development Teaam is appropriate and sufficient to support the day-to-day decision-making needed to rapidly evolve the solution in short, focussed Timeboxes
+         * The DSDM roles and responsibilities are appropriately allocated and all role holders understand and accept the responsibilities associated with their role.
+         * The Solution Development team has the appropriate collective knowledge and skills (soft skills and technical skills) to collaboratively evolve an optimal business solution.
+         * Solution Development Team members are allocated to the project at an appropriate and consistent level sufficient to fully support the DSDM timeboxing practice
+         * Tools and collaborative working practices within the Solution Development Team are sufficient to allow effective Iterative Development of the solution.
+         * All necessary review and testing activity is fully integrated within the Iterative Development practice.
+         * Project progress is measured primarily through the incremental, demonstrable delivery of business value.
+         * There are no mandatory standards or other constraints in place that will prevent the application of the DSDM Philosophy and Practices on this project.
 
 ## DSDM Process
 
@@ -315,9 +320,13 @@ each stage and can be either milestones or evolving in nature:
     * Business based risk
 * Responsible for:
     * Define business vision - what changed business will look like
+        * Starting point for all projects,
         * Ensuring that requirments align with business vision.
         * Ensure delivery of the required business change successful (fit for purpose).
         * Ensure incremental delivery of business value is optimal for business as whole.
+            * Associated with:
+                * Business case
+                * Set of very high level prioritised requirements.
     * Communicating business vision to all
     * Monitor progress
     * Contributes to **key** requirements, desgn, review.
@@ -563,6 +572,45 @@ each stage and can be either milestones or evolving in nature:
 * *APPROVED BY*: BS
 
 ## Workshops
+* Acheive greater buy-in to decisions quickly, generate ideas, solve problems, action plan.
+* Specialised type of meeting with:
+    * Clear objective deliverables.
+    * Participants specifically chosen.
+    * Independent facilitator
+* Core DSDM practice.
+* Benefits:
+    * Rapid, high qualit decision-makeing
+    * Greater buy-in from all stakeholders
+    * Build team spirit
+    * Build consensus
+    * Clarifies issues
+* Roles:
+    * Workshop facilitator:
+        * Neutral guide,
+        * No opinion on content,
+        * No stake in outcome.
+        * Responsibile - plans, designs, ammends process in conjuction with workshop owner.
+    * Workshow owner:
+        * Owns objective workshop aims to achieve,
+        * Ususally also owns workshop budget,
+        * Sets objectives and expected deliverables,
+        * Objectives should be understood & agreed by all.
+    * Scribe:
+        * Optional
+        * Record and publish workshop output
+        * Not usually a participant.
+    * Observer:
+        * No direct input to discussions or deliverables
+        * E.g.: An auditor or trainee facilitator.
+* Techniques:
+    * Brainstorming,
+    * Storyboards
+    * SWOT analysis
+        * A study undertaken by an organization to identify its internal strengths and weaknesses, as well as its external opportunities and threats.
+    * Diagraming approaches etc.
+* 4 or more participants to be effective,
+* See [International Association of Facilitators (IAF) website](www.iaf-world.org) for facilitation resources.
+
 
 ## MoSCoW Prioritisation
 <pre style="border: 0;">
@@ -575,7 +623,7 @@ Must have = MUST = Minimum Usable SubseT...
         should/could have.
 
 Should have...
-    Important byt not vital
+    Important but not vital
     Painful to leave out - needs workarounds
 Could have...
     Wanted or desirable bu less important
@@ -585,8 +633,7 @@ Wont have this time...
 
 Prioritisation
     BV and BAmb have the final say
-    Start with all requirements ans wont have and then justify any
-        priority increment
+    Start with all requirements as "wont have" and then justify any priority increment
 Business sponsor
     - Expects ALL must haves
     - Typically expects most/all should haves
@@ -596,12 +643,60 @@ Business sponsor
 Team needs to ask questions to relevant stakeholders to determine the priority.
 </pre>
 
+* Must haves:
+    * **M**inimum **U**sable **S**ubse**T** (MUST),
+        * Not legal without it,
+        * No point in delivering without it,
+        * Unsafe without it,
+        * Not viable without it.
+    * *<= 60% effort* typically,
+    * Meaning *not* negotiable v.s. could/should meaning which is more subjective.
+    * Ask: "Can this be broken down into a set of must with could./should's?"
+* Should haves:
+    * *20% effort* typically,
+    * Ask: "What value of befefits could justify dropping this to a could have?"
+* Could haves:
+    * *Main point of contingency*
+    * *20% effort* typically,
+    * Ask: "At what point does number of people impacted raise a could to a should?"
+* Won't have this time:
+* MoSCoW *balances risk v.s. predictability* through use of could/should have contingencies.
+
 ## Iterative Development
+<pre style="border: 0; white-space: pre-wrap;">Conversation ---> Thought ---> Actions ---> Conversation</pre>
+
+* Cycle begins with *convo*: focus on detail of what needs to be done.
+* Continues with a *thought*: how need addressed. May be planning event but more likely informal period of reflection/planning.
+* Refined by *action*: Refines the evolving solution based on prev two steps
+* Ends with *conversation*: Review of whats achieved and whether good enough.
+* Requirements:
+    * Functions
+    * Usability (elevated out of non-functional - importance to business case)
+    * Non-functional
 
 ## Modelling
+* Designed to improve comms and prompt right questions:
+    * Improve understanding through visual representation,
+    * Support transpacency - simplify core elements
+    * Abstract most relevant info into clarity
+    * All cross-checking
+* Model:
+    * Description or analogy
+    * or small but exact copy
+    * or patten or figure of proposed product
+    * not necessarily a prototype
+* Prototype:
+    * Type of model
+* Perspectives
+    * WHAT
+    * HOW
+    * WHERE
+    * WHO
+    * WHEN
+    * WHY
 
 ## Timeboxing
-<pre style="border: 0">
+<pre style="border: 0; white-space: pre-wrap;">
 DEMOs and end of each TIMEBOX - thats why mix MH, CH, SH in one single timebox.
 Investigation -  phase is couple of hours - do we understand requirements and acceptable criteria
 Refinement - iterative development and testing - dailies and burn down charts etc.
@@ -638,18 +733,32 @@ Generic def of ready for epics:
     All parties are satisfied that the Epic is "Ready"
 
 Standups
-    RAID
-    Risks
-    Assumptions
-    Issues
-    Dependencies
+    RAID:
+        - Risks
+        - Assumptions
+        - Issues
+        - Dependencies
 </pre>
 
+* Two types:
+    * DSDM *structured* TB
+    * *Free format* TB
+* Structured TB:
+    * Kick off:
+        * 1-3 hours for 2-3 week TB
+    * Investigation:
+        * 10% - 20% effort
+    * Refinement:
+        * 60% - 80% efford
+    * Consolidation:
+        * 10% - 20% effort
+    * Close out:
+        * 1-3 hours for 2-3 week TB
 
 ## People, Teams and Interactions
 
 ## Requirements and User Stories
-<pre style="border: 0">
+<pre style="border: 0; white-space: pre-wrap;">
 EPICS - placeholders for user stories and then technical breakdown - at feas and found levels.
 	Functional
 		What the solition does. What not how.

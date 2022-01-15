@@ -223,6 +223,8 @@ Ref: https://docs.docker.com/engine/reference/builder/#cmd
 
 1. Run docker container, modify then do "docker commit"
 2. Docker file - blueprint or recipe for what you want your docker image to be - the best way (apparently)
+	Docker ignore file - Docker looks for a file named .dockerignore in the root directory of build. If this file exists,
+	the build excludes files and directories that match patterns in it. 
 
 Docker images are layers, which are kinda like self-contained files and the docker image is the result of stacking up these layers.
 
@@ -479,6 +481,136 @@ docker image ls #&lt; See images: images with &lt;none&gt; and dangling and can 
 docker container stop $(docker container ls -a -q) #&lt; Stop all running containers
 </pre>
 
+<h2>BuildKit and Multi Stage Builds</h2>
+<pre>
+See:
+	https://docs.docker.com/develop/develop-images/multistage-build/
+	https://www.docker.com/blog/advanced-dockerfiles-faster-builds-and-smaller-images-using-buildkit-and-multistage-builds/
+
+Multi-stage builds = smaller containers, better caching, smaller security footprint.
+	E.g. build container and production container where production container only contains build artefact not tools for build.
+
+The latest Docker versions come with new opt-in builder backend BuildKit.
+
+Enable using  DOCKER_BUILDKIT=1 docker build .
+</pre>
+
+<h2>Kubernetes</h2>
+<pre>
+* Short form of name is k8s
+* Tool for running many different Docker containers
+* Infrastructure as code to setup multiple containers and networking between them
+* Creates clusters. One cluster is a set of virtual machines, all managed by one master process.
+    * Each VM runs one or more "pods" and each pod manages one or more containers
+      +-----------------------------------------------------------------------...
+      |  +=======================+   +=======================+
+      |  | Node                  |   | Node                  |
+      |  |  +-----------------+  |   |  +-----------------+  |
+      |  |  | Pod             |  |   |  | Pod             |  |
+      |  |  |  +-----------+  |  |   |  |  +-----------+  |  |
+      |  |  |  | Container |  |  |   |  |  | Container |  |  |     ...
+      |  |  |  +-----------+  |  |   |  |  +-----------+  |  |
+      |  |  |       ...       |  |   |  |       ...       |  |
+      |  |  +-----------------+  |   |  +-----------------+  |
+      |  |          ...          |   |          ...          |
+      |  +==========^^^==========+===+==========^^^==========+==== ...
+      |  | SERVICE (abstacts networking between pods away - makes simpler...)
+      |  +======================================================== ....
+      |
+      |  +--------------------------------------------------------------------...
+      |  | MASTER
+      |  +----------------------------------------------------------------^---...
+      |  +----------------------------------------------------------------|---...
+      |  | DEPLOYMENT FOR PODS (one function is re-incarnation server)    |
+      |  +-------------------------------------------------------------^--|---...
+      +----------------------------------------------------------------|--|---...
+                                                                       |  |
+                                                                       \  /
+                                                                        \/
+                                                                    Config file
+	  
+      Cluster = Collection of nodes + master to manage them
+      Node = VM to run pods
+      Pod = Contains one or more containers. When only one container its more-or-less a container
+      Deployment = Object intended to Monitor and manage pod sets and re-incarnates them if they crash
+                   and to update pods (creates new pods, switches to them, deletes old pods.)
+      Service = Provides URL to access running containers to allow "easy" inter-container network access.
+* If running on Linux need minikube tool installed.
+* Config files:
+    * Describes different deployments, pods and services (aka objects) to Create
+    * YAML
+    * Infrastructure as code - stored in source control
+    * Basic pod config (DONT create this way - usually use a deployment):
+      ```
+        apiVersion: v1
+        kind: Pod                              } Type of object to create
+        metadata:                              } Options to pod being created
+            name: some name for your Pod
+        spec:
+            containers:
+            - name: name for this container     } A spec for one container in this pod.
+              images: name-of-docker-image:ver  } default ver, if not specified, is "latest"
+      ```
+      Run: `kubectl apply -f name-of-yaml-file.yaml
+           `kubectl get pods`
+* Common kubectl commands:
+    * kubectl get pods                       } Like docker container ps
+    * kubectl exec -it [pod name] [cmd]      } Like docker container exec
+    * kubectl logs [pod name]                } Like docker container logs
+    * kubectl delete pod [pod name]
+    * kubectl apply -f [config file name]
+    * kubectl describe pod [pod name]
+    * kubectl get deployments
+* K8s about running containers together. Docker about running single or few containers.
+* Deployment example YAML - super minimal:
+  ```
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+        name: deploymentName-depl
+    spec:
+        replicas: 1                   - number of pods to create for running an image.
+        selector:                     } Selector tells deployment which pods to manage.
+            matchLabels:              }    matchLabels are key/value pairs - name of key/value can be anything.
+                app: pod-name         }
+        template:                     - Spec config of pod deployment should create.
+            metadata:
+                labels:               } All pods in this deployment will be assigned a label of app = posts
+                    app: app-label    }
+            spec:
+                containers: 
+                    - name: container Name
+                      image: docker image name
+
+  ```
+* Services
+  * 4 types:
+    1. Cluster IP
+        Sets up user-friendly URLs to access pods. Only exposes pods in cluster.
+        Good for setting up communications between pods in a cluster.
+    2. Node port
+        Makes pod accessable outside the cluster. Usually only needed for dev.
+
+                                           +-----------------------------------------------------------------+
+                                           |                                          +------------------+   |
+                                           |                                          | Pod              |   |
+                                           |             +-------------+              | +-------------+  |   |
+                      +------------+       |  +----------|-+ Node port |    +---------|--+            |  |   |
+        Browser ----> | port 3xxxx | -------->| port 4000  | service   |--->| port 4000  |  Container |  |   |
+                      +------------+       |  +----------|-+           |    +---------|--+            |  |   |
+                                           |             +-------------+              | +-------------+  |   |
+                                           |                                          +------------------+   |
+                                           +-----------------------------------------------------------------+
+                      ^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^                ^^^^^^^^^^^^^^
+                      node port               port                          target port 
+
+    3. Load balancer
+        Makes pot accessable outside the cluster. Preferred way to expose pod to the world.
+    4. External name
+        Redirects in-cluster requests to a CNAME url.
+
+
+</pre>
 
 </div> <!-- END H1 padding div -->
 </div>
