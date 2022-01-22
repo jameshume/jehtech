@@ -65,8 +65,8 @@ if remote_files_not_in_local:
     for file_path in remote_files_not_in_local:
         print(f'Deleting {file_path}')
         s3.delete_object(
-            'jehtech.com',
-            file_path
+            Bucket='jehtech.com',
+            Key=file_path
         )
     print("Creating CloudFront invalidations for deleted files...")
     cf.create_invalidation(
