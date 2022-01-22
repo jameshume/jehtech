@@ -39,6 +39,7 @@ def inject_raw_snippet(match_object_for_snippet_placeholder):
     tag.
     """
     raw_snippet_filename =  SNIPPET_DIRNAME / match_object_for_snippet_placeholder.group(1)
+    print(f"   Inserting raw snippet {raw_snippet_filename}")
     with codecs.open(raw_snippet_filename, 'r', 'utf-8') as raw_snippet_file:
         return raw_snippet_file.read()
 
@@ -46,8 +47,9 @@ def inject_raw_snippet(match_object_for_snippet_placeholder):
 def inject_markdown_snippet(match_object_for_snippet_placeholder):
     """ Include a markdown file, converted to HTML, as a snippet """
     md_filname = SNIPPET_DIRNAME / match_object_for_snippet_placeholder.group(1)
+    print(f"   Inserting MD snippet {md_filname}")
     with codecs.open(md_filname, 'r', 'utf-8') as md_file:
-        return markdown.markdown(md_file.read(), extensions=['tables', 'toc'])
+        return markdown.markdown(md_file.read(), extensions=['tables', 'toc', 'fenced_code'])
 
 
 def inject_processed_snippet(match_object_for_snippet_placeholder):
@@ -60,6 +62,7 @@ def inject_processed_snippet(match_object_for_snippet_placeholder):
     xhtmlFileContents = ""
     html_escape_table = {"&": "&amp;", '"': "&quot;", "'": "&apos;", ">": "&gt;", "<": "&lt;"}
 
+    print(f"   Inserting processed snippet {xhtmlFileName}")
     with codecs.open(xhtmlFileName, 'r', 'utf-8') as xhtmlFile:
         xhtmlFileContents = xhtmlFile.readlines()
         ## Replace all ========== titles with <h1> tags

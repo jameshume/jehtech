@@ -46,14 +46,17 @@ DEP_FILES:=$(patsubst %.html,%.d,$(patsubst $(DST_HTML_ROOT_DIR)%,$(DEP_DIR)%,$(
 #         directory.
 #    $3 - The root *destination* HTML directory
 define generate_html_rules
-$(patsubst $(1)%,$(DEP_DIR)%,$(2))/%.d:
+# The .d file depends on the source .html file. If that changes the dependencies must be regenerated.
+$(patsubst $(1)%,$(DEP_DIR)%,$(2))/%.d: $(patsubst $(1)%,$(3)%,$(2))/%.html | $(patsubst $(1)%,$(DEP_DIR)%,$(2))
 	@python3 generate_snippet_dependencies.py \
         "$(1)" \
         "$(3)" \
         "$$(patsubst %.d,%.html,$$(patsubst $(DEP_DIR)%,$(1)%,$$@))" \
         "$$@"
 
-$(patsubst $(1)%,$(3)%,$(2))/%.html: $(2)/%.html $(1)/_links.html $(patsubst $(1)%,$(DEP_DIR)%,$(2))/%.d | $(patsubst $(1)%,$(3)%,$(2)) $(patsubst $(1)%,$(DEP_DIR)%,$(2))
+# The destination .html file depends on the source .html file and the links.html, which all JEHTexh
+# pages depend on.
+$(patsubst $(1)%,$(3)%,$(2))/%.html: $(2)/%.html $(1)/_links.html | $(patsubst $(1)%,$(3)%,$(2)) 
 	@./generate_html.sh "$$<" "$$@" "$(3)"
 
 $(patsubst $(1)%,$(3)%,$(2)):
@@ -198,7 +201,16 @@ $(OUTPUT_DIR):
 
 # Include the dependency files. These give a mapping from HTML files to any imported snippets
 # If any of the include targets (i.e., the DEP_FILES) were updated by the rules the 
-# makefile is reloaded with a cleared db.
+# makefile is reloaded with a cleared db. This is because
+#    > GNU make will attempt to rebuild the included makefile. If it is successfully rebuilt, 
+#    > GNU make will re-execute itself to read the new version.
+#    (See http://make.mad-scientist.net/papers/advanced-auto-dependency-generation/)
+# This rebuild should only happen as per normal rules - if the target is older than any
+# pre-requisite. The .d's will depend on their .html's, so will be re-generated if a
+# .html is newer than them.
+#
+# Note, we're not using the optimal method the above article suggests but it will do!
+# The re-exec of make is not avoided... meh.
 #
 # Note dependency files must be marked as SECONDARY so that make does not think they are
 # normal intermediary files that should be cleaned up at the end of a build.
