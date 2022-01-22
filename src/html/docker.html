@@ -495,6 +495,9 @@ The latest Docker versions come with new opt-in builder backend BuildKit.
 Enable using  DOCKER_BUILDKIT=1 docker build .
 </pre>
 
+
+
+
 <h2>Kubernetes</h2>
 <pre>
 * Short form of name is k8s
@@ -560,7 +563,8 @@ Enable using  DOCKER_BUILDKIT=1 docker build .
     * kubectl delete pod [pod name]
     * kubectl apply -f [config file name]
     * kubectl describe pod [pod name]
-    * kubectl get deployments
+    * kubectl get pods | deployments | services
+    * kubectl rollout restart deployment [name]
 * K8s about running containers together. Docker about running single or few containers.
 * Deployment example YAML - super minimal:
   ```
@@ -588,11 +592,47 @@ Enable using  DOCKER_BUILDKIT=1 docker build .
     1. Cluster IP
         Sets up user-friendly URLs to access pods. Only exposes pods in cluster.
         Good for setting up communications between pods in a cluster.
+
+        +--------------------+       +--------------------+
+        | Pod                |       | Pod                | Containers access containers in other pods
+        |   +-----------+    |       |   +-----------+    | via the cluster IP service for that pod.
+        |   | Container |    |       |   | Container |    |
+        |   +---------|-+    |       |   +-|---------+    |
+        |        ...  |      |       |     |  ...         |
+        +----^--------|------+       +-----|--------^-----+
+             |        \                    /        |
+             |         \-----------\      /         |
+             |              --------\----/          |
+             |              |        |              |
+        +----|--------------v+       v--------------|-----+
+        | Cluster IP Service |       | Cluster IP Service |  &lt; The address to use to access
+        +--------------------+       +--------------------+       the Pod, via the cluster IP service is
+                                                                  *name* of the ClusterIP service as defined
+                                                                  in the deployment YAML (see below). E.g. if
+                                                                  the service is called snafu-srv then the
+                                                                  address is http://snafu-srv/...
+
+        YAML may look something like this:
+          apiVersion: v1
+          kind: Service
+          metadata:
+              name: a name for this service
+          spec:
+              selector:
+                  app: name-of-deployment/pod/app-to-add-ip-service-too
+              type: ClusterIP
+              ports:
+                  - name: a Name
+                    protocol: TCP
+                    port: xxxx         } See diagram below for meaning of port
+                    targetPort: xxxx   } v.s. targetPort
+
+
     2. Node port
         Makes pod accessable outside the cluster. Usually only needed for dev.
 
                                            +-----------------------------------------------------------------+
-                                           |                                          +------------------+   |
+                                           | Node                                     +------------------+   |
                                            |                                          | Pod              |   |
                                            |             +-------------+              | +-------------+  |   |
                       +------------+       |  +----------|-+ Node port |    +---------|--+            |  |   |
@@ -605,11 +645,53 @@ Enable using  DOCKER_BUILDKIT=1 docker build .
                       node port               port                          target port 
 
     3. Load balancer
-        Makes pot accessable outside the cluster. Preferred way to expose pod to the world.
+        Makes pods accessable outside the cluster. **Preferred** way to expose pod to the world.
+        +--------------------------------------------------- ... --------------------------+
+        | Cluster                                                                          |
+        |   +--------------------+   +--------------------+  ...  +--------------------+   |
+        |   | Pod                |   | Pod                |  ...  | Pod                |   |
+        |   |   +-----------+    |   |   +-----------+    |  ...  |   +-----------+    |   |
+        |   |   | Container |    |   |   | Container |    |  ...  |   | Container |    |   |
+        |   |   +-----------+    |   |   +-----------+    |  ...  |   +-----------+    |   |
+        |   |        ...         |   |        ...         |  ...  |        ...         |   |
+        |   +--------------------+   +--------------------+  ...  +--------------------+   |
+        |   | Cluster IP Service |   | Cluster IP Service |  ...  | Cluster IP Service |   |
+        |   +--------^-----------+   +---------^----------+  ...  +---------^----------+   |
+        |            |_________________________|____________________________|              |
+        |                                      |                                           |
+        |                              INGRESS CONTROLLER                                  |
+        |                                      |                                           |
+        |                        +-------------^-------------... -+                        |
+        +------------------------|           Load                 |------------------------+
+                                 |      Balancer Service          |
+                                 +-------------^------------ ... -+
+                                               |
+                                            Client
+        The Load Balancer Service tells kunernetes to "reach out" to its provider and provision
+        a load balancer. Gets traffic to a SINGLE pod. "Provider" means the cloud service etc,
+        for example, AWS or Azure, that kubernetes is running on. The LB exists *outside* of any
+        cluster we create - it is provisioned by the infrastructure that KB is running on.
+
+        The Ingress or Ingress Controler is a pod with a set of routing rules to distribute traffic
+        to other services. The LB does not know how to route specific URLs to the correct pod. It is
+        a general load balancing mechanism. It is the Ingress Controller that is responsible for
+        routing certain URLs to certain pods.
+
     4. External name
         Redirects in-cluster requests to a CNAME url.
 
-
+* Updating an image used by a deployment
+    * Steps
+        1. Deployment uses 'latest' tag in pod Spec
+        2. Make update to code
+        3. Build Docker image
+        4. Push image to docker hub
+        5. kubectl rollout restart deployment [depl_name]
+    * Above is quite a hassle - intro SKAFFOLD to help!
+      SKAFFOLD (skaffold.dev):
+        * Automates many tasks in Kubernetes dev environment.
+        * Makes it easy to update code in a running pod.
+        * Makes easy to create/de;ete all objects tied to a project in on go
 </pre>
 
 </div> <!-- END H1 padding div -->
