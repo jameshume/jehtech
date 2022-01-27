@@ -29,8 +29,18 @@
 		<h2>Windows WSL CLI Reference</h2>
 		<div>
 			<p></p>
-			<pre class="prettyprint linenums">wsl -d distro-name --user user-name
-wsl --list --verbose</pre>
+			<pre class="prettyprint linenums"># List all distros
+wsl --list --verbose
+
+# Run a specific distro with specific user
+wsl -d distro-name --user user-name
+
+# Convert distro to WSL 1 or 2
+wsl --set-version DISTRO_NAME 2
+
+# Set default version
+wsl --set-default-version 2
+</pre>
 			<p></p>
 		</div>
 
