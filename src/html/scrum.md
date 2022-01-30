@@ -3,20 +3,20 @@
 * Follows the Agile Manifesto:
     * 4 Values
     * 12 Principles
-* Agile is a framework, scrum is an agile METHODOLOGY
-* Product owner == business owner, who's responsibility is Optimizing the business value of the work
-* SDT - Built and test the product
-* Scrum master: Process Expert
-	* Verify test cases - benificial? Needs to be reviewed by someone, e.g. someone close to requirements.
-* Empowerment and business buy in
-* Budget risk - dont have good visibility of everything that needs to be done from the onset.
-* Scope creep - change from time to time, risk of scope creep - difficult for people to focus.
-* Risk - will business accept it.
-* Is is suitable for every project?
-* Is the output of each sprint deployable?
-* Does not scale well.
-    * The output does not have any give - its all or nothing.
-    * Or if big design up front needed like construction projects or data center migration project - difficult fit maybe.
+* Agile is a *framework*, scrum is an agile *METHODOLOGY*.
+* Value-driven life cycle: prioritise work by business value - do most valuable work first.
+    * Provides best return on investment (ROI) possible to stakeholders.
+    * Incremental build and deployment lets stakeholders evolve requirements and check right thing built.
+    * However, could be more risk focused.
+* Empowerment and business buy in are fundamental success factors.
+* Critisisms of pure scrum:
+    * Budget risk - dont have good visibility of everything that needs to be done from the onset.
+    * Scope creep - change from time to time, risk of scope creep - difficult for people to focus.
+    * Not for every project.
+    * Does not scale well.
+        * The output does not have any give - its all or nothing.
+        * Or if big design up front needed like construction projects or data center migration project - difficult fit maybe.
+    * Risk - will business accept it.
 * https://www.atlassian.com/continuous-delivery/software-testing/types-of-software-testing
 * Pillars = TIA:
 	1. Trasparency
@@ -33,7 +33,38 @@
 * [The Scrum Guide](https://scrumguides.org/scrum-guide.html)
 
 
-## How as a scrum master can we ensure the values?
+## Roles
+### Product Owner (PO)
+* Product owner == business owner, who's responsibility is Optimizing the business value of the work
+    * Prioritised the backlog.
+    * Captures requirements.
+    * Don't need to understand all technical details.
+
+
+* One person.
+* Represents the business & customer in the scrum team.
+* Provides vision & day-to-day steers - directs development team.
+* Responsible for accomplishment of deliverables at each project stage/increment.
+    * S/he defines the following:
+        * Product features
+        * Release date
+    * And is responsible for:
+		* Prioritising features
+		* Developing and maintaining product backlog
+    		* Changes must be approved by PO
+		* Making decisions on behalf of customer/business
+		* Accepting/Rejecting work
+* Must attend sprint planning and review at a minimum
+
+### Scrum Master (SM)
+* Promotes scrum values and coaches team. Ensures all following scrum practices.
+* Serves PO and SDT
+* Facilitate events/ceremonies
+* **It is the Scrum Master's top priority to remove impediments.**
+* Process Expert
+	* Verify test cases - benificial? Needs to be reviewed by someone, e.g. someone close to requirements.
+  
+#### How as a scrum master can we ensure the values?
 
 Commitment:	Are people attending daily standups and other ceremonies, taking part in discussions/collaboration, etc.
 
@@ -55,7 +86,7 @@ Commitment:	Are people attending daily standups and other ceremonies, taking par
 * Respect:
     * A problem is the TEAM's problem not an individual's. Team empowered to self organise.
 
-**It is the Scrum Master's top priority to remove impediments.**
+Feedback:
 
 * How to ask for feedback:
     * Don't ask for honesty
@@ -74,93 +105,92 @@ Commitment:	Are people attending daily standups and other ceremonies, taking par
 
 
 ## Sprints
-* Increment - Some feature that you add to the existing functionaility.
-* Sprint cancellation - If product becomes obsolete, for example. Or the business case is no longer valid.
-    * Product owner must approve this!
-* Sprint Goal - The object of the sprint - what is meant to be achieved at the end of the sprint.
-* Sprint planning - 3 things to consider:
-    1. Capacity - Finding the availablility of the team
-    2. Scope - setting the sprint goal
-    3. Estimation -task breakdown and assignment etc.
+A sprint is a *timeboxed* duration that can*not* be extended. It defines an increment of a product, in that
+it has a clear *goal*, which ensures that at the end of the sprint some feature is delivered that adds to existing
+functionality.
+
+![Sprint structure and timings](##IMG_DIR##/scrum_sprint_cememony_timings.jpeg.jpg)
+
+A sprint has the following ceremonies:
+
+1. Planning
+2. Daily scrums
+3. Review
+4. Retrospective
+
+Is the output of each sprint deployable?
+
+### Planning
+* Attended by PO, SM, SDT
+* 3 things to consider:
+    1. Capacity - Finding the availablility of the team.
+    2. Scope - Set the goal: *Why is this Sprint valuable?
+    3. Estimation - Task breakdown and assignment etc.
+       1. The requirements for the sprint and each task must be fully understood by the SDT.
+       2. Tasks must be INVEST/SMART
+       3. What can be Done this Sprint and how will it get done?
+          1. Definition of *Done* decided and applied.
+
+The "Definition of *Ready*" applies: is the team ready to start the sprint? Are all requirements fully understood? Does every task
+have an estimate against it?
+
+### Daily Scrum
 * During the daily Scrum, The Product Owner's participation is defined by the team.
-* Scrum Artifacts
-	1. Product backlog
-		* ** This is MANAGED BY THE PRODUCT OWNER **
-		* Its the PRL, maintained by the product owner based on:
-			* Risk
-			* Business value
-			* Dependencies
-			* Timescales
-		* Features added normally in user story format
-		* WHAT will be built
-		* ** Open and editable by anyone but PRODUCT OWNER is responsible for ordering it. **
-		* Rough estimates of business values and development effort, e.g. using story points.
-		* ** Product refinement/"grooming" <= 5 - 10% of teams capacity **
-        * <pre style="border: 0">
-+---------------------------------------------------------+
-| vv The product backlog vv                               |
-+---------------------------------------------------------+
-|Sprint backlog  Requirement  }                           |
-|                Requirement  } Ready for sprint          |
-|                ...          }                           |
-|                Requirement  }                           |
-|---------------------------------------------------------+
-|Groomed         Requirement  }                           |
-|                ...          } User stories              |
-|                Requirement  }                           |
-|---------------------------------------------------------+
-|Future          Requirement  } EPIC stories              |
-|                ...          } to be broken down later   |
-+---------------------------------------------------------+</pre>
-		* When Resource planning:
-			1. Work Breakdown Structure: Divide task into sub tashs
-			2. Basing requirments on past projects or industry standards
-			3. Using the scope statement of the project to estimate resource needs
-			4. Creating a resource plan to specify the resources needded in different categories.
+* Timebox to 15 minutes - approx. 2 minutes per team member.
+* Format:
+    * What did I do yesterday to help meet the Sprint Goal
+    * What do I plan to do today to help meet the Sprint Goal
+    * What individual or Team impediments might prevent us from meeting the Sprint Goal
+* Progress visible to all on the *work board*.
 
-	2. Sprint backlog
-		* ** This is MANAGED BY THE TEAM **
-		* Not mandatory commitment.
-			* Is a prediction of work that will be completed
-			* Distinction exists to create a less stressful work environment - take only what you
-			  can eat.
-		* Work is not assigned - any team member can pick up a ticket - team should be self motivated to
-			pick their tasks.
-		* Backlog can be updated when important information comes to light but in general the sprint
-			should be FIXED. Any one can change the sprint but the SCRUM MASTER MUST APPROVE and
-			depending on bredth of scope the PRODUCT OWNER may also have to.
-		* Servant leaderhip is a philosophy and a practice. Servant leader looks to the needs of people
-		around them attempts to fix or solves their problems, promoting personal development.
-			* Should have these qualities:
-    			* Forsight
-    			* Vision
-    			* Transformation
-    			* Awareness
-			    * Empathy
-			    * Persuasion
-			    * Listening
-			    * Team Growth
-				* Stewarship
-				* Building continuity
-		* A good leader needs to understand themselves.
-		* All Sprint Backlog Items are "owned" by the entire Development Team, even though each one
-		may be done by an individual team member. 
-
-	3. Increment
+### Scrum Artifacts
+1. Product backlog
+	* ** This is MANAGED BY THE PRODUCT OWNER **
+	* Its the PRL, maintained by the product owner based on:
+		* Risk
+		* Business value
+		* Dependencies
+		* Timescales
+	* Features added normally in user story format
+	* WHAT will be built
+	* ** Open and editable by anyone but PRODUCT OWNER is responsible for ordering it. **
+	* Rough estimates of business values and development effort, e.g. using story points.
+	* ** Product refinement/"grooming" <= 5 - 10% of teams capacity **
+	* When Resource planning:
+		1. Work Breakdown Structure: Divide task into sub tasks
+		2. Basing requirments on past projects or industry standards
+		3. Using the scope statement of the project to estimate resource needs
+		4. Creating a resource plan to specify the resources needded in different categories.
+2. Sprint backlog
+	* ** This is MANAGED BY THE TEAM **
+	* Not mandatory commitment.
+		* Is a prediction of work that will be completed
+		* Distinction exists to create a less stressful work environment - take only what you
+		  can eat.
+	* Work is not assigned - any team member can pick up a ticket - team should be self motivated to
+		pick their tasks.
+	* Backlog can be updated when important information comes to light but in general the sprint
+		should be FIXED. Any one can change the sprint but the SCRUM MASTER MUST APPROVE and
+		depending on bredth of scope the PRODUCT OWNER may also have to.
+	* Servant leaderhip is a philosophy and a practice. Servant leader looks to the needs of people
+	around them attempts to fix or solves their problems, promoting personal development.
+		* Should have these qualities:
+			* Forsight
+			* Vision
+			* Transformation
+			* Awareness
+		    * Empathy
+		    * Persuasion
+		    * Listening
+		    * Team Growth
+			* Stewarship
+			* Building continuity
+	* A good leader needs to understand themselves.
+	* All Sprint Backlog Items are "owned" by the entire Development Team, even though each one
+	may be done by an individual team member. 
+3. Increment
 
 
-Key techniques:
-
-* Estimating
-* User Stories
-* Kanban Board
-* Definition of *Done*
-* Definition of *Ready*
-* MoSCoW
-* Retrospectives
-* Estimating
-* Burn Charts
-* Team Board\Information Radiators
 
 ### Report Out Session
 - Product owner, scrum master, business analysis, SDT for ONLY 20 minutes max
@@ -203,11 +233,32 @@ User stories should use *INVEST* model:
 * **T***estable*
 	* The story and description must procide enough detqail to make test development possible.
 
+Should also be *SMART*:
+
+* **S**pecific (simple, sensible, significant).
+    * *What* do I want to accomplish?
+    * *Why* is this goal important?
+    * *Who* is involved?
+    * *Where* is it located?
+    * *Which* resources or limits are involved?
+* **M**easurable (meaningful, motivating).
+    * How much?
+    * How many?
+    * How will I know when it is accomplished?
+* **A**chievable (agreed, attainable).
+* **R**elevant (reasonable, realistic and resourced, results-based).
+* **T**ime bound (time-based, time limited, time/cost limited, timely, time-sensitive).
+
 
 ## Burn-down/Burn-up charts/Risk-burn-down charts:
-Burn-down:
-	Core project management tool in Scrum
-	A graphical representation of work to do against time left
+* Burn-down:
+	* Core project management tool in Scrum
+	* A graphical representation of work to do against time left, often showing idea time too.
+  	* Helps predict liklihood of completing on time.
+  	* Number of story points completed per sprint is the teams *velocity*.
+  	* Can be at the sprint *and* epic level (kind of a burndown of burndowns).
+  	* Actual-work line above ideal-work line => behind schedule
+  	* Actual-work line below ideal-work line => doing better than expected
 	
 
 
@@ -227,21 +278,39 @@ This is normally "must haves" and "should haves"
 	
 
 ## Definition of Done (DoD)
-* All acceptance criterias are met,
-* Different definitions will affect the estimates and then work in the sprint plan,
-* Scrum team should come together to define this,
-* According to [Scrum.org](https://scrum.org), a definition of done (DoD) is a shared understanding of expectations that the current sprint (or increment) must meet in order to be released to users.
-* Purpose [[Ref]](https://plan.io/blog/definition-of-done/):
+According to [Scrum.org](https://scrum.org):
+
+> a definition of done (DoD) is a shared understanding of expectations that the current sprint 
+> (or increment) must meet in order to be released to users.
+
+* Benefits / Purpose [[Ref]](https://plan.io/blog/definition-of-done/):
     * Building a common understanding within the team about quality and completeness.
     * Providing a checklist of criteria to check user stories against. 
-    * Ensuring that the increment shipped at the end of the sprint meets the quality level that your team and the project owner agreed upon. 
+    * Ensuring that the increment shipped at the end of the sprint meets the quality level that your 
+    	team and the project owner agreed upon. 
+    * Makes shared understanding of "complete" visible to all - pool of shared knowledge/understanding.
+    * Strong base to deliver increments.
+    * Build in quality at each step.
+
+* All acceptance criterias are met,
+    * A checklist that defines what's needed for an increment to be releasable at the end of a sprint. 
+    * Note: DoD is global but acceptance specific to task
+    * DoD is different depending on whats being designed.
+    * Should be clear, testable, concise and realistic.
+
+* Different definitions will affect the estimates and then work in the sprint plan,
+* Scrum team should come together to define this,
+ 
 * Example DoD list:
+    * Code peer reviewed
     * Unit test passed
-    * Code reviewed
-    * Acceptance criteria for each issue met
     * Functional tests passed
-    * Non-functional requirements met
+    * Non-functional tests pass / requirements met
+    * Acceptance criteria for each issue met
+    * Continuous Integration build passing
+    * Documentation updated
     * Product owner accepts the User Story
+
 * DoD v.s. acceptance criteria:
     * DoD is *global*, acceptance unique to the user story.
 
