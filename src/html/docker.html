@@ -57,6 +57,8 @@ https://confluence.atlassian.com/bitbucket/configure-bitbucket-pipelines-yml-792
 
 <h2>Introduction</h2>
 <pre>
+*** get.docker.com ***
+
 Both virtualisation and containerisation decouple workloads from underlying hardware.
 	Virtual machines MIMIC A HARDWARE ENVIRONMENT.
 	Containers are OS LEVEL virtualisation.
@@ -569,6 +571,8 @@ volumes:
     * A __manager__ node dispatches units of work called tasks to worker nodes and perform the orchestration
       and cluster management.
         * Deploy swarm by submitting service definition to manager.        
+    * __Worker__ nodes receive and execute tasks dispatched from manager nodes
+    * A __service__ is the definition of the tasks to execute on the manager or worker nodes.
 
 * Create service:
     * $ docker service create alpine ping 8.8.8.8
@@ -600,10 +604,52 @@ volumes:
 
 * Newer modern alternative to the now deprecated docker-machine is https://multipass.run/.
 
-
-  
-
+* Docker swarm ports for firewall:
+    https://www.bretfisher.com/docker-swarm-firewall-ports/
 </pre>
+<p></p>
+
+
+<h3>MultiPass</h3>
+<p>
+  Multipass lets you control multiple VM instances from one command line interface and has a docker image that comes
+  with Docker pre-installed - usefull for messing around with swarm.
+</p>
+
+<pre># Launch an instance (by default you get the current Ubuntu LTS)
+multipass launch --name foo [--cloud-init cloud-config.yaml] [image]
+                             ^^^^^^                           ^^^^^ 
+                             ^^^^^^                           Image to launch. Ommitted =&gt; default Ubuntu used
+                             Pass a cloud-init metadata file 
+
+# Run commands in that instance
+multipass exec foo -- command-goes-here
+
+# Open a shell prompt on an instance
+mulutipass shell foo
+
+# See all instances
+multipass list
+
+#Stop and start instances
+multipass stop foo bar
+multipass start foo
+
+# Clean up
+multipass delete bar
+multipass purge
+
+# Find alternate images to launch with multipass
+multipass find
+
+# Use VirtualBox (https://multipass.run/docs/using-virtualbox-in-multipass-windows)
+multipass set local.driver=virtualbox
+
+# Share data via Mounts
+multipass [u]mount $HOME foo
+</pre>
+<p></p>
+
 
 
 <h2>Kubernetes</h2>
