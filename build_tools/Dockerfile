@@ -9,5 +9,5 @@ RUN npm install yargs@3 -g
 RUN npm install html-linter -g
 RUN npm install html-validate -g
 RUN apt-get update
-RUN apt-get install -y python3-pip
+RUN apt-get install -y python3-pip vim
 RUN pip3 install lxml pillow pyhash awscli boto3 markdown

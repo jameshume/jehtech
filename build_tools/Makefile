@@ -215,4 +215,4 @@ $(OUTPUT_DIR):
 # Note dependency files must be marked as SECONDARY so that make does not think they are
 # normal intermediary files that should be cleaned up at the end of a build.
 .SECONDARY: $(DEP_FILES)
-include $(DEP_FILES)
+-include $(DEP_FILES)

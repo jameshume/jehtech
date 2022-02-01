@@ -27,6 +27,15 @@
 		</div>
 
         <h2>Todo</h2>
+
+		<h3>Who Owns The Port</h3>
+		<pre># Command Prompt
+netstat -ano
+netstat -a -b
+
+# Power shell
+Get-Process -Id (Get-NetTCPConnection -LocalPort port-number-of-interest).OwningProcess</pre>
+		<p></p>
         <h3>Console Colours and Title</h3>
         <pre>@title Console Window Title
 color 0b
