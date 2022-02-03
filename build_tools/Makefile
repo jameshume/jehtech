@@ -147,6 +147,9 @@ clean_css:
 clean:
 	@rm -fr $(OUTPUT_DIR)
 
+.PHONY: display
+display:
+	/mnt/c/Program\ Files/Google/Chrome/Application/chrome.exe "$(shell wslpath -w $(shell realpath "$(DST_HTML_ROOT_DIR)/index.html"))"
 
 # The JavaScript monolith is supposed to reduce the number of seperate requrest that the browser
 # has to make to get all the different JavaScript components required by the pages. It

@@ -32,8 +32,8 @@ The risk metrics can be created from a *risk list*, which is often summarised us
 
 Simple table as follows, where the scores are as described for the risk heat map.
 
-| Risk          | Liklihood Score | Impact Score | Magnitude | Owner | Status | Date Identified | Days active |
-|---------------|-----------------|--------------|-----------|-------|--------|-----------------|-------------|
-| A description |  2              |  5           |  10       | JH    | -      | dd/mm/yyy       | 13          |
-| ...
+| ID | Risk          | Liklihood Score | Impact Score | Magnitude | Owner | Status                | Date Identified | Days active |
+|----|---------------|-----------------|--------------|-----------|-------|-----------------------|-----------------|-------------|
+| 1  | A description |  2              |  5           |  10       | JH    | Open/Waiting/Closed   | dd/mm/yyy       | 13          |
+| 2  | ...
 

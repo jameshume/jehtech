@@ -57,6 +57,8 @@ https://confluence.atlassian.com/bitbucket/configure-bitbucket-pipelines-yml-792
 
 <h2>Introduction</h2>
 <pre>
+*** get.docker.com ***
+
 Both virtualisation and containerisation decouple workloads from underlying hardware.
 	Virtual machines MIMIC A HARDWARE ENVIRONMENT.
 	Containers are OS LEVEL virtualisation.
@@ -495,6 +497,158 @@ The latest Docker versions come with new opt-in builder backend BuildKit.
 Enable using  DOCKER_BUILDKIT=1 docker build .
 </pre>
 
+
+<h2>Docker Compose</h2>
+<pre class="prettyprint linenums">
+version: '3'
+
+services:
+    redis:
+        image: 'redis:3.2-alpine'    # The docker hub image to download
+        ports:                       # Port mapping list
+            - '6379:6378'
+            - ...
+        volumes:                     # Volumes list
+            - 'redis:/data'          # This is a data volume
+            - ...
+
+    web:
+        build: '.'                   # Rather than download, build the image from the current dir
+        depends_on:                  # Container will be started after all these
+            - 'redis'
+            - ...
+        environment:                 # Environment variables as key value pairs
+            FLASK_DEBUG: 'true'
+            PYTHONBUFFERED=true      # So we can see python output when run thu docker compose.
+            ...
+        env_file:                    # Alternatively provide the key/value pairs from a file
+            - '.env'                 # Loads from top to bottom, latter override earlier settings
+            - ...                    # Use COMOSE_PROJECT_NAME=... to set the name to prefix image/container/etc names.
+        ports:                       # Port mapping list
+            - '5000:5000'
+        volumes:                     # Volumes list
+            - '.:/app'               # Mapped volume - can use '.' for CWD :)
+
+# Because a data volume was used for redis an extra bit of config needs
+# to be done here.
+volumes:
+    redis: {}
+</pre>
+
+<p>
+  <code>docker-compose build</code> will go through the YAML file and build any services with a <code>build</code> property.<br/>
+  <code>docker-compose pull</code> will go through the YAML file and download any services with an <code>image</code> property.<br/>
+  <code>docker-compose up [--build] [-d]</code> will start the project. <code>--build</code> combines the build step into this command and <code>-d</code> makes it run in the background.<br/>
+  <code>docker-compose ps</code><br/>
+  <code>docker-compose logs [-f] [container-name]</code> displays all the logs and <code>-f</code> will tail the output.<br/>
+  <code>docker-compose restart [container-name]</code> restarts all the containers. Container name optional.<br/>
+  <code>docker-compose exec container-name CMD</code> runs command in container. If use shell to have interactive session don't need <code>-it</code> flags because these are added auto.<br/>
+  <code>docker-compose stop</code><br/>
+</p>
+
+<h2>Docker Swarm</h2>
+<pre>
+* Docker swarm is a clustering solution built inside Docker.
+    * Clusters we care less about individual nodes. We don't name them - just throw requirements at
+      swarm and swarm does the machanics of distributing round the swarm.
+* Deploy & maintain many containers across many instances and automate the container lifecyle!
+* A single service can have multiple tasks.  
+
+* Swarm not active by default. Use `docker info` to see swarm status.
+    * Use `docker swarm init [--advertise-addr IP_ADDR]` to enable.
+        * Use --advertise-addr to give a public address to advertise the swarm service on - must
+          be accessible from other servers you want in the swarm.
+    * Creates root signing certficate created for the swarm, issued for first Manager node
+    * Join tokens created - can be used on other nodes to join swarm
+    * Create RAFT consensus DB
+    * Creates the "leader" node.
+        * docker node ls
+          ID                            HOSTNAME         STATUS    AVAILABILITY   MANAGER STATUS   ENGINE VERSION
+          v6neb2hympfaejcdgjxqp92pu *   docker-desktop   Ready     Active         Leader           20.10.11
+
+* Language:
+    * A __node__ is an instance of the Docker engine participating in the swarm. Can run >= 1 node on a computer.
+    * A __manager__ node dispatches units of work called tasks to worker nodes and perform the orchestration
+      and cluster management.
+        * Deploy swarm by submitting service definition to manager.        
+    * __Worker__ nodes receive and execute tasks dispatched from manager nodes
+    * A __service__ is the definition of the tasks to execute on the manager or worker nodes.
+
+* Create service:
+    * $ docker service create alpine ping 8.8.8.8
+      mmib56y49ixo0v38xc8vqq24u                      # This is the SERVICE ID, not the container ID
+
+    * $ docker service ls
+      ID             NAME            MODE         REPLICAS   IMAGE           PORTS
+      mmib56y49ixo   laughing_bohr   replicated   1/1        alpine:latest
+
+    * To see the task allocated to this service:
+      $ docker service ps laughing_bohr
+      ID             NAME              IMAGE           NODE             DESIRED STATE   CURRENT STATE           ERROR     PORTS
+      m1328c1z8s92   laughing_bohr.1   alpine:latest   docker-desktop   Running         Running 2 minutes ago
+                                                       ^^^^^^^^^^^^^^
+                                                       The service that this task is running on
+
+    * Scale it up using          
+      $ docker service update mmib56y49ixo --replicas 3        
+
+      Which now means there are three tasks:
+      $ docker service ps laughing_bohr
+      ID             NAME              IMAGE           NODE             DESIRED STATE   CURRENT STATE            ERROR     PORTS
+      m1328c1z8s92   laughing_bohr.1   alpine:latest   docker-desktop   Running         Running 5 minutes ago
+      qsrs5ntvv9qm   laughing_bohr.2   alpine:latest   docker-desktop   Running         Running 21 seconds ago
+      6jjw41tdp9w9   laughing_bohr.3   alpine:latest   docker-desktop   Running         Running 22 seconds ago
+
+      IF YOU KILL A TASK, IT WILL BE RESTARTED AUTOMATICALLY BY SWARM!!
+
+
+* Newer modern alternative to the now deprecated docker-machine is https://multipass.run/.
+
+* Docker swarm ports for firewall:
+    https://www.bretfisher.com/docker-swarm-firewall-ports/
+</pre>
+<p></p>
+
+
+<h3>MultiPass</h3>
+<p>
+  Multipass lets you control multiple VM instances from one command line interface and has a docker image that comes
+  with Docker pre-installed - usefull for messing around with swarm.
+</p>
+
+<pre># Launch an instance (by default you get the current Ubuntu LTS)
+multipass launch --name foo [--cloud-init cloud-config.yaml] [image]
+                             ^^^^^^                           ^^^^^ 
+                             ^^^^^^                           Image to launch. Ommitted =&gt; default Ubuntu used
+                             Pass a cloud-init metadata file 
+
+# Run commands in that instance
+multipass exec foo -- command-goes-here
+
+# Open a shell prompt on an instance
+mulutipass shell foo
+
+# See all instances
+multipass list
+
+#Stop and start instances
+multipass stop foo bar
+multipass start foo
+
+# Clean up
+multipass delete bar
+multipass purge
+
+# Find alternate images to launch with multipass
+multipass find
+
+# Use VirtualBox (https://multipass.run/docs/using-virtualbox-in-multipass-windows)
+multipass set local.driver=virtualbox
+
+# Share data via Mounts
+multipass [u]mount $HOME foo
+</pre>
+<p></p>
 
 
 
