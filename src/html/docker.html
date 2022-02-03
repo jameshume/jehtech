@@ -700,3 +700,257 @@ Enable using  DOCKER_BUILDKIT=1 docker build .
 </html>
 
 
+
+
+
+<pre>
+URG
+
+From https://docs.docker.com/engine/swarm/how-swarm-mode-works/nodes/
+A swarm consists of one or more nodes: physical or virtual machines running Docker Engine 1.12 or later in swarm mode.
+There are two types of nodes: managers and workers.
+
+Manager nodes handle cluster management tasks:
+    * maintaining cluster state
+    * scheduling services
+    * serving swarm mode HTTP API endpoints
+Using a Raft implementation, the managers maintain a consistent internal state of the entire 
+swarm and all the services running on it. 
+
+When you have multiple managers you can recover from the failure of a manager node without downtime.
+An N manager cluster tolerates the loss of at most (N-1)/2 managers.
+
+Worker nodes are also instances of Docker Engine whose sole purpose is to execute containers. Worker nodes don't
+participate in the Raft distributed state, make scheduling decisions, or serve the swarm mode HTTP API.
+
+By default, all managers are also workers
+
+See https://docs.docker.com/engine/swarm/how-swarm-mode-works/services/
+    https://docs.docker.com/engine/swarm/how-swarm-mode-works/pki/
+
+
+
+Back to course...
+
+In the turorial create 3 VMs with docker installed.
+
+On node 1:
+docker swarm init --advertise-addr 142.93.44.156
+# ^^ This should print out a join command that the other nodes can use.
+# For example, the above printed out the following:
+
+On the other nodes:
+docker swarm join --token SWMTKN-1-428pmulqy030ktqjwogyjw0nv49i45ytgc3pmw1q25xi6u3dkk-d282u6s5s0eb67tp9pts2pioj 142.93.44.156:2377
+
+Workers cannot use swarm commands - priviledge limitation
+
+To make a worker a manager Use
+  docker node update --role manager nodeX
+
+To add a node as a manager by default need to get the manager token:
+  docker swarm join-token manager
+
+You can change these tokens if you need to for security reasons.
+They are stored encrypted on disk.
+
+To see all the nodes do:
+  docker node ls [--filter role=(worker|manager)]
+
+Now, a service, replcated across our three nodes can be created:
+  docker service create --replicas 3 alpine ping 8.8.8.8
+  #                                  ^^^^^^ ^^^^
+  #                                  ^^^^^^ Command to execute - i.e. the service function
+  #                                  The image to use on the nodes to run the service
+To see the service do:
+  docker service ls
+
+To see the gory details of/for a service:
+  docker service inspect SERVICE_NAME
+
+To see the service instance running on the various nodes do:
+  docker service ps affectionate_ellis
+  #                 ^^
+  #                 Name docker assigned the service
+
+On each node you can see the service instance that is running:
+  docker node ps [node-name]
+  #               ^^
+  #               If omitted then current Node
+ 
+Most tasks can now be orchestrated from node 1 - no need to exec commands in the
+other nodes directly.
+
+
+Network Overlays: Multi-Host networking
+----------------------------------------
+
+* Use docker `network create ... --driver overlay ...` when creating network
+* For intra-container comms only inside a single swarm
+    * They can access eachother as-if on a VLAN
+* Can enable full network encryption (IPSec (AES))
+    * Off by default (perforamce reasons)
+* Services can be connected to multiple networks.
+
+Create:
+  docker network create --driver overlay OVERLAY_NAME
+See:
+  docker network ls
+
+In course example, create a drupal network
+  docker service create \
+      --name psql \
+      --network mydrupal \
+      -e POSTGRES_PASSWORD=mypass postgres
+This will create the service on the current node (?). Can do, to see the service:
+  [watch] docker service ls
+And to see what's running in the service
+  docker service ps psql
+Can see logs
+  docker service logs psql
+You can get it directly from the container, but the container name may have stuff suffixed onto it
+so do a `docker container ls` to find out its name. For me, for ex is was:
+  docker container logs psql.1.qhv53a8qrka1wz31u7rm1bsku
+
+Now create another service for drupal itself:
+  docker service create --name mydrupal --network drupal -p 80:80 drupal
+
+
+This gives us two services on two *different* nodes.
+So, how can they talk: A: Use the SERVICE NAMES!! So when you configure the hostname for the DB in drupal setup
+you can just use "psql" rather than needing to know an IP address!
+
+There is some magic! I can access drupal on the IP of any of the nodes - the magic has to do with the ROUTING git_merge_squash
+
+
+
+Routing Mesh
+------------
+* Routes ingress packets for a service to the tasks for that service which spans all the nodes...
+* Spans all nodes in swarm
+* Uses IP Virtual Server (IPVS) from Linux kernel
+    * IPVS is the linux load balancer
+    * Random ref: https://debugged.it/blog/ipvs-the-linux-load-balancer/
+    * Load balances Swarm services across their Tasks.
+    * Two ways of working:
+      * Container-to-container in an overlay network
+          * E.g. is FE talking the BE - if DB is duplicated the FE does not use DB real IP - instead uses
+            a virtual IP (VIP), which the IPVS can then forward to any of the duplicated DBs.
+            Swarm PUTS THIS VIP IN FRONT OF ALL SERVICES.
+            Ensures load is distributed across all tasks in the service.
+      * External traffic incoming to published ports:
+          * All nodes listen to all published ports and can re-route traffic the the appropriate container.
+          * This means that when deploying containers in a swarm you do not have to care what particular server it is on.
+              * E.g. If container fails it could be re-incarnated on another node.
+* Possible issues:
+  * Issues
+    * &lt;= 17.03 Routing mesh and load balancing are STATELESS - has impact on apps expectin sessions!
+        * If you use session cookies or clients expect to talk with same container consistently across requests
+          then need to add this functionality.
+    * Layer 3 (IP) load balancer, not layer 4 (DNS)
+  * Some solutions
+    * NGINX or HAProxy
+    * Use Docker Enterprise - comes with built-in L4 web proxy
+
+</pre>
+<img src="##IMG_DIR##/docker_swarm_intra_node_comms.jpg"/>
+<img src="##IMG_DIR##/docker_swarm_ingress_nwk_comms.jpg"/>
+<pre>
+Tutorial continues:
+
+  docker service create --name search --replicas 3 -p 9200:9200 elasticsearch:2
+  docker service ps search
+  # Shows three instance running
+  # Doing CuRL localhost:9200 several times returns a different name and the reason is that the
+  # load balancer is sending our queries to different instances each time, as it should :) 
+  curl localhost:9200 # (I had to use curl node1:9200)
+
+
+Swarm Stacks and Production Grade components
+---------------------------------------------
+* Extra layer of abstraction to Swarm called Stacks
+* Stacks accept compose files as defn for services, networks, Volumes
+     docker stack deploy # Rather than docer service create
+* docker-compose cli not needed on swarm server
+    * Not designed as a production tool anyway - just dev / syadm tool
+* A stack is for only one swarm
+
+
+
+$ docker stack deploy -c compose-file.yml
+#                     ^^
+#                     Tell it to use a compose file
+
+The course example compise file is
+{{{
+    version: "3"
+    services:
+
+        redis:
+            image: redis:alpine
+            ports:
+                - "6379"
+            networks:
+                - frontend
+            deploy:
+                replicas: 2
+                update_config:
+                    parallelism: 2
+                    delay: 10s
+                restart_policy:
+                    condition: on-failure
+        
+        db:
+            image: postgres:9.4
+            volumes:
+                - db-data:/var/lib/postgressql/data
+            networks
+                - backend
+            deploy:
+                placement:
+                    constraints: [node.role == manager]
+        
+        ...
+}}}
+
+docker stack ls
+
+The stacks create APPs and each app has one or more SERVICES associated with it
+    docker stack services APP_NAME  # Like a service ls
+    docker stack ps APP_NAME        # Shows tasks not containers
+
+
+
+Secret Storage In Swarm
+------------------------
+Secrets storage:
+    * Built in to swarm
+    * Easiest "secure" solution for storing secrets in Swarm
+    * Docker >- 1.13 Raft DB encrypted on disk
+        * Only stored on disk on manager nodes
+        * Manager and works "control plane" is TLS + auth (key delivery)
+        * Workers keep keys secure in memory only (RAMFS)
+
+Pass secret using file (not so good if file stored on host):
+    * docker secret create psql_user psql_user.txt
+                           ^^^^
+                           Secret Name
+Or send it on STDIN
+    * echo "password-bad-unless-hidden-from-bash-history" | docker secret create psql_user -
+
+Neither of the above good for production!!
+
+docker secret inspect NAME
+
+These secrets will map to...
+    /run/secrets/NAME
+...for any node in a service which has the secret added to it
+
+To create a service with a secret do
+    docker secive create --name foo --secret SECRET_NAME --secret ANOTHER_SECRET_NAME ....
+To tell processes how to use secrets things like environment variables set to their paths
+can be given using the `-e ENV_VAR_NAME=/run/secrets/SNAME` option.
+
+
+
+
+</pre>

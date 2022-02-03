@@ -176,6 +176,15 @@ ssh -vT address-of-server</pre>
 		following line (replicate once for each key you wish to permenantly add):
 	</p>
 	<pre>IdentityFile ~/.ssh/some_key_name</pre>
+    <p></p>
+
+    <h3>PuttyGen</h3>
+    <ol>
+        <li>Generate key: Click "Generate" and add a passphrase for the key.</li>
+        <li>Save PuTTY private key: Click "Save private key" and save with a ".ppk" extension, e.g., "my-new-key.ppk"</li>
+        <li>Save OpenSSH public key: Copy and paste from top text box into a file and save as a ".pub" file, e.g., "id_rsa_my-new-key.pub"</li>
+        <li>Save OpenSSH private key: From top menu select "Conversions &gt; Export OpenSSG key (force new file format)". Save as id_rsa file, or for e.g., just "ids_rsa_my-new-key"</li>
+    </ol>
 </div> <!-- END: Create A Public/Private Keypair -->
 
 <h2>Debugging A Git Connection</h2>
