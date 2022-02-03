@@ -866,8 +866,8 @@ The stacks create APPs and each app has one or more SERVICES associated with it
 
 
 
-Secret Storage In Swarm
-------------------------
+Secret Storage & Usage In Swarm
+--------------------------------
 Secrets storage:
     * Built in to swarm
     * Easiest "secure" solution for storing secrets in Swarm
@@ -895,9 +895,74 @@ To create a service with a secret do
     docker secive create --name foo --secret SECRET_NAME --secret ANOTHER_SECRET_NAME ....
 To tell processes how to use secrets things like environment variables set to their paths
 can be given using the `-e ENV_VAR_NAME=/run/secrets/SNAME` option.
+
+To use SECRETS IN STACKS you need >= version 3.1 in the YAML file. Pass in the secrets in much
+the same way
+{{
+  version: "3.1"
+  services:
+      psql:
+        ...
+        secrets:
+            - psql_user
+            - psql_password
+        ...
+  
+  secrets:
+      psql_user:
+          file: ./my_secrets_file.txt
+          psql_password:
+          file: ./my_secrets_other_file.txt
+}}
 </pre>
 <p></p>
 
+<h3>Swarm App Lifecyle</h3>
+<pre>
+Overriding Settings To Use Multiple Compose Files
+-------------------------------------------------
+1. Use a default compose file for the common settings across all environments (local, dev, prod etc)
+   `docker-compose.yml`
+2. Then use override file `docker-compose.override.yml`.
+   This is a special filename that docker compose will automatically "include"
+
+OR
+
+Specify using `-f` where the command line order is the order that the YAML files are overlaid. E.g.:
+    docker-compose -f docker-compose.yml -f docker-compose.my-environment.yml up -d
+
+The result of "smooshing" these files together can be output as well:
+    docker  -f docker-compose.yml -f docker-compose.my-environment.yml config > output.yml
+                                                                       ^^^^^^
+                                                                       Note the config command
+
+There is also an EXTENDS option - does this work yet in Stacks?
+
+
+Service Updates
+---------------
+* Provides rolling replacement of tasks/containers in a service
+* There are also scale, rollback and healthcare options
+    e.g. SCALE: docker service scale service_name=4
+         ROLLBACK: docker service rollback service_name
+* A stack deploy to an existing stack IS an update. Thats how you do an UPDATE.
+* UPDATE IMAGE E.g. if image was prev 1.2.0:
+    docker service update --image myapp:1.2.1 service-name
+* ADD ENV
+    docker service update d --env-add BLAH=BLAH
+* ADD/DELETE PORT
+    docker service update --publish-(add|rm) 8080
+
+
+When you scale swarm doesn't move resource around so nodes could be unbalanced.
+
+
+  
+
+
+
+
+</pre>
 
 
 <h2>Kubernetes</h2>
