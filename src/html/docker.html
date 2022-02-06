@@ -134,6 +134,9 @@ Replicated verbatim:
 	# Allow your user to access the Docker CLI without needing root access.
 	sudo usermod -aG docker $USER
 
+  # If still permission denied use
+  sudo chmod 666 /var/run/docker.sock
+
 
 	Connect to a remote Docker daemon with this 1 liner:
 	====================================================
@@ -145,7 +148,7 @@ Replicated verbatim:
 	Ensure Volume Mounts Work
 	=========================
 	When using WSL, Docker for Windows expects you to supply your volume paths in a format that matches this: /c/Users/nick/dev/myapp.
-	But, WSL doesn’t work like that. Instead, it uses the /mnt/c/Users/nick/dev/myapp format.
+	But, WSL doesn't work like that. Instead, it uses the /mnt/c/Users/nick/dev/myapp format.
 
 		Running Windows 10 18.03+ or Newer?
 		-----------------------------------
@@ -402,6 +405,11 @@ $ docker container exec "echo james" alpine
 
 <h2>Link Docker Containers Over A Network</h2>
 <pre>
+https://docs.docker.com/network/bridge/
+https://docs.docker.com/network/overlay/
+https://docs.docker.com/config/containers/container-networking/
+https://docs.docker.com/network/network-tutorial-standalone
+
 $docker network ls
 
 Docker will have installed a virtual network adaptor. On windows I see it as:
@@ -421,11 +429,16 @@ On Linux I see it as:
 See the docker networks using
 $ docker network ls
 NETWORK ID          NAME                DRIVER              SCOPE
-5c6e2a9ca9b2        bridge              bridge              local << This is the virtual network adapter created oh your host as seen above (DockerNAT)
+5c6e2a9ca9b2        bridge              bridge              local &lt;&lt; This is the virtual network adapter created oh your host as seen above (DockerNAT)
 0aa3a20ed51a        host                host                local
 bb9b8f0ffcd6        none                null                local
 
-The bridge network is used by default. Inspect it using:
+The bridge network is used by default. 
+  In terms of Docker, a bridge network uses a software bridge which allows containers connected to
+  the same bridge network to communicate, while providing isolation from containers which are not
+  connected to that bridge network.
+
+Inspect it using:
 $ docker network inspect bridge
 
 NOTE: Conatiners are, by default, added to the bridge network unless you specify otherwise
@@ -487,11 +500,17 @@ docker container stop $(docker container ls -a -q) #&lt; Stop all running contai
 <pre>
 See:
 	https://docs.docker.com/develop/develop-images/multistage-build/
-	https://www.docker.com/blog/advanced-dockerfiles-faster-builds-and-smaller-images-using-buildkit-and-multistage-builds/
+      With multi-stage builds, you use multiple FROM statements in your Dockerfile. Each FROM
+      instruction can use a different base, and each of them begins a new stage of the build.
+      You can selectively copy artifacts from one stage to another, leaving behind everything
+      you don't want in the final image.
 
 Multi-stage builds = smaller containers, better caching, smaller security footprint.
 	E.g. build container and production container where production container only contains build artefact not tools for build.
 
+
+See:
+  https://www.docker.com/blog/advanced-dockerfiles-faster-builds-and-smaller-images-using-buildkit-and-multistage-builds/
 The latest Docker versions come with new opt-in builder backend BuildKit.
 
 Enable using  DOCKER_BUILDKIT=1 docker build .
@@ -500,6 +519,9 @@ Enable using  DOCKER_BUILDKIT=1 docker build .
 
 <h2>Docker Compose</h2>
 <pre class="prettyprint linenums">
+GOOD YAML TUT - https://medium.com/@kinghuang/docker-compose-anchors-aliases-extensions-a1e4105d70b
+Compose files doc: https://docs.docker.com/compose/compose-file/compose-file-v3/
+
 version: '3'
 
 services:
@@ -533,6 +555,17 @@ services:
 # to be done here.
 volumes:
     redis: {}
+
+
+A note about volumes (https://docs.docker.com/engine/reference/commandline/service_create/):
+  docker service create \
+      --name my-service \
+      --replicas 3 \
+      --mount type=volume,source=my-volume,destination=/path/in/container,volume-label="color=red",volume-label="shape=round" \
+      nginx:alpine
+For each replica of the service, the engine requests a volume named "my-volume" from the default ("local") volume driver
+where the task is deployed. If the volume does not exist, the engine creates a new volume and applies the labels.
+When the task is started, the volume is mounted on /path/in/container/ inside the container.
 </pre>
 
 <p>
@@ -729,8 +762,19 @@ other nodes directly.
 
 Network Overlays: Multi-Host networking
 ----------------------------------------
+See for networking in swarm: https://docs.docker.com/network/overlay/
+  The overlay network driver creates a distributed network among multiple Docker daemon hosts.
+  This network sits on top of (overlays) the host-specific networks, allowing containers
+  connected to it (including swarm service containers) to communicate securely when encryption
+  is enabled. Docker transparently handles routing of each packet to and from the correct Docker
+  daemon host and the correct destination container.
 
-* Use docker `network create ... --driver overlay ...` when creating network
+  All swarm service management traffic is encrypted by default, using the AES algorithm in GCM
+  mode. Manager nodes in the swarm rotate the key used to encrypt gossip data every 12 hours.
+
+  To encrypt application data as well, add --opt encrypted when creating the overlay network
+
+* Use docker `network create ... --driver overlay [--opt encrypted] ...` when creating network
 * For intra-container comms only inside a single swarm
     * They can access eachother as-if on a VLAN
 * Can enable full network encryption (IPSec (AES))
@@ -811,6 +855,40 @@ Tutorial continues:
   curl localhost:9200 # (I had to use curl node1:9200)
 
 
+
+Dockers Distributed Voting App
+-------------------------------
+Use this for playing around and teaching yourself docker and docker swarm.
+https://github.com/bretfisher/udemy-docker-mastery
+Use swarm-app-1 directory in course repository
+
+    # Create the networks for this excercise
+    docker network create --driver overlay frontend
+    docker network create --driver overlay backend
+
+    # Create the volume for the DB
+    docker volume create db_volume
+
+    # Create the vote service
+    docker service create --name vote_app -p 80:80 --network frontend --replicas 2 bretfisher/examplevotingapp_vote
+
+    # Create the redis service
+    docker service create --name redis --network frontend redis:3.2
+
+    # Create worker service
+    docker service create --name worker_app --network backend --network frontend bretfisher/examplevotingapp_worker
+
+    # Create postgres service
+    docker service create --name postgres --network backend \
+        --mount type=volume,source=db_volume,destination=/var/lib/postgresql/data \
+        -e POSTGRES_HOST_AUTH_METHOD=trust postgres:9.4
+
+    # Create result service
+    docker service create --name service --network backend -p 5001:80 bretfisher/examplevotingapp_result
+
+
+
+
 Swarm Stacks and Production Grade components
 ---------------------------------------------
 * Extra layer of abstraction to Swarm called Stacks
@@ -820,7 +898,22 @@ Swarm Stacks and Production Grade components
     * Not designed as a production tool anyway - just dev / syadm tool
 * A stack is for only one swarm
 
+From https://www.ronaldjamesgroup.com/article/docker-stack#:~:text=Docker%20Stack%20sits%20at%20a,grouped%20together%2C%20essentially%20pooling%20resources.:
+How does Docker Stack help?
+    Docker Stack sits at a higher level than Docker containers and helps to manage the 
+    orchestration of multiple containers across several machines. Docker Stack is run 
+    across a Docker Swarm, which is essentially a group of machines running the Docker 
+    daemon, which are grouped together, essentially pooling resources.
 
+    Stacks allow for multiple services, which are containers distributed across a swarm,
+    to be deployed and grouped logically. The services run in a Stack can be configured
+    to run several replicas, which are clones of the underlying container. This number
+    will be maintained as long as the service is running. Adding or removing replicas
+    of a service is simple. This makes Docker Services ideal for running stateless
+    processing applications.
+
+Main docs: https://docs.docker.com/engine/reference/commandline/stack/
+           https://docs.docker.com/engine/swarm/stack-deploy/
 
 $ docker stack deploy -c compose-file.yml
 #                     ^^
@@ -840,8 +933,10 @@ The course example compise file is
             deploy:
                 replicas: 2
                 update_config:
+                    # vv The number of containers to update at a time
                     parallelism: 2
                     delay: 10s
+                # vv Configures if and how to restart containers when they exi
                 restart_policy:
                     condition: on-failure
         
@@ -853,7 +948,13 @@ The course example compise file is
                 - backend
             deploy:
                 placement:
+                    # vv Specify placement of constraints and preferences
                     constraints: [node.role == manager]
+                    # vv Number of containers that should be running at any given time
+                    replicas: 2
+                    # vv Limit number of replicas of a replicated-mode service that can
+                    # vv run on one node.
+                    max_replicas_per_node: 1
         
         ...
 }}}
@@ -864,7 +965,13 @@ The stacks create APPs and each app has one or more SERVICES associated with it
     docker stack services APP_NAME  # Like a service ls
     docker stack ps APP_NAME        # Shows tasks not containers
 
+In the stack compose file it is the deploy keywork that is unique to swarm:
+    https://docs.docker.com/compose/compose-file/compose-file-v3/#deploy
+    Specify configuration related to the deployment and running of services. This only
+    takes effect when deploying to a swarm with docker stack deploy, and is ignored by
+    docker-compose up and docker-compose run.
 
+For CONSTRAINTS see: https://docs.docker.com/engine/reference/commandline/service_create/#specify-service-constraints---constraint
 
 Secret Storage & Usage In Swarm
 --------------------------------
@@ -955,7 +1062,6 @@ Service Updates
 
 
 When you scale swarm doesn't move resource around so nodes could be unbalanced.
-
 
   
 
