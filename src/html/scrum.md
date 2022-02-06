@@ -32,6 +32,91 @@
 * [The Agile Manifesto](https://agilemanifesto.org/)
 * [The Scrum Guide](https://scrumguides.org/scrum-guide.html)
 
+[An amazing SO thread on sprints and "failures"](https://pm.stackexchange.com/a/18228), quoted
+below:
+
+> TL;DR
+> They have decided that if there are any User Stories not fully completed (as per the DoD) 
+> at the end of the Sprint, the Sprint has failed.
+> 
+> This is not only incorrect, it's an abuse of the Scrum framework and a thorough
+> misunderstanding of how work is selected for inclusion into a Sprint.
+> 
+> The purpose of a Sprint is not to complete user stories. That's simply a means to an end. 
+> Rather, the purpose of a Sprint is to provide a time-box to work on Product Backlog items 
+> that collectively deliver the value defined by an overarching Sprint Goal.
+> 
+> Sprint Failure Conditions
+> While not addressed specifically within The Scrum Guide, a Sprint really has only three failure conditions:
+> 
+> The Sprint Goal has not been met.
+> The delivered Increment is not in usable condition.
+> The Increment does not meet the "Definition of Done."
+> That's it. Individual stories can be done or not-done, forecasts (estimates) can be missed, and 
+> the team may have successfully delivered the wrong MacGuffin. Such Sprints are still technically 
+> "successful" in that they delivered a potentially-releasable Increment and leveraged the framework
+> to provide the business with process transparency and appropriate opportunities to inspect-and-adapt.
+>
+> Sprint Goals and Increments
+> The following elements of the Scrum framework are explicitly defined in The Scrum Guide. The Sprint
+> Goal is developed during Sprint Planning, and provides guidance throughout the Sprint. The Increment
+> is the work completed according to the Definition of Done, and is essentially the de facto
+> deliverable for the Sprint.
+>
+> Sprint Goal
+> The selected Product Backlog items deliver one coherent function, which can be the Sprint Goal.
+> The Sprint Goal can be any other coherence that causes the Development Team to work together
+> rather than on separate initiatives.
+>
+> Increment
+> At the end of a Sprint, the new Increment must be "Done", which means it must be in useable
+> condition and meet the Scrum Team’s definition of “Done.” It must be in useable condition regardless
+> of whether the Product Owner decides to actually release it.
+> 
+> Educational Opportunities
+> In general, your management team's approach is exhibiting a number of smells that indicate a faulty
+> Scrum implementation. It is the Scrum Master's job to educate the entire organization, including
+> the Scrum Team and senior management, about the way Scrum actually works.
+>
+> Specifically, you should use this as an opportunity to address the following project smells
+> implied by your original post:
+> 
+> A Sprint should have a coherent goal.
+> 
+> As defined by the Scrum Guide, each Sprint should have a defined goal which causes the team to
+> work together rather than on separate initiatives. If you don't have a coherent Sprint Goal, a
+> coherent Increment, or a collection of Sprint Backlog Items that are interrelated, then the
+> framework is being implemented incorrectly.
+> 
+> Work is selected by the Scrum Team, not assigned from the outside.
+> 
+> The Product Owner prioritizes work on the Product Backlog, and the team negotiates with the
+> Product Owner during Sprint Planning to select stories for the Sprint Backlog that will:
+> 
+> Fit within the time box.
+> Support the Sprint Goal.
+> Collectively deliver a vertical slice of value.
+> Assigning stories to the team, selecting unrelated stories, or failing to leverage the "team"
+> aspect of the Development Team >when performing Sprint Planning are all huge red flags.
+> 
+> Forecasts are not money-back guarantees.
+> 
+> Sprint Planning is a short-term planning exercise that estimates both level-of-effort and team capacity
+> to arrive at a reasonable forecast of the work that can be completed within a given time box (the Sprint)
+> with the resources and knowledge currently available. Forecasts can be missed for a wide variety of
+> reasons; it is not inherently a failure of either the framework or the team's work during the iteration.
+> Instead, a missed forecast is an opportunity to:
+> 
+> - Learn more about the problem domain.
+> - Inspect-and-adapt the framework or development process.
+> - Improve estimating techniques.
+> It is more effective to iterate rather than to affix blame.
+> 
+> If your organization is trying to "hold people accountable" for forecasts, they have misunderstood
+> the difference between an estimate and a guarantee. Educate them about how iterative development and
+> iterative process improvement actually work, and explain how the Scrum framework provides them with
+> the tools they need to effectively manage emergent designs and processes.
+
 
 ## Roles
 ### Product Owner (PO)
