@@ -118,6 +118,54 @@ below:
 > the tools they need to effectively manage emergent designs and processes.
 
 
+I also [really liked this](https://www.industriallogic.com/blog/estimates-vs-actuals/):
+
+> A couple of years ago they refused to design to an endpoint (even while agreeing the endpoint may
+> be excellent) and instead delivered incrementally. They learned from customers using early versions
+> of the feature and changed their vision for it to suit the customers’ actual needs. Had they built
+> to the endpoint, the feature may have failed to provide the desired effect. As is, it has opened
+> up new revenue opportunities.
+> 
+> In a product environment, the product concept is under constant revision. What we should deliver
+> may vary considerably from what we originally planned to deliver. This alone disqualifies the
+> waterfall process.
+>
+> ... Story points ... abstract away from hours and days because people could make more accurate 
+> relative assessments (comparing one job to another) than they can absolute assessments.
+>
+> ... effort was not the only component of an estimate ... estimator included (at least) two more elements:
+>
+> Uncertainty: we’re not sure how this is done or how to do it in our environment. We will have to learn new things.
+> ... Risk: if we do the thing, we aren’t sure that doing it won’t cause other parts of a complicated system to break.
+> ... These factors are significant. An 8-point story isn’t necessarily 8 times as much work as a one-point story. 
+> It may be less work but with 8 times more uncertainty and/or risk.
+> 
+> ... The problem isn’t that you aren’t good at estimation in general, but that the work has too much risk, #
+> uncertainty, delay, and interruption.
+>
+> ... 
+>
+> So what can we do?
+> 
+> We must characterize and reduce the chaos in our system if we are to have any hope of making valid predictions 
+> in the future.
+> 
+> Realizing our plans are soft, we can de-risk by delivering complete end-to-end "walking skeleton" features,
+> while we inspect and improve our development and delivery processes.
+>
+> We can keep jobs small so we can conduct many small-scale, safe-to-fail experiments on reducing variability.
+> We can use automated testing ("checking") and more frequent integration to help uncover risks more quickly – 
+> while we still have recovery time.
+>
+> Teams can reserve capacity so variations can be more easily absorbed. After all, if the team is 100% utilized
+> then there is no capacity to spend examining, inspecting, and improving their work to make it predictable and
+> efficient.
+>
+> By delivering incrementally we can adjust and improve our plans on the fly, find more frugal ways to reach
+> our goals, and even adjust our goals as we learn from our users.
+
+
+
 ## Roles
 ### Product Owner (PO)
 * Product owner == business owner, who's responsibility is Optimizing the business value of the work
