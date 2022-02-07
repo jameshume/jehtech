@@ -1,13 +1,22 @@
 FROM node
 
-RUN npm install @node-minify/core @node-minify/cli @node-minify/cssnano @node-minify/uglify-es -g
-RUN npm install @babel/core @babel/cli -g
-RUN npm install @babel/preset-env -g
-RUN npm install esm -g
-RUN npm install mathjax@3 -g
-RUN npm install yargs@3 -g
-RUN npm install html-linter -g
-RUN npm install html-validate -g
-RUN apt-get update
-RUN apt-get install -y python3-pip vim
-RUN pip3 install lxml pillow pyhash awscli boto3 markdown
+RUN mkdir /scripts
+COPY docker_script.sh /scripts
+
+RUN npm install \
+        @node-minify/core \
+        @node-minify/cli \
+        @node-minify/cssnano \
+        @node-minify/uglify-es \
+        @babel/core @babel/cli \
+        @babel/preset-env \
+        esm \
+        mathjax@3 \
+        yargs@3 \
+        html-linter \
+        html-validate -g \
+    && apt-get update \
+    && apt-get install -y python3-pip vim \
+    && pip3 install lxml pillow pyhash awscli boto3 markdown
+
+ENTRYPOINT [ "bash", "/scripts/docker_script.sh" ]

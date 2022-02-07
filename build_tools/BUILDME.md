@@ -1,19 +1,30 @@
 # Build
 
 The build uses a Docker image to elliminate build environment differences and general
-dependency differences. Generally build on a Windows machine, untested running in *nix
+dependency differences. Generally built on a Windows machine, untested running in *nix
 environment.
 
-To build the container, from the `build_tools` directory type:
+Now using docker-compose.
+
+From the `build_tools` directory:
+
+* To run a build of the website do `docker-compose up`
+* To build the container and then do a build of the website do `docker-compose up --build`
+
+The docker-compose file will do a bind-mount for you so that the root of the jehtech repository is
+mapped to `/jehtech` in the Docker image. The `RUN` command will execute a script that will change
+directory to `/jehtech/build_tools` and execute `make all`
+
+To deploy to the AWS S3 bucket the `build_tools` folder needs the file `aws_jehtech_uploader_credentials.json`
+which will have the following contents:
 
 ```
-docker image build -t jehtech:vX.Y .
+{
+    "access_key_id": "your-access-key-id-goes-here",
+    "access_key": "your-access-key-goes-here"
+}
 ```
 
-To build the site, from the root of the repository checkout, assuming in the following
-example that it has been checkout out to `C:\Users\Brian\Documents\jehtech2`, type:
+The **access_key is secret: never commit to your repository!**.
 
-```
-docker container run --rm -it -v //c/Users/brian/Documents/jehtech2:/jehtech jehtech:v1.0 bash
-```
-
+To do the deploy from the command line use... TODO 

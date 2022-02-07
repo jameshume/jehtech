@@ -217,6 +217,9 @@ docker run -it --rm --name alpine alpine sh
            ^^^ Completely remove container when stopped
            be interactive and terminal (handle ctrl-c and colours etc)
 
+The difference between `docker run` and `docker exec` is that `docker exec` executes a command on a running container whereas
+`docker run` creates a temporary container, executes the command in it and stops the container when it is done.
+
 docker stop alpine # to shut down the container
 
 docker hub as auatomated build hooks - so if i push a change to my GitHub the docker registery can rebuild my image for me automatgiclaly.
@@ -267,12 +270,24 @@ EXPOSE - Expose a port on which the container can access the outside world on
 
 ENTRYPOINT - Lets you define what script or command to run when the container starts up
              E.g. ENTRYPOINT [ "python" ]
+             Generally ENTRYPOINT ["executable", "param1", "param2", ...]
+ 
+             From https://goinbigdata.com/docker-run-vs-cmd-vs-entrypoint/:
+                ENTRYPOINT instruction allows you to configure a container that will run as an executable.
+                It looks similar to CMD, because it also allows you to specify a command with parameters.
+                The difference is ENTRYPOINT command and parameters are not ignored when Docker container
+                runs with command line parameters. 
 
 CMD - Execute commands at runtime, difference to ENTRYPOINT is that you can provide default values
       which can be overriden at runtime. Entrypoint can be overridden.
       E.g. CMD [ "app.py" ]
+      Generally CMD ["executable", "param1", "param2", ...]
 
-
+      From https://goinbigdata.com/docker-run-vs-cmd-vs-entrypoint/:
+        * CMD instruction allows you to set a default command, which will be executed only when you run
+          container without specifying a command.
+        * Docker container runs with a command, the default command will be ignored. If Dockerfile has
+          more than one CMD instruction, all but last CMD instructions are ignored.
 
 Example
 --------
@@ -566,6 +581,14 @@ A note about volumes (https://docs.docker.com/engine/reference/commandline/servi
 For each replica of the service, the engine requests a volume named "my-volume" from the default ("local") volume driver
 where the task is deployed. If the volume does not exist, the engine creates a new volume and applies the labels.
 When the task is started, the volume is mounted on /path/in/container/ inside the container.
+
+From Overriding Dockerfile image defaults
+
+Overriding Dockerfile image defaults:
+    https://docs.docker.com/engine/reference/run/#overriding-dockerfile-image-defaults
+    When a developer builds an image from a Dockerfile or when she commits it, the developer can set a number of default 
+    parameters that take effect when the image starts up as a container. Four of the Dockerfile commands cannot be overridden 
+    at runtime: FROM, MAINTAINER, RUN, and ADD. Everything else has a corresponding override in docker run.
 </pre>
 
 <p>
@@ -1266,6 +1289,71 @@ When you scale swarm doesn't move resource around so nodes could be unbalanced.
         * Automates many tasks in Kubernetes dev environment.
         * Makes it easy to update code in a running pod.
         * Makes easy to create/de;ete all objects tied to a project in on go
+</pre>
+
+<h2>Urg</h2>
+<pre>
+  https://docs.docker.com/engine/swarm/admin_guide/
+Raft requires a majority of managers, also called the quorum, to agree on proposed updates to the swarm, such as node additions or removals. Membership operations are subject to the same constraints as state replication.
+
+If the swarm loses the quorum of managers, the swarm cannot perform management tasks. If your swarm has multiple managers, always have more than two
+
+Raft tolerates up to (N-1)/2 failures and requires a majority or quorum of (N/2)+1 members to agree on values proposed to the cluster. This means that in a cluster of 5 Managers running Raft, if 3 nodes are unavailable, the system cannot process any more requests to schedule additional tasks. The existing tasks keep running but the scheduler cannot rebalance tasks to cope with failures if the manager set is not healthy.
+
+
+
+https://docs.mongodb.com/manual/replication/
+
+A replica set in MongoDB is a group of mongod processes that maintain the same data set. Replica sets provide redundancy and high availability, and are the basis for all production deployments. 
+
+Your application connection logic should include tolerance for automatic failovers and the subsequent elections. Starting in MongoDB 3.6, MongoDB drivers can detect the loss of the primary and automatically retry certain write operations a single time, providing additional built-in handling of automatic failovers and elections
+
+The primary is the only member in the replica set that receives write operations. MongoDB applies write operations on the primary and then records the operations on the primary's oplog. Secondary members replicate this log and apply the operations to their data sets.
+
+Replica sets should always have an odd number of members. This ensures that elections will proceed smoothly.
+THis confirms it: https://dba.stackexchange.com/q/148855
+
+See: https://docs.mongodb.com/manual/tutorial/deploy-replica-set/
+
+
+
+https://medium.com/@kalahari/running-a-mongodb-replica-set-on-docker-1-12-swarm-mode-step-by-step-a5f3ba07d06e
+
+It is important to specify the “ — listen-addr” parameter when using docker-machine and VirtualBox, as the VMs are assigned multiple network interfaces.
+docker@manager1:~$ docker swarm init --listen-addr 192.168.99.100:2377 --advertise-addr 192.168.99.100:2377
+
+
+
+
+
+docker node update --label-add mongo.replica=2 $(docker node ls -q -f name=worker1)
+
+$ docker node ls -q -f name=docker-desktop
+v6neb2hympfaejcdgjxqp92pu
+
+
+$ docker service create --replicas 1 --network mongo --mount type=volume,source=mongodata1,target=/data/db --mount type=volume,source=mongoconfig1,target=/data/configdb --constraint 'node.labels.mongo.replica == 1' --name mongo1 mongo:3.2 mongod --replSet example
+b29ftmx77l75owmhm
+
+
+
+$docker exec \
+   -it $(docker ps -qf label=com.docker.swarm.service.name=mongo1) \
+   mongo \
+   --eval 'rs.initiate({
+               _id: "example",
+                members: [
+                    { _id: 1, host: "mongo1:27017" },
+                    { _id: 2, host: "mongo2:27017" },
+                    { _id: 3, host: "mongo3:27017" }
+                ],
+                settings: { 
+                    getLastErrorDefaults: {
+                        w: "majority",
+                        wtimeout: 30000
+                    }
+                 }
+             })'
 </pre>
 
 </div> <!-- END H1 padding div -->
