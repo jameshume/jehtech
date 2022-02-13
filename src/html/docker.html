@@ -263,6 +263,9 @@ RUN - To run a command(s)
       By default this is run as an argument to '/bin/sh -c'.
       The CMD instruction is being passed in as an argument to and ENTRYPOINT script (see later)
 
+      CMD output probably doesnt go to docker logs: https://stackoverflow.com/a/55444575
+          use &gt;&gt; /proc/1/fd/1   
+
 
 EXPOSE - Expose a port on which the container can access the outside world on
          e.g. EXPOSE 8080 # Expose this port for the webapp.
@@ -605,6 +608,8 @@ Overriding Dockerfile image defaults:
 <h2>Docker Swarm</h2>
 <h3>Intro</h3>
 <pre>
+Like: https://gabrieltanner.org/blog/docker-swarm
+
 * Docker swarm is a clustering solution built inside Docker.
     * Clusters we care less about individual nodes. We don't name them - just throw requirements at
       swarm and swarm does the machanics of distributing round the swarm.
@@ -612,9 +617,10 @@ Overriding Dockerfile image defaults:
 * A single service can have multiple tasks.  
 
 * Swarm not active by default. Use `docker info` to see swarm status.
-    * Use `docker swarm init [--advertise-addr IP_ADDR]` to enable.
+    * Use `docker swarm init [--advertise-addr IP_ADDR] [--listen-addr IP_ADDR]` to enable.
         * Use --advertise-addr to give a public address to advertise the swarm service on - must
           be accessible from other servers you want in the swarm.
+        * Use "--listen-addr" when machine has multiple network interfaces and you want to bind to a specific one.
     * Creates root signing certficate created for the swarm, issued for first Manager node
     * Join tokens created - can be used on other nodes to join swarm
     * Create RAFT consensus DB
@@ -630,6 +636,14 @@ Overriding Dockerfile image defaults:
         * Deploy swarm by submitting service definition to manager.        
     * __Worker__ nodes receive and execute tasks dispatched from manager nodes
     * A __service__ is the definition of the tasks to execute on the manager or worker nodes.
+
+* Ports
+    You need the following ports open between your swarm nodes:
+
+    2377/tcp: Swarm mode api
+    7946/both: Overlay networking control
+    4789/udp: Overlay networking data
+    protocol 50 for ipsec (secure option) of overlay networking
 
 * Create service:
     * $ docker service create alpine ping 8.8.8.8
@@ -711,27 +725,36 @@ multipass [u]mount $HOME foo
 <pre>
 A small bit of revision....
 From https://docs.docker.com/engine/swarm/how-swarm-mode-works/nodes/
-A swarm consists of one or more nodes: physical or virtual machines running Docker Engine 1.12 or later in swarm mode.
-There are two types of nodes: managers and workers.
+and https://docs.docker.com/engine/swarm/admin_guide/:
+    A swarm consists of one or more nodes: physical or virtual machines running Docker Engine 1.12 or later in
+    swarm mode. There are two types of nodes: managers and workers.
 
-Manager nodes handle cluster management tasks:
-    * maintaining cluster state
-    * scheduling services
-    * serving swarm mode HTTP API endpoints
-Using a Raft implementation, the managers maintain a consistent internal state of the entire 
-swarm and all the services running on it. 
+    Manager nodes handle cluster management tasks:
+        * maintaining cluster state
+        * scheduling services
+        * serving swarm mode HTTP API endpoints
+        * When you run a swarm of Docker Engines, manager nodes are the key components for managing the swarm and
+          storing the swarm state.
+        * Raft requires a majority of managers, also called the quorum, to agree on proposed updates to the swarm,
+          such as node additions or removals ... If the swarm loses the quorum of managers, the swarm cannot perform
+          management tasks ... Even if a swarm loses the quorum of managers, swarm tasks on existing worker nodes
+          continue to run. However, swarm nodes cannot be added, updated, or removed, and new or existing tasks
+          cannot be started, stopped, moved, or updated.
+    Using a Raft implementation, the managers maintain a consistent internal state of the entire 
+    swarm and all the services running on it. 
 
-When you have multiple managers you can recover from the failure of a manager node without downtime.
-An N manager cluster tolerates the loss of at most (N-1)/2 managers.
+    When you have multiple managers you can recover from the failure of a manager node without downtime.
+    An N manager cluster tolerates the loss of at most (N-1)/2 managers.
 
-Worker nodes are also instances of Docker Engine whose sole purpose is to execute containers. Worker nodes don't
-participate in the Raft distributed state, make scheduling decisions, or serve the swarm mode HTTP API.
+    Worker nodes are also instances of Docker Engine whose sole purpose is to execute containers. Worker nodes don't
+    participate in the Raft distributed state, make scheduling decisions, or serve the swarm mode HTTP API.
 
-By default, all managers are also workers
+    By default, all managers are also workers
 
-See https://docs.docker.com/engine/swarm/how-swarm-mode-works/services/
-    https://docs.docker.com/engine/swarm/how-swarm-mode-works/pki/
+    See https://docs.docker.com/engine/swarm/how-swarm-mode-works/services/
+        https://docs.docker.com/engine/swarm/how-swarm-mode-works/pki/
 
+        Like: https://sebiwi.github.io/blog/how-does-it-work-docker-3/
 
 Back to course...
 
@@ -768,7 +791,7 @@ To see the service do:
   docker service ls
 
 To see the gory details of/for a service:
-  docker service inspect SERVICE_NAME
+  docker service inspect [--pretty] SERVICE_NAME
 
 To see the service instance running on the various nodes do:
   docker service ps affectionate_ellis
@@ -1303,6 +1326,9 @@ Raft tolerates up to (N-1)/2 failures and requires a majority or quorum of (N/2)
 
 
 https://docs.mongodb.com/manual/replication/
+Really good blogg post about it: https://www.openmymind.net/Does-My-Replica-Set-Need-An-Arbiter/
+Votes: https://stackoverflow.com/questions/26167440/mongodb-replica-set-and-preventing-primary-from-becoming-a-secondary
+       https://stackoverflow.com/q/20857306
 
 A replica set in MongoDB is a group of mongod processes that maintain the same data set. Replica sets provide redundancy and high availability, and are the basis for all production deployments. 
 
@@ -1318,13 +1344,6 @@ See: https://docs.mongodb.com/manual/tutorial/deploy-replica-set/
 
 
 https://medium.com/@kalahari/running-a-mongodb-replica-set-on-docker-1-12-swarm-mode-step-by-step-a5f3ba07d06e
-
-It is important to specify the “ — listen-addr” parameter when using docker-machine and VirtualBox, as the VMs are assigned multiple network interfaces.
-docker@manager1:~$ docker swarm init --listen-addr 192.168.99.100:2377 --advertise-addr 192.168.99.100:2377
-
-
-
-
 
 docker node update --label-add mongo.replica=2 $(docker node ls -q -f name=worker1)
 
@@ -1354,6 +1373,28 @@ $docker exec \
                     }
                  }
              })'
+
+
+Useful reading about High Availability (HA) Clusters
+----------------------------------------------------
+https://en.wikipedia.org/wiki/Split-brain_(computing)
+    It indicates data or availability inconsistencies originating from the maintenance of two separate data
+    sets with overlap in scope, either because of servers in a network design, or a failure condition based
+    on servers not communicating and synchronizing their data to each other. This last case is also commonly
+    referred to as a network partition.
+
+    Modern commercial general-purpose HA clusters typically use a combination of heartbeat network connections
+    between cluster hosts, and quorum witness storage. The challenge with two-node clusters is that adding a
+    witness device adds cost and complexity (even if implemented in the cloud), but without it, if heartbeat
+    fails, cluster members cannot determine which should be active. In such clusters (without quorum), if a
+    member fails, even if the members normally assign primary and secondary statuses to the hosts, there is
+    at least a 50% probability that a 2-node HA cluster will totally fail until human intervention is provided,
+    to prevent multiple members becoming active independently and either directly conflicting or corrupting data.
+
+https://en.wikipedia.org/wiki/Heartbeat_(computing)#Heartbeat_network
+    Heartbeat network is a private network which is shared only by the nodes in the cluster, and is not
+    accessible from outside the cluster. It is used by cluster nodes in order to monitor each node's status
+    and communicate with each other messages necessary for maintaining the operation of the cluster.
 </pre>
 
 </div> <!-- END H1 padding div -->
