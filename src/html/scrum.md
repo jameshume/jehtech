@@ -238,7 +238,7 @@ Feedback:
 
 
 ## Sprints
-A sprint is a *timeboxed* duration that can*not* be extended. It defines an increment of a product, in that
+A sprint is a *timeboxed* duration that can *not* be extended. It defines an increment of a product, in that
 it has a clear *goal*, which ensures that at the end of the sprint some feature is delivered that adds to existing
 functionality.
 
