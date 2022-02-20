@@ -71,3 +71,22 @@ Some examples of when type annotation is useful:
 * WHen variable has type that cannot otherwise inferred
 * When function returns 'any' type and it needs to be restricted/clarified
 
+#### Types Added By TypeScript
+
+``` { .prettyprint .linenums}
+//
+// Tuples (Really fixed length arrays):
+var_name: [number, string] 
+
+// Note tuple length is contrained when creating them but unfortunately
+// you can violate this with .push()
+
+
+// Enums
+enum { ENUM_1, ENUM_2, ... }  // Creates labels starting at 0
+enum { ENUM_1 = 101, ENUM_2, ... }  // Creates labels starting at 101
+// + Can assign to any/all of the enum members.
+
+
+
+```

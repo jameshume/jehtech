@@ -1191,6 +1191,27 @@ https://www.linux.com/blog/learn/intro-to-linux/2018/5/writing-systemd-services-
 https://learn.adafruit.com/running-programs-automatically-on-your-tiny-computer/systemd-writing-and-enabling-a-service</pre>
       </div>
 
+      <h2>Setup/Install SSH Daemon for SSH access</h2>
+      <div>
+         <pre>$sudo apt update
+$ sudo apt install openssh-server   # Instal the server
+$ sudo systemctl status ssh         # Make sure its running
+
+# Root login and password based authentication enabled by default
+# Security practice is to disable both and require users to provide keys.
+
+$ sudo vi /etc/ssh/sshd_config
+# Change ChallengeResponseAuthentication to &quot;no&quot;
+#        PasswordAuthentication to &quot;no&quot;
+#        UsePAM to &quot;no&quot;
+#        PermitRootLogin to &quot;no&quot;
+#        PermitRootLogin to &quot;prohibit-password&quot;
+
+$ sudo /etc/init.d/ssh reload
+# OR
+$ sudo systemctl reload ssh</pre>
+      </div>
+
 	  <h2>Sed</h2>
 	  <div>
 		<h3>Intro</h3>
