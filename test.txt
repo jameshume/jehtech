@@ -1,7 +1,5 @@
-RUNNING THE MAKER WITH ARGS "DEPLOY" "" ""
+RUNNING THE MAKER WITH ARGS "DEPLOY" ">" "/proc/1/fd/1"
 DOing the deploy
 Downloading remote site hash file... Done
 Nothing to delete on remote
-Uploading docker.html as text/html
-Creating CloudFront invalidations for uploaded files...
-Uploading site_hashes.dat
+Nothing to upload to remote

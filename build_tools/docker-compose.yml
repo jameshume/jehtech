@@ -1,8 +1,15 @@
 version: '3'
 services:
-    jehtech:
+    make:
         build: '.'
         image: 'jehtech:latest'
         volumes:
             - '..:/jehtech'
-        command: "DEPLOY"
+        entrypoint: [ "bash", "/scripts/docker_script.sh" ]
+
+    upload:
+        build: '.'
+        image: 'jehtech:latest'
+        volumes:
+            - '..:/jehtech'
+        entrypoint: [ "bash", "/scripts/docker_script.sh" , "DEPLOY" , ">", "/proc/1/fd/1"]

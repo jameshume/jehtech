@@ -8,8 +8,8 @@ Now using docker-compose.
 
 From the `build_tools` directory:
 
-* To run a build of the website do `docker-compose up`
-* To build the container and then do a build of the website do `docker-compose up --build`
+* To run a build of the website do `docker-compose up make`
+* To build the container and then do a build of the website do `docker-compose up --build make`
 
 The docker-compose file will do a bind-mount for you so that the root of the jehtech repository is
 mapped to `/jehtech` in the Docker image. The `RUN` command will execute a script that will change
@@ -27,4 +27,4 @@ which will have the following contents:
 
 The **access_key is secret: never commit to your repository!**.
 
-To do the deploy from the command line use... TODO 
+To do the deploy from the command line use `docker-compose up upload`.

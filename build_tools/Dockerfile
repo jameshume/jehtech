@@ -19,4 +19,3 @@ RUN npm install \
     && apt-get install -y python3-pip vim \
     && pip3 install lxml pillow pyhash awscli boto3 markdown
 
-ENTRYPOINT [ "bash", "/scripts/docker_script.sh" ]

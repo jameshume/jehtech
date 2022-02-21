@@ -76,4 +76,42 @@ be known to Anglular at the time it analysers our `index.html` file.
 
 
 ### Components
+Create a new component in one of two ways:
+
+1. Using the CLI tool `ng generate component foo`
+2. Do it manually:
+    * Give each component own folder
+    * Make folder for component under the `app` folder with the same name as the component.
+    * Inside the folder create a file named `foo.component.ts`.
+    * Add into the file:
+```
+import { Component } from '@angular/core';
+
+@Component({
+    selector: 'app-foo', // This tells Angular to recognise <app-mycomponent/> in the HTML
+                         // It must be UNIQUE and not a reserved HTML tag name.
+    templateUrl: './foo/foo.component.html',
+    styleUrls: [filename1.css, ...]
+})
+export class FooComponent {
+
+};
+```
+   * Register the new component in `app.module.ts` in the `declarations` dictionary in `@NgModule`
+     and remember to include your component in this file.
+
+
+* Templates can also be defined *inline* by changing `templateUrl` to `template`, which then maps
+  not to a file name but a string containing HTML.
+* Just how templates can be inlined, so can styles by changing `styleUrl` to `styles`.
+
+#### Selectors Deep Dive
+The `selector: 'app-foo'` can be any CSS selector. For exmaple if it was changed to `selector:[app-foo]`
+then cannot use `<app-foo>` and must instead use `<div app-foo>` because `app-foo` is now an attribute!
+
+The selector could also specify a class, as in `selector: '.app-foo'`. Then we would have to use
+`<div class="app-foo">`!
+
+Selecting by ID and pseudo selectors will *not* work!
+
 
