@@ -4,6 +4,12 @@
     * 4 Values
     * 12 Principles
 * Agile is a *framework*, scrum is an agile *METHODOLOGY*.
+
+    > Agile comprises of principles that guide through the iterative approach for software processes. 
+    > But there are certain rules that testers have to follow in an agile environment. This set of rules is called scrum.
+    > Scrum is a part of an agile framework.
+    > (https://www.testim.io/blog/scrum-testing-guide/)
+
 * Value-driven life cycle: prioritise work by business value - do most valuable work first.
     * Provides best return on investment (ROI) possible to stakeholders.
     * Incremental build and deployment lets stakeholders evolve requirements and check right thing built.
@@ -31,6 +37,7 @@
 ### Good References
 * [The Agile Manifesto](https://agilemanifesto.org/)
 * [The Scrum Guide](https://scrumguides.org/scrum-guide.html)
+* [Hey Scrum! Where has the test phase gone?](https://explainagile.com/blog/test-phase-in-scrum/)
 
 [An amazing SO thread on sprints and "failures"](https://pm.stackexchange.com/a/18228), quoted
 below:
