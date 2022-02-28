@@ -1,5 +1,7 @@
 ## Conduit API
 
+![Phab object relationships](##IMG_DIR##/phabricator_projects_tasks_structure.png)
+
 ### Setup Python API With Token
 To avoid storing the token in source control, keep it in a file that is part of `.gitignore` so that
 it does not get committed.
