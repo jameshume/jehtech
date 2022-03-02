@@ -22,11 +22,11 @@ phab.update_interfaces()
 ### Task Info
 To search for a task there is `phab_api.maniphest.query(ids=[...])` and `phab_api.maniphest.search(constraints={'ids': [...]})`. Both return an overlapping set of information but with some annoying differences, for example, `search()` will give information about the story points for the task, whilst `query()` will not.
 
-``` { .prettyprint .linenums}
+<pre>
 Auxillary fields removed from below:
 
 +------------------------------------------------+-------------------------------------------------------------+
-| maniphest.search()                             | maniphest.query()                                           |
+| <b>maniphest.search()</b>                             | <b>maniphest.query()</b>                                           |
 +------------------------------------------------+-------------------------------------------------------------+
 | List[Dict]                                     | Dict: PHID-TASK -> Dict                                     |
 | [{                                             | {                                                           |
@@ -65,7 +65,7 @@ Auxillary fields removed from below:
 | ...                                            |     ...                                                     |
 | ]                                              | }                                                           |
 +------------------------------------------------+-------------------------------------------------------------+
-```
+</pre>
 
 To get a complete view of a task 2 API calls need to be made :(
 
@@ -120,8 +120,8 @@ The fields `newValue` and `oldValue` depend on the `transactionType`.
 'oldValue': None,
 ```
 
-When `fromColumnPHIDs` is the empty  list (`[]`) it means that the task (if you were querying tasks!)
-was created and has just been assigned a column in a workboard.
+When `fromColumnPHIDs` is the empty  list (`[]`) it means that the task was created and has just been
+assigned a column in a workboard.
 
 You have to watch out for board changes. The `columnPHID` and `fromColumnPHIDs` can be on another board.
 
