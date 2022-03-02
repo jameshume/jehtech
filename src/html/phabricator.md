@@ -1,4 +1,9 @@
-## Conduit API
+<style>
+    .same {
+        background-color: #ccffcc
+    }
+</style>
+
 
 ![Phab object relationships](##IMG_DIR##/phabricator_projects_tasks_structure.png)
 
@@ -13,42 +18,49 @@ phab = Phabricator(host='https://HOST_ADDR/api/', token=conduit_api_token)
 phab.update_interfaces()
 ```
 
-## Tasks
+## Tasks (The Maniphest API)
 ### Task Info
 To search for a task there is `phab_api.maniphest.query(ids=[...])` and `phab_api.maniphest.search(constraints={'ids': [...]})`. Both return an overlapping set of information but with some annoying differences, for example, `search()` will give information about the story points for the task, whilst `query()` will not.
 
 ``` { .prettyprint .linenums}
+Auxillary fields removed from below:
+
 +------------------------------------------------+-------------------------------------------------------------+
-| Search()                                       | Query()                                                     |
+| maniphest.search()                             | maniphest.query()                                           |
 +------------------------------------------------+-------------------------------------------------------------+
 | List[Dict]                                     | Dict: PHID-TASK -> Dict                                     |
 | [{                                             | {                                                           |
 |     'attachments': {},                         |                                                             |
 |     'fields': {                                |     'PHID-TASK-sff44g4bfykui2mwakwt': {                     |
-|         'authorPHID': 'PHID-USER-...',         |         'authorPHID': 'PHID-USER-...',                      |
-|         'closerPHID': 'PHID-USER-...',         |         'auxiliary': {...},                                 |
-|         'dateClosed': unix-epoch-timestamp,    |         'ccPHIDs': ['PHID-USER-.', ...],                    |
-|         'dateCreated': unix-epoch-timestamp,   |         'dateCreated': '1617202435',                        |
-|         'dateModified': unix-epoch-timestamp,  |         'dateModified': '1646080087',                       |
-|         'description': {'raw': '...'},         |         'description': '...',                               |
-|         'name': '...',                         |         'title': '...',                                     |
-|         'ownerPHID': 'PHID-USER-...',          |                                                             |
-|         'points': '...',                       |         'isClosed': True,                                   |
+<span class="same">|         'authorPHID': 'PHID-USER-...',         |         'authorPHID': 'PHID-USER-...',                      |</span>
+|         'closerPHID': 'PHID-USER-...',         |                                                             |
+|         'dateClosed': unix-epoch-timestamp,    |                                                             |
+<span class="same">|         'dateCreated': unix-epoch-timestamp,   |         'dateCreated': 'unix-epoch-timestamp',              |</span>
+<span class="same">|         'dateModified': unix-epoch-timestamp,  |         'dateModified': 'unix-epoch-timestamp',             |</span>
+<span class="same">|         'description': {'raw': '...'},         |         'description': '...',                               |</span>
+<span class="same">|         'name': '...',                         |         'title': '...',                                     |</span>
+<span class="same">|         'ownerPHID': 'PHID-USER-...',          |         'ownerPHID': 'PHID-USER-lvc3c4gnmdu6biq5bac4'       |</span>
+|         'points': '...',                       |                                                             |
 |         'policy': {'edit': 'users',            |         'objectName': 'T1234',                              |
-|                    'interact': 'users',        |         'ownerPHID': 'PHID-USER-lvc3c4gnmdu6biq5bac4'       |
+|                    'interact': 'users',        |                                                             |
 |                    'view': 'users'},           |                                                             |
-|         'priority': {'color': 'orange',        |         'priority': 'Normal',                               |
-|                      'name': 'Normal',         |         'priorityColor': 'orange',                          |
-|                      'value': 50},             |         'projectPHIDs': ['PHID-PROJ-...'],                  |
-|         'spacePHID': None,                     |         'uri': 'https://url-here.com/T1234',                |
-|         'status': {'color': None,              |         'status': 'resolved',                               |
-|                    'name': 'Resolved',         |         'statusName': 'Resolved',                           |
-|                    'value': 'resolved'},       |                                                             |
-|         'subtype': 'default'                   |         'dependsOnTaskPHIDs': ['PHID-TASK-...', ...],       |
+<span class="same">|         'priority': {'color': 'orange',        |         'priority': 'Normal',                               |</span>
+<span class="same">|                      'name': 'Normal',         |         'priorityColor': 'orange',                          |</span>
+|                      'value': 50},             |                                                             |
+|         'spacePHID': None,                     |                                                             |
+|         'status': {'color': None,              |                                                             |
+<span class="same">|                    'name': 'Resolved',         |         'statusName': 'Resolved',                           |</span>
+<span class="same">|                    'value': 'resolved'},       |         'status': 'resolved',                               |</span>
+|         'subtype': 'default'                   |                                                             |
 |     },                                         |                                                             |
-|     'id': 11600,                               |         'id': '11600',                                      |
-|     'phid': 'PHID-TASK-...',                   |         'phid': 'PHID-TASK-...',                            |
+<span class="same">|     'id': 11600,                               |         'id': '11600',                                      |</span>
+<span class="same">|     'phid': 'PHID-TASK-...',                   |         'phid': 'PHID-TASK-...',                            |</span>
 |     'type': 'TASK'                             |                                                             |
+|                                                |         'projectPHIDs': ['PHID-PROJ-...'],                  |
+|                                                |         'uri': 'https://url-here.com/T1234',                |
+|                                                |         'dependsOnTaskPHIDs': ['PHID-TASK-...', ...],       |
+|                                                |         'ccPHIDs': ['PHID-USER-.', ...],                    |
+|                                                |         'isClosed': True,                                   |
 | },                                             |     },                                                      |
 | ...                                            |     ...                                                     |
 | ]                                              | }                                                           |
