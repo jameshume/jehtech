@@ -115,3 +115,97 @@ The selector could also specify a class, as in `selector: '.app-foo'`. Then we w
 Selecting by ID and pseudo selectors will *not* work!
 
 
+#### Data Binding
+* How the model can output data to the view and receive updates (react to user events) from the view: communication.
+  * String Interpolation: `{{ data }}`. `data` is any expression that can result in a string.
+  * Property Binding: `[property]="isEnabled"`.
+    * E.g. `<button [disabled]="isEnabled">My Button</button>` or even more complex, `<span [style.font-size.px]="size">FontSize: {{size}}px</span>`.
+      This binds to the HTML element property the value of the variable isEnabled in whatever component is assoc with this template.
+      This will mean that the view updates dynamically when the propery changes.
+  * Event Binding: `(event)="expression"`.
+    * E.g. `<button (click)="functionNameInComponent($event)">...`
+      * `$event` is the data emmitted with that event. This is the DOM event object, unlike in React where a 
+        virtual event wrapper would be received.
+      * eg 
+        ```
+        export class SomeComponent {
+          ...
+          functionNameInComponent(event: Event) {
+            this.someVariable = (<HTMLInputElement>event.target).value;
+          }
+        }
+        ```
+
+Important: For Two-Way-Binding, enable the `ngModel` directive. Add the `FormsModule` to the `imports[]` array in the `AppModule`.
+You then also need to add the `import from @angular/forms` in the `app.module.ts` file: `import { FormsModule } from '@angular/forms';`.
+
+##### Two Way Binding
+* When we want to display/use the value from the model and update it as well:
+  * E.g. `<input type="text" [(ngModel)]="model_variable">...`. This combines the property binding syntax and the event
+    binding syntax into one expression.
+
+
+### Directives
+#### ngIf
+`ngIf` is a structural directive, which means that it changes the structure of the DOM. It can be bound to an element to
+determine whether it appears in the DOM (is displayed) or not.
+
+```
+<p *ngIf="boolean-expression">Some text ... </p>
+   ^
+   * means it is a structural directive - it changes the structure of the DOM.
+```
+To add an "else" block - i.e., a DOM node that will be displayed if `boolean-expression` above is `false`, use a local reference
+like so:
+
+```
+<p *ngIf="boolean-expression; else booleanExpressionWasFalse">Some text ... </p>
+<ng-template #booleanExpressionWasFalse>
+  <p>The oppose of the text in the paragraph above</p>
+</ng-template>
+```
+
+#### ngStyle
+Use `ngStyle` to dymanically style components. This is an attribute directive, which means it doesn't add or remove elements. It
+only changes the element it was placed on.
+
+```
+<p [ngStyle="{...key/value CSS pairs...}"]>...</p>
+   ^^^^^^^^
+   ^ngStyle is a directive - its not the property we bind to
+   ^
+   The square brackets mean we are binding to the prpoerty **of the directive**. 
+```
+
+Eg `<p [ngStyle="{backgroundColor: getColor()}"]>...</p>`, where `getColor` is a function in the assoc. component.
+
+
+Better e.g.:
+```
+<ul>
+  <li *ngFor="let course of courses" 
+  [ngStyle]="{'color': course.color, 'font-size':'24px'}"> 
+    {{ course.name }}
+  </li>
+</ul>
+```
+
+#### ngClass
+Provide CSS classes dynamically.
+
+Use: `<p [ngClass]="{keys: the CSS class name, values: determine whether class should be applied}">`.
+
+E.g. `<p [bgClass]={my_css_class: shouldApplyIt()}>`.
+
+
+#### ngFor
+
+Generate lists. E.g.:
+
+```
+<ul>
+  <li *ngFor="let user of users">{{ user.name }}</li>
+</ul>
+```
+
+
