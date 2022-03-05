@@ -20,7 +20,7 @@ phab.update_interfaces()
 
 ## Tasks (The Maniphest API)
 ### Task Info
-To search for a task there is `phab_api.maniphest.query(ids=[...])` and `phab_api.maniphest.search(constraints={'ids': [...]})`. Both return an overlapping set of information but with some annoying differences, for example, `search()` will give information about the story points for the task, whilst `query()` will not.
+To search for a task there is `phab_api.maniphest.query(ids=[...])` and `phab_api.maniphest.search(constraints={'ids': [...]})`. Both return an overlapping set of information but with some annoying differences, for example, `search()` will give information about the story points for the task, whilst `query()` will not. The reason is that **`query()` is deprecated**.
 
 <pre>
 Auxillary fields removed from below:
@@ -130,6 +130,63 @@ You have to watch out for board changes. The `columnPHID` and `fromColumnPHIDs` 
 'newValue': <int or None>,
 'oldValue': <int or None>,
 ```
+
+#### transactionType == 'core:edges'
+As in edges in a graph data structure: these are the links between tasks and projects, other taks and diffusion commits.
+
+**Add/Remove Project To/From Task**
+Example of adding a Project tag to a task - an edge between the project and task is created:
+```
+{
+    'authorPHID': 'PHID-USER-...', 
+            'comments': None,
+            'dateCreated': '...',
+            'newValue': ['PHID-PROJ-', ...],
+            'oldValue': [],
+            'taskID': '...',
+            'transactionID': '...',
+            'transactionPHID': 'PHID-XACT-TASK-...',
+            'transactionType': 'core:edge'
+}
+```
+
+`newValue` has the project PHID that was newly associated with the task. If multiple projects were associated then the list has more than one member.
+
+`oldValue` would be populated if a project as disassociated from a task
+
+**Add/Remove Metnion Of Another Task To/From A Task**
+When another task is mentioned in the current task, an association, or edge, to the mentioned task must be created. The edge direction is from the mentioner to the mentionee Eg:
+
+```
+{
+    'authorPHID': 'PHID-USER-'
+    'comments': None,
+    'dateCreated': '1617143557',
+    'newValue': ['PHID-TASK-...'],
+    'oldValue': [],
+    'taskID': '...',
+    'transactionID': '...',
+    'transactionPHID': 'PHID-XACT-TASK-...',
+    'transactionType': 'core:edge'
+},
+```
+
+**Add/Remove Mention Of Task To/From Diffusion Comment**
+This is when a Diffusion comment mentions a task. The edge directon is from the mentioner (the diffusion comment) to the mentionee (the task):
+```
+{
+    'authorPHID': 'PHID-USER-...',
+    'comments': None,
+    'dateCreated': '...',
+    'newValue': ['PHID-CMIT-...'],
+    'oldValue': [],
+    'taskID': '...',
+    'transactionID': '...',
+    'transactionPHID': 'PHID-XACT-TASK-...',
+    'transactionType': 'core:edge'
+}
+```
+
 ## Listing Projects
 From the Phab docs:
 
@@ -142,7 +199,11 @@ From the Phab docs:
 > Milestones are a special kind of subproject for organizing tasks into blocks of work.
 > You can use them to implement sprints, iterations, milestones, versions, etc.
 
-Use [`projects.query()`](https://secure.phabricator.com/conduit/method/project.query/).
+Use [`projects.query()`](https://secure.phabricator.com/conduit/method/project.query/) and/or
+Use [`projects.search()`](https://secure.phabricator.com/conduit/method/project.search/)
+
+### Query
+**`query()` is deprecated**.
 
 ``` { .prettyprint .linenums}
 all_projects = phab.project.query()
@@ -180,7 +241,40 @@ In this case the response is the same shape as shown above except that the `data
 
 If the project cannot be found then `data` will be an empty *list*.
 
+### Search
+Just as for tasks, query and search give slightly different sets of data. For example, search lets you find out about parents! The reason is that **`query()` is deprecated**.
 
+```
+{'attachments': {},
+  'fields': {'color': {'key': 'blue', 'name': 'Blue'},
+             'dateCreated': 1614861258,
+             'dateModified': 1634812114,
+             'depth': 1,
+             'description': '* Development of the configuration for the DS '
+                            'server cluster\n'
+                            '* Initial deployment of intrusion detection '
+                            '(Snort & SELinux)',
+             'icon': {'icon': 'fa-map-marker',
+                      'key': 'milestone',
+                      'name': 'Milestone'},
+             'milestone': 5,
+             'name': 'DS 1: Platform & Intrusion Det. 1',
+             'parent': {'id': 359,
+                        'name': 'Seagull',
+                        'phid': 'PHID-PROJ-anuxwlemwcqozn7zwlxs'},
+             'policy': {'edit': 'users', 'join': 'users', 'view': 'users'},
+             'slug': None,
+             'spacePHID': None,
+             'subtype': 'default'},
+  'id': 385,
+  'phid': 'PHID-PROJ-2ogwbkehmovihj36qump',
+  'type': 'PROJ'
+}
+```
+
+* `depth` is the level in the parent/child tree where the parent has depth `0`.
+* If searching for a project by name, that is not at depth 0, then if subprojects can have identical names then
+  will need to also specificy the parent project.
 
 #### Project Work Board: Getting Columns
 
