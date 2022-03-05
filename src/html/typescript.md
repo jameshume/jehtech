@@ -17,6 +17,19 @@
           to compile and then run code into one command.
     * Run compiler: `tsc --help`. TSC = **T**ype**S**cript **C**ompiler
 
+
+## TS Compiler Config
+* Avoid continuall re-running `tsc` using watch mode: 
+    * Specific file: `tsc <filename> --watch`
+    * A project `tsc --init` (only once for project - be in root before running!)
+        * Creates `tsconfig.json`
+            * Non-compile Options:
+                * `"exclude": [...list of more file names...]` (* and ** ok and "node_modules" excluded bu default)
+                * `"include": [now only these files are compiled - must include everything]`
+            * Compiler Options
+                * `"target": "es5|es6|...` - which version of JavaScript you compile to.
+                * `"lib": []` - spec library files to include, e.g. DOM model (is default known).
+        * Now can just run `tsc --watch`
 ## Features & Syntax
 ### Types
 For example, to make a dictionary/object type stricter by defining the members and
@@ -86,7 +99,5 @@ var_name: [number, string]
 enum { ENUM_1, ENUM_2, ... }  // Creates labels starting at 0
 enum { ENUM_1 = 101, ENUM_2, ... }  // Creates labels starting at 101
 // + Can assign to any/all of the enum members.
-
-
-
 ```
+## Classes
