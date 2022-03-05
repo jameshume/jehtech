@@ -34,35 +34,66 @@ const my_variable = some_other_variable as my_interface
 
 Or we can do
 
-``` { .prettyprint .linenums}
-// Simple types
+<pre>
+<b>// Simple types</b>
 const blah: number = 5; // However TS can infer this - dont 
                         // need to be so explicit in this ex because
                         // doing decl and init on *same* line!
 
-// Arrays
+
+<b>// Arrays</b>
 const bar: number[] = [1,2,3]
 
-// Objects / CLasses
+
+<b>// Objects / Classes</b>
 const foo: Date = new Date();
 
-// Object literal
+
+<b>// Object literal</b>
 const cartesian = { x: number; y : number } {
     x: 10,
     y: 100
 }
 
-// Function
+
+<b>// Functions</b>
+// "Normal" functions
+function myFunc(a: number, b: number) : number {
+    //                                ^^^^^^^^
+    //                                Return type
+}
+
+// Return type can be `void` if nothing returned
+function myFunc(a: number, b: number) : void {    
+}
+
+// Function references
+let myFuncRef: Function;
+myFuncRef = myFunc
+
 const myFunc: (arg1: type1) => return_type = (arg1: type1) => {
     //        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    //        THis is the annotation even though it looks like the
+    //        This is the annotation even though it looks like the
     //        func defn - hard to read syntax
 }
 
-// Union types (best to avoid)
+
+<b>// Union types (best to avoid)</b>
 let oops: boolean | number = false;
 ...
 boolean = 44;
+
+
+<b>// Literals</b>
+// Not just a type but the specific value, or subset of values, from the set of values the type supports!
+// Just union of literals
+someVar: 1 | 2 | 3 // Can only have literal values 1, 2, or 3
+
+
+<b>// Alias</b>
+// The `type` keyword is *not* JS, it is introduced by TS
+type StringOrNumber = string | number;
+type User = { name: string; age: number };
 ```
 
 Some examples of when type annotation is useful:
@@ -86,7 +117,4 @@ var_name: [number, string]
 enum { ENUM_1, ENUM_2, ... }  // Creates labels starting at 0
 enum { ENUM_1 = 101, ENUM_2, ... }  // Creates labels starting at 101
 // + Can assign to any/all of the enum members.
-
-
-
 ```

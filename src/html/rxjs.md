@@ -528,3 +528,58 @@ mergeMap(v => obs$()) -----+--------------+---------------------+---------------
   never completes memory can be chewed up at a rate of knots.
 
 #### `exhaustMap`
+TODO
+
+
+
+## Subjects
+
+* [Docs](https://www.learnrxjs.io/learn-rxjs/subjects/subject)
+* Combination of an observer and an observable
+  * You can `.subscribe()` to it and use it as a regular observable.
+  * As subject is a source of emissions it behaves as a *hot observable* so all subscribers see the same values.
+    * Calling `next(value)`, `error(err)` or `complete()` on a subject will *multicast* that value to all subscribers..
+
+```
+code          -----+-------------+------------+----------------x-----...
+                   | next(A)     | next(B)    | next(C)        | error(err)
+                   v             v            v                v
+subject       -----A-------------B------------C----------------x-----...
+                         |       :     |      :                :
+                         |       :     |      :                :
+subscriber 1             +-------B-----|------C----------------x-----...
+                                       |      :                :
+                                       |      :                :
+subscriber 2                           +------C----------------x-----...
+
+                         ^^^^^^^^      ^^^^^^^^
+                         ^^^^^^^^      The length of time subscriber 2 has to wait, from start of subscription
+                         ^^^^^^^^      before getting a value.
+                         The length of time subscriber 1 has to wait, from start of subscription
+                         before getting a value.
+
+                         ^^^^^^^^^^^^^^^^^^^^^^
+                         For subscribers 1 & 2 to not have to wait to get a state, and instead on subscribe
+                         be called with the last seen state, use BehviorSubject
+```
+* E.g. multicast a button event to many listeners.
+* Note that a subscriber to a `Subject` will have to wait, from point of subscribe to the next emission to
+  find state. For a `BehaviorSubject` this is not the case. On subscription it gets a `.next()` call with the
+  last seen state. `BehaviorSubject` needs an *initial value*:
+
+```
+code          -------------------+------------+----------------x-----...
+                                 | next(C)    | next(D)        | error(err)
+                                 v            v                v
+BS (A)        -------------------B------------D----------------x-----...
+                   |             :     |      :                :
+                   |             :     |      :                :
+subscriber 1       A-------------B-----|------C----------------x-----...
+                   ^                   |      :                :
+                   ^                   |      :                :
+subscriber 2       ^                   B------C----------------x-----...
+                   ^                   ^
+                   ^                   On subscription the last seen value is always sent immediately.
+                   ^
+                   Note when BS has not received a value via `next()` it uses the initial value. 
+```
