@@ -26,7 +26,7 @@ To search for a task there is `phab_api.maniphest.query(ids=[...])` and `phab_ap
 Auxillary fields removed from below:
 
 +------------------------------------------------+-------------------------------------------------------------+
-| <b>maniphest.search()</b>                             | <b>maniphest.query()</ b>[DEPRECATED]                               |
+| <b>maniphest.search()</b>                             | <b>maniphest.query()</ b>[DEPRECATED]</b>                               |
 +------------------------------------------------+-------------------------------------------------------------+
 | List[Dict]                                     | Dict: PHID-TASK -> Dict                                     |
 | [{                                             | {                                                           |
