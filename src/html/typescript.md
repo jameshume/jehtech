@@ -106,8 +106,19 @@ someVar: 1 | 2 | 3 // Can only have literal values 1, 2, or 3
 <b>// Alias</b>
 // The `type` keyword is *not* JS, it is introduced by TS
 type StringOrNumber = string | number;
-type User = { name: string; age: number };
-```
+type User = { 
+    name: string;
+    age: number 
+};
+
+// Or for a func...
+type MyFunc = (a: int, b: string) => int[];
+let myf: MyFunc;
+...
+mgf = (a: int, b: string) => {
+    return [1,2,3];
+}
+</pre>
 
 Some examples of when type annotation is useful:
 
@@ -131,4 +142,222 @@ enum { ENUM_1, ENUM_2, ... }  // Creates labels starting at 0
 enum { ENUM_1 = 101, ENUM_2, ... }  // Creates labels starting at 101
 // + Can assign to any/all of the enum members.
 ```
+
+
 ## Classes
+* A difference in TS is that you can specify, as a little improvement,  `this: <class type>` as a parameter for class methods to
+allow TS to detect errors where `this` would not lexically scope as happens in JS.
+* Class fields and methods can have `private`, `protected` and `public` (the default) modifiers. This will compile down to
+  [private JS class fields](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_class_fields#specifications)
+  if the compile-to version is modern enough, for example. If compile-to JS version not enough then not runtime enforced, only in TS.
+  eg.
+
+```
+// Can do this
+class A {
+    private a: int;
+    private b: int[] = [];
+    ...
+    
+    constructor(a: int, b: int[]) {
+        this.a = a;
+        this.b = b;
+        ...
+    }
+}
+
+// And the SHORT CUT is this:
+class A {
+    private a: int;
+    private b: int[] = [];
+    ...
+    
+    constructor(private a: int, private b: int[], ...) {
+        // With access modifiers the class member vars will be auto made for us...
+    }
+}
+```
+
+* Can make fields readonly after init. Only a TS fixture, does not exist in JS.
+```
+class A {
+    private a: int;
+    private b: int[] = [];
+    ...
+    
+    constructor(private readonly a: int, private b: int[], ...) {
+        //              ^^^^^^^^
+        //              a will be read only after it is initialised
+    }
+}
+```
+
+* Getters and setters like in normal JS
+```
+class A {
+    private a: int = 10
+
+    get my_a() {
+        return a; // But you'd use more complex logic!
+    }
+
+    set my_a(value: int) {
+        this.a = value;
+    }
+}
+
+const a = new A()
+a.my_a; // returns 10
+```
+
+* Static properties and methods use `static` keyword
+
+* In abstract classes can use `abstract` class functions using this keyword. They have no body and must define the return val.
+```
+abstract class A {
+    abstract some_func(this: A, ...): void;
+    //                                ^^^^^
+    //                                Note return type and NO function body
+}
+```
+
+* Create singletons using `private` constructors.
+
+## Interfaces
+* Describes a class/object members and functions. Use to type check objects.
+* Classes can `implements` interfaces... just like in Java - the solved the multiple inhertiance virtual base class problem.
+* TS only, doesn't exist in JS
+
+```
+interface A {
+    var1: string;
+    var2: string[];
+    ...
+
+    some_func(param: int, ...): int;
+    ...
+}
+
+let myA: A;
+...
+...
+myA = { // The following matches the interface so TS can typecheck this assignment because
+        // it knows what `myA` should look like.
+    var1: "JEH",
+    var2: "Tech",
+    some_func(param: int, ...) {
+        ...
+    }
+}
+
+// OR
+class MyClass implements A[, B[, ...]] {
+    ...
+}
+```
+
+* Interfaces cannot have `public`, `protected`, `privated`.
+* Interfaces CAN have `readonly` properties.
+* Interfaces can `extends` interfaces. Inheritance for interfaces!
+```
+interface A extends B, C[, ...] { ... } 
+```
+
+* Optional parameters and properties (can do in classes too!):
+```
+interface A {
+    optionalVariables?: int;
+    //               ^
+    //               Note the question mark - interface implementers can
+    //               choose not to implement this.
+}
+```
+
+## Advanced Types
+
+### Intersection Types
+* With a union type, can only access members that are *common* to all types in the union.
+* An intersection type *combines* multiple types into one.
+    * `type ALL = A & B & C`: `ALL` object has members of *all* three types!
+
+```
+type A = {
+    a1: string;
+    a2: int
+}
+
+type AA = {
+    a1: string;
+    a3: int[]
+}
+
+type AAA = A & AA;
+// Has the type {
+//     a1: string;
+//     a2: int
+//     a3: int[]
+//}
+```
+
+But for primative types it is an intersection:
+```
+type A = number | string;
+type B = number | boolean;
+type C = A & B; // effective type is number string or boolean!
+```
+
+### Discrimated Union
+* Give an interface a literal type and use it to distinguish between objects that object the interface.
+* Feels a bit yuk - if/elses on types... hmmm.
+
+
+### Type Casting
+* Tell TS something is a certain type;
+* E.g., getting a DOM element, or a property of an element, need to tell TS what the type is
+```
+// Method 1
+const inputElement = <HTMLInputElement>document.getElementByID("some-id")!; //< Have to tell TS what type of DOM element this is!
+//                   ^^^^^^^^^^^^^^^^^                                   ^
+//                   ^^^^^^^^^^^^^^^^^                                   The EXCLAMATION mark tells TS this will not be null
+//                   This is one way to type cast
+
+
+// Method 2
+const inputElement = document.getElementByID("some-id")! as HTMLInputElement; //< Have to tell TS what type of DOM element this is!
+//                                                       ^^^^^^^^^^^^^^^^^^^
+//                                                       The other way to type case (avoids it looking like React JSX)  
+```
+
+* Cannot type cast if the returned value could be null. Have to do this
+```
+const somethingThatCouldBeNull = ...;
+if (somethingThatCouldBeNull) {
+    (somethingThatCouldBeNull as HTMLInputElement).value = ...'
+  // ^                         ^^^^^^^^^^^^^^^^^^^^
+  // Need to wrap the variable in parenthesis and cast inside them like so. 
+}
+```
+
+### Index Properties
+* Define the types of properties in a class but not their actual names
+```
+// Don't know property count or names, jsut know they must all be strings and have values that 
+// are also strings.
+interface Blah {
+    [prop: string]: string;
+}
+```
+
+
+### Function Overloads
+E.g. help typescript infer return type correctly when multiple possibilities exist.
+```
+type Combinable = string | number;
+
+function add (a: number, b: number): number                 //<< Function override so that TS knows that adding a number...
+function add (a: Combinable, b: Combinable): Combinable {   // ...and a number results in a number and not a Combinable
+    ...
+}
+```
+
+## Generics
