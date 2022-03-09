@@ -361,3 +361,89 @@ function add (a: Combinable, b: Combinable): Combinable {   // ...and a number r
 ```
 
 ## Generics
+* Kinda like templates in C++
+
+### Built In
+```
+// E.g. Arrays:
+const my_array: Array<string>;
+const my_array: Array<string | number>; // etc etc
+
+// Promise
+const promise: Promise<what-it-resolves-to> = new Promise((resolve, reject) => {...});
+// so more specifically...
+const promise: Promise<string> = new Promise((resolve, reject) => {... resolve("result"); ...});
+// now we know that
+promise.then(data => ...) // that data is of type string - so better type safety here :)
+```
+
+### User defined generic function
+```
+// E.g.,
+function myFunc<T, U>(p1: T, p2: U): T & U {
+    ...
+}
+
+// Can call the function "bare" but can also specialise the template like this:
+const a = myFunc<{p1: int}, {p2: string}>({p1: 1}, {p2: "james"});
+// But shouldn't ordinarily need to do this ^^
+
+// Can apply constraints to cover for JS silent fails:
+function myOtherFunc<T>(p1: T); // T is *any*. May want to contrain it to be something...
+// So do this:
+function myOtherFunc<T extends SomeClassInterfaceOrType>(p1: T); 
+//                     ^^^^^^
+//                     Where you could extend an interface if you wanted, for example, to
+//                     contrain the object to having a superset of certain keys, etc.
+
+// Eg
+type MyFunc = (a: int, b: string) => int[];
+interface CanSpeak {
+    speak: MyFUnc
+}
+function doSpeak<T extends CanSpeak>(p1: T): string;
+//              ^^^
+//              Will accept any type that has a speak member that is a function of type MyFUnc.
+
+// Use `extends keyof` to say a param is a key of an object
+```
+
+### Generic classes
+```
+class MyClass<T> {
+    function somFunc(p1: T) {
+        ...
+    }
+    ...
+    function otherFUnc<U>(p1: T, p2: U) {
+        ...
+    }
+    ...
+}
+const myInstance = new MyClass<string>();
+```
+
+### Utility Types
+* [The Docs](https://www.typescriptlang.org/docs/handbook/utility-types.html)
+
+#### Partial Types
+* Tell TS it will eventually be that full type, but we're going to build it up rather than define it in one go.
+* Makes all members optional
+```
+interface Junk {
+    a: int,
+    b: int
+}
+
+const a: Partial<Junk> = {}; // Partial required here coz not initialising type in one go
+a.a = 1;
+a.b = 2;
+const b: Junk = a as Junk;
+
+
+#### Read Only Types
+```
+const junk: Readonly<int[]> = [1, 2]
+junk.push(3); // TS will complain (JS will just do it - JS can freeze arrays!)
+```
+
