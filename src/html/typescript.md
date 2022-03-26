@@ -168,12 +168,10 @@ class A {
 
 // And the SHORT CUT is this:
 class A {
-    private a: int;
-    private b: int[] = [];
-    ...
-    
     constructor(private a: int, private b: int[], ...) {
         // With access modifiers the class member vars will be auto made for us...
+        // ..note we dont define them in the class body - they're implicitly defined
+        // for us now...
     }
 }
 ```
@@ -344,9 +342,17 @@ if (somethingThatCouldBeNull) {
 // Don't know property count or names, jsut know they must all be strings and have values that 
 // are also strings.
 interface Blah {
-    [prop: string]: string;
+    [prop: string]: number;
+    ^^^^^^^^^^^^^^  ^^^^^^
+    ^^^^^^^^^^^^^^  2. And these properties all map to numbers
+    1. Blah only has properties that are strings
 }
 ```
+
+Note, this use of square brackets in the interface is *not* the same as ES6 [*computed property names*](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer#computed_property_names).
+
+> Starting with ECMAScript 2015, the object initializer syntax also supports computed property names. 
+> That allows you to put an expression in brackets [], that will be computed and used as the property name.
 
 
 ### Function Overloads
@@ -362,6 +368,7 @@ function add (a: Combinable, b: Combinable): Combinable {   // ...and a number r
 
 ## Generics
 * Kinda like templates in C++
+* [Docs](https://www.typescriptlang.org/docs/handbook/generics.html)
 
 ### Built In
 ```
@@ -423,6 +430,13 @@ class MyClass<T> {
 const myInstance = new MyClass<string>();
 ```
 
+Caution with Generics v.s. union types and the differences:
+```
+class MyClass<T extends number | string> {
+    function somFunc(p1: T) { ... } //< When class is instantiatied T is ONE type: not either a num or str!
+                                    //  Whereas, had a union type been used, it could be either.
+}
+
 ### Utility Types
 * [The Docs](https://www.typescriptlang.org/docs/handbook/utility-types.html)
 
@@ -447,3 +461,183 @@ const junk: Readonly<int[]> = [1, 2]
 junk.push(3); // TS will complain (JS will just do it - JS can freeze arrays!)
 ```
 
+
+## Decorators
+* In `tsconfig.json` make sure you have selected `es6` as the `target` and add/set `experimentalDecorators` to `true`.
+* The `@` symber prefixes decorators, and a function name should follow it. The number of args the decorator function
+  accepts depends on how it is used.
+    * For *classes* the function should take one argument, the constructor function.
+    * For class *properties* the function should take two arguments, the target of the property being decorated (receives the object prototype or the constructor function if it is a static class) and property name.
+    * For *accessor* decorators, same as for properties but with a second as the name of the accessor/param, third parameter of type [`PropertyDescriptor`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty).
+        * For *methods* its the same.
+        * For *parameters* get target, name, and *position*
+* Executors execute when the class is *defined*, not when it is instatiated!
+
+```
+function MyFirstDecorator(constructor: Function) {
+    console.log("I decorated it");
+}
+
+@MyFirstDecorator
+class MyClass {
+    constructor() {
+        console.log("Creating MyClass");
+    }
+}
+
+// Output will be (because decorator runs at class definition):
+// I decorate it
+```
+
+* A secorator *factory* is a function that returns a decorator and allows the returned decorator
+  to thus be configured. 
+
+```
+function MyFirstDecoratorFACTORY(some_config: any) {
+    return function(constructor: Function) {
+        console.log(
+            "I decorated it with " + some_config
+        );
+    }
+}
+
+@MyFirstDecoratorFACTORY("Example config")
+class MyClass {
+    constructor() {
+        console.log("Creating MyClass");
+    }
+}
+
+// Output will be (because decorator runs at class definition):
+// I decorate it with Example config
+```
+
+* *Multiple* decorators can be added to a class. The execute in *bottom-ip* order: i.e. decorator closest to class definition first and
+  the one furthest away last:
+
+```
+@This_Decorator_Executes_Last
+...
+@This_Decorator_Executes_Second
+@This_Decorator_Executes_First
+class MyCLass { ... }
+```
+
+### Decorators Returning Values
+* Class decorators can return a *new constructor function* that will replace the old one.
+
+```
+function MyDecorator(orig_constructor: any) {
+    ...
+    return class extends orig_constructor { // Returning new class but remember class is SYNTACTIC 
+                                            // SUGAR for a constructor function!
+        constructor() {
+            super(): // Construct the child!!
+            // ... the replacement constructor, which because super() is called has all the
+            // original functionality plus whatever we do here, and this log will only
+            // execute when the class is instatiated.
+        }
+    }
+}
+```
+
+* Method and accessor decorators can also return vales.
+  * Return new [`PropertyDescriptor`s](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty).
+    *  By default, values added using `Object.defineProperty()` are immutable and not enumerable.
+
+
+* Any other decorators (properties and values) have their return values ignored.
+
+
+### Example Class Function Decorator
+* [See the docs](https://www.typescriptlang.org/docs/handbook/decorators.html#method-decorators)
+* From the docs: 
+  * The expression for the method decorator will be called as a function at runtime, with the following three arguments:
+      1. Either the constructor function of the class for a static member, or the prototype of the class for an instance member.
+      2. The name of the member.
+      3. The Property Descriptor for the member.
+* See also: [Medium article on PropertyDescriptor](https://medium.com/jspoint/a-quick-introduction-to-the-property-descriptor-of-the-javascript-objects-5093c37d079#:~:text=A%20property%20descriptor%20is%20a,value%20and%20other%20meta%2Ddata.&text=In%20the%20above%20example%2C%20we,with%20myPropOne%20and%20myPropTwo%20properties.)
+  > When we create a JavaScript object ... and add some properties to it, each property (key) gets a default property descriptor. A property descriptor is a simple JavaScript object associated with each property of the object that contains information about that property such as its value and other meta-data.
+  >
+  > ...
+  > The `value` property of the property descriptor is the current value of the property, `writable` is whether the user can assign a new value to the property, `enumerable` is whether this property will show up in enumerations like for in loop or for of loop or Object.keys etc. The `configurable` property tells whether the user has permission to change property descriptor ...
+  >
+  > ...
+  > `get` (getter) and `set` (setter) for a property can also be set in property descriptor with these exact keys. But when you define a getter, it comes with some sacrifices. You can not have an initial value or `value` key on the descriptor at all because the getter will return the value of that property. You can not use `writable` key on descriptor as well, because your writes are done through the setter and you can prevent writes there.
+
+
+```
+function MyDecorator(target: any, name: string, descriptor: PropertyDescriptor) {
+    // target is the class prototype 
+    // name is the string "myFunction"
+    // descriptor is the property descriptor for 
+    console.log(target)
+    console.log(name)
+    console.log(descriptor)
+
+    // descriptor.value == the original method
+    // ^^ This is what lets you either replace the function completely or
+    //    wrap it g(f(x)) style.
+
+    // Create a new, ajusted descriptor to override/augment the function
+    // being decorated.
+}
+
+...
+
+class A {
+    @MyDecorator
+    myFunction(...) {
+        ...
+    }
+}
+//
+// Outputs the following from the decorator:
+//     V {constructor: ƒ, myFunction: ƒ}
+//         V constructor: class A
+//             length: 0
+//             name: "A"
+//         V prototype:
+//             > constructor: class A
+//             > myFunction: ƒ myFunction()
+//             > [[Prototype]]: Object        
+//             arguments: (...)
+//             caller: (...)
+//             [[FunctionLocation]]: VM124:19
+//             > [[Prototype]]: ƒ ()
+//             [[Scopes]]: Scopes[6]
+//         > myFunction: ƒ myFunction()
+//         [[Prototype]]: Object
+//     
+//     myFunction
+//     
+//     V {writable: true, enumerable: false, configurable: true, value: ƒ}
+//         configurable: true
+//         enumerable: false
+//         V value: ƒ myFunction()         <<<< THIS IS THE FUNCTION ITSELF
+//             length: 0
+//             name: "myFunction"
+//             arguments: (...)
+//             caller: (...)
+//             [[FunctionLocation]]: VM124:20
+//             > [[Prototype]]: ƒ ()
+//             > [[Scopes]]: Scopes[6]
+//         writable: true
+//         [[Prototype]]: Object
+```
+
+### Example Class property Decorator
+* The expression for the property decorator will be called as a function at runtime, with the following two arguments:
+    1. Either the constructor function of the class for a static member, or the prototype of the class for an instance member.
+    2. The name of the member.
+* See [this good example](https://dev.to/danywalls/using-property-decorators-in-typescript-with-a-real-example-44e)
+
+```
+function(prototypeOrConstructor: Object, propertyKey: string) {
+    // Can for example add a setter and getter to the property.
+    Object.defineProperty(target, propertyKey, {
+      get: () => { ... },
+      set: () => { ... }
+    }); 
+}
+```
