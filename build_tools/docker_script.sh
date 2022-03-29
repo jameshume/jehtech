@@ -17,6 +17,6 @@ make -j"$(estimate_num_build_cores)" all > /proc/1/fd/1
 
 if [ "$1" == "DEPLOY" ]
 then
-    echo "DOing the deploy" > /proc/1/fd/1
+    echo "Doing the deploy" > /proc/1/fd/1
     make deploy > /proc/1/fd/1
 fi

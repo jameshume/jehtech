@@ -1,5 +1,11 @@
 ## SCRUM
 
+* TODO/TO READ
+  * [Planning Poker 1](https://www.scrum.org/forum/scrum-forum/15584/planning-poker-accurate-estimation-iteration-hours)
+  * [Planning Poker 2](https://doasync.com/blog/how-long-does-planning-poker-session-take-to-complete/)
+
+
+
 * Follows the Agile Manifesto:
     * 4 Values
     * 12 Principles
@@ -461,6 +467,9 @@ According to [Scrum.org](https://scrum.org):
 * Do the tasks follow the INVEST model?
 * Other common questions:
 	* Are the acceptance criteria agreed and understood?
+      	* I.e. is there a clear goal
+  	* Skill sets needed decided?
+  	* Have team discussed what problems could occur?
 	* Are estimates agreed?
 	* Is the testing strategy agreed?
 	* Are the items [[Ref]](https://agility.im/frequent-agile-question/what-is-a-definition-of-ready):

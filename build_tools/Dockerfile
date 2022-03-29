@@ -17,6 +17,6 @@ RUN npm install \
         html-validate -g \
     && apt-get update \
     && apt-get install -y python3-pip vim dos2unix \
-    && pip3 install lxml pillow pyhash awscli boto3 markdown
+    && pip3 install lxml pillow pyhash awscli boto3 markdown pymdown-extensions
 
 RUN dos2unix /scripts/docker_script.sh
