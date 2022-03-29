@@ -69,9 +69,11 @@ Auxillary fields removed from below:
 
 To get a complete view of a task 2 API calls need to be made :(
 
-Urg. not sure if I've missed something, but I can't figure out how to get all the tasks associate with a sub-project form `search()`. Been using `query()` for this! For some reason `search()` wants to just give be everything from a project, which I suppose isn't so bad, just a shame I can't get it for a specific board (sub project). Don't know why they bothered because sub-project name's are globally unique, it would seem.
+Urg. not sure if I've missed something, but I can't figure out how to get all the tasks associated with a sub-project form `search()`. Been using `query()` for this! For some reason `search()` wants to just give be everything from a project, which I suppose isn't so bad, just a shame I can't get it for a specific board (sub project). Don't know why they bothered because sub-project name's are globally unique, it would seem.
 
 So, using new API can get tasks for project but not sub-project. So either use `query()` and then suppliment with `search([task ids from query])` or search on parent project. But then can't associate the tasks to a sub-project, thre's nothing in the returned data to do this. Which seems like a P in the A until... `search()` has a constraint called `columnPHIDs`, so the work around is to get the workboard columns for a project and use them as the filter criteria... phew!
+
+Ah, there are extra **attachments** that can be requested! Haven't played with these yet!
 
 ### Getting Transactions For A Task
 Use [`maniphest.gettasktransactions()`](https://secure.phabricator.com/conduit/method/maniphest.gettasktransactions/)
@@ -132,8 +134,6 @@ The fields `newValue` and `oldValue` depend on the `transactionType`.
 When `fromColumnPHIDs` is the empty  list (`[]`) it means that the task was created and has just been
 assigned a column in a workboard. When it is a dictionary, I have, so far, only seen it have one key.
 
-You have to watch out for board changes. The `columnPHID` and `fromColumnPHIDs` can be on another board.
-
 The `beforePHIDs` field appears, to give the order of tickets in the workboard column after the ticket
 was moved, relative to this ticket. The PHID at index 0 is the one below this ticket, and so on.
 
@@ -142,6 +142,18 @@ immediately above, index 1, the one above that and so on.
 
 Both `beforePHIDs` and `afterPHIDs` can be an empty or not. The combination gives the snapshot of the
 workboard column at the time of the move.
+
+One might wonder why there is only `boardPHID` and to a "to" and "from" board PHID if a ticket moves
+board. The reason is is that this is a different event. This would generate a `core:edge` transaction,
+where the ticket, from whatever column it is in the source board, moves to the backlog of the other
+board.
+
+**Warnign about which board the column PHID is on**:
+You have to watch out for board changes. The `columnPHID` and `fromColumnPHIDs` can be on another board.
+The `boardPHID` field can refer to a *different project* when this is the case and to get the column
+name the other board's columns must be looked up. I don't quite understand why this is. It would seem
+the ticket might have been moved to this board but the references remain to the old board - the column
+names appear to be the same in these cases.
 
 
 **Example ticket just created**
