@@ -35,7 +35,7 @@
 For example, to make a dictionary/object type stricter by defining the members and
 their types you can:
 
-``` { .prettyprint .linenums}
+```
 inteface my_interface {
     property1: type1,
     ....
@@ -128,7 +128,7 @@ Some examples of when type annotation is useful:
 
 #### Types Added By TypeScript
 
-``` { .prettyprint .linenums}
+```
 //
 // Tuples (Really fixed length arrays):
 var_name: [number, string] 
@@ -226,50 +226,52 @@ abstract class A {
 * Classes can `implements` interfaces... just like in Java - the solved the multiple inhertiance virtual base class problem.
 * TS only, doesn't exist in JS
 
-```
-interface A {
-    var1: string;
-    var2: string[];
-    ...
+    ```
+    interface A {
+        var1: string;
+        var2: string[];
+        ...
 
-    some_func(param: int, ...): int;
-    ...
-}
-
-let myA: A;
-...
-...
-myA = { // The following matches the interface so TS can typecheck this assignment because
-        // it knows what `myA` should look like.
-    var1: "JEH",
-    var2: "Tech",
-    some_func(param: int, ...) {
+        some_func(param: int, ...): int;
         ...
     }
-}
 
-// OR
-class MyClass implements A[, B[, ...]] {
+    let myA: A;
     ...
-}
-```
+    ...
+    myA = { // The following matches the interface so TS can typecheck this assignment because
+            // it knows what `myA` should look like.
+        var1: "JEH",
+        var2: "Tech",
+        some_func(param: int, ...) {
+            ...
+        }
+    }
+
+    // OR
+    class MyClass implements A[, B[, ...]] {
+        ...
+    }
+    ```
 
 * Interfaces cannot have `public`, `protected`, `privated`.
 * Interfaces CAN have `readonly` properties.
 * Interfaces can `extends` interfaces. Inheritance for interfaces!
-```
-interface A extends B, C[, ...] { ... } 
-```
+
+    ```
+    interface A extends B, C[, ...] { ... } 
+    ```
 
 * Optional parameters and properties (can do in classes too!):
-```
-interface A {
-    optionalVariables?: int;
-    //               ^
-    //               Note the question mark - interface implementers can
-    //               choose not to implement this.
-}
-```
+
+    ```
+    interface A {
+        optionalVariables?: int;
+        //               ^
+        //               Note the question mark - interface implementers can
+        //               choose not to implement this.
+    }
+    ```
 
 ## Advanced Types
 
@@ -338,6 +340,7 @@ if (somethingThatCouldBeNull) {
 
 ### Index Properties
 * Define the types of properties in a class but not their actual names
+
 ```
 // Don't know property count or names, jsut know they must all be strings and have values that 
 // are also strings.
@@ -354,6 +357,78 @@ Note, this use of square brackets in the interface is *not* the same as ES6 [*co
 > Starting with ECMAScript 2015, the object initializer syntax also supports computed property names. 
 > That allows you to put an expression in brackets [], that will be computed and used as the property name.
 
+### Utility Types and `keyof`
+* [See the docs for utility types](https://www.typescriptlang.org/docs/handbook/utility-types.html).
+* TypeScript provides several utility types to facilitate common type transformations...
+    * `Omit`, `Partial`, `Readonly`, `Exclude`, `Extract`, `NonNullable`, `ReturnType`.
+* Example `Omit`:
+    
+    ```
+    interface Book {
+        author: string | null;
+        numPages: number;
+        price: number;
+    }
+    // Article is a Book without a Page
+    type Article = Omit<Book, 'numPages'>;
+    ```
+* Example `Pick`:
+  
+    ```
+    interface Todo {
+        title: string;
+        description: string;
+        completed: boolean;
+    }
+        
+    type TodoPreview = Pick<Todo, "title" | "completed">;
+    
+    const todo: TodoPreview = {
+        title: "Clean room",
+        completed: false,
+    };
+    ```
+
+* [See the docs 4 mapped types](https://www.typescriptlang.org/docs/handbook/2/mapped-types.html).
+* The **`keyof`** operator takes an object type and *produces a string or numeric literal union of its keys*:
+    * Example:
+  
+    ```
+    type Person = {
+        name: string;
+        surname: string;
+        email: string;
+    }
+    
+    type PersonKeys = keyof Person;
+    // PersonKeys = 'name' | 'surname' | 'email'
+    ```
+
+    * Example use of `keyof` in `Pick` utlity type
+
+        ```
+        // Definition of Pick<Type, Keys>
+        // Constructs a type by picking the set of properties Keys (string literal or union
+        // of string literals) from Type...
+        type Pick<T, K extends keyof T> = {
+            [P in K]: T[P];
+        };        
+        
+        // Using the example above of
+        // type TodoPreview = Pick<Todo, "title" | "completed">;
+        // keyof Todo == 'name' | 'surname' | 'email'
+        // `K extends keyof T` means that the resulting type is the super set of 
+        //   `'name' | 'surname' | 'email'`, but in the way this function is used, it just
+        //    means that K is a selection of the keys of T... extends just allows us
+        //    to say that K is of type "keyof Keys". Although K extends the union of the 
+        //    types of T, anything "extra" on top of that union can never be picked from T 
+        //    anway, so really its just a way of saying the picked keys are the keys in T.
+        ```
+
+
+
+### Mapped Types
+TODO
 
 ### Function Overloads
 E.g. help typescript infer return type correctly when multiple possibilities exist.
@@ -436,13 +511,12 @@ class MyClass<T extends number | string> {
     function somFunc(p1: T) { ... } //< When class is instantiatied T is ONE type: not either a num or str!
                                     //  Whereas, had a union type been used, it could be either.
 }
-
-### Utility Types
-* [The Docs](https://www.typescriptlang.org/docs/handbook/utility-types.html)
+```
 
 #### Partial Types
 * Tell TS it will eventually be that full type, but we're going to build it up rather than define it in one go.
 * Makes all members optional
+
 ```
 interface Junk {
     a: int,
@@ -453,9 +527,10 @@ const a: Partial<Junk> = {}; // Partial required here coz not initialising type 
 a.a = 1;
 a.b = 2;
 const b: Junk = a as Junk;
-
+```
 
 #### Read Only Types
+
 ```
 const junk: Readonly<int[]> = [1, 2]
 junk.push(3); // TS will complain (JS will just do it - JS can freeze arrays!)
@@ -583,7 +658,7 @@ function MyDecorator(target: any, name: string, descriptor: PropertyDescriptor) 
     // being decorated.
 }
 
-...
+// ...
 
 class A {
     @MyDecorator
@@ -632,12 +707,12 @@ class A {
     2. The name of the member.
 * See [this good example](https://dev.to/danywalls/using-property-decorators-in-typescript-with-a-real-example-44e)
 
-```
-function(prototypeOrConstructor: Object, propertyKey: string) {
-    // Can for example add a setter and getter to the property.
-    Object.defineProperty(target, propertyKey, {
-      get: () => { ... },
-      set: () => { ... }
-    }); 
-}
-```
+    ```
+    function(prototypeOrConstructor: Object, propertyKey: string) {
+        // Can for example add a setter and getter to the property.
+        Object.defineProperty(target, propertyKey, {
+        get: () => { ... },
+        set: () => { ... }
+        }); 
+    }
+    ```

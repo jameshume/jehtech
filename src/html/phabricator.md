@@ -73,7 +73,16 @@ Urg. not sure if I've missed something, but I can't figure out how to get all th
 
 So, using new API can get tasks for project but not sub-project. So either use `query()` and then suppliment with `search([task ids from query])` or search on parent project. But then can't associate the tasks to a sub-project, thre's nothing in the returned data to do this. Which seems like a P in the A until... `search()` has a constraint called `columnPHIDs`, so the work around is to get the workboard columns for a project and use them as the filter criteria... phew!
 
-Ah, there are extra **attachments** that can be requested! Haven't played with these yet!
+Ah, there are extra **attachments** that can be requested! So, can get all the tasks for the main project and then filter for tasks that belong to a sub-project by adding `attachments={'parents': True}` into the API call.
+
+WOW! Tested the `search` API further and it returned, in my test, a ticket that was not actually associated with JEHTest1 in the present (didn't appear on the workboards and also the API returned an empty list in the attachments list). It had previously been associated with JEHTest1 but it had been removed from that project. So, does this search for tickets that have been associated with a project at any time!
+
+So... if I am looking at points currently on a board I need to filter this list to ensure the ticket attachments list the PHID of the project in the constraints!
+
+But if I want to delve into the history of the project I need to know *when* the ticket was associated with the project.
+
+So, I suppose it makes sense this API returns tickets that were associated with the project at *any* time in its history.
+
 
 ### Getting Transactions For A Task
 Use [`maniphest.gettasktransactions()`](https://secure.phabricator.com/conduit/method/maniphest.gettasktransactions/)

@@ -794,11 +794,11 @@ export class AppRoutingModule {
 * Functionality that is run before a route is loaded or once you want to leave a route.
     * E.g. you only want to give access to a route if the user is logged in.
     * Don't want to do this check in every component that requires it - cumbersome. Instead better to add the guards to the route specification.
-* Protect route entry: use the **`canActive`* guard.
+* Protect route entry: use the **`canActivate`* guard.
     * Create a service for the guard. For example, course used `auth-guard.service.ts`.
 
       ```
-      import { CanActive } from '@angular/router';
+      import { CanActivate } from '@angular/router';
       import { Observable } from 'rxjs/Observable';
 
       export class AuthGuardService implements CanActivate {
@@ -814,7 +814,7 @@ export class AppRoutingModule {
                       else {
                           this.router.navigate([... some path...]);
                       }
-                  })
+                  });
           }
       }
 
@@ -827,3 +827,157 @@ export class AppRoutingModule {
     * To *protect children* use **`canActiveChild`**. In route table only need to specify this on parent and it can protect both the parent and the child.
 
 * Protect route exit using a **`canDeactive`** guard (i.e. a service).
+    * Whereas `canActivate` guards the entry to a route - a point before the component associated with that route is even created - `canDeactivate` stops us leaving a compoment that is currently mounted. It will often want to do this based on the *contents of the mounted component*. Thus the guard - which *must be a service* needs to *link between the Angular router and the component*. End up with this sort of structure/pattern:
+
+      ```
+      //
+      // File defines a service for the canDeactivate guard...
+      //
+      import { Observable } from 'rxjs/Observable';
+      import { CanDeactivate, ActiveRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+
+      //
+      // This is an interface define for the component that wishes to have the canDactivate guard
+      // attached to it, so this this service can bridge between the router logic and the component
+      // by calling an interface (contract) on the component.
+      export interface ICanComponentDeactivate {
+        canDeactivate: () => Observable<boolean> | Promise<boolean> | boolean;
+      }
+
+      // 
+      // The actual service/guard is the following class. Accepts, in the constructor, the
+      // component that it will guard, which must implement the above interface
+      export class CanDeactivateGuard implements CanDeactivate<ICanComponentDeactivate> {
+          canDeactivate(
+                  component: CanComponentDeactivate,
+                  currentRoute: ActivatedRouteSnapshop,
+                  currentState: RouterStateSnapshot,
+                  nextState?: RouterStateSnapshot
+          ): Observable<boolean> | Promise<boolean> | boolean {
+              return component.canDeactivate();
+              //     ^^^^^^^^^^^^^^^^^^^^^^^^^
+              //     The guard calls the component via the interface defined above this class.
+          }
+      }
+
+
+      //
+      // Then in the path setup in the routing definition file
+      //
+      const appRoutes: Routes = [
+        ...
+        {path: ..., canDeactivate: [CanDeactivateGuard]}
+        ...
+      ]
+
+      //
+      // And add the guard to the `providers` section of `app.module.ts`
+      //
+
+      //
+      // And finally, implement canDeactivate() in the component being guarded.
+      //
+      @Component({...})
+      export class MyComponent ... implements ICanComponentDeactivate ... {
+          canDeactivate() {
+              // Some logic that returns boolean, and Observable<boolean> or Promise<boolean>
+              // Basic eg:
+              if (some reason shouldn't leave, eg field change not saved) {
+                  return confirm('are you sure?')
+              }
+              return true;
+          }
+      }
+      ```
+
+### Passing Data To Route Destination Components
+#### Static Data
+* In the routing table do:
+
+    ```
+    const appRoutes: Routes = [
+        {path: ..., ..., data: {anyKey: anyValue, ...}}
+        //               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        //               Pass data as key value pairs.
+    ];
+    ```
+
+* This can then be retrieved in the component from the `ActivatedRoute` injectable:
+
+    ```
+    @Component({...})
+    export class MyComponent implements OnInit {
+        constructor(private route: ActivatedRoute) {}
+
+        ngOnInit() {
+            this.someProperty = this.route.snapshot.data['anyKey'];
+            // or, if this data could possibly change - page navigates to self...
+            this.route.data.subscribe(...);
+        }
+    }
+    ```
+
+#### Dynamic Data
+* To present data that must be fetched before a route is rendered requires the use of a **resolver**.
+* The resolver will always, eventually, render the component, it just preloading... i.e., its not a guard.
+    * The alternative is to render page immediately and then have page do the fetch in the onInit etc.
+
+
+
+
+## Making HTTP Requests In Angular
+* [Useful ACME Mind REST & JWT Youtube Series](https://academind.com/tutorials/building-a-restful-api-with-nodejs)
+* [Cookies vs. Session vs. Tokens](https://dev.to/dev_emmy/what-is-really-the-difference-between-cookie-session-and-tokens-when-it-comes-to-authentication-4164#:~:text=SO%20YOU%20ARE%20PROBABLY%20WONDERING,but%20they%20may%20have%20one.)
+
+* Add the **`HttpClientModule`** module into the `app.module.ts` `imports` array:
+
+    ```
+    import { HttpClientModule } from '@angular/common/http';
+    ...
+    @NgModule ({
+      ...
+      imports: [..., HttpClientModule],
+      ...
+    });
+    ```
+
+* In the module where you want to make HTTP requests **`import { HttpClient } from '@agnular/common/http';`**
+* Example sending of request:
+
+    ```
+    import { HttpClient } from '@agnular/common/http';;
+    ...
+    class MyComponent {
+        constructor(private http: HttpClient) {
+          //        ^^^^^^^^^^^^^^^^^^^^^^^^
+          //        HttpClient INJECTED automatically by Angular.
+        }
+
+        someFuncDoingPOST() {
+            // The OBSERVABLE post will auto-convert the object to JSON for you.
+            this.http.post<RESPONSE-BODY-TYPE>(
+                'https://your-url.com/some/endpoint',
+                some-data-object
+            ).pipe(
+            ).subscribe({
+                next: (data) => {...}
+                error: (err) => {...}
+                complete: () => {...}
+            });
+        }
+
+        someFuncDoingGET() {
+          this.http.get<RESPONSE-BODY-TYPE>(
+              'https://your-url.com/some/endpoint'
+          ).pipe( // An example of observable data munging...
+              map( responseData => {
+                // Do some data mapping             
+              })
+          ).subscribe({
+              next: (data) => {...}
+              error: (err) => {...}
+              complete: () => {...}
+          });
+        }
+    }
+    ```
