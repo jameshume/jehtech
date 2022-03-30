@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>380</x>
+      <y>450</y>
+      <w>210</w>
+      <h>420</h>
+    </coordinates>
+    <panel_attributes>Project API Response
+A Parent Project - Top Level
+--
+fields:
+   - color
+   - dateCreated
+   - dateModified
+**   - depth: 0**
+   - description
+   - icon
+       - icon
+       - key
+       -name
+**   - milestone: None**
+**   - parent: None**
+
+
+
+   - policy ...
+   - slug
+   - spacePHID
+   - subtype
+- id
+**- phid: A**
+- type</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>760</x>
+      <y>0</y>
+      <w>210</w>
+      <h>420</h>
+    </coordinates>
+    <panel_attributes>Project API Response
+A Child Project
+--
+fields:
+   - color
+   - dateCreated
+   - dateModified
+**   - depth: 1**
+   - description
+   - icon
+       - icon
+       - key
+       -name
+**   - milestone: None**
+**   - parent:**
+**        - id**
+**        - name**
+**        - phid: A**
+   - policy ...
+   - slug
+   - spacePHID
+   - subtype
+- id
+**- phid B**
+- type</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1130</x>
+      <y>0</y>
+      <w>210</w>
+      <h>420</h>
+    </coordinates>
+    <panel_attributes>Project API Response
+A Child Child Project
+--
+fields:
+   - color
+   - dateCreated
+   - dateModified
+**   - depth: 2**
+   - description
+   - icon
+       - icon
+       - key
+       -name
+**   - milestone: None**
+**   - parent:**
+**        - id**
+**        - name**
+**        - phid: B**
+   - policy ...
+   - slug
+   - spacePHID
+   - subtype
+- id
+**- phid C**
+- type</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>580</x>
+      <y>190</y>
+      <w>200</w>
+      <h>480</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;460.0;100.0;460.0;100.0;10.0;180.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>960</x>
+      <y>190</y>
+      <w>190</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;170.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>760</x>
+      <y>890</y>
+      <w>210</w>
+      <h>420</h>
+    </coordinates>
+    <panel_attributes>Project API Response
+Another Milestone of A
+--
+fields:
+   - color
+   - dateCreated
+   - dateModified
+**   - depth: 1**
+   - description
+   - icon
+       - icon
+       - key
+       -name
+**   - milestone: 2**
+**   - parent:**
+**        - id**
+**        - name**
+**        - phid: A**
+   - policy ...
+   - slug
+   - spacePHID
+   - subtype
+- id
+**- phid B**
+- type</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>760</x>
+      <y>450</y>
+      <w>210</w>
+      <h>420</h>
+    </coordinates>
+    <panel_attributes>Project API Response
+A Milestone of A
+--
+fields:
+   - color
+   - dateCreated
+   - dateModified
+**   - depth: 1**
+   - description
+   - icon
+       - icon
+       - key
+       -name
+**   - milestone: 1**
+**   - parent:**
+**        - id**
+**        - name**
+**        - phid: A**
+   - policy ...
+   - slug
+   - spacePHID
+   - subtype
+- id
+**- phid B**
+- type</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>580</x>
+      <y>640</y>
+      <w>200</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;180.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>580</x>
+      <y>640</y>
+      <w>200</w>
+      <h>480</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;100.0;10.0;100.0;460.0;180.0;460.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1070</x>
+      <y>630</y>
+      <w>240</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>The milestone is the index of the milestone and is numbered by the order of creation. So first milestone is 1, the next 2 and so on...
+fg=white
+style=wordwrap
+bg=black</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>870</x>
+      <y>650</y>
+      <w>220</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>fg=blue</panel_attributes>
+    <additional_attributes>10.0;10.0;200.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>770</x>
+      <y>650</y>
+      <w>110</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>bg=blue
+fg=blue
+transparency=70</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>780</x>
+      <y>1090</y>
+      <w>110</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>bg=blue
+fg=blue
+transparency=70</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>880</x>
+      <y>650</y>
+      <w>210</w>
+      <h>470</h>
+    </coordinates>
+    <panel_attributes>fg=blue</panel_attributes>
+    <additional_attributes>10.0;450.0;190.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1140</x>
+      <y>100</y>
+      <w>110</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>bg=blue
+fg=blue
+transparency=70</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1400</x>
+      <y>80</y>
+      <w>160</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>Depth tells us how far down the tree the child is. Depth starts at 0 for top level of tree.
+fg=white
+style=wordwrap
+bg=black</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1240</x>
+      <y>100</y>
+      <w>180</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>fg=blue</panel_attributes>
+    <additional_attributes>10.0;10.0;160.0;10.0</additional_attributes>
+  </element>
+</diagram>
