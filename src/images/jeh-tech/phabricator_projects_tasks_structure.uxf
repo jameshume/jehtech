@@ -37,21 +37,10 @@ m2=1</panel_attributes>
     <additional_attributes>100.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>540</x>
-      <y>260</y>
-      <w>120</w>
-      <h>160</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>100.0;10.0;100.0;70.0;10.0;70.0;10.0;140.0</additional_attributes>
-  </element>
-  <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>500</x>
-      <y>400</y>
+      <x>590</x>
+      <y>300</y>
       <w>100</w>
       <h>40</h>
     </coordinates>
@@ -62,24 +51,13 @@ PROJECT</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>680</x>
-      <y>400</y>
+      <x>590</x>
+      <y>370</y>
       <w>100</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>MILESTONE</panel_attributes>
     <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>630</x>
-      <y>260</y>
-      <w>120</w>
-      <h>160</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;70.0;100.0;70.0;100.0;140.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -109,12 +87,66 @@ m2=1</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>490</x>
-      <y>150</y>
-      <w>330</w>
+      <y>240</y>
+      <w>120</w>
       <h>110</h>
     </coordinates>
-    <panel_attributes>lt=&lt;.
-&lt;&lt;transitively&gt;&gt;</panel_attributes>
-    <additional_attributes>310.0;90.0;260.0;90.0;260.0;20.0;50.0;20.0;50.0;90.0;10.0;90.0</additional_attributes>
+    <panel_attributes>lt=&lt;-
+m1=1
+m2=1</panel_attributes>
+    <additional_attributes>100.0;80.0;50.0;80.0;50.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>490</x>
+      <y>240</y>
+      <w>120</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1
+m2=1</panel_attributes>
+    <additional_attributes>100.0;150.0;50.0;150.0;50.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>770</x>
+      <y>290</y>
+      <w>280</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+bg=black
+fg=white
+A task can belong to many projects but it can only below to one sub-project or milestone.
+
+So, if there are projects A and B, with subprojects A.1 and B.1, a task can be in A and B, or A and B.1 but not A and A.1, for example.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>240</y>
+      <w>140</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>m1=1
+m2=1</panel_attributes>
+    <additional_attributes>10.0;80.0;60.0;80.0;60.0;10.0;120.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>240</y>
+      <w>140</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>m1=1
+m2=1</panel_attributes>
+    <additional_attributes>10.0;150.0;60.0;150.0;60.0;10.0;120.0;10.0</additional_attributes>
   </element>
 </diagram>

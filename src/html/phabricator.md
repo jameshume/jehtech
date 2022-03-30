@@ -292,11 +292,22 @@ In this case the response is the same shape as shown above except that the `data
 
 If the project cannot be found then `data` will be an empty *list*.
 
+![How Project dicts returned by project.search link up](##IMG_DIR##/phab_project_search_api.jpg)
+
 ### Search
 Just as for tasks, query and search give slightly different sets of data. For example, search lets you find out about parents! The reason is that **`query()` is deprecated**.
 
 ```
-{'attachments': {},
+{'attachments': {'ancestors': {'ancestors': [{'id': ...,                 # The parent projects can be 
+                                               'name': '...',            # obtained using the attachments={"ancestors":True}
+                                               'phid': 'PHID-PROJ-...'   # API parameter.
+                                              },                         # Looks like list is ordered by depth, 0 first.
+                                              ...
+                                            ]
+                              },
+                  'members': ...,
+                  ...
+                },
   'fields': {'color': {'key': 'blue', 'name': 'Blue'},
              'dateCreated': 1614861258,
              'dateModified': 1634812114,
