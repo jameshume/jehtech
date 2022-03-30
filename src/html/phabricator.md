@@ -113,6 +113,22 @@ This returns the following structure in `result.response`:
 
 The fields `newValue` and `oldValue` depend on the `transactionType`.
 
+#### transactionType == 'core:create'
+
+```
+{
+    'authorPHID': 'PHID-USER-...',
+    'comments': None,
+    'dateCreated': '1648665913',
+    'newValue': None,
+    'oldValue': None,
+    'taskID': '13163',
+    'transactionID': '300668',
+    'transactionPHID': 'PHID-XACT-TASK-...',
+    'transactionType': 'core:create'
+}
+```
+
 #### transactionType == 'core:columns'
 
 ```{ .prettyprint .linenums}
@@ -157,7 +173,7 @@ names appear to be the same in these cases.
 
 
 **Example ticket just created**
-Here the transaction occurs just after a `core:create`:
+Here the transaction `core:columns` occurs just after a `core:create`:
 ```
 'newValue': [{'afterPHIDs': [],
                 'beforePHIDs': [],
@@ -165,7 +181,6 @@ Here the transaction occurs just after a `core:create`:
                 'columnPHID': 'PHID-PCOL-vwfdaeklqotgxwglewm7',
                 'fromColumnPHIDs': []}],
 ```
-
 
 #### transactionType == 'points'
 ```
@@ -175,6 +190,71 @@ Here the transaction occurs just after a `core:create`:
 
 #### transactionType == 'core:edges'
 As in edges in a graph data structure: these are the links between tasks and projects, other taks and diffusion commits.
+
+For example, when a ticket is created, after the `core:create` and then the `core:columns` is a `core:edge` to associate
+the task with the project it was created in...
+
+```
+{
+    'authorPHID': 'PHID-USER-...',
+    'comments': None,
+    'dateCreated': '1648665913',
+    'newValue': ['PHID-PROJ-...'],
+    'oldValue': [],
+    'taskID': '...',
+    'transactionID': '...',
+    'transactionPHID': 'PHID-XACT-TASK-...',
+    'transactionType': 'core:edge'
+}
+```
+
+Then, lets say a tag is added.
+
+```
+{
+    'authorPHID': 'PHID-USER-...',
+    'comments': None,
+    'dateCreated': '1648667160',
+    'newValue': ['PHID-PROJ-...'],
+    'oldValue': [],
+    'taskID': '...',
+    'transactionID': '...',
+    'transactionPHID': 'PHID-XACT-TASK-...',
+    'transactionType': 'core:edge'
+}
+```
+
+Note, how `oldValue` doesn't contain anything. That is because nothing was *removed*, only added. *And*, `newValue` does not accumulate the tags on the ticket, it only shows what was added by this transaction. So, when the same tag is removed...
+
+```
+{   
+    'authorPHID': 'PHID-USER-...',
+    'comments': None,
+    'dateCreated': '1648667354',
+    'newValue': [],
+    'oldValue': ['PHID-PROJ-...'],
+    'taskID': '...',
+    'transactionID': '...',
+    'transactionPHID': 'PHID-XACT-TASK-...',
+    'transactionType': 'core:edge'
+}
+```
+
+Now, if we moved a task from one board to another:
+
+```
+{
+    'authorPHID': 'PHID-USER-..',
+    'comments': None,
+    'dateCreated': '1648667477',
+    'newValue': ['PHID-PROJ-...'],
+    'oldValue': ['PHID-PROJ-...'],
+    'taskID': '...',
+    'transactionID': '..',
+    'transactionPHID': 'PHID-XACT-TASK-...',
+    'transactionType': 'core:edge'
+}
+```
 
 **Add/Remove Project To/From Task**
 Example of adding a Project tag to a task - an edge between the project and task is created:
