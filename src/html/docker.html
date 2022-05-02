@@ -1124,210 +1124,10 @@ Service Updates
 
 
 When you scale swarm doesn't move resource around so nodes could be unbalanced.
-
-  
-
-
-
-
 </pre>
 
 
-<h2>Kubernetes</h2>
-<pre>
-* Short form of name is k8s
-* Tool for running many different Docker containers
-* Infrastructure as code to setup multiple containers and networking between them
-* Creates clusters. One cluster is a set of virtual machines, all managed by one master process.
-    * Each VM runs one or more "pods" and each pod manages one or more containers
-      +-----------------------------------------------------------------------...
-      |  +=======================+   +=======================+
-      |  | Node                  |   | Node                  |
-      |  |  +-----------------+  |   |  +-----------------+  |
-      |  |  | Pod             |  |   |  | Pod             |  |
-      |  |  |  +-----------+  |  |   |  |  +-----------+  |  |
-      |  |  |  | Container |  |  |   |  |  | Container |  |  |     ...
-      |  |  |  +-----------+  |  |   |  |  +-----------+  |  |
-      |  |  |       ...       |  |   |  |       ...       |  |
-      |  |  +-----------------+  |   |  +-----------------+  |
-      |  |          ...          |   |          ...          |
-      |  +==========^^^==========+===+==========^^^==========+==== ...
-      |  | SERVICE (abstacts networking between pods away - makes simpler...)
-      |  +======================================================== ....
-      |
-      |  +--------------------------------------------------------------------...
-      |  | MASTER
-      |  +----------------------------------------------------------------^---...
-      |  +----------------------------------------------------------------|---...
-      |  | DEPLOYMENT FOR PODS (one function is re-incarnation server)    |
-      |  +-------------------------------------------------------------^--|---...
-      +----------------------------------------------------------------|--|---...
-                                                                       |  |
-                                                                       \  /
-                                                                        \/
-                                                                    Config file
-	  
-      Cluster = Collection of nodes + master to manage them
-      Node = VM to run pods
-      Pod = Contains one or more containers. When only one container its more-or-less a container
-      Deployment = Object intended to Monitor and manage pod sets and re-incarnates them if they crash
-                   and to update pods (creates new pods, switches to them, deletes old pods.)
-      Service = Provides URL to access running containers to allow "easy" inter-container network access.
-* If running on Linux need minikube tool installed.
-* Config files:
-    * Describes different deployments, pods and services (aka objects) to Create
-    * YAML
-    * Infrastructure as code - stored in source control
-    * Basic pod config (DONT create this way - usually use a deployment):
-      ```
-        apiVersion: v1
-        kind: Pod                              } Type of object to create
-        metadata:                              } Options to pod being created
-            name: some name for your Pod
-        spec:
-            containers:
-            - name: name for this container     } A spec for one container in this pod.
-              images: name-of-docker-image:ver  } default ver, if not specified, is "latest"
-      ```
-      Run: `kubectl apply -f name-of-yaml-file.yaml
-           `kubectl get pods`
-* Common kubectl commands:
-    * kubectl get pods                       } Like docker container ps
-    * kubectl exec -it [pod name] [cmd]      } Like docker container exec
-    * kubectl logs [pod name]                } Like docker container logs
-    * kubectl delete pod [pod name]
-    * kubectl apply -f [config file name]
-    * kubectl describe pod [pod name]
-    * kubectl get pods | deployments | services
-    * kubectl rollout restart deployment [name]
-* K8s about running containers together. Docker about running single or few containers.
-* Deployment example YAML - super minimal:
-  ```
-    apiVersion: apps/v1
-    kind: Deployment
-    metadata:
-        name: deploymentName-depl
-    spec:
-        replicas: 1                   - number of pods to create for running an image.
-        selector:                     } Selector tells deployment which pods to manage.
-            matchLabels:              }    matchLabels are key/value pairs - name of key/value can be anything.
-                app: pod-name         }
-        template:                     - Spec config of pod deployment should create.
-            metadata:
-                labels:               } All pods in this deployment will be assigned a label of app = posts
-                    app: app-label    }
-            spec:
-                containers: 
-                    - name: container Name
-                      image: docker image name
 
-  ```
-* Services
-  * 4 types:
-    1. Cluster IP
-        Sets up user-friendly URLs to access pods. Only exposes pods in cluster.
-        Good for setting up communications between pods in a cluster.
-
-        +--------------------+       +--------------------+
-        | Pod                |       | Pod                | Containers access containers in other pods
-        |   +-----------+    |       |   +-----------+    | via the cluster IP service for that pod.
-        |   | Container |    |       |   | Container |    |
-        |   +---------|-+    |       |   +-|---------+    |
-        |        ...  |      |       |     |  ...         |
-        +----^--------|------+       +-----|--------^-----+
-             |        \                    /        |
-             |         \-----------\      /         |
-             |              --------\----/          |
-             |              |        |              |
-        +----|--------------v+       v--------------|-----+
-        | Cluster IP Service |       | Cluster IP Service |  &lt; The address to use to access
-        +--------------------+       +--------------------+       the Pod, via the cluster IP service is
-                                                                  *name* of the ClusterIP service as defined
-                                                                  in the deployment YAML (see below). E.g. if
-                                                                  the service is called snafu-srv then the
-                                                                  address is http://snafu-srv/...
-
-        YAML may look something like this:
-          apiVersion: v1
-          kind: Service
-          metadata:
-              name: a name for this service
-          spec:
-              selector:
-                  app: name-of-deployment/pod/app-to-add-ip-service-too
-              type: ClusterIP
-              ports:
-                  - name: a Name
-                    protocol: TCP
-                    port: xxxx         } See diagram below for meaning of port
-                    targetPort: xxxx   } v.s. targetPort
-
-
-    2. Node port
-        Makes pod accessable outside the cluster. Usually only needed for dev.
-
-                                           +-----------------------------------------------------------------+
-                                           | Node                                     +------------------+   |
-                                           |                                          | Pod              |   |
-                                           |             +-------------+              | +-------------+  |   |
-                      +------------+       |  +----------|-+ Node port |    +---------|--+            |  |   |
-        Browser ----> | port 3xxxx | -------->| port 4000  | service   |--->| port 4000  |  Container |  |   |
-                      +------------+       |  +----------|-+           |    +---------|--+            |  |   |
-                                           |             +-------------+              | +-------------+  |   |
-                                           |                                          +------------------+   |
-                                           +-----------------------------------------------------------------+
-                      ^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^                ^^^^^^^^^^^^^^
-                      node port               port                          target port 
-
-    3. Load balancer
-        Makes pods accessable outside the cluster. **Preferred** way to expose pod to the world.
-        +--------------------------------------------------- ... --------------------------+
-        | Cluster                                                                          |
-        |   +--------------------+   +--------------------+  ...  +--------------------+   |
-        |   | Pod                |   | Pod                |  ...  | Pod                |   |
-        |   |   +-----------+    |   |   +-----------+    |  ...  |   +-----------+    |   |
-        |   |   | Container |    |   |   | Container |    |  ...  |   | Container |    |   |
-        |   |   +-----------+    |   |   +-----------+    |  ...  |   +-----------+    |   |
-        |   |        ...         |   |        ...         |  ...  |        ...         |   |
-        |   +--------------------+   +--------------------+  ...  +--------------------+   |
-        |   | Cluster IP Service |   | Cluster IP Service |  ...  | Cluster IP Service |   |
-        |   +--------^-----------+   +---------^----------+  ...  +---------^----------+   |
-        |            |_________________________|____________________________|              |
-        |                                      |                                           |
-        |                              INGRESS CONTROLLER                                  |
-        |                                      |                                           |
-        |                        +-------------^-------------... -+                        |
-        +------------------------|           Load                 |------------------------+
-                                 |      Balancer Service          |
-                                 +-------------^------------ ... -+
-                                               |
-                                            Client
-        The Load Balancer Service tells kunernetes to "reach out" to its provider and provision
-        a load balancer. Gets traffic to a SINGLE pod. "Provider" means the cloud service etc,
-        for example, AWS or Azure, that kubernetes is running on. The LB exists *outside* of any
-        cluster we create - it is provisioned by the infrastructure that KB is running on.
-
-        The Ingress or Ingress Controler is a pod with a set of routing rules to distribute traffic
-        to other services. The LB does not know how to route specific URLs to the correct pod. It is
-        a general load balancing mechanism. It is the Ingress Controller that is responsible for
-        routing certain URLs to certain pods.
-
-    4. External name
-        Redirects in-cluster requests to a CNAME url.
-
-* Updating an image used by a deployment
-    * Steps
-        1. Deployment uses 'latest' tag in pod Spec
-        2. Make update to code
-        3. Build Docker image
-        4. Push image to docker hub
-        5. kubectl rollout restart deployment [depl_name]
-    * Above is quite a hassle - intro SKAFFOLD to help!
-      SKAFFOLD (skaffold.dev):
-        * Automates many tasks in Kubernetes dev environment.
-        * Makes it easy to update code in a running pod.
-        * Makes easy to create/de;ete all objects tied to a project in on go
-</pre>
 
 <h2>Urg</h2>
 <pre>
@@ -1417,6 +1217,269 @@ https://en.wikipedia.org/wiki/Heartbeat_(computing)#Heartbeat_network
     Heartbeat network is a private network which is shared only by the nodes in the cluster, and is not
     accessible from outside the cluster. It is used by cluster nodes in order to monitor each node's status
     and communicate with each other messages necessary for maintaining the operation of the cluster.
+</pre>
+
+
+
+<h2>Kubernetes</h2>
+<pre>
+* USEFUL: https://www.nginx.com/c/microservices-march-2022-kubernetes-networking/
+* USEFUL: https://learnk8s.io/
+* Short form of name is k8s
+* Tool for running many different Docker containers
+* Infrastructure as code to setup multiple containers and networking between them
+* Creates clusters. One cluster is a set of virtual machines, all managed by one master process.
+    * Each VM runs one or more "pods" and each pod manages one or more containers
+      +-----------------------------------------------------------------------...
+      |  +=======================+   +=======================+
+      |  | Node                  |   | Node                  |
+      |  |  +-----------------+  |   |  +-----------------+  |
+      |  |  | Pod             |  |   |  | Pod             |  |
+      |  |  |  +-----------+  |  |   |  |  +-----------+  |  |
+      |  |  |  | Container |  |  |   |  |  | Container |  |  |     ...
+      |  |  |  +-----------+  |  |   |  |  +-----------+  |  |
+      |  |  |       ...       |  |   |  |       ...       |  |
+      |  |  +-----------------+  |   |  +-----------------+  |
+      |  |          ...          |   |          ...          |
+      |  +==========^^^==========+===+==========^^^==========+==== ...
+      |  | SERVICE (abstacts networking between pods away - makes simpler...)
+      |  +======================================================== ....
+      |
+      |  +--------------------------------------------------------------------...
+      |  | MASTER
+      |  +----------------------------------------------------------------^---...
+      |  +----------------------------------------------------------------|---...
+      |  | DEPLOYMENT FOR PODS (one function is re-incarnation server)    |
+      |  +-------------------------------------------------------------^--|---...
+      +----------------------------------------------------------------|--|---...
+                                                                       |  |
+                                                                       \  /
+                                                                        \/
+                                                                    Config file
+	  
+      Cluster = Collection of nodes + master to manage them
+      Node = VM to run pods
+      Pod = Contains one or more containers. When only one container its more-or-less a container
+      Deployment = Object intended to Monitor and manage pod sets and re-incarnates them if they crash
+                   and to update pods (creates new pods, switches to them, deletes old pods.)
+      Service = Provides URL to access running containers to allow "easy" inter-container network access
+</pre>
+<img src="##IMG_DIR##/Kubernetes-Cluster_Service_Node_pod.drawio.png"/>
+<pre>
+* If running on Linux need minikube tool installed.
+* Config files:
+    * Describes different deployments, pods and services (aka objects) to Create
+    * YAML
+    * Infrastructure as code - stored in source control
+    * Basic pod config (DONT create this way - usually use a deployment):
+      ```
+        apiVersion: v1
+        kind: Pod                              } Type of object to create
+        metadata:                              } Options to pod being created
+            name: some name for your Pod
+        spec:
+            containers:
+            - name: name for this container     } A spec for one container in this pod.
+              images: name-of-docker-image:ver  } default ver, if not specified, is "latest"
+      ```
+      Run: `kubectl apply -f name-of-yaml-file.yaml
+           `kubectl get pods`
+* Common kubectl commands:
+    * kubectl get pods                       } Like docker container ps
+    * kubectl exec -it [pod name] [cmd]      } Like docker container exec
+    * kubectl logs [pod name]                } Like docker container logs
+    * kubectl delete pod [pod name]
+    * kubectl apply -f [config file name]
+    * kubectl describe pod [pod name]
+    * kubectl get pods | deployments | services
+    * kubectl rollout restart deployment [name]
+* K8s about running containers together. Docker about running single or few containers.
+* Deployment example YAML - super minimal:
+  ```
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+        name: deploymentName-depl
+    spec:
+        replicas: 1                   - number of pods to create for running an image.
+        selector:                     } Selector tells deployment which pods to manage.
+            matchLabels:              }    matchLabels are key/value pairs - name of key/value can be anything.
+                app: pod-name         }
+        template:                     - Spec config of pod deployment should create.
+            metadata:
+                labels:               } All pods in this deployment will be assigned a label of app = posts
+                    app: app-label    }
+            spec:
+                containers: 
+                    - name: container Name
+                      image: docker image name
+
+  ```
+ 
+* Services
+  * See also "[Kubernetes Ingress for Beginners, by Nick Ramirez](https://thenewstack.io/kubernetes-ingress-for-beginners/)"
+</pre>
+<img src="##IMG_DIR##/Kubernetes-Services.drawio.png"/>
+<pre>
+  * 4 types:
+    1. Cluster IP
+        Sets up user-friendly URLs to access pods. Only exposes pods in cluster.
+        Good for setting up communications between pods in a cluster.
+
+        +--------------------+       +--------------------+
+        | Pod                |       | Pod                | Containers access containers in other pods
+        |   +-----------+    |       |   +-----------+    | via the cluster IP service for that pod.
+        |   | Container |    |       |   | Container |    |
+        |   +---------|-+    |       |   +-|---------+    |
+        |        ...  |      |       |     |  ...         |
+        +----^--------|------+       +-----|--------^-----+
+             |        \                    /        |
+             |         \-----------\      /         |
+             |              --------\----/          |
+             |              |        |              |
+        +----|--------------v+       v--------------|-----+
+        | Cluster IP Service |       | Cluster IP Service |  &lt; The address to use to access
+        +--------------------+       +--------------------+       the Pod, via the cluster IP service is
+                                                                  *name* of the ClusterIP service as defined
+                                                                  in the deployment YAML (see below). E.g. if
+                                                                  the service is called snafu-srv then the
+                                                                  address is http://snafu-srv/...
+
+        YAML may look something like this:
+          apiVersion: v1
+          kind: Service
+          metadata:
+              name: a name for this service
+          spec:
+              selector:
+                  app: name-of-deployment/pod/app-to-add-ip-service-too
+              type: ClusterIP
+              ports:
+                  - name: a Name
+                    protocol: TCP
+                    port: xxxx         } See diagram below for meaning of port
+                    targetPort: xxxx   } v.s. targetPort
+
+
+    2. Node port
+        Makes pod accessable outside the cluster. Usually only needed for dev.
+
+                                           +-----------------------------------------------------------------+
+                                           | Node                                     +------------------+   |
+                                           |                                          | Pod              |   |
+                                           |             +-------------+              | +-------------+  |   |
+                      +------------+       |  +----------|-+ Node port |    +---------|--+            |  |   |
+        Browser ----> | port 3xxxx | -------->| port 4000  | service   |--->| port 4000  |  Container |  |   |
+                      +------------+       |  +----------|-+           |    +---------|--+            |  |   |
+                                           |             +-------------+              | +-------------+  |   |
+                                           |                                          +------------------+   |
+                                           +-----------------------------------------------------------------+
+                      ^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^                ^^^^^^^^^^^^^^
+                      node port               port                          target port 
+
+        From "Kubernetes for beginners article":
+            > Services with a NodePort type are easy. They essentially announce that they'd like the Kubernetes API
+            > to assign to them a random TCP port and expose it outside the cluster. What makes this convenient is 
+            > that a client can target any node in the cluster using that port and their messages will be relayed to 
+            > the right place. It's like saying you can call any phone in the United States and whoever picks up will
+            > make sure you get forwarded to the right person.
+            >
+            > The downside is that the port's value must fall between 30000 and 32767, a range safely out of the way
+            > of well-known ports, but also conspicuously non-standard compared to the familiar ports 80 for HTTP and
+            > 443 for HTTPS. The randomness itself is also a hurdle, since it means that you don't know what the value
+            > will be beforehand, which makes configuring NAT, firewall rules, etc. just a bit more challenging 
+            > ...
+            > Defining many NodePort services creates a tangle of random ports.
+
+    3. Load balancer
+        Makes pods accessable outside the cluster. **Preferred** way to expose pod to the world.
+        +--------------------------------------------------- ... --------------------------+
+        | Cluster                                                                          |
+        |   +--------------------+   +--------------------+  ...  +--------------------+   |
+        |   | Pod                |   | Pod                |  ...  | Pod                |   |
+        |   |   +-----------+    |   |   +-----------+    |  ...  |   +-----------+    |   |
+        |   |   | Container |    |   |   | Container |    |  ...  |   | Container |    |   |
+        |   |   +-----------+    |   |   +-----------+    |  ...  |   +-----------+    |   |
+        |   |        ...         |   |        ...         |  ...  |        ...         |   |
+        |   +--------------------+   +--------------------+  ...  +--------------------+   |
+        |   | Cluster IP Service |   | Cluster IP Service |  ...  | Cluster IP Service |   |
+        |   +--------^-----------+   +---------^----------+  ...  +---------^----------+   |
+        |            |_________________________|____________________________|              |
+        |                                      |                                           |
+        |                              INGRESS CONTROLLER                                  |
+        |                                      |                                           |
+        |                        +-------------^-------------... -+                        |
+        +------------------------|           Load                 |------------------------+
+                                 |      Balancer Service          |
+                                 +-------------^------------ ... -+
+                                               |
+                                            Client
+        The Load Balancer Service tells kunernetes to "reach out" to its provider and provision
+        a load balancer. Gets traffic to a SINGLE pod. "Provider" means the cloud service etc,
+        for example, AWS or Azure, that kubernetes is running on. The LB exists *outside* of any
+        cluster we create - it is provisioned by the infrastructure that KB is running on.
+
+        The Ingress or Ingress Controler is a pod with a set of routing rules to distribute traffic
+        to other services. The LB does not know how to route specific URLs to the correct pod. It is
+        a general load balancing mechanism. It is the Ingress Controller that is responsible for
+        routing certain URLs to certain pods.
+
+        From "Kubernetes for beginners article":
+          > ... this comes with some prerequisites. It only works if you are operating in a cloud-hosted
+          > environment like ... Amazon's EKS and if you are okay with using that cloud vendor's load
+          > balancer technology, since it is chosen and configured automatically. The most costly
+          > disadvantage is that a hosted load balancer is spun up for every service with this type,
+          > along with a new public IP address, which has additional costs.
+          > ...
+          > Defining many Load Balancer services leads to paying for more cloud resources than desired.
+
+        - Automatic provisioning
+        - Cloud provider only
+        - Layer 4 (TCP/UDP)
+
+    4. External name
+        Redirects in-cluster requests to a CNAME url.
+
+    5 **Ingress Routing**
+        Not actually a service! From the K8S docs: You can also use Ingress to expose your Service.
+        Ingress is not a Service type, but it acts as the entry point for your cluster. It lets you
+        consolidate your routing rules into a single resource as it can expose multiple services under
+        the same IP address.
+          -- https://kubernetes.io/docs/concepts/services-networking/ingress/
+
+        From "Kubernetes for beginners article":
+            > ... perhaps it could be reduced, contained, so that you would only need to allocate one
+            > random port or one load balancer to expose many internal services? The platform needed a
+            > new layer of abstraction, one that could consolidate many services behind a single
+            > entrypoint...
+            >
+            > ...you write an Ingress manifest that declares how you would like clients to be routed
+            > to a service. The manifest doesn't actually do anything on its own; you must deploy an
+            > Ingress Controller into your cluster...
+            >
+            > ... Ingress controllers are pods, just like any other application, so they're part of
+            > the cluster and can see other pods. They're built using reverse proxies that have been
+            > active in the market for years ... NGINX Ingress Controller, and so on. The underlying
+            > proxy gives it Layer 7 routing and load balancing capabilities...
+            >
+            > ...Being inside the cluster themselves, Ingress Controllers are susceptible to the
+            > same walled-in jail as other Kubernetes pods. You need to expose them to the outside
+            > via a Service with a type of either NodePort or LoadBalancer. However, now you have a
+            > single entrypoint that all traffic goes through: one Service connected to one Ingress
+            > Controller, which, in turn, is connected to many internal pods.
+
+* Updating an image used by a deployment
+    * Steps
+        1. Deployment uses 'latest' tag in pod Spec
+        2. Make update to code
+        3. Build Docker image
+        4. Push image to docker hub
+        5. kubectl rollout restart deployment [depl_name]
+    * Above is quite a hassle - intro SKAFFOLD to help!
+      SKAFFOLD (skaffold.dev):
+        * Automates many tasks in Kubernetes dev environment.
+        * Makes it easy to update code in a running pod.
+        * Makes easy to create/de;ete all objects tied to a project in on go
 </pre>
 
 </div> <!-- END H1 padding div -->
