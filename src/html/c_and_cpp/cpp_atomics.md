@@ -1,0 +1,1 @@
+![memory fences acquire/release semantics](##IMG_DIR##/cpp_memory_reordering.png)
