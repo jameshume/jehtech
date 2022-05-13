@@ -50,6 +50,11 @@ https://kentcdodds.com/blog/state-colocation-will-make-your-react-app-faster
 https://kentcdodds.com/blog/how-to-use-react-context-effectively
 https://pagepro.co/blog/how-to-use-memoization-in-js-and-react/#:~:text=First%20things%20first%2C%20Memoization%20in,same%20arguments%20are%20supplied%20again.
 https://reactjs.org/blog/2016/07/13/mixins-considered-harmful.html
+https://indepth.dev/posts/1501/exploring-how-virtual-dom-is-implemented-in-react
+https://vaadin.com/learn/tutorials/using-web-components-in-react
+https://felixgerschau.com/react-component-composition/
+https://codewithnico.com/production-ready-react-apps/
+https://github.com/chaoming/fireact
 
 
 
