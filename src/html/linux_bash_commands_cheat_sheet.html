@@ -459,7 +459,18 @@ sudo <em>usermod</em> -a -G sudo the_new_guy</pre>
             </tr>
             <tr>
               <td>List PCI:</td>
-              <td><code>lspci -tv</code></td>
+              <td>
+                <pre>lspci -tv
+       ^
+       Show a tree-like diagram containing all buses, bridges, devices and connections                  
+                </pre>
+                <br/>
+                <pre>lspci -k -nn -v
+       ^  ^^  ^
+       ^  ^^  Verbose
+       ^  Show PCI vendor and device codes as both numbers and names    
+       Show kernel drivers handling each device</pre>
+              </td>
             </tr>
             <tr>
               <td>List USB:</td>
@@ -470,8 +481,16 @@ sudo <em>usermod</em> -a -G sudo the_new_guy</pre>
               <td><code>sudo cat /proc/tty/driver/usbserial</code></td>
             </tr>
             <tr>
+              <td>Memory fitted:</td>
+              <td><code>sudo lshw -c memory</code></td>
+            </tr>
+            <tr>
               <td>Free memory:</td>
               <td><code>free -m</code><br/><code>vmstat -s -S M | grep mem</code></td>
+            </tr>
+            <tr>
+              <td>CPU:</td>
+              <td><code>lscpu</code></td>
             </tr>
           </table>
         </p>
