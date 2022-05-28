@@ -6,6 +6,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
       - uses: actions/setup-node@v3
       - run: npm -v
       - run: npm install @node-minify/core
@@ -20,7 +22,7 @@ jobs:
       - run: npm install  yargs@3
       - run: npm install  html-linter
       - run: npm install  html-validate
-      - run: apt-get update
-      - run: apt-get install -y python3-pip vim dos2unix
-      - run: pip3 install lxml pillow pyhash awscli boto3 markdown pymdown-extensions
+      - run: sudo apt-get update
+      - run: sudo apt-get install -y python3-pip vim dos2unix
+      - run: sudo pip3 install lxml pillow pyhash awscli boto3 markdown pymdown-extensions
       - run: echo "$(pwd)"
