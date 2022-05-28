@@ -10,18 +10,18 @@ jobs:
           fetch-depth: 1
       - uses: actions/setup-node@v3
       - run: npm -v
-      - run: npm install @node-minify/core
-      - run: npm install  @node-minify/cli
-      - run: npm install  @node-minify/cssnano
-      - run: npm install  @node-minify/uglify-es
-      - run: npm install  @babel/core 
-      - run: npm install  @babel/cli
-      - run: npm install  @babel/preset-env
-      - run: npm install  esm
-      - run: npm install  mathjax@3
-      - run: npm install  yargs@3
-      - run: npm install  html-linter
-      - run: npm install  html-validate
+      - run: npm install -g @node-minify/core
+      - run: npm install -g @node-minify/cli
+      - run: npm install -g @node-minify/cssnano
+      - run: npm install -g @node-minify/uglify-es
+      - run: npm install -g @babel/core 
+      - run: npm install -g @babel/cli
+      - run: npm install -g @babel/preset-env
+      - run: npm install -g esm
+      - run: npm install -g mathjax@3
+      - run: npm install -g yargs@3
+      - run: npm install -g html-linter
+      - run: npm install -g html-validate
       - run: sudo apt-get update
       - run: sudo apt-get install -y python3-pip vim dos2unix
       - run: sudo pip3 install lxml pillow pyhash awscli boto3 markdown pymdown-extensions
