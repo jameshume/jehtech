@@ -2,8 +2,12 @@
     .same {
         background-color: #ccffcc
     }
+    pre > code {
+        border: 0;
+        background-color: transparent;
+        font-size: 85%;
+    }
 </style>
-
 
 ![Phab object relationships](##IMG_DIR##/phabricator_projects_tasks_structure.png)
 
@@ -11,7 +15,7 @@
 To avoid storing the token in source control, keep it in a file that is part of `.gitignore` so that
 it does not get committed.
 
-``` { .prettyprint .linenums}
+```
 conduit_api_data = json.load(open('conduit_token.json', 'r', encoding='ascii'))
 conduit_api_token = conduit_api_data['token']
 phab = Phabricator(host='https://HOST_ADDR/api/', token=conduit_api_token)
@@ -89,7 +93,7 @@ Use [`maniphest.gettasktransactions()`](https://secure.phabricator.com/conduit/m
 
 I wanted to get transactions for each task. To do this in Python:
 
-``` { .prettyprint .linenums}
+```
 result = phab.maniphest.gettasktransactions(ids=[...])
 ```
 
@@ -97,7 +101,7 @@ Where `ids` is a list of task IDs as *integers*.
 
 This returns the following structure in `result.response`:
 
-``` { .prettyprint .linenums}
+```
 {
     '<task ID>': [
         {
@@ -140,7 +144,7 @@ The fields `newValue` and `oldValue` depend on the `transactionType`.
 
 #### transactionType == 'core:columns'
 
-```{ .prettyprint .linenums}
+```
 {
     'authorPHID': 'PHID-USER-...',
     ...
@@ -186,8 +190,8 @@ Here the transaction `core:columns` occurs just after a `core:create`:
 ```
 'newValue': [{'afterPHIDs': [],
                 'beforePHIDs': [],
-                'boardPHID': 'PHID-PROJ-urganmk55akhmlc5aahl',
-                'columnPHID': 'PHID-PCOL-vwfdaeklqotgxwglewm7',
+                'boardPHID': 'PHID-PROJ-...',
+                'columnPHID': 'PHID-PCOL-...',
                 'fromColumnPHIDs': []}],
 ```
 
@@ -336,14 +340,14 @@ Use [`projects.search()`](https://secure.phabricator.com/conduit/method/project.
 ### Query
 **`query()` is deprecated**.
 
-``` { .prettyprint .linenums}
+```
 all_projects = phab.project.query()
 all.projects.response
 ```
 
 The response looks like this:
 
-``` { .prettyprint .linenums}
+```
 {
     'cursor': {'after': '283', 'before': None, 'limit': 100},
     'data': {
@@ -365,7 +369,7 @@ The response looks like this:
 
 To query a specific project or projects by name use:
 
-``` { .prettyprint .linenums}
+```
 my_projects = phab.project.query(names=['My Project', 'My Other Project', ...])
 ```
 In this case the response is the same shape as shown above except that the `data` dictionary will only have one key.
@@ -420,7 +424,7 @@ Just as for tasks, query and search give slightly different sets of data. For ex
 
 #### Project Work Board: Getting Columns
 
-``` { .prettyprint .linenums}
+```
 search_result = phab.project.column.search(
     constraints={'projects': [<project-phid>, ...]}
 )
@@ -428,7 +432,7 @@ search_result = phab.project.column.search(
 
 The `search_result.response` has this shape:
 
-``` { .prettyprint .linenums}
+```
 {
     'cursor': {
         'after': ...,

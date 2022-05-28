@@ -772,3 +772,11 @@ From nice big-picures tutorial: https://developer.okta.com/blog/2019/10/21/illus
 	(i.e. the Resource Owner) is called identity. When an Authorization Server supports OIDC, it is
 	sometimes called an identity provider, since it provides information about the Resource Owner
 	back to the Client.
+
+
+====================================================================================================
+====================================================================================================
+OAuth and JWT
+====================================================================================================
+https://stackoverflow.com/a/28503265
+https://www.loginradius.com/blog/engineering/using-jwt-with-oauth2-when-and-why/
