@@ -10,7 +10,6 @@ jobs:
       - run: npm -v
       - run: >
           npm install
-            @node-minify/core
             @node-minify/cli
             @node-minify/cssnano
             @node-minify/uglify-es
