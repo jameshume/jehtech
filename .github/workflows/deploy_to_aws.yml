@@ -8,19 +8,19 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
       - run: npm -v
-      - run: >
-          npm install
-            @node-minify/cli
-            @node-minify/cssnano
-            @node-minify/uglify-es
-            @babel/core 
-            @babel/cli
-            @babel/preset-env
-            esm
-            mathjax@3
-            yargs@3
-            html-linter
-            html-validate
+      - run: npm install
+      - run: @node-minify/core
+      - run: @node-minify/cli
+      - run: @node-minify/cssnano
+      - run: @node-minify/uglify-es
+      - run: @babel/core 
+      - run: @babel/cli
+      - run: @babel/preset-env
+      - run: esm
+      - run: mathjax@3
+      - run: yargs@3
+      - run: html-linter
+      - run: html-validate
       - run: apt-get update
       - run: apt-get install -y python3-pip vim dos2unix
       - run: pip3 install lxml pillow pyhash awscli boto3 markdown pymdown-extensions
