@@ -25,6 +25,9 @@ jobs:
       - run: npm install -g html-validate
       - run: npm -g list
       - run: sudo apt-get update
-      - run: sudo apt-get install -y python3-pip vim dos2unix
+      - run: sudo apt-get install -y python3-pip
       - run: sudo pip3 install lxml pillow pyhash awscli boto3 markdown pymdown-extensions
-      - run: cd build_tools && chmod +x generate_html.sh && make all
+      - run: cd build_tools && chmod +x generate_html.sh && make -j$(lscpu | grep "^\s*CPU(s):" | sed 's/.*:\s*//g') all && make deploy
+        env:
+          AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}

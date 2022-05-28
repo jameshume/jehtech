@@ -1,6 +1,7 @@
 import datetime
 import json
 import mimetypes
+import os
 import sys
 from tempfile import NamedTemporaryFile
 import boto3
@@ -13,8 +14,16 @@ aws_credentials = None
 s3_hash_dict = {}
 local_hash_dict = {}
 
-with open('aws_jehtech_uploader_credentials.json', 'r', encoding='ascii') as fh:
-    aws_credentials = json.load(fh)
+AWS_ACCESS_KEY = os.getenv('AWS_ACCESS_KEY')
+AWS_SECRET_KEY = os.getenv('AWS_SECRET_KEY')
+if AWS_ACCESS_KEY is not None and AWS_SECRET_KEY is not None:
+    aws_credentials = {
+        'access_key_id': AWS_ACCESS_KEY,
+        'access_key': AWS_SECRET_KEY
+    }
+else:
+    with open('aws_jehtech_uploader_credentials.json', 'r', encoding='ascii') as fh:
+        aws_credentials = json.load(fh)
 
 s3 = boto3.client(
     's3', 
