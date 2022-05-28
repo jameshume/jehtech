@@ -28,13 +28,15 @@ else:
 s3 = boto3.client(
     's3', 
     aws_access_key_id=aws_credentials['access_key_id'],
-    aws_secret_access_key=aws_credentials['access_key']
+    aws_secret_access_key=aws_credentials['access_key'],
+    region_name='eu-west-2'
 )
 
 cf = boto3.client(
     'cloudfront',
     aws_access_key_id=aws_credentials['access_key_id'],
-    aws_secret_access_key=aws_credentials['access_key']
+    aws_secret_access_key=aws_credentials['access_key'],
+    region_name='eu-west-2'
 )
 
 if len(sys.argv) > 1 and sys.argv[1] == "refresh":
