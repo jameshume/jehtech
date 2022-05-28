@@ -1,3 +1,4 @@
+--- 
 name: deploy-to-aws
 on: [push]
 jobs:
@@ -9,18 +10,18 @@ jobs:
         with:
           node-version: '14'
       - run: >
-        npm install
-          @node-minify/core
-          @node-minify/cli
-          @node-minify/cssnano
-          @node-minify/uglify-es
-          @babel/core @babel/cli
-          @babel/preset-env
-          esm
-          mathjax@3
-          yargs@3
-          html-linter
-          html-validate
+          npm install
+            @node-minify/core
+            @node-minify/cli
+            @node-minify/cssnano
+            @node-minify/uglify-es
+            @babel/core @babel/cli
+            @babel/preset-env
+            esm
+            mathjax@3
+            yargs@3
+            html-linter
+            html-validate
       - run: apt-get update
       - run: apt-get install -y python3-pip vim dos2unix
       - run: pip3 install lxml pillow pyhash awscli boto3 markdown pymdown-extensions
