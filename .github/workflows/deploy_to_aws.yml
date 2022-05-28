@@ -7,6 +7,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
+      - run: npm -v
       - run: >
           npm install
             @node-minify/core
