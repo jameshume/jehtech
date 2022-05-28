@@ -2,20 +2,19 @@
 name: deploy-to-aws
 on: [push]
 jobs:
-  check-bats-version:
+  deploy-to-aws:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
-        with:
-          node-version: '14'
       - run: >
           npm install
             @node-minify/core
             @node-minify/cli
             @node-minify/cssnano
             @node-minify/uglify-es
-            @babel/core @babel/cli
+            @babel/core 
+            @babel/cli
             @babel/preset-env
             esm
             mathjax@3
