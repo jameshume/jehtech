@@ -16,6 +16,7 @@ SRC_JAVASCRIPT_DIR:=$(SRC_DIR)/javascript
 #SRC_JAVASCRIPT_FILES := $(shell find "$(SRC_JAVASCRIPT_DIR)" -type f -name "*.js")
 SRC_JAVASCRIPT_FILES := $(shell cat "$(SRC_JAVASCRIPT_DIR)/contexts.txt")
 $(info THIS IS SOME DEBUG)
+$(info "$(SRC_JAVASCRIPT_DIR)/contexts.txt")
 $(info $(SRC_JAVASCRIPT_FILES))
 
 SRC_CSS_DIR:=$(SRC_DIR)/css
