@@ -15,6 +15,8 @@ SRC_IMAGE_FILES:=$(filter %.png %.gif %.mp4 %.svg %.jpg %.jpeg %.tif,$(SRC_IMAGE
 SRC_JAVASCRIPT_DIR:=$(SRC_DIR)/javascript
 #SRC_JAVASCRIPT_FILES := $(shell find "$(SRC_JAVASCRIPT_DIR)" -type f -name "*.js")
 SRC_JAVASCRIPT_FILES := $(shell cat "$(SRC_JAVASCRIPT_DIR)/contexts.txt")
+$(info THIS IS SOME DEBUG)
+$(info $(SRC_JAVASCRIPT_FILES))
 
 SRC_CSS_DIR:=$(SRC_DIR)/css
 SRC_CSS_FILES := $(shell find "$(SRC_CSS_DIR)" -type f -name "*.css")
