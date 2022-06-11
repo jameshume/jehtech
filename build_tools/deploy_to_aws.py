@@ -74,7 +74,8 @@ remote_files_not_in_local = s3_hash_dict_keys - local_hash_dict_keys
 # Delete everything no longer needed
 if remote_files_not_in_local:
     for file_path in remote_files_not_in_local:
-        print(f'Deleting {file_path}')
+        print(f'FAKE Deleting {file_path}')
+        pass
         s3.delete_object(
             Bucket='jehtech.com',
             Key=file_path
