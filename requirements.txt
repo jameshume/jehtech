@@ -1,6 +1,6 @@
-awscli==1.25.19
-boto3==1.24.19
-botocore==1.27.19
+awscli==1.25.18
+boto3==1.24.18
+botocore==1.27.18
 colorama==0.4.4
 docutils==0.16
 importlib-metadata==4.12.0
