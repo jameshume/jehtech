@@ -170,7 +170,7 @@ $(DST_HTML_ROOT_DIR)/jeh-monolith.js: $(SRC_JAVASCRIPT_FILES)
         cat "$${file}" >> "$@"; \
      done
 	@echo "   Minifying..."
-	@"$${npm bin}\node-minify" --compressor uglify-es --input "$@" --output "$@" --silence
+	@"$$(npm bin)\node-minify" --compressor uglify-es --input "$@" --output "$@" --silence
 
 
 $(DST_HTML_ROOT_DIR)/animatron_player.js: $(SRC_HTML_ROOT_DIR)/animatron_player.js
