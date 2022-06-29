@@ -1,8 +1,13 @@
 --- 
-name: deploy-to-aws
-on: [push]
+name: Build website and deploy to AWS
+
+on: 
+  push:
+    branches:
+      - master
+
 jobs:
-  deploy-to-aws:
+  build-and-deploy-to-aws:
     runs-on: ubuntu-latest
     environment: deploy
     steps:
