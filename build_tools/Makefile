@@ -172,7 +172,7 @@ $(DST_HTML_ROOT_DIR)/jeh-monolith.js: $(SRC_JAVASCRIPT_FILES)
 	@echo "   Minifying..."
 	ls -hal "$$(npm bin)/"
 	ls -hal "$$(npm bin)/../@node-minify/cli/bin/cli.js"
-	echo "$$(realpath $$(npm bin)/node-minify")"
+	echo "$$(realpath $$(npm bin)/node-minify)"
 	echo "$$(npm bin)/node-minify"
 	echo "$$(npm bin)/node-minify" --compressor uglify-es --input "$@" --output "$@" --silence
 	"$$(npm bin)/node-minify" --compressor uglify-es --input "$@" --output "$@" --silence
