@@ -20,10 +20,14 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm test
-      - run: sudo apt-get update
-      - run: sudo apt-get install -y python3-pip
-      - run: sudo pip3 install lxml pillow pyhash awscli boto3 markdown pymdown-extensions
-      - run: pip3 freeze
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          update-environment: true
+          cache: 'pip'
+      - run: pip3 install -U pip wheel setuptools
+      - run: pip3 install -r requirements.txt
       - run: >
           cd build_tools 
           && chmod +x generate_html.sh 
