@@ -20,7 +20,8 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm test
-      - run: sudo apt install python3-wheel && sudo pip install wheel
+      - run: sudo apt install python3-wheel
+      - run: sudo pip3 install wheel
       - uses: actions/setup-python@v4
         with:
           python-version: '3.10'
