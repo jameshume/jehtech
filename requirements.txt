@@ -9,7 +9,7 @@ lxml==4.9.0
 Markdown==3.3.7
 Pillow==9.1.1
 pyasn1==0.4.8
-pyhash==0.9.3
+#pyhash==0.9.3
 pymdown-extensions==9.5
 python-dateutil==2.8.2
 PyYAML==5.4.1
