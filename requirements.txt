@@ -49,7 +49,7 @@ pipx==1.1.0
 protobuf==3.6.1
 pyasn1==0.4.2
 pyasn1-modules==0.2.1
-Pygments==2.3.1
+Pygments==2.7.4
 PyGObject==3.36.0
 PyHamcrest==1.9.0
 pyhash==0.9.3
