@@ -173,6 +173,7 @@ $(DST_HTML_ROOT_DIR)/jeh-monolith.js: $(SRC_JAVASCRIPT_FILES)
 	ls -hal "$$(npm bin)/"
 	ls -hal "$$(npm bin)/../@node-minify/cli/bin/cli.js"
 	"$$(npm bin)/../@node-minify/cli/bin/cli.js"
+	"$$(npm bin)/node-minify"
 	cat "$$(npm bin)/../@node-minify/cli/bin/cli.js"
 	echo "$$(realpath $$(npm bin)/node-minify)"
 	echo "$$(npm bin)/node-minify"
