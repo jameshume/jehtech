@@ -172,9 +172,10 @@ $(DST_HTML_ROOT_DIR)/jeh-monolith.js: $(SRC_JAVASCRIPT_FILES)
 	@echo "   Minifying..."
 	ls -hal "$$(npm bin)/"
 	ls -hal "$$(npm bin)/../@node-minify/cli/bin/cli.js"
-	@echo "$$(npm bin)/node-minify"
-	@echo "$$(npm bin)/node-minify" --compressor uglify-es --input "$@" --output "$@" --silence
-	@"$$(npm bin)/node-minify" --compressor uglify-es --input "$@" --output "$@" --silence
+	echo "$$(realpath $$(npm bin)/node-minify")"
+	echo "$$(npm bin)/node-minify"
+	echo "$$(npm bin)/node-minify" --compressor uglify-es --input "$@" --output "$@" --silence
+	"$$(npm bin)/node-minify" --compressor uglify-es --input "$@" --output "$@" --silence
 
 
 $(DST_HTML_ROOT_DIR)/animatron_player.js: $(SRC_HTML_ROOT_DIR)/animatron_player.js
