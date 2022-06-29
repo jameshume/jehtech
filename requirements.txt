@@ -77,7 +77,7 @@ six==1.14.0
 sos==4.3
 ssh-import-id==5.10
 systemd-python==234
-Twisted==18.9.0
+Twisted==22.4.0
 ubuntu-advantage-tools==27.8
 ufw==0.36
 urllib3==1.25.8
