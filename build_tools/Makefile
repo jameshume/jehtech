@@ -170,7 +170,7 @@ $(DST_HTML_ROOT_DIR)/jeh-monolith.js: $(SRC_JAVASCRIPT_FILES)
         cat "$${file}" >> "$@"; \
      done
 	@echo "   Minifying..."
-	"$$(npm bin)/node-minify" --compressor uglify-es --input "$@" --output "$@" 
+	@"$$(npm bin)/node-minify" --compressor uglify-es --input "$@" --output "$@" 
 
 
 $(DST_HTML_ROOT_DIR)/animatron_player.js: $(SRC_HTML_ROOT_DIR)/animatron_player.js
@@ -184,7 +184,7 @@ $(DST_HTML_ROOT_DIR)/jeh-monolith.css: $(SRC_CSS_FILES)
 	@echo "Generating $@"
 	@rm -f "$@"
 	@for file in $(SRC_CSS_FILES); do cat "$${file}" >> "$@"; done
-	@node-minify --compressor cssnano --input "$@" --output "$@" --silence
+	@"$$(npm bin)/node-minify" --compressor cssnano --input "$@" --output "$@" --silence
 
 
 # The HTML file build rules. The macro is evaluated for each source HTML file so that a rule
