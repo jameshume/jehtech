@@ -17,13 +17,13 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 14
-          cache: 'npm'
+          cache: 'npmjeh'
       - run: npm ci
       - uses: actions/setup-python@v4
         with:
           python-version: '3.10'
           update-environment: true
-          cache: 'pip'
+          cache: 'pipjeh'
       - run: >
           cd build_tools 
           && chmod +x generate_html.sh 
