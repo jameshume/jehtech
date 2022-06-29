@@ -2738,6 +2738,9 @@ If you ommit DEPENDENCIES-OF-FUNCTION then it runs FOR EVERY render cycle.
 If you make it an empty list then it only runs for the very FIRST render - i.e., like
 componentDidMount().
 
+
+##IMG:useEffectDepsDecisionDiagram.png##
+
 You can have multiple useEffect() calls, just like you do with useState().
 
 To use dependencies:
@@ -2762,6 +2765,24 @@ if you use them.
 		const { keyName } = props;
 		...
 		useEffect( () => {...}, [..., keyValue]);
+
+If you don't use the deps parameter properly you can get a "closure trap of a hook": see https://betterprogramming.pub/understanding-the-closure-trap-of-react-hooks-6c560c408cde.
+
+This is also a *really* super read with a React hooks closure trap problem: https://betterprogramming.pub/a-react-hooks-challenge-for-senior-react-developers-f1190e1939ec
+	
+	A really important knuget of knowledge from the above article is this:
+	
+		In `const [myList, setMyList] = useState([])` the list returned by each call to 
+		useState is calculated based on the following formula:
+			base state + update1 + update2 + … = current state
+		... So, the list returned by multiple calls to useState are different objects with different
+		addresses in memory.
+
+	It also makes it very clear as to why when setting state based on prev state, one should use
+	`setMyList( prevList => prevList.concat(...))`
+
+	For a good explanation of closures see: https://betterprogramming.pub/10-javascript-closure-challenges-explained-with-diagrams-c964110805e7
+
 
 Clean Up With useEffect():
 - - - - - - - - - - - - - -
