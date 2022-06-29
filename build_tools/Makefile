@@ -170,6 +170,8 @@ $(DST_HTML_ROOT_DIR)/jeh-monolith.js: $(SRC_JAVASCRIPT_FILES)
         cat "$${file}" >> "$@"; \
      done
 	@echo "   Minifying..."
+	echo $$(npm bin)
+	ls $$(npm bin)
 	@"$$(npm bin)\node-minify" --compressor uglify-es --input "$@" --output "$@" --silence
 
 
