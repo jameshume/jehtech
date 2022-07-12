@@ -39,3 +39,52 @@
     * Privileged:
         * Can use all instrutions and resources.
         * Can write to CONTROL register to change privilege level.
+
+
+# Cortext-Debug: VSCode Extension - JLINK
+* VSCode would call `launchRequest()` in `gdb.ts`:
+  * This does `launchAttachInit()` amd then `processLaunchAttachRequest()`, witch `attach=false`.
+  * `processLaunchAttachRequest()`:
+    * The session is started: this refers to starting GDB client and the server and starting a debug "session".
+    * Symbols are loaded asynchonously
+    * GDB is started asynchonously
+    * TCP ports acquired then
+      * Creates GDB Server and once it is started
+        * Waits for GDB client to have finished launching
+        * Waits for GDB server to have finished launching
+        * Waits for symbol load to have completed
+        * SENDS init commands
+        * SENDS preLaunch commands
+        * SENDS launch commands (or overriden version)
+          * For JLink this is
+            ```
+            interpreter-exec console "monitor halt"     # Exec command in GDB CLI interpretter - moitor == send through as-is to server
+            interpreter-exec console "monitor reset"    # Exec command in GDB CLI interpretter - moitor == send through as-is to server
+            if no loadFiles                             # Reset for M0 will always leave CPU halted
+              interpreter-exec console "monitor reset"
+              target-download
+            else if zero length loadFiles
+              <nothing>
+            else 
+              interpreter-exec console "monitor reset"
+              for each FILE:
+                file-exec-file FILE                    # Specify the executable file to be debugged
+                target-download                        # Loads the executable onto the remote target
+
+            interpreter-exec console "monitor reset"
+            ```
+        * SENDS postLaunch commands
+* See `restartRequest()` in `gdb.ts`. The restart command send to the server will be
+  ```
+  ...preRestartCommands
+  interpreter-exec console "monitor halt"  } Or if overridden, block replaced with new commands.
+  interpreter-exec console "monitor reset" } 
+  ...postRestartCommands # All reset strateges halt the CPU after the reset, so CPU is HALTED here
+  ```
+  After reset all JLink reset strategies have halted the CPI. In `resetRequest()`, only after the
+  restart commands (inc. pre and post) are sent, is there is stuff about a start sequence: 
+  `finishStartSequence()`: `this.miDebugger.restart(commands).then(async (done) => {....`.
+    * JLink reset command: https://wiki.segger.com/J-Link_GDB_Server#reset
+    * JLink reset strategies: https://wiki.segger.com/J-Link_Reset_Strategies
+    * All of them halt the CPU after the reset.
+* Dissasembly. See `runDisasmRequest()` in `disasm.ts`.
