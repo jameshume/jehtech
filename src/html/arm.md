@@ -1,5 +1,5 @@
 
-# Intro
+## Intro
 
 * Main ARM series: R for **R**eal-time processors, A for **A**pplication processors, M for **M**icrocontroller processors.
     * Pipelines: A has long, R long/medium, M short.
@@ -16,10 +16,10 @@
             * 16-bit and 32-bit Thumb-2
                 * Introduced in 2003. Keeps the code density of the Thumb instruction set and the performance of the 32-bit set. Most processors now only support the Thumb-2 instruction set (>= M0).
 
-# Programmers Model
+## Programmers Model
 * Explains the interface programmer must use to design their application on a specific processor.
 
-## Cortex-M4
+### Cortex-M4
 * Processor modes:
     * Thread mode:
         * Execute applications.
@@ -41,7 +41,7 @@
         * Can write to CONTROL register to change privilege level.
 
 
-# Cortext-Debug: VSCode Extension - JLINK
+## Cortext-Debug: VSCode Extension - JLINK
 * VSCode would call `launchRequest()` in `gdb.ts`:
   * This does `launchAttachInit()` amd then `processLaunchAttachRequest()`, witch `attach=false`.
   * `processLaunchAttachRequest()`:
