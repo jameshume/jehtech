@@ -46,8 +46,8 @@
   * This does `launchAttachInit()` amd then `processLaunchAttachRequest()`, witch `attach=false`.
   * `processLaunchAttachRequest()`:
     * The session is started: this refers to starting GDB client and the server and starting a debug "session".
-    * Symbols are loaded asynchonously
-    * GDB is started asynchonously
+    * Symbols are loaded asynchronously
+    * GDB is started asynchronously
     * TCP ports acquired then
       * Creates GDB Server and once it is started
         * Waits for GDB client to have finished launching
@@ -55,11 +55,11 @@
         * Waits for symbol load to have completed
         * SENDS init commands
         * SENDS preLaunch commands
-        * SENDS launch commands (or overriden version)
+        * SENDS launch commands (or overridden version)
           * For JLink this is
             ```
-            interpreter-exec console "monitor halt"     # Exec command in GDB CLI interpretter - moitor == send through as-is to server
-            interpreter-exec console "monitor reset"    # Exec command in GDB CLI interpretter - moitor == send through as-is to server
+            interpreter-exec console "monitor halt"     # Exec command in GDB CLI interpreter - monitor == send through as-is to server
+            interpreter-exec console "monitor reset"    # Exec command in GDB CLI interpreter - monitor == send through as-is to server
             if no loadFiles                             # Reset for M0 will always leave CPU halted
               interpreter-exec console "monitor reset"
               target-download
