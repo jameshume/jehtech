@@ -1,6 +1,9 @@
 """
 Calander API stuff ripped from https://karenapp.io/articles/how-to-automate-google-calendar-with-python-using-the-calendar-api/
 pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
+
+https://blog.salrashid.dev/articles/2021/cloud_sdk_missing_manual/override_trust_certificates_for_tls/
+https://googleapis.dev/python/google-auth/latest/reference/google.auth.transport.grpc.html
 """
 import datetime
 import pickle
@@ -20,6 +23,12 @@ SCOPES = ['https://www.googleapis.com/auth/calendar']
 CREDENTIALS_FILE = 'client_secret_307417093131-435eeuus7qvsftss10ll2sr73f7hiuuu.apps.googleusercontent.com.json'
 
 def get_calendar_service():
+   # If you are behind an HTTPS proxy look for your cert file in cat /etc/ssl/certs
+   # and copy it into the file printed out below... VERY HACKY bute cant be arsed to do
+   # better
+   import certifi
+   print(certifi.where()) ##<< COPY AND PASTE THE ZSCALER CERRTICIATE FROM HERE
+
    creds = None
    # The file token.pickle stores the user's access and refresh tokens, and is
    # created automatically when the authorization flow completes for the first
@@ -36,8 +45,7 @@ def get_calendar_service():
                CREDENTIALS_FILE, SCOPES)
            creds = flow.run_local_server(port=0)
 
-       # Save the credentials for the next run
-       with open('token.pickle', 'wb') as token:
+           # Save the credentials for the next run
            pickle.dump(creds, token)
 
    service = build('calendar', 'v3', credentials=creds)
