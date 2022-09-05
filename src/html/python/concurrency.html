@@ -447,17 +447,29 @@ cv.release()
 <div>
     <p>
         N philosophers sit around a table with N-1 forks available. To eat, each philosopher must
-        pick up two forks, on to their left and one to their right. They pick up both forks to eat
+        pick up two forks, the one to their left and the one to their right. They pick up both forks to eat
         and once finished put down both forks and think for a while before eating again.
     </p>
+	<p>
+		<img alt="Dining philosophers image" src="##IMG_DIR##/concurrency_philosophers.png"/>
+	</p>
     <p>
         We must make sure that <em>no philosopher starves</em>! Dead philosophers are bad! We'd
         also like to make things fair... one fat philosopher who gobbles up 99% of the food will
         upset the others!
     </p>
     <p>
-        This problem demonstrates the concepts of <em>deadlock</em> and possible <em>livelock</em>.
+        This problem demonstrates the concepts of <em>deadlock</em> and possible <em>livelock</em>
+		(safety and fairness).
     </p>
+	<p>
+		For example, deadlock would occur if every philosopher picked up their left fork before anyone
+		picked up their right:
+	</p>
+	<p>
+		<img alt="Dining philosophers deadlock" src="##IMG_DIR##/concurrency_philosophers_deadlock.png"/>
+	</p>
+	
 </div> <!-- END H2 DIV -->
 
 <h2>The Readers And Writers Problem: Conditional Forms Of Mutual Exclusion</h2>
