@@ -301,14 +301,14 @@ my_rlock.acquire() #< Will NOT block</pre>
 <h2>The Bounded Buffer Problem: Asynchronous Message Passing</h2>
 <div>
 	<p>
-		In this scenario there a is thread that creates a load of data. It could be
+		In this scenario there is a thread that creates a load of data. It could be
 		a thread on your server, accepting client connections, reading data from
 		the client and then passing the
 		the received data on to another thread in your application that will
 		process the data.
 	</p>
 	<p>
-		The thread getting the data that is getting pumped into your program's
+		The thread sending the data that is getting pumped into your program's
 		analysis algorithm is called the <em>producer</em>. The algorithm
 		thread is said be be the <em>consumer</em> because it is <em>consuming</em>
 		the data.
@@ -321,14 +321,20 @@ my_rlock.acquire() #< Will NOT block</pre>
 		have to wait and so it could miss some incoming data. The same for the
 		analysis thread. It will have to wait until data is available. If there is
 		a sudden load on the network and there is a large delay in receiving data,
-		the analysis thread will sit idle until suddenly a glut of data is received.
+		the analysis thread will sit idle until suddenly a glut of data is received. See below.
+	</p>
+	<p>
+		<img alt="Lock step data passing. Needs decoupling" src="##IMG_DIR##/concurrency_bounded_buffer_in_lockstep.png"/>
 	</p>
 	<p>
 		What we want to do is to <em>decouple</em> these two threads so that if
 		the producer is busy, there is still enough data available to occupy the
 		consumer. If the consumer is busy, the producer has somewhere to stash
 		the data quickly so it can get back to its task. This is done by placing
-		a <em>buffer</em> between the two processes.
+		a <em>buffer</em> between the two processes. See below.
+	</p>
+	<p>
+		TODO IMG
 	</p>
 	<p>
 		We need to make sure of two things. The consumer must not read from and
