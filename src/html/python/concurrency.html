@@ -331,10 +331,11 @@ my_rlock.acquire() #< Will NOT block</pre>
 		the producer is busy, there is still enough data available to occupy the
 		consumer. If the consumer is busy, the producer has somewhere to stash
 		the data quickly so it can get back to its task. This is done by placing
-		a <em>buffer</em> between the two processes. See below.
+		a <em>buffer</em> between the two processes. An example interleaving showing the advantages
+		of using a thread safe buffer to decouple to processes is shown below...
 	</p>
 	<p>
-		TODO IMG
+		<img alt="Threads decoupled with queue" src="##IMG_DIR##/concurrency_bounded_buffer_buffered"/>
 	</p>
 	<p>
 		We need to make sure of two things. The consumer must not read from and
@@ -342,8 +343,8 @@ my_rlock.acquire() #< Will NOT block</pre>
 		buffer (overflow).
 	</p>
 	<p>
-		Now, in Python, the standard library already gives us such a thread
-		safe buffer. It is found in <code>collections.deque</code>: <q>Deques support
+		Now, in Python, the <b>standard library already gives us such a thread
+		safe buffer!</p>b> It is found in <code>collections.deque</code>: <q>Deques support
 		thread-safe, memory efficient appends and pops from either side of the deque
 		with approximately the same <code>O(1)</code> performance in either direction</q>.
 	</p>
