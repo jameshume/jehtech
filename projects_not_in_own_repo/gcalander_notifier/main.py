@@ -7,6 +7,7 @@ https://googleapis.dev/python/google-auth/latest/reference/google.auth.transport
 """
 import datetime
 import pickle
+import time
 import os.path
 import pytz
 import tkinter as tk
@@ -53,7 +54,7 @@ def get_calendar_service():
 
 
 
-def main():
+def main(silenced):
     service = get_calendar_service()
     # Call the Calendar API
     print('Getting list of calendars')
@@ -71,6 +72,7 @@ def main():
 
 
     events_str = list()
+    events_tag = list()
 
     # Call the Calendar API
     now_datetime = datetime.datetime.utcnow()
@@ -82,30 +84,61 @@ def main():
     events = events_result.get('items', [])
 
     for event in events:
-        start = event['start'].get('dateTime', event['start'].get('date'))
-        start_date = parser.parse(start)
-        if (utc.localize(now_datetime) + datetime.timedelta(minutes = 5) >= start_date):
-            description = "\n"
-            if 'description' in event:
-                description = "\n{}\n\n".format(event['description'])
-            events_str.append("{}: {} {}".format(start, event['summary'], description))
+        if event['etag'] in silenced:
+            print("**** event ID was silenced {} ****".format(event['etag']))
+        else:
+            start = event['start'].get('dateTime', event['start'].get('date'))
+            start_date = parser.parse(start)
+            if (utc.localize(now_datetime) + datetime.timedelta(minutes = 5) >= start_date):
+                print("**** event ID will start soon {} ****".format(event['etag']))
+                description = "\n"
+                if 'description' in event:
+                    description = "\n{}\n\n".format(event['description'])
+                print("**** event ID being added to alert list {} ****".format(event['etag']))
+                events_str.append("{}: {} {}".format(start, event['summary'], description))
+                events_tag.append(event['etag'])
 
     if len(events_str):
         def close():
             window.quit()
+            window.destroy()
+
+        def silence(tag):
+            silenced.add(tag)
+            close()
 
         window = tk.Tk()
         window.attributes('-topmost', True)
-        greeting = tk.Label(text="CALANDER EVENTS IMMINANT\n\n\n{}".format(
-            "\n".join(events_str)
-        ))
+        greeting = tk.Label(text="CALANDER EVENTS IMMINANT\n\n\n{}".format(events_str[0]))
         greeting.pack()
         window.attributes('-fullscreen', True)
-        button = tk.Button(window, text="Acknolwedge", command=close)
+        button = tk.Button(window, text="Silence", command=lambda: silence(events_tag[0]))
         button.pack()
+        button = tk.Button(window, text="Sleep", command=close)
+        button.pack()
+
+        if len(events_str) > 1:
+            greeting = tk.Label(text="\n\nThere are more events pending after this:\n\n{}".format(
+                "\n* ".join(events_str[1:]))
+            )
+            greeting.pack()
+
         window.mainloop()
 
 if __name__ == '__main__':
-   main()
+    import fcntl
+    import os
+   
+    # Will throw if cannot lock the file and abort - makes sure only one instance runs
+    handle = os.open("LOCK_FILE.LOCK", os.O_RDONLY)
+    fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+   
+    silenced = set()
+
+    while True:
+        main(silenced)
+        print(silenced)
+        time.sleep(10) # Every minute
+
 
 

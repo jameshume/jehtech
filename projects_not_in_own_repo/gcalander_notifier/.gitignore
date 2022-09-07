@@ -1,3 +1,4 @@
 .venv
 client_secret_*.json
 token.pickle
+LOCK_FILE.LOCK
