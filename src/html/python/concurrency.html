@@ -372,49 +372,49 @@ get_data:
 
     <p>
         An example implementation is shown below.
-		<a href="https://github.com/jameshume/jehtech/tree/master/projects_not_in_own_repo/concurrency/python/bounded_buffer.py">See full example here.</a>
+		<a target="_blank" href="https://github.com/jameshume/jehtech/tree/master/projects_not_in_own_repo/concurrency/python/bounded_buffer.py">See full example here.</a>
     </p>
     <pre class="prettyprint linenums">import threading
 
-	class ExampleThreadSafeBoundedBuffer(object):
-		def __init__(self, size):
-			self._size = size
-			self._q = [None] * self._size
-			self._start = 0
-			self._end = 0
-			self._elements = threading.Semaphore(0)
-			self._spaces = threading.Semaphore(self._size)
-			self._cr = threading.Lock()
-	 
-		def enqueue(self, item):
-			# Wait for a space to become available
-			self._spaces.acquire()
-	 
-			# Enter a critical region. We require this because if there are
-			# multiple writers we could have multiple threads executing this logic
-			# so we must enforce mutual exclusion.
-			with self._cr:
-				self._q[self._end] = item
-				self._end = (self._end + 1) % self._size
-	 
-			# Signal anyone waiting for an element to become available...
-			self._elements.release()
-	 
-		def dequeue(self):
-			item = None
-			# Wait for an element to be available in the buffer
-			self._elements.acquire()
-	 
-			# Enter a critical region. We require this because if there are
-			# multiple readers we could have multiple threads executing this logic
-			# so we must enforce mutual exclusion.
-			with self._cr:
-				item = self._q[self._start]
-				self._start = (self._start + 1) % self._size
-	 
-			# Signal anyone waiting for a space to become available...
-			self._spaces.release()
-			return item</pre>
+class ExampleThreadSafeBoundedBuffer(object):
+	def __init__(self, size):
+		self._size = size
+		self._q = [None] * self._size
+		self._start = 0
+		self._end = 0
+		self._elements = threading.Semaphore(0)
+		self._spaces = threading.Semaphore(self._size)
+		self._cr = threading.Lock()
+	
+	def enqueue(self, item):
+		# Wait for a space to become available
+		self._spaces.acquire()
+	
+		# Enter a critical region. We require this because if there are
+		# multiple writers we could have multiple threads executing this logic
+		# so we must enforce mutual exclusion.
+		with self._cr:
+			self._q[self._end] = item
+			self._end = (self._end + 1) % self._size
+	
+		# Signal anyone waiting for an element to become available...
+		self._elements.release()
+	
+	def dequeue(self):
+		item = None
+		# Wait for an element to be available in the buffer
+		self._elements.acquire()
+	
+		# Enter a critical region. We require this because if there are
+		# multiple readers we could have multiple threads executing this logic
+		# so we must enforce mutual exclusion.
+		with self._cr:
+			item = self._q[self._start]
+			self._start = (self._start + 1) % self._size
+	
+		# Signal anyone waiting for a space to become available...
+		self._spaces.release()
+		return item</pre>
 
     <p>
     	But, in Python we can use <em>condition variables</em>. Here I replicate,
