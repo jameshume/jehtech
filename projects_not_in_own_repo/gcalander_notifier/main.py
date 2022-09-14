@@ -23,6 +23,9 @@ SCOPES = ['https://www.googleapis.com/auth/calendar']
 
 CREDENTIALS_FILE = 'client_secret_307417093131-435eeuus7qvsftss10ll2sr73f7hiuuu.apps.googleusercontent.com.json'
 
+CHECK_PERIOD_MINUTES = 2
+MINUTES_IN_ADVANCE_FOR_WARNING = 6
+
 def get_calendar_service():
    # If you are behind an HTTPS proxy look for your cert file in cat /etc/ssl/certs
    # and copy it into the file printed out below... VERY HACKY bute cant be arsed to do
@@ -89,7 +92,7 @@ def main(silenced):
         else:
             start = event['start'].get('dateTime', event['start'].get('date'))
             start_date = parser.parse(start)
-            if (utc.localize(now_datetime) + datetime.timedelta(minutes = 5) >= start_date):
+            if (utc.localize(now_datetime) + datetime.timedelta(minutes = MINUTES_IN_ADVANCE_FOR_WARNING) >= start_date):
                 print("**** event ID will start soon {} ****".format(event['etag']))
                 description = "\n"
                 if 'description' in event:
@@ -138,7 +141,7 @@ if __name__ == '__main__':
     while True:
         main(silenced)
         print(silenced)
-        time.sleep(10) # Every minute
+        time.sleep(60 * CHECK_PERIOD_MINUTES)
 
 
 
