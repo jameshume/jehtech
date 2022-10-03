@@ -37,8 +37,76 @@
 <h2>Event Subsystem</h2>
 <div>
 	<p>
+		The Event System consists of several channels which route the internal events from peripherals (generators) to other
+		internal peripherals or IO pins (users).
+	</p>
+	<p>
 		<img src="##IMG_DIR##/sam21l_event_subsystem.png" alt="Block diagram of SAML21 event subsystem"/>
 	</p>
+
+	<h3>Initialisation</h3>
+	<p>
+		The datasheet suggests the following sequence:
+	</p>
+	<ol>
+		<li>
+			<p>
+				Enable output in event generator peripheral. E.g. `RTC.EVCTRL`: the RTC can generate events on
+				overflow, comparison, and periodic intervals.
+			</p>
+		</li>
+		<li>
+			<p>
+				Then confgure EVSYS: from the above diagram we see we need to configure `CHANNEL[0-11].EVGEN`
+				and `USER[0-41].CHANNEL`.
+			</p>
+			<p>
+				The `CHANNEL[0-11]` register can be used to set things like whether the channel runs in sleep mode,
+				edge detection selection, path selection, event generator etc. The event generator bits choose which 
+				event generator to connect to the selected channel. For example, where we to use the RTC overflow to
+				channel 0 we would set `CHANNEL0.EVGEN` to the value `0x03`.
+			</p>
+			<p>
+				`USER[0-14].CHANNEL` tells us to which event _user_ the channel output should go. I.e. setting
+				`USER0.CHANNEL` dictates which channel is sent to user 0.
+			</p>
+		</li>
+		<li>
+			Configure the event user to use the event via the `EVCTRL.EVACT` in said user's registers. E.g., could count
+			events by getting `TC` to be an event user via its `TC.EVCTRL.EVACT` register.
+		</li>
+		<li>
+			Enable the event in the user: `TC.EVCTRL.STARTEI`.
+		</li>
+	</ol>
+
+	<h3>Channel Paths</h3>
+	<p>
+		<b>Asynchronous</b>: 
+	</p>
+	<ul>
+		<li>Event from generator sent to user without event system interaction.</li>
+		<li>No clock latency. Routing latency device dependent.</li>
+		<li>Can<b>not</b> generate interrupts.</li>
+	</ul>
+	<p>
+		<b>Synchronous</b>:
+	</p>
+	<ul>
+		<li>Event generator and channel <b>must share same generator for generic clock</b>.</li>
+		<li>Can generate interrupts.</li>
+		<li>Routing latency is one `GCLK_EVSYS_CHANNEL_n` clock cycle.</li>
+	</ul>
+
+	<p>
+		<b>Resynchonized</b>:
+	</p>
+	<ul>
+		<li>Event generator and channel do <b>not</b> share same generator for generic clock.</li>
+		<li>Routing latency is three `GCLK_EVSYS_CHANNEL_n` clock cycles.</li>
+	</ul>
+
+	<p></p>
 </div> <!-- End Misc -->
 
 </div> <!-- END H1 padding div -->

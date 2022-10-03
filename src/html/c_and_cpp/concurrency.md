@@ -17,6 +17,8 @@ under the hood!
 
 ## Start A Thread
 
+Starting a thread is pretty easy...
+
 <div class="box_container">
 <div class="warning">
 CAUTION: You must `join()` or `detach()` from an `std::thread` before it is destroyed, otherwise your program
@@ -24,7 +26,7 @@ will be restarted!
 </div>
 </div>
 
-As part of the above warning, when `join()`'ing a thread, you must _make sure no exceptions occur before you have done the join_. Use RAII to combat this!
+As part of the above warning, when `join()`'ing a thread, you must _make sure no exceptions occur before you have done the `join()`_. Use RAII to combat this!
 
 ### Using A Function
 
@@ -34,14 +36,14 @@ As part of the above warning, when `join()`'ing a thread, you must _make sure no
 #include <iostream>
 #include <thread>
 
-void my_thread_function(void)
+void my_thread_function(int a, int b)
 {
-    std::cout << "This is my thread running\n";
+    std::cout << "This is my thread running: " << a << " - " << b << "\n";
 }
 
 int main(int argc, char *argv[])
 {
-    std::thread my_thread(my_thread_function);
+    std::thread my_thread(my_thread_function, 9, 2);
     my_thread.join();
     return 0;
 }
@@ -52,12 +54,15 @@ int main(int argc, char *argv[])
 [See it on Github](https://github.com/jameshume/jehtech/blob/master/projects_not_in_own_repo/concurrency/c++/basic_thread_start_callable.cpp)
 
 ```
+#include <iostream>
+#include <thread>
+
 class my_thread_callable
 {
 public:
-    void operator() () const
+    void operator() (int a, int b) const
     {
-        std::cout << "This is my thread running\n";
+        std::cout << "This is my thread running: " << a << " - " << b << "\n";
     }
 };
 
@@ -68,13 +73,13 @@ int main(int argc, char *argv[])
     if constexpr (use_temporary)
     {
         // For a temporary must use brace intialiser to avoid most vexing parse issue.
-        std::thread my_thread{my_thread_callable()};
+        std::thread my_thread{my_thread_callable(), 20, 21};
         my_thread.join();
 
     }
     else {        
         my_thread_callable my_thread_obj;
-        std::thread my_thread(my_thread_obj);
+        std::thread my_thread(my_thread_obj, 19, 20);
         my_thread.join();
     }
     return 0;
