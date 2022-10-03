@@ -12,7 +12,8 @@ the standard so one could not be completely guaranteed that a program written in
 targets.
 
 With C+11 and beyond, as the memory model is multi-threaded, threads, locks, etc., etc., are supported
-natively by the standard library.
+natively by the standard library, although the implementation may indeed just be `pthreads`, or similar,
+under the hood!
 
 ## Start A Thread
 
@@ -22,6 +23,8 @@ CAUTION: You must `join()` or `detach()` from an `std::thread` before it is dest
 will be restarted!
 </div>
 </div>
+
+As part of the above warning, when `join()`'ing a thread, you must _make sure no exceptions occur before you have done the join_. Use RAII to combat this!
 
 ### Using A Function
 
