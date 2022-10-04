@@ -21,14 +21,14 @@ Starting a thread is pretty easy...
 
 <div class="box_container">
 <div class="warning">
-CAUTION: You must `join()` or `detach()` from an `std::thread` before it is destroyed, otherwise your program
+You must <code>join()</code> or <code>detach()</code> from an <code>std::thread</code> before it is destroyed, otherwise your program
 will be restarted!
 </div>
 </div>
 
 <div class="box_container">
 <div class="info">
-CAUTION: `std::thread` is movable but _not_ copyable.
+<code>std::thread</code> is movable but <em>not</em> copyable.
 </div>
 </div>
 
@@ -135,3 +135,7 @@ your original object and _not_ a copy.
 ## Semaphores
 Interestingly C++ didn't get a semaphore class until C++20. Prior to that there were only mutexes
 and condition variables [[Ref]](https://stackoverflow.com/questions/4792449/c0x-has-no-semaphores-how-to-synchronize-threads).
+
+
+## Mutexes
+TODO
