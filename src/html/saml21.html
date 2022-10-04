@@ -51,32 +51,32 @@
 	<ol>
 		<li>
 			<p>
-				Enable output in event generator peripheral. E.g. `RTC.EVCTRL`: the RTC can generate events on
+				Enable output in event generator peripheral. E.g. <code>RTC.EVCTRL</code>: the RTC can generate events on
 				overflow, comparison, and periodic intervals.
 			</p>
 		</li>
 		<li>
 			<p>
-				Then confgure EVSYS: from the above diagram we see we need to configure `CHANNEL[0-11].EVGEN`
-				and `USER[0-41].CHANNEL`.
+				Then confgure EVSYS: from the above diagram we see we need to configure <code>CHANNEL[0-11].EVGEN</code>
+				and <code>USER[0-41].CHANNEL</code>.
 			</p>
 			<p>
-				The `CHANNEL[0-11]` register can be used to set things like whether the channel runs in sleep mode,
+				The <code>CHANNEL[0-11]</code> register can be used to set things like whether the channel runs in sleep mode,
 				edge detection selection, path selection, event generator etc. The event generator bits choose which 
 				event generator to connect to the selected channel. For example, where we to use the RTC overflow to
-				channel 0 we would set `CHANNEL0.EVGEN` to the value `0x03`.
+				channel 0 we would set <code>CHANNEL0.EVGEN</code> to the value <code>0x03</code>.
 			</p>
 			<p>
-				`USER[0-14].CHANNEL` tells us to which event _user_ the channel output should go. I.e. setting
-				`USER0.CHANNEL` dictates which channel is sent to user 0.
+				<code>USER[0-14].CHANNEL</code> tells us to which event _user_ the channel output should go. I.e. setting
+				<code>USER0.CHANNEL</code> dictates which channel is sent to user 0.
 			</p>
 		</li>
 		<li>
-			Configure the event user to use the event via the `EVCTRL.EVACT` in said user's registers. E.g., could count
-			events by getting `TC` to be an event user via its `TC.EVCTRL.EVACT` register.
+			Configure the event user to use the event via the <code>EVCTRL.EVACT</code> in said user's registers. E.g., could count
+			events by getting <code>TC</code> to be an event user via its <code>TC.EVCTRL.EVACT</code> register.
 		</li>
 		<li>
-			Enable the event in the user: `TC.EVCTRL.STARTEI`.
+			Enable the event in the user: <code>TC.EVCTRL.STARTEI</code>.
 		</li>
 	</ol>
 
@@ -95,7 +95,7 @@
 	<ul>
 		<li>Event generator and channel <b>must share same generator for generic clock</b>.</li>
 		<li>Can generate interrupts.</li>
-		<li>Routing latency is one `GCLK_EVSYS_CHANNEL_n` clock cycle.</li>
+		<li>Routing latency is one <code>GCLK_EVSYS_CHANNEL_n</code> clock cycle.</li>
 	</ul>
 
 	<p>
@@ -103,7 +103,7 @@
 	</p>
 	<ul>
 		<li>Event generator and channel do <b>not</b> share same generator for generic clock.</li>
-		<li>Routing latency is three `GCLK_EVSYS_CHANNEL_n` clock cycles.</li>
+		<li>Routing latency is three <code>GCLK_EVSYS_CHANNEL_n</code> clock cycles.</li>
 	</ul>
 
 	<p></p>
