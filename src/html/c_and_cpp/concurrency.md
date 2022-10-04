@@ -26,6 +26,13 @@ will be restarted!
 </div>
 </div>
 
+<div class="box_container">
+<div class="info">
+CAUTION: `std::thread` is movable but _not_ copyable.
+</div>
+</div>
+
+
 As part of the above warning, when `join()`'ing a thread, you must _make sure no exceptions occur before you have done the `join()`_. Use RAII to combat this!
 
 ### Using A Function
@@ -44,6 +51,33 @@ void my_thread_function(int a, int b)
 int main(int argc, char *argv[])
 {
     std::thread my_thread(my_thread_function, 9, 2);
+    my_thread.join();
+    return 0;
+}
+```
+
+### Using A Function Pointer To A Class Member Function
+
+[See it on Github](https://github.com/jameshume/jehtech/blob/master/projects_not_in_own_repo/concurrency/c++/basic_thread_start_class_func.cpp)
+
+```
+#include <iostream>
+#include <thread>
+
+class MyThreadyThing
+{
+public:
+    void MyThreadyFunction(int a, int b)
+    {
+        std::cout << "This is my thread running: " << a << " - " << b << "\n";
+    }
+
+};
+
+int main(int argc, char *argv[])
+{
+    MyThreadyThing thing;
+    std::thread my_thread(&MyThreadyThing::MyThreadyFunction, &thing, 99, 22);
     my_thread.join();
     return 0;
 }
@@ -85,3 +119,19 @@ int main(int argc, char *argv[])
     return 0;
 }
 ```
+
+### Thread Parameter Gotchas
+
+The `std::thread` constructor _copies_ supplied values. Thus, if the thread function expects references it will
+get a reference to the _copy_, not the original.
+
+The solution is to wrap the argument using `std::ref()`. This will wrap the object with an appropriate
+`std::reference_wrapper` type. This is an object that emulates a reference, internally holding a reference to
+your object. Thus when `std::thread` _copies_ this object, the internal reference used will still reference
+your original object and _not_ a copy.
+
+
+
+## Semaphores
+Interestingly C++ didn't get a semaphore class until C++20. Prior to that there were only mutexes
+and condition variables [[Ref]](https://stackoverflow.com/questions/4792449/c0x-has-no-semaphores-how-to-synchronize-threads).
