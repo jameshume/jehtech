@@ -138,4 +138,22 @@ and condition variables [[Ref]](https://stackoverflow.com/questions/4792449/c0x-
 
 
 ## Mutexes
-TODO
+* Create using `std::mutex`. Acquire/lock with `.lock()` and release/unlock with `.unlock()`, however
+  to avoid forgetting to unlock, best to use RAII in the form of a `std::lock_guard<std::mutex>`.
+
+```
+std::mutex my_mutex;
+
+void do_something(void) {
+    std::lock_guard<std::mutex> guard(my_mutex);
+    // Rest of function until `guard` goes out of scope is now protected by `my_mutex`
+    // ....
+}
+```
+
+### Deadlock
+#### std::lock
+* When locks cannot be reliably acquired in the same order use `std::lock()` - it can lock two or more
+  mutexes at once without risk of deadlock.
+
+#### std::unique_lock
