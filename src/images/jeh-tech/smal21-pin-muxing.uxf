@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.0.0">
+  <zoom_level>18</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>396</x>
+      <y>414</y>
+      <w>36</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>378</x>
+      <y>396</y>
+      <w>90</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;30.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>378</x>
+      <y>396</y>
+      <w>90</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;30.0;30.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>414</x>
+      <y>396</y>
+      <w>162</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;20.0;70.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>702</x>
+      <y>342</y>
+      <w>54</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>customelement=
+drawLine(0, 0.1 * height, 0, height - 0.1 * height)
+drawLine(width,  0, width, height)
+drawLine(0, 0.1 * height, width, 0)
+drawLine(0, height - 0.1 * height, width, height)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>738</x>
+      <y>324</y>
+      <w>108</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;20.0;40.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>738</x>
+      <y>342</y>
+      <w>108</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;20.0;40.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>738</x>
+      <y>360</y>
+      <w>108</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;20.0;40.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>738</x>
+      <y>378</y>
+      <w>108</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;20.0;40.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>738</x>
+      <y>396</y>
+      <w>108</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;20.0;40.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>738</x>
+      <y>414</y>
+      <w>108</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;20.0;40.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>738</x>
+      <y>432</y>
+      <w>108</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;20.0;40.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>738</x>
+      <y>450</y>
+      <w>108</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;20.0;40.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>738</x>
+      <y>468</y>
+      <w>108</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;20.0;40.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>810</x>
+      <y>342</y>
+      <w>252</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>A: EIC/RSTC
+fontsize=10</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>810</x>
+      <y>360</y>
+      <w>342</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>B: REF, ADC, AC, PTC, DAC, OPAMP
+fontsize=10</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>810</x>
+      <y>378</y>
+      <w>252</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>C:SERCOM
+fontsize=10</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>810</x>
+      <y>396</y>
+      <w>252</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>D: SERCOM-ALT
+fontsize=10</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>810</x>
+      <y>414</y>
+      <w>252</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>E: TC/TCC
+fontsize=10</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>810</x>
+      <y>432</y>
+      <w>252</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>F:TCC
+fontsize=10</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>810</x>
+      <y>450</y>
+      <w>252</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>G: COM
+fontsize=10</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>810</x>
+      <y>468</y>
+      <w>252</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>H: AC/GCLK/SUPC
+fontsize=10</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>810</x>
+      <y>486</y>
+      <w>252</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>I: CCL
+fontsize=10</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>630</x>
+      <y>162</y>
+      <w>180</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>fontsize=10
+PMUXn.PMUXI|O
+bg=LIGHT_GRAY</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>702</x>
+      <y>180</y>
+      <w>54</w>
+      <h>216</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>540</x>
+      <y>414</y>
+      <w>54</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>_umletcode=
+transparency=100;
+drawArc(0,0,width,height,270,180,true)
+drawLine(0,0,width/2,0)
+drawLine(0,height,width/2,height)
+drawLine(0,0,0,height)
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>450</x>
+      <y>450</y>
+      <w>126</w>
+      <h>162</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;70.0;10.0;10.0;50.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>576</x>
+      <y>414</y>
+      <w>162</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;20.0;70.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>378</x>
+      <y>576</y>
+      <w>180</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>fontsize=10
+PINCFG.PMUXEN
+bg=LIGHT_GRAY</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>378</x>
+      <y>612</y>
+      <w>378</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>fontsize=10
+style=wordwrap
+PMUXEN configures who has control over the pin direction/value/etc.
+Either a peripheral function controls the pin, or it is user-configurable (i.e. just a normal GPIO)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>810</x>
+      <y>162</y>
+      <w>234</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>fontsize=10
+style=wordwrap
+PMUXI|O selects a peripheral function</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
