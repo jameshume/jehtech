@@ -1,144 +1,150 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<diagram program="umlet" version="14.3.0">
-  <zoom_level>9</zoom_level>
+<diagram program="umlet" version="15.0.0">
+  <zoom_level>13</zoom_level>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>819</x>
-      <y>45</y>
-      <w>36</w>
-      <h>54</h>
+      <x>611</x>
+      <y>156</y>
+      <w>52</w>
+      <h>78</h>
     </coordinates>
     <panel_attributes>+ + + + + +
  + + P + + 
-+ + + + + +</panel_attributes>
++ + + + + +
+lw=2
+bg=BLACK</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>684</x>
-      <y>45</y>
-      <w>117</w>
-      <h>54</h>
+      <x>416</x>
+      <y>156</y>
+      <w>169</w>
+      <h>78</h>
     </coordinates>
     <panel_attributes>- - - - - - - - - - - - - - -
 - - - - - - - N - - - - - - 
-- - - - - - - - - - - - - - -</panel_attributes>
+- - - - - - - - - - - - - - -
+lw=2
+bg=LIGHT_GRAY</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>801</x>
-      <y>45</y>
-      <w>18</w>
-      <h>54</h>
+      <x>585</x>
+      <y>156</y>
+      <w>26</w>
+      <h>78</h>
     </coordinates>
     <panel_attributes>+ -
 - +
-+ -</panel_attributes>
++ -
+lw=2</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>792</x>
-      <y>90</y>
-      <w>45</w>
-      <h>81</h>
+      <x>572</x>
+      <y>221</y>
+      <w>65</w>
+      <h>104</h>
     </coordinates>
     <panel_attributes>lt=&lt;..</panel_attributes>
-    <additional_attributes>10.0;10.0;30.0;70.0</additional_attributes>
+    <additional_attributes>10.0;10.0;30.0;60.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>729</x>
-      <y>153</y>
-      <w>189</w>
-      <h>144</h>
+      <x>416</x>
+      <y>299</y>
+      <w>598</w>
+      <h>104</h>
     </coordinates>
-    <panel_attributes>Where the 2 chunks of silicon
-are joined together is a
-"depletion zone" where the
-charges balance out.
+    <panel_attributes>Where the 2 chunks of silicon are joined together is a "depletion zone" where the charges balance out: there is no excess or shortage of electrons.
+*HIGH resistance*
 
-no excess or shortage of
-electrons.
-
-HIGH resistance</panel_attributes>
+style=wordwrap</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>873</x>
-      <y>45</y>
-      <w>216</w>
-      <h>54</h>
+      <x>689</x>
+      <y>156</y>
+      <w>312</w>
+      <h>78</h>
     </coordinates>
     <panel_attributes>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
  - - - - - - - - - - - - - N - - - - - - - - - - - -- 
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</panel_attributes>
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+bg=LIGHT_GRAY</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>855</x>
-      <y>45</y>
-      <w>18</w>
-      <h>54</h>
+      <x>663</x>
+      <y>156</y>
+      <w>26</w>
+      <h>78</h>
     </coordinates>
     <panel_attributes>+ -
 - +
-+ -</panel_attributes>
++ -
+lw=2</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>810</x>
-      <y>90</y>
-      <w>72</w>
-      <h>81</h>
+      <x>598</x>
+      <y>221</y>
+      <w>104</w>
+      <h>104</h>
     </coordinates>
     <panel_attributes>lt=&lt;..</panel_attributes>
-    <additional_attributes>60.0;10.0;10.0;70.0</additional_attributes>
+    <additional_attributes>60.0;10.0;10.0;60.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>819</x>
-      <y>477</y>
-      <w>36</w>
-      <h>54</h>
+      <x>611</x>
+      <y>533</y>
+      <w>52</w>
+      <h>78</h>
     </coordinates>
     <panel_attributes>P
 *BASE*
-</panel_attributes>
+
+bg=BLACK
+lw=2</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>684</x>
-      <y>477</y>
-      <w>117</w>
-      <h>54</h>
+      <x>416</x>
+      <y>533</y>
+      <w>169</w>
+      <h>78</h>
     </coordinates>
     <panel_attributes> N
-*EMITTER*</panel_attributes>
+*EMITTER*
+bg=LIGHT_GRAY
+lw=2</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>792</x>
-      <y>522</y>
-      <w>45</w>
-      <h>81</h>
+      <x>572</x>
+      <y>598</y>
+      <w>65</w>
+      <h>117</h>
     </coordinates>
     <panel_attributes>lt=&lt;..</panel_attributes>
     <additional_attributes>10.0;10.0;30.0;70.0</additional_attributes>
@@ -146,38 +152,36 @@ HIGH resistance</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>729</x>
-      <y>585</y>
-      <w>198</w>
-      <h>144</h>
+      <x>416</x>
+      <y>689</y>
+      <w>585</w>
+      <h>104</h>
     </coordinates>
-    <panel_attributes>Forward biasing the Emitter-Base
-junction causes the depletion
-region to disappear, just like we
-saw for diodes. Only a small
-current from the Emitter to Base
-is required to achive this.</panel_attributes>
+    <panel_attributes>Forward biasing the Emitter-Base junction causes the depletion region to disappear, just like we saw for diodes. Only a small current from the Emitter to Base is required to achive this
+style=wordwrap</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>873</x>
-      <y>477</y>
-      <w>216</w>
-      <h>54</h>
+      <x>689</x>
+      <y>533</y>
+      <w>312</w>
+      <h>78</h>
     </coordinates>
     <panel_attributes>N
-COLLECTOR</panel_attributes>
+COLLECTOR
+bg=LIGHT_GRAY
+lw=2</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>810</x>
-      <y>522</y>
-      <w>72</w>
-      <h>81</h>
+      <x>598</x>
+      <y>598</y>
+      <w>104</w>
+      <h>117</h>
     </coordinates>
     <panel_attributes>lt=&lt;..</panel_attributes>
     <additional_attributes>60.0;10.0;10.0;70.0</additional_attributes>
@@ -185,10 +189,10 @@ COLLECTOR</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>567</x>
-      <y>477</y>
-      <w>27</w>
-      <h>63</h>
+      <x>247</x>
+      <y>533</y>
+      <w>39</w>
+      <h>91</h>
     </coordinates>
     <panel_attributes>lw=3</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
@@ -196,10 +200,10 @@ COLLECTOR</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>576</x>
-      <y>486</y>
-      <w>27</w>
-      <h>45</h>
+      <x>260</x>
+      <y>546</y>
+      <w>39</w>
+      <h>65</h>
     </coordinates>
     <panel_attributes>lw=5</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;30.0</additional_attributes>
@@ -207,10 +211,10 @@ COLLECTOR</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>558</x>
-      <y>477</y>
-      <w>18</w>
-      <h>27</h>
+      <x>234</x>
+      <y>533</y>
+      <w>26</w>
+      <h>39</h>
     </coordinates>
     <panel_attributes>+</panel_attributes>
     <additional_attributes/>
@@ -218,10 +222,10 @@ COLLECTOR</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>585</x>
-      <y>477</y>
-      <w>27</w>
-      <h>27</h>
+      <x>273</x>
+      <y>533</y>
+      <w>39</w>
+      <h>39</h>
     </coordinates>
     <panel_attributes> -</panel_attributes>
     <additional_attributes/>
@@ -229,10 +233,10 @@ COLLECTOR</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>576</x>
-      <y>486</y>
-      <w>126</w>
-      <h>36</h>
+      <x>260</x>
+      <y>546</y>
+      <w>182</w>
+      <h>52</h>
     </coordinates>
     <panel_attributes/>
     <additional_attributes>10.0;20.0;120.0;20.0</additional_attributes>
@@ -240,10 +244,10 @@ COLLECTOR</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>513</x>
-      <y>423</y>
-      <w>333</w>
-      <h>99</h>
+      <x>169</x>
+      <y>455</y>
+      <w>481</w>
+      <h>143</h>
     </coordinates>
     <panel_attributes/>
     <additional_attributes>70.0;90.0;10.0;90.0;10.0;20.0;200.0;20.0;210.0;30.0;220.0;10.0;230.0;30.0;240.0;10.0;250.0;30.0;260.0;10.0;270.0;30.0;280.0;20.0;350.0;20.0;350.0;60.0</additional_attributes>
@@ -251,32 +255,34 @@ COLLECTOR</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>855</x>
-      <y>477</y>
-      <w>18</w>
-      <h>54</h>
+      <x>663</x>
+      <y>533</y>
+      <w>26</w>
+      <h>78</h>
     </coordinates>
-    <panel_attributes>lt=.</panel_attributes>
+    <panel_attributes>lt=.
+bg=BLACK</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>801</x>
-      <y>477</y>
-      <w>18</w>
-      <h>54</h>
+      <x>585</x>
+      <y>533</y>
+      <w>26</w>
+      <h>78</h>
     </coordinates>
-    <panel_attributes>lt=.</panel_attributes>
+    <panel_attributes>lt=.
+bg=BLACK</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1161</x>
-      <y>477</y>
-      <w>27</w>
-      <h>63</h>
+      <x>1105</x>
+      <y>533</y>
+      <w>39</w>
+      <h>91</h>
     </coordinates>
     <panel_attributes>lw=3</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
@@ -284,10 +290,10 @@ COLLECTOR</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1170</x>
-      <y>486</y>
-      <w>27</w>
-      <h>45</h>
+      <x>1118</x>
+      <y>546</y>
+      <w>39</w>
+      <h>65</h>
     </coordinates>
     <panel_attributes>lw=5</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;30.0</additional_attributes>
@@ -295,10 +301,10 @@ COLLECTOR</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>1152</x>
-      <y>477</y>
-      <w>18</w>
-      <h>27</h>
+      <x>1092</x>
+      <y>533</y>
+      <w>26</w>
+      <h>39</h>
     </coordinates>
     <panel_attributes>+</panel_attributes>
     <additional_attributes/>
@@ -306,10 +312,10 @@ COLLECTOR</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1080</x>
-      <y>486</y>
-      <w>108</w>
-      <h>36</h>
+      <x>988</x>
+      <y>546</y>
+      <w>156</w>
+      <h>52</h>
     </coordinates>
     <panel_attributes/>
     <additional_attributes>10.0;20.0;100.0;20.0</additional_attributes>
@@ -317,10 +323,10 @@ COLLECTOR</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>729</x>
-      <y>495</y>
-      <w>513</w>
-      <h>90</h>
+      <x>481</x>
+      <y>559</y>
+      <w>741</w>
+      <h>130</h>
     </coordinates>
     <panel_attributes/>
     <additional_attributes>500.0;10.0;550.0;10.0;550.0;70.0;270.0;70.0;260.0;80.0;250.0;50.0;240.0;80.0;230.0;50.0;220.0;80.0;210.0;50.0;200.0;70.0;10.0;70.0;10.0;40.0</additional_attributes>
@@ -328,10 +334,10 @@ COLLECTOR</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>1179</x>
-      <y>477</y>
-      <w>27</w>
-      <h>27</h>
+      <x>1131</x>
+      <y>533</y>
+      <w>39</w>
+      <h>39</h>
     </coordinates>
     <panel_attributes> -</panel_attributes>
     <additional_attributes/>
@@ -339,37 +345,37 @@ COLLECTOR</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>603</x>
-      <y>387</y>
-      <w>234</w>
-      <h>126</h>
+      <x>299</x>
+      <y>442</y>
+      <w>377</w>
+      <h>143</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
-lw=2
+lw=3
 bg=dark_gray
-fg=dark_gray</panel_attributes>
-    <additional_attributes>160.0;10.0;240.0;10.0;240.0;120.0;10.0;120.0</additional_attributes>
+fg=RED</panel_attributes>
+    <additional_attributes>160.0;10.0;270.0;10.0;270.0;90.0;10.0;90.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>603</x>
-      <y>504</y>
-      <w>567</w>
-      <h>27</h>
+      <x>299</x>
+      <y>572</y>
+      <w>819</w>
+      <h>39</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
-lw=5
-fg=dark_gray</panel_attributes>
+lw=6
+fg=RED</panel_attributes>
     <additional_attributes>610.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>954</x>
-      <y>918</y>
-      <w>54</w>
-      <h>45</h>
+      <x>806</x>
+      <y>1118</y>
+      <w>78</w>
+      <h>65</h>
     </coordinates>
     <panel_attributes>I_base</panel_attributes>
     <additional_attributes/>
@@ -377,10 +383,10 @@ fg=dark_gray</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>765</x>
-      <y>765</y>
-      <w>27</w>
-      <h>171</h>
+      <x>533</x>
+      <y>858</y>
+      <w>39</w>
+      <h>247</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 lw=2</panel_attributes>
@@ -389,10 +395,10 @@ lw=2</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>756</x>
-      <y>900</y>
-      <w>243</w>
-      <h>27</h>
+      <x>520</x>
+      <y>1053</y>
+      <w>351</w>
+      <h>39</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 lw=3</panel_attributes>
@@ -401,10 +407,10 @@ lw=3</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>819</x>
-      <y>387</y>
-      <w>198</w>
-      <h>45</h>
+      <x>650</x>
+      <y>442</y>
+      <w>286</w>
+      <h>65</h>
     </coordinates>
     <panel_attributes>/A SMALL current can flow from/
 /the emitter to the base/</panel_attributes>
@@ -413,10 +419,10 @@ lw=3</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>756</x>
-      <y>756</y>
-      <w>63</w>
-      <h>27</h>
+      <x>520</x>
+      <y>845</y>
+      <w>117</w>
+      <h>39</h>
     </coordinates>
     <panel_attributes>I_collector</panel_attributes>
     <additional_attributes/>
@@ -424,10 +430,10 @@ lw=3</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>765</x>
-      <y>801</y>
-      <w>99</w>
-      <h>126</h>
+      <x>533</x>
+      <y>910</y>
+      <w>143</w>
+      <h>182</h>
     </coordinates>
     <panel_attributes/>
     <additional_attributes>10.0;120.0;90.0;10.0</additional_attributes>
@@ -435,10 +441,10 @@ lw=3</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>837</x>
-      <y>792</y>
-      <w>144</w>
-      <h>36</h>
+      <x>637</x>
+      <y>897</y>
+      <w>208</w>
+      <h>52</h>
     </coordinates>
     <panel_attributes/>
     <additional_attributes>140.0;20.0;10.0;20.0</additional_attributes>
@@ -446,10 +452,10 @@ lw=3</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>1062</x>
-      <y>513</y>
-      <w>198</w>
-      <h>45</h>
+      <x>962</x>
+      <y>585</y>
+      <w>286</w>
+      <h>65</h>
     </coordinates>
     <panel_attributes>/A LARGE current can flow from/
 /the emitter to the collector/</panel_attributes>
@@ -458,10 +464,10 @@ lw=3</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>963</x>
-      <y>792</y>
-      <w>81</w>
-      <h>45</h>
+      <x>819</x>
+      <y>897</y>
+      <w>117</w>
+      <h>65</h>
     </coordinates>
     <panel_attributes>&lt;&lt; Saturation</panel_attributes>
     <additional_attributes/>
@@ -469,12 +475,60 @@ lw=3</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>819</x>
-      <y>846</y>
-      <w>117</w>
-      <h>27</h>
+      <x>611</x>
+      <y>975</y>
+      <w>169</w>
+      <h>39</h>
     </coordinates>
     <panel_attributes>&lt;&lt; Some resistance</panel_attributes>
     <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>559</x>
+      <y>65</y>
+      <w>91</w>
+      <h>91</h>
+    </coordinates>
+    <panel_attributes>lw=2
+fg=GRAY</panel_attributes>
+    <additional_attributes>50.0;10.0;10.0;30.0;50.0;50.0;50.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>559</x>
+      <y>65</y>
+      <w>39</w>
+      <h>91</h>
+    </coordinates>
+    <panel_attributes>lw=2
+fg=GRAY</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>637</x>
+      <y>65</y>
+      <w>91</w>
+      <h>91</h>
+    </coordinates>
+    <panel_attributes>lw=2
+fg=GRAY</panel_attributes>
+    <additional_attributes>10.0;30.0;10.0;10.0;50.0;30.0;10.0;50.0;10.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>689</x>
+      <y>65</y>
+      <w>39</w>
+      <h>91</h>
+    </coordinates>
+    <panel_attributes>lw=2
+fg=GRAY</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
   </element>
 </diagram>
