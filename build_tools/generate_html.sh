@@ -25,7 +25,7 @@ DEBUG_TMP=$(mktemp)
 
 SRC=$1
 DST=$2
-DEBUG_OUT_FILE="${DST}.debug"
+DEBUG_OUT_FILE="${DST}.debug.txt"
 ROOT_IMAGES_RELATIVE_TO=$3
 RELATIVE_PREFIX="$(get_relative_dir_path_prefix "${DST}" "${ROOT_IMAGES_RELATIVE_TO}")"
 IMG_DIR="${RELATIVE_PREFIX}images/jeh-tech"
