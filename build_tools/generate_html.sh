@@ -39,6 +39,9 @@ then
 else
     cp "${SRC}" "${DST}"
 fi
+echo "============================================================================================="
+echo "============================================================================================="
+cat "${DST}"
 
 # All files that use M4 preprocessor must include the line "dnl USEM4".
 if grep --ignore-case "dnl USEM4" "${DST}" > /dev/null
@@ -48,11 +51,17 @@ then
     m4 "${DST}" > "${TMP}"
     mv "${TMP}" "${DST}"
 fi
+echo "============================================================================================="
+echo "============================================================================================="
+cat "${DST}"
 
 # Process snippet inserts - must be done before all other in-place sed'ing
 # Process the destination file but give the dirname of the source file so that
 # the snippet can be found.
 python3 process_snippets.py "${DST}" "$(dirname "${SRC}")" "${IMG_DIR}"
+echo "============================================================================================="
+echo "============================================================================================="
+cat "${DST}"
 
 # Each file contains a marker that must be replaced with the contents of the _link.html page
 # NOTE: <div id="includedContent"> must have the closing tag on the SAME LINE and be one a
@@ -63,18 +72,40 @@ cp "../src/html/_links.html" "${links_tmp_file}"
 sed --in-place -e  "s#href=\"\([^\"]*\)\"#href=\"${RELATIVE_PREFIX}\1\"#g" "${links_tmp_file}"
 sed --in-place -e "/\(<\s*div\s\s*id\s*=\s*\"includedContent\"\s*>\)/{r ${links_tmp_file}
 d}" "${DST}"
+echo "============================================================================================="
+echo "============================================================================================="
+cat "${DST}"
 
 # Each file contains a marker for the CSS import that must use a *relative* import directory
 # from this page to the CSS file. 
 sed --in-place  -e \
     "s#<!--\s*CSS_INSERT\s*-->#<link rel=\"stylesheet\" href=\"${RELATIVE_PREFIX}jeh-monolith.css\" type=\"text/css\" />#" \
     "${DST}"
+echo "============================================================================================="
+echo "============================================================================================="
+cat "${DST}"
 
 # Each file contains a marker for the JavaScript import that must use a *relative* import
 # directory from this page to the JavaScript file. 
 sed --in-place  -e \
     "s#<!--\s*JAVASCRIPT_INSERT\s*-->#<script src=\"${RELATIVE_PREFIX}jeh-monolith.js\"></script>#" \
     "${DST}"
+echo "============================================================================================="
+echo "============================================================================================="
+cat "${DST}"
 
 # The ##IMG_DIR## marker must be replaced with the path to the image directory on the server
 sed --in-place  -e "s|##IMG_DIR##|${IMG_DIR}|" "${DST}"
+echo "============================================================================================="
+echo "============================================================================================="
+cat "${DST}"
+
+echo "============================================================================================="
+echo "============================================================================================="
+echo "============================================================================================="
+echo "============================================================================================="
+echo "============================================================================================="
+echo "============================================================================================="
+echo "============================================================================================="
+echo "============================================================================================="
+
