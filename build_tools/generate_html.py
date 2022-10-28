@@ -27,8 +27,6 @@ def getMathjaxNodePageBinPath():
 prog_add_links_to_page = re.compile('(<\s*div\s+id\s*=\s*"includedContent"\s*>)', re.IGNORECASE)
 # Regexs to put in JS and CSS
 prog_css = re.compile('(<!--\s*CSS_INSERT\s*-->)', re.IGNORECASE)
-prog_js  = re.compile('(<!--\s*JAVASCRIPT_INSERT\s*-->)', re.IGNORECASE)
-prog_img = re.compile('##IMG_DIR##')
 
 
 # Open and read in the source file
@@ -56,8 +54,6 @@ htmlFileContents =
 		'<link rel="stylesheet" href="{}{}jeh-monolith.css" type="text/css" />'.format(
 			link_to_root, "" if link_to_root == "" else '/'), 
 		htmlFileContents)
-#htmlFileContents = prog_js.sub('<script src="{}{}jeh-monolith.js"></script>'.format(link_to_root, "" if link_to_root == "" else '/'), htmlFileContents)
-#htmlFileContents = prog_img.sub('{}{}images/jeh-tech'.format(link_to_root, "" if link_to_root == "" else '/'), htmlFileContents)
 
 newFileName = DST_FILE
 targetDir = os.path.split(newFileName)[0]
