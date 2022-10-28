@@ -1,5 +1,9 @@
 .DEFAULT_GOAL:=all
 
+# This worked well when compiling locally because Make could figure out which files had been
+# modified since the last build. However, this cannot work when building online using a fresh
+# checkout. So when building online get a list of the changed files from git and use those
+# instead.
 SRC_DIR:=../src
 SRC_HTML_ROOT_DIR:=$(SRC_DIR)/html
 SRC_HTML_DIRS:=$(shell find "$(SRC_HTML_ROOT_DIR)" -type d)

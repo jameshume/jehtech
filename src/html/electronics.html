@@ -1180,13 +1180,51 @@ dnl ---- END M4 MACROS ----
 				Diodes drop the same voltage across them no matter the voltage source rating. So, for example,
 				silicon diode needs about 0.7V to fwd bias, but won't let the voltage drop across it
 				exceed this. So if you don't protect it with a resistor it will allow too much current to
-				flow an potentially overheat!
+				flow and potentially overheat!
 			</p>
 			<p>
 				<img src="##IMG_DIR##/diode_with_resistor_current.png"/>
 			</p>
 			<p>
 			</p>
+			<h3>Forward and Reverse Voltages - Some Terminology</h3>
+			<p></p>
+			<blockquote>
+				The <b>forward voltage</b> is the voltage drop across the diode if the voltage at the anode
+				is more positive than the voltage at the cathode (if you connect + to the anode). [I.e.,
+				voltage drop when forward biased.]
+
+				You will be using this value to calculate the power dissipation of the diode and the
+				voltage after the diode.
+
+				The <b>reverse voltage</b> is the voltage drop across the diode if the voltage at the cathode
+				is more positive than the voltage at the anode (if you connect + to the cathode).
+				[I.e., voltage drop when reverse biased.]
+
+				This is usually much higher than the forward voltage. As with forward voltage, a current
+				will flow if the connected voltage exceeds this value. This is called a "breakdown".
+				Common diodes are usually destroyed but with Z and Zener diodes this effect is used deliberately.
+				<footer>-- <a href="https://electronics.stackexchange.com/a/10968" target="_blanK">StackOverflow</a>.</footer>
+			</blockquote>
+			<p></p>
+
+			<h3>Light Emitting Diode (LED)</h3>
+			<p>
+				Lets look at a standard
+				<a href="https://www.farnell.com/datasheets/1498852.pdf" target="_blank">red LED datasheet</a>:
+			</p>
+			<p>
+				<img src="##IMG_DIR##/../standard_led_datasheet_screenshot.png">
+			</p>
+			<p>
+				The data sheet shows that we should be putting about 20mA through the LED, with
+				about 2V across it.
+			</p>
+			<p>
+				That data sheet also shows us that if we reverse bias the LED and put more than
+				100 microamps through it it will break down.
+			</p>
+
 
 			<h3>References</h3>
 			<ul>
