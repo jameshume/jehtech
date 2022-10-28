@@ -21,6 +21,8 @@ function get_relative_dir_path_prefix() {
     fi
 }
 
+DEBUG_TMP=$(mktemp)
+
 SRC=$1
 DST=$2
 ROOT_IMAGES_RELATIVE_TO=$3
@@ -36,24 +38,24 @@ then
 else
     cp "${SRC}" > "${DST}"
 fi
-echo "============================================================================================="
-echo "============================================================================================="
-cat "${DST}"
+echo "=============================================================================================" >> "${DEBUG_TMP}"
+echo "=============================================================================================" >> "${DEBUG_TMP}"
+cat "${DST}" >> "${DEBUG_TMP}"
 
 # All files that contain MathJax to be be pre-processed should have the string "<!-- MATHJAX -->"
 # somewhere in the file. Its easier doing this than it is to "guess" as to whether the HTML
 # contains MathJax by trying to, for example, parse the HTML to see if there is MathJax content.
 # Want to avoid trying to render pages with no MathJax as it increases build time noticably.
-if grep --ignore-case "<!--\s*MATHJAX\s*-->" "${SRC}" > /dev/null
+if grep --ignore-case "<!--\s*MATHJAX\s*-->" "${DST}" > /dev/null
 then
     echo "   Pre-rendering MathJax for ${DST}"
     TMP=$(mktemp)
     node -r esm tex2html-cpage.js "${DST}" > "${TMP}"
     mv "${TMP}" "${DST}"
 fi
-echo "============================================================================================="
-echo "============================================================================================="
-cat "${DST}"
+echo "=============================================================================================" >> "${DEBUG_TMP}"
+echo "=============================================================================================" >> "${DEBUG_TMP}"
+cat "${DST}" >> "${DEBUG_TMP}"
 
 
 
@@ -61,9 +63,9 @@ cat "${DST}"
 # Process the destination file but give the dirname of the source file so that
 # the snippet can be found.
 python3 process_snippets.py "${DST}" "$(dirname "${SRC}")" "${IMG_DIR}"
-echo "============================================================================================="
-echo "============================================================================================="
-cat "${DST}"
+echo "=============================================================================================" >> "${DEBUG_TMP}"
+echo "=============================================================================================" >> "${DEBUG_TMP}"
+cat "${DST}" >> "${DEBUG_TMP}"
 
 # Each file contains a marker that must be replaced with the contents of the _link.html page
 # NOTE: <div id="includedContent"> must have the closing tag on the SAME LINE and be one a
@@ -74,40 +76,35 @@ cp "../src/html/_links.html" "${links_tmp_file}"
 sed --in-place -e  "s#href=\"\([^\"]*\)\"#href=\"${RELATIVE_PREFIX}\1\"#g" "${links_tmp_file}"
 sed --in-place -e "/\(<\s*div\s\s*id\s*=\s*\"includedContent\"\s*>\)/{r ${links_tmp_file}
 d}" "${DST}"
-echo "============================================================================================="
-echo "============================================================================================="
-cat "${DST}"
+echo "=============================================================================================" >> "${DEBUG_TMP}"
+echo "=============================================================================================" >> "${DEBUG_TMP}"
+cat "${DST}" >> "${DEBUG_TMP}"
 
 # Each file contains a marker for the CSS import that must use a *relative* import directory
 # from this page to the CSS file. 
 sed --in-place  -e \
     "s#<!--\s*CSS_INSERT\s*-->#<link rel=\"stylesheet\" href=\"${RELATIVE_PREFIX}jeh-monolith.css\" type=\"text/css\" />#" \
     "${DST}"
-echo "============================================================================================="
-echo "============================================================================================="
-cat "${DST}"
+echo "=============================================================================================" >> "${DEBUG_TMP}"
+echo "=============================================================================================" >> "${DEBUG_TMP}"
+cat "${DST}" >> "${DEBUG_TMP}"
 
 # Each file contains a marker for the JavaScript import that must use a *relative* import
 # directory from this page to the JavaScript file. 
 sed --in-place  -e \
     "s#<!--\s*JAVASCRIPT_INSERT\s*-->#<script src=\"${RELATIVE_PREFIX}jeh-monolith.js\"></script>#" \
     "${DST}"
-echo "============================================================================================="
-echo "============================================================================================="
-cat "${DST}"
+echo "=============================================================================================" >> "${DEBUG_TMP}"
+echo "=============================================================================================" >> "${DEBUG_TMP}"
+cat "${DST}" >> "${DEBUG_TMP}"
 
 # The ##IMG_DIR## marker must be replaced with the path to the image directory on the server
 sed --in-place  -e "s|##IMG_DIR##|${IMG_DIR}|" "${DST}"
-echo "============================================================================================="
-echo "============================================================================================="
-cat "${DST}"
+echo "=============================================================================================" >> "${DEBUG_TMP}"
+echo "=============================================================================================" >> "${DEBUG_TMP}"
+cat "${DST}" >> "${DEBUG_TMP}"
+
 
 echo "============================================================================================="
+cat "${DEBUG_TMP}"
 echo "============================================================================================="
-echo "============================================================================================="
-echo "============================================================================================="
-echo "============================================================================================="
-echo "============================================================================================="
-echo "============================================================================================="
-echo "============================================================================================="
-
