@@ -40,153 +40,136 @@ dnl ---- END M4 MACROS ----
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
 
 	<script>
-		jCanv = com_JEHTech_www_Canvas();
+		if (com_JEHTech_www_Canvas !== undefined) {
+			jCanv = com_JEHTech_www_Canvas();
 
-		function JEHResistor(owner, x, y, width, height, numBands) {
-			jCanv.CanvasElement.call(this, owner, null);
-			this.x = x;
-			this.y = y;
-			this.width = width;
-			this.height = height;
-			console.log("CREATE WITH " + numBands + " BANDS");
-			this.numBands = numBands;
-			this.bandColours = new Array(numBands);
-			for( var i=0; i < numBands; ++i)
-				this.bandColours[i] = null;
-			this.r1  = 0;
-			this.r2  = 0;
-			this.tol = 0;
-			this.mul = 0;
-		}
-
-		JEHResistor.prototype = 
-			Object.create(jCanv.CanvasElement.prototype, {
-				constructor: {
-					value: JEHResistor
-				}
-			});
-
-		JEHResistor.prototype.getResistanceValue = function () {
-			if( this.r1 == 0 || this.r2 == 0 || this.mul == 0)
-				return 0;
-			else
-				return (this.r1 + this.r2) * this.mul;
-		}
-
-		JEHResistor.prototype.setBandColour = function(bandNum, bandColour, val, bartype) {
-			if (bandNum >= this.numBands)
-				throw "JEHResistor: Band index too large";
-			
-			this.bandColours[bandNum] = bandColour;
-			this.drawOnCanvas(this._jehCanvasOwner);
-
-			if( bartype == "resistance" ) {
-				console.log("SETTING RES");
-				if(bandNum == 0)      this.r1 = val;
-				else if(bandNum == 1) this.r2 = val;
-				else                  throw "ERROR: band is not a resistance";
-			} else if( bartype == "multiplier" ) {
-				console.log("SETTING MUL");
-				this.mul = val;
+			function JEHResistor(owner, x, y, width, height, numBands) {
+				jCanv.CanvasElement.call(this, owner, null);
+				this.x = x;
+				this.y = y;
+				this.width = width;
+				this.height = height;
+				console.log("CREATE WITH " + numBands + " BANDS");
+				this.numBands = numBands;
+				this.bandColours = new Array(numBands);
+				for( var i=0; i < numBands; ++i)
+					this.bandColours[i] = null;
+				this.r1  = 0;
+				this.r2  = 0;
+				this.tol = 0;
+				this.mul = 0;
 			}
-		}
 
-		JEHResistor.prototype.drawOnCanvas = function(jehCanvas) {
-			var ctx = jehCanvas.ctx;
-			var midY = this.y + this.height/2;
+			JEHResistor.prototype = 
+				Object.create(jCanv.CanvasElement.prototype, {
+					constructor: {
+						value: JEHResistor
+					}
+				});
 
-			ctx.clearRect(this.x, this.y, this.width, this.height);
+			JEHResistor.prototype.getResistanceValue = function () {
+				if( this.r1 == 0 || this.r2 == 0 || this.mul == 0)
+					return 0;
+				else
+					return (this.r1 + this.r2) * this.mul;
+			}
 
-			// Draw the legs
-			console.log("Resistor: Drawing legs");
-			var legWidth = 10;
-			jehCanvas.drawLine(this.x, midY, this.x+legWidth, midY);
-			jehCanvas.drawLine(this.x+this.width-legWidth, midY, this.x+this.width, midY);
+			JEHResistor.prototype.setBandColour = function(bandNum, bandColour, val, bartype) {
+				if (bandNum >= this.numBands)
+					throw "JEHResistor: Band index too large";
+				
+				this.bandColours[bandNum] = bandColour;
+				this.drawOnCanvas(this._jehCanvasOwner);
 
-			// Draw the main resistor body
-			console.log("Resistor: Drawing main body");
-			gr = ctx.createLinearGradient(0, 0, 0, this.height);
-			gr.addColorStop(0,   "#DCDCDC");
-			gr.addColorStop(0.5, "#FFFFFF");
-			gr.addColorStop(1,   "#DCDCDC");
-			ctx.fillStyle = gr;
-			ctx.fillRect(this.x+legWidth, this.y, this.width-2*legWidth, this.height);
-			ctx.beginPath();
-			ctx.strokeStyle = "black";
-			ctx.lineWidth = 1;
-			ctx.rect(this.x+legWidth, this.y, this.width-2*legWidth, this.height);
-			ctx.stroke();
-
-			// Draw the colour code bars
-			console.log("Drawing the " + this.numBands + " colour bars");
-			var bandWidth = 15;
-			var spacerWidth = ((this.width-2*legWidth) - this.numBands*bandWidth) / (this.numBands + 2);
-			for(var i = 0; i < this.numBands; ++i) {
-				extraSpace = (i == (this.numBands - 1)) ? spacerWidth : 0;
-				console.log(extraSpace);
-				if (this.bandColours[i] !== null) {
-					ctx.fillStyle = this.bandColours[i];
-					ctx.fillRect(this.x+legWidth+spacerWidth*(i+1)+bandWidth*i+extraSpace, this.y, bandWidth, this.height);
+				if( bartype == "resistance" ) {
+					console.log("SETTING RES");
+					if(bandNum == 0)      this.r1 = val;
+					else if(bandNum == 1) this.r2 = val;
+					else                  throw "ERROR: band is not a resistance";
+				} else if( bartype == "multiplier" ) {
+					console.log("SETTING MUL");
+					this.mul = val;
 				}
+			}
+
+			JEHResistor.prototype.drawOnCanvas = function(jehCanvas) {
+				var ctx = jehCanvas.ctx;
+				var midY = this.y + this.height/2;
+
+				ctx.clearRect(this.x, this.y, this.width, this.height);
+
+				// Draw the legs
+				console.log("Resistor: Drawing legs");
+				var legWidth = 10;
+				jehCanvas.drawLine(this.x, midY, this.x+legWidth, midY);
+				jehCanvas.drawLine(this.x+this.width-legWidth, midY, this.x+this.width, midY);
+
+				// Draw the main resistor body
+				console.log("Resistor: Drawing main body");
+				gr = ctx.createLinearGradient(0, 0, 0, this.height);
+				gr.addColorStop(0,   "#DCDCDC");
+				gr.addColorStop(0.5, "#FFFFFF");
+				gr.addColorStop(1,   "#DCDCDC");
+				ctx.fillStyle = gr;
+				ctx.fillRect(this.x+legWidth, this.y, this.width-2*legWidth, this.height);
 				ctx.beginPath();
 				ctx.strokeStyle = "black";
 				ctx.lineWidth = 1;
-				ctx.rect(this.x+legWidth+spacerWidth*(i+1)+bandWidth*i+extraSpace, this.y, bandWidth, this.height);
+				ctx.rect(this.x+legWidth, this.y, this.width-2*legWidth, this.height);
 				ctx.stroke();
-				
-			}
-		}
 
-
-		$(function(){
-			var jCanvas = new jCanv.Canvas("#myCanvas", null);
-			console.log(jCanvas);
-			var bwidth = 60;
-			var bgap = 10;
-			var bheight = 25;
-			var colours = ['gold', 'silver', 'black', 'brown', 'red', 'orange', 'yellow', 'green', 'blue', 'violet', 'gray', 'white'];
-			var tolerances = [10, 5, 0, 1, 2, 0, 0, 0.5, 0.25, 0.1];
-			var numberOfResistanceBands = 2;
-
-			var totalNumberOfColumns = 3 + numberOfResistanceBands;
-			var totalGridWidth = totalNumberOfColumns * bwidth + totalNumberOfColumns * (bgap-1);
-
-			var resistorWidth = 200;
-			var resistorX = (totalGridWidth - resistorWidth)/2;
-			var resistorY = 5;
-			var resistor = jCanvas.addObject(new JEHResistor(jCanvas, resistorX, resistorY, resistorWidth, 40, 4));
-
-			var txtBoxY = resistorY + resistor.height + 20;
-			var txtBox = jCanvas.addObject(new jCanv.ValueBox(jCanvas, resistorX, txtBoxY, resistor.width, bheight, "Select all colour bands", "", "Ohms", {lineColour: null, text: "james"})); 
-
-			var gridYOffset = txtBoxY + bheight + 20;
-			console.log("########");
-			console.log(gridYOffset);
-			var gridXOffset = 0;
-			for (var rowIdx = 0; rowIdx < 12; ++rowIdx)
-			{
-				var box = null;
-				for (var colIdx = 0; colIdx < totalNumberOfColumns; ++colIdx) {
-					var bindToClickHandler = true;
-					if (colIdx == 0) {
-						bindToClickHandler = false;
-						box = jCanvas.addObject(new jCanv.Box(
-							jCanvas, 
-							(bwidth + bgap) * colIdx + gridXOffset, 
-							(bheight +bgap) * rowIdx + gridYOffset, 
-							bwidth, 
-							bheight, 
-							{
-								lineColour: null, 
-								fillColour: null, 
-								text: colours[rowIdx]
-							},
-							null
-						));
+				// Draw the colour code bars
+				console.log("Drawing the " + this.numBands + " colour bars");
+				var bandWidth = 15;
+				var spacerWidth = ((this.width-2*legWidth) - this.numBands*bandWidth) / (this.numBands + 2);
+				for(var i = 0; i < this.numBands; ++i) {
+					extraSpace = (i == (this.numBands - 1)) ? spacerWidth : 0;
+					console.log(extraSpace);
+					if (this.bandColours[i] !== null) {
+						ctx.fillStyle = this.bandColours[i];
+						ctx.fillRect(this.x+legWidth+spacerWidth*(i+1)+bandWidth*i+extraSpace, this.y, bandWidth, this.height);
 					}
-					else if(colIdx <= numberOfResistanceBands) {
-						if( rowIdx > 1 ) {
-							var resistance =  (rowIdx-1) * Math.pow(10, numberOfResistanceBands - colIdx);
+					ctx.beginPath();
+					ctx.strokeStyle = "black";
+					ctx.lineWidth = 1;
+					ctx.rect(this.x+legWidth+spacerWidth*(i+1)+bandWidth*i+extraSpace, this.y, bandWidth, this.height);
+					ctx.stroke();
+					
+				}
+			}
+
+			$(function(){
+				var jCanvas = new jCanv.Canvas("#myCanvas", null);
+				console.log(jCanvas);
+				var bwidth = 60;
+				var bgap = 10;
+				var bheight = 25;
+				var colours = ['gold', 'silver', 'black', 'brown', 'red', 'orange', 'yellow', 'green', 'blue', 'violet', 'gray', 'white'];
+				var tolerances = [10, 5, 0, 1, 2, 0, 0, 0.5, 0.25, 0.1];
+				var numberOfResistanceBands = 2;
+
+				var totalNumberOfColumns = 3 + numberOfResistanceBands;
+				var totalGridWidth = totalNumberOfColumns * bwidth + totalNumberOfColumns * (bgap-1);
+
+				var resistorWidth = 200;
+				var resistorX = (totalGridWidth - resistorWidth)/2;
+				var resistorY = 5;
+				var resistor = jCanvas.addObject(new JEHResistor(jCanvas, resistorX, resistorY, resistorWidth, 40, 4));
+
+				var txtBoxY = resistorY + resistor.height + 20;
+				var txtBox = jCanvas.addObject(new jCanv.ValueBox(jCanvas, resistorX, txtBoxY, resistor.width, bheight, "Select all colour bands", "", "Ohms", {lineColour: null, text: "james"})); 
+
+				var gridYOffset = txtBoxY + bheight + 20;
+				console.log("########");
+				console.log(gridYOffset);
+				var gridXOffset = 0;
+				for (var rowIdx = 0; rowIdx < 12; ++rowIdx)
+				{
+					var box = null;
+					for (var colIdx = 0; colIdx < totalNumberOfColumns; ++colIdx) {
+						var bindToClickHandler = true;
+						if (colIdx == 0) {
+							bindToClickHandler = false;
 							box = jCanvas.addObject(new jCanv.Box(
 								jCanvas, 
 								(bwidth + bgap) * colIdx + gridXOffset, 
@@ -194,93 +177,111 @@ dnl ---- END M4 MACROS ----
 								bwidth, 
 								bheight, 
 								{
-									lineColour: "black", 
-									fillColour: colours[rowIdx], 
-									text: resistance.toString(),
-									textColour: colours[rowIdx] !== "black" ? "black" : "white"
+									lineColour: null, 
+									fillColour: null, 
+									text: colours[rowIdx]
 								},
-								{
-									value:      resistance,
-									type:       "resistance",
-									bandIdx:    colIdx - 1,
-									bandColour: colours[rowIdx] 
-								}
+								null
 							));
 						}
-					}
-					else if(colIdx == numberOfResistanceBands + 1) {
-						if( rowIdx < 10 ) {
-							var multiplierValue = Math.pow(10, rowIdx -2);
-							box = jCanvas.addObject(new jCanv.ValueBox(
-								jCanvas, 
-								(bwidth + bgap) * colIdx + gridXOffset, 
-								(bheight +bgap) * rowIdx + gridYOffset, 
-								bwidth, 
-								bheight, 
-								multiplierValue,
-								"",
-								"",
-								{
-									lineColour: "black", 
-									fillColour: colours[rowIdx], 
-									textColour: colours[rowIdx] !== "black" ? "black" : "white"
-								},
-								{
-									value: multiplierValue,
-									type:  "multiplier",
-									bandIdx:    colIdx - 1,
-									bandColour: colours[rowIdx] 
-								}
-							));
+						else if(colIdx <= numberOfResistanceBands) {
+							if( rowIdx > 1 ) {
+								var resistance =  (rowIdx-1) * Math.pow(10, numberOfResistanceBands - colIdx);
+								box = jCanvas.addObject(new jCanv.Box(
+									jCanvas, 
+									(bwidth + bgap) * colIdx + gridXOffset, 
+									(bheight +bgap) * rowIdx + gridYOffset, 
+									bwidth, 
+									bheight, 
+									{
+										lineColour: "black", 
+										fillColour: colours[rowIdx], 
+										text: resistance.toString(),
+										textColour: colours[rowIdx] !== "black" ? "black" : "white"
+									},
+									{
+										value:      resistance,
+										type:       "resistance",
+										bandIdx:    colIdx - 1,
+										bandColour: colours[rowIdx] 
+									}
+								));
+							}
 						}
-					}
-					else {
-						if(rowIdx in {0:0, 1:1, 3:3, 4:4, 7:7, 8:8, 9:9}) {
-							box = jCanvas.addObject(new jCanv.ValueBox(
-								jCanvas, 
-								(bwidth + bgap) * colIdx + gridXOffset, 
-								(bheight +bgap) * rowIdx + gridYOffset, 
-								bwidth, 
-								bheight, 
-								tolerances[rowIdx],
-								"±",
-								"%",
-								{
-									lineColour: "black", 
-									fillColour: colours[rowIdx], 
-									textColour: colours[rowIdx] !== "black" ? "black" : "white"
-								},
-								{
-									value: multiplierValue,
-									type:  "tolerance",
-									bandIdx:    colIdx - 1,
-									bandColour: colours[rowIdx] 
-								}
-							));
+						else if(colIdx == numberOfResistanceBands + 1) {
+							if( rowIdx < 10 ) {
+								var multiplierValue = Math.pow(10, rowIdx -2);
+								box = jCanvas.addObject(new jCanv.ValueBox(
+									jCanvas, 
+									(bwidth + bgap) * colIdx + gridXOffset, 
+									(bheight +bgap) * rowIdx + gridYOffset, 
+									bwidth, 
+									bheight, 
+									multiplierValue,
+									"",
+									"",
+									{
+										lineColour: "black", 
+										fillColour: colours[rowIdx], 
+										textColour: colours[rowIdx] !== "black" ? "black" : "white"
+									},
+									{
+										value: multiplierValue,
+										type:  "multiplier",
+										bandIdx:    colIdx - 1,
+										bandColour: colours[rowIdx] 
+									}
+								));
+							}
 						}
-					}
+						else {
+							if(rowIdx in {0:0, 1:1, 3:3, 4:4, 7:7, 8:8, 9:9}) {
+								box = jCanvas.addObject(new jCanv.ValueBox(
+									jCanvas, 
+									(bwidth + bgap) * colIdx + gridXOffset, 
+									(bheight +bgap) * rowIdx + gridYOffset, 
+									bwidth, 
+									bheight, 
+									tolerances[rowIdx],
+									"±",
+									"%",
+									{
+										lineColour: "black", 
+										fillColour: colours[rowIdx], 
+										textColour: colours[rowIdx] !== "black" ? "black" : "white"
+									},
+									{
+										value: multiplierValue,
+										type:  "tolerance",
+										bandIdx:    colIdx - 1,
+										bandColour: colours[rowIdx] 
+									}
+								));
+							}
+						}
 
-					if(bindToClickHandler) {
-						box.bindToEvent(jCanv.Canvas.prototype.EVENT_TYPES.click, function() {
-								console.log("Button clicked...");
-								console.log(this);
-								if(this.opaqueUserData !== null) {
-									resistor.setBandColour(
-										this.opaqueUserData.bandIdx, 
-										this.opaqueUserData.bandColour, 
-										this.opaqueUserData.value, 
-										this.opaqueUserData.type);
-									var res = resistor.getResistanceValue();
-									if( res > 0 )
-										txtBox.setValue(res);
-								}
-							});
+						if(bindToClickHandler) {
+							box.bindToEvent(jCanv.Canvas.prototype.EVENT_TYPES.click, function() {
+									console.log("Button clicked...");
+									console.log(this);
+									if(this.opaqueUserData !== null) {
+										resistor.setBandColour(
+											this.opaqueUserData.bandIdx, 
+											this.opaqueUserData.bandColour, 
+											this.opaqueUserData.value, 
+											this.opaqueUserData.type);
+										var res = resistor.getResistanceValue();
+										if( res > 0 )
+											txtBox.setValue(res);
+									}
+								});
+						}
 					}
 				}
-			}
-			//jCanvas.fit(10);
-			jCanvas.render();
-		});
+				//jCanvas.fit(10);
+				jCanvas.render();
+			});
+		}
 	</script>
 </head>
 
