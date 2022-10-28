@@ -28,32 +28,35 @@ RELATIVE_PREFIX="$(get_relative_dir_path_prefix "${DST}" "${ROOT_IMAGES_RELATIVE
 IMG_DIR="${RELATIVE_PREFIX}images/jeh-tech"
 echo "Generating ${DST} from ${SRC}"
 
+# All files that use M4 preprocessor must include the line "dnl USEM4".
+if grep --ignore-case "dnl USEM4" "${SRC}" > /dev/null
+then
+    echo "   Running M4 macro expansion for ${SRC}"
+    m4 "${SRC}" > "${DST}"
+    mv "${SRC}" "${DST}"
+else
+    cp "${SRC}" > "${DST}"
+fi
+echo "============================================================================================="
+echo "============================================================================================="
+cat "${DST}"
+
 # All files that contain MathJax to be be pre-processed should have the string "<!-- MATHJAX -->"
 # somewhere in the file. Its easier doing this than it is to "guess" as to whether the HTML
 # contains MathJax by trying to, for example, parse the HTML to see if there is MathJax content.
 # Want to avoid trying to render pages with no MathJax as it increases build time noticably.
 if grep --ignore-case "<!--\s*MATHJAX\s*-->" "${SRC}" > /dev/null
 then
-    echo "   Pre-rendering MathJax for ${SRC}"
-    node -r esm tex2html-cpage.js "${SRC}" > "${DST}"
-else
-    cp "${SRC}" "${DST}"
-fi
-echo "============================================================================================="
-echo "============================================================================================="
-cat "${DST}"
-
-# All files that use M4 preprocessor must include the line "dnl USEM4".
-if grep --ignore-case "dnl USEM4" "${DST}" > /dev/null
-then
-    echo "   Running M4 macro expansion for ${DST}"
+    echo "   Pre-rendering MathJax for ${DST}"
     TMP=$(mktemp)
-    m4 "${DST}" > "${TMP}"
+    node -r esm tex2html-cpage.js "${DST}" > "${TMP}"
     mv "${TMP}" "${DST}"
 fi
 echo "============================================================================================="
 echo "============================================================================================="
 cat "${DST}"
+
+
 
 # Process snippet inserts - must be done before all other in-place sed'ing
 # Process the destination file but give the dirname of the source file so that
