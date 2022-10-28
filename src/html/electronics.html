@@ -13,6 +13,8 @@ define(`REF_UDEMY_ROBOTS', `https://www.udemy.com/course/analog-electronics-robo
 define(`REF_NPN_INTRO', `https://www.theengineeringprojects.com/2018/05/introduction-to-npn-transistor.html')
 define(`REF_TRANS_CONFIGS', `https://www.electronics-notes.com/articles/analogue_circuits/transistor/transistor-circuit-configurations.php')
 define(`REF_2N2222', `https://www.electroschematics.com/wp-content/uploads/2009/04/2n2222-datasheet.pdf')
+define(`REF_CE_CONN', `https://circuitglobe.com/common-emitter-connection-or-ce-configuration.html')
+define(`REF_NPN_ELECTRONICS_TUTS, `https://www.electronics-tutorials.ws/transistor/tran_2.html`)
 dnl ---- END M4 MACROS ----
 <!DOCTYPE HTML>
 <html>
@@ -1227,12 +1229,18 @@ dnl ---- END M4 MACROS ----
 				<img src="##IMG_DIR##/electronics_npm_in_voltage_divider.png">
 			</p>
 			<p>
-				TODO https://circuitglobe.com/common-emitter-connection-or-ce-configuration.html
-			</p>
-			<p>
 				The above configuration is called the <b>common emitter</b> configuration and is
 				probably the most widely used REF(`REF_TRANS_CONFIGS', `[Ref]').
 			</p>
+			<blockquote>
+				The configuration in which the emitter is connected between the collector and base
+				is known as a common emitter configuration. The input circuit is connected between
+				emitter and base, and the output circuit is taken from the collector and emitter.
+				Thus, the emitter is common to both the input and the output circuit, and hence the
+				name is the common emitter configuration. 
+				<footer>-- REF(`REF_CE_CONN', `Common Emitter Connection (or CE Configuration)').</footer>
+			</blockquote>
+			<p></p>			
 			<p>
 				NPN transistors can <b>typically handle up to about 0.8 A</b>. Thus, they are <b>low current</b>
 				devices. For large currents MOSFETs are used (later section).
@@ -1279,6 +1287,48 @@ dnl ---- END M4 MACROS ----
 				<footer>-- REF(`REF_TRANS_CONFIGS', `Transistor Configurations: Circuit Configurations'), emphasis mine.</footer>
 			</blockquote>
 			<p></p>
+			
+			<h3>Current Amplification Factor: $\alpha$ &amp; Base Current Amplification Factor: $\beta$</h3>
+			<p>
+				The current gain from Collector (C) to Emitter (E): i.e., the ratio of change in collector current to the change in emitter current when <em>emitter voltage is kept constant</em>:
+
+				$$
+				\alpha = \frac{\Delta I_C}{\Delta I_E}\ \text{at constant } V_{CE}
+				$$
+			</p>
+			<p>
+				Ratio of output and input current in CE config:
+
+				$$
+				\beta = \frac{\Delta I_C}{\Delta I_B}
+				$$
+			</p>
+			<p>
+				The two are related as follows:
+
+				$$
+				\beta = \frac{\alpha}{1 - \alpha}\ \text{OR } \alpha = \beta(1 - alpha)
+				$$
+
+			</p>
+			
+			<p>
+				Some examples, taken verbatim, from REF(`REF_NPN_ELECTRONICS_TUTS', `electronics-tutorials.ws on the NPN Transitor') will
+				help understand why these are useful.
+			</p>
+			<p>
+				A bipolar NPN transistor has a DC current gain, $\beta$, value of 200. Calculate the base current $I_b$ required to switch a resistive load of 4mA.
+
+				$$
+				I_B = \frac{I_C}{\beta} = \frac{4 \times 10^{-3}}{200} = 20 \mu A
+				$$
+			</p>
+
+
+			<p>
+				TODO https://circuitglobe.com/common-emitter-connection-or-ce-configuration.html
+			</p>
+
 
 			<h3>References</h3>
 			<div>
@@ -1305,7 +1355,7 @@ dnl ---- END M4 MACROS ----
 
 
 		<!-- --------------------------------------------------------------------------------------- -->
-		<a name="mosfet"/>
+		<a name="mosfet"></a>
 		<h2 style="clear:both;">Metal Oxide Semiconductor Field Effect Transistor (MOSFET)</h2>
 		<div>
 			<p>
