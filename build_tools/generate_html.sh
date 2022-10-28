@@ -29,7 +29,7 @@ DEBUG_OUT_FILE="${DST}.debug"
 ROOT_IMAGES_RELATIVE_TO=$3
 RELATIVE_PREFIX="$(get_relative_dir_path_prefix "${DST}" "${ROOT_IMAGES_RELATIVE_TO}")"
 IMG_DIR="${RELATIVE_PREFIX}images/jeh-tech"
-echo "Generating $(realpath ${DST}) from $(realpath${SRC})"
+echo "Generating $(realpath ${DST}) from $(realpath ${SRC})"
 
 # All files that use M4 preprocessor must include the line "dnl USEM4".
 if grep --ignore-case "dnl USEM4" "${SRC}" > /dev/null
