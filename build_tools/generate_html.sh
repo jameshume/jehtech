@@ -33,7 +33,6 @@ if grep --ignore-case "dnl USEM4" "${SRC}" > /dev/null
 then
     echo "   Running M4 macro expansion for ${SRC}"
     m4 "${SRC}" > "${DST}"
-    mv "${SRC}" "${DST}"
 else
     cp "${SRC}" > "${DST}"
 fi
