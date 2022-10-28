@@ -40,8 +40,6 @@ else
     cp "${SRC}" "${DST}"
 fi
 
-cat "${DST}"
-
 # All files that use M4 preprocessor must include the line "dnl USEM4".
 if grep --ignore-case "dnl USEM4" "${DST}" > /dev/null
 then
@@ -49,14 +47,12 @@ then
     TMP=$(mktemp)
     m4 "${DST}" > "${TMP}"
     mv "${TMP}" "${DST}"
-    cat "${DST}"
 fi
 
 # Process snippet inserts - must be done before all other in-place sed'ing
 # Process the destination file but give the dirname of the source file so that
 # the snippet can be found.
 python3 process_snippets.py "${DST}" "$(dirname "${SRC}")" "${IMG_DIR}"
-cat "${DST}"
 
 # Each file contains a marker that must be replaced with the contents of the _link.html page
 # NOTE: <div id="includedContent"> must have the closing tag on the SAME LINE and be one a
