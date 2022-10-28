@@ -33,3 +33,11 @@ jobs:
         env:
           AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+        - name: 'Upload Artifact'
+      - name: Stash debug artefacts for short time
+        uses: actions/upload-artifact@v3
+        with:
+          name: debug-artefact
+          path: |
+            dist/**/*.debug
+          retention-days: 1

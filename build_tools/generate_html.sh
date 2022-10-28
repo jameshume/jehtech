@@ -25,10 +25,11 @@ DEBUG_TMP=$(mktemp)
 
 SRC=$1
 DST=$2
+DEBUG_OUT_FILE="${DST}.debug"
 ROOT_IMAGES_RELATIVE_TO=$3
 RELATIVE_PREFIX="$(get_relative_dir_path_prefix "${DST}" "${ROOT_IMAGES_RELATIVE_TO}")"
 IMG_DIR="${RELATIVE_PREFIX}images/jeh-tech"
-echo "Generating ${DST} from ${SRC}"
+echo "Generating $(realpath ${DST}) from $(realpath${SRC})"
 
 # All files that use M4 preprocessor must include the line "dnl USEM4".
 if grep --ignore-case "dnl USEM4" "${SRC}" > /dev/null
@@ -38,9 +39,9 @@ then
 else
     cp "${SRC}" > "${DST}"
 fi
-echo "=============================================================================================" >> "${DEBUG_TMP}"
-echo "=============================================================================================" >> "${DEBUG_TMP}"
-cat "${DST}" >> "${DEBUG_TMP}"
+echo "=============================================================================================" >> "${DEBUG_OUT_FILE}"
+echo "=============================================================================================" >> "${DEBUG_OUT_FILE}"
+cat "${DST}" >> "${DEBUG_OUT_FILE}"
 
 # All files that contain MathJax to be be pre-processed should have the string "<!-- MATHJAX -->"
 # somewhere in the file. Its easier doing this than it is to "guess" as to whether the HTML
@@ -53,9 +54,9 @@ then
     node -r esm tex2html-cpage.js "${DST}" > "${TMP}"
     mv "${TMP}" "${DST}"
 fi
-echo "=============================================================================================" >> "${DEBUG_TMP}"
-echo "=============================================================================================" >> "${DEBUG_TMP}"
-cat "${DST}" >> "${DEBUG_TMP}"
+echo "=============================================================================================" >> "${DEBUG_OUT_FILE}"
+echo "=============================================================================================" >> "${DEBUG_OUT_FILE}"
+cat "${DST}" >> "${DEBUG_OUT_FILE}"
 
 
 
@@ -63,9 +64,9 @@ cat "${DST}" >> "${DEBUG_TMP}"
 # Process the destination file but give the dirname of the source file so that
 # the snippet can be found.
 python3 process_snippets.py "${DST}" "$(dirname "${SRC}")" "${IMG_DIR}"
-echo "=============================================================================================" >> "${DEBUG_TMP}"
-echo "=============================================================================================" >> "${DEBUG_TMP}"
-cat "${DST}" >> "${DEBUG_TMP}"
+echo "=============================================================================================" >> "${DEBUG_OUT_FILE}"
+echo "=============================================================================================" >> "${DEBUG_OUT_FILE}"
+cat "${DST}" >> "${DEBUG_OUT_FILE}"
 
 # Each file contains a marker that must be replaced with the contents of the _link.html page
 # NOTE: <div id="includedContent"> must have the closing tag on the SAME LINE and be one a
@@ -76,35 +77,30 @@ cp "../src/html/_links.html" "${links_tmp_file}"
 sed --in-place -e  "s#href=\"\([^\"]*\)\"#href=\"${RELATIVE_PREFIX}\1\"#g" "${links_tmp_file}"
 sed --in-place -e "/\(<\s*div\s\s*id\s*=\s*\"includedContent\"\s*>\)/{r ${links_tmp_file}
 d}" "${DST}"
-echo "=============================================================================================" >> "${DEBUG_TMP}"
-echo "=============================================================================================" >> "${DEBUG_TMP}"
-cat "${DST}" >> "${DEBUG_TMP}"
+echo "=============================================================================================" >> "${DEBUG_OUT_FILE}"
+echo "=============================================================================================" >> "${DEBUG_OUT_FILE}"
+cat "${DST}" >> "${DEBUG_OUT_FILE}"
 
 # Each file contains a marker for the CSS import that must use a *relative* import directory
 # from this page to the CSS file. 
 sed --in-place  -e \
     "s#<!--\s*CSS_INSERT\s*-->#<link rel=\"stylesheet\" href=\"${RELATIVE_PREFIX}jeh-monolith.css\" type=\"text/css\" />#" \
     "${DST}"
-echo "=============================================================================================" >> "${DEBUG_TMP}"
-echo "=============================================================================================" >> "${DEBUG_TMP}"
-cat "${DST}" >> "${DEBUG_TMP}"
+echo "=============================================================================================" >> "${DEBUG_OUT_FILE}"
+echo "=============================================================================================" >> "${DEBUG_OUT_FILE}"
+cat "${DST}" >> "${DEBUG_OUT_FILE}"
 
 # Each file contains a marker for the JavaScript import that must use a *relative* import
 # directory from this page to the JavaScript file. 
 sed --in-place  -e \
     "s#<!--\s*JAVASCRIPT_INSERT\s*-->#<script src=\"${RELATIVE_PREFIX}jeh-monolith.js\"></script>#" \
     "${DST}"
-echo "=============================================================================================" >> "${DEBUG_TMP}"
-echo "=============================================================================================" >> "${DEBUG_TMP}"
-cat "${DST}" >> "${DEBUG_TMP}"
+echo "=============================================================================================" >> "${DEBUG_OUT_FILE}"
+echo "=============================================================================================" >> "${DEBUG_OUT_FILE}"
+cat "${DST}" >> "${DEBUG_OUT_FILE}"
 
 # The ##IMG_DIR## marker must be replaced with the path to the image directory on the server
 sed --in-place  -e "s|##IMG_DIR##|${IMG_DIR}|" "${DST}"
-echo "=============================================================================================" >> "${DEBUG_TMP}"
-echo "=============================================================================================" >> "${DEBUG_TMP}"
-cat "${DST}" >> "${DEBUG_TMP}"
-
-
-echo "============================================================================================="
-cat "${DEBUG_TMP}"
-echo "============================================================================================="
+echo "=============================================================================================" >> "${DEBUG_OUT_FILE}"
+echo "=============================================================================================" >> "${DEBUG_OUT_FILE}"
+cat "${DST}" >> "${DEBUG_OUT_FILE}"
