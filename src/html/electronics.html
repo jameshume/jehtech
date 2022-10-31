@@ -15,6 +15,10 @@ define(`REF_TRANS_CONFIGS', `https://www.electronics-notes.com/articles/analogue
 define(`REF_2N2222', `https://www.electroschematics.com/wp-content/uploads/2009/04/2n2222-datasheet.pdf')
 define(`REF_CE_CONN', `https://circuitglobe.com/common-emitter-connection-or-ce-configuration.html')
 define(`REF_NPN_ELECTRONICS_TUTS', `https://www.electronics-tutorials.ws/transistor/tran_2.html')
+define(`REF_CIRCUIT_LAB', `https://www.circuitlab.com/')
+define(`REF_CIRCUIT_LAB_BOOK', `https://ultimateelectronicsbook.com/')
+define(`REF_CALC_RESISTOR_FOR_TRANSITOR', `https://raspberrypi.stackexchange.com/questions/75520/calculating-resistor-value-for-transistor')
+define(`REF_CE_TRANSITOR_CONFIG', `https://circuitglobe.com/common-emitter-connection-or-ce-configuration.html')
 dnl ---- END M4 MACROS ---- 
 <!DOCTYPE HTML>
 <html>
@@ -305,6 +309,28 @@ dnl ---- END M4 MACROS ----
 		<div id="page_contents">
 		</div>
 
+		<h2>References</h2>
+		<div>
+			<ul>
+				<li>REF(`REF_KHAN_CAP_PULSE',)"</li>
+				<li>REF(`REF_KHAN_CAP_EQUATIONS',)</li>
+				<li>REF(`REF_SO_CAP_EQUATIONS',)</li>
+				<li>REF(`REF_SO_I_SRC',)</li>
+				<li>REF(`REF_BATT_INT_RES',)</li>
+				<li>REF(`REF_UTUBE_CIRC_ANAL',)</li>
+				<li>REF(`REF_NPN_CURVES',)</li>
+				<li>REF(`REF_UDEMY_ROBOTS',)</li>
+				<li>REF(`REF_NPN_INTRO',)</li>
+				<li>REF(`REF_TRANS_CONFIGS',)</li>
+				<li>REF(`REF_2N2222',)</li>
+				<li>REF(`REF_CE_CONN',)</li>
+				<li>REF(`REF_NPN_ELECTRONICS_TUTS',)</li>
+				<li>REF(`REF_CIRCUIT_LAB',)</li>
+				<li>REF(`REF_CIRCUIT_LAB_BOOK',)</li>
+				<li>REF(`REF_CALC_RESISTOR_FOR_TRANSITOR',)</li>
+				<li>REF(`REF_CE_TRANSITOR_CONFIG',)"</li>
+			</ul>
+		</div>
 
 
 		<!-- --------------------------------------------------------------------------------------- -->
@@ -1323,13 +1349,54 @@ dnl ---- END M4 MACROS ----
 				only 0.2A at the base. It is however, able to tolerate relatively high voltages, just not
 				high currents, which as we said above, you'd need MOSFETs, or even relays for.
 			</p>
+			<p>
+				Other useful numbers from the datasheet include:
+			</p>
+			<table class="jehtable">
+				<thead>
+					<tr><td>Parameter</td><td>Max</td></tr>
+				</thead>
+				<tbody>
+					<tr><td>V<sub>CEsat</sub><br>Voltage from collector-emitter when saturated (i.e fully on)</td> <td>400mV</td></tr>
+					<tr><td>V<sub>BEsat</sub><br>Voltage from base-emitter when saturated (i.e fully on)</td> <td>1.3V</td></tr>
+					<tr><td>
+							H<sub>FE</sub><br>
+							DC current gain<br>
+							@ I<sub>C</sub> = 0.1 mA; V<sub>CE</sub> = 10 V<br>
+							@ I<sub>C</sub> = 1 mA; V<sub>CE</sub> = 10 V<br>
+							@ I<sub>C</sub> = 10 mA; V<sub>CE</sub> = 10 V<br>
+							@ I<sub>C</sub> = 150 mA; V<sub>CE</sub> = 1 V<br>
+							@ I<sub>C</sub> = 150 mA; V<sub>CE</sub> = 10 V<br>
+					    </td>
+						<td>
+							<br>
+							<br>
+							35<br>
+							50<br>
+							75<br>
+							50<br>
+							100-300<br>
+						</td>
+					</tr>
+				</tbody>
+			</table>
 
 			<blockquote>
 				<ul>
-					<li>The <b>base is responsible for initiating transistor action</b>. When a voltage is applied at the base, it gets biased and draws <b>small current which is then used to control large</b> current at the collector and emitter side.</li>
-					<li>The base action is considered as an ON-OFF valve which generates current when a proper bias voltage is applied at this terminal.</li>
-					<li>The small change at the voltage applied at the base terminal shows a large impact at the output terminals. Actually, base acts as an input and collector acts as an output in NPN transistor.</li>
-					<li>In case of <b>silicon transistor emitter-base junction draws voltage around 0.7</b> when there is no voltage at the base terminal, in order to initiate the electron action and put the transistor in running condition, the base voltage must be greater than 0.7 voltage in case of silicon transistor and 0.3 in case of germanium transistor.</li>
+					<li>The <b>base is responsible for initiating transistor action</b>. When a voltage 
+						is applied at the base, it gets biased and draws <b>small current which is then
+							used to control large</b> current at the collector and emitter side.
+					</li>
+					<li>The base action is considered as an ON-OFF valve which generates current when a
+						proper bias voltage is applied at this terminal.
+					</li>
+					<li>The small change at the voltage applied at the base terminal shows a large impact
+						at the output terminals. Actually, base acts as an input and collector acts as an output
+						in NPN transistor.</li>
+					<li>In case of <b>silicon transistor emitter-base junction draws voltage around 0.7V</b>
+						when there is no voltage at the base terminal, in order to initiate the electron action
+						and put the transistor in running condition, the base voltage must be greater than 0.7
+						voltage in case of silicon transistor and 0.3 in case of germanium transistor.</li>
 				</ul>
 				<footer>-- REF(`REF_TRANS_CONFIGS', `Transistor Configurations: Circuit Configurations'), emphasis mine.</footer>
 			</blockquote>
@@ -1360,11 +1427,12 @@ dnl ---- END M4 MACROS ----
 			</p>
 			
 			<p>
-				Some examples, taken verbatim, from REF(`REF_NPN_ELECTRONICS_TUTS', `electronics-tutorials.ws on the NPN Transitor') will
-				help understand why these are useful.
+				Some examples, taken verbatim, from REF(`REF_NPN_ELECTRONICS_TUTS', `electronics-tutorials.ws on the NPN Transitor')
+				will help understand why these are useful.
 			</p>
 			<p>
-				A bipolar NPN transistor has a DC current gain, $\beta$, value of 200. Calculate the base current $I_b$ required to switch a resistive load of 4mA.
+				A bipolar NPN transistor has a DC current gain, $\beta$, value of 200. Calculate the base current $I_b$
+				required to switch a resistive load of 4mA.
 
 				$$
 				I_B = \frac{I_C}{\beta} = \frac{4 \times 10^{-3}}{200} = 20 \mu A
@@ -1372,10 +1440,13 @@ dnl ---- END M4 MACROS ----
 			</p>
 
 
+			<h3>Calculating Resistor Values</h3>
 			<p>
-				TODO https://circuitglobe.com/common-emitter-connection-or-ce-configuration.html
+				All based on an answer from StackOverflow REF(`REF_CALC_RESISTOR_FOR_TRANSITOR', `[Ref]').
 			</p>
-
+			<p>
+				<img src="##IMG_DIR##/electronics_calc_tranistor_load_resistor.png">
+			</p>
 
 			<h3>References</h3>
 			<div>
@@ -1394,6 +1465,12 @@ dnl ---- END M4 MACROS ----
 					</li>
 					<li>
 						REF(`REF_2N2222', `NPN Transistor 2N2222 DataSheet').
+					</li>
+					<li>
+						REF(`REF_CALC_RESISTOR_FOR_TRANSITOR',)
+					</li>
+					<li>
+						REF(`REF_CE_TRANSITOR_CONFIG',)"
 					</li>
 				</ul>
 			</div>
