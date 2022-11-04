@@ -334,112 +334,137 @@ dnl ---- END M4 MACROS ----
 
 
 		<!-- --------------------------------------------------------------------------------------- -->
-		<h2>Charge, Current, Voltage</h2>
+		<h2>Charge, Current, Voltage, Power</h2>
 		<div>
 			<h3>References</h3>
-			<ul>
-				<li>
-					<a href="https://cleantechnica.com/2015/02/02/power-vs-energy-explanation/" target="_blank">The Great Power vs. Energy Confusion</a>, Rob Lewis.
-				</li>
-				<li>
-					<a href="https://youtu.be/elJUghWSVh4" target="_blank">Electric potential energy</a>, Khan Academy.</li>
-				<li>
-					REF(`REF_UTUBE_CIRC_ANAL',`Essential &amp; Practical Circuit Analysis: Part 1- DC Circuits'), Solid State Workship, YouTube.
-				</li> 
-			</ul>
-
+			<div>
+				<ul>
+					<li>
+						<a href="https://cleantechnica.com/2015/02/02/power-vs-energy-explanation/" target="_blank">The Great Power vs. Energy Confusion</a>, Rob Lewis.
+					</li>
+					<li>
+						<a href="https://youtu.be/elJUghWSVh4" target="_blank">Electric potential energy</a>, Khan Academy.</li>
+					<li>
+						REF(`REF_UTUBE_CIRC_ANAL',`Essential &amp; Practical Circuit Analysis: Part 1- DC Circuits'), Solid State Workship, YouTube.
+					</li> 
+				</ul>
+			</div>
+			
 			<h3>Conventional Current And Charge</h3>
-			<p>
-				<img src="##IMG_DIR##/conventional_current.png" width="150" style="float:left">
-				Historically positive charge moves through the circuit from the positive to negative terminals. This is called <em>conventional</em> current.
-				We now know that it is, in fact, the flow of electrons from the negative to positive terminals that is current. Due to the historical precedent,
-				current is still often shown as conventional current.
-			</p>
-			<p>
-				From Wikipedia: <q>Conventional current flows from the positive pole (terminal) to the negative pole. Electrons flow from negative to positive. In a direct current (DC) circuit, current flows in one direction only, and one pole is always negative and the other pole is always positive. In an alternating current (AC) circuit the two poles alternate between negative and positive and the direction of the current (electron flow) reverses periodically.</q>.
-			</p>
-			<p>
-				Note that voltages are relative, which is why the negative terminal of the battery can be negative - it depends what
-				the reference voltage you are measuring against is - e.g. if ground is midway between the two terminals then they will
-				have voltages -A and +A respectively.
-			</p>
-			<p>
-				Informally, <b>current is a flow of electric charge</b>.
-			</p>
-			<p>
-				Current, $i$, is the amount of charge, $q$, that moves through a point in the circuit at any time.
-				$$i = \frac{\mathrm dq}{\mathrm dt}$$
-				Charge, $q$, is measured in Coulombs. One electron has a charge of $-1.6 \times 10^{-19}$ Coulombs. This is the smallest
-				unit of charge possible.
-			</p>
-			<p>
-				We can integrate the above to get $I = \frac{Q}{t}$ and therefore $Q = It$.
-			</p>
+			<div>
+				<p>
+					<img src="##IMG_DIR##/conventional_current.png" width="150" style="float:left">
+					Historically positive charge moves through the circuit from the positive to negative terminals. This is called <em>conventional</em> current.
+					We now know that it is, in fact, the flow of electrons from the negative to positive terminals that is current. Due to the historical precedent,
+					current is still often shown as conventional current.
+				</p>
+				<p>
+					From Wikipedia: <q>Conventional current flows from the positive pole (terminal) to the negative pole. Electrons flow from negative to positive. In a direct current (DC) circuit, current flows in one direction only, and one pole is always negative and the other pole is always positive. In an alternating current (AC) circuit the two poles alternate between negative and positive and the direction of the current (electron flow) reverses periodically.</q>.
+				</p>
+				<p>
+					Note that voltages are relative, which is why the negative terminal of the battery can be negative - it depends what
+					the reference voltage you are measuring against is - e.g. if ground is midway between the two terminals then they will
+					have voltages -A and +A respectively.
+				</p>
+				<p>
+					Informally, <b>current is a flow of electric charge</b>.
+				</p>
+				<p>
+					Current, $i$, is the amount of charge, $q$, that moves through a point in the circuit at any time.
+					$$i = \frac{\mathrm dq}{\mathrm dt}$$
+					Charge, $q$, is measured in Coulombs. One electron has a charge of $-1.6 \times 10^{-19}$ Coulombs. This is the smallest
+					unit of charge possible.
+				</p>
+				<p>
+					We can integrate the above to get $I = \frac{Q}{t}$ and therefore $Q = It$.
+				</p>
+			</div>
 
 			<h3 style="clear: both;">Voltage</h3>
-			<p>
-				Voltage, $V$, is the amount of work (in Joules) that must be done per unit charge to move between two points in a field.
-				$$V_{ab} = \frac{\mathrm dw}{\mathrm dq}$$
-				I.e. 1 volt is 1 Joule per Coulomb.
-			</p>
-			<p>
-				If we integrate both sides of the abote w.r.t to charge we get:
-				$$VQ = W\ \therefore W = QV$$
-			</p>
-			<p>
-				To help understand this let's revisit the terms energy, work and power.<br/>
-			</p>
-			<p style="padding-left: 16pt;">
-				<b>Energy</b> is the ability to do work.<br/>
-				<b>Work</b> is the force that must be exerted to move a mass a certain distance.<br/>
-				<b>Power</b> is the rate at which energy is generator/consumed.
-			</p>
-			<p>
-				Energy is what makes it possible to move things. Moving things involves doing work and it takes energy to do this. <b>Energy measures
-					the total amount of work done</b>. It does not say how fast the energy was used/produced.
-			</p>
-			<p>
-				<b>Power gives that rate at which energy is used/produced</b>. Power measures how <b>fast</b> the work gets done.
-			</p>
-			<p>
-				<img src="##IMG_DIR##/work_evergy_power.svg" alt="Image showing work and energy vs power"/>
-			</p>
-			<p>
-				Give these definitions we can see how they are defined for electronics. Using some crude (read incorrect as we're using multiplication not integration to make it seem simpler) we see:
+			<div>
+				<p>
+					Voltage, $V$, is the amount of work (in Joules) that must be done per unit charge to move between two points in a field.
+					$$V_{ab} = \frac{\mathrm dw}{\mathrm dq}$$
+					I.e. 1 volt is 1 Joule per Coulomb.
+				</p>
+				<p>
+					If we integrate both sides of the abote w.r.t to charge we get:
+					$$VQ = W\ \therefore W = QV$$
+				</p>
+			</div>
 
-				$$
-				\begin{align}
-				E &= IVt \\
-				  &= \frac{\mathrm dq}{\mathrm dt} \cdot \frac{\mathrm dw}{\mathrm dq} \cdot t\\
-				  &= \frac{\mathrm dW}{\mathrm dt} \cdot t \\
-				  &= W
-				\end{align}
-				$$
+			<h3 style="clear: both;">Energy, Work and Power</h3>
+			<div>
+				<p>
+					To help understand this let's revisit the terms energy, work and power.<br/>
+				</p>
+				<p style="padding-left: 16pt;">
+					<b>Energy</b> is the ability to do work.<br/>
+					<b>Work</b> is the force that must be exerted to move a mass a certain distance.<br/>
+					<b>Power</b> is the rate at which energy is generator/consumed.
+				</p>
+				<p>
+					Energy is what makes it possible to move things. Moving things involves doing work and it takes energy to do this. <b>Energy measures
+						the total amount of work done</b>. It does not say how fast the energy was used/produced.
+				</p>
+				<p>
+					<b>Power gives that rate at which energy is used/produced</b>. Power measures how <b>fast</b> the work gets done.
+				</p>
+				<p>
+					<img src="##IMG_DIR##/work_evergy_power.svg" alt="Image showing work and energy vs power"/>
+				</p>
+				<p>
+					Give these definitions we can see how they are defined for electronics. Using some crude (read incorrect as we're using multiplication not integration to make it seem simpler) we see:
 
-				So energy is indeed the total work required to move a charge between two points in an electric field.
+					$$
+					\begin{align}
+					E &= IVt \\
+					&= \frac{\mathrm dq}{\mathrm dt} \cdot \frac{\mathrm dw}{\mathrm dq} \cdot t\\
+					&= \frac{\mathrm dW}{\mathrm dt} \cdot t \\
+					&= W
+					\end{align}
+					$$
 
-				And because 
+					So energy is indeed the total work required to move a charge between two points in an electric field.
 
-				$$
-				P = IV = \frac{E}{t}
-				$$
+					And because 
 
-				We can see that electrical power (measured in <b>Watts</b>) is the rate of consumption/generation of electrical energy.
-			</p>
-			<p>
-				Note that electric potential energy is measured with respect to a reference point. In the
-				image below one can see that the voltage either side of the resistor is measured w.r.t ground.
-				Ground is the normal reference point, but any point in a circuit can be used as long as it is
-				used consistently.
-			</p>
-			<p>
-				<img src="##IMG_DIR##/voltage_needs_a_reference.svg" alt="Measuring potential requires a reference voltage, usually ground"/>
-			</p>
-			<p>
-				Note then, that potential <em>difference</em>, is the difference between to points, each of which has
-				a potential <em>energy</em> w.r.t to a reference. The potential <em>difference</em> is the difference between these
-				two points, but <em>only make sense if the potential of each point is measured w.r.t to the same reference</em>.
-			</p>
+					$$
+					P = IV = \frac{E}{t}
+					$$
+
+					We can see that electrical power (measured in <b>Watts</b>) is the rate of consumption/generation of electrical energy.
+				</p>
+				<p>When current flows through a resistor it dissipates power in the form of heat. When it flows
+					through an LED it dissipates power in the form of both heat and light.
+				</p>
+				<p>
+					Power, measured in <b>watts</b>, is also defined as:
+					$$
+					P = IV = I^2R = \frac{V^2}{R}
+					$$
+				</p>
+				<p>
+					Resistors usually have a power rating (the power they can dissipate) associated with them.
+					This means that if you know
+					the resistor's power rating you can calculate the maximum voltage or current you can
+					put across/through them without breaking the resistor.
+				</p>
+				<p>
+					Note that electric potential energy is measured with respect to a reference point. In the
+					image below one can see that the voltage either side of the resistor is measured w.r.t ground.
+					Ground is the normal reference point, but any point in a circuit can be used as long as it is
+					used consistently.
+				</p>
+				<p>
+					<img src="##IMG_DIR##/voltage_needs_a_reference.svg" alt="Measuring potential requires a reference voltage, usually ground"/>
+				</p>
+				<p>
+					Note then, that potential <em>difference</em>, is the difference between to points, each of which has
+					a potential <em>energy</em> w.r.t to a reference. The potential <em>difference</em> is the difference between these
+					two points, but <em>only make sense if the potential of each point is measured w.r.t to the same reference</em>.
+				</p>
+			</div>
 
 			<h3 style="clear: both;">Ohm's Law</h3>
 			<div>
@@ -730,26 +755,7 @@ dnl ---- END M4 MACROS ----
 					the same using a simple voltage divider? The answer lies in the <em>sensitivity</em> of the measurement
 					system. This is covered in the next section.
 				</p>
-			</div>
-
-			<h3 style="clear:both;">Power</h3>
-			<div>
-				<p>When current flows through a resistor it dissipates power in the form of heat. When it flows
-					through an LED it dissipates power in the form of both heat and light.
-				</p>
-				<p>
-					Power, measured in <b>watts</b>, is defined as:
-					$$
-					P = VI = I^2R = \frac{V^2}{R}
-					$$
-				</p>
-				<p>
-					Resistors usually have a power rating (the power they can dissipate) associated with them.
-					This means that if you know
-					the resistor's power rating you can calculate the maximum voltage or current you can
-					put across/through them without breaking the resistor.
-				</p>
-			</div>
+			</div>			
 		</div> <!-- End H2 -->
 
 
@@ -770,7 +776,8 @@ dnl ---- END M4 MACROS ----
 				<p>
 					But, <a href="electronics-batteries.html">batteries</a>, even power supplies etc etc
 					are <em>not</em> ideal. In the real world
-					they have a small internal resistance, anywhere between approx 0.1 OHM() to 2 OHM() depending on the battery
+					they have a small internal resistance, anywhere between approx 0.1 OHM() to 
+					2.0 OHM() depending on the battery
 					REF(`REF_BATT_INT_RES', `[Ref]'), which means they are modelled more like this:
 				</p>
 				<p>
@@ -1277,182 +1284,207 @@ dnl ---- END M4 MACROS ----
 		<a name="bjt"></a>
 		<h2 style="clear:both;">Bipolar Junction Transistors (BJT)</h2>
 		<div>
-			<p>
-				NPN transistors consist of two N-type (negatively doped - excess electroncs) silicon &quot;chunks&quot;
-				sandwiching a P-type (positively doped - exess holes or lacking electrons) as shown below. They are
-				<b>current controlled</b>.
-			</p>
-			<p>
-				<img src="##IMG_DIR##/npn_transistor.png"/>
-				REF(`REF_UDEMY_ROBOTS', `[Ref]')
-			</p>
-			<p>
-				By forward biasing the emitter to base junction with even a small current, the
-				transistor's resistance between the emitter and collector quickly decreses, allowing
-				a relatively large current to from from the emitter to collector. I.e., <b>base current
-				controls current at emitter and collector</b>.
-			</p>
-			<p>
-				The circuit in its most basic form looks like:
-			</p>
-			<p>
-				<img src="##IMG_DIR##/electronics_npm_circuit_basic.png">
-			</p>
-			<p>
-				<img src="##IMG_DIR##/electronics_npm_in_voltage_divider.png">
-			</p>
-			<p>
-				The above configuration is called the <b>common emitter</b> configuration and is
-				probably the most widely used REF(`REF_TRANS_CONFIGS', `[Ref]').
-			</p>
-			<blockquote>
-				The configuration in which the emitter is connected between the collector and base
-				is known as a common emitter configuration. The input circuit is connected between
-				emitter and base, and the output circuit is taken from the collector and emitter.
-				Thus, the emitter is common to both the input and the output circuit, and hence the
-				name is the common emitter configuration. 
-				<footer>-- REF(`REF_CE_CONN', `Common Emitter Connection (or CE Configuration)').</footer>
-			</blockquote>
-			<p></p>			
-			<p>
-				NPN transistors can <b>typically handle up to about 0.8 A</b>. Thus, they are <b>low current</b>
-				devices. For large currents MOSFETs are used (later section).
-			</p>
-			<p><b>Saturation region</b> is where the maximum collector current flows and the transistor
-			is basically a closed switch from collector to emitter.
-			</p>
-			<p><b>Active mode / region</b> is where there is an almost linear relationship between the
-				terminal currents at the base, collector and emitter. The transistor has some resistance,
-				that is determined by the emitter/base current.
-			</p>
-			<p><b>Cut-off region</b> is where the transistor acts like an open switch.
-			</p>
-			<p>
-				The following is taken from the Semtech 2N2222 datasheet:
-			</p>
-			<p>
-				<img src="##IMG_DIR##/../electronics_2N222_Vce_vs_Ic.png">
-			</p>
-			<p>
-				A common NPN transistor is the 2N2222. Looking at the data sheet REF(`REF_2N2222', `[Ref]')
-				we can find the following properties:
-			</p>
-			<table class="jehtable">
-				<thead>
-					<tr><td>Parameter</td><td>Max</td></tr>
-				</thead>
-				<tbody>
-					<tr><td>Collector-base voltage V<sub>CBO</sub></td><td>60 V</td></tr>
-					<tr><td>Collector-emitter voltage V<sub>CEO</sub></td><td>30 V</td></tr>
-					<tr><td>Emitter-base voltage V<sub>EBO</sub></td><td>5 V</td></tr>
-					<tr><td>Peak collector current</td><td>800 mA</td></tr>
-					<tr><td>Peak base current</td><td>200mA</td></tr>
-					<tr><td>Total power disipation</td><td>500 mW</td></tr>
-				</tbody>
-			</table>
-			<p>
-				We can see that this device can handle a maximum of 0.8A though its emitter-collector and
-				only 0.2A at the base. It is however, able to tolerate relatively high voltages, just not
-				high currents, which as we said above, you'd need MOSFETs, or even relays for.
-			</p>
-			<p>
-				Other useful numbers from the datasheet include:
-			</p>
-			<table class="jehtable">
-				<thead>
-					<tr><td>Parameter</td><td>Max</td></tr>
-				</thead>
-				<tbody>
-					<tr><td>V<sub>CEsat</sub><br>Voltage from collector-emitter when saturated (i.e fully on)</td> <td>400mV</td></tr>
-					<tr><td>V<sub>BEsat</sub><br>Voltage from base-emitter when saturated (i.e fully on)</td> <td>1.3V</td></tr>
-					<tr><td>
-							H<sub>FE</sub><br>
-							DC current gain<br>
-							@ I<sub>C</sub> = 0.1 mA; V<sub>CE</sub> = 10 V<br>
-							@ I<sub>C</sub> = 1 mA; V<sub>CE</sub> = 10 V<br>
-							@ I<sub>C</sub> = 10 mA; V<sub>CE</sub> = 10 V<br>
-							@ I<sub>C</sub> = 150 mA; V<sub>CE</sub> = 1 V<br>
-							@ I<sub>C</sub> = 150 mA; V<sub>CE</sub> = 10 V<br>
-					    </td>
-						<td>
-							<br>
-							<br>
-							35<br>
-							50<br>
-							75<br>
-							50<br>
-							100-300<br>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+			<h3>NPN Transistor in Common Emitter Configuration</h3>
+			<div>
+				<p>
+					NPN transistors consist of two N-type (negatively doped - excess electroncs) silicon &quot;chunks&quot;
+					sandwiching a P-type (positively doped - exess holes or lacking electrons) as shown below. They are
+					<b>current controlled</b>.
+				</p>
+				<p>
+					<img src="##IMG_DIR##/npn_transistor.png"/>
+					REF(`REF_UDEMY_ROBOTS', `[Ref]')
+				</p>
+				<p>
+					By forward biasing the emitter to base junction with even a small current, the
+					transistor's resistance between the emitter and collector quickly decreses, allowing
+					a relatively large current to from from the emitter to collector. I.e., <b>base current
+					controls current at emitter and collector</b>.
+				</p>
+				<p>
+					The circuit in its most basic form looks like:
+				</p>
+				<p>
+					<img src="##IMG_DIR##/electronics_npm_circuit_basic.png">
+				</p>
+				<p>
+					<img src="##IMG_DIR##/electronics_npm_in_voltage_divider.png">
+				</p>
+				<p>
+					The above configuration is called the <b>common emitter</b> configuration and is
+					probably the most widely used REF(`REF_TRANS_CONFIGS', `[Ref]').
+				</p>
+				<blockquote>
+					The configuration in which the emitter is connected between the collector and base
+					is known as a common emitter configuration. The input circuit is connected between
+					emitter and base, and the output circuit is taken from the collector and emitter.
+					Thus, the emitter is common to both the input and the output circuit, and hence the
+					name is the common emitter configuration. 
+					<footer>-- REF(`REF_CE_CONN', `Common Emitter Connection (or CE Configuration)').</footer>
+				</blockquote>
+				<p></p>			
+				<p>
+					NPN transistors can <b>typically handle up to about 0.8 A</b>. Thus, they are <b>low current</b>
+					devices. For large currents MOSFETs are used (later section).
+				</p>
+				<p><b>Saturation region</b> is where the maximum collector current flows and the transistor
+				is basically a closed switch from collector to emitter.
+				</p>
+				<p><b>Active mode / region</b> is where there is an almost linear relationship between the
+					terminal currents at the base, collector and emitter. The transistor has some resistance,
+					that is determined by the emitter/base current.
+				</p>
+				<p><b>Cut-off region</b> is where the transistor acts like an open switch.
+				</p>
+				<p>
+					The following is taken from the Semtech 2N2222 datasheet:
+				</p>
+				<p>
+					<img src="##IMG_DIR##/../electronics_2N222_Vce_vs_Ic.png">
+				</p>
+				<p>
+					A common NPN transistor is the 2N2222. Looking at the data sheet REF(`REF_2N2222', `[Ref]')
+					we can find the following properties:
+				</p>
+				<table class="jehtable">
+					<thead>
+						<tr><td>Parameter</td><td>Max</td></tr>
+					</thead>
+					<tbody>
+						<tr><td>Collector-base voltage V<sub>CBO</sub></td><td>60 V</td></tr>
+						<tr><td>Collector-emitter voltage V<sub>CEO</sub></td><td>30 V</td></tr>
+						<tr><td>Emitter-base voltage V<sub>EBO</sub></td><td>5 V</td></tr>
+						<tr><td>Peak collector current</td><td>800 mA</td></tr>
+						<tr><td>Peak base current</td><td>200mA</td></tr>
+						<tr><td>Total power disipation</td><td>500 mW</td></tr>
+					</tbody>
+				</table>
+				<p>
+					We can see that this device can handle a maximum of 0.8A though its emitter-collector and
+					only 0.2A at the base. It is however, able to tolerate relatively high voltages, just not
+					high currents, which as we said above, you'd need MOSFETs, or even relays for.
+				</p>
+				<p>
+					Other useful numbers from the datasheet include:
+				</p>
+				<table class="jehtable">
+					<thead>
+						<tr><td>Parameter</td><td>Max</td></tr>
+					</thead>
+					<tbody>
+						<tr><td>V<sub>CEsat</sub><br>Voltage from collector-emitter when saturated (i.e fully on)</td> <td>400mV</td></tr>
+						<tr><td>V<sub>BEsat</sub><br>Voltage from base-emitter when saturated (i.e fully on)</td> <td>1.3V</td></tr>
+						<tr><td>
+								H<sub>FE</sub><br>
+								DC current gain<br>
+								@ I<sub>C</sub> = 0.1 mA; V<sub>CE</sub> = 10 V<br>
+								@ I<sub>C</sub> = 1 mA; V<sub>CE</sub> = 10 V<br>
+								@ I<sub>C</sub> = 10 mA; V<sub>CE</sub> = 10 V<br>
+								@ I<sub>C</sub> = 150 mA; V<sub>CE</sub> = 1 V<br>
+								@ I<sub>C</sub> = 150 mA; V<sub>CE</sub> = 10 V<br>
+							</td>
+							<td>
+								<br>
+								<br>
+								35<br>
+								50<br>
+								75<br>
+								50<br>
+								100-300<br>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 
-			<blockquote>
-				<ul>
-					<li>The <b>base is responsible for initiating transistor action</b>. When a voltage 
-						is applied at the base, it gets biased and draws <b>small current which is then
-							used to control large</b> current at the collector and emitter side.
-					</li>
-					<li>The base action is considered as an ON-OFF valve which generates current when a
-						proper bias voltage is applied at this terminal.
-					</li>
-					<li>The small change at the voltage applied at the base terminal shows a large impact
-						at the output terminals. Actually, base acts as an input and collector acts as an output
-						in NPN transistor.</li>
-					<li>In case of <b>silicon transistor emitter-base junction draws voltage around 0.7V</b>
-						when there is no voltage at the base terminal, in order to initiate the electron action
-						and put the transistor in running condition, the base voltage must be greater than 0.7
-						voltage in case of silicon transistor and 0.3 in case of germanium transistor.</li>
-				</ul>
-				<footer>-- REF(`REF_TRANS_CONFIGS', `Transistor Configurations: Circuit Configurations'), emphasis mine.</footer>
-			</blockquote>
-			<p></p>
-			
-			<h3>Current Amplification Factor: $\alpha$ &amp; Base Current Amplification Factor: $\beta$</h3>
-			<p>
-				The current gain from Collector (C) to Emitter (E): i.e., the ratio of change in collector current to the change in emitter current when <em>emitter voltage is kept constant</em>:
+				<blockquote>
+					<ul>
+						<li>The <b>base is responsible for initiating transistor action</b>. When a voltage 
+							is applied at the base, it gets biased and draws <b>small current which is then
+								used to control large</b> current at the collector and emitter side.
+						</li>
+						<li>The base action is considered as an ON-OFF valve which generates current when a
+							proper bias voltage is applied at this terminal.
+						</li>
+						<li>The small change at the voltage applied at the base terminal shows a large impact
+							at the output terminals. Actually, base acts as an input and collector acts as an output
+							in NPN transistor.</li>
+						<li>In case of <b>silicon transistor emitter-base junction draws voltage around 0.7V</b>
+							when there is no voltage at the base terminal, in order to initiate the electron action
+							and put the transistor in running condition, the base voltage must be greater than 0.7
+							voltage in case of silicon transistor and 0.3 in case of germanium transistor.</li>
+					</ul>
+					<footer>-- REF(`REF_TRANS_CONFIGS', `Transistor Configurations: Circuit Configurations'), emphasis mine.</footer>
+				</blockquote>
+				<p></p>
+				
+				<h4>Current Amplification Factor: $\alpha$ &amp; Base Current Amplification Factor: $\beta$</h4>
+				<div>
+					<p>
+						The current gain from Collector (C) to Emitter (E): i.e., the ratio of change in collector current to
+						the change in emitter current when <em>emitter voltage is kept constant</em>:
 
-				$$
-				\alpha = \frac{\Delta I_C}{\Delta I_E}\ \text{at constant } V_{CE}
-				$$
-			</p>
-			<p>
-				Ratio of output and input current in CE config:
+						$$
+						\alpha = \frac{\Delta I_C}{\Delta I_E}\ \text{at constant } V_{CE}
+						$$
 
-				$$
-				\beta = \frac{\Delta I_C}{\Delta I_B}
-				$$
-			</p>
-			<p>
-				The two are related as follows:
+						Note that <b>$\alpha$ is always less than 1!</b>. This is because the collector current cannot be
+						greater than the emitter current: KCL: $i_e = i_b + i_c$, so therefore, $i_c = i_e - i_b$, which means that,
+						because $i_b \neq 0$, $i_e > i_c$.
+					</p>
+					<p>
+						Ah, it seems <b>$\alpha$ is more relevant to the common base</b> configuration?! Although still useful here because
 
-				$$
-				\beta = \frac{\alpha}{1 - \alpha}\ \text{OR } \alpha = \beta(1 - alpha)
-				$$
+						$$
+						 I_c = \alpha I_e
+						$$
+					</p>
+					<p>
+						Ratio of output and input current in CE config:
 
-			</p>
-			
-			<p>
-				Some examples, taken verbatim, from REF(`REF_NPN_ELECTRONICS_TUTS', `electronics-tutorials.ws on the NPN Transitor')
-				will help understand why these are useful.
-			</p>
-			<p>
-				A bipolar NPN transistor has a DC current gain, $\beta$, value of 200. Calculate the base current $I_b$
-				required to switch a resistive load of 4mA.
+						$$
+						\beta = \frac{\Delta I_C}{\Delta I_B}
+						$$
+					</p>
+					<p>
+						The two are related as follows:
 
-				$$
-				I_B = \frac{I_C}{\beta} = \frac{4 \times 10^{-3}}{200} = 20 \mu A
-				$$
-			</p>
+						$$
+						\beta = \frac{\alpha}{1 - \alpha}\ \text{OR } \alpha = \beta(1 - alpha)
+						$$
+					</p>
+					<p>
+						And,
+
+						$$
+						I_c = \beta I_b
+						$$
+					</p>
+					
+					<p>
+						Some examples, taken verbatim, from REF(`REF_NPN_ELECTRONICS_TUTS', `electronics-tutorials.ws on the NPN Transitor')
+						will help understand why these are useful.
+					</p>
+					<p>
+						A bipolar NPN transistor has a DC current gain, $\beta$, value of 200. Calculate the base current $I_b$
+						required to switch a resistive load of 4mA.
+
+						$$
+						I_B = \frac{I_C}{\beta} = \frac{4 \times 10^{-3}}{200} = 20 \mu A
+						$$
+					</p>
+				</div>
 
 
-			<h3>Calculating Resistor Values</h3>
-			<p>
-				All based on an answer from StackOverflow REF(`REF_CALC_RESISTOR_FOR_TRANSITOR', `[Ref]').
-			</p>
-			<p>
-				<img src="##IMG_DIR##/electronics_calc_tranistor_load_resistor.png">
-			</p>
+				<h4>Calculating Resistor Values</h4>
+				<div>
+					<p>
+						All based on an answer from StackOverflow REF(`REF_CALC_RESISTOR_FOR_TRANSITOR', `[Ref]').
+					</p>
+					<p>
+						<img src="##IMG_DIR##/electronics_calc_tranistor_load_resistor.png">
+					</p>
+				</div>
+			</div>
 
 			<h3>References</h3>
 			<div>

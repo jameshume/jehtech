@@ -366,7 +366,7 @@ fg=GRAY</panel_attributes>
       <w>1110</w>
       <h>30</h>
     </coordinates>
-    <panel_attributes>*NPN BJT*
+    <panel_attributes>*NPN BJT (COMMON EMMITTER CONFIGURATION)*
 bg=LIGHT_GRAY</panel_attributes>
     <additional_attributes/>
   </element>
@@ -631,8 +631,8 @@ A LARGE current can flow from the emitter to the collector.</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>650</x>
-      <y>130</y>
+      <x>420</x>
+      <y>110</y>
       <w>30</w>
       <h>90</h>
     </coordinates>
@@ -642,8 +642,8 @@ A LARGE current can flow from the emitter to the collector.</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>650</x>
-      <y>170</y>
+      <x>420</x>
+      <y>150</y>
       <w>70</w>
       <h>60</h>
     </coordinates>
@@ -654,8 +654,8 @@ lw=2</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>650</x>
-      <y>120</y>
+      <x>420</x>
+      <y>100</y>
       <w>70</w>
       <h>60</h>
     </coordinates>
@@ -665,8 +665,8 @@ lw=2</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>600</x>
-      <y>160</y>
+      <x>370</x>
+      <y>140</y>
       <w>80</w>
       <h>30</h>
     </coordinates>
@@ -677,8 +677,8 @@ lw=2</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>670</x>
-      <y>110</y>
+      <x>440</x>
+      <y>90</y>
       <w>30</w>
       <h>20</h>
     </coordinates>
@@ -688,8 +688,8 @@ lw=2</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>630</x>
-      <y>150</y>
+      <x>400</x>
+      <y>130</y>
       <w>30</w>
       <h>20</h>
     </coordinates>
@@ -699,8 +699,8 @@ lw=2</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>670</x>
-      <y>200</y>
+      <x>440</x>
+      <y>180</y>
       <w>30</w>
       <h>30</h>
     </coordinates>
@@ -710,8 +710,8 @@ lw=2</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>690</x>
-      <y>100</y>
+      <x>460</x>
+      <y>80</y>
       <w>30</w>
       <h>50</h>
     </coordinates>
@@ -722,8 +722,8 @@ lw=2</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>690</x>
-      <y>220</y>
+      <x>460</x>
+      <y>200</y>
       <w>30</w>
       <h>60</h>
     </coordinates>
@@ -734,8 +734,8 @@ lw=2</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>690</x>
-      <y>200</y>
+      <x>460</x>
+      <y>180</y>
       <w>30</w>
       <h>60</h>
     </coordinates>
@@ -746,8 +746,8 @@ lw=2</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>690</x>
-      <y>70</y>
+      <x>460</x>
+      <y>50</y>
       <w>30</w>
       <h>60</h>
     </coordinates>
@@ -758,8 +758,8 @@ lw=2</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>580</x>
-      <y>160</y>
+      <x>350</x>
+      <y>140</y>
       <w>50</w>
       <h>30</h>
     </coordinates>
@@ -770,8 +770,8 @@ lw=2</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>710</x>
-      <y>100</y>
+      <x>480</x>
+      <y>80</y>
       <w>30</w>
       <h>30</h>
     </coordinates>
@@ -782,8 +782,8 @@ fg=DARK_GRAY</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>600</x>
-      <y>180</y>
+      <x>370</x>
+      <y>160</y>
       <w>40</w>
       <h>30</h>
     </coordinates>
@@ -794,8 +794,8 @@ fg=DARK_GRAY</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>620</x>
-      <y>90</y>
+      <x>390</x>
+      <y>70</y>
       <w>80</w>
       <h>70</h>
     </coordinates>
@@ -807,8 +807,8 @@ fg=DARK_GRAY</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>610</x>
-      <y>90</y>
+      <x>380</x>
+      <y>70</y>
       <w>50</w>
       <h>30</h>
     </coordinates>
@@ -819,8 +819,8 @@ fg=DARK_GRAY</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>610</x>
-      <y>200</y>
+      <x>380</x>
+      <y>180</y>
       <w>80</w>
       <h>70</h>
     </coordinates>
@@ -832,8 +832,8 @@ fg=DARK_GRAY</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>600</x>
-      <y>230</y>
+      <x>370</x>
+      <y>210</y>
       <w>50</w>
       <h>30</h>
     </coordinates>
@@ -844,8 +844,8 @@ fg=DARK_GRAY</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>740</x>
-      <y>100</y>
+      <x>510</x>
+      <y>80</y>
       <w>30</w>
       <h>160</h>
     </coordinates>
@@ -857,8 +857,8 @@ fg=DARK_GRAY</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>760</x>
-      <y>160</y>
+      <x>530</x>
+      <y>140</y>
       <w>50</w>
       <h>30</h>
     </coordinates>
@@ -869,13 +869,195 @@ fg=DARK_GRAY</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>710</x>
-      <y>250</y>
+      <x>480</x>
+      <y>230</y>
       <w>130</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>I_E = E_B + I_C
 fg=DARK_GRAY</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>620</x>
+      <y>60</y>
+      <w>220</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>KCL: I_e = I_b + I_c
+halign=left</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>620</x>
+      <y>110</y>
+      <w>220</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>KVL: V_ce + V_eb +V_bc = 0
+halign=left</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>620</x>
+      <y>160</y>
+      <w>220</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>I_c = alpha x I_e
+halign=left</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>620</x>
+      <y>210</y>
+      <w>220</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>I_c = beta x I_b
+halign=left</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>880</x>
+      <y>170</y>
+      <w>280</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Characteristic properties of a transistor in active mode - assume constant values for that transistor.
+style=wordwrap
+halign=left</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>830</x>
+      <y>140</y>
+      <w>70</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;20.0;50.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>830</x>
+      <y>210</y>
+      <w>70</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;30.0;50.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>250</x>
+      <y>90</y>
+      <w>40</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>N</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>250</x>
+      <y>130</y>
+      <w>40</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>P</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>250</x>
+      <y>170</y>
+      <w>40</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>N</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>200</x>
+      <y>130</y>
+      <w>70</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>50.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>260</x>
+      <y>200</y>
+      <w>30</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;10.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>260</x>
+      <y>50</y>
+      <w>30</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;10.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>190</x>
+      <y>140</y>
+      <w>30</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>*B*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>260</x>
+      <y>240</y>
+      <w>30</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>*E*</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>260</x>
+      <y>40</y>
+      <w>30</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>*C*</panel_attributes>
     <additional_attributes/>
   </element>
 </diagram>
