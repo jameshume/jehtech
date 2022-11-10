@@ -2,6 +2,7 @@ dnl USEM4
 dnl ---- START M4 MACROS ----
 define(`OHM', `&#x2126;')
 define(`REF', `<a href="$1" target="_blank">$2</a>')dnl
+define(`REF_KIRCHOFF', `https://www.cpp.edu/~elab/projects/project_02/index.html')
 define(`REF_KHAN_CAP_PULSE', `https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/ee-natural-and-forced-response/a/ee-capacitor-equation-in-action')
 define(`REF_KHAN_CAP_EQUATIONS', `https://www.youtube.com/watch?v=gd7caHXKtp8')
 define(`REF_SO_CAP_EQUATIONS', `https://electronics.stackexchange.com/a/264282/26358')
@@ -465,7 +466,7 @@ dnl ---- END M4 MACROS ----
 					two points, but <em>only make sense if the potential of each point is measured w.r.t to the same reference</em>.
 				</p>
 			</div>
-
+			
 			<h3 style="clear: both;">Ohm's Law</h3>
 			<div>
 				<p>Ohm's law gives the relationship between voltage, current and resistance:
@@ -474,68 +475,125 @@ dnl ---- END M4 MACROS ----
 					$$V = IR$$
 				</p>
 			</div>
-			<h3 style="clear: both;">Kirchoff's Laws</h3>
 
-			<h4>Nodes, Branches and Loops</h4>
-			<p>
-				<b>Branch</b>: A branch represents a single element such as a resistor. I.e., any two terminal element.
-			</p>
-			<p>
-				<b>Node</b>: A node is the point of connection between 2 or more branches. Every point going into the
-				node, at the node, is at the same potential.
-			</p>
-			<p>
-				<b>Loop</b>: A loops is any closed path in a circuit. Starts and ends at the same node
-				and does not pass through a node more than once.
-			</p>
-			<p>
-				<img src="##IMG_DIR##/loops_nodes_branches.png" alt="Branches, loops and nodes in a ciruite"/>
-			</p>
 
-			<h4>The Laws...</h4>
-			<p>
-				Two important laws: <em>Kirchoff's voltage law</em> and <em>Kirchoff's current law</em>.
-			</p>
-			<h5>KCL</h5>
-			<p>
-				Kirchoff's current law says that the <b>sum of currents flowing into a node must equal the sum of currents leaving</b> a node.
-				This is often expressed in another way: the sum of currents entering and leaving a node must always be zero. This works because we label, by convention, all currents entering the node as positive and all currents leaving the node as negative.
-			</p>
-			<p>
-				<img src="##IMG_DIR##/kcl_kvl.png" alt="KCL"/>
-			</p>
-			<p>
-				This can be written most compactly as:
+			<h3 style="clear: both;">Passive Sign Convention</h3>
+			<div>
+				<p>
+					SEE https://ultimateelectronicsbook.com/labeling-voltages-currents-nodes/
+					SEE https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/circuit-elements/v/ee-passive-sign-convention
+				</p>
+				<p>
+					&quot;Passive&quot; describes components that do not create power and do not amplify signals. For example, resistors, capacitors
+					and inductors are passive components because they do not create power and do not amplify signals.
+				</p>
+				<p>
+					Sometimes a voltage source, like a battery, can be said to be passive because although it creates power it does not amplify signals.
+				</p>
+				<p>
+					The sign convention for passive components is that <b>the current goes into the positive terminal (terminal with higher V)</b>.
+				</p>
+				<p>
+					When analysing a circuit, as we'll see below when using Kirchhoff's laws, we have to label each component with a voltage and current.
+					The passive sign convention makes sure that when we use Ohm's law, it comes out with the <em>correct sign</em>.
+				</p>
+				<p>
+					Take the following resistor. If we label the voltage across it as so:
+				</p>
+				<p>
+					<img src="##IMG_DIR##/electronics_passive_sign_voltage_first_then_determine_current_1.png">
+				</p>
+				<p>
+					We then know that, using the passive sign convention, that the current must be labelled so that it flows into the
+					positive terminal, like so:
+				</p>
+				<p>
+					<img src="##IMG_DIR##/electronics_passive_sign_voltage_first_then_determine_current_2.png">
+				</p>
+				<p>
+					We're clearly talking about <em>conventional current</em> here, by the way.
+				</p>
+				<p>
+					What it means is that if we labelled either the voltage or the current incorrectly, Ohm's law will give a negative answer, because
+					if we label the current going into the negative terminal, we must consider it to be negative current as it is going in the
+					wrong direction. Why would we label a circuit wrong? Because sometimes in circuit analysis we do not know the polarity of an
+					element, so we just guess, and then if the sign comes out negative we know we labeled the polarity wrong and change the labelling.
+				</p>
+			</div>
 
-				$$
-					\sum_{j=0}^{n} I_j = 0
-				$$
-			</p>
-			<p>
-				Lets look at the following example REF(`REF_UTUBE_CIRC_ANAL',`[Ref]'):
-			</p>
-			<p>
+			<h3 style="clear: both;">Kirchhoff's Laws</h3>
+			<div>
+				<h4>Nodes, Branches and Loops</h4>
+				<p>
+					<b>Branch</b>: A branch represents a single element such as a resistor. I.e., any two terminal element.
+				</p>
+				<p>
+					<b>Node</b>: A node is the point of connection between 2 or more branches. Every point going into the
+					node, at the node, is at the same potential.
+				</p>
+				<p>
+					<b>Loop</b>: A loops is any closed path in a circuit. Starts and ends at the same node
+					and does not pass through a node more than once.
+				</p>
+				<p>
+					<img src="##IMG_DIR##/loops_nodes_branches.png" alt="Branches, loops and nodes in a ciruite"/>
+				</p>
 
-			</p>
-			<h5>KVL</h5>
-			<p>
-				Kirchoff's voltage law says that the <b>sum of voltages around a closed circuit must be zero</b>.
-			</p>
-			<p>
-				<img src="##IMG_DIR##/kvl.png" alt="KVL"/>
-			</p>
-			<p>
-				This can be written most compactly as:
+				<h4>The Laws...</h4>
+				<p>
+					Two important laws: <em>Kirchoff's voltage law</em> and <em>Kirchoff's current law</em>.
+				</p>
+				<h5>KCL</h5>
+				<p>
+					Kirchoff's current law says that the <b>sum of currents flowing into a node must equal the sum of currents leaving</b> a node.
+					This is often expressed in another way: the sum of currents entering and leaving a node must always be zero. This works because we label, by convention, all currents entering the node as positive and all currents leaving the node as negative.
+				</p>
+				<p>
+					<img src="##IMG_DIR##/kcl_kvl.png" alt="KCL"/>
+				</p>
+				<p>
+					This can be written most compactly as:
 
-				$$
-					\sum_{j=0}^{n} V_j = 0
-				$$
-			</p>
-			<p>
-					Say, for example, that $V_1$ is 12V, R2 is $4 \Omega$, R3 is $6 \Omega$, $V_2$ is 3V and R5 is $1 \Omega$.
-					Then we know $-12 + 4i + 6i - 4 + i = 0$. We can then work out the current in the circuit using KVL
-					by re-arranging the formula.
-			</p>
+					$$
+						\sum_{j=0}^{n} I_j = 0
+					$$
+				</p>
+				<p>
+					Lets look at the following example REF(`REF_UTUBE_CIRC_ANAL',`[Ref]'):
+				</p>
+				<p>
+
+				</p>
+				<h5>KVL</h5>
+				<p>
+					Kirchoff's voltage law says that the <b>sum of voltages around a closed circuit must be zero</b>,
+					where the sign on each voltage is the polarity of the terminal encountered first as the loops is
+					traveled around. Another way of saying it is that one way to assign the +'s and -'s is REF(`REF_KIRCHOFF', `[Ref]'):
+				</p>
+				<ol>
+					<li>if the positive (+) side of the voltage is encountered first, assign a positive "+" sign to the voltage across the element.</li>
+					<li>If the negative (-) side of the voltage is encountered first, assign a negative "-" sign to the voltage across the element.</li>
+				</ol>
+				<p>
+					SEE https://ultimateelectronicsbook.com/labeling-voltages-currents-nodes/
+					SEE https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/circuit-elements/v/ee-passive-sign-convention
+				</p>
+				<p>
+					<img src="##IMG_DIR##/kvl.png" alt="KVL"/>
+				</p>
+				<p>
+					This can be written most compactly as:
+
+					$$
+						\sum_{j=0}^{n} V_j = 0
+					$$
+				</p>
+				<p>
+						Say, for example, that $V_1$ is 12V, R2 is $4 \Omega$, R3 is $6 \Omega$, $V_2$ is 3V and R5 is $1 \Omega$.
+						Then we know $-12 + 4i + 6i - 4 + i = 0$. We can then work out the current in the circuit using KVL
+						by re-arranging the formula.
+				</p>
+			</div>
 		</div>
 
 
