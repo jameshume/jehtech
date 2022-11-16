@@ -14,12 +14,13 @@ define(`REF_UDEMY_ROBOTS', `https://www.udemy.com/course/analog-electronics-robo
 define(`REF_NPN_INTRO', `https://www.theengineeringprojects.com/2018/05/introduction-to-npn-transistor.html')
 define(`REF_TRANS_CONFIGS', `https://www.electronics-notes.com/articles/analogue_circuits/transistor/transistor-circuit-configurations.php')
 define(`REF_2N2222', `https://www.electroschematics.com/wp-content/uploads/2009/04/2n2222-datasheet.pdf')
-define(`REF_CE_CONN', `https://circuitglobe.com/common-emitter-connection-or-ce-configuration.html')
 define(`REF_NPN_ELECTRONICS_TUTS', `https://www.electronics-tutorials.ws/transistor/tran_2.html')
 define(`REF_CIRCUIT_LAB', `https://www.circuitlab.com/')
 define(`REF_CIRCUIT_LAB_BOOK', `https://ultimateelectronicsbook.com/')
 define(`REF_CALC_RESISTOR_FOR_TRANSITOR', `https://raspberrypi.stackexchange.com/questions/75520/calculating-resistor-value-for-transistor')
 define(`REF_CE_TRANSITOR_CONFIG', `https://circuitglobe.com/common-emitter-connection-or-ce-configuration.html')
+define(`REF_KHAN_PASSIVE_SIGN', `https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/circuit-elements/v/ee-passive-sign-convention')
+define(`REF_LABEL_V_I_NODE', `https://ultimateelectronicsbook.com/labeling-voltages-currents-nodes/')
 dnl ---- END M4 MACROS ---- 
 <!DOCTYPE HTML>
 <html>
@@ -313,23 +314,24 @@ dnl ---- END M4 MACROS ----
 		<h2>References</h2>
 		<div>
 			<ul>
-				<li>REF(`REF_KHAN_CAP_PULSE', `TODO')</li>
-				<li>REF(`REF_KHAN_CAP_EQUATIONS', `TODO')</li>
-				<li>REF(`REF_SO_CAP_EQUATIONS', `TODO')</li>
-				<li>REF(`REF_SO_I_SRC', `TODO')</li>
-				<li>REF(`REF_BATT_INT_RES', `TODO')</li>
-				<li>REF(`REF_UTUBE_CIRC_ANAL', `TODO')</li>
-				<li>REF(`REF_NPN_CURVES', `TODO')</li>
-				<li>REF(`REF_UDEMY_ROBOTS', `TODO')</li>
-				<li>REF(`REF_NPN_INTRO', `TODO')</li>
-				<li>REF(`REF_TRANS_CONFIGS', `TODO')</li>
-				<li>REF(`REF_2N2222', `TODO')</li>
-				<li>REF(`REF_CE_CONN', `TODO')</li>
-				<li>REF(`REF_NPN_ELECTRONICS_TUTS', `TODO')</li>
-				<li>REF(`REF_CIRCUIT_LAB', `TODO')</li>
-				<li>REF(`REF_CIRCUIT_LAB_BOOK', `TODO')</li>
-				<li>REF(`REF_CALC_RESISTOR_FOR_TRANSITOR', `TODO')</li>
-				<li>REF(`REF_CE_TRANSITOR_CONFIG', `TODO')</li>
+				<li>REF(`REF_KHAN_CAP_PULSE', `Capacitor i-v equation in action'), Khan Academy.</li>
+				<li>REF(`REF_KHAN_CAP_EQUATIONS', `Derivation of Charging and Discharging Equations for RC Circuit'), JKTekker, YouTube.com.</li>
+				<li>REF(`REF_SO_CAP_EQUATIONS', `Deriving the formula from 'scratch' for charging a capacitor'), StackOverflow.</li>
+				<li>REF(`REF_SO_I_SRC', `What exactly is a current source?'), StockOverflow.</li>
+				<li>REF(`REF_BATT_INT_RES', `Battery Internal Resistance'), LeanAboutElectronics.com.</li>
+				<li>REF(`REF_UTUBE_CIRC_ANAL', `Essential & Practical Circuit Analysis: Part 1- DC Circuits'), Solid State Workshop, YouTube.com.</li>
+				<li>REF(`REF_NPN_CURVES', `NPN Curves (seems broken?)')</li>
+				<li>REF(`REF_UDEMY_ROBOTS', `Electricity & electronics - Robotics, learn by building'), Ian Juby, Udemy.com.</li>
+				<li>REF(`REF_NPN_INTRO', `Introduction to NPN Transistor'), The Engineering Projects.</li>
+				<li>REF(`REF_TRANS_CONFIGS', `Transistor Configurations: circuit configurations'), ElectonicsNotes.</li>
+				<li>REF(`REF_2N2222', `2N2222; 2N2222A Data Sheet'), Philips Semiconductors.</li>
+				<li>REF(`REF_NPN_ELECTRONICS_TUTS', `NPN Transistor'), ElectronicsTutorials.</li>
+				<li>REF(`REF_CIRCUIT_LAB', `Circuit Lab Website').</li>
+				<li>REF(`REF_CIRCUIT_LAB_BOOK', `Ultimate Electronics eBook').</li>
+				<li>REF(`REF_CALC_RESISTOR_FOR_TRANSITOR', `Calculating resistor value for transistor'), StackOverflow.</li>
+				<li>REF(`REF_CE_TRANSITOR_CONFIG', `Common Emitter Connection (or CE Configuration)'), Circuit Globe.</li>
+				<li>REF(`REF_KHAN_PASSIVE_SIGN', `Sign convention for passive components'), Khan Academy.</li>
+				<li>REF(`REF_LABEL_V_I_NODE', `Labeling Voltages, Currents, and Nodes'), Ultimate Electronics eBook.</li>
 			</ul>
 		</div>
 
@@ -1378,7 +1380,7 @@ dnl ---- END M4 MACROS ----
 					emitter and base, and the output circuit is taken from the collector and emitter.
 					Thus, the emitter is common to both the input and the output circuit, and hence the
 					name is the common emitter configuration. 
-					<footer>-- REF(`REF_CE_CONN', `Common Emitter Connection (or CE Configuration)').</footer>
+					<footer>-- REF(`REF_CE_TRANSITOR_CONFIG', `Common Emitter Connection (or CE Configuration)').</footer>
 				</blockquote>
 				<p></p>			
 				<p>
