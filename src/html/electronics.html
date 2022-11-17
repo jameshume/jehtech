@@ -5,6 +5,7 @@ define(`REF', `<a href="$1" target="_blank">$2</a>')dnl
 define(`REF_POW_VS_ENERGY', `https://cleantechnica.com/2015/02/02/power-vs-energy-explanation/')
 define(`REF_KHAN_ELEC_POT', `https://youtu.be/elJUghWSVh4')
 define(`REF_KIRCHOFF', `https://www.cpp.edu/~elab/projects/project_02/index.html')
+define(`REF_TEXTBOOK_KVL_STACK_QUESTION', `https://electronics.stackexchange.com/q/641627/325669')
 define(`REF_KHAN_CAP_PULSE', `https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/ee-natural-and-forced-response/a/ee-capacitor-equation-in-action')
 define(`REF_KHAN_CAP_EQUATIONS', `https://www.youtube.com/watch?v=gd7caHXKtp8')
 define(`REF_SO_CAP_EQUATIONS', `https://electronics.stackexchange.com/a/264282/26358')
@@ -336,6 +337,7 @@ dnl ---- END M4 MACROS ----
 				<li>REF(`REF_LABEL_V_I_NODE', `Labeling Voltages, Currents, and Nodes'), Ultimate Electronics eBook.</li>
 				<li>REF(`REF_POW_VS_ENERGY', `The Great "Power Vs. Energy" Confusion'), Rob Lewis, CleanTechnica.</li>
 				<li>REF(`REF_KHAN_ELEC_POT', `Electric potential energy'), Khan Academy, YouTube.com.</li>
+				<li>REF(`REF_TEXTBOOK_KVL_STACK_QUESTION', `Textbook's way of determining KVL polarities'), StackOverflow.</li>
 			</ul>
 		</div>
 
@@ -348,7 +350,7 @@ dnl ---- END M4 MACROS ----
 				<ul>
 					<li>REF(`REF_POW_VS_ENERGY', `The Great "Power Vs. Energy" Confusion'), Rob Lewis, CleanTechnica.</li>
 					<li>REF(`REF_KHAN_ELEC_POT', `Electric potential energy'), Khan Academy, YouTube.com.</li>
-					<li>REF(`REF_UTUBE_CIRC_ANAL',`Essential &amp; Practical Circuit Analysis: Part 1- DC Circuits'), Solid State Workship, YouTube.</li> 
+					<li>REF(`REF_UTUBE_CIRC_ANAL',`Essential &amp; Practical Circuit Analysis: Part 1- DC Circuits'), Solid State Workshop, YouTube.</li> 
 				</ul>
 			</div>
 			
@@ -523,6 +525,22 @@ dnl ---- END M4 MACROS ----
 					wrong direction. Why would we label a circuit wrong? Because sometimes in circuit analysis we do not know the polarity of an
 					element, so we just guess, and then if the sign comes out negative we know we labeled the polarity wrong and change the labelling.
 				</p>
+				<p></p>
+				<blockquote>
+					<p>
+						The convention to label current as positive when flowing into the + terminal is arbitrary, but it makes a few things work out simply and consistently:
+					</p>
+					<ol>
+						<li>First, V-I relationships like the definition of Ohm's Law don't need a minus sign.</li>
+						<li>Second, power consumption is defined correctly with $P = vi$, where $P>0$ for ordinary components which are consuming power like a resistor, and $P<0$ for components which are supplying power like a battery.</li>
+					</ol>
+					<footer>-- REF(`REF_LABEL_V_I_NODE', `Labeling Voltages, Currents, and Nodes'), Ultimate Electronics eBook.</footer>
+				</blockquote>
+				<p></p>
+				<p>
+					Why would incorrectly labelling a branch (i.e., we labelled the terminal that current was going into as negative (-)) require a sign change? Simply because
+					of this convention! If current moving in one direction is positive then moving in the other direction must be negative!
+				</p>
 			</div>
 
 			<h3 style="clear: both;">Kirchhoff's Laws</h3>
@@ -579,8 +597,10 @@ dnl ---- END M4 MACROS ----
 					<li>If the negative (-) side of the voltage is encountered first, assign a negative "-" sign to the voltage across the element.</li>
 				</ol>
 				<p>
-					SEE https://ultimateelectronicsbook.com/labeling-voltages-currents-nodes/
-					SEE https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/circuit-elements/v/ee-passive-sign-convention
+					However, for passive components, one might not know apriori how to label the terminals. The choice can be arbitrary, so long as the
+					passive sign convention is used, such that in a loop, because we know current can only flow in one direction, whatever arbitrary
+					direction we decided to think of it as going, if it enters the positive terminal then the result is a positive current, otherwise
+					it is a negative current. We will see an example below.
 				</p>
 				<p>
 					<img src="##IMG_DIR##/kvl.png" alt="KVL"/>
@@ -593,9 +613,16 @@ dnl ---- END M4 MACROS ----
 					$$
 				</p>
 				<p>
-						Say, for example, that $V_1$ is 12V, R2 is $4 \Omega$, R3 is $6 \Omega$, $V_2$ is 3V and R5 is $1 \Omega$.
-						Then we know $-12 + 4i + 6i - 4 + i = 0$. We can then work out the current in the circuit using KVL
-						by re-arranging the formula.
+					Say, for example, that $V_1$ is 12V, R2 is $4 \Omega$, R3 is $6 \Omega$, $V_2$ is 3V and R5 is $1 \Omega$.
+					Then we know $-12 + 4i + 6i - 4 + i = 0$. We can then work out the current in the circuit using KVL
+					by re-arranging the formula.
+				</p>
+				<p>
+					In this example it was trivial to know apriori what direction the current would flow. Sometimes we may not. The following is
+					a simple example from the book "Funamentals of Electric Circuits", fourth edition. This demonstrates the way that passive
+					components can have their terminals labelled in an "arbitrary" fashion of our choosing (as long as we consistently apply
+					the passive sign convention to know whether current is + or - whilst considering each branch). It stumped me for a while,
+					so I asked, REF(`REF_TEXTBOOK_KVL_STACK_QUESTION', `and got some very helpful answers on good old StackOverflow').
 				</p>
 			</div>
 		</div>
@@ -917,7 +944,7 @@ dnl ---- END M4 MACROS ----
 						REF(REF_BATT_INT_RES, `Battery Internal Resistance'), LearningAboutElectronics.com.
 					</li>
 					<li>
-						REF(`REF_UTUBE_CIRC_ANAL',`Essential &amp; Practical Circuit Analysis: Part 1- DC Circuits'), Solid State Workship, YouTube.
+						REF(`REF_UTUBE_CIRC_ANAL',`Essential &amp; Practical Circuit Analysis: Part 1- DC Circuits'), Solid State Workshop, YouTube.
 					</li>
 				</ul>
 			</div>
