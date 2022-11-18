@@ -618,11 +618,33 @@ dnl ---- END M4 MACROS ----
 					by re-arranging the formula.
 				</p>
 				<p>
-					In this example it was trivial to know apriori what direction the current would flow. Sometimes we may not. The following is
+					In this example it was trivial to know, apriori, what direction the current would flow. Sometimes we may not. The following is
 					a simple example from the book "Fundamentals of Electric Circuits", fourth edition. This demonstrates the way that passive
 					components can have their terminals labelled in an "arbitrary" fashion of our choosing (as long as we consistently apply
 					the passive sign convention to know whether current is + or - whilst considering each branch). It stumped me for a while,
 					so I asked, REF(`REF_TEXTBOOK_KVL_STACK_QUESTION', `and got some very helpful answers on good old StackOverflow').
+				</p>
+				<p>
+					<img src="##IMG_DIR##/electronics_kvl_book_ex_1.png">
+				</p>
+				<p>
+					Conventional current flow is used, as indicated by the circular arrow. Going around the loop, because the current enters the
+					negative terminal of R2, the current current and voltage <em>must be negative!</em>. See the section "Passive Sign Convention" above.
+				</p>
+				<p>
+					By Ohms, law $V = iR$, we therefore know that $v_2 = -3i$. Note it is <em>negative</em>!
+				</p>
+				<p>
+					So, going around the loop we get $v_1 = 2i$ and $v_2 = -3i$. Applying KVL gives us,
+
+					$$
+					\begin{align}
+					-20 - v_1 - v_2 &= 0
+					\therefore -20 -2i + 3i &= 0
+					\end{align}
+					$$
+
+					And thus, $i = 4\text{A}$, $v_1 = 8\text{V}$ and $v_2 = -12\text{V}$
 				</p>
 			</div>
 		</div>

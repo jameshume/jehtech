@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1.0-SNAPSHOT">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>440</x>
+      <y>260</y>
+      <w>60</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>/+/
+
+/-/</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>460</x>
+      <y>180</y>
+      <w>240</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;140.0;10.0;210.0;210.0;210.0;210.0;150.0;200.0;140.0;220.0;130.0;200.0;120.0;220.0;110.0;200.0;100.0;220.0;90.0;210.0;80.0;210.0;20.0;150.0;20.0;140.0;30.0;130.0;10.0;120.0;30.0;110.0;10.0;100.0;30.0;90.0;10.0;80.0;20.0;10.0;20.0;45.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>460</x>
+      <y>190</y>
+      <w>30</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>540</x>
+      <y>260</y>
+      <w>60</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>_umletcode=
+drawArc(0,0,width,height,00,240,true)
+fg=red
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>590</x>
+      <y>280</y>
+      <w>30</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;-
+fg=red</panel_attributes>
+    <additional_attributes>10.0;20.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>550</x>
+      <y>140</y>
+      <w>60</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>2 Ohm
+R1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>700</x>
+      <y>280</y>
+      <w>60</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>3 Ohm
+R2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>560</x>
+      <y>280</y>
+      <w>60</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>/ i/</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>400</x>
+      <y>270</y>
+      <w>60</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>20 V</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>530</x>
+      <y>210</y>
+      <w>90</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>+     v1      -</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>640</x>
+      <y>250</y>
+      <w>20</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>+
+
+
+
+/-/</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>630</x>
+      <y>280</y>
+      <w>30</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>v2</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
