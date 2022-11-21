@@ -618,7 +618,11 @@ dnl ---- END M4 MACROS ----
 					by re-arranging the formula.
 				</p>
 				<p>
-					In this example it was trivial to know, apriori, what direction the current would flow. Sometimes we may not. The following is
+					In this example it was trivial to know, apriori, what direction the current would flow. Sometimes we may not. 
+				</p>
+				<p><u>Example #1</p>
+				<p>
+					The following is
 					a simple example from the book "Fundamentals of Electric Circuits", fourth edition. This demonstrates the way that passive
 					components can have their terminals labelled in an "arbitrary" fashion of our choosing (as long as we consistently apply
 					the passive sign convention to know whether current is + or - whilst considering each branch). It stumped me for a while,
@@ -650,11 +654,49 @@ dnl ---- END M4 MACROS ----
 					We know that the voltage drop across $v_2$ isn't really negative. This means we just labelled the terminals incorrectly, so to fix it,
 					just flip the labels around and we get the correct positive voltage for $v_2$ :)
 				</p>
+				<p><u>Example #2</p>
 				<p>
-					Another example...
+					Another example. In this example we are required to find the voltage supplied by the voltage controlled voltage supply,
+					which provides $2v_0$ volts. Hence we need to find out what $v_0$ is.
 				</p>
 				<p>
 					<img src="##IMG_DIR##/electronics_kvl_book_ex_2.png">
+				</p>
+				<p>
+					The power supplies can use the polarities already indicated on them. The
+					resistors we can assign polarities arbitrarily to, but the ones shown are the ones shown in the book's example,
+					so lets use them!
+				</p>
+				<p>
+					Using KVL:
+
+					$$
+					-12 + v_r + 2v_0 - 4 - v_0 = 0
+					$$
+
+					Where, due to the passive sign convention:
+
+					$$
+					v_0 = -6i,\ v_r = +4i
+					$$
+
+					Substituting these values in:
+
+					$$
+					-12 + 4i -12i -4 + 6i = 0 \\
+					\therefore 2i = 16 \\
+					\there i = -8A 
+					$$
+
+					This means that we labelled the current flow in the wrong direction. So, the current
+					is $8A$ is the anti-clockwise direction and the polarity labels on the $6\ohm$
+					resistor are switched.
+
+					$$
+					v_o = 6i = 6 * 8 = 48V
+					$$
+
+					This means that the voltage controlled power supply is supplying $96$ volts!
 				</p>
 			</div>
 		</div>

@@ -196,4 +196,15 @@ fg=red</panel_attributes>
     <panel_attributes>2v_0</panel_attributes>
     <additional_attributes/>
   </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>630</x>
+      <y>400</y>
+      <w>60</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>  v_0</panel_attributes>
+    <additional_attributes/>
+  </element>
 </diagram>
