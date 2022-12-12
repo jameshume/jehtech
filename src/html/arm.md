@@ -68,55 +68,57 @@
     * Its of no use for Cortex-M processors as they only have Thumb-2, but, still need to jump with +1 on the address! Hey ho!
     * And then... M33 then the T-bit apparently has another meaning so gets more complicated?
   * Speical purpose
-    * Processor status (xPSR) - Combined Program Status Register - contains, in one register, the following 3 "registers":
-      * Indicate the state of the core right now.
-      * APSR - Application Program Status Register - Only APSR flags can be uysed for confition execution (`BCC, `IT`).
-        ```
-         31                                                                             5              0
-        +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-        |N |Z |C |V |                                     Reserved                                      |
-        +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-        ```
-      * FPSCR - Float flags (if FPU present).
-        ```
-         31                                                                       7  6  5  4  3  2  1  0
-        +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-        |N |Z |C |V |  |  |DN|FZ|     |                    Reserved             |  |     |  |  |  |  |  |                
-        +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-                     |  |        vvvvv                                            | vvvvv  |  |  |  |  |
-        Reserved ----+  |        RMode                                            |   |    |  |  |  |  +--- IOC
-                AHP ----+                                                         |   |    |  |  |  +------ DZC
-                                                                                  |   |    |  |  +--------- OFC
-                                                                                  |   |    |  +------------ UFC
-                                                                                  |   |    +--------------- IXC
-                                                                                  |   +-------------------- Reservered
-                                                                                  +------------------------ IDC
-        ```
-      * IPSR - Contains interrupt/exception number.
-        ```
-         31                                                                             5              0
-        +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-        |                                 Reservered                                  |   ISR Number    |
-        +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-        ```
-      * EPSR - Contains Execution Status.
-        ```
-         31                   24                                                                       0
-        +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-        |     Reservered     |T |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
-        +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-        ```
-    * APSR/IPSR/EPSR accessed as one register via xPSR. For example
-      when an interrupt occurs, the xPSR is one of the resisters that is auto stored on the stack and looks like this:
-        ```
-         31                 24                                                          5              0
-        +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-        |N |Z |C |V |xxxxx|T |                       Reserved                         |    ISR Number   |
-        +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-        ```
-    * CONTROL: Stacks and privilege.
-    * PRIMASK (only Arm-v7), FAULTMASK (only Arm-v7), BASEPRI: Exception handling.
-      * PRIMASK is a 1 bit register that when set blocks all interrupts other than the NMI and hard fault.
+      * Processor status (xPSR) - Combined Program Status Register - contains, in one register, the following 3 "registers":
+            * Indicate the state of the core right now.
+            * APSR - Application Program Status Register - Only APSR flags can be uysed for confition execution (`BCC, `IT`).
+              ```
+              31                                                                             5              0
+              +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+              |N |Z |C |V |                                     Reserved                                      |
+              +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+              ```
+            * FPSCR - Float flags (if FPU present).
+              ```
+              31                                                                       7  6  5  4  3  2  1  0
+              +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+              |N |Z |C |V |  |  |DN|FZ|     |                    Reserved             |  |     |  |  |  |  |  |                
+              +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+                          |  |        vvvvv                                            | vvvvv  |  |  |  |  |
+              Reserved ----+  |        RMode                                            |   |    |  |  |  |  +--- IOC
+                      AHP ----+                                                         |   |    |  |  |  +------ DZC
+                                                                                        |   |    |  |  +--------- OFC
+                                                                                        |   |    |  +------------ UFC
+                                                                                        |   |    +--------------- IXC
+                                                                                        |   +-------------------- Reservered
+                                                                                        +------------------------ IDC
+              ```
+            * IPSR - Contains interrupt/exception number.
+              ```
+              31                                                                             5              0
+              +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+              |                                 Reservered                                  |   ISR Number    |
+              +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+              ```
+            * EPSR - Contains Execution Status.
+              ```
+              31                   24                                                                       0
+              +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+              |     Reservered     |T |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+              +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+              ```
+            * APSR/IPSR/EPSR accessed as one register via xPSR. For example
+              when an interrupt occurs, the xPSR is one of the resisters that is auto stored on the stack and looks like this:
+              ```
+              31                 24                                                          5              0
+              +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+              |N |Z |C |V |xxxxx|T |                       Reserved                         |    ISR Number   |
+              +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+              ```
+      * CONTROL: Stacks and privilege.
+      * PRIMASK (only Arm-v7), FAULTMASK (only Arm-v7), BASEPRI: Exception handling.
+          * PRIMASK is a 1 bit register that when set blocks all interrupts other than the NMI and hard fault.
+      * In unprivileged mode all special registers are read only except for the APSR. The EPSR is not accessible (reads zero) in all modes.  IPSR is always RO.
+
 
 ## Architecture
 An *architecture* defines <q>how the program execution should behave and how the debuggers interact with the processor</q>.
