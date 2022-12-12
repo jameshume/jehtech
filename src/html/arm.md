@@ -106,7 +106,7 @@
         |     Reservered     |T |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
         +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
         ```
-    * APSR/IPSR/EPSR accessed as one register via xPSR, which acts as an alias for one of the registers at a time. For example
+    * APSR/IPSR/EPSR accessed as one register via xPSR. For example
       when an interrupt occurs, the xPSR is one of the resisters that is auto stored on the stack and looks like this:
         ```
          31                 24                                                          5              0
@@ -116,6 +116,7 @@
         ```
     * CONTROL: Stacks and privilege.
     * PRIMASK (only Arm-v7), FAULTMASK (only Arm-v7), BASEPRI: Exception handling.
+      * PRIMASK is a 1 bit register that when set blocks all interrupts other than the NMI and hard fault.
 
 ## Architecture
 An *architecture* defines <q>how the program execution should behave and how the debuggers interact with the processor</q>.
@@ -151,50 +152,50 @@ A *micro-architecture* defines <q>the exact implementation details of the proces
   + If we use PSP it is because we want to use it in user mode. MSP is meant to be used by an operating system. On a simple system that does not have such a separation it would probably just use the MSP.
 
 * Priviledge levels:
-  * Unprivileged:
-      * Limited access to MSR (move general register to program status register (PSR)) and MRS (copy PSR to general register) instructions.
-      * Cannot use change-process-state (CPS) instruction.
-      * Cannot access sys timer, NVIC, or system control block.
-      * Restricted access to peripherals.
-      * Must use SVC instruction to make supervisor call to transfer priviledge levels.
-  * Privileged:
-      * Can use all instrutions and resources.
-      * Can write to CONTROL register to change privilege level.
-      * Out of reset you are in privileged mode.
+    * Unprivileged:
+        * Limited access to MSR (move general register to program status register (PSR)) and MRS (copy PSR to general register) instructions.
+        * Cannot use change-process-state (CPS) instruction.
+        * Cannot access sys timer, NVIC, or system control block.
+        * Restricted access to peripherals.
+        * Must use SVC instruction to make supervisor call to transfer priviledge levels.
+    * Privileged:
+        * Can use all instrutions and resources.
+        * Can write to CONTROL register to change privilege level.
+        * Out of reset you are in privileged mode.
 
 * Interrupts and Exceptions
-  * Optimized for low latency and good interrupt performance.
-    * Auto save and restore of processor registers.
-    * Implements all ARMv7-M low latency features - this is available on the M0(+) devices too.
-      * Late arrival, tail-chaining, lazy FPU stacking, ICI bits for load/store multiple operations.
-    * Aggressive fliushing of multi-cycle operations in pipeline.
-      * To enable interrupt processing to start quickly.
-      * Applies to all DEV/SO loads/stores that have bit vee started on the bus.
-    * Avoids bursts on the bus for DEV/SO load/store multiples - may reduce bus performance.
-  * Core includes Nested Vectored Interrupt Controller (NVIC).
-  * Interrupt latency:
-    * Typically 12 cycles.
-    * 15+ cycles for M0.
+    * Optimized for low latency and good interrupt performance.
+        * Auto save and restore of processor registers.
+        * Implements all ARMv7-M low latency features - this is available on the M0(+) devices too.
+            * Late arrival, tail-chaining, lazy FPU stacking, ICI bits for load/store multiple operations.
+        * Aggressive fliushing of multi-cycle operations in pipeline.
+            * To enable interrupt processing to start quickly.
+            * Applies to all DEV/SO loads/stores that have bit vee started on the bus.
+        * Avoids bursts on the bus for DEV/SO load/store multiples - may reduce bus performance.
+    * Core includes Nested Vectored Interrupt Controller (NVIC).
+    * Interrupt latency:
+        * Typically 12 cycles.
+        * 15+ cycles for M0.
   
 * Power Management
-  * Mostly SoC dependant.
-  * Sleep modes:
-    * SLEEPING.
-    * DEEPSLEEP.
-      * Controlled by system control reigsters.
-      * Is software programmable (just states an intention - the job to actually go deep sleep is left to the SoC implementor to do).
-    * WIC-based DEEPSLEEP.
-    * 2 outputs: 1 to say "I am sleeping" and 1 to say "I am DEEP sleeping" so the SoC can see its state.
-  * WFI, WFE and SEV instructions (wait fo rinterrupt/event and send event).
-    * If you execute these the core goes into standby state an asserts the sleep signals so the SoC can see its state.
-  * Sleep On Exit.
-    * Sleep immediately on return from last ISR.
-  * System clock is gated in sleep modes.
-    * Sleep signal is exported allowing external systemn to be block gated.
-    * NVIC interrupt interface stays awake.
-  * Wake-Up Interrupt Controller (WIC).
-    * Optional external wak-up detector allows core to be fully powered down.
-    * Effecting with State-Retention Power Gating (SRPG) methodology.
+    * Mostly SoC dependant.
+    * Sleep modes:
+        * SLEEPING.
+        * DEEPSLEEP.
+            * Controlled by system control reigsters.
+            * Is software programmable (just states an intention - the job to actually go deep sleep is left to the SoC implementor to do).
+        * WIC-based DEEPSLEEP.
+        * 2 outputs: 1 to say "I am sleeping" and 1 to say "I am DEEP sleeping" so the SoC can see its state.
+    * WFI, WFE and SEV instructions (wait fo rinterrupt/event and send event).
+        * If you execute these the core goes into standby state an asserts the sleep signals so the SoC can see its state.
+    * Sleep On Exit.
+        * Sleep immediately on return from last ISR.
+    * System clock is gated in sleep modes.
+        * Sleep signal is exported allowing external systemn to be block gated.
+        * NVIC interrupt interface stays awake.
+    * Wake-Up Interrupt Controller (WIC).
+        * Optional external wak-up detector allows core to be fully powered down.
+        * Effecting with State-Retention Power Gating (SRPG) methodology.
 
 
 
