@@ -16,8 +16,52 @@
             * 16-bit and 32-bit Thumb-2
                 * Introduced in 2003. Keeps the code density of the Thumb instruction set and the performance of the 32-bit set. Most processors now only support the Thumb-2 instruction set (>= M0).
 
+* CortexM's all use Thumb-2 instruction set.
+    * NO ARM instruction set support
+    * No Coprocessor 15: The coprocessor was used to configure the main processor. Cortex-M devices do not have this. Instead all the registers are memory-mapped to reserved regions of memory.
+    * Vector table is a set of addresses, *not* instructions.
+        * Typical ARM vector tables would be a table of jump instructions.
+* Cortex-M23/M33 : ARMv8.
+* Cortex-M3      : ARMv7-M, 3-stage pipeline.
+    * Mosty 32-bit instructions
+* Cortex-M7      : ARMv7-M, 6 stage pipeline.
+    * Mosty 32-bit instructions
+* Cortex-M0+     : Less than 12k gates (what the M0 "should have been").
+    * ARM-v6-M architecture (16-bit Thumb, except system instructions). Majority 16-bit instructions, some 32-bit instructions like `BL`, for example.
+    * 2-stage pipeline (M0 has 3-stage)
+    * Optional User/priviledged support
+    * Optional MPU with 8 regions.
+    * AHB-Lite master interface
+    * Optional low-latency I/O port. Read and writes are done in a *single cycle*. Address and data in one cycle. All other ARM protocols use a minimum of two cycles. Typically used for GPIO operations.
+    * Optional support for a WIC controller for increased power saving.
+* Cortex-M0/M0+  : Designed for LOW POWER.
+    * Majority 16-bit instructions, some 32-bit instructions like `BL`, for example.
+    * M0's are aimed at replacing PICs in the market place.
+    * No hardware divide.
+    * Hardware multiplier is optional.
+    * M0+ only: uTrace: use internal SRAM as a trace buffer - record the execution of the program into the trace buffer and then use debugger to access buffer.
+    * Von-Neumann architecture (Other Cortex-Ms use Harvard achitecture.)
+* Cortex-M chips use Thumb-2 instruction set *only*.
+* v6-M --> V7-M : ~50 instructtions --> ~200 instructions - sizeable increase.
+* M4 is like an M3 with instructions for DSP - SIMD and a single-precision FPU optionally. Some operator improvement for efficiency.
+
 ## Programmers Model
 * Explains the interface programmer must use to design their application on a specific processor.
+
+* Registers:
+  * R13 is *Stack Pointer* (SP)
+    * There are two stack pointers.
+      * Don't have to use both but can choose to use both.
+      * MSP - Main Stack Processor (R13)
+      * 
+  * R14 is the *Link Register* (LR)
+  * R15 is the *Program Counter* (PC): Points to the address of the code being **fetched** from memory at this moment.
+  * Processor status
+    * Indicate the state of the core right now.
+    * APSR - Program Status Register - Only APSR flags can be uysed for confition execution (`BCC, `IT`).
+    * FPSCR - Float flags (if FPU present).
+    * IPSR - Contains interrupt/exception number.
+    * EPSR - Contains Execution Status.
 
 ### Cortex-M4
 * Processor modes:
@@ -39,52 +83,3 @@
     * Privileged:
         * Can use all instrutions and resources.
         * Can write to CONTROL register to change privilege level.
-
-
-## Cortext-Debug: VSCode Extension - JLINK
-* VSCode would call `launchRequest()` in `gdb.ts`:
-  * This does `launchAttachInit()` amd then `processLaunchAttachRequest()`, witch `attach=false`.
-  * `processLaunchAttachRequest()`:
-    * The session is started: this refers to starting GDB client and the server and starting a debug "session".
-    * Symbols are loaded asynchronously
-    * GDB is started asynchronously
-    * TCP ports acquired then
-      * Creates GDB Server and once it is started
-        * Waits for GDB client to have finished launching
-        * Waits for GDB server to have finished launching
-        * Waits for symbol load to have completed
-        * SENDS init commands
-        * SENDS preLaunch commands
-        * SENDS launch commands (or overridden version)
-          * For JLink this is
-            ```
-            interpreter-exec console "monitor halt"     # Exec command in GDB CLI interpreter - monitor == send through as-is to server
-            interpreter-exec console "monitor reset"    # Exec command in GDB CLI interpreter - monitor == send through as-is to server
-            if no loadFiles                             # Reset for M0 will always leave CPU halted
-              interpreter-exec console "monitor reset"
-              target-download
-            else if zero length loadFiles
-              <nothing>
-            else 
-              interpreter-exec console "monitor reset"
-              for each FILE:
-                file-exec-file FILE                    # Specify the executable file to be debugged
-                target-download                        # Loads the executable onto the remote target
-
-            interpreter-exec console "monitor reset"
-            ```
-        * SENDS postLaunch commands
-* See `restartRequest()` in `gdb.ts`. The restart command send to the server will be
-  ```
-  ...preRestartCommands
-  interpreter-exec console "monitor halt"  } Or if overridden, block replaced with new commands.
-  interpreter-exec console "monitor reset" } 
-  ...postRestartCommands # All reset strateges halt the CPU after the reset, so CPU is HALTED here
-  ```
-  After reset all JLink reset strategies have halted the CPI. In `resetRequest()`, only after the
-  restart commands (inc. pre and post) are sent, is there is stuff about a start sequence: 
-  `finishStartSequence()`: `this.miDebugger.restart(commands).then(async (done) => {....`.
-    * JLink reset command: https://wiki.segger.com/J-Link_GDB_Server#reset
-    * JLink reset strategies: https://wiki.segger.com/J-Link_Reset_Strategies
-    * All of them halt the CPU after the reset.
-* Dissasembly. See `runDisasmRequest()` in `disasm.ts`.

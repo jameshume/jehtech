@@ -1555,6 +1555,28 @@ sed '$!N;s/\n/ /'</pre>
       <pre>screen -D [<i>screenName</i>]</pre>
     </div> <!-- END Screen sessions -->
 
+   
+   <h2>Barrier - Software KWM</h2>
+   <div>
+      <p>
+         Configure the SLL certificates on both client and server using this:
+      </p>
+      <pre>
+         See https://stackoverflow.com/a/67343805
+         mkdir -p Fingerprints
+         openssl req -x509 -nodes -days 365 -subj /CN=barrier -newkey rsa:4096 -keyout Barrier.pem -out Barrier.pem
+         openssl x509 -fingerprint -sha1 -noout -in Barrier.pem > Fingerprints/Local.txt
+         sed -e "s/.*=//" -i Fingerprints/Local.txt
+      </pre>
+      <p>
+         The configure server with exact name of client to allow client to connect.
+      </p>
+      <p>
+         Note, at the time of writing, Dec 2022, Barrier does <b>not support the Wayland display server</b>. To use it you must use Ubuntu with X11.
+      </p>
+   </div>
+   
+   
    </div> <!-- END H1 padding div -->
    </div>
 </body>

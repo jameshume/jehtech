@@ -132,8 +132,14 @@ ssh -i /absolute/path/to/key/folder/id_rsa $*</pre>
     <pre>echo $HOME
 echo ~</pre>
 
+    <h3>Older school</h3>
     <p>To create SSH key pair:</p>
     <pre>ssh-keygen</pre>
+
+    <h3>New school</h3>
+    <pre>$ ssh-keygen -t ed25519 -C "your_email@example.com"  # Create a new SSH key, using the provided email as a label.
+$ eval "$(ssh-agent -s)"                             # Start the ssh-agent in the background
+$ ssh-add ~/.ssh/id_ed25519                          # Add your SSH private key to the ssh-agent</pre>        
 
     <p>To see your public key type:</p>
     <pre>cat ~/.ssh/id_rsa.pub</pre>
