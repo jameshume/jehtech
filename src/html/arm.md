@@ -52,8 +52,8 @@
   * R13 is *Stack Pointer* (SP)
     * There are two stack pointers.
       * Don't have to use both but can choose to use both.
-      * MSP - Main Stack Processor (R13)
-      * 
+      * MSP - Main Stack (R13)
+      * PSP - Process Stack
   * R14 is the *Link Register* (LR)
   * R15 is the *Program Counter* (PC): Points to the address of the code being **fetched** from memory at this moment.
   * Processor status
@@ -62,6 +62,23 @@
     * FPSCR - Float flags (if FPU present).
     * IPSR - Contains interrupt/exception number.
     * EPSR - Contains Execution Status.
+
+* Modes, privilege and stacks
+  * Handler Mode
+    * Entered when taking any exception
+    * Always privileged
+    * Always uses main stack
+  * Thread mode
+    * Core enters thread mode out of reset
+    * Typically used for user app code
+    * Runs either priviliedged or unpriviliedged (should be configured by the reset handler)
+    * Can use either main or process stack
+    * Typically uses process stack if Thread mode is unpriviledged
+
+  |          | Priv                         | User        |
+  |----------|------------------------------|-------------|
+  | Handler  | Interrupt handlers & OS code | Not allowed
+  | Thread   |
 
 ### Cortex-M4
 * Processor modes:
