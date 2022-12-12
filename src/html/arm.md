@@ -55,44 +55,93 @@
   * R13 is *Stack Pointer* (SP)
     * Armv7-M cores have two banked versions. There are two stack pointers.
       * Don't have to use both but can choose to use both.
-      * MSP - Main Stack (R13)
+      * MSP - Main Stack (R13) (Out of reset MSP is active)
       * PSP - Process Stack (priviledged)
+    * Points to the last entry in the stack, going down in the address range.
     * R13 is an alias for the *currently active* stack. So if MSP is currently activated, R13 references the MSP, but if PSP is activated then R13 references the PSP. To activate one or the other, use the CONTROL register.
   * R14 is the *Link Register* (LR)
+    * Enables return from subroutines
+    * Special function for exception handling
   * R15 is the *Program Counter* (PC): Points to the address of the code being **fetched** from memory at this moment.
     * When jumping +1 to address when executing Thumb-2 instructions (e.g. accessing 0x1000 warite 0x1001 to PC) - its a wierd ARM thing - because ARM has hijacked bit 0 of the instruction address bus internally within the core (externally always see addredd 0x1000) and used as a way to configure the execution state of the processor. Decides which instruction set the instruction belongs to - 32-bit ARM instructions or 16-bit Thumb-2 sintructions. Bit 0 of instruction address bus is connected to T-bit of the state control register - it tells the core what type of instruction it is decoding.
-      > The CPSR register holds the processor mode (user or exception flag), interrupt mask bits, condition codes, and Thumb status bit. The Thumb status bit (T ) indicates the processor’s current state: 0 for ARM state (default) or 1 for Thumb. -- https://www.embedded.com/introduction-to-arm-thumb
+      > The CPSR register holds the processor mode (user or exception flag), interrupt mask bits, condition codes, and Thumb status bit. The Thumb status bit indicates the processor’s current state: 0 for ARM state (default) or 1 for Thumb. -- https://www.embedded.com/introduction-to-arm-thumb
     * Its of no use for Cortex-M processors as they only have Thumb-2, but, still need to jump with +1 on the address! Hey ho!
     * And then... M33 then the T-bit apparently has another meaning so gets more complicated?
   * Speical purpose
-    * Processor status (xPSR)
+    * Processor status (xPSR) - Combined Program Status Register - contains, in one register, the following 3 "registers":
       * Indicate the state of the core right now.
-      * APSR - Program Status Register - Only APSR flags can be uysed for confition execution (`BCC, `IT`).
+      * APSR - Application Program Status Register - Only APSR flags can be uysed for confition execution (`BCC, `IT`).
+        ```
+         31                                                                             5              0
+        +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+        |N |Z |C |V |                                     Reserved                                      |
+        +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+        ```
       * FPSCR - Float flags (if FPU present).
+        ```
+         31                                                                       7  6  5  4  3  2  1  0
+        +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+        |N |Z |C |V |  |  |DN|FZ|     |                    Reserved             |  |     |  |  |  |  |  |                
+        +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+                     |  |        vvvvv                                            | vvvvv  |  |  |  |  |
+        Reserved ----+  |        RMode                                            |   |    |  |  |  |  +--- IOC
+                AHP ----+                                                         |   |    |  |  |  +------ DZC
+                                                                                  |   |    |  |  +--------- OFC
+                                                                                  |   |    |  +------------ UFC
+                                                                                  |   |    +--------------- IXC
+                                                                                  |   +-------------------- Reservered
+                                                                                  +------------------------ IDC
+        ```
       * IPSR - Contains interrupt/exception number.
+        ```
+         31                                                                             5              0
+        +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+        |                                 Reservered                                  |   ISR Number    |
+        +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+        ```
       * EPSR - Contains Execution Status.
+        ```
+         31                   24                                                                       0
+        +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+        |     Reservered     |T |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+        +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+        ```
+    * APSR/IPSR/EPSR accessed as one register via xPSR, which acts as an alias for one of the registers at a time. For example
+      when an interrupt occurs, the xPSR is one of the resisters that is auto stored on the stack and looks like this:
+        ```
+         31                 24                                                          5              0
+        +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+        |N |Z |C |V |xxxxx|T |                       Reserved                         |    ISR Number   |
+        +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+        ```
     * CONTROL: Stacks and privilege.
     * PRIMASK (only Arm-v7), FAULTMASK (only Arm-v7), BASEPRI: Exception handling.
 
+## Architecture
+An *architecture* defines <q>how the program execution should behave and how the debuggers interact with the processor</q>.
+
+A *micro-architecture* defines <q>the exact implementation details of the processor, e.g. how many pipeline stages ... etc</q>.
+
 * Modes, privilege and stacks
   * Handler Mode
-    * Entered when taking any exception
-    * Always privileged
-    * Always uses main stack
-    * OS can run here
+    * Entered when taking any exception.
+    * Always privileged.
+    * Always uses main stack.
+    * OS can run here.
     * Handles exceptions.
-    * Processor returns to thread mode once exception processing finisshed.
+    * Processor returns to thread mode once exception processing finished.
     * Always priviledged.
   * Thread mode
     * Execute applications.
     * Processor enters thread mode (priviledged) at startup.
     * CONTROL register controls whether executions is privileged or un privileged.
-    * Core enters thread mode out of reset
-    * Typically used for user app code
-    * Runs either priviliedged or unpriviliedged (should be configured by the reset handler)
-    * Can use either main or process stack
-    * Typically uses process stack if Thread mode is unpriviledged
-    * User "apps" can run here
+    * Core enters thread mode out of reset.
+    * Typically used for user app code.
+    * Runs either priviliedged or unpriviliedged (should be configured by the reset handler).
+    * Can use either main or process stack.
+    * Typically uses process stack if Thread mode is unpriviledged.
+    * User "apps" can run here.
+    * On reset processor runs in thread mode.
 
   |          | Priv                                                          | User                                             |
   |----------|---------------------------------------------------------------|--------------------------------------------------|
@@ -111,39 +160,42 @@
   * Privileged:
       * Can use all instrutions and resources.
       * Can write to CONTROL register to change privilege level.
+      * Out of reset you are in privileged mode.
 
 * Interrupts and Exceptions
-  * Optimized for low latency and good interrupt performance
-    * Auto save and restore of processor registers
+  * Optimized for low latency and good interrupt performance.
+    * Auto save and restore of processor registers.
     * Implements all ARMv7-M low latency features - this is available on the M0(+) devices too.
-      * Late arrival, tail-chaining, lazy FPU stacking, ICI bits for load/store multiple operations
-    * Aggressive fliushing of multi-cycle operations in pipeline
-      * To enable interrupt processing to start quickly
-      * Applies to all DEV/SO loads/stores that have bit vee started on the bus
-    * Avoids bursts on the bus for DEV/SO load/store multiples - may reduce bus performance
-  * Core includes Nested Vectored Interrupt Controller (NVIC)
+      * Late arrival, tail-chaining, lazy FPU stacking, ICI bits for load/store multiple operations.
+    * Aggressive fliushing of multi-cycle operations in pipeline.
+      * To enable interrupt processing to start quickly.
+      * Applies to all DEV/SO loads/stores that have bit vee started on the bus.
+    * Avoids bursts on the bus for DEV/SO load/store multiples - may reduce bus performance.
+  * Core includes Nested Vectored Interrupt Controller (NVIC).
   * Interrupt latency:
-    * Typically 12 cycles
-    * 15+ cycles for M0
+    * Typically 12 cycles.
+    * 15+ cycles for M0.
   
 * Power Management
-  * Mostly SoC dependant
+  * Mostly SoC dependant.
   * Sleep modes:
-    * SLEEPING
-    * DEEPSLEEP
-      * Controlled by system control reigsters
+    * SLEEPING.
+    * DEEPSLEEP.
+      * Controlled by system control reigsters.
       * Is software programmable (just states an intention - the job to actually go deep sleep is left to the SoC implementor to do).
-    * WIC-based DEEPSLEEP
+    * WIC-based DEEPSLEEP.
     * 2 outputs: 1 to say "I am sleeping" and 1 to say "I am DEEP sleeping" so the SoC can see its state.
-  * WFI, WFE and SEV instructions (wait fo rinterrupt/event and send event)
+  * WFI, WFE and SEV instructions (wait fo rinterrupt/event and send event).
     * If you execute these the core goes into standby state an asserts the sleep signals so the SoC can see its state.
-  * Sleep On Exit
-    * Sleep immediately on return from last ISR
-  * System clock is gated in sleep modes
-    * Sleep signal is exported allowing external systemn to be block gated
-    * NVIC interrupt interface stays awake
-  * Wake-Up Interrupt Controller (WIC)
-    * Optional external wak-up detector allows core to be fully powered down
+  * Sleep On Exit.
+    * Sleep immediately on return from last ISR.
+  * System clock is gated in sleep modes.
+    * Sleep signal is exported allowing external systemn to be block gated.
+    * NVIC interrupt interface stays awake.
+  * Wake-Up Interrupt Controller (WIC).
+    * Optional external wak-up detector allows core to be fully powered down.
     * Effecting with State-Retention Power Gating (SRPG) methodology.
+
+
 
 
