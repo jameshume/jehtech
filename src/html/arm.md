@@ -53,7 +53,7 @@
     * There are two stack pointers.
       * Don't have to use both but can choose to use both.
       * MSP - Main Stack (R13)
-      * PSP - Process Stack
+      * PSP - Process Stack (priviledged)
   * R14 is the *Link Register* (LR)
   * R15 is the *Program Counter* (PC): Points to the address of the code being **fetched** from memory at this moment.
   * Processor status
@@ -75,10 +75,14 @@
     * Can use either main or process stack
     * Typically uses process stack if Thread mode is unpriviledged
 
-  |          | Priv                         | User        |
-  |----------|------------------------------|-------------|
-  | Handler  | Interrupt handlers & OS code | Not allowed
-  | Thread   |
+  |          | Priv                                                          | User                           |
+  |----------|---------------------------------------------------------------|--------------------------------|
+  | Handler  | Interrupt handlers & OS code - MSP (R13) - Can*not* user PSP! | Not allowed                    |
+  | Thread   | Any code - MSP (R13) *or* PSP (but not usually+)              | Any code - MSP (R13) *or* PSP  |
+  
+  + If we use PSP it is because we want to use it in user mode.
+
+
 
 ### Cortex-M4
 * Processor modes:
