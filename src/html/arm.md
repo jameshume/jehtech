@@ -120,7 +120,7 @@
                 |                                       Reservered                                        |  |  |
                 +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
                                                                                                             |  |
-                                                                                    SPEL (stack def) ------+  |
+                                                                                     SPEL (stack def) ------+  |
                                                                                                     nPRIV -----+
                 ```
         * PRIMASK (only Arm-v7), FAULTMASK (only Arm-v7), BASEPRI: Exception handling.
