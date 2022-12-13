@@ -208,3 +208,5 @@ A *micro-architecture* defines <q>the exact implementation details of the proces
 
 
 
+* `nop` not guaranteed to waste a cycle!!!! use `mv r0, r0` instead.
+
