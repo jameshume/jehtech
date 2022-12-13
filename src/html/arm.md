@@ -72,14 +72,14 @@
             * Indicate the state of the core right now.
             * APSR - Application Program Status Register - Only APSR flags can be uysed for confition execution (`BCC, `IT`).
               ```
-              31                                                                             5              0
+               31                                                                             5              0
               +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
               |N |Z |C |V |                                     Reserved                                      |
               +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
               ```
             * FPSCR - Float flags (if FPU present).
               ```
-              31                                                                       7  6  5  4  3  2  1  0
+               31                                                                       7  6  5  4  3  2  1  0
               +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
               |N |Z |C |V |  |  |DN|FZ|     |                    Reserved             |  |     |  |  |  |  |  |                
               +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
@@ -94,14 +94,14 @@
               ```
             * IPSR - Contains interrupt/exception number.
               ```
-              31                                                                             5              0
+               31                                                                             5              0
               +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
               |                                 Reservered                                  |   ISR Number    |
               +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
               ```
             * EPSR - Contains Execution Status.
               ```
-              31                   24                                                                       0
+               31                   24                                                                       0
               +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
               |     Reservered     |T |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
               +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
@@ -109,12 +109,21 @@
             * APSR/IPSR/EPSR accessed as one register via xPSR. For example
               when an interrupt occurs, the xPSR is one of the resisters that is auto stored on the stack and looks like this:
               ```
-              31                 24                                                          5              0
+               31                 24                                                          5              0
               +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
               |N |Z |C |V |xxxxx|T |                       Reserved                         |    ISR Number   |
               +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
               ```
       * CONTROL: Stacks and privilege.
+              ```
+               31                                                                                            0
+              +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+              |                                       Reservered                                        |  |  |
+              +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+                                                                                                          |  |
+                                                                                   SPEL (stack def) ------+  |
+                                                                                                  nPRIV -----+
+              ```
       * PRIMASK (only Arm-v7), FAULTMASK (only Arm-v7), BASEPRI: Exception handling.
           * PRIMASK is a 1 bit register that when set blocks all interrupts other than the NMI and hard fault.
       * In unprivileged mode all special registers are read only except for the APSR. The EPSR is not accessible (reads zero) in all modes.  IPSR is always RO.
@@ -146,10 +155,7 @@ A *micro-architecture* defines <q>the exact implementation details of the proces
     * User "apps" can run here.
     * On reset processor runs in thread mode.
 
-  |          | Priv                                                          | User                                             |
-  |----------|---------------------------------------------------------------|--------------------------------------------------|
-  | Handler  | Interrupt handlers & OS code - MSP (R13) - Can*not* use PSP!  | Not allowed                                      |
-  | Thread   | Any code - MSP (R13) *or* PSP (but not usually)               | Any code - MSP (R13) *or* PSP (but not usually)  |
+![Table showing privilege levels v.s use of MSP and PSP](##IMG_DIR##/arm_priv_mode.png)
   
   + If we use PSP it is because we want to use it in user mode. MSP is meant to be used by an operating system. On a simple system that does not have such a separation it would probably just use the MSP.
 
