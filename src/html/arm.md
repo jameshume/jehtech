@@ -70,7 +70,7 @@
   * Speical purpose
       * Processor status (xPSR) - Combined Program Status Register - contains, in one register, the following 3 "registers":
             * Indicate the state of the core right now.
-            * APSR - Application Program Status Register - Only APSR flags can be uysed for confition execution (`BCC, `IT`).
+            * APSR - Application Program Status Register - Only APSR flags can be uysed for condition execution (`BCC, `IT`). In original ARM instruction set almost all instructions could be issued conditionally based on contents of APSR, but in Thumb-2 conditional execution is only supported using 16-bit branch instructions `B<c> addr`.
               ```
                31                                                                             5              0
               +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
@@ -83,7 +83,7 @@
               +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
               |N |Z |C |V |  |  |DN|FZ|     |                    Reserved             |  |     |  |  |  |  |  |                
               +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-                          |  |        vvvvv                                            | vvvvv  |  |  |  |  |
+                           |  |        vvvvv                                            | vvvvv  |  |  |  |  |
               Reserved ----+  |        RMode                                            |   |    |  |  |  |  +--- IOC
                       AHP ----+                                                         |   |    |  |  |  +------ DZC
                                                                                         |   |    |  |  +--------- OFC
@@ -208,5 +208,5 @@ A *micro-architecture* defines <q>the exact implementation details of the proces
 
 
 
-* `nop` not guaranteed to waste a cycle!!!! use `mv r0, r0` instead.
+* WANGING: `nop` not guaranteed to waste a cycle!!!! use `mv r0, r0` instead.
 
