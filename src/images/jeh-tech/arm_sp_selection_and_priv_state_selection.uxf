@@ -1,0 +1,48 @@
+<diagram program="umletino" version="15.0.0"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>290</x><y>230</y><w>140</w><h>80</h></coordinates><panel_attributes>*&lt;&lt;Thread mode&gt;&gt;*
+*Privileged*
+CONTROL[0]=0
+*MSP selected*
+CONTROL[1] = 0
+bg=green</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>600</x><y>230</y><w>140</w><h>80</h></coordinates><panel_attributes>*&lt;&lt;Thread mode&gt;&gt;*
+*NOT Privileged*
+CONTROL[0]=1
+*PSP selected*
+CONTROL[1] = 1
+bg=yellow</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>450</x><y>60</y><w>140</w><h>90</h></coordinates><panel_attributes>*&lt;&lt;Handler mode&gt;&gt;*
+*ALWAYS privileged*
+CONTROL[1] = 0
+*MSP ALWAYS selected*
+CONTROL[1] = 0
+bg=green</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>420</x><y>240</y><w>200</w><h>40</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-
+Set CONTROL[0] bit</panel_attributes><additional_attributes>180;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>420</x><y>140</y><w>90</w><h>110</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-
+Exception
+request</panel_attributes><additional_attributes>30;10;10;90</additional_attributes></element><element><id>Relation</id><coordinates><x>580</x><y>140</y><w>90</w><h>110</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-
+Exception
+request</panel_attributes><additional_attributes>10;10;20;90</additional_attributes></element><element><id>Relation</id><coordinates><x>580</x><y>110</y><w>140</w><h>140</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-
+Exception
+return</panel_attributes><additional_attributes>90;120;70;50;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>350</x><y>110</y><w>120</w><h>140</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-
+Exception
+return</panel_attributes><additional_attributes>10;120;30;30;100;10</additional_attributes></element><element><id>UMLSpecialState</id><coordinates><x>190</x><y>250</y><w>20</w><h>20</h></coordinates><panel_attributes>type=final</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>200</x><y>240</y><w>110</w><h>40</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-
+Start</panel_attributes><additional_attributes>90;20;10;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>330</x><y>360</y><w>140</w><h>80</h></coordinates><panel_attributes>*&lt;&lt;Thread mode&gt;&gt;*
+Privileged
+CONTROL[0]=0
+*PSP selected (unusual)*
+CONTROL[1] = 1
+lt=..
+bg=green</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>570</x><y>360</y><w>140</w><h>80</h></coordinates><panel_attributes>*&lt;&lt;Thread mode&gt;&gt;*
+NOT Privileged
+CONTROL[0]=1
+*MSP selected (unusual)*
+CONTROL[1] = 0
+lt=..
+bg=yellow</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>350</x><y>300</y><w>120</w><h>80</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;..&gt;&gt;&gt;
+Set
+CONTROL[1] bit</panel_attributes><additional_attributes>10;60;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>670</x><y>300</y><w>150</w><h>80</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;..&gt;&gt;&gt;
+Clear CONTROL[1] bit</panel_attributes><additional_attributes>10;60;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>460</x><y>380</y><w>130</w><h>60</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;..
+Clear
+CONTROL[1]
+bit</panel_attributes><additional_attributes>110;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>390</x><y>300</y><w>230</w><h>80</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;..
+                                Set CONTROL[0] bit</panel_attributes><additional_attributes>180;60;40;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>180</x><y>500</y><w>100</w><h>30</h></coordinates><panel_attributes>Privilieged
+bg=green</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>300</x><y>500</y><w>100</w><h>30</h></coordinates><panel_attributes>UNprivilieged
+bg=yellow</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLNote</id><coordinates><x>850</x><y>180</y><w>170</w><h>130</h></coordinates><panel_attributes>Note that NOT priviliged mode only has read only access to the CONTROL register so cannot directly enter priviliged mode. To go mack to priviliged mode an exception is required.
+style=wordwrap</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>730</x><y>200</y><w>140</w><h>80</h></coordinates><panel_attributes>lt=..</panel_attributes><additional_attributes>120;10;10;60</additional_attributes></element></diagram>

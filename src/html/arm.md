@@ -156,6 +156,7 @@ A *micro-architecture* defines <q>the exact implementation details of the proces
     * On reset processor runs in thread mode.
 
 ![Table showing privilege levels v.s use of MSP and PSP](##IMG_DIR##/arm_priv_mode.png)
+![State transistion for privilege and stack pointer selection](##IMG_DIR##/arm_sp_selection_and_priv_state_selection.png)
   
   + If we use PSP it is because we want to use it in user mode. MSP is meant to be used by an operating system. On a simple system that does not have such a separation it would probably just use the MSP.
 
