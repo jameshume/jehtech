@@ -15,15 +15,15 @@ CONTROL[1] = 0
 *MSP ALWAYS selected*
 CONTROL[1] = 0
 bg=green</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>280</x><y>210</y><w>200</w><h>40</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-
-Set CONTROL[0] bit</panel_attributes><additional_attributes>180;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>280</x><y>110</y><w>90</w><h>110</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-
+Set CONTROL[0] bit</panel_attributes><additional_attributes>180;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>270</x><y>110</y><w>100</w><h>90</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-
 Exception
-request</panel_attributes><additional_attributes>30;10;10;90</additional_attributes></element><element><id>Relation</id><coordinates><x>440</x><y>110</y><w>90</w><h>110</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-
+request</panel_attributes><additional_attributes>40;10;10;70</additional_attributes></element><element><id>Relation</id><coordinates><x>440</x><y>110</y><w>90</w><h>90</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-
 Exception
-request</panel_attributes><additional_attributes>10;10;20;90</additional_attributes></element><element><id>Relation</id><coordinates><x>440</x><y>80</y><w>140</w><h>140</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-
+request</panel_attributes><additional_attributes>10;10;30;70</additional_attributes></element><element><id>Relation</id><coordinates><x>440</x><y>80</y><w>110</w><h>120</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-
 Exception
-return</panel_attributes><additional_attributes>90;120;70;50;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>210</x><y>80</y><w>120</w><h>140</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-
+return</panel_attributes><additional_attributes>90;100;80;40;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>210</x><y>80</y><w>120</w><h>120</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-
 Exception
-return</panel_attributes><additional_attributes>10;120;30;30;100;10</additional_attributes></element><element><id>UMLSpecialState</id><coordinates><x>50</x><y>220</y><w>20</w><h>20</h></coordinates><panel_attributes>type=final</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>60</x><y>210</y><w>110</w><h>40</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-
+return</panel_attributes><additional_attributes>10;100;30;30;100;10</additional_attributes></element><element><id>UMLSpecialState</id><coordinates><x>50</x><y>220</y><w>20</w><h>20</h></coordinates><panel_attributes>type=final</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>60</x><y>210</y><w>110</w><h>40</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-
 Start</panel_attributes><additional_attributes>90;20;10;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>150</x><y>360</y><w>140</w><h>80</h></coordinates><panel_attributes>*&lt;&lt;Thread mode&gt;&gt;*
 Privileged
 CONTROL[0]=0
@@ -49,4 +49,4 @@ style=wordwrap</panel_attributes><additional_attributes></additional_attributes>
 style=wordwrap
 lt=..</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>590</x><y>390</y><w>140</w><h>70</h></coordinates><panel_attributes>lt=..</panel_attributes><additional_attributes>120;50;10;10</additional_attributes></element><element><id>UMLNote</id><coordinates><x>370</x><y>510</y><w>140</w><h>70</h></coordinates><panel_attributes>This would be quite a strange state to use. Not sure why you'd use it?!
 style=wordwrap
-lt=..</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>280</x><y>430</y><w>110</w><h>100</h></coordinates><panel_attributes>lt=..</panel_attributes><additional_attributes>90;80;10;10</additional_attributes></element></diagram>
+lt=..</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>280</x><y>430</y><w>110</w><h>100</h></coordinates><panel_attributes>lt=..</panel_attributes><additional_attributes>90;80;10;10</additional_attributes></element><element><id>UMLState</id><coordinates><x>140</x><y>180</y><w>160</w><h>270</h></coordinates><panel_attributes></panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLState</id><coordinates><x>450</x><y>180</y><w>160</w><h>270</h></coordinates><panel_attributes></panel_attributes><additional_attributes></additional_attributes></element></diagram>
