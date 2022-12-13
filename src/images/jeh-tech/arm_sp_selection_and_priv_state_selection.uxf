@@ -33,7 +33,7 @@ lt=..
 bg=green</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>460</x><y>360</y><w>140</w><h>80</h></coordinates><panel_attributes>*&lt;&lt;Thread mode&gt;&gt;*
 NOT Privileged
 CONTROL[0]=1
-*MSP selected (unusual)*
+*MSP selected*
 CONTROL[1] = 0
 lt=..
 bg=yellow</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>210</x><y>270</y><w>120</w><h>110</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;..&gt;&gt;&gt;
