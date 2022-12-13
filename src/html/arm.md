@@ -47,86 +47,85 @@
 
 ## Programmers Model
 * Explains the interface programmer must use to design their application on a specific processor.
-
 * Registers:
-  * General Pupose
-    * R0-R7: Accessible to all instrunctions
-    * R8-R12: Accessible to a few 16-bit instructions and all 32-bit instuctions
-  * R13 is *Stack Pointer* (SP)
-    * Armv7-M cores have two banked versions. There are two stack pointers.
-      * Don't have to use both but can choose to use both.
-      * MSP - Main Stack (R13) (Out of reset MSP is active)
-      * PSP - Process Stack (priviledged)
-    * Points to the last entry in the stack, going down in the address range.
-    * R13 is an alias for the *currently active* stack. So if MSP is currently activated, R13 references the MSP, but if PSP is activated then R13 references the PSP. To activate one or the other, use the CONTROL register.
-  * R14 is the *Link Register* (LR)
-    * Enables return from subroutines
-    * Special function for exception handling
-  * R15 is the *Program Counter* (PC): Points to the address of the code being **fetched** from memory at this moment.
-    * When jumping +1 to address when executing Thumb-2 instructions (e.g. accessing 0x1000 warite 0x1001 to PC) - its a wierd ARM thing - because ARM has hijacked bit 0 of the instruction address bus internally within the core (externally always see addredd 0x1000) and used as a way to configure the execution state of the processor. Decides which instruction set the instruction belongs to - 32-bit ARM instructions or 16-bit Thumb-2 sintructions. Bit 0 of instruction address bus is connected to T-bit of the state control register - it tells the core what type of instruction it is decoding.
-      > The CPSR register holds the processor mode (user or exception flag), interrupt mask bits, condition codes, and Thumb status bit. The Thumb status bit indicates the processor’s current state: 0 for ARM state (default) or 1 for Thumb. -- https://www.embedded.com/introduction-to-arm-thumb
-    * Its of no use for Cortex-M processors as they only have Thumb-2, but, still need to jump with +1 on the address! Hey ho!
-    * And then... M33 then the T-bit apparently has another meaning so gets more complicated?
-  * Speical purpose
-      * Processor status (xPSR) - Combined Program Status Register - contains, in one register, the following 3 "registers":
-            * Indicate the state of the core right now.
-            * APSR - Application Program Status Register - Only APSR flags can be uysed for condition execution (`BCC, `IT`). In original ARM instruction set almost all instructions could be issued conditionally based on contents of APSR, but in Thumb-2 conditional execution is only supported using 16-bit branch instructions `B<c> addr`.
-              ```
-               31                                                                             5              0
-              +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-              |N |Z |C |V |                                     Reserved                                      |
-              +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-              ```
-            * FPSCR - Float flags (if FPU present).
-              ```
-               31                                                                       7  6  5  4  3  2  1  0
-              +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-              |N |Z |C |V |  |  |DN|FZ|     |                    Reserved             |  |     |  |  |  |  |  |                
-              +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-                           |  |        vvvvv                                            | vvvvv  |  |  |  |  |
-              Reserved ----+  |        RMode                                            |   |    |  |  |  |  +--- IOC
-                      AHP ----+                                                         |   |    |  |  |  +------ DZC
-                                                                                        |   |    |  |  +--------- OFC
-                                                                                        |   |    |  +------------ UFC
-                                                                                        |   |    +--------------- IXC
-                                                                                        |   +-------------------- Reservered
-                                                                                        +------------------------ IDC
-              ```
-            * IPSR - Contains interrupt/exception number.
-              ```
-               31                                                                             5              0
-              +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-              |                                 Reservered                                  |   ISR Number    |
-              +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-              ```
-            * EPSR - Contains Execution Status.
-              ```
-               31                   24                                                                       0
-              +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-              |     Reservered     |T |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
-              +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-              ```
-            * APSR/IPSR/EPSR accessed as one register via xPSR. For example
-              when an interrupt occurs, the xPSR is one of the resisters that is auto stored on the stack and looks like this:
-              ```
-               31                 24                                                          5              0
-              +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-              |N |Z |C |V |xxxxx|T |                       Reserved                         |    ISR Number   |
-              +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-              ```
-      * CONTROL: Stacks and privilege.
-              ```
-               31                                                                                            0
-              +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-              |                                       Reservered                                        |  |  |
-              +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-                                                                                                          |  |
-                                                                                   SPEL (stack def) ------+  |
-                                                                                                  nPRIV -----+
-              ```
-      * PRIMASK (only Arm-v7), FAULTMASK (only Arm-v7), BASEPRI: Exception handling.
-          * PRIMASK is a 1 bit register that when set blocks all interrupts other than the NMI and hard fault.
-      * In unprivileged mode all special registers are read only except for the APSR. The EPSR is not accessible (reads zero) in all modes.  IPSR is always RO.
+    * General Pupose
+      * R0-R7: Accessible to all instrunctions
+      * R8-R12: Accessible to a few 16-bit instructions and all 32-bit instuctions
+    * R13 is *Stack Pointer* (SP)
+      * Armv7-M cores have two banked versions. There are two stack pointers.
+        * Don't have to use both but can choose to use both.
+        * MSP - Main Stack (R13) (Out of reset MSP is active)
+        * PSP - Process Stack (priviledged)
+      * Points to the last entry in the stack, going down in the address range.
+      * R13 is an alias for the *currently active* stack. So if MSP is currently activated, R13 references the MSP, but if PSP is activated then R13 references the PSP. To activate one or the other, use the CONTROL register.
+    * R14 is the *Link Register* (LR)
+      * Enables return from subroutines
+      * Special function for exception handling
+    * R15 is the *Program Counter* (PC): Points to the address of the code being **fetched** from memory at this moment.
+      * When jumping +1 to address when executing Thumb-2 instructions (e.g. accessing 0x1000 warite 0x1001 to PC) - its a wierd ARM thing - because ARM has hijacked bit 0 of the instruction address bus internally within the core (externally always see addredd 0x1000) and used as a way to configure the execution state of the processor. Decides which instruction set the instruction belongs to - 32-bit ARM instructions or 16-bit Thumb-2 sintructions. Bit 0 of instruction address bus is connected to T-bit of the state control register - it tells the core what type of instruction it is decoding.
+        > The CPSR register holds the processor mode (user or exception flag), interrupt mask bits, condition codes, and Thumb status bit. The Thumb status bit indicates the processor’s current state: 0 for ARM state (default) or 1 for Thumb. -- https://www.embedded.com/introduction-to-arm-thumb
+      * Its of no use for Cortex-M processors as they only have Thumb-2, but, still need to jump with +1 on the address! Hey ho!
+      * And then... M33 then the T-bit apparently has another meaning so gets more complicated?
+    * Speical purpose
+        * Processor status (xPSR) - Combined Program Status Register - contains, in one register, the following 3 "registers":
+              * Indicate the state of the core right now.
+              * APSR - Application Program Status Register - Only APSR flags can be uysed for condition execution (`BCC, `IT`). In original ARM instruction set almost all instructions could be issued conditionally based on contents of APSR, but in Thumb-2 conditional execution is only supported using 16-bit branch instructions `B<c> addr`.
+                ```
+                31                                                                             5              0
+                +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+                |N |Z |C |V |                                     Reserved                                      |
+                +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+                ```
+              * FPSCR - Float flags (if FPU present).
+                ```
+                31                                                                       7  6  5  4  3  2  1  0
+                +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+                |N |Z |C |V |  |  |DN|FZ|     |                    Reserved             |  |     |  |  |  |  |  |                
+                +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+                            |  |        vvvvv                                            | vvvvv  |  |  |  |  |
+                Reserved ----+  |        RMode                                            |   |    |  |  |  |  +--- IOC
+                        AHP ----+                                                         |   |    |  |  |  +------ DZC
+                                                                                          |   |    |  |  +--------- OFC
+                                                                                          |   |    |  +------------ UFC
+                                                                                          |   |    +--------------- IXC
+                                                                                          |   +-------------------- Reservered
+                                                                                          +------------------------ IDC
+                ```
+              * IPSR - Contains interrupt/exception number.
+                ```
+                31                                                                             5              0
+                +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+                |                                 Reservered                                  |   ISR Number    |
+                +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+                ```
+              * EPSR - Contains Execution Status.
+                ```
+                31                   24                                                                       0
+                +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+                |     Reservered     |T |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+                +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+                ```
+              * APSR/IPSR/EPSR accessed as one register via xPSR. For example
+                when an interrupt occurs, the xPSR is one of the resisters that is auto stored on the stack and looks like this:
+                ```
+                31                 24                                                          5              0
+                +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+                |N |Z |C |V |xxxxx|T |                       Reserved                         |    ISR Number   |
+                +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+                ```
+        * CONTROL: Stacks and privilege.
+                ```
+                31                                                                                            0
+                +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+                |                                       Reservered                                        |  |  |
+                +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+                                                                                                            |  |
+                                                                                    SPEL (stack def) ------+  |
+                                                                                                    nPRIV -----+
+                ```
+        * PRIMASK (only Arm-v7), FAULTMASK (only Arm-v7), BASEPRI: Exception handling.
+            * PRIMASK is a 1 bit register that when set blocks all interrupts other than the NMI and hard fault.
+        * In unprivileged mode all special registers are read only except for the APSR. The EPSR is not accessible (reads zero) in all modes.  IPSR is always RO.
 
 
 ## Architecture
@@ -156,6 +155,7 @@ A *micro-architecture* defines <q>the exact implementation details of the proces
     * On reset processor runs in thread mode.
 
 ![Table showing privilege levels v.s use of MSP and PSP](##IMG_DIR##/arm_priv_mode.png)
+
 ![State transistion for privilege and stack pointer selection](##IMG_DIR##/arm_sp_selection_and_priv_state_selection.png)
   
   + If we use PSP it is because we want to use it in user mode. MSP is meant to be used by an operating system. On a simple system that does not have such a separation it would probably just use the MSP.
@@ -208,6 +208,8 @@ A *micro-architecture* defines <q>the exact implementation details of the proces
 
 
 
+## Instruction Set
+* WARNING: `nop` not guaranteed to waste a cycle!!!! use `mv r0, r0` instead.
+TODO
 
-* WANGING: `nop` not guaranteed to waste a cycle!!!! use `mv r0, r0` instead.
 
