@@ -58,6 +58,10 @@
         * PSP - Process Stack (priviledged)
       * Points to the last entry in the stack, going down in the address range.
       * R13 is an alias for the *currently active* stack. So if MSP is currently activated, R13 references the MSP, but if PSP is activated then R13 references the PSP. To activate one or the other, use the CONTROL register.
+      * Stack pointer **must be 8 or 4 byte aligned**. I.e. can only stack words or double words.
+      * SP points to the top of the stack.
+      * Stack **grows downwards (full descending)**, i.e. the bottom of the stack is at address X and the top of the stack is at address X - STACK_SIZE. So, grows downwards means grows into lower/smaller address values as items are pushed.
+          * E.g. If SRAM is 0x2000_0000 to 0x2000_7FFF then at start SP is 0x2000_8000, so that the first push will be to 0x2000_7FFC (remember SP must be at least word aligned).
     * R14 is the *Link Register* (LR)
       * Enables return from subroutines
       * Special function for exception handling
@@ -73,8 +77,10 @@
                 ```
                 31                                                                             5              0
                 +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-                |N |Z |C |V |                                     Reserved                                      |
+                |N |Z |C |V |Q |                                  Reserved                                      |
                 +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+                              |
+                              Not on M0
                 ```
               * FPSCR - Float flags (if FPU present).
                 ```
@@ -82,7 +88,7 @@
                 +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
                 |N |Z |C |V |  |  |DN|FZ|     |                    Reserved             |  |     |  |  |  |  |  |                
                 +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-                            |  |        vvvvv                                            | vvvvv  |  |  |  |  |
+                            |   |        vvvvv                                            | vvvvv  |  |  |  |  |
                 Reserved ----+  |        RMode                                            |   |    |  |  |  |  +--- IOC
                         AHP ----+                                                         |   |    |  |  |  +------ DZC
                                                                                           |   |    |  |  +--------- OFC
@@ -99,12 +105,23 @@
                 +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
                 ```
               * EPSR - Contains Execution Status.
-                ```
-                31                   24                                                                       0
-                +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-                |     Reservered     |T |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
-                +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-                ```
+                  * M0
+                  ```
+                   31                   24                                                                       0
+                  +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+                  |     Reservered     |T |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+                  +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+                  ```
+                  * M4
+                  ```
+                   31                   24                         15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
+                  +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+                  |  Reservered  |     |T |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+                  +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+                                  |||||                            |||||||||||||||||
+                                  ICI/IT                                ICT/IT
+                  ```
+
               * APSR/IPSR/EPSR accessed as one register via xPSR. For example
                 when an interrupt occurs, the xPSR is one of the resisters that is auto stored on the stack and looks like this:
                 ```
@@ -122,6 +139,8 @@
                                                                                                             |  |
                                                                                      SPEL (stack def) ------+  |
                                                                                                     nPRIV -----+
+
+                ** Note **: A change requires an ISB!
                 ```
         * PRIMASK (only Arm-v7), FAULTMASK (only Arm-v7), BASEPRI: Exception handling.
             * PRIMASK is a 1 bit register that when set blocks all interrupts other than the NMI and hard fault.
@@ -211,5 +230,31 @@ A *micro-architecture* defines <q>the exact implementation details of the proces
 ## Instruction Set
 * WARNING: `nop` not guaranteed to waste a cycle!!!! use `mv r0, r0` instead.
 TODO
+* Sync
+    * WARNING DMB only works for one bus - 2 load/stores on 2 different busses do not have order of execution segregated by DMB as it only focuses on one bus and does not work across busses.
+    * DSB is stricter than DMB - not just load/stores but intructions too - no futher instructions may complete execution or change interrupt masks until the Memory Barrier instruction completes. Including *implicit* operations - e.g. a cache controller refreshing its contents etc. Applies to *multiple* busses and *broadcasts to other cores in the cluster*.
+    * See https://developer.arm.com/documentation/dai0321/a/?lang=en
 
+
+## Setup GCC (Ubuntu)
+
+* Download the toolchain from the [ARM website](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads). The the time of writing (Dec 2022) I downloaded 11.3.Rel1 as `arm-gnu-toolchain-11.3.rel1-x86_64-arm-none-eabi.tar.xz`.
+* Extract this to a directory of your choice. You could use `/usr/share`, or `/opt/gcc-arm-none-eabi` for example. The following instructions were taken
+  from [here](https://lindevs.com/install-arm-gnu-toolchain-on-ubuntu).
+    ```
+    sudo mkdir /opt/gcc-arm-none-eabi
+    sudo tar xf arm-gnu-toolchain-11.3.rel1-x86_64-arm-none-eabi.tar.xz --strip-components=1 -C /opt/gcc-arm-none-eabi
+    echo 'export PATH=$PATH:/opt/gcc-arm-none-eabi/bin' | sudo tee -a /etc/profile.d/gcc-arm-none-eabi.sh
+    source /etc/profile
+    ```
+* Add the `bin` folder under your installation directory to the `PATH` environment variable.
+* If you see the following when running GDB, install ncurses using `sudo apt install -y libncursesw5`.
+    ```
+    opt/gcc-arm-none-eabi/bin/arm-none-eabi-gdb: error while loading shared libraries: libncursesw.so.5: cannot open shared object file: No such file or directory
+    ```
+* If after installing ncurses it moans about Python, you don't have Python (3.8) installed! On Linux, Arm GNU toolchain provides GDB with Python support. It requires installation of Python 3.8 [[Ref]](https://lindevs.com/install-arm-gnu-toolchain-on-ubuntu). To install Python 3.8 specifically:
+    ```
+    sudo add-apt-repository -y ppa:deadsnakes/ppa
+    sudo apt install -y python3.8
+    ```
 
