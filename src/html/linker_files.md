@@ -85,6 +85,20 @@ So why are the following useful. One example use I had was using Ceedling. Ceedl
 
 TODO
 
+```
+EXCLUDE_FILE (test_*.o) *(.text*)
+KEEP(test_*.o(.text*))
+```
+
+The first line includes all `.text*` sections, except those sections found in files named `test_*.o`
+
+The second line - `test_*.o(.text*)` "selects" all `.text` sections from files matching the pattern `test_*.o` - the opposite of above. The `KEEP` specifier tells the linker that although it has been instructed to garbage collect unused sections, it may not garbage collect the `.text` sections from files matching the pattern `test_*.o`. The reason for this is that if we don't specify this it will garbage collect almost everything and the reason for this is that the main Ceedling test runner, runs the test functions by calling them through a function pointer. The linker cannot track this so the call graph it would otherwise generate would not include any tests... fun!
+
+Therefore, what we're saying is that the linker is free to garbage collect everything it likes, except the test functions themselves - we force it to know something about the call graph it couldn't otherwise.
+
+The compiler flags that were added to the target ceedling YAML are what enable the garbage collection by instructing the compiler to put every function in its own section, which is what then allows the linker to garbage collect, as it can only garbage collect by section.
+
+
 ### Source Code Reference
 [See the docs](https://sourceware.org/binutils/docs/ld/Source-Code-Reference.html).
 
