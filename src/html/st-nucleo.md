@@ -7,7 +7,7 @@
 
 ## Debugging
 * The STM32Cube IDE uses the STLink GDB server, but I cannot find this as an independent package to install, without installing all of the STM32Cube IDE.
-    * Note the "ST-link server" and "ST-link DFB server" are *not* the same thing! [[Ref]](https://stackoverflow.com/a/71937416).
+    * Note the "ST-link server" and "ST-link DGB server" are *not* the same thing! [[Ref]](https://stackoverflow.com/a/71937416).
 * For non-STM32Cube IDEs most guides suggest using OpenOCD.
     > The Open On-Chip Debugger (OpenOCD) aims to provide debugging, in-system programming and boundary-scan testing for embedded target devices.
     >
