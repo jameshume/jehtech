@@ -33,6 +33,10 @@ LD files contain the following:
 
 ### Sections
 
+All of the object files contain various sections. These are the *input* sections.
+
+The linker file defines a set of *output* sections that include arbirary *input* sections. I.e., the input sections are mapped to output sections, which are mapped to various physical memory locations.
+
 To define and add a section to a memory region:
 
 ```
@@ -47,9 +51,12 @@ SECTIONS
 
 In the above, the files being linked are inputs and the sections they contain are *input sections*. The result of the linking, i.e., the single binary, also contains sections, sometimes called *output sections*
 
-Every section as a *load address* (LMA) and a *virtual address* (VMA). The linker uses VMA addresses to resolve symbols.
+Every section has a *load address* (LMA) and a *virtual address* (VMA). The linker uses VMA addresses to resolve symbols.
 
 > Every loadable or allocatable output section has two addresses. The first is the VMA, or virtual memory address. This is the address the section will have when the output file is run. The second is the LMA, or load memory address. This is the address at which the section will be loaded. In most cases the two addresses will be the same. An example of when they might be different is when a data section is loaded into ROM, and then copied into RAM when the program starts up (this technique is often used to initialize global variables in a ROM based system). In this case the ROM address would be the LMA, and the RAM address would be the VMA.
+
+
+![Image describing the difference between the LMA and VMA of a section in a linker file](##IMG_DIR##/linker_file_vma_vs_lma.png)
 
 
 ### Source Code Reference

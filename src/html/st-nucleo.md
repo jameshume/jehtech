@@ -14,4 +14,14 @@
     >
     > It does so with the assistance of a debug adapter, which is a small hardware module which helps provide the right kind of electrical signaling to the target being debugged. 
 
+    Install OpenOCD: `apt-get install openocd`
+
 * The Nucleo boards have debug adaptor module on-board (ST-LINK/V2-1 debugger): well, really its an STM32F103C8, which is a very small ARM Cortex-M3 MCU that acts as the debug adaptor. The firmware can be upgraded using the [app found here](https://www.st.com/en/development-tools/stsw-link007.html).
+
+
+### Setting Up VSCode
+* https://marketplace.visualstudio.com/items?itemName=marus25.cortex-debug
+* https://marketplace.visualstudio.com/items?itemName=bmd.stm32-for-vscode
+* https://medium.com/@erbo-engineering/using-vs-code-for-embedded-stm32-development-14405ed4ac82
+* https://bacelarhenrique.me/2020/03/29/complete-guide-to-stm32-arm-development-on-visual-studio-code.html
+* https://lonesometraveler.github.io/2020/03/27/debug.html
