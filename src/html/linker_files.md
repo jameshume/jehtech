@@ -58,6 +58,32 @@ Every section has a *load address* (LMA) and a *virtual address* (VMA). The link
 
 ![Image describing the difference between the LMA and VMA of a section in a linker file](##IMG_DIR##/linker_file_vma_vs_lma.png)
 
+Usually in LD files we will see sections that look something like the following (taken from LD file for STM32 app):
+
+```
+.text :
+  {
+    . = ALIGN(4);
+    *(.text)           /* .text sections (code) */
+    *(.text*)          /* .text* sections (code) */
+
+    KEEP (*(.init))
+    KEEP (*(.fini))
+
+    . = ALIGN(4);
+    _etext = .;        /* define a global symbols at end of code */
+  } >FLASH
+```
+
+Of interest here is that wildcards (the asterisks (`*`)) are used.
+
+In `*(.text*)`, the first asterisks selects all object files and the second is a wild card that means from all the selected object files the sections matching `.text*` are inclued. This means the sections `.text_some_name`, `.text_blahblahblah` etc would all be included in the `.text` section.
+
+The `KEEP` directive is also interesting. This is used when the linker does *garbage collection of unused sections* and specifically tells the linker never to discard the sections annotated by `KEEP`.
+
+So why are the following useful. One example use I had was using Ceedling. Ceedling outputs an absolute ton of mocked methods for unit tests, only a small fraction of which I actually used in my tests. When running on a memory contrained target this was a problem as including unused functions bloated the `.text` section size to the point that some tests would not fit in flash. How to overcome this?
+
+TODO
 
 ### Source Code Reference
 [See the docs](https://sourceware.org/binutils/docs/ld/Source-Code-Reference.html).
