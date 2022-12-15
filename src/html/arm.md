@@ -156,25 +156,25 @@ An *architecture* defines <q>how the program execution should behave and how the
 A *micro-architecture* defines <q>the exact implementation details of the processor, e.g. how many pipeline stages ... etc</q>.
 
 * Modes, privilege and stacks
-  * Handler Mode
-    * Entered when taking any exception.
-    * Always privileged.
-    * Always uses main stack.
-    * OS can run here.
-    * Handles exceptions.
-    * Processor returns to thread mode once exception processing finished.
-    * Always priviledged.
-  * Thread mode
-    * Execute applications.
-    * Processor enters thread mode (priviledged) at startup.
-    * CONTROL register controls whether executions is privileged or un privileged.
-    * Core enters thread mode out of reset.
-    * Typically used for user app code.
-    * Runs either priviliedged or unpriviliedged (should be configured by the reset handler).
-    * Can use either main or process stack.
-    * Typically uses process stack if Thread mode is unpriviledged.
-    * User "apps" can run here.
-    * On reset processor runs in thread mode.
+    * Handler Mode
+        * Entered when taking any exception.
+        * Always privileged.
+        * Always uses main stack.
+        * OS can run here.
+        * Handles exceptions.
+        * Processor returns to thread mode once exception processing finished.
+        * Always priviledged.
+    * Thread mode
+        * Execute applications.
+        * Processor enters thread mode (priviledged) at startup.
+        * CONTROL register controls whether executions is privileged or un privileged.
+        * Core enters thread mode out of reset.
+        * Typically used for user app code.
+        * Runs either priviliedged or unpriviliedged (should be configured by the reset handler).
+        * Can use either main or process stack.
+        * Typically uses process stack if Thread mode is unpriviledged.
+        * User "apps" can run here.
+        * On reset processor runs in thread mode.
 
 ![Table showing privilege levels v.s use of MSP and PSP](##IMG_DIR##/arm_priv_mode.png)
 
