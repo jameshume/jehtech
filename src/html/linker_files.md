@@ -77,29 +77,29 @@ Usually in LD files we will see sections that look something like the following 
 
 Of interest here is that wildcards (the asterisks (`*`)) are used.
 
-In `*(.text*)`, the first asterisks selects all object files and the second is a wild card that means from all the selected object files the sections matching `.text*` are inclued. This means the sections `.text_some_name`, `.text_blahblahblah` etc would all be included in the `.text` section.
+In `*(.text*)`, the first asterisk selects all object files and the second is a wild card that means from all the selected object files the sections matching `.text*` are inclued. This means the sections `.text_some_name`, `.text_blahblahblah` etc would all be included in the `.text` section.
 
 The `KEEP` directive is also interesting. This is used when the linker does *garbage collection of unused sections* and specifically tells the linker never to discard the sections annotated by `KEEP`.
 
-So why are the following useful. One example use I had was using Ceedling. Ceedling outputs an absolute ton of mocked methods for unit tests, only a small fraction of which I actually used in my tests. When running on a memory contrained target this was a problem as including unused functions bloated the `.text` section size to the point that some tests would not fit in flash. How to overcome this?
+So why are the following useful? One example use I had was using Ceedling. Ceedling outputs an absolute ton of mocked methods for unit tests, only a small fraction of which I actually used in my tests. When running on a memory contrained target this was a problem as including unused functions bloated the `.text` section size to the point that some tests would not fit in flash. How to overcome this? Get the linker to discard unused functions. The catch? The linker can only do things at the section level of granularity, so to work around this we must tell GCC to put each function in its own section using the `-ffunction-sections` command line option.
 
-TODO
 
 ```
 EXCLUDE_FILE (test_*.o) *(.text*)
 KEEP(test_*.o(.text*))
 ```
 
-The first line includes all `.text*` sections, except those sections found in files named `test_*.o`
+The first line includes all `.text*` sections, except those sections found in files named `test_*.o`.
 
-The second line - `test_*.o(.text*)` "selects" all `.text` sections from files matching the pattern `test_*.o` - the opposite of above. The `KEEP` specifier tells the linker that although it has been instructed to garbage collect unused sections, it may not garbage collect the `.text` sections from files matching the pattern `test_*.o`. The reason for this is that if we don't specify this it will garbage collect almost everything and the reason for this is that the main Ceedling test runner, runs the test functions by calling them through a function pointer. The linker cannot track this so the call graph it would otherwise generate would not include any tests... fun!
+The second line - `test_*.o(.text*)` selects all `.text` sections from files matching the pattern `test_*.o` - the opposite of above. The `KEEP` specifier tells the linker that although it has been instructed to garbage collect unused sections, it may not garbage collect the `.text` sections from files matching the pattern `test_*.o`. The reason for this is that if we don't specify this it will garbage collect almost everything. The reason for this is that the main Ceedling test runner, runs the test functions by calling them through a function pointer. The linker cannot track this so the call graph it would otherwise generate would not include any tests... fun!
 
 Therefore, what we're saying is that the linker is free to garbage collect everything it likes, except the test functions themselves - we force it to know something about the call graph it couldn't otherwise.
 
 The compiler flags that were added to the target ceedling YAML are what enable the garbage collection by instructing the compiler to put every function in its own section, which is what then allows the linker to garbage collect, as it can only garbage collect by section.
 
+In general:
 
-### Source Code Reference
+### Referencing Linker Script Symbols From C Code
 [See the docs](https://sourceware.org/binutils/docs/ld/Source-Code-Reference.html).
 
 > You cannot access the *value* of a linker script defined symbol - it has no value - all you can do is access the *address* of a linker script defined symbol.
