@@ -32,6 +32,7 @@ jobs:
           && echo "${{ github.event.pull_request.base.sha }}"
           && echo "${{ github.sha }}"
           && git log --oneline -2
+          && git diff --name-only HEAD^1 HEAD
         env:
           AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
