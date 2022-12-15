@@ -149,6 +149,7 @@ all:
 #	@python3 deploy_to_aws.py
 deploy:
 	echo "$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | xargs)"
+	echo "${GH_ACTION_CHANGED_FILES}"
 
 
 .PHONY: images
@@ -242,12 +243,6 @@ $(foreach image_file,$(SRC_NO_WATERMARK_IMAGE_FILES),$(eval $(call generate_unwa
 
 # The HTML file build rules. The macro is evaluated for each source HTML file so that a rule
 # dest-html: src-html src-html-dep is created.
-#
-# remake<1> print SRC_HTML_DIRS
-# Makefile:9 (origin: makefile) SRC_HTML_DIRS = ../src/html ../src/html/python ../src/html/mathsy_stuff ../src/html/c_and_cpp ../src/html/dsp
-# remake<2> print SRC_HTML_ROOT_DIR
-# Makefile:8 (origin: makefile) SRC_HTML_ROOT_DIR = ../src/html
-#
 $(foreach html_dir,$(SRC_HTML_DIRS),$(eval $(call generate_html_rules,$(SRC_HTML_ROOT_DIR),$(html_dir),$(DST_HTML_ROOT_DIR))))
 
 

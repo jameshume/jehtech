@@ -28,7 +28,7 @@ jobs:
       - run: >
           cd build_tools 
           && chmod +x generate_html.sh 
-          && make -j$(lscpu | grep "^\s*CPU(s):" | sed 's/.*:\s*//g') all 
+          && GH_ACTION_CHANGED_FILES="$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | xargs)" make -j$(lscpu | grep "^\s*CPU(s):" | sed 's/.*:\s*//g') all  
           && make deploy
         env:
           AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}

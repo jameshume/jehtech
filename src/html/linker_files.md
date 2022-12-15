@@ -42,10 +42,10 @@ To define and add a section to a memory region:
 ```
 SECTIONS
 {
-    .output_section_name [address] [(type)]: <-----------+
-    {                                                    |
-        file_name(section_name_in_file) -----------------+  << Any filename and input section(s) within matching
-    } [> memory_region_name] [AT> load_addr ]                  these patterns get put into the .section_name section.
+    .output_section_name [address] [BLOCK(align)] [(type)]: <-----------+
+    {                                                                   |
+        file_name(section_name_in_file) --------------------------------+  << Any filename and input section(s) within matching
+    } [> memory_region_name] [AT> load_addr ]                                 these patterns get put into the .section_name section.
 }
 ```
 
