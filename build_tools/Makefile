@@ -101,7 +101,9 @@ endef
 #all: images html javascript css fonts | $(OUTPUT_DIR)
 #	@python3 site_hasher.py create_hash_file "${DST_HTML_ROOT_DIR}" "${OUTPUT_DIR}/site_hashes.dat"
 all:
-	echo "$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | xargs)"
+	echo "${ github.event.pull_request.base.sha }"
+	echo "${ github.sha }"
+	echo "$(git diff --name-only --diff-filter=ACMRT ${ github.event.pull_request.base.sha } ${ github.sha } | xargs)"
 
 
 .PHONY: deploy
