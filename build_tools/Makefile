@@ -103,8 +103,10 @@ all: images html javascript css fonts | $(OUTPUT_DIR)
 
 
 .PHONY: deploy
-deploy: all
-	@python3 deploy_to_aws.py
+#deploy: all
+#	@python3 deploy_to_aws.py
+deploy:
+	echo "$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .ts$ | xargs)"
 
 
 .PHONY: images

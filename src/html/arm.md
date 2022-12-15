@@ -59,7 +59,7 @@
             * PSP - Process Stack (priviledged)
         * Points to the last entry in the stack, going down in the address range.
         * R13 is an alias for the *currently active* stack. So if MSP is currently activated, R13 references the MSP, but if PSP is activated then R13 references the PSP. To activate one or the other, use the CONTROL register.
-      * Stack pointer **must be 8 or 4 byte aligned**. I.e. can only stack words or double words.
+      * Stack pointer **must be 8 or 4 byte aligned**. I.e. can only stack words or double words. But when you **call** a function the SP should be **8 byte aligned**!
       * SP points to the top of the stack.
       * Stack **grows downwards (full descending)**, i.e. the bottom of the stack is at address X and the top of the stack is at address X - STACK_SIZE. So, grows downwards means grows into lower/smaller address values as items are pushed.
           * E.g. If SRAM is 0x2000_0000 to 0x2000_7FFF then at start SP is 0x2000_8000, so that the first push will be to 0x2000_7FFC (remember SP must be at least word aligned).
