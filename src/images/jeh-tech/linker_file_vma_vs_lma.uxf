@@ -1,4 +1,4 @@
-<diagram program="umletino" version="15.0.0"><zoom_level>13</zoom_level><element><id>Text</id><coordinates><x>221</x><y>143</y><w>273</w><h>286</h></coordinates><panel_attributes>SECTIONS {
+<diagram program="umletino" version="15.0.0"><zoom_level>13</zoom_level><help_text>Space for diagram notes</help_text><element><id>Text</id><coordinates><x>221</x><y>91</y><w>273</w><h>286</h></coordinates><panel_attributes>SECTIONS {
     .text :
     {
         * (.text);
@@ -11,27 +11,38 @@
         * (.data);
         edata = .;
     } SRAM AT &gt; FLASH
-}</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>494</x><y>65</y><w>169</w><h>481</h></coordinates><panel_attributes>lw=3
-Address Map</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>507</x><y>403</y><w>143</w><h>130</h></coordinates><panel_attributes>lw=2
-fg=blue</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>507</x><y>195</y><w>143</w><h>169</h></coordinates><panel_attributes>lw=2
-fg=green</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>520</x><y>481</y><w>117</w><h>39</h></coordinates><panel_attributes>lw=2
+}
+group=group-0</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>559</x><y>0</y><w>169</w><h>481</h></coordinates><panel_attributes>lw=3
+Address Map</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>572</x><y>338</y><w>143</w><h>130</h></coordinates><panel_attributes>lw=2
+fg=blue</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>572</x><y>130</y><w>143</w><h>169</h></coordinates><panel_attributes>lw=2
+fg=green</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>585</x><y>416</y><w>117</w><h>39</h></coordinates><panel_attributes>lw=2
 .text
 *(VMA &amp; LMA)*
-valign=center</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>520</x><y>416</y><w>117</w><h>52</h></coordinates><panel_attributes>lw=2
+valign=center</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>585</x><y>351</y><w>117</w><h>52</h></coordinates><panel_attributes>lw=2
 .data
 *(LMA)*
 valign=center
 fg=gray
-lt=..</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>520</x><y>299</y><w>117</w><h>52</h></coordinates><panel_attributes>lw=2
+lt=..</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>585</x><y>234</y><w>117</w><h>52</h></coordinates><panel_attributes>lw=2
 .data
 *(VMA)*
-valign=center</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>624</x><y>338</y><w>130</w><h>39</h></coordinates><panel_attributes>lt=&lt;-</panel_attributes><additional_attributes>10;10;80;10</additional_attributes></element><element><id>Relation</id><coordinates><x>624</x><y>286</y><w>130</w><h>39</h></coordinates><panel_attributes>lt=&lt;-</panel_attributes><additional_attributes>10;10;80;10</additional_attributes></element><element><id>Text</id><coordinates><x>728</x><y>338</y><w>52</w><h>26</h></coordinates><panel_attributes>sdata</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>728</x><y>286</y><w>52</w><h>26</h></coordinates><panel_attributes>edata</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>299</x><y>221</y><w>104</w><h>65</h></coordinates><panel_attributes>lt=&lt;-
-fg=cyan</panel_attributes><additional_attributes>10;30;60;10</additional_attributes></element><element><id>Text</id><coordinates><x>377</x><y>208</y><w>104</w><h>26</h></coordinates><panel_attributes>LMA &amp; VMA
-fg=cyan</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>221</x><y>390</y><w>78</w><h>78</h></coordinates><panel_attributes>lt=&lt;-
-fg=green</panel_attributes><additional_attributes>40;10;10;40</additional_attributes></element><element><id>Text</id><coordinates><x>364</x><y>442</y><w>52</w><h>26</h></coordinates><panel_attributes>LMA
-fg=blue</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>312</x><y>390</y><w>78</w><h>78</h></coordinates><panel_attributes>lt=&lt;-
-fg=blue</panel_attributes><additional_attributes>10;10;40;40</additional_attributes></element><element><id>Text</id><coordinates><x>182</x><y>442</y><w>52</w><h>26</h></coordinates><panel_attributes>VMA
-fg=green</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>624</x><y>429</y><w>221</w><h>39</h></coordinates><panel_attributes>lt=&lt;..
-fg=gray</panel_attributes><additional_attributes>10;10;150;10</additional_attributes></element><element><id>Text</id><coordinates><x>819</x><y>429</y><w>169</w><h>117</h></coordinates><panel_attributes>Linker will *store* the .data section in the application binary at this address.
-style=wordwrap</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>819</x><y>286</y><w>169</w><h>78</h></coordinates><panel_attributes>Application will *access* .data in this address range.
-style=wordwrap</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>624</x><y>468</y><w>130</w><h>39</h></coordinates><panel_attributes>lt=&lt;-</panel_attributes><additional_attributes>10;10;80;10</additional_attributes></element><element><id>Text</id><coordinates><x>728</x><y>468</y><w>52</w><h>26</h></coordinates><panel_attributes>etext</panel_attributes><additional_attributes></additional_attributes></element></diagram>
+valign=center</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>689</x><y>273</y><w>130</w><h>39</h></coordinates><panel_attributes>lt=&lt;-</panel_attributes><additional_attributes>10;10;80;10</additional_attributes></element><element><id>Relation</id><coordinates><x>689</x><y>221</y><w>130</w><h>39</h></coordinates><panel_attributes>lt=&lt;-</panel_attributes><additional_attributes>10;10;80;10</additional_attributes></element><element><id>Text</id><coordinates><x>793</x><y>273</y><w>52</w><h>26</h></coordinates><panel_attributes>sdata</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>793</x><y>221</y><w>52</w><h>26</h></coordinates><panel_attributes>edata</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>299</x><y>169</y><w>104</w><h>65</h></coordinates><panel_attributes>lt=&lt;-
+fg=cyan
+group=group-0</panel_attributes><additional_attributes>10;30;60;10</additional_attributes></element><element><id>Text</id><coordinates><x>377</x><y>156</y><w>104</w><h>26</h></coordinates><panel_attributes>LMA &amp; VMA
+fg=cyan
+group=group-0</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>221</x><y>338</y><w>78</w><h>78</h></coordinates><panel_attributes>lt=&lt;-
+fg=green
+group=group-0</panel_attributes><additional_attributes>40;10;10;40</additional_attributes></element><element><id>Text</id><coordinates><x>364</x><y>390</y><w>52</w><h>26</h></coordinates><panel_attributes>LMA
+fg=blue
+group=group-0</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>312</x><y>338</y><w>78</w><h>78</h></coordinates><panel_attributes>lt=&lt;-
+fg=blue
+group=group-0</panel_attributes><additional_attributes>10;10;40;40</additional_attributes></element><element><id>Text</id><coordinates><x>182</x><y>390</y><w>52</w><h>26</h></coordinates><panel_attributes>VMA
+fg=green
+group=group-0</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>689</x><y>364</y><w>221</w><h>39</h></coordinates><panel_attributes>lt=&lt;..
+fg=gray</panel_attributes><additional_attributes>10;10;150;10</additional_attributes></element><element><id>Text</id><coordinates><x>884</x><y>364</y><w>169</w><h>117</h></coordinates><panel_attributes>Linker will *store* the .data section in the application binary at this address.
+style=wordwrap</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>884</x><y>221</y><w>169</w><h>78</h></coordinates><panel_attributes>Application will *access* .data in this address range.
+style=wordwrap</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>689</x><y>403</y><w>130</w><h>39</h></coordinates><panel_attributes>lt=&lt;-</panel_attributes><additional_attributes>10;10;80;10</additional_attributes></element><element><id>Text</id><coordinates><x>793</x><y>403</y><w>52</w><h>26</h></coordinates><panel_attributes>etext</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>520</x><y>247</y><w>91</w><h>156</h></coordinates><panel_attributes>lt=&lt;..
+fg=gray
+</panel_attributes><additional_attributes>50;10;10;20;10;90;50;100</additional_attributes></element><element><id>Text</id><coordinates><x>442</x><y>286</y><w>104</w><h>65</h></coordinates><panel_attributes>copy to VMA
+on startup
+fg=gray</panel_attributes><additional_attributes></additional_attributes></element></diagram>
