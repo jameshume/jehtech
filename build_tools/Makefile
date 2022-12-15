@@ -78,7 +78,7 @@ endef
 #    $1 - The source image file
 define generate_images_rules
 $(patsubst $(SRC_IMAGE_DIR)%,$(DST_IMAGE_DIR)%,$(1)): $(1)
-	@echo "Generating $$@"
+	@echo "Generating $$@ (rule=(patsubst $(SRC_IMAGE_DIR)%,$(DST_IMAGE_DIR)%,$(1)): $(1))"
 	@mkdir --parents "$$$$(dirname "$$@")" 1>/dev/null 2>&1 || true
 	@IMG_FILENAME=$$$$(basename "$$<"); \
         IMG_EXT="$$$${IMG_FILENAME##*.}"; \
