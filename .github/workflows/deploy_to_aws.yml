@@ -31,7 +31,7 @@ jobs:
           && GH_ACTION_CHANGED_FILES="$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | xargs)" make -j$(lscpu | grep "^\s*CPU(s):" | sed 's/.*:\s*//g') deploy
           && echo "${{ github.event.pull_request.base.sha }}"
           && echo "${{ github.sha }}"
-          && git log --online -2
+          && git log --oneline -2
         env:
           AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
