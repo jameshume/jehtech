@@ -49,6 +49,44 @@ DEP_FILES:=$(patsubst %.html,%.d,$(patsubst $(DST_HTML_ROOT_DIR)%,$(DEP_DIR)%,$(
 #    $2 - The *source* HTML directory under and including $1 that will be mirrored in the built
 #         directory.
 #    $3 - The root *destination* HTML directory
+#
+# Urg! Its hard to grok coming back to this some time later. Using the marvellous remake:
+#     remake<7> print SRC_HTML_DIRS
+#         Makefile:9 (origin: makefile) SRC_HTML_DIRS = ../src/html ../src/html/python ../src/html/mathsy_stuff ../src/html/c_and_cpp ../src/html/dsp
+#
+#     remake<9> expand $(call generate_html_rules,$(SRC_HTML_ROOT_DIR),../src/html,$(DST_HTML_ROOT_DIR))
+#         # The .d file depends on the source .html file. If that changes the dependencies must be regenerated.
+#         ../output/deps/%.d: ../output/site/%.html | ../output/deps
+#                 @python3 generate_snippet_dependencies.py "../src/html" "../output/site" "$(patsubst %.d,%.html,$(patsubst ../output/deps%,../src/html%,$@))" "$@" 
+#   
+#         # The destination .html file depends on the source .html file and the links.html, which all JEHTech
+#         # pages depend on.
+#         ../output/site/%.html: ../src/html/%.html ../src/html/_links.html | ../output/site 
+#                 @./generate_html.sh "$<" "$@" "../output/site"
+#
+#         ../output/site:
+#                 @mkdir --parents "$@"
+#
+#         ../output/deps:
+#                 @mkdir --parents "$@"
+#
+#     remake<8> expand $(call generate_html_rules,$(SRC_HTML_ROOT_DIR),../src/html/python,$(DST_HTML_ROOT_DIR))
+#         # The .d file depends on the source .html file. If that changes the dependencies must be regenerated.
+#         ../output/deps/python/%.d: ../output/site/python/%.html | ../output/deps/python
+#                 @python3 generate_snippet_dependencies.py "../src/html" "../output/site" "$(patsubst %.d,%.html,$(patsubst ../output/deps%,../src/html%,$@))" "$@"
+#
+#         # The destination .html file depends on the source .html file and the links.html, which all JEHTech
+#         # pages depend on.
+#         ../output/site/python/%.html: ../src/html/python/%.html ../src/html/_links.html | ../output/site/python 
+#                 @./generate_html.sh "$<" "$@" "../output/site"
+#
+#         ../output/site/python:
+#                 @mkdir --parents "$@"
+#   
+#         ../output/deps/python:
+#                 @mkdir --parents "$@"
+#         remake<10> 
+#
 define generate_html_rules
 # The .d file depends on the source .html file. If that changes the dependencies must be regenerated.
 $(patsubst $(1)%,$(DEP_DIR)%,$(2))/%.d: $(patsubst $(1)%,$(3)%,$(2))/%.html | $(patsubst $(1)%,$(DEP_DIR)%,$(2))
@@ -58,7 +96,7 @@ $(patsubst $(1)%,$(DEP_DIR)%,$(2))/%.d: $(patsubst $(1)%,$(3)%,$(2))/%.html | $(
         "$$(patsubst %.d,%.html,$$(patsubst $(DEP_DIR)%,$(1)%,$$@))" \
         "$$@"
 
-# The destination .html file depends on the source .html file and the links.html, which all JEHTexh
+# The destination .html file depends on the source .html file and the links.html, which all JEHTech
 # pages depend on.
 $(patsubst $(1)%,$(3)%,$(2))/%.html: $(2)/%.html $(1)/_links.html | $(patsubst $(1)%,$(3)%,$(2)) 
 	@./generate_html.sh "$$<" "$$@" "$(3)"
@@ -197,20 +235,25 @@ $(DST_HTML_ROOT_DIR)/jeh-monolith.css: $(SRC_CSS_FILES)
 	@"$$(npm bin)/node-minify" --compressor cssnano --input "$@" --output "$@" --silence
 
 
-# The HTML file build rules. The macro is evaluated for each source HTML file so that a rule
-# dest-html: src-html src-html-dep is created.
+# Image file make rules
 $(foreach image_file,$(SRC_IMAGE_FILES),$(eval $(call generate_images_rules,$(image_file))))
 $(foreach image_file,$(SRC_NO_WATERMARK_IMAGE_FILES),$(eval $(call generate_unwatermarked_image_rules,$(image_file))))
 
 
-# The CSS file build rules. Macro evaluation similar to how HTML rule macro eval works.
+# The HTML file build rules. The macro is evaluated for each source HTML file so that a rule
+# dest-html: src-html src-html-dep is created.
+#
+# remake<1> print SRC_HTML_DIRS
+# Makefile:9 (origin: makefile) SRC_HTML_DIRS = ../src/html ../src/html/python ../src/html/mathsy_stuff ../src/html/c_and_cpp ../src/html/dsp
+# remake<2> print SRC_HTML_ROOT_DIR
+# Makefile:8 (origin: makefile) SRC_HTML_ROOT_DIR = ../src/html
+#
 $(foreach html_dir,$(SRC_HTML_DIRS),$(eval $(call generate_html_rules,$(SRC_HTML_ROOT_DIR),$(html_dir),$(DST_HTML_ROOT_DIR))))
 
 
 # Make sure output dir exists
 $(OUTPUT_DIR):
 	mkdir --parents "$(OUTPUT_DIR)"
-
 
 # Include the dependency files. These give a mapping from HTML files to any imported snippets
 # If any of the include targets (i.e., the DEP_FILES) were updated by the rules the 
@@ -227,5 +270,10 @@ $(OUTPUT_DIR):
 #
 # Note dependency files must be marked as SECONDARY so that make does not think they are
 # normal intermediary files that should be cleaned up at the end of a build.
+#
+# ARSE: On a Github action build this would cause everything to get built, always, because
+# the dep files will not exist... sigh.
+ifneq ($(CI),true)
 .SECONDARY: $(DEP_FILES)
 -include $(DEP_FILES)
+endif
