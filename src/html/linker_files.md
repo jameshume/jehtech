@@ -8,7 +8,7 @@
 * [ARM ELF File Format](https://developer.arm.com/documentation/dui0101/a/)
 * [Basic Linker Script Concepts](https://sourceware.org/binutils/docs/ld/Basic-Script-Concepts.html)
 * [LD docs](https://sourceware.org/binutils/docs/ld/index.html)
-
+* [RedHat: Using the GNU Linker](https://access.redhat.com/webassets/avalon/d/Red_Hat_Enterprise_Linux-4-Red_Hat_Enterprise_Linux_4_-_Archived_Documents-en-US/files/Red_Hat_Enterprise_Linux-4-Using_ld_the_GNU_Linker-en-US.pdf)
 
 ### Anatomy
 
@@ -42,10 +42,10 @@ To define and add a section to a memory region:
 ```
 SECTIONS
 {
-    .output_section_name [address]: <-----------+
-    {                                           |
-        file_name(section_name_in_file) --------+  << Any filename and input section(s) within matching
-    } [> memory_region_name] [AT> load_addr ]         these patterns get put into the .section_name section.
+    .output_section_name [address] [(type)]: <-----------+
+    {                                                    |
+        file_name(section_name_in_file) -----------------+  << Any filename and input section(s) within matching
+    } [> memory_region_name] [AT> load_addr ]                  these patterns get put into the .section_name section.
 }
 ```
 
@@ -91,13 +91,17 @@ KEEP(test_*.o(.text*))
 
 The first line includes all `.text*` sections, except those sections found in files named `test_*.o`.
 
-The second line - `test_*.o(.text*)` selects all `.text` sections from files matching the pattern `test_*.o` - the opposite of above. The `KEEP` specifier tells the linker that although it has been instructed to garbage collect unused sections, it may not garbage collect the `.text` sections from files matching the pattern `test_*.o`. The reason for this is that if we don't specify this it will garbage collect almost everything. The reason for this is that the main Ceedling test runner, runs the test functions by calling them through a function pointer. The linker cannot track this so the call graph it would otherwise generate would not include any tests... fun!
+The second line, `test_*.o(.text*)`, selects all `.text` sections from files matching the pattern `test_*.o` - the opposite of above. The `KEEP` specifier tells the linker that although it has been instructed to garbage collect unused sections, it may not garbage collect the `.text` sections from files matching the pattern `test_*.o`. The reason for this is that if we don't specify this it will garbage collect almost everything. The reason for this is that the main Ceedling test runner, runs the test functions by calling them through a function pointer. The linker cannot track this so the call graph it would otherwise generate would not include any tests... fun!
 
 Therefore, what we're saying is that the linker is free to garbage collect everything it likes, except the test functions themselves - we force it to know something about the call graph it couldn't otherwise.
 
 The compiler flags that were added to the target ceedling YAML are what enable the garbage collection by instructing the compiler to put every function in its own section, which is what then allows the linker to garbage collect, as it can only garbage collect by section.
 
-In general:
+TODOS:
+
+1. ALIGN - padding vs section start
+2. Define registers via section in LD file instead of #defines in C code.
+3. PROVIDE
 
 ### Referencing Linker Script Symbols From C Code
 [See the docs](https://sourceware.org/binutils/docs/ld/Source-Code-Reference.html).

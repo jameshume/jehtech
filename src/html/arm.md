@@ -44,36 +44,39 @@
 * Cortex-M chips use Thumb-2 instruction set *only*.
 * v6-M --> V7-M : ~50 instructtions --> ~200 instructions - sizeable increase.
 * M4 is like an M3 with instructions for DSP - SIMD and a single-precision FPU optionally. Some operator improvement for efficiency.
+* No instruction cache (except M7)
 
 ## Programmers Model
 * Explains the interface programmer must use to design their application on a specific processor.
 * Registers:
     * General Pupose
-      * R0-R7: Accessible to all instrunctions
-      * R8-R12: Accessible to a few 16-bit instructions and all 32-bit instuctions
+        * R0-R7: Accessible to all instrunctions
+        * R8-R12: Accessible to a few 16-bit instructions and all 32-bit instuctions
     * R13 is *Stack Pointer* (SP)
-      * Armv7-M cores have two banked versions. There are two stack pointers.
-        * Don't have to use both but can choose to use both.
-        * MSP - Main Stack (R13) (Out of reset MSP is active)
-        * PSP - Process Stack (priviledged)
-      * Points to the last entry in the stack, going down in the address range.
-      * R13 is an alias for the *currently active* stack. So if MSP is currently activated, R13 references the MSP, but if PSP is activated then R13 references the PSP. To activate one or the other, use the CONTROL register.
+        * Armv7-M cores have two banked versions. There are two stack pointers.
+            * Don't have to use both but can choose to use both.
+            * MSP - Main Stack (R13) (Out of reset MSP is active)
+            * PSP - Process Stack (priviledged)
+        * Points to the last entry in the stack, going down in the address range.
+        * R13 is an alias for the *currently active* stack. So if MSP is currently activated, R13 references the MSP, but if PSP is activated then R13 references the PSP. To activate one or the other, use the CONTROL register.
       * Stack pointer **must be 8 or 4 byte aligned**. I.e. can only stack words or double words.
       * SP points to the top of the stack.
       * Stack **grows downwards (full descending)**, i.e. the bottom of the stack is at address X and the top of the stack is at address X - STACK_SIZE. So, grows downwards means grows into lower/smaller address values as items are pushed.
           * E.g. If SRAM is 0x2000_0000 to 0x2000_7FFF then at start SP is 0x2000_8000, so that the first push will be to 0x2000_7FFC (remember SP must be at least word aligned).
+      * Passing parameters by stack is inefficient (if more that 4 parameters to a function). Accessing stack memory, because most Cortex-M have no cache, involves memory access - costly in time and power consumption as outside bus is used.
+            * If at all possible on your architecture, cache the stack memory!
     * R14 is the *Link Register* (LR)
-      * Enables return from subroutines
-      * Special function for exception handling
+        * Enables return from subroutines
+        * Special function for exception handling
     * R15 is the *Program Counter* (PC): Points to the address of the code being **fetched** from memory at this moment.
-      * When jumping +1 to address when executing Thumb-2 instructions (e.g. accessing 0x1000 warite 0x1001 to PC) - its a wierd ARM thing - because ARM has hijacked bit 0 of the instruction address bus internally within the core (externally always see addredd 0x1000) and used as a way to configure the execution state of the processor. Decides which instruction set the instruction belongs to - 32-bit ARM instructions or 16-bit Thumb-2 sintructions. Bit 0 of instruction address bus is connected to T-bit of the state control register - it tells the core what type of instruction it is decoding.
-        > The CPSR register holds the processor mode (user or exception flag), interrupt mask bits, condition codes, and Thumb status bit. The Thumb status bit indicates the processor’s current state: 0 for ARM state (default) or 1 for Thumb. -- https://www.embedded.com/introduction-to-arm-thumb
-      * Its of no use for Cortex-M processors as they only have Thumb-2, but, still need to jump with +1 on the address! Hey ho!
-      * And then... M33 then the T-bit apparently has another meaning so gets more complicated?
-    * Speical purpose
+        * When jumping +1 to address when executing Thumb-2 instructions (e.g. accessing 0x1000 warite 0x1001 to PC) - its a wierd ARM thing - because ARM has hijacked bit 0 of the instruction address bus internally within the core (externally always see addredd 0x1000) and used as a way to configure the execution state of the processor. Decides which instruction set the instruction belongs to - 32-bit ARM instructions or 16-bit Thumb-2 sintructions. Bit 0 of instruction address bus is connected to T-bit of the state control register - it tells the core what type of instruction it is decoding.
+            > The CPSR register holds the processor mode (user or exception flag), interrupt mask bits, condition codes, and Thumb status bit. The Thumb status bit indicates the processor’s current state: 0 for ARM state (default) or 1 for Thumb. -- https://www.embedded.com/introduction-to-arm-thumb
+        * Its of no use for Cortex-M processors as they only have Thumb-2, but, still need to jump with +1 on the address! Hey ho!
+        * And then... M33 then the T-bit apparently has another meaning so gets more complicated?
+    * Specical purpose
         * Processor status (xPSR) - Combined Program Status Register - contains, in one register, the following 3 "registers":
               * Indicate the state of the core right now.
-              * APSR - Application Program Status Register - Only APSR flags can be uysed for condition execution (`BCC, `IT`). In original ARM instruction set almost all instructions could be issued conditionally based on contents of APSR, but in Thumb-2 conditional execution is only supported using 16-bit branch instructions `B<c> addr`.
+              * APSR - Application Program Status Register - Only APSR flags can be uysed for condition execution (`BCC`, `IT`). In original ARM instruction set almost all instructions could be issued conditionally based on contents of APSR, but in Thumb-2 conditional execution is only supported using 16-bit branch instructions `B<c> addr`.
                 ```
                 31                                                                             5              0
                 +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
