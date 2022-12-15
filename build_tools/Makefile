@@ -4,23 +4,41 @@
 # modified since the last build. However, this cannot work when building online using a fresh
 # checkout. So when building online get a list of the changed files from git and use those
 # instead.
+
 SRC_DIR:=../src
 SRC_HTML_ROOT_DIR:=$(SRC_DIR)/html
 SRC_HTML_DIRS:=$(shell find "$(SRC_HTML_ROOT_DIR)" -type d)
-SRC_HTML_FILES:=$(shell find "$(SRC_HTML_ROOT_DIR)" -type f -name "*.html")
-
 SRC_NO_WATERMARK_IMAGE_DIR:=$(SRC_DIR)/images
+SRC_IMAGE_DIR:=$(SRC_DIR)/images/jeh-tech
+SRC_JAVASCRIPT_DIR:=$(SRC_DIR)/javascript
+SRC_CSS_DIR:=$(SRC_DIR)/css
+
+
+ifeq ($(CI),true)
+# Github actions cannot use the Make magic of figuring out what changed since last build as the
+# checkout is fresh. But still want to use the dependency graphs for each file so adding it to
+# makefile rather than custom build script... the right thing to do? Meh.
+# Paths relative to repo root but we are in the build_tools directory so prefix all files with ../
+CHANGED_FILES:=$(shell git diff --name-only HEAD^1 HEAD | sed 's!^\(.*\)$$!../\1!g') #< Note $$ in sed command to escape $ from Makefile expansion
+SRC_HTML_FILES:=$(filter %.html,$(CHANGED_FILES))
+CHANGED_IMAGE_FILES:=$(filter %.png %.gif %.mp4 %.svg %.jpg %.jpeg %.tif,$(CHANGED_FILES))
+SRC_NO_WATERMARK_IMAGE_FILES:=$(filter-out ../src/images/jehtech%,$(CHANGED_IMAGE_FILES))
+SRC_IMAGE_FILES:=$(filter ../src/images/jehtech%,$(CHANGED_IMAGE_FILES))
+SRC_CSS_FILES:=$(filter %.css,$(CHANGED_FILES))
+
+else
+
+# Normal build running on a normal Linux box.
+SRC_HTML_FILES:=$(shell find "$(SRC_HTML_ROOT_DIR)" -type f -name "*.html")
 SRC_NO_WATERMARK_IMAGE_FILES:=$(shell find "$(SRC_NO_WATERMARK_IMAGE_DIR)" -maxdepth 1 -type f)
 SRC_NO_WATERMARK_IMAGE_FILES:=$(filter %.png %.gif %.mp4 %.svg %.jpg %.jpeg %.tif,$(SRC_NO_WATERMARK_IMAGE_FILES))
-SRC_IMAGE_DIR:=$(SRC_DIR)/images/jeh-tech
 SRC_IMAGE_FILES:=$(shell find "$(SRC_IMAGE_DIR)" -type f)
 SRC_IMAGE_FILES:=$(filter %.png %.gif %.mp4 %.svg %.jpg %.jpeg %.tif,$(SRC_IMAGE_FILES))
+SRC_CSS_FILES := $(shell find "$(SRC_CSS_DIR)" -type f -name "*.css")
+endif
 
-SRC_JAVASCRIPT_DIR:=$(SRC_DIR)/javascript
 SRC_JAVASCRIPT_FILES := $(addprefix $(SRC_JAVASCRIPT_DIR)/,$(shell cat "$(SRC_JAVASCRIPT_DIR)/contents.txt"))
 
-SRC_CSS_DIR:=$(SRC_DIR)/css
-SRC_CSS_FILES := $(shell find "$(SRC_CSS_DIR)" -type f -name "*.css")
 
 OUTPUT_DIR=../output
 
@@ -136,20 +154,13 @@ endef
 
 
 .PHONY: all
-#all: images html javascript css fonts | $(OUTPUT_DIR)
-#	@python3 site_hasher.py create_hash_file "${DST_HTML_ROOT_DIR}" "${OUTPUT_DIR}/site_hashes.dat"
-all:
-	echo "${ github.event.pull_request.base.sha }"
-	echo "${ github.sha }"
-	echo "$(git diff --name-only --diff-filter=ACMRT ${ github.event.pull_request.base.sha } ${ github.sha } | xargs)"
+all: images html javascript css fonts | $(OUTPUT_DIR)
+	@python3 site_hasher.py create_hash_file "${DST_HTML_ROOT_DIR}" "${OUTPUT_DIR}/site_hashes.dat"
 
 
 .PHONY: deploy
-#deploy: all
-#	@python3 deploy_to_aws.py
-deploy:
-	echo "$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | xargs)"
-	echo "${GH_ACTION_CHANGED_FILES}"
+deploy: all
+	@python3 deploy_to_aws.py
 
 
 .PHONY: images
