@@ -13,11 +13,19 @@ SRC_IMAGE_DIR:=$(SRC_DIR)/images/jeh-tech
 SRC_JAVASCRIPT_DIR:=$(SRC_DIR)/javascript
 SRC_CSS_DIR:=$(SRC_DIR)/css
 
+SRC_JAVASCRIPT_FILES := $(addprefix $(SRC_JAVASCRIPT_DIR)/,$(shell cat "$(SRC_JAVASCRIPT_DIR)/contents.txt"))
 
-ifeq ($(CI),true)
+ifeq ($(TODO_CI),true)
 # Github actions cannot use the Make magic of figuring out what changed since last build as the
 # checkout is fresh. But still want to use the dependency graphs for each file so adding it to
 # makefile rather than custom build script... the right thing to do? Meh.
+#
+# Well, probably not! The uploader needs to be smarter too - it cannot delete files from the website
+# by detecting files on the server but not in the build output as this would only build a subset of files.
+#
+# So... more work TBD
+
+
 # Paths relative to repo root but we are in the build_tools directory so prefix all files with ../
 CHANGED_FILES:=$(shell git diff --name-only HEAD^1 HEAD | sed 's!^\(.*\)$$!../\1!g') #< Note $$ in sed command to escape $ from Makefile expansion
 SRC_HTML_FILES:=$(filter %.html,$(CHANGED_FILES))
@@ -37,7 +45,6 @@ SRC_IMAGE_FILES:=$(filter %.png %.gif %.mp4 %.svg %.jpg %.jpeg %.tif,$(SRC_IMAGE
 SRC_CSS_FILES := $(shell find "$(SRC_CSS_DIR)" -type f -name "*.css")
 endif
 
-SRC_JAVASCRIPT_FILES := $(addprefix $(SRC_JAVASCRIPT_DIR)/,$(shell cat "$(SRC_JAVASCRIPT_DIR)/contents.txt"))
 
 
 OUTPUT_DIR=../output
