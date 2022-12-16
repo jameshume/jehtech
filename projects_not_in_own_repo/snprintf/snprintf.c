@@ -73,7 +73,7 @@ static count_and_format_tuple_t chew_percent_chars(const char *_format)
     return rval;
 }
 
-static const char* find_next_specifier(const char *_format, print_buffer_t *const print_buffer)
+static const char* print_to_buffer_escaped_percents_until_next_specifier(const char *_format, print_buffer_t *const print_buffer)
 {
     const char *previous_format;
     count_and_format_tuple_t rval = { .format = _format, .count = 0 };
@@ -128,6 +128,23 @@ static const char* find_next_specifier(const char *_format, print_buffer_t *cons
 }
 
 
+/*
+ * From https://cplusplus.com/reference/cstdio/printf/#compatibility:
+ *
+ *    Flags     Description
+ *    --------|--------------------------------------------------------------------------------------------------------
+ *    -       | Left-justify within the given field width; Right justification is the default (see width
+ *            | sub-specifier).
+ *    +       | Forces to preceed the result with a plus or minus sign (+ or -) even for positive numbers. By default,
+ *            | only negative numbers are preceded with a - sign.
+ *    (space) | If no sign is going to be written, a blank space is inserted before the value.
+ *    #       | Used with o, x or X specifiers the value is preceeded with 0, 0x or 0X respectively for values
+ *            | different than zero.
+ *            | Used with a, A, e, E, f, F, g or G it forces the written output to contain a decimal point even if no
+ *            | more digits follow. By default, if no digits follow, no decimal point is written.
+ *    0	      | Left-pads the number with zeroes (0) instead of spaces when padding is specified (see width
+ *            | sub-specifier).
+ */
 typedef struct format_flags_tag
 {
     bool left_justify;
@@ -188,6 +205,16 @@ static count_and_format_tuple_t parse_format__unsigned_int(const char* _format) 
     return rval;
 }
 
+/*
+ * From https://cplusplus.com/reference/cstdio/printf/#compatibility:
+ *
+ *    width description
+ *    ---------|-------------------------------------------------------------------------------------------------------
+ *    (number) | Minimum number of characters to be printed. If the value to be printed is shorter than this number,
+ *             | the result is padded with blank spaces. The value is not truncated even if the result is larger.
+ *    *        | The width is not specified in the format string, but as an additional integer value argument preceding
+ *             | the argument that has to be formatted.
+ */
 typedef struct format_width_tag
 {
     size_t minimum_number_of_characters;
@@ -236,12 +263,33 @@ static void dump_format_width(const format_width_t *const width_spec)
     DEBUG(("   as_extra_argument: %u\n", (unsigned int)width_spec->as_extra_argument));
 }
 
+/*
+ * From https://cplusplus.com/reference/cstdio/printf/#compatibility:
+ *
+ *    .precision | description
+ *    -----------|------------------------------------------------------------------------------------------------------
+ *    .number    | integer specifiers (d, i, o, u, x, X): precision specifies the minimum number of digits to be
+ *               | written. If the value to be written is shorter than this number, the result is padded with leading
+ *               | zeros. The value is not truncated even if the result is longer. A precision of 0 means that no
+ *               | character is written for the value 0.
+ *               |
+ *               | For a, A, e, E, f and F specifiers: this is the number of digits to be printed after the decimal
+ *               | point (by default, this is 6).
+ *               |
+ *               | For g and G specifiers: This is the maximum number of significant digits to be printed.
+ *               |
+ *               | For s: this is the maximum number of characters to be printed. By default all characters are
+ *               | printed until the ending null character is encountered. If the period is specified without an
+ *               | explicit value for precision, 0 is assumed.
+ *               |
+ *    .*         | The precision is not specified in the format string, but as an additional integer value argument
+ *               | preceding the argument that has to be formatted.
+ */
 typedef struct format_precision_tag
 {
     size_t number_of_digits;
     bool is_specified;
     bool as_extra_argument;
-    bool error;
 } format_precision_t;
 
 static const char* parse_format__precision(const char* format, format_precision_t *precision_spec)
@@ -253,11 +301,11 @@ static const char* parse_format__precision(const char* format, format_precision_
     {
         ++format;
         this_char = *format;
+
         if (this_char == '*')
         {
             /* The width is not specified in the format string, but as an additional integer value argument preceding
              * the argument that has to be formatted. */
-             precision_spec->is_specified = true;
              precision_spec->as_extra_argument = true;
         }
         else if(is_number_character(this_char))
@@ -266,13 +314,14 @@ static const char* parse_format__precision(const char* format, format_precision_
              * the result is padded with blank spaces. The value is not truncated even if the result is larger. */
             const count_and_format_tuple_t count_and_format = parse_format__unsigned_int(format);
             format = count_and_format.format;
-            precision_spec->is_specified = true;
             precision_spec->number_of_digits = count_and_format.count;
         }
         else
         {
-            precision_spec->error = true;
+            precision_spec->number_of_digits = 0;
         }
+
+        precision_spec->is_specified = true;
     }
     else 
     {
@@ -284,10 +333,11 @@ static const char* parse_format__precision(const char* format, format_precision_
 
 static void dump_format_precision(const format_precision_t *const prec_spec)
 {
-    DEBUG(("number_of_digits: %u", prec_spec->number_of_digits));
-    DEBUG(("is_specified: %u", prec_spec->is_specified));
-    DEBUG(("as_extra_argument: %u", prec_spec->as_extra_argument));
-    DEBUG(("error: %u", prec_spec->error));
+    DEBUG(("Precision Spec:\n"));
+    DEBUG(("    number_of_digits: %zu\n", prec_spec->number_of_digits));
+    DEBUG(("    is_specified: %u\n", prec_spec->is_specified));
+    DEBUG(("    as_extra_argument: %u\n", prec_spec->as_extra_argument));
+    DEBUG(("    error: %u\n", prec_spec->error));
 
 }
 
@@ -338,12 +388,15 @@ static const char* parse_format__length(const char* format, format_length_t *len
             *length_spec = FORMAT_LENGHT_NOT_SPECIFIED;
             break;
     }
+
+    return format;
 }
 
 
 typedef enum format_specifier_tag
 {
     FORMAT_SPECIFIER_CHARACTER,
+    FORMAT_SPECIFIER_ERROR,
     FORMAT_SPECIFIER_FLOATING_POINT_LOWER_CASE_DECIMAL,
     FORMAT_SPECIFIER_FLOATING_POINT_LOWER_CASE_HEXADECIMAL,
     FORMAT_SPECIFIER_FLOATING_POINT_LOWER_CASE_SCIENTIFIC,
@@ -357,70 +410,35 @@ typedef enum format_specifier_tag
     FORMAT_SPECIFIER_SIGNED_DECIMAL_INTEGER,
     FORMAT_SPECIFIER_STRING,
     FORMAT_SPECIFIER_UNSIGNED_DECIMAL_INTEGER,
-    FORMAT_SPECIFIER_UNSIGNED_HEX_LOWER_CASE,
-    FORMAT_SPECIFIER_UNSIGNED_HEX_UPPER_CASE,
+    FORMAT_SPECIFIER_UNSIGNED_HEXADECIMAL_LOWER_CASE,
+    FORMAT_SPECIFIER_UNSIGNED_HEXADECIMAL_UPPER_CASE,
     FORMAT_SPECIFIER_UNSIGNED_OCTAL,
 } format_specifier_t;
 
-const char* parse_format__specifier(const char* format) {
+const char* parse_format__specifier(const char* format, format_specifier_t *const format_spec) {
     switch (*format)
     {
         case 'd':
-        case 'i':
-            break;
-
-        case 'u':
-            break;
-        
-        case 'o':
-            break;
-        
-        case 'x':
-            break;
-        
-        case 'X':
-            break;
-        
-        case 'f':
-            break;
-        
-        case 'F':
-            break;
-        
-        case 'e':
-            break;
-        
-        case 'E':
-            break;
-        
-        case 'g':
-            break;
-        
-        case 'G':
-            break;
-        
-        case 'a':
-            break;
-        
-        case 'A':
-            break;
-
-        case 'c':
-            break;
-
-        case 's':
-            break;
-
-        case 'p':
-            break;
-
-        case 'n':
-            break;
-
-        default:
-            // Error
-            break;
+        case 'i': *format_spec = FORMAT_SPECIFIER_SIGNED_DECIMAL_INTEGER;                 break;
+        case 'u': *format_spec = FORMAT_SPECIFIER_UNSIGNED_DECIMAL_INTEGER;               break;
+        case 'o': *format_spec = FORMAT_SPECIFIER_UNSIGNED_OCTAL;                         break;
+        case 'x': *format_spec = FORMAT_SPECIFIER_UNSIGNED_HEXADECIMAL_LOWER_CASE;        break;
+        case 'X': *format_spec = FORMAT_SPECIFIER_UNSIGNED_HEXADECIMAL_UPPER_CASE;        break;
+        case 'f': *format_spec = FORMAT_SPECIFIER_FLOATING_POINT_LOWER_CASE_DECIMAL;      break;
+        case 'F': *format_spec = FORMAT_SPECIFIER_FLOATING_POINT_UPPER_CASE_DECIMAL;      break;
+        case 'e': *format_spec = FORMAT_SPECIFIER_FLOATING_POINT_LOWER_CASE_SCIENTIFIC;   break;
+        case 'E': *format_spec = FORMAT_SPECIFIER_FLOATING_POINT_UPPER_CASE_SCIENTIFIC;   break;
+        case 'g': *format_spec = FORMAT_SPECIFIER_FLOATING_POINT_LOWER_CASE_SHORTEST;     break;
+        case 'G': *format_spec = FORMAT_SPECIFIER_FLOATING_POINT_UPPER_CASE_SHORTEST;     break;
+        case 'a': *format_spec = FORMAT_SPECIFIER_FLOATING_POINT_LOWER_CASE_HEXADECIMAL;  break;
+        case 'A': *format_spec = FORMAT_SPECIFIER_FLOATING_POINT_UPPER_CASE_HEXADECIMAL;  break;
+        case 'c': *format_spec = FORMAT_SPECIFIER_CHARACTER;                              break;
+        case 's': *format_spec = FORMAT_SPECIFIER_STRING ;                                break;
+        case 'p': *format_spec = FORMAT_SPECIFIER_POINTER_ADDRESS;                        break;
+        case 'n': *format_spec = FORMAT_SPECIFIER_NOTHING;                                break;
+        default:  *format_spec = FORMAT_SPECIFIER_ERROR;                                  break;
     }
+    return format + 1;
 }
 
 const char* parse_format(const char* format) {
@@ -429,37 +447,96 @@ const char* parse_format(const char* format) {
 
 }
 
+unsigned int get_next_arg_as_unsigned_int(void) {
+    return 11;
+}
 
+const char * get_next_arg_as_string(void) {
+    return "woops";
+}
+
+void print_arg_to_buffer(
+        print_buffer_t *const pbuff,
+        const format_flags_t *const flags,
+        const format_width_t *const width_spec,
+        const format_precision_t *const prec_spec,
+        const format_length_t length_spec,
+        const format_specifier_t format_spec)
+{
+    unsigned int minimum_number_of_characters = 0;
+    unsigned int number_of_digits = 0;
+    
+    if (width_spec->is_specified) {
+        if (width_spec->as_extra_argument) {
+            minimum_number_of_characters = get_next_arg_as_unsigned_int();
+        }
+        else {
+            minimum_number_of_characters = width_spec->minimum_number_of_characters;
+        }
+    }
+
+    if (prec_spec->is_specified) {
+        if (prec_spec->as_extra_argument) {
+            number_of_digits = get_next_arg_as_unsigned_int();
+        }
+        else {
+            number_of_digits = prec_spec->number_of_digits;
+        }
+    }
+
+    if (format_spec == FORMAT_SPECIFIER_STRING)
+    {
+        const char *const string = get_next_arg_as_string();        
+        size_t string_length = strlen(string);
+        const size_t max_characters = (prec_spec->is_specified) ? prec_spec->number_of_digits : string_length;
+        const size_t min_characters = (width_spec->is_specified) ? mwidth_spec->inimum_number_of_characters : string_length;
+
+        
+
+    }
+}
 
 
 void mysnprintf(const char *const format, size_t size, char *buffer)
 {
     print_buffer_t pbuff = { .format = format, .size_bytes = size, .consumed_bytes = 0, .buffer = buffer };
+    format_flags_t flags;
+    format_width_t width_spec;
+    format_precision_t precision_spec;
+    format_length_t length_spec;
+    format_specifier_t format_spec;
 
     printf("\n\n------- TESTING %s\n\n", format);
 
-    const char *next_char = find_next_specifier(pbuff.format, &pbuff);    
+    const char *next_char = print_to_buffer_escaped_percents_until_next_specifier(pbuff.format, &pbuff);    
     if (*next_char != '0') {
-        format_flags_t flags;
         next_char = parse_format__flags(next_char, &flags);
         dump_format_flags(&flags);
     }
 
     if (*next_char != '0') {
-        format_width_t width_spec;
         next_char = parse_format__width(next_char, &width_spec);
         dump_format_width(&width_spec);
     }
 
     if (*next_char != '0') {
-        format_precision_t precision_spec;
         next_char = parse_format__precision(next_char, &precision_spec);
+        dump_format_precision(&precision_spec);
     }
 
     if (*next_char != '0') {
-        format_length_t length_spec;
         next_char = parse_format__length(next_char, &length_spec);
+        DEBUG(("Length spec: %u\n", (unsigned int)length_spec));
     }
+
+    if (*next_char != '0') {
+        next_char = parse_format__specifier(next_char, &format_spec);
+        DEBUG(("Format spec: %u\n", (unsigned int)format_spec));
+
+        print_arg_to_buffer(&pbuff, &flags, &width_spec, &precision_spec, &length_spec, &format_spec);
+    }
+
+    
 
     printf("%s\n", pbuff.buffer);
 
@@ -479,9 +556,9 @@ int main(void) {
     const char *ex6_2 = "abc%+*uJames";
     const char *ex6_3 = "abc%+82732uJames";
 
-    const char *ex7_1 = "abc%+ *uJames";
+    const char *ex7_1 = "abc%+ 123.66uJames";
     const char *ex7_2 = "abc%-*uJames";
-    const char *ex7_3 = "abc% 82732uJames";
+    const char *ex7_3 = "abc% 82732.*uJames";
 
 
     mysnprintf(ex7_1, SIZE, buffer);
