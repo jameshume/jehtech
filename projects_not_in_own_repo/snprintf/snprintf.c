@@ -2,8 +2,8 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stddef.h>
-#include <stdarg.h>
 
+#include <stdarg.h>
 //#define DEBUG(x) printf x
 #define DEBUG(x)
 
@@ -158,6 +158,8 @@ bool write_character_to_print_buffer(print_buffer_t *const print_buffer, char ch
 
 bool write_string_to_print_buffer(print_buffer_t *const print_buffer, const char *const string, const size_t num_characters)
 {
+    bool rval = false;
+
     if (print_buffer->consumed_bytes < print_buffer->size_bytes)
     {
         const size_t space_remaining = print_buffer->size_bytes - 1 - print_buffer->consumed_bytes; /* -1 to leave space for trailing '\0' */
@@ -166,12 +168,12 @@ bool write_string_to_print_buffer(print_buffer_t *const print_buffer, const char
             const size_t bytes_to_write = num_characters > space_remaining ? space_remaining : num_characters;
             memcpy(&print_buffer->buffer[print_buffer->consumed_bytes], string, bytes_to_write);
             print_buffer->consumed_bytes += bytes_to_write;
-            return true;
+            rval =  true;
         }
         print_buffer->buffer[print_buffer->consumed_bytes] = '\0'; /* Always terminate to be safe - could be overwritten if more is added. */
     }
 
-    return false;
+    return rval;
 }
 
 static const char* chew_not_percent_chars(const char *format)
@@ -211,10 +213,13 @@ static const char* print_to_buffer_escaped_percents_until_next_specifier(const c
     
     do 
     {
-        previous_format = rval.format;
-        rval.format = chew_not_percent_chars(rval.format);
-        write_string_to_print_buffer(print_buffer, previous_format, rval.format - previous_format);
-        /* At this point `rval.format` points to a null character or the first '%' character found. */
+        if (*rval.format != '\0')
+        {
+            previous_format = rval.format;
+            rval.format = chew_not_percent_chars(rval.format);
+            write_string_to_print_buffer(print_buffer, previous_format, rval.format - previous_format);
+            /* At this point `rval.format` points to a null character or the first '%' character found. */
+        }
 
         if (*rval.format != '\0')
         {
@@ -556,7 +561,9 @@ static void print_string_arg_to_buffer(context_t *const context)
     }
     else
     {
-        write_string_to_print_buffer(&context->pbuff, string, max_characters);
+        const size_t characters_to_write = string_length > max_characters ? max_characters : string_length;
+        DEBUG(("WRITING %u chars for max\n", characters_to_write));
+        write_string_to_print_buffer(&context->pbuff, string, characters_to_write);
     }
 }
 
@@ -589,6 +596,7 @@ void mysnprintf(char *const buffer, const size_t size, const char *const format,
     const char *next_char = context.pbuff.format;
     do
     {
+        DEBUG(("***** ITERATIONS\n"));
         next_char = print_to_buffer_escaped_percents_until_next_specifier(next_char, &context.pbuff);    
         if (*next_char != '\0') {
             next_char = parse_format__flags(next_char, &context.flags);
@@ -624,8 +632,9 @@ void mysnprintf(char *const buffer, const size_t size, const char *const format,
 }
 
 int main(void) {
-    #define SIZE 200
+    #define SIZE 40
     char buffer[SIZE];
+    memset(buffer, (int)'#', sizeof(*buffer));
 
     const char *ex1 = "abc%de";
     const char *ex2 = "abc%%de";
@@ -642,12 +651,27 @@ int main(void) {
     const char *ex7_3 = "aa_%-*s_bbb";
 // %[flags][width][.precision][length]specifier
 
+    memset(buffer, (int)'#', sizeof(*buffer));
     mysnprintf(buffer, SIZE, "aa_%-15s_bbb", "JamesHume");
-    mysnprintf(buffer, SIZE, "aa_%-*s_bbb", 15, "JamesHume");
-    mysnprintf(buffer, SIZE, "aa_%*s_bbb", 15, "JamesHume");
-    mysnprintf(buffer, SIZE, "aa_%15s_bbb", "JamesHume");
-    mysnprintf(buffer, SIZE, "aa_%2s_bbb", "JamesHume");
-    
 
+    memset(buffer, (int)'#', sizeof(*buffer));
+    mysnprintf(buffer, SIZE, "aa_%-*s_bbb", 15, "JamesHume");
+
+    memset(buffer, (int)'#', sizeof(*buffer));
+    mysnprintf(buffer, SIZE, "aa_%*s_bbb", 15, "JamesHume");
+
+    memset(buffer, (int)'#', sizeof(*buffer));
+    mysnprintf(buffer, SIZE, "aa_%15s_bbb", "JamesHume");
+
+    memset(buffer, (int)'#', sizeof(*buffer));
+    mysnprintf(buffer, SIZE, "aa_%.3s_bbb", "JamesHume");
+    memset(buffer, (int)'#', sizeof(*buffer));
+    mysnprintf(buffer, SIZE, "aa_%.8s_bbb", "JamesHume");
+    memset(buffer, (int)'#', sizeof(*buffer));
+    mysnprintf(buffer, SIZE, "aa_%.9s_bbb", "JamesHume");
+    memset(buffer, (int)'#', sizeof(*buffer));
+    mysnprintf(buffer, SIZE, "aa_%10.10s_bbb", "JamesHume");
+    memset(buffer, (int)'#', sizeof(*buffer));
+    mysnprintf(buffer, SIZE, "aa_%10.9s_bbb", "JamesHume");
     return 0;
 }
