@@ -2,8 +2,53 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stddef.h>
+#include <stdarg.h>
 
-#define DEBUG(x) printf x
+//#define DEBUG(x) printf x
+#define DEBUG(x)
+
+/*
+ * From https://cplusplus.com/reference/cstdio/printf/#compatibility:
+ *
+ *    Flags     Description
+ *    --------|--------------------------------------------------------------------------------------------------------
+ *    -       | Left-justify within the given field width; Right justification is the default (see width
+ *            | sub-specifier).
+ *    +       | Forces to precede the result with a plus or minus sign (+ or -) even for positive numbers. By default,
+ *            | only negative numbers are preceded with a - sign.
+ *    (space) | If no sign is going to be written, a blank space is inserted before the value.
+ *    #       | Used with o, x or X specifiers the value is preceeded with 0, 0x or 0X respectively for values
+ *            | different than zero.
+ *            | Used with a, A, e, E, f, F, g or G it forces the written output to contain a decimal point even if no
+ *            | more digits follow. By default, if no digits follow, no decimal point is written.
+ *    0	      | Left-pads the number with zeroes (0) instead of spaces when padding is specified (see width
+ *            | sub-specifier).
+ */
+typedef struct format_flags_tag
+{
+    bool left_justify;
+    bool force_sign;
+    bool no_sign;
+    bool force_decimal_point_or_0x_prefix;
+    bool left_pad_with_zeros;
+} format_flags_t;
+
+/*
+ * From https://cplusplus.com/reference/cstdio/printf/#compatibility:
+ *
+ *    width description
+ *    ---------|-------------------------------------------------------------------------------------------------------
+ *    (number) | Minimum number of characters to be printed. If the value to be printed is shorter than this number,
+ *             | the result is padded with blank spaces. The value is not truncated even if the result is larger.
+ *    *        | The width is not specified in the format string, but as an additional integer value argument preceding
+ *             | the argument that has to be formatted.
+ */
+typedef struct format_width_tag
+{
+    size_t minimum_number_of_characters;
+    bool is_specified;
+    bool as_extra_argument;
+} format_width_t;
 
 typedef struct print_buffer_tag
 {
@@ -13,18 +58,105 @@ typedef struct print_buffer_tag
     char *buffer;
 } print_buffer_t;
 
+typedef struct count_and_format_tuple_tag
+{
+    size_t count;
+    const char *format;
+} count_and_format_tuple_t;
 
-void write_character_to_print_buffer(print_buffer_t *const print_buffer, char character)
+
+/*
+ * From https://cplusplus.com/reference/cstdio/printf/#compatibility:
+ *
+ *    .precision | description
+ *    -----------|------------------------------------------------------------------------------------------------------
+ *    .number    | integer specifiers (d, i, o, u, x, X): precision specifies the minimum number of digits to be
+ *               | written. If the value to be written is shorter than this number, the result is padded with leading
+ *               | zeros. The value is not truncated even if the result is longer. A precision of 0 means that no
+ *               | character is written for the value 0.
+ *               |
+ *               | For a, A, e, E, f and F specifiers: this is the number of digits to be printed after the decimal
+ *               | point (by default, this is 6).
+ *               |
+ *               | For g and G specifiers: This is the maximum number of significant digits to be printed.
+ *               |
+ *               | For s: this is the maximum number of characters to be printed. By default all characters are
+ *               | printed until the ending null character is encountered. If the period is specified without an
+ *               | explicit value for precision, 0 is assumed.
+ *               |
+ *    .*         | The precision is not specified in the format string, but as an additional integer value argument
+ *               | preceding the argument that has to be formatted.
+ */
+typedef struct format_precision_tag
+{
+    size_t number_of_digits;
+    bool is_specified;
+    bool as_extra_argument;
+} format_precision_t;
+
+
+typedef enum format_length_tag
+{
+    FORMAT_LENGHT_NOT_SPECIFIED,
+    FORMAT_LENGHT_H,
+    FORMAT_LENGHT_HH,
+    FORMAT_LENGHT_J,
+    FORMAT_LENGHT_L_DBL,
+    FORMAT_LENGHT_L,
+    FORMAT_LENGHT_LL,
+    FORMAT_LENGHT_T,
+    FORMAT_LENGHT_Z,
+} format_length_t;
+
+
+typedef enum format_specifier_tag
+{
+    FORMAT_SPECIFIER_CHARACTER,
+    FORMAT_SPECIFIER_ERROR,
+    FORMAT_SPECIFIER_FLOATING_POINT_LOWER_CASE_DECIMAL,
+    FORMAT_SPECIFIER_FLOATING_POINT_LOWER_CASE_HEXADECIMAL,
+    FORMAT_SPECIFIER_FLOATING_POINT_LOWER_CASE_SCIENTIFIC,
+    FORMAT_SPECIFIER_FLOATING_POINT_LOWER_CASE_SHORTEST,
+    FORMAT_SPECIFIER_FLOATING_POINT_UPPER_CASE_DECIMAL,
+    FORMAT_SPECIFIER_FLOATING_POINT_UPPER_CASE_HEXADECIMAL,
+    FORMAT_SPECIFIER_FLOATING_POINT_UPPER_CASE_SCIENTIFIC,
+    FORMAT_SPECIFIER_FLOATING_POINT_UPPER_CASE_SHORTEST,
+    FORMAT_SPECIFIER_NOTHING,
+    FORMAT_SPECIFIER_POINTER_ADDRESS,
+    FORMAT_SPECIFIER_SIGNED_DECIMAL_INTEGER,
+    FORMAT_SPECIFIER_STRING,
+    FORMAT_SPECIFIER_UNSIGNED_DECIMAL_INTEGER,
+    FORMAT_SPECIFIER_UNSIGNED_HEXADECIMAL_LOWER_CASE,
+    FORMAT_SPECIFIER_UNSIGNED_HEXADECIMAL_UPPER_CASE,
+    FORMAT_SPECIFIER_UNSIGNED_OCTAL,
+} format_specifier_t;
+
+typedef struct context_tag
+{
+    print_buffer_t pbuff;
+    format_flags_t flags;
+    format_width_t width_spec;
+    format_precision_t precision_spec;
+    format_length_t length_spec;
+    format_specifier_t format_spec;
+    va_list args;
+} context_t;
+
+
+bool write_character_to_print_buffer(print_buffer_t *const print_buffer, char character)
 {
     if (print_buffer->consumed_bytes < print_buffer->size_bytes - 1) /* Make sure trailing '\0' is left */
     {
         print_buffer->buffer[print_buffer->consumed_bytes] = character;
         print_buffer->consumed_bytes += 1;
         print_buffer->buffer[print_buffer->consumed_bytes] = '\0'; /* Always terminate to be safe - could be overwritten if more is added. */
+        return true;
     }
+
+    return false;
 }
 
-void write_string_to_print_buffer(print_buffer_t *const print_buffer, const char *const string, const size_t num_characters)
+bool write_string_to_print_buffer(print_buffer_t *const print_buffer, const char *const string, const size_t num_characters)
 {
     if (print_buffer->consumed_bytes < print_buffer->size_bytes)
     {
@@ -34,9 +166,12 @@ void write_string_to_print_buffer(print_buffer_t *const print_buffer, const char
             const size_t bytes_to_write = num_characters > space_remaining ? space_remaining : num_characters;
             memcpy(&print_buffer->buffer[print_buffer->consumed_bytes], string, bytes_to_write);
             print_buffer->consumed_bytes += bytes_to_write;
+            return true;
         }
         print_buffer->buffer[print_buffer->consumed_bytes] = '\0'; /* Always terminate to be safe - could be overwritten if more is added. */
     }
+
+    return false;
 }
 
 static const char* chew_not_percent_chars(const char *format)
@@ -51,11 +186,7 @@ static const char* chew_not_percent_chars(const char *format)
     return format - 1;
 }
 
-typedef struct count_and_format_tuple_tag
-{
-    size_t count;
-    const char *format;
-} count_and_format_tuple_t;
+
 
 static count_and_format_tuple_t chew_percent_chars(const char *_format)
 {
@@ -128,31 +259,7 @@ static const char* print_to_buffer_escaped_percents_until_next_specifier(const c
 }
 
 
-/*
- * From https://cplusplus.com/reference/cstdio/printf/#compatibility:
- *
- *    Flags     Description
- *    --------|--------------------------------------------------------------------------------------------------------
- *    -       | Left-justify within the given field width; Right justification is the default (see width
- *            | sub-specifier).
- *    +       | Forces to preceed the result with a plus or minus sign (+ or -) even for positive numbers. By default,
- *            | only negative numbers are preceded with a - sign.
- *    (space) | If no sign is going to be written, a blank space is inserted before the value.
- *    #       | Used with o, x or X specifiers the value is preceeded with 0, 0x or 0X respectively for values
- *            | different than zero.
- *            | Used with a, A, e, E, f, F, g or G it forces the written output to contain a decimal point even if no
- *            | more digits follow. By default, if no digits follow, no decimal point is written.
- *    0	      | Left-pads the number with zeroes (0) instead of spaces when padding is specified (see width
- *            | sub-specifier).
- */
-typedef struct format_flags_tag
-{
-    bool left_justify;
-    bool force_sign;
-    bool no_sign;
-    bool force_decimal_point_or_0x_prefix;
-    bool left_pad_with_zeros;
-} format_flags_t;
+
 
 static void dump_format_flags(const format_flags_t *const flags)
 {
@@ -205,22 +312,7 @@ static count_and_format_tuple_t parse_format__unsigned_int(const char* _format) 
     return rval;
 }
 
-/*
- * From https://cplusplus.com/reference/cstdio/printf/#compatibility:
- *
- *    width description
- *    ---------|-------------------------------------------------------------------------------------------------------
- *    (number) | Minimum number of characters to be printed. If the value to be printed is shorter than this number,
- *             | the result is padded with blank spaces. The value is not truncated even if the result is larger.
- *    *        | The width is not specified in the format string, but as an additional integer value argument preceding
- *             | the argument that has to be formatted.
- */
-typedef struct format_width_tag
-{
-    size_t minimum_number_of_characters;
-    bool is_specified;
-    bool as_extra_argument;
-} format_width_t;
+
 
 static const char* parse_format__width(const char* format, format_width_t *width_spec)
 {
@@ -263,34 +355,6 @@ static void dump_format_width(const format_width_t *const width_spec)
     DEBUG(("   as_extra_argument: %u\n", (unsigned int)width_spec->as_extra_argument));
 }
 
-/*
- * From https://cplusplus.com/reference/cstdio/printf/#compatibility:
- *
- *    .precision | description
- *    -----------|------------------------------------------------------------------------------------------------------
- *    .number    | integer specifiers (d, i, o, u, x, X): precision specifies the minimum number of digits to be
- *               | written. If the value to be written is shorter than this number, the result is padded with leading
- *               | zeros. The value is not truncated even if the result is longer. A precision of 0 means that no
- *               | character is written for the value 0.
- *               |
- *               | For a, A, e, E, f and F specifiers: this is the number of digits to be printed after the decimal
- *               | point (by default, this is 6).
- *               |
- *               | For g and G specifiers: This is the maximum number of significant digits to be printed.
- *               |
- *               | For s: this is the maximum number of characters to be printed. By default all characters are
- *               | printed until the ending null character is encountered. If the period is specified without an
- *               | explicit value for precision, 0 is assumed.
- *               |
- *    .*         | The precision is not specified in the format string, but as an additional integer value argument
- *               | preceding the argument that has to be formatted.
- */
-typedef struct format_precision_tag
-{
-    size_t number_of_digits;
-    bool is_specified;
-    bool as_extra_argument;
-} format_precision_t;
 
 static const char* parse_format__precision(const char* format, format_precision_t *precision_spec)
 {
@@ -337,22 +401,8 @@ static void dump_format_precision(const format_precision_t *const prec_spec)
     DEBUG(("    number_of_digits: %zu\n", prec_spec->number_of_digits));
     DEBUG(("    is_specified: %u\n", prec_spec->is_specified));
     DEBUG(("    as_extra_argument: %u\n", prec_spec->as_extra_argument));
-    DEBUG(("    error: %u\n", prec_spec->error));
-
 }
 
-typedef enum format_length_tag
-{
-    FORMAT_LENGHT_NOT_SPECIFIED,
-    FORMAT_LENGHT_H,
-    FORMAT_LENGHT_HH,
-    FORMAT_LENGHT_J,
-    FORMAT_LENGHT_L_DBL,
-    FORMAT_LENGHT_L,
-    FORMAT_LENGHT_LL,
-    FORMAT_LENGHT_T,
-    FORMAT_LENGHT_Z,
-} format_length_t;
 
 static const char* parse_format__length(const char* format, format_length_t *length_spec)
 {
@@ -393,27 +443,6 @@ static const char* parse_format__length(const char* format, format_length_t *len
 }
 
 
-typedef enum format_specifier_tag
-{
-    FORMAT_SPECIFIER_CHARACTER,
-    FORMAT_SPECIFIER_ERROR,
-    FORMAT_SPECIFIER_FLOATING_POINT_LOWER_CASE_DECIMAL,
-    FORMAT_SPECIFIER_FLOATING_POINT_LOWER_CASE_HEXADECIMAL,
-    FORMAT_SPECIFIER_FLOATING_POINT_LOWER_CASE_SCIENTIFIC,
-    FORMAT_SPECIFIER_FLOATING_POINT_LOWER_CASE_SHORTEST,
-    FORMAT_SPECIFIER_FLOATING_POINT_UPPER_CASE_DECIMAL,
-    FORMAT_SPECIFIER_FLOATING_POINT_UPPER_CASE_HEXADECIMAL,
-    FORMAT_SPECIFIER_FLOATING_POINT_UPPER_CASE_SCIENTIFIC,
-    FORMAT_SPECIFIER_FLOATING_POINT_UPPER_CASE_SHORTEST,
-    FORMAT_SPECIFIER_NOTHING,
-    FORMAT_SPECIFIER_POINTER_ADDRESS,
-    FORMAT_SPECIFIER_SIGNED_DECIMAL_INTEGER,
-    FORMAT_SPECIFIER_STRING,
-    FORMAT_SPECIFIER_UNSIGNED_DECIMAL_INTEGER,
-    FORMAT_SPECIFIER_UNSIGNED_HEXADECIMAL_LOWER_CASE,
-    FORMAT_SPECIFIER_UNSIGNED_HEXADECIMAL_UPPER_CASE,
-    FORMAT_SPECIFIER_UNSIGNED_OCTAL,
-} format_specifier_t;
 
 const char* parse_format__specifier(const char* format, format_specifier_t *const format_spec) {
     switch (*format)
@@ -447,103 +476,155 @@ const char* parse_format(const char* format) {
 
 }
 
-unsigned int get_next_arg_as_unsigned_int(void) {
-    return 11;
+static void print_string_arg_to_buffer(context_t *const context)
+{
+    /* Must be careful to request parameters in the correct order. Before the string itself there may be a width
+     * and then a precision value specified as extra arguments, in that order, that occur, before the string argument */
+    const size_t width_extra_argument =
+        ((context->width_spec.is_specified) && (context->width_spec.as_extra_argument))
+            ? va_arg(context->args, unsigned int)
+            : 0;
+    DEBUG(("width_extra_argument == %zu\n", width_extra_argument));
+    
+
+    const size_t precision_extra_argument =
+        ((context->precision_spec.is_specified) && (context->precision_spec.as_extra_argument))
+            ? va_arg(context->args, unsigned int)
+            : 0;
+    DEBUG(("precision_extra_argument == %zu\n", precision_extra_argument));
+
+    /* Having gotten potential width & prevision arguments, can get the string argument */
+    const char *const string = va_arg(context->args, char *);      
+    DEBUG(("string == %s\n", string));  
+    const size_t string_length = strlen(string);
+
+    /* Now the padding, alignment and max length can be figured out.
+     * - A width could be specified to set a minimum string width.
+     * - A precision could be specified to set a maximum string width.
+     * - Both could be specified
+     *    - Must expect precision >= width for the specification to make sense. If it wasn't then what should be done?
+     *      Makes sense to reduce the width to the precision. */
+
+    /* Print no more than `max_characters` not including the NULL sentinel */
+    const size_t max_characters = 
+        (context->precision_spec.is_specified)
+            ? context->precision_spec.as_extra_argument
+                ? precision_extra_argument
+                : context->precision_spec.number_of_digits
+            : string_length; 
+
+    /* Pad with spaces if string less than minimum_number_of_characters, on left or right depending on flags */
+    const size_t min_characters_intermediate =
+        (context->width_spec.is_specified)
+            ? context->width_spec.as_extra_argument
+                ? width_extra_argument
+                : context->width_spec.minimum_number_of_characters
+            : string_length;
+
+    const size_t min_characters =
+        (context->precision_spec.is_specified)
+            ? (min_characters_intermediate < max_characters)
+                ? min_characters_intermediate
+                : max_characters
+            : min_characters_intermediate;
+
+
+    if (string_length < min_characters)
+    {
+        /* The string must be padded */
+        size_t number_of_padding_spaces = min_characters - string_length;
+        if (context->flags.left_justify)
+        {
+            bool space_left = write_string_to_print_buffer(&context->pbuff, string, string_length);
+            for(size_t count = number_of_padding_spaces; count != 0 && space_left; count--)
+            {
+                space_left = write_character_to_print_buffer(&context->pbuff, ' ');
+            }
+        }
+        else
+        {
+            bool space_left = true;
+            for(size_t count = number_of_padding_spaces; count != 0 && space_left; count--)
+            {
+                space_left = write_character_to_print_buffer(&context->pbuff, ' ');
+            }
+            if (space_left)
+            {
+                write_string_to_print_buffer(&context->pbuff, string, string_length);
+            }
+        }
+    }
+    else
+    {
+        write_string_to_print_buffer(&context->pbuff, string, max_characters);
+    }
 }
 
-const char * get_next_arg_as_string(void) {
-    return "woops";
-}
-
-void print_arg_to_buffer(
-        print_buffer_t *const pbuff,
-        const format_flags_t *const flags,
-        const format_width_t *const width_spec,
-        const format_precision_t *const prec_spec,
-        const format_length_t length_spec,
-        const format_specifier_t format_spec)
+static void print_arg_to_buffer(context_t *const context)
 {
     unsigned int minimum_number_of_characters = 0;
     unsigned int number_of_digits = 0;
-    
-    if (width_spec->is_specified) {
-        if (width_spec->as_extra_argument) {
-            minimum_number_of_characters = get_next_arg_as_unsigned_int();
-        }
-        else {
-            minimum_number_of_characters = width_spec->minimum_number_of_characters;
-        }
-    }
 
-    if (prec_spec->is_specified) {
-        if (prec_spec->as_extra_argument) {
-            number_of_digits = get_next_arg_as_unsigned_int();
-        }
-        else {
-            number_of_digits = prec_spec->number_of_digits;
-        }
-    }
-
-    if (format_spec == FORMAT_SPECIFIER_STRING)
+    switch(context->format_spec)
     {
-        const char *const string = get_next_arg_as_string();        
-        size_t string_length = strlen(string);
-        const size_t max_characters = (prec_spec->is_specified) ? prec_spec->number_of_digits : string_length;
-        const size_t min_characters = (width_spec->is_specified) ? mwidth_spec->inimum_number_of_characters : string_length;
-
-        
-
-    }
+        case FORMAT_SPECIFIER_STRING: print_string_arg_to_buffer(context); break;
+        default: break;
+    }        
 }
 
 
-void mysnprintf(const char *const format, size_t size, char *buffer)
+
+
+
+void mysnprintf(char *const buffer, const size_t size, const char *const format, ...)
 {
-    print_buffer_t pbuff = { .format = format, .size_bytes = size, .consumed_bytes = 0, .buffer = buffer };
-    format_flags_t flags;
-    format_width_t width_spec;
-    format_precision_t precision_spec;
-    format_length_t length_spec;
-    format_specifier_t format_spec;
+    context_t context = {
+        .pbuff = { .format = format, .size_bytes = size, .consumed_bytes = 0, .buffer = buffer },
+    };
 
-    printf("\n\n------- TESTING %s\n\n", format);
+    va_start(context.args, format);
 
-    const char *next_char = print_to_buffer_escaped_percents_until_next_specifier(pbuff.format, &pbuff);    
-    if (*next_char != '0') {
-        next_char = parse_format__flags(next_char, &flags);
-        dump_format_flags(&flags);
-    }
+    DEBUG(("\n\n------- TESTING %s\n\n", format));
 
-    if (*next_char != '0') {
-        next_char = parse_format__width(next_char, &width_spec);
-        dump_format_width(&width_spec);
-    }
+    const char *next_char = context.pbuff.format;
+    do
+    {
+        next_char = print_to_buffer_escaped_percents_until_next_specifier(next_char, &context.pbuff);    
+        if (*next_char != '\0') {
+            next_char = parse_format__flags(next_char, &context.flags);
+            dump_format_flags(&context.flags);
+        }
 
-    if (*next_char != '0') {
-        next_char = parse_format__precision(next_char, &precision_spec);
-        dump_format_precision(&precision_spec);
-    }
+        if (*next_char != '\0') {
+            next_char = parse_format__width(next_char, &context.width_spec);
+            dump_format_width(&context.width_spec);
+        }
 
-    if (*next_char != '0') {
-        next_char = parse_format__length(next_char, &length_spec);
-        DEBUG(("Length spec: %u\n", (unsigned int)length_spec));
-    }
+        if (*next_char != '\0') {
+            next_char = parse_format__precision(next_char, &context.precision_spec);
+            dump_format_precision(&context.precision_spec);
+        }
 
-    if (*next_char != '0') {
-        next_char = parse_format__specifier(next_char, &format_spec);
-        DEBUG(("Format spec: %u\n", (unsigned int)format_spec));
+        if (*next_char != '\0') {
+            next_char = parse_format__length(next_char, &context.length_spec);
+            DEBUG(("Length spec: %u\n", (unsigned int)context.length_spec));
+        }
 
-        print_arg_to_buffer(&pbuff, &flags, &width_spec, &precision_spec, &length_spec, &format_spec);
-    }
+        if (*next_char != '\0') {
+            next_char = parse_format__specifier(next_char, &context.format_spec);
+            DEBUG(("Format spec: %u\n", (unsigned int)context.format_spec));
 
+            print_arg_to_buffer(&context);
+        }
+
+    } while(*next_char != '\0');
+    printf("%s\n", context.pbuff.buffer);
     
-
-    printf("%s\n", pbuff.buffer);
-
+    va_end(context.args);
 }
 
 int main(void) {
-    #define SIZE 6
+    #define SIZE 200
     char buffer[SIZE];
 
     const char *ex1 = "abc%de";
@@ -558,12 +639,15 @@ int main(void) {
 
     const char *ex7_1 = "abc%+ 123.66uJames";
     const char *ex7_2 = "abc%-*uJames";
-    const char *ex7_3 = "abc% 82732.*uJames";
+    const char *ex7_3 = "aa_%-*s_bbb";
+// %[flags][width][.precision][length]specifier
 
-
-    mysnprintf(ex7_1, SIZE, buffer);
-    //mysnprintf(ex7_2, SIZE, buffer);
-    //mysnprintf(ex7_3, SIZE, buffer);
+    mysnprintf(buffer, SIZE, "aa_%-15s_bbb", "JamesHume");
+    mysnprintf(buffer, SIZE, "aa_%-*s_bbb", 15, "JamesHume");
+    mysnprintf(buffer, SIZE, "aa_%*s_bbb", 15, "JamesHume");
+    mysnprintf(buffer, SIZE, "aa_%15s_bbb", "JamesHume");
+    mysnprintf(buffer, SIZE, "aa_%2s_bbb", "JamesHume");
+    
 
     return 0;
 }
