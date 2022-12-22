@@ -1,7 +1,12 @@
+// A little bit of prating around making an snprintf function for cortex-m0. For some reason work didn't use
+// nano newlib and found ee_sprintf which doesn't have the "n" variant so I wondered if I could write my own.
+// Got some way there but then if you look at things like nano newlib its waaaaay way better so stopping here...
+// was a bit of fun.
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
 #include <stddef.h>
+#include <stdint.h>
 
 #include <stdarg.h>
 //#define DEBUG(x) printf x
@@ -263,19 +268,6 @@ static const char* print_to_buffer_escaped_percents_until_next_specifier(const c
     return rval.format;
 }
 
-
-
-
-static void dump_format_flags(const format_flags_t *const flags)
-{
-    DEBUG(("Flags:\n"));
-    DEBUG(("   left_justify: %u\n", (unsigned int)flags->left_justify));
-    DEBUG(("   force_sign: %u\n", (unsigned int)flags->force_sign));
-    DEBUG(("   no_sign: %u\n", (unsigned int)flags->no_sign));
-    DEBUG(("   force_decimal_point_or_0x_prefix: %u\n", (unsigned int)flags->force_decimal_point_or_0x_prefix));
-    DEBUG(("   left_pad_with_zeros: %u\n", (unsigned int)flags->left_pad_with_zeros));
-}
-
 static const char* parse_format__flags(const char* format, format_flags_t *const flags)
 {
     bool no_flag_char_seen = false;
@@ -283,7 +275,6 @@ static const char* parse_format__flags(const char* format, format_flags_t *const
 
     while ((*format != '\0') && (!no_flag_char_seen))
     {
-        DEBUG(("Flags looking at '%c'\n", *format));
         switch(*format)
         {
             case '-': flags->left_justify = true;                      break;
@@ -328,7 +319,6 @@ static const char* parse_format__width(const char* format, format_width_t *width
     {
         /* The width is not specified in the format string, but as an additional integer value argument preceding
          * the argument that has to be formatted. */
-        DEBUG(("Width wildcard found\n"));
         width_spec->is_specified = true;
         width_spec->as_extra_argument = true;
         ++format;
@@ -341,25 +331,14 @@ static const char* parse_format__width(const char* format, format_width_t *width
         format = count_and_format.format;
         width_spec->is_specified = true;
         width_spec->minimum_number_of_characters = count_and_format.count;
-        DEBUG(("Width of %zu found\n", width_spec->minimum_number_of_characters));
     }
     else 
     {
         /* There is no width specifier present */
-        DEBUG(("No width specifier found\n"));
     }
 
     return format;
 }
-
-static void dump_format_width(const format_width_t *const width_spec)
-{
-    DEBUG(("Width Spec:\n"));
-    DEBUG(("   minimum_number_of_characters: %zu\n", width_spec->minimum_number_of_characters));
-    DEBUG(("   is_specified: %u\n", (unsigned int)width_spec->is_specified));
-    DEBUG(("   as_extra_argument: %u\n", (unsigned int)width_spec->as_extra_argument));
-}
-
 
 static const char* parse_format__precision(const char* format, format_precision_t *precision_spec)
 {
@@ -398,14 +377,6 @@ static const char* parse_format__precision(const char* format, format_precision_
     }
 
     return format;
-}
-
-static void dump_format_precision(const format_precision_t *const prec_spec)
-{
-    DEBUG(("Precision Spec:\n"));
-    DEBUG(("    number_of_digits: %zu\n", prec_spec->number_of_digits));
-    DEBUG(("    is_specified: %u\n", prec_spec->is_specified));
-    DEBUG(("    as_extra_argument: %u\n", prec_spec->as_extra_argument));
 }
 
 
@@ -475,9 +446,13 @@ const char* parse_format__specifier(const char* format, format_specifier_t *cons
     return format + 1;
 }
 
-const char* parse_format(const char* format) {
-    // %[flags][width][.precision][length]specifier
-    
+static void print_unsigned_integer_to_buffer(context_t *const context) {
+    char buffer[50];
+    unsigned long long num = 1234567;
+
+    /* Awful algorithm would divide by 10^n, 10^(n-1) and so on, but want to assume that there is no divide
+     * instruction. So could subtract 10^n, 10^(n-1) and so on to get counts.*/
+
 
 }
 
@@ -489,18 +464,22 @@ static void print_string_arg_to_buffer(context_t *const context)
         ((context->width_spec.is_specified) && (context->width_spec.as_extra_argument))
             ? va_arg(context->args, unsigned int)
             : 0;
-    DEBUG(("width_extra_argument == %zu\n", width_extra_argument));
-    
 
     const size_t precision_extra_argument =
         ((context->precision_spec.is_specified) && (context->precision_spec.as_extra_argument))
             ? va_arg(context->args, unsigned int)
             : 0;
-    DEBUG(("precision_extra_argument == %zu\n", precision_extra_argument));
 
     /* Having gotten potential width & prevision arguments, can get the string argument */
-    const char *const string = va_arg(context->args, char *);      
-    DEBUG(("string == %s\n", string));  
+    char character_as_string[2] = {'\0' ,'\0'};
+    const char * string;
+    if (context->format_spec == FORMAT_SPECIFIER_STRING) {
+        string = va_arg(context->args, char *);
+    }
+    else {
+        character_as_string[0] = (char)va_arg(context->args, int);
+        string = character_as_string;
+    }
     const size_t string_length = strlen(string);
 
     /* Now the padding, alignment and max length can be figured out.
@@ -562,8 +541,105 @@ static void print_string_arg_to_buffer(context_t *const context)
     else
     {
         const size_t characters_to_write = string_length > max_characters ? max_characters : string_length;
-        DEBUG(("WRITING %u chars for max\n", characters_to_write));
         write_string_to_print_buffer(&context->pbuff, string, characters_to_write);
+    }
+}
+
+/*
+ * The Cortex-M0 has no divide instruction and does not even have a CLZ instruction. One for future but looking at
+ * GCC divide code, might be able to optimize the CLZ part of the divide as the same divisor is going to be used
+ * in multiple locations and is known - it will be either 8, 10, or 16! Also numerator changes predictably... in each
+ * subsequent divide, the MSB bits are dealth with by the previous divide.
+ * 
+ * Meh... nice little idea but a awful lot of work for not much more gain I suspect... and then we have to do the
+ * whole thing again for signed stuff so meh!
+ */
+struct qr {
+	unsigned q;		/* computed quotient */
+	unsigned r;		/* computed remainder */
+};
+// see https://github.com/OP-TEE/optee_os/blob/master/lib/libutils/isoc/arch/arm/arm32_aeabi_divmod.c
+static void mydivision_qr(unsigned n, unsigned p, struct qr *qr)
+{
+	unsigned i = 1, q = 0;
+    /* We *know* the denominator so don't need to CLZ or check for zero div! */
+    /* Counts the leading zeros in the denominator */
+    if ((p >> 4) == 0) {
+        i <<= 28;
+        p <<= 28;
+    }
+    else {
+        i <<= 27;
+        p <<= 27;
+    }
+
+
+    /* TODO!!!! At each stage we can do less searching than the previous stage as we know the previous 2 MSBs have been
+     * dealth with in the last iteration, 3 if base 16!*/
+	while (i > 0) {
+		q = q << 1;	/* write bit in q at index (size-1) */
+		if (n >= p)
+		{
+			n -= p;
+			q++;
+		}
+		p = p >> 1; 	/* decrease p */
+		i = i >> 1; 	/* decrease remaining size in q */
+	}
+	qr->r = n;
+	qr->q = q;
+}
+
+void num_to_str(unsigned long num, unsigned long base)
+{
+    // max ulong value is 4294967296 on 32-bit device, so need 11 characters including NULL terminator
+    struct qr qr;
+    char buffer[11];
+    memset(buffer, 0, sizeof(buffer));
+    unsigned int i = 0;
+    while(num > 0)
+    {  
+        mydivision_qr(num, base, &qr);
+        buffer[i++] = '0' + qr.r;
+        num = qr.q;
+        
+    }
+    buffer[i] = '\0';
+    printf("%s\n", buffer);
+}
+
+static void print_decimal_arg_to_buffer(context_t *const context) {
+    
+    switch(context->length_spec)
+    {
+        /* All of the following would have been type promoted to an unsigned int */
+        case FORMAT_LENGHT_H:
+        case FORMAT_LENGHT_HH:
+        case FORMAT_LENGHT_NOT_SPECIFIED:
+            va_arg(context->args, unsigned int);
+            break;
+
+        case FORMAT_LENGHT_L:
+            va_arg(context->args, unsigned long int);
+            break;
+        
+        case FORMAT_LENGHT_LL:
+            va_arg(context->args, unsigned long long int);
+            break;
+
+        case FORMAT_LENGHT_J:
+            va_arg(context->args, uintmax_t);
+            break;
+
+        case FORMAT_LENGHT_T:
+            va_arg(context->args, ptrdiff_t);
+            break;
+
+        case FORMAT_LENGHT_Z:
+            va_arg(context->args, size_t);
+            break;
+    
+        //FORMAT_LENGHT_L_DBL,
     }
 }
 
@@ -574,7 +650,9 @@ static void print_arg_to_buffer(context_t *const context)
 
     switch(context->format_spec)
     {
-        case FORMAT_SPECIFIER_STRING: print_string_arg_to_buffer(context); break;
+        case FORMAT_SPECIFIER_STRING:                   print_string_arg_to_buffer(context);  break;
+        case FORMAT_SPECIFIER_CHARACTER:                print_string_arg_to_buffer(context);  break;
+        case FORMAT_SPECIFIER_UNSIGNED_DECIMAL_INTEGER: print_decimal_arg_to_buffer(context); break;
         default: break;
     }        
 }
@@ -596,32 +674,23 @@ void mysnprintf(char *const buffer, const size_t size, const char *const format,
     const char *next_char = context.pbuff.format;
     do
     {
-        DEBUG(("***** ITERATIONS\n"));
         next_char = print_to_buffer_escaped_percents_until_next_specifier(next_char, &context.pbuff);    
-        if (*next_char != '\0') {
-            next_char = parse_format__flags(next_char, &context.flags);
-            dump_format_flags(&context.flags);
-        }
+        if (*next_char == '\0') { break; }
+        
+        next_char = parse_format__flags(next_char, &context.flags);
+        if (*next_char == '\0') { break; }
+        
+        next_char = parse_format__width(next_char, &context.width_spec);
+        if (*next_char == '\0') { break; }
 
-        if (*next_char != '\0') {
-            next_char = parse_format__width(next_char, &context.width_spec);
-            dump_format_width(&context.width_spec);
-        }
+        next_char = parse_format__precision(next_char, &context.precision_spec);
+        if (*next_char == '\0') { break; }
 
-        if (*next_char != '\0') {
-            next_char = parse_format__precision(next_char, &context.precision_spec);
-            dump_format_precision(&context.precision_spec);
-        }
-
-        if (*next_char != '\0') {
-            next_char = parse_format__length(next_char, &context.length_spec);
-            DEBUG(("Length spec: %u\n", (unsigned int)context.length_spec));
-        }
+        next_char = parse_format__length(next_char, &context.length_spec);
+        if (*next_char == '\0') { break; }
 
         if (*next_char != '\0') {
             next_char = parse_format__specifier(next_char, &context.format_spec);
-            DEBUG(("Format spec: %u\n", (unsigned int)context.format_spec));
-
             print_arg_to_buffer(&context);
         }
 
@@ -632,6 +701,9 @@ void mysnprintf(char *const buffer, const size_t size, const char *const format,
 }
 
 int main(void) {
+
+    num_to_str(42946, 10);
+
     #define SIZE 40
     char buffer[SIZE];
     memset(buffer, (int)'#', sizeof(*buffer));
@@ -673,5 +745,13 @@ int main(void) {
     mysnprintf(buffer, SIZE, "aa_%10.10s_bbb", "JamesHume");
     memset(buffer, (int)'#', sizeof(*buffer));
     mysnprintf(buffer, SIZE, "aa_%10.9s_bbb", "JamesHume");
+
+    memset(buffer, (int)'#', sizeof(*buffer));
+    mysnprintf(buffer, SIZE, "aa_%c_bbb", '!');
+    memset(buffer, (int)'#', sizeof(*buffer));
+    mysnprintf(buffer, SIZE, "aa_%-10c_bbb", '!');
+    memset(buffer, (int)'#', sizeof(*buffer));
+    mysnprintf(buffer, SIZE, "aa_%10c_bbb", '!');
+
     return 0;
 }

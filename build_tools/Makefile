@@ -1,10 +1,14 @@
-.DEFAULT_GOAL:=all
-
 # This worked well when compiling locally because Make could figure out which files had been
 # modified since the last build. However, this cannot work when building online using a fresh
-# checkout. So when building online get a list of the changed files from git and use those
-# instead.
+# checkout. It just rebuilds everything!!
 
+.DEFAULT_GOAL:=all
+
+
+
+########################################################################################################################
+# INPUT FILES
+########################################################################################################################
 SRC_DIR:=../src
 SRC_HTML_ROOT_DIR:=$(SRC_DIR)/html
 SRC_HTML_DIRS:=$(shell find "$(SRC_HTML_ROOT_DIR)" -type d)
@@ -13,29 +17,6 @@ SRC_IMAGE_DIR:=$(SRC_DIR)/images/jeh-tech
 SRC_JAVASCRIPT_DIR:=$(SRC_DIR)/javascript
 SRC_CSS_DIR:=$(SRC_DIR)/css
 
-SRC_JAVASCRIPT_FILES := $(addprefix $(SRC_JAVASCRIPT_DIR)/,$(shell cat "$(SRC_JAVASCRIPT_DIR)/contents.txt"))
-
-ifeq ($(TODO_CI),true)
-# Github actions cannot use the Make magic of figuring out what changed since last build as the
-# checkout is fresh. But still want to use the dependency graphs for each file so adding it to
-# makefile rather than custom build script... the right thing to do? Meh.
-#
-# Well, probably not! The uploader needs to be smarter too - it cannot delete files from the website
-# by detecting files on the server but not in the build output as this would only build a subset of files.
-#
-# So... more work TBD
-
-
-# Paths relative to repo root but we are in the build_tools directory so prefix all files with ../
-CHANGED_FILES:=$(shell git diff --name-only HEAD^1 HEAD | sed 's!^\(.*\)$$!../\1!g') #< Note $$ in sed command to escape $ from Makefile expansion
-SRC_HTML_FILES:=$(filter %.html,$(CHANGED_FILES))
-CHANGED_IMAGE_FILES:=$(filter %.png %.gif %.mp4 %.svg %.jpg %.jpeg %.tif,$(CHANGED_FILES))
-SRC_NO_WATERMARK_IMAGE_FILES:=$(filter-out ../src/images/jehtech%,$(CHANGED_IMAGE_FILES))
-SRC_IMAGE_FILES:=$(filter ../src/images/jehtech%,$(CHANGED_IMAGE_FILES))
-SRC_CSS_FILES:=$(filter %.css,$(CHANGED_FILES))
-
-else
-
 # Normal build running on a normal Linux box.
 SRC_HTML_FILES:=$(shell find "$(SRC_HTML_ROOT_DIR)" -type f -name "*.html")
 SRC_NO_WATERMARK_IMAGE_FILES:=$(shell find "$(SRC_NO_WATERMARK_IMAGE_DIR)" -maxdepth 1 -type f)
@@ -43,9 +24,13 @@ SRC_NO_WATERMARK_IMAGE_FILES:=$(filter %.png %.gif %.mp4 %.svg %.jpg %.jpeg %.ti
 SRC_IMAGE_FILES:=$(shell find "$(SRC_IMAGE_DIR)" -type f)
 SRC_IMAGE_FILES:=$(filter %.png %.gif %.mp4 %.svg %.jpg %.jpeg %.tif,$(SRC_IMAGE_FILES))
 SRC_CSS_FILES := $(shell find "$(SRC_CSS_DIR)" -type f -name "*.css")
-endif
+SRC_JAVASCRIPT_FILES := $(addprefix $(SRC_JAVASCRIPT_DIR)/,$(shell cat "$(SRC_JAVASCRIPT_DIR)/contents.txt"))
 
 
+
+########################################################################################################################
+# OUTPUT FILES
+########################################################################################################################
 
 OUTPUT_DIR=../output
 
@@ -60,6 +45,12 @@ DST_IMAGE_FILES:=$(patsubst $(SRC_IMAGE_DIR)%,$(DST_IMAGE_DIR)%,$(SRC_IMAGE_FILE
 
 DEP_DIR:=$(OUTPUT_DIR)/deps
 DEP_FILES:=$(patsubst %.html,%.d,$(patsubst $(DST_HTML_ROOT_DIR)%,$(DEP_DIR)%,$(DST_HTML_FILES)))
+
+
+
+########################################################################################################################
+# MACROS 
+########################################################################################################################
 
 #
 # MACRO generates the HTML rules that take HTML files from the source directory into the built
@@ -160,6 +151,11 @@ $(patsubst $(SRC_NO_WATERMARK_IMAGE_DIR)%,$(DST_NO_WATERMARK_IMAGE_DIR)%,$(1)): 
 endef
 
 
+
+########################################################################################################################
+# RULES
+########################################################################################################################
+
 .PHONY: all
 all: images html javascript css fonts | $(OUTPUT_DIR)
 	@python3 site_hasher.py create_hash_file "${DST_HTML_ROOT_DIR}" "${OUTPUT_DIR}/site_hashes.dat"
@@ -237,7 +233,7 @@ $(DST_HTML_ROOT_DIR)/jeh-monolith.js: $(SRC_JAVASCRIPT_FILES)
         cat "$${file}" >> "$@"; \
      done
 	@echo "   Minifying..."
-#@"$$(npm bin)/node-minify" --compressor uglify-es --input "$@" --output "$@" 
+	@"$$(npm bin)/node-minify" --compressor uglify-es --input "$@" --output "$@" 
 
 
 $(DST_HTML_ROOT_DIR)/animatron_player.js: $(SRC_HTML_ROOT_DIR)/animatron_player.js
@@ -268,6 +264,12 @@ $(foreach html_dir,$(SRC_HTML_DIRS),$(eval $(call generate_html_rules,$(SRC_HTML
 $(OUTPUT_DIR):
 	mkdir --parents "$(OUTPUT_DIR)"
 
+
+
+########################################################################################################################
+# DEPENDENCIES
+########################################################################################################################
+
 # Include the dependency files. These give a mapping from HTML files to any imported snippets
 # If any of the include targets (i.e., the DEP_FILES) were updated by the rules the 
 # makefile is reloaded with a cleared db. This is because
@@ -283,10 +285,5 @@ $(OUTPUT_DIR):
 #
 # Note dependency files must be marked as SECONDARY so that make does not think they are
 # normal intermediary files that should be cleaned up at the end of a build.
-#
-# ARSE: On a Github action build this would cause everything to get built, always, because
-# the dep files will not exist... sigh.
-ifneq ($(CI),true)
 .SECONDARY: $(DEP_FILES)
 -include $(DEP_FILES)
-endif

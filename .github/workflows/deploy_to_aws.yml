@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 2 # Depth is DELIBERATELY 2 so that commits straight to master can be see files changed. I dont bother with PRs - its only my crappy notes site!
+          fetch-depth: 2 # Depth is DELIBERATELY 2 so that commits straight to master can be see files changed. I don't bother with PRs - its only my crappy notes site!
       - uses: actions/setup-node@v3
         with:
           node-version: 16.13.2
