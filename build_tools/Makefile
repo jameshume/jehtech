@@ -1,26 +1,36 @@
-.DEFAULT_GOAL:=all
-
 # This worked well when compiling locally because Make could figure out which files had been
 # modified since the last build. However, this cannot work when building online using a fresh
-# checkout. So when building online get a list of the changed files from git and use those
-# instead.
+# checkout. It just rebuilds everything!!
+
+.DEFAULT_GOAL:=all
+
+
+
+########################################################################################################################
+# INPUT FILES
+########################################################################################################################
 SRC_DIR:=../src
 SRC_HTML_ROOT_DIR:=$(SRC_DIR)/html
 SRC_HTML_DIRS:=$(shell find "$(SRC_HTML_ROOT_DIR)" -type d)
-SRC_HTML_FILES:=$(shell find "$(SRC_HTML_ROOT_DIR)" -type f -name "*.html")
-
 SRC_NO_WATERMARK_IMAGE_DIR:=$(SRC_DIR)/images
+SRC_IMAGE_DIR:=$(SRC_DIR)/images/jeh-tech
+SRC_JAVASCRIPT_DIR:=$(SRC_DIR)/javascript
+SRC_CSS_DIR:=$(SRC_DIR)/css
+
+# Normal build running on a normal Linux box.
+SRC_HTML_FILES:=$(shell find "$(SRC_HTML_ROOT_DIR)" -type f -name "*.html")
 SRC_NO_WATERMARK_IMAGE_FILES:=$(shell find "$(SRC_NO_WATERMARK_IMAGE_DIR)" -maxdepth 1 -type f)
 SRC_NO_WATERMARK_IMAGE_FILES:=$(filter %.png %.gif %.mp4 %.svg %.jpg %.jpeg %.tif,$(SRC_NO_WATERMARK_IMAGE_FILES))
-SRC_IMAGE_DIR:=$(SRC_DIR)/images/jeh-tech
 SRC_IMAGE_FILES:=$(shell find "$(SRC_IMAGE_DIR)" -type f)
 SRC_IMAGE_FILES:=$(filter %.png %.gif %.mp4 %.svg %.jpg %.jpeg %.tif,$(SRC_IMAGE_FILES))
-
-SRC_JAVASCRIPT_DIR:=$(SRC_DIR)/javascript
+SRC_CSS_FILES := $(shell find "$(SRC_CSS_DIR)" -type f -name "*.css")
 SRC_JAVASCRIPT_FILES := $(addprefix $(SRC_JAVASCRIPT_DIR)/,$(shell cat "$(SRC_JAVASCRIPT_DIR)/contents.txt"))
 
-SRC_CSS_DIR:=$(SRC_DIR)/css
-SRC_CSS_FILES := $(shell find "$(SRC_CSS_DIR)" -type f -name "*.css")
+
+
+########################################################################################################################
+# OUTPUT FILES
+########################################################################################################################
 
 OUTPUT_DIR=../output
 
@@ -36,6 +46,12 @@ DST_IMAGE_FILES:=$(patsubst $(SRC_IMAGE_DIR)%,$(DST_IMAGE_DIR)%,$(SRC_IMAGE_FILE
 DEP_DIR:=$(OUTPUT_DIR)/deps
 DEP_FILES:=$(patsubst %.html,%.d,$(patsubst $(DST_HTML_ROOT_DIR)%,$(DEP_DIR)%,$(DST_HTML_FILES)))
 
+
+
+########################################################################################################################
+# MACROS 
+########################################################################################################################
+
 #
 # MACRO generates the HTML rules that take HTML files from the source directory into the built
 # directory.
@@ -49,6 +65,44 @@ DEP_FILES:=$(patsubst %.html,%.d,$(patsubst $(DST_HTML_ROOT_DIR)%,$(DEP_DIR)%,$(
 #    $2 - The *source* HTML directory under and including $1 that will be mirrored in the built
 #         directory.
 #    $3 - The root *destination* HTML directory
+#
+# Urg! Its hard to grok coming back to this some time later. Using the marvellous remake:
+#     remake<7> print SRC_HTML_DIRS
+#         Makefile:9 (origin: makefile) SRC_HTML_DIRS = ../src/html ../src/html/python ../src/html/mathsy_stuff ../src/html/c_and_cpp ../src/html/dsp
+#
+#     remake<9> expand $(call generate_html_rules,$(SRC_HTML_ROOT_DIR),../src/html,$(DST_HTML_ROOT_DIR))
+#         # The .d file depends on the source .html file. If that changes the dependencies must be regenerated.
+#         ../output/deps/%.d: ../output/site/%.html | ../output/deps
+#                 @python3 generate_snippet_dependencies.py "../src/html" "../output/site" "$(patsubst %.d,%.html,$(patsubst ../output/deps%,../src/html%,$@))" "$@" 
+#   
+#         # The destination .html file depends on the source .html file and the links.html, which all JEHTech
+#         # pages depend on.
+#         ../output/site/%.html: ../src/html/%.html ../src/html/_links.html | ../output/site 
+#                 @./generate_html.sh "$<" "$@" "../output/site"
+#
+#         ../output/site:
+#                 @mkdir --parents "$@"
+#
+#         ../output/deps:
+#                 @mkdir --parents "$@"
+#
+#     remake<8> expand $(call generate_html_rules,$(SRC_HTML_ROOT_DIR),../src/html/python,$(DST_HTML_ROOT_DIR))
+#         # The .d file depends on the source .html file. If that changes the dependencies must be regenerated.
+#         ../output/deps/python/%.d: ../output/site/python/%.html | ../output/deps/python
+#                 @python3 generate_snippet_dependencies.py "../src/html" "../output/site" "$(patsubst %.d,%.html,$(patsubst ../output/deps%,../src/html%,$@))" "$@"
+#
+#         # The destination .html file depends on the source .html file and the links.html, which all JEHTech
+#         # pages depend on.
+#         ../output/site/python/%.html: ../src/html/python/%.html ../src/html/_links.html | ../output/site/python 
+#                 @./generate_html.sh "$<" "$@" "../output/site"
+#
+#         ../output/site/python:
+#                 @mkdir --parents "$@"
+#   
+#         ../output/deps/python:
+#                 @mkdir --parents "$@"
+#         remake<10> 
+#
 define generate_html_rules
 # The .d file depends on the source .html file. If that changes the dependencies must be regenerated.
 $(patsubst $(1)%,$(DEP_DIR)%,$(2))/%.d: $(patsubst $(1)%,$(3)%,$(2))/%.html | $(patsubst $(1)%,$(DEP_DIR)%,$(2))
@@ -58,7 +112,7 @@ $(patsubst $(1)%,$(DEP_DIR)%,$(2))/%.d: $(patsubst $(1)%,$(3)%,$(2))/%.html | $(
         "$$(patsubst %.d,%.html,$$(patsubst $(DEP_DIR)%,$(1)%,$$@))" \
         "$$@"
 
-# The destination .html file depends on the source .html file and the links.html, which all JEHTexh
+# The destination .html file depends on the source .html file and the links.html, which all JEHTech
 # pages depend on.
 $(patsubst $(1)%,$(3)%,$(2))/%.html: $(2)/%.html $(1)/_links.html | $(patsubst $(1)%,$(3)%,$(2)) 
 	@./generate_html.sh "$$<" "$$@" "$(3)"
@@ -78,7 +132,7 @@ endef
 #    $1 - The source image file
 define generate_images_rules
 $(patsubst $(SRC_IMAGE_DIR)%,$(DST_IMAGE_DIR)%,$(1)): $(1)
-	@echo "Generating $$@"
+	@echo "Generating $$@ (rule=(patsubst $(SRC_IMAGE_DIR)%,$(DST_IMAGE_DIR)%,$(1)): $(1))"
 	@mkdir --parents "$$$$(dirname "$$@")" 1>/dev/null 2>&1 || true
 	@IMG_FILENAME=$$$$(basename "$$<"); \
         IMG_EXT="$$$${IMG_FILENAME##*.}"; \
@@ -96,6 +150,11 @@ $(patsubst $(SRC_NO_WATERMARK_IMAGE_DIR)%,$(DST_NO_WATERMARK_IMAGE_DIR)%,$(1)): 
 	@cp "$$<" "$$@";
 endef
 
+
+
+########################################################################################################################
+# RULES
+########################################################################################################################
 
 .PHONY: all
 all: images html javascript css fonts | $(OUTPUT_DIR)
@@ -174,7 +233,7 @@ $(DST_HTML_ROOT_DIR)/jeh-monolith.js: $(SRC_JAVASCRIPT_FILES)
         cat "$${file}" >> "$@"; \
      done
 	@echo "   Minifying..."
-#@"$$(npm bin)/node-minify" --compressor uglify-es --input "$@" --output "$@" 
+	@"$$(npm bin)/node-minify" --compressor uglify-es --input "$@" --output "$@" 
 
 
 $(DST_HTML_ROOT_DIR)/animatron_player.js: $(SRC_HTML_ROOT_DIR)/animatron_player.js
@@ -191,13 +250,13 @@ $(DST_HTML_ROOT_DIR)/jeh-monolith.css: $(SRC_CSS_FILES)
 	@"$$(npm bin)/node-minify" --compressor cssnano --input "$@" --output "$@" --silence
 
 
-# The HTML file build rules. The macro is evaluated for each source HTML file so that a rule
-# dest-html: src-html src-html-dep is created.
+# Image file make rules
 $(foreach image_file,$(SRC_IMAGE_FILES),$(eval $(call generate_images_rules,$(image_file))))
 $(foreach image_file,$(SRC_NO_WATERMARK_IMAGE_FILES),$(eval $(call generate_unwatermarked_image_rules,$(image_file))))
 
 
-# The CSS file build rules. Macro evaluation similar to how HTML rule macro eval works.
+# The HTML file build rules. The macro is evaluated for each source HTML file so that a rule
+# dest-html: src-html src-html-dep is created.
 $(foreach html_dir,$(SRC_HTML_DIRS),$(eval $(call generate_html_rules,$(SRC_HTML_ROOT_DIR),$(html_dir),$(DST_HTML_ROOT_DIR))))
 
 
@@ -205,6 +264,11 @@ $(foreach html_dir,$(SRC_HTML_DIRS),$(eval $(call generate_html_rules,$(SRC_HTML
 $(OUTPUT_DIR):
 	mkdir --parents "$(OUTPUT_DIR)"
 
+
+
+########################################################################################################################
+# DEPENDENCIES
+########################################################################################################################
 
 # Include the dependency files. These give a mapping from HTML files to any imported snippets
 # If any of the include targets (i.e., the DEP_FILES) were updated by the rules the 

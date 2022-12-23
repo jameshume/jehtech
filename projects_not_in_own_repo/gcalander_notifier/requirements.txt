@@ -1,5 +1,5 @@
 cachetools==5.2.0
-certifi==2022.6.15
+certifi==2022.12.7
 charset-normalizer==2.1.1
 google-api-core==2.8.2
 google-api-python-client==2.57.0
@@ -9,8 +9,8 @@ google-auth-oauthlib==0.5.2
 googleapis-common-protos==1.56.4
 httplib2==0.20.4
 idna==3.3
-oauthlib==3.2.0
-protobuf==4.21.5
+oauthlib==3.2.1
+protobuf==4.21.6
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pyparsing==3.0.9

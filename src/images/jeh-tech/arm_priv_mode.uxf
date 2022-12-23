@@ -1,0 +1,20 @@
+<diagram program="umletino" version="15.0.0"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>410</x><y>240</y><w>100</w><h>60</h></coordinates><panel_attributes>Handler Mode
+bg=gray</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>410</x><y>310</y><w>100</w><h>60</h></coordinates><panel_attributes>Thread Mode
+bg=gray</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>530</x><y>190</y><w>110</w><h>40</h></coordinates><panel_attributes>Privileged
+*CONTROL[0] = 0*
+bg=gray</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>660</x><y>190</y><w>110</w><h>40</h></coordinates><panel_attributes>User
+*CONTROL[0] = 1*
+bg=gray</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>660</x><y>240</y><w>110</w><h>60</h></coordinates><panel_attributes>Not Allowed
+lt=.
+bg=gray</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>530</x><y>240</y><w>110</w><h>60</h></coordinates><panel_attributes>MSP only
+*CONTROL[1] = 0*</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>530</x><y>310</y><w>110</w><h>60</h></coordinates><panel_attributes>MSP or PSP
+Usually MSP!
+*CONTROL[1]=0*</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>660</x><y>310</y><w>110</w><h>60</h></coordinates><panel_attributes>MSP or PSP
+Usually PSP!
+*CONTROL[1] = 1*</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLNote</id><coordinates><x>370</x><y>430</y><w>170</w><h>110</h></coordinates><panel_attributes>Although either the MSP or PSP can be used, as this is privileged it would notmally be something like an OS task (as opposed to a user task).
+style=wordwrap
+bg=blue</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>530</x><y>360</y><w>70</w><h>90</h></coordinates><panel_attributes>lt=.&gt;
+</panel_attributes><additional_attributes>50;10;10;70</additional_attributes></element><element><id>UMLNote</id><coordinates><x>710</x><y>430</y><w>170</w><h>110</h></coordinates><panel_attributes>Although Either the MSP or PSP can be used, normally would use PSP.
+style=wordwrap
+bg=blue</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>700</x><y>360</y><w>90</w><h>90</h></coordinates><panel_attributes>lt=.&gt;
+</panel_attributes><additional_attributes>10;10;70;70</additional_attributes></element></diagram>

@@ -13,7 +13,17 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 1
+          # This isn't used yet. The Makefile is still being used, but this was designed to run on a machine that held a
+          # stash of the built files and updated them incrementally. The Makefile, as is, just rebuilds *everything* 
+          # from scratch, including all image watermarking etc, so is incredibly inefficient. However, as a quick hack
+          # its working okay to build the site using a Github action rather than having multiple copies on different
+          # local machines, some of which break every so often.
+          #
+          # TODO: An EC2 instance that can be spun up for a build then spun down would be better. It could use the
+          #       makefile as it was designed to be made.
+          # OR:   Create a new script that will only build what is necessary by looking at the Git history to figure
+          #       out what has changed and only build that.
+          fetch-depth: 2 # Depth is DELIBERATELY 2 so that commits straight to master can be see files changed. I don't bother with PRs - its only my crappy notes site!
       - uses: actions/setup-node@v3
         with:
           node-version: 16.13.2
@@ -21,15 +31,14 @@ jobs:
       - run: npm ci
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.8.10'
+          python-version: '3.8.12'
           cache: 'pip'
       - run: pip3 install wheel
       - run: pip3 install -r requirements.txt
       - run: >
           cd build_tools 
           && chmod +x generate_html.sh 
-          && make -j$(lscpu | grep "^\s*CPU(s):" | sed 's/.*:\s*//g') all 
-          && make deploy
+          && make -j$(lscpu | grep "^\s*CPU(s):" | sed 's/.*:\s*//g') deploy
         env:
           AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
