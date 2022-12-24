@@ -77,7 +77,8 @@ SECTIONS
 
 In the above, the files being linked are *inputs* and the sections they contain are *input sections*. The result of the linking, i.e., the single binary, also contains sections, sometimes called *output sections*.
 
-TODO - image here
+
+![Linker file output sections based on input section object name and section name mappings](##IMG_DIR##/linker_file_input_ouput_sections.png)
 
 
 Usually in LD files we will see sections that look something like the following (taken from LD file for STM32 app):
