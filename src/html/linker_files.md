@@ -116,17 +116,28 @@ It would layout the image something akin to this:
 
 Looking at how some of the input sections are mapped to output sections:
 
-1. In the `output_2` section, the pattern `*(.special_text*)` says "match all object files and include from the matched object files all sections who's name start with "special_text". 
+1. In the `output_2` section, the pattern `*(.special_text*)` says "match all object files and include from the matched object files all sections who's name start with "special_text".<br><br>Thus the file selector, being the wildcard, selects all the object files `file_a.o`, `file_b.o`, and `file_c.o`. From this set of object files the sections matching `.special_text*` are `.special_text22` and `.special_text_11`. Thus, these two sections are selected and their contents appended into the memory region `MEM_1`.
 
-   Thus, the file selector being the wildcard selects all the objects `file_a.o`, `file_b.o`, and `file_c.o`. From this set of files
-   the sections matching `.special_text*` are `.special_text22` and `.special_text_11`. Thus, these two sections are selected and their contents appended into the memory region `MEM_1`.
+2. The sections `.output_1` and `.output_3` show how sections with the same name, from difference object files, can be mapped to different memory regions.<br><br>For example, the section `.output_1` takes the `.text` section only from files matching the pattern `*_a.o`. Thus, only the `.text` section from `file_a.o` is selected and appended to memory region `MEM_1`.
 
-
+3. And so on...
 
 #### Section Garbage Collection & Keeping Files
-The `KEEP` directive is also interesting. This is used when the linker does *garbage collection of unused sections* and specifically tells the linker never to discard the sections annotated by `KEEP`.
+The linker is capable of pruning all unused *sections* from the final, linked, binary. Note *sections* and not functions! To ask the linker to do this the `--gc-sections` options must be passed to the linker. When doing the build and link from the one command the option usually looks like `gcc ... -Wl,--gc-sections ...`.
 
-So why are the following useful? One example use I had was using Ceedling. Ceedling outputs an absolute ton of mocked methods for unit tests, only a small fraction of which I actually used in my tests. When running on a memory contrained target this was a problem as including unused functions bloated the `.text` section size to the point that some tests would not fit in flash. How to overcome this? Get the linker to discard unused functions. The catch? The linker can only do things at the section level of granularity, so to work around this we must tell GCC to put each function in its own section using the `-ffunction-sections` command line option.
+Why is this useful? The scenario I've encountered this in is for pruning unused functions (and data). To do this the compiler has a little trick up its sleave: because the linker can only prune *sections*, it can put each function (and data item) in its *own section*. To tell the compiler to do this, the flags `-fdata-sections -ffunction-sections`.
+
+In the rather contrived LD file seen above, if we use the flags `-fdata-sections -ffunction-sections`, we get the following:
+
+![Linker section garbage collection: an imaginary linker generated call graph](##IMG_DIR##/linker_section_garbage_collection.png)
+
+Each function has been placed in its own section. The linker can generate a *call graph* between sections, and thus, in this case between functions. Any node that is not part of the call graph is unused and therefore garbage collected: not included in the output.
+
+Note a small caveat! The section `.test_stuff_a5` and thus the function `a5()` has been garbage collected (and thus the link will fail). Why is this? It is because it appears that the linker *cannot track functions called by pointer*! This was an interesting problem I had when trying to prune unused mock functions from Ceedling tests: the test functions are all called via function pointer and so a naive garbage collection just got rid of all the test functions (see below). 
+
+The `KEEP` directive is also interesting and will help us tell the linker not to discard `.test_stuff_a5` in the above example. The directive is used when the linker does *garbage collection of unused sections* and specifically tells the linker *never* to discard the sections annotated by `KEEP`.
+
+So why are the following useful? One example use I had was using Ceedling. Ceedling outputs an absolute ton of mocked methods for unit tests, only a small fraction of which I actually used in my tests. When running on a memory constrained target this was a problem as including unused functions bloated the `.text` section size to the point that some tests would not fit in flash. How to overcome this? Get the linker to discard unused functions. The catch? The linker can only do things at the section level of granularity, so to work around this we must tell GCC to put each function in its own section using the `-ffunction-sections` command line option.
 
 
 ```
@@ -134,19 +145,13 @@ EXCLUDE_FILE (test_*.o) *(.text*)
 KEEP(test_*.o(.text*))
 ```
 
-The first line includes all `.text*` sections, except those sections found in files named `test_*.o`.
+The first line includes all `.text*` sections, except those sections found in files named `test_*.o`. The linker can prune these sections as it sees fit.
 
 The second line, `test_*.o(.text*)`, selects all `.text` sections from files matching the pattern `test_*.o` - the opposite of above. The `KEEP` specifier tells the linker that although it has been instructed to garbage collect unused sections, it may not garbage collect the `.text` sections from files matching the pattern `test_*.o`. The reason for this is that if we don't specify this it will garbage collect almost everything. The reason for this is that the main Ceedling test runner, runs the test functions by calling them through a function pointer. The linker cannot track this so the call graph it would otherwise generate would not include any tests... fun!
 
 Therefore, what we're saying is that the linker is free to garbage collect everything it likes, except the test functions themselves - we force it to know something about the call graph it couldn't otherwise.
 
 The compiler flags that were added to the target ceedling YAML are what enable the garbage collection by instructing the compiler to put every function in its own section, which is what then allows the linker to garbage collect, as it can only garbage collect by section.
-
-TODOS:
-
-1. ALIGN - padding vs section start
-2. Define registers via section in LD file instead of #defines in C code.
-3. PROVIDE
 
 
 #### VMA and LMA
@@ -160,6 +165,14 @@ In summary:
 * LMA - Address used to *store*.
 
 ![Image describing the difference between the LMA and VMA of a section in a linker file](##IMG_DIR##/linker_file_vma_vs_lma.png)
+
+#### TODO
+
+TODOS:
+
+1. ALIGN - padding vs section start
+2. Define registers via section in LD file instead of #defines in C code.
+3. PROVIDE
 
 
 
