@@ -77,31 +77,53 @@ SECTIONS
 
 In the above, the files being linked are *inputs* and the sections they contain are *input sections*. The result of the linking, i.e., the single binary, also contains sections, sometimes called *output sections*.
 
+Let's imagine a simple, dummy linker file:
+
+```
+MEMORY {
+  MEM1 ([rwx]+) : ORIGIN = 0x>???????, LENGTH = ???K
+  MEM2 ([rwx]+) : ORIGIN = 0x>???????, LENGTH = ???K
+  MEM3 ([rwx]+) : ORIGIN = 0x0???????, LENGTH = ???K
+}
+
+
+SECTIONS {
+   .output_1 {
+      *_a.o (.text*)
+      * (.other_named_section)
+   } > MEM_1
+
+   .output_2:
+   {
+      * (.special_text*)
+   } > MEM_1
+
+   .output_3:
+   {
+      *_b.o (.text*)
+   } > MEM_2
+
+   .data:
+   {
+      * (.data)
+   } > MEM_3
+}
+```
+
+It would layout the image something akin to this:
 
 ![Linker file output sections based on input section object name and section name mappings](##IMG_DIR##/linker_file_input_ouput_sections.png)
 
+Looking at how some of the input sections are mapped to output sections:
 
-Usually in LD files we will see sections that look something like the following (taken from LD file for STM32 app):
+1. In the `output_2` section, the pattern `*(.special_text*)` says "match all object files and include from the matched object files all sections who's name start with "special_text". 
 
-```
-.text :
-  {
-    . = ALIGN(4);
-    *(.text)           /* .text sections (code) */
-    *(.text*)          /* .text* sections (code) */
+   Thus, the file selector being the wildcard selects all the objects `file_a.o`, `file_b.o`, and `file_c.o`. From this set of files
+   the sections matching `.special_text*` are `.special_text22` and `.special_text_11`. Thus, these two sections are selected and their contents appended into the memory region `MEM_1`.
 
-    KEEP (*(.init))
-    KEEP (*(.fini))
 
-    . = ALIGN(4);
-    _etext = .;        /* define a global symbols at end of code */
-  } >FLASH
-```
 
-Of interest here is that wildcards (the asterisks (`*`)) are used.
-
-In `*(.text*)`, the first asterisk selects all object files and the second is a wild card that means from all the selected object files the sections matching `.text*` are inclued. This means the sections `.text_some_name`, `.text_blahblahblah` etc would all be included in the `.text` section.
-
+#### Section Garbage Collection & Keeping Files
 The `KEEP` directive is also interesting. This is used when the linker does *garbage collection of unused sections* and specifically tells the linker never to discard the sections annotated by `KEEP`.
 
 So why are the following useful? One example use I had was using Ceedling. Ceedling outputs an absolute ton of mocked methods for unit tests, only a small fraction of which I actually used in my tests. When running on a memory contrained target this was a problem as including unused functions bloated the `.text` section size to the point that some tests would not fit in flash. How to overcome this? Get the linker to discard unused functions. The catch? The linker can only do things at the section level of granularity, so to work around this we must tell GCC to put each function in its own section using the `-ffunction-sections` command line option.
