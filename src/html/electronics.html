@@ -1764,6 +1764,45 @@ dnl ---- END M4 MACROS ----
 				</li>
 			</ul>
 		</div>
+
+
+		<!-- --------------------------------------------------------------------------------------- -->
+		<h2 style="clear:both;">Decibels</h2>
+		<div>
+			<ul>
+				<li>Ratio of two power values.</li>
+				<li>Consistent way to compare signal strengths.</li>
+				<li>Uses logarithmic values so large and small ratios alike can be worked with.</li>
+				<li>1 Bel == x10 power gain or loss. Too big for most measurements, hence the decibel (dB) which is x0.1 power gain or loss.</li>
+			</ul>
+			<p>
+				$$
+				\text{Power Gain (dB)} = 10\log\left(\frac{\text{power}}{\text{reference power}}\right)
+				$$
+
+				The number of dB is 10 times the number of bels (hence the multiplication by 10 of the log of the power ratio).
+			</p>
+			<p>
+				If the reference power is 1, then,
+			</p>
+			<table class="jehtable">
+				<tr><td>Measured power</td> <td>Gain in dB</td></tr>
+				<tr><td>...</td><td>...</td></tr>
+				<tr><td>0.001</td><td>-30</td></tr>
+				<tr><td>0.01</td><td>-20</td></tr>
+				<tr><td>0.1</td><td>-10</td></tr>
+				<tr><td>1</td><td>0</td></tr>
+				<tr><td>10</td><td>10</td></tr>
+				<tr><td>100</td><td>20</td></tr>
+				<tr><td>1000</td><td>30</td></tr>
+				<tr><td>...</td><td>...</td></tr>
+			</table>
+			<p>
+				In other words, if the measured signal is 10 time stronger than the
+				reference then the gain is 10 dB. If the measured signal is 100 times stronger than
+				the reference then the gain is 20 dB and so on...
+			</p>
+		</div>
 	</div>
 </body>
 </html>
