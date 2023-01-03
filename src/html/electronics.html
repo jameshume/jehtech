@@ -1798,9 +1798,19 @@ dnl ---- END M4 MACROS ----
 				<tr><td>...</td><td>...</td></tr>
 			</table>
 			<p>
-				In other words, if the measured signal is 10 time stronger than the
+				If the measured signal is 10 time stronger than the
 				reference then the gain is 10 dB. If the measured signal is 100 times stronger than
-				the reference then the gain is 20 dB and so on...
+				the reference then the gain is 20 dB and so on... <b>I.e., x10 power means +10dB</b>.
+			</p>
+			<p>
+				Note that the decibels difference between two voltage or currents is:
+
+				$$
+					\text{V Power Gain (dB)} = \textbf{20}\log\left(\frac{\text{V}_{\text{out}}\text{ power}}{\text{V}_{\text{in}}\text{ power}}\right)
+				$$
+
+				Note the multiply-by-20 as opposed to the multiply-by-10. This is so that a x10 increased in power would be equivalent to adding 10dB and
+				becase power is proportional to the square of the voltage.
 			</p>
 		</div>
 	</div>
