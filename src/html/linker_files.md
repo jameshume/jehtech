@@ -61,7 +61,7 @@ There are 3 common types of section:
 3. `.data` : This holds initialised global data.
 
 
-The linker file defines a set of *output* sections that include arbirary *input* sections. I.e., the input sections are mapped to output sections, which are mapped to various physical memory locations.
+The linker file defines a set of *output* sections that include arbitrary *input* sections. I.e., the input sections are mapped to output sections, which are mapped to various physical memory locations.
 
 To define and add a section to a memory region, the general syntax is:
 
@@ -166,12 +166,51 @@ In summary:
 
 ![Image describing the difference between the LMA and VMA of a section in a linker file](##IMG_DIR##/linker_file_vma_vs_lma.png)
 
+### Define Registers In LD File
+
+A nice alternative to defining register locations in C files using `#define`'s, the location can be put in
+linker files.
+
+Means that, for example, OS doesn't need to be re-compiled for different targets, just re-linked. So, when there is a lengthy
+recompile time, being able to just link against the correct linker file for the platform gives both a more efficient
+production time but also less coupling to the locations of devices in the memory map.
+
+Say the SPI interface registers are at 0x8000_0000 on one platform and 0x9000_0000 on another. Its the
+same SPI interface, just at different locations. Rather than re-compile for different targets so that
+different `#define`'s are compiled in, if the definitions are in the linker file, then only a re-link
+is required.
+
+In the linker file:
+
+```
+...
+SECTIONS {
+   ...
+   .SPI_Interface_1 0x8000000 : {
+      spi_1_driver_file.o (.SPI_1_SECTION)
+   }
+   ...
+}
+```
+
+In the C file `spi_1_driver_file.c`:
+
+```
+typedef struct spi_registers_tag {
+   uint32_t reg1;
+   ...
+} spi_registers_t;
+
+volatile spi_registers_t SPI_1 __attribute__((section("SPI_Interface_1)));
+```
+
+Then the variable `SPI_1` can be accessed normally in code to read and write to the registers defined in the structure.
+
 #### TODO
 
 TODOS:
 
 1. ALIGN - padding vs section start
-2. Define registers via section in LD file instead of #defines in C code.
 3. PROVIDE
 
 
@@ -181,3 +220,34 @@ TODOS:
 
 > You cannot access the *value* of a linker script defined symbol - it has no value - all you can do is access the *address* of a linker script defined symbol.
 
+What this means is that the symbols provided in the linker script are not backed by their own memory like a symbol in normal C code would be.
+
+This means that if you define a symbol in your linker file called, for example, `mysec_start` as so:
+
+```
+SECTIONS {
+   ...
+   .mysec {
+      .= ALIGN(8)
+      mysec_start = .
+      *(.mysec*)
+   }
+   ...
+}
+```
+
+If you declare it in C as follows:
+
+```
+extern uintptr_t mysec_start;
+```
+
+You must *take the address* of `mysec_start` to get the address of, what in this case is, the section start.
+
+Lets say that upon link, the linker assigns the value `0x8000_0000` to `mysec_start`. In C the following is true:
+
+```
+&mysec_start == 0x8000_0000
+
+mysec_start == What ever is in memory at the address 0x8000_0000
+```
