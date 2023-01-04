@@ -40,3 +40,18 @@ See:
 
 
 
+# SIM and Phone Identifiers
+See [Difference Between IMEI, IMSI, ICCID And MSISDN Numbers September 20, 2019 By Adnan Ghayas](https://commsbrief.com/difference-between-imei-imsi-iccid-and-msisdn-numbers/).
+
+| Acronym | Meaning                                           | Linked to | Format                                                | Description                                                                                           |
++---------+---------------------------------------------------+-----------+-------------------------------------------------------+-------------------------------------------------------------------------------------------------------+
+| IMEI    | International Mobile Equipment Identity           | Phone     |  15 numbers                                           | Unique identifier assigned to every cellular device for each of its SIM *slots*.                      |
+| IMSI    | International Mobile Subscriber Identity          | SIM       |  15 numbers  (1)                                      | Unique identifier assigned to every SIM *card*.                                                       |
+| ICCID   | Integrated Circuit Card Identifier                | SIM       | ~20 numbers  (2)                                      | Identifies the chip of each SIM card.                                                                 |
+| MSISDN  | Mobile Station International Subscriber Directory | SIM       |                                                       | Full mobile number with country code and all prefixes.                                                |
+
+
+(1) Format is `CCCNNIIIIIIIIII`, where `C` (the first 3 digits) are the mobile country code, `N` (the next 2 digits) are the mobile network code and the last 10 digits, `I`, are the Mobile Subscriber Identification Number. The <q>mobile network may use a temporary IMSI called TMSI (Temporary Mobile Subscriber Identity) instead of IMSI to ensure the subscriber's confidentiality</q>.
+
+(2) Usually 19 or 20 digits. Format is similar to `IICCSSSSUUUUUUUUUUU`, where `I` is the industry code, `C` is the country code, `S` is the issuer's code, and `U` is the unique identifier for the SIM.
+
