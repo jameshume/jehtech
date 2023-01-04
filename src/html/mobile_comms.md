@@ -37,9 +37,21 @@ Notes:
 * CDMA = Code Division Multiple Access
     * Can *_not_* make voice calls and transmit data at the same time,
     * GSM is widely used across the world, CDMA is mostly only common in the US/Asia
-* UTMS = Universal Mobile Telecommunications System
-    * Fully compatible with GSM
-
+* UMTS = Universal Mobile Telecommunications System
+    * Fully compatible with GSM, but
+    * Required upgrades to existing 2G networks (whether GSM, GPRS or EDGE) as UMTS uses different access technology (WCDMA) - new base stations required.
+* HSPA = High Speed Packet Access
+    * Tech used to enhance UMTS to improve data rates.
+    * Combination of HSUPA (High Speed Uplink Packet Access) and HSDPA (High Speed Downlink Packet Access)
+    * "3G+" or "H" icon on phone.
+* HSPA+ = Evolved High Speed Packet Access
+* EVDO = EVolution Data optimized
+    * Used in CSMA networks.
+    * Equivalent in GMS/UMTS networks is HSPA.
+* LTE = Long Term Evolution (of mobile networks)
+    * 4G
+* NR = New Radio
+    * 5G
 
 
 ## SIM and Phone Identifiers
