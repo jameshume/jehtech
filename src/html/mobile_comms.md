@@ -68,3 +68,22 @@ See [Difference Between IMEI, IMSI, ICCID And MSISDN Numbers](https://commsbrief
 (1) Format is `CCCNNIIIIIIIIII`, where `C` (the first 3 digits) are the mobile country code, `N` (the next 2 digits) are the mobile network code and the last 10 digits, `I`, are the Mobile Subscriber Identification Number. The <q>mobile network may use a temporary IMSI called TMSI (Temporary Mobile Subscriber Identity) instead of IMSI to ensure the subscriber's confidentiality</q>.
 
 (2) Usually 19 or 20 digits. Format is similar to `IICCSSSSUUUUUUUUUUU`, where `I` is the industry code, `C` is the country code, `S` is the issuer's code, and `U` is the unique identifier for the SIM.
+
+
+## Signal Strength
+* See [[Ref]](https://www.metageek.com/training/resources/understanding-rssi/)
+
+### RSSI
+* A relative measure
+* Values in range [0, 255], *however* each chipset vendor can choose their own maximum value within this range, so RSSI numbers between vendors *may not* be comparable!
+* Use dBm for a comparable metric.
+
+### dBm
+* See [Electonics:decibels](electronics.html) for a definition.
+    * Summary: dBm is gain relative to a reference power of 1mW. 10 dBm means the signal has a power x10 greater than 1mW.
+* Rough guide to strengths and impact on comms:
+    * > -67 dBM is amazing.
+    * > -70 dBm is very good. Required for VoIP / streaming video etc.
+    * > -80 dBm is okay. Useable for email and web browsing.
+    * > -90 dBm is not good. Packet delivery likely unreliable at this point.
+    * <= -90 dBm is unusable. Any functionality unlikely - below noise floor!

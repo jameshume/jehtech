@@ -1769,9 +1769,10 @@ dnl ---- END M4 MACROS ----
 		<!-- --------------------------------------------------------------------------------------- -->
 		<h2 style="clear:both;">Decibels</h2>
 		<div>
+			Decibels:
 			<ul>
-				<li>Ratio of two power values.</li>
-				<li>Consistent way to compare signal strengths.</li>
+				<li>Are a consistent way to compare signal strengths.</li>
+				<li>Are a ratio of two power values.</li>
 				<li>Uses logarithmic values so large and small ratios alike can be worked with.</li>
 				<li>1 Bel == x10 power gain or loss. Too big for most measurements, hence the decibel (dB) which is x0.1 power gain or loss.</li>
 			</ul>
@@ -1821,6 +1822,13 @@ dnl ---- END M4 MACROS ----
 				Note the multiply-by-20 as opposed to the multiply-by-10. This is so that a x10 increased in power would be equivalent to adding 10dB and
 				becase power is proportional to the square of the voltage.
 			</p>
+
+			<h3>Specific Reference Values</h3>
+			<div>
+				If the value is x dB?, where ? is a letter, ? says *what* the decibel value is relative to. If, for example, the value is 
+				x dBm, then because "m" stands for milliwatt (mW), the value is relative to a reference power of 1 mW. Thus, 10 dBm would be q 10 mW gain and so on...
+			</div>
+
 		</div>
 	</div>
 </body>
