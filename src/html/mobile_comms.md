@@ -82,8 +82,9 @@ See [Difference Between IMEI, IMSI, ICCID And MSISDN Numbers](https://commsbrief
 * See [Electonics:decibels](electronics.html) for a definition.
     * Summary: dBm is gain relative to a reference power of 1mW. 10 dBm means the signal has a power x10 greater than 1mW.
 * Rough guide to strengths and impact on comms:
-    * > -67 dBM is amazing.
-    * > -70 dBm is very good. Required for VoIP / streaming video etc.
-    * > -80 dBm is okay. Useable for email and web browsing.
-    * > -90 dBm is not good. Packet delivery likely unreliable at this point.
-    * <= -90 dBm is unusable. Any functionality unlikely - below noise floor!
+    * >= -67 dBM is amazing.
+    * >= -70 dBm is very good. Required for VoIP / streaming video etc.
+    * >= -80 dBm is okay. Useable for email and web browsing.
+    * >= -90 dBm is not good. Packet delivery likely unreliable at this point.
+    * < -90 dBm is unusable. Any functionality unlikely - below noise floor!
+
