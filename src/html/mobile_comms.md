@@ -79,12 +79,13 @@ See [Difference Between IMEI, IMSI, ICCID And MSISDN Numbers](https://commsbrief
 * Use dBm for a comparable metric.
 
 ### dBm
-* See [Electonics:decibels](electronics.html) for a definition.
+* See [Electronics:decibels](electronics.html) for a definition.
     * Summary: dBm is gain relative to a reference power of 1mW. 10 dBm means the signal has a power x10 greater than 1mW.
-* Rough guide to strengths and impact on comms:
-    * \> -67 dBM is amazing.
-    * \> -70 dBm is very good. Required for VoIP / streaming video etc.
-    * \> -80 dBm is okay. Useable for email and web browsing.
-    * \> -90 dBm is not good. Packet delivery likely unreliable at this point.
-    * < -90 dBm is unusable. Any functionality unlikely - below noise floor!
+* What dBm constitutes "good" or "bad" is rather dependent on the carrier - hence the number of bars meaning different things per carrier.
+  Arbitrarily using this [[as a reference]](https://www.signalsolutions.co.uk/blog/when-the-bars-are-high-but-the-signal-is-low/):
+      * -50 to -79 dBm = great signal, full bars (4 to 5 bars).
+      * -80 to -89 dBm = good signal (3 to 4 bars).
+      * -90 to -99 dBm = average signal (2 to 3 bars).
+      * -100 to -109 dBm = poor signal (1 to 2 bars).
+      * -110 to -120 dBm = very poor signal or not-spot (0 to 1 bar).
 
