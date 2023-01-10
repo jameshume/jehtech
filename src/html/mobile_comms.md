@@ -110,23 +110,34 @@ These are just quick notes on some commands for quick reference. Not trying to d
 -->
         
         <tr>
-            <td><code>AT++CREG</code></td>
-            <td>Network Registration Status</td>
+            <td><p><code>AT+CREG</code></p></td>
+            <td><p>GSM network registration [status]</p></td>
         </tr>
 
         <tr>
-            <td><code>AT+CIMI</code></td>
-            <td>Request the IMSI (International Mobile Subscriber Identity).</td>
+            <td><p><code>AT+CGREG</code></p></td>
+            <td><p>GPRS network registration [status]</p></td>
         </tr>
 
 
         <tr>
-            <td><code>AT+CPSMS</code></td>
+            <td><p><code>AT+CEREG</code></p></td>
+            <td><p>LTE/EPS network registration [status]</p></td>
+        </tr>
+
+        <tr>
+            <td><p><code>AT+CIMI</code></p></td>
+            <td><p>Request the IMSI (International Mobile Subscriber Identity).</p></td>
+        </tr>
+
+
+        <tr>
+            <td><p><code>AT+CPSMS</code></p></td>
             <td></td>
         </tr>
 
         <tr>
-            <td><code>AT+CEDRXS</code></td>
+            <td><p><code>AT+CEDRXS</code></p></td>
             <td><p>
                     UEs extended discontinuous reception (eDRX) parameters. EDRX is an extension of the DRX feature that is used by IoT devices to reduce power consumption. <q>DRX is a mechanism in which a device goes into sleep mode for a certain period and then wakes up after a fixed interval to receive signals. The basic principle for eDRX is to extend DRX cycles to allow a device to remain in a power-saving state for a longer period of time</q> -- [[Ref]](https://www.everythingrf.com/community/what-is-edrx)
                 </p>
@@ -137,28 +148,28 @@ These are just quick notes on some commands for quick reference. Not trying to d
 
 
         <tr>
-            <td><code>AT+CPSMS</code></td>
-            <td>Power saving mode settings</td>
+            <td><p><code>AT+CPSMS</code></p></td>
+            <td><p>Power saving mode settings</p></td>
         </tr>
 
         <tr>
-            <td><code>AT+CGDCONT</code></td>
-            <td>Packet Data Protocol (PDP) context definition: Packet Data Protocol (PDP) context is a data structure that allows the device to transmit data using Internet Protocol. Eg APN name, IP address etc.</td>
+            <td><p><code>AT+CGDCONT</code></p></td>
+            <td><p>Packet Data Protocol (PDP) context definition: Packet Data Protocol (PDP) context is a data structure that allows the device to transmit data using Internet Protocol. Eg APN name, IP address etc.</p></td>
         </tr>
 
         <tr>
-            <td><code>ATI0</code></td>
-            <td>Module information: Module type number request</td>
+            <td><p><code>ATI0</code></p></td>
+            <td><p>Module information: Module type number request.</p></td>
         </tr>
 
         <tr>
-            <td><code>ATI9</code></td>
-            <td>Firmware information: Modem and application version request</td>
+            <td><p><code>ATI9</code></p></td>
+            <td><p>Firmware information: Modem and application version request.</p></td>
         </tr>
 
         <tr>
-            <td><code>AT+CCID</code></td>
-            <td>Returns the ICCID (Integrated Circuit Card ID) of the SIM-card. ICCID is a serial number identifying the SIM.</td>
+            <td><p><code>AT+CCID</code></p></td>
+            <td><p>Returns the ICCID (Integrated Circuit Card ID) of the SIM-card. ICCID is a serial number identifying the SIM.</p></td>
         </tr>
 
         <tr>
@@ -172,8 +183,8 @@ These are just quick notes on some commands for quick reference. Not trying to d
         </tr>
 
         <tr>
-            <td><code>AT+COPS</code></td>
-            <td>The +COPS command selects a Public Land Mobile Network (PLMN) automatically or manually, and reads and searches the current mobile network.</td>
+            <td><p><code>AT+COPS</code></p></td>
+            <td><p>The +COPS command selects a Public Land Mobile Network (PLMN) automatically or manually, and reads and searches the current mobile network.</p></td>
         </tr>
   
     </tbody>
@@ -194,21 +205,7 @@ These are just quick notes on some commands for quick reference. Not trying to d
         </tr>
 -->
 
-        <tr>
-            <td><code>AT+CREG</code></td>
-            <td>GSM network registration [status]</td>
-        </tr>
-
-        <tr>
-            <td><code>AT+CGREG</code></td>
-            <td>GPRS network registration [status]</td>
-        </tr>
-
-
-        <tr>
-            <td><code>AT+CEREG</code></td>
-            <td>LTE/EPS network registration [status]</td>
-        </tr>
+       
 
         <tr>
             <td><code>AT+UANTR</code></td>
