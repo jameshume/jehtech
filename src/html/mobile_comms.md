@@ -89,3 +89,75 @@ See [Difference Between IMEI, IMSI, ICCID And MSISDN Numbers](https://commsbrief
       * -100 to -109 dBm = poor signal (1 to 2 bars).
       * -110 to -120 dBm = very poor signal or not-spot (0 to 1 bar).
 
+
+## AT Commands
+
+### Standard
+
+<table class="jehtable">
+    <thread>
+        <td>Command</td><td>Description</td>
+    </thread>
+    <tbody>
+        <tr>
+            <td><code></code></td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <td><code>ATI0</code></td>
+            <td>Module information: Module type number request</td>
+        </tr>
+
+        <tr>
+            <td><code>ATI9</code></td>
+            <td>Firmware information: Modem and application version request</td>
+        </tr>
+
+        <tr>
+            <td><code>AT+CCID</code></td>
+            <td>Returns the ICCID (Integrated Circuit Card ID) of the SIM-card. ICCID is a serial number identifying the SIM.</td>
+        </tr>
+
+        <tr>
+            <td><code>AT+CRSM</code></td>
+            <td>
+                <p>Restricted SIM access: Allows easy access to the SIM database by sending SIM commands as defined in [ETSI TS 102221](https://www.etsi.org/deliver/etsi_ts/102200_102299/102221/15.00.00_60/ts_102221v150000p.pdf)
+                </p>
+                <p>For example, the command `AT+CRSM=176,28486,0,0,17` is a read binary command (176), reading elementary file (EF) identified by ID `28486 (0x6F46)` (EFs described in [3GPP TS 31.102](https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1803)). From the spec, on can see that `6F4F` is the service provider name (EF<sub>SPM</sub>). Both P1 and P2 are zero indicating no offset is applied.
+                </p>
+            </td>
+        </tr>
+
+        <tr>
+            <td><code>AT+COPS</code></td>
+            <td>Force an attempt to select and register with the GSM/LTE network operator or query network registered with.</td>
+        </tr>
+  
+    </tbody>
+</table>
+
+
+### U-Blox
+
+<table class="jehtable">
+    <thread>
+        <td>Command</td><td>Description</td>
+    </thread>
+    <tbody>
+        <tr>
+            <td><code></code></td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <td><code>AT+UMNOPROF</code></td>
+            <td>Set Mobile Network Operator (MNO) profile - i.e., select the MNO type to connect to.</td>
+        </tr>
+
+        <tr>
+            <td><code>AT+UFACTORY=&lt;fs_op&gt;,&lt;nvm_op&gt;</code></td>
+            <td>Restore factory configuration ... executed only at the next module boot</td>
+        </tr>
+    </tbody>
+</table>
