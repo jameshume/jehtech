@@ -1,11 +1,12 @@
 ## Different Mobile Comms Standards
 
-|    | Standards                         | Technology | SMS | Voice Switching | Data Switching       | Data Rates   |
-|----|-----------------------------------|------------|-----|-----------------|----------------------|--------------|
-| 1G | AMPS, TACS                        | Analog     | No  | Circuit         | Circuit              | N/A          |
-| 2G | GSM, CDMA, EDGE, GPRS             | Digital    | Yes | Circuit         | Circuit / Packet (1) | 236.8 kbps   |
-| 3G | UTMS, CDMA2k, HSPDA, EVDO         | Digital    | Yes | Circuit         | Packet               | 384 kbps     |
-| 4G | LTE advanced, IEEE 802.16 (WiMax) | Digital    | Yes | Packet          | Packet               | up to 1 Gbps |
+|      | Standards                                | Technology | SMS | Voice Switching | Data Switching       | Data Rates   |
+|------|------------------------------------------|------------|-----|-----------------|----------------------|--------------|
+| 1G   | AMPS, TACS                               | Analog     | No  | Circuit         | Circuit              | N/A          |
+| 2G   | GSM, CDMA, EDGE, GPRS                    | Digital    | Yes | Circuit         | Circuit / Packet (1) | 236.8 kbps   |
+| 3G   | UTMS, CDMA2k, HSPDA, EVDO                | Digital    | Yes | Circuit         | Packet               | 384 kbps     |
+| 4G   | LTE advanced, IEEE 802.16 (WiMax)        | Digital    | Yes | Packet          | Packet               | up to 1 Gbps |
+| 4/5G | LTE-M (aka Cat-M1), NB-IoT (aka Cat-NB1) | Digital    | ?   | ?               | ?                    | ?            |
 [[Ref]](https://www.javatpoint.com/history-of-wireless-communication)
 
 (1) GPRS is a packet-switched network and GSM is a circuit-switched network [[Ref]](https://byjus.com/gate/difference-between-gsm-and-gprs/#:~:text=The%20GSM%20is%20a%20circuit,packet%2Dswitched%20type%20of%20network.&text=The%20GSM%20technology%20provides%20a,for%20all%20of%20its%20users.)
@@ -91,6 +92,8 @@ See [Difference Between IMEI, IMSI, ICCID And MSISDN Numbers](https://commsbrief
 
 
 ## AT Commands
+These are just quick notes on some commands for quick reference. Not trying to duplicate the manual here so for details look at modem manual.
+
 
 ### Standard
 
@@ -99,9 +102,48 @@ See [Difference Between IMEI, IMSI, ICCID And MSISDN Numbers](https://commsbrief
         <td>Command</td><td>Description</td>
     </thread>
     <tbody>
+<!--
         <tr>
             <td><code></code></td>
             <td></td>
+        </tr>
+-->
+        
+        <tr>
+            <td><code>AT++CREG</code></td>
+            <td>Network Registration Status</td>
+        </tr>
+
+        <tr>
+            <td><code>AT+CIMI</code></td>
+            <td>Request the IMSI (International Mobile Subscriber Identity).</td>
+        </tr>
+
+
+        <tr>
+            <td><code>AT+CPSMS</code></td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <td><code>AT+CEDRXS</code></td>
+            <td><p>
+                    UEs extended discontinuous reception (eDRX) parameters. EDRX is an extension of the DRX feature that is used by IoT devices to reduce power consumption. <q>DRX is a mechanism in which a device goes into sleep mode for a certain period and then wakes up after a fixed interval to receive signals. The basic principle for eDRX is to extend DRX cycles to allow a device to remain in a power-saving state for a longer period of time</q> -- [[Ref]](https://www.everythingrf.com/community/what-is-edrx)
+                </p>
+                <p>
+                    Good article: [[Low-power Optimization for Cellular Modules]](https://www.twilio.com/docs/iot/supersim/low-power-optimization-for-cellular-modules).</td>
+                </p>
+        </tr>
+
+
+        <tr>
+            <td><code>AT+CPSMS</code></td>
+            <td>Power saving mode settings</td>
+        </tr>
+
+        <tr>
+            <td><code>AT+CGDCONT</code></td>
+            <td>Packet Data Protocol (PDP) context definition: Packet Data Protocol (PDP) context is a data structure that allows the device to transmit data using Internet Protocol. Eg APN name, IP address etc.</td>
         </tr>
 
         <tr>
@@ -131,7 +173,7 @@ See [Difference Between IMEI, IMSI, ICCID And MSISDN Numbers](https://commsbrief
 
         <tr>
             <td><code>AT+COPS</code></td>
-            <td>Force an attempt to select and register with the GSM/LTE network operator or query network registered with.</td>
+            <td>The +COPS command selects a Public Land Mobile Network (PLMN) automatically or manually, and reads and searches the current mobile network.</td>
         </tr>
   
     </tbody>
@@ -145,9 +187,42 @@ See [Difference Between IMEI, IMSI, ICCID And MSISDN Numbers](https://commsbrief
         <td>Command</td><td>Description</td>
     </thread>
     <tbody>
+<!--
         <tr>
             <td><code></code></td>
             <td></td>
+        </tr>
+-->
+
+        <tr>
+            <td><code>AT+CREG</code></td>
+            <td>GSM network registration [status]</td>
+        </tr>
+
+        <tr>
+            <td><code>AT+CGREG</code></td>
+            <td>GPRS network registration [status]</td>
+        </tr>
+
+
+        <tr>
+            <td><code>AT+CEREG</code></td>
+            <td>LTE/EPS network registration [status]</td>
+        </tr>
+
+        <tr>
+            <td><code>AT+UANTR</code></td>
+            <td>Antenna detection: measure DC component of load of cellular antenna.</td>
+        </tr>
+
+        <tr>
+            <td><code>AT+UAUTHREQ</code></td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <td><code>AT+USIMSTAT</code></td>
+            <td>Configure the SIM state reporting so that the unsolicited result code (URC) reports the (U)SIM toolkit REFRESH proactive command execution result</td>
         </tr>
 
         <tr>
@@ -156,8 +231,16 @@ See [Difference Between IMEI, IMSI, ICCID And MSISDN Numbers](https://commsbrief
         </tr>
 
         <tr>
-            <td><code>AT+UFACTORY=&lt;fs_op&gt;,&lt;nvm_op&gt;</code></td>
+            <td><code>AT+UFACTORY</code></td>
             <td>Restore factory configuration ... executed only at the next module boot</td>
         </tr>
     </tbody>
 </table>
+
+
+## TODOs
+* SIM Toolkit https://www.techopedia.com/definition/30501/sim-toolkit-stk#techopedia-explains-sim-toolkit-stk
+              https://web.archive.org/web/20061207010523/http://www.cellular.co.za/sim_toolkit.htm
+              ***** https://www.etsi.org/deliver/etsi_ts/131100_131199/131111/13.03.00_60/ts_131111v130300p.pdf
+* Proactive SIMs https://deepsec.net/docs/Slides/2021/Proactive_SIMs_David_Burgess.pdf
+* FOTA - Frimware-Over-The_air https://www.soracom.io/iot-definitions/what-is-firmware-over-the-air-fota/
