@@ -2,7 +2,7 @@
 * [DWARF Debugging Information Format, Version 5, February 13, 2017](https://dwarfstd.org/doc/DWARF5.pdf)
 * [How debuggers work: Part 3 - Debugging information](https://eli.thegreenplace.net/2011/02/07/how-debuggers-work-part-3-debugging-information)
 * [Introduction to the DWARF Debugging Format] (https://dwarfstd.org/doc/Debugging%20using%20DWARF-2012.pdf)
-
+* [Some things I learned about libdwarf, Kamal Marhubi](https://kamalmarhubi.com/blog/2016/07/25/some-things-i-learned-about-libdwarf/)
 
 ## Acronyms
 | Acronym | Meaning |
@@ -20,7 +20,7 @@ DWARF tries to be both architecture and language agonistic. It can support many 
 
 The debugging information entries are contained in the `.debug_info` section of an object file.
 
-A DWARF blob is a series of **Debugging Information Entries (DIEs)**:
+A DWARF blob is a series of **Debugging Information Entries (DIEs)** that are arranged as a tree flattened in prefix order:
 
 ```
 DIE {
@@ -57,7 +57,18 @@ can be described:
 > The ownership relationship of debugging information entries is achieved
 > naturally because the **debugging information is represented as a tree**.
 >
+> ...
+>
+> The **tree itself is represented by flattening it in prefix order**.
+>
 > -- [DWARF Debugging Information Format, Version 5, February 13, 2017](https://dwarfstd.org/doc/DWARF5.pdf) (emphasis mine)
 
-One should use existing libraries to access DWARF debug information (e.g. `libdwarf`, used on FreeBSD or `libbfd`, as used by GNU binutils) and as such the unit header isn't important, but understanding that the structure is a CU DIE followed by sibling DIEs that describe the CU is.
+One should use existing libraries to access DWARF debug information (e.g. `libdwarf`, used on FreeBSD or `libbfd`, as used by GNU binutils) and as such the unit header isn't important, but understanding that the structure is a CU DIE followed by children and siblings is important when using some of the APIs (I'm thinking `libdwarf` here that has functions like `dwarf_siblingof()`, `dwarf_child()` etc - I've not looked at `libbfd` (yet)).
+
+The `libdwarf` library does have some oddities, for example the `_a`, `_b`, etc function suffixes for API upgrades etc.
+There are other alternatives to `libdwarf`, including:
+
+1. `libbfd`
+2. `liblibdw` from `elfutils`
+3. [Gimli](https://users.rust-lang.org/t/gimli-a-blazing-fast-parser-for-dwarf-debugging-information/7348) (written in Rust).
 
