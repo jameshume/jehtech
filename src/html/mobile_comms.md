@@ -1,16 +1,16 @@
 ## Different Mobile Comms Standards
 
-|      | Standards                                | Technology | SMS | Voice Switching | Data Switching       | Data Rates   |
-|------|------------------------------------------|------------|-----|-----------------|----------------------|--------------|
-| 1G   | AMPS, TACS                               | Analog     | No  | Circuit         | Circuit              | N/A          |
-| 2G   | GSM, CDMA, EDGE, GPRS                    | Digital    | Yes | Circuit         | Circuit / Packet (1) | 236.8 kbps   |
-| 3G   | UTMS, CDMA2k, HSPDA, EVDO                | Digital    | Yes | Circuit         | Packet               | 384 kbps     |
-| 4G   | LTE advanced, IEEE 802.16 (WiMax)        | Digital    | Yes | Packet          | Packet               | up to 1 Gbps |
-| 4/5G | LTE-M (aka Cat-M1), NB-IoT (aka Cat-NB1) | Digital    | ?   | ?               | ?                    | ?            |
+|      | Standards                                | Technology | SMS | Voice Switching | Data Switching       | Data Rates                               |
+|------|------------------------------------------|------------|-----|-----------------|----------------------|--------------                            |
+| 1G   | AMPS, TACS                               | Analog     | No  | Circuit         | Circuit              | N/A                                      |
+| 2G   | GSM, CDMA, EDGE, GPRS                    | Digital    | Yes | Circuit         | Circuit / Packet (1) | GSM ~22.8Kpbs<br>CDSM ~14.4 Kbps (single channel)<br> GRPS ~50Kbps<br>EDGE ~150Kbps |
+| 3G   | UTMS, CDMA2k, HSPA, EVDO                 | Digital    | Yes | Circuit         | Packet               | UMTS/HSPA ~10Mbps<br> UMTS/HSPA+ ~20Mbps |
+| 4G   | LTE, LTE advanced, IEEE 802.16 (WiMax)   | Digital    | Yes | Packet          | Packet               | LTE 20-50Mbps<br>LTE advanced ~1Gbps     |
+| 4/5G | LTE-M (aka Cat-M1), NB-IoT (aka Cat-NB1) | Digital    | ?   | ?               | ?                    | ?                                        |
+| 5G   |                                          | Digital    | Yes | Packet          | Packet               | ~20 Gbps                                 |
 [[Ref]](https://www.javatpoint.com/history-of-wireless-communication)
 
 (1) GPRS is a packet-switched network and GSM is a circuit-switched network [[Ref]](https://byjus.com/gate/difference-between-gsm-and-gprs/#:~:text=The%20GSM%20is%20a%20circuit,packet%2Dswitched%20type%20of%20network.&text=The%20GSM%20technology%20provides%20a,for%20all%20of%20its%20users.)
-
 
 
 See:
@@ -33,7 +33,7 @@ Notes:
     * Packet switched,
     * Introduced Multimedia Messaging Service (MMS),
     * Can make voice calls and transmit data at the same time.
-* EDGE = Enhanced Data Rate for FSM Evolution
+* EDGE = Enhanced Data Rate for GSM Evolution
     * Improves upon the GSM/GPRS family: higher bit-rates per radio channel: 2.75 tech.
 * CDMA = Code Division Multiple Access
     * Can *_not_* make voice calls and transmit data at the same time,
@@ -53,6 +53,43 @@ Notes:
     * 4G
 * NR = New Radio
     * 5G
+
+
+* Uplink v.s. Downlink
+    * Uplink is connection from Mobile Station (MS), i.e., your phone, to the Base Station, a.k.a. Base Transceiver System (BTS)
+    * Downlink is BTS to MS comms.
+    * MS uses full duplex comms.
+
+* A combination of FDMA and TDMA is used to allow a BTS to communicate with many MS: The channels, split by frequency, are also time divided.
+
+* FM Frequency Modulation was 1G. All later technologies used different methods.
+* FSK - Frequency Shift Keying 
+* PSK - Phase Shift Keying
+* QPKS - Quadrature PSK
+* QAM - Quadrature Amplitude Modulation - varies both amplitude and phase to get more bits per symbol.
+
+European Commission has good infographic:
+![European Commission has good infographic](https://ec.europa.eu/newsroom/dae/document.cfm?doc_id=4541)
+
+### 1G
+* 3 variants used:
+    * Advanced Mobile Phone (AMP). USA.
+    * Noridic Mobile Telephone (NMT). Scandinavia.
+    * Total Access Communications (TAC). Europe.
+* All used FDMA with analog FM.
+* Weak security and no roaming.
+
+### 2G
+* GSM developed in 1991 by European Telecomms Standards Institute (ETSI).
+    * Combination of FDMA and TDMA used.
+* Ditigal AMP used in USA.
+* Supported packet switching, roaming, encryption, SMS and data.
+
+### 3G
+
+
+## Network Architectures
+
 
 
 ## SIM and Phone Identifiers
