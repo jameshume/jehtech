@@ -142,13 +142,21 @@ These are just quick notes on some commands for quick reference. Not trying to d
 <!--
         <tr>
             <td><code></code></td>
-            <td></td>
+            <td><p></p></td>
         </tr>
 -->
         
         <tr>
             <td><p><code>AT+CREG</code></p></td>
-            <td><p>GSM network registration [status]</p></td>
+            <td><p>GSM network registration status/report.</p>
+                <p>The set command configures whether URCs are emitted by the modem. E.g., `AT+CREG=2` enables network registration URCs with network cell ID data. 
+                   A URC emitted as a result of the above example might be `+CREG: 5,"090C","0696",3`, where `5` is the status (in this case registered, roaming), 
+                   `"090C"` is the Local Area Code (LAC) and `"0696"` is the Cell ID. `3` is the `AcTSatus` (a Ublox specific thing maybe?) and indicates that the
+                   RAT being used is GSM/GPRS.
+                </p>
+                <p>The read command reports the current mode and network registration status. E.g., 
+                </p>
+            </td>
         </tr>
 
         <tr>
@@ -176,7 +184,7 @@ These are just quick notes on some commands for quick reference. Not trying to d
         <tr>
             <td><p><code>AT+CEDRXS</code></p></td>
             <td><p>
-                    UEs extended discontinuous reception (eDRX) parameters. EDRX is an extension of the DRX feature that is used by IoT devices to reduce power consumption. <q>DRX is a mechanism in which a device goes into sleep mode for a certain period and then wakes up after a fixed interval to receive signals. The basic principle for eDRX is to extend DRX cycles to allow a device to remain in a power-saving state for a longer period of time</q> -- [[Ref]](https://www.everythingrf.com/community/what-is-edrx)
+                    Use extended discontinuous reception (eDRX) parameters. EDRX is an extension of the DRX feature that is used by IoT devices to reduce power consumption. <q>DRX is a mechanism in which a device goes into sleep mode for a certain period and then wakes up after a fixed interval to receive signals. The basic principle for eDRX is to extend DRX cycles to allow a device to remain in a power-saving state for a longer period of time</q> -- [[Ref]](https://www.everythingrf.com/community/what-is-edrx)
                 </p>
                 <p>
                     Good article: [[Low-power Optimization for Cellular Modules]](https://www.twilio.com/docs/iot/supersim/low-power-optimization-for-cellular-modules).</td>
