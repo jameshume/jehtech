@@ -69,7 +69,7 @@ Notes:
 * QAM - Quadrature Amplitude Modulation - varies both amplitude and phase to get more bits per symbol.
 
 European Commission has good infographic:
-![European Commission has good infographic](https://ec.europa.eu/newsroom/dae/document.cfm?doc_id=4541)
+<img alt="European Commission has good infographic" src="https://ec.europa.eu/newsroom/dae/document.cfm?doc_id=4541" style="width: 50%"/>
 
 ### 1G
 * 3 variants used:
