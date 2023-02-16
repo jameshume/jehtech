@@ -156,9 +156,51 @@ See [Difference Between IMEI, IMSI, ICCID And MSISDN Numbers](https://commsbrief
 ## AT Commands
 These are just quick notes on some commands for quick reference. Not trying to duplicate the manual here so for details look at modem manual.
 
-AT commands take the following format:
+AT commands come in at least two forms:
+1. Basic AT commands
+2. Extended AT commands
 
+Basic AT commands have the following format:
 
+```
+ATCMDb=123
+||||||^
+||^^^^Commands can have parameters
+^^ The basic command is "CMDb" (substitute an actual command here).
+All AT commands are prefexed with the charaters "AT". No space between "AT" and "CMDx"
+because this is a basic command
+```
+
+For example, some basic AT commands include:
+```
+ATI0 // Request type numbner of device
+ATI6 // Request mobile boot sequence version
+ATI9 // Request modem and application version
+```
+
+Extended commands are prefixed with a "+":
+
+```
+AT+<COMMAND><SUFFIX><DATA>
+```
+
+For example:
+
+```
+AT+CMDe=,,15
+```
+Because the prefix is "AT+" we know this is an extended AT command. The command itself is "CMDe" (not real), it is a set operation because the suffix is "=", and the data consists of three parameters. The first 2 are optional and not specified, the last is 15.
+
+Extended commands come in 3 flavours:
+1. Set: Suffix is "=". Think set a property. Property might enable/disable something, cause a specific behavior etc.
+2. Read: Suffix is "?".
+3. Execute: No suffix. Makes modem do something, think verb.
+4. Test: Suffix is "=?". Asks about capabilities and if command understood/supported.
+
+However, not all AT commands follow this convention religiously. For example, `AT+CIMI` has the same functionality as `AT_CIMI?`: the CIMI can be read without using a "?" suffix, so it looks like an execution command, but really is doing a read of sorts.
+
+Standard commands will be something like "AT+C....". Vendor specific commands usually replace the C with something. For example UBlox specific
+AT commands look like "AT+U...".
 
 ### Standard
 
