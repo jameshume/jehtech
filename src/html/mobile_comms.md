@@ -412,29 +412,29 @@ AT commands look like "AT+U...".
     | Send    | `AT+CMEE=1`         |
     | Receive | `AT+CMEE=1`<br>`OK` |
 
-   Why should we do this?
-   > When controlling GSM devices using AT commands, the device can respond with either "OK" or "ERROR". 
-   > Sometimes you will receive an error and you do not know the cause of this error.
-   > 
-   >  That's why most advanced GSM devices support extended errors. Instead of just displaying the "ERROR" message, 
-   >  it also shows an error number. The syntax of this extended error is either "+CMS ERROR: xxx" or "+CME ERROR: xxx".
-   >
-   > When the error starts with "+CME ERROR", it means that the error is a device specific error code. For instance,
-   > you are trying to read a phonebook entry before entering a pincode
-   >
-   > -- [GSM Equipment and Network Error Codes, smssolutions.net](https://www.smssolutions.net/tutorials/gsm/gsmerrorcodes/)
+    Why should we do this?
+    > When controlling GSM devices using AT commands, the device can respond with either "OK" or "ERROR". 
+    > Sometimes you will receive an error and you do not know the cause of this error.
+    > 
+    >  That's why most advanced GSM devices support extended errors. Instead of just displaying the "ERROR" message, 
+    >  it also shows an error number. The syntax of this extended error is either "+CMS ERROR: xxx" or "+CME ERROR: xxx".
+    >
+    > When the error starts with "+CME ERROR", it means that the error is a device specific error code. For instance,
+    > you are trying to read a phonebook entry before entering a pincode
+    >
+    > -- [GSM Equipment and Network Error Codes, smssolutions.net](https://www.smssolutions.net/tutorials/gsm/gsmerrorcodes/)
 
 1. Get some information about the modem - its modem and firmware version numbers:
 
-|         |             |
-|---------|-------------|
-| Send    | `ATI9`                               | 
-| Receive | `ATI9`<br>`M0.10.00,A.02.14`<br>`OK` |
+    |         |             |
+    |---------|-------------|
+    | Send    | `ATI9`                               | 
+    | Receive | `ATI9`<br>`M0.10.00,A.02.14`<br>`OK` |
 
 1. Request the ICCID number of the SIM - the code that uniquely identifies the chip on the SIM card.
 
-| Send    | `AT+CCID`                                    |
-| Receive | `AT+CCID`<br>`+CCID: <19-20 digits>`<br>`OK` |
+    | Send    | `AT+CCID`                                    |
+    | Receive | `AT+CCID`<br>`+CCID: <19-20 digits>`<br>`OK` |
 
 
 
