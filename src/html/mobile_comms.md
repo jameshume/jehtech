@@ -400,17 +400,17 @@ AT commands look like "AT+U...".
 
 1. See if the modem is there using a basic echo command:
 
-|         |             |
-|---------|-------------|
-| Send    | `AT`        |
-| Receive | `AT`<br>`OK`|
+    |         |             |
+    |---------|-------------|
+    | Send    | `AT`        |
+    | Receive | `AT`<br>`OK`|
 
 1. Enable extended error (CME) reports with numeric values:
 
-|         |             |
-|---------|-------------|
-| Send    | `AT+CMEE=1`         |
-| Receive | `AT+CMEE=1`<br>`OK` |
+    |         |             |
+    |---------|-------------|
+    | Send    | `AT+CMEE=1`         |
+    | Receive | `AT+CMEE=1`<br>`OK` |
 
    Why should we do this?
    > When controlling GSM devices using AT commands, the device can respond with either "OK" or "ERROR". 
