@@ -1,3 +1,28 @@
+## Terminology
+
+| Acronym | Meaning |
+|---------|---------|
+| GSM     | Global Systems for Mobile |
+| GPRS    | General Packet Radio Service |
+| EDGE    | Enhanced Data Rate for GSM Evolution |
+| UMTS    | Universal Mobile Telecommunications System |
+| HSPA    | High Speed Packet Access |
+| HSPA+   | Evolved High Speed Packet Access |
+| EVDO    | EVolution Data optimized |
+| LTE     | Long Term Evolution (of mobile networks) |
+| NR      | New Radio |
+| MS      | Mobile Station: your phone |
+| BTS     | Base Transceiver System - aka Base Station |
+| IMEI    | International Mobile Equipment Identity - Think MAC address of slot SIM is inserted into |
+| IMSI    | International Mobile Subscriber Identity - Unique identifier assigned to every SIM  |
+| ICCID   | Integrated Circuit Card Identifier - Identifies the chip of each SIM card. |
+| MSISDN  | Mobile Station International Subscriber Directory - Full mobile number with country code and all prefixes. |
+| TAU     | Tracking Area Updating period |
+| PSM     | Power Saving Mode |
+| UE      | User Equipment |
+
+
+
 ## Different Mobile Comms Standards
 
 |      | Standards                                | Technology | SMS | Voice Switching | Data Switching       | Data Rates                               |
@@ -149,25 +174,26 @@ These are just quick notes on some commands for quick reference. Not trying to d
         <tr>
             <td><p><code>AT+CREG</code></p></td>
             <td><p>GSM network registration status/report.</p>
-                <p>The set command configures whether URCs are emitted by the modem. E.g., `AT+CREG=2` enables network registration URCs with network cell ID data. 
-                   A URC emitted as a result of the above example might be `+CREG: 5,"090C","0696",3`, where `5` is the status (in this case registered, roaming), 
-                   `"090C"` is the Local Area Code (LAC) and `"0696"` is the Cell ID. `3` is the `AcTSatus` (a Ublox specific thing maybe?) and indicates that the
+                <p>The <i>set</i> command configures whether URCs are emitted by the modem. E.g., the set command <code>AT+CREG=2</code> enables network registration URCs, which will include network cell ID data. An example of such a URC could be <code>+CREG: 5,"090C","0696",3</code>, where <code>5</code> is the status (in this case registered, roaming), 
+                   <code>"090C"</code> is the Local Area Code (LAC) and `"0696"` is the Cell ID. `3` is the `AcTSatus` (a Ublox specific thing maybe?) and indicates that the
                    RAT being used is GSM/GPRS.
                 </p>
-                <p>The read command reports the current mode and network registration status. E.g., 
+                <p>The <i>read</i> command reports the current mode and network registration status.
                 </p>
             </td>
         </tr>
 
         <tr>
             <td><p><code>AT+CGREG</code></p></td>
-            <td><p>GPRS network registration [status]</p></td>
+            <td><p>GPRS network registration status/report.</p>
+                <p>Very similar to `AT+CREG` but for GRPS networks
+            </td>
         </tr>
 
 
         <tr>
             <td><p><code>AT+CEREG</code></p></td>
-            <td><p>LTE/EPS network registration [status]</p></td>
+            <td><p>LTE/EPS network registration status/report</p></td>
         </tr>
 
         <tr>
@@ -178,17 +204,28 @@ These are just quick notes on some commands for quick reference. Not trying to d
 
         <tr>
             <td><p><code>AT+CPSMS</code></p></td>
-            <td></td>
+            <td><p>Power Saving Mode (PSM) settings.</p>
+                <blockquote>
+                    <p>PSM is ... designed for IoT devices ... it allows idling devices to be placed in a low-power mode,
+                       conserving a maximum amount of energy when the IoT device is not in use ...
+                    </p>
+                    <p>PSM keeps the device in a sleep state most of the time. The device connects to the network periodically to send data, idles to receive data and commands, and then returns to the PSM-induced sleep mode.
+                    </p>
+                    <footer>-- <a href="https://blog.velosiot.com/what-are-psm-edrx-features-in-lte-m-and-nb-iot#:~:text=What%20is%20PSM%3F,device%20is%20not%20in%20use." target="_blank">What are PSM & eDRX features in LTE-M and NB-IoT?</a>, Velosiot Blog.
+                </blockquote>
+                <p></p>
+            </td>
         </tr>
 
         <tr>
             <td><p><code>AT+CEDRXS</code></p></td>
             <td><p>
-                    Use extended discontinuous reception (eDRX) parameters. EDRX is an extension of the DRX feature that is used by IoT devices to reduce power consumption. <q>DRX is a mechanism in which a device goes into sleep mode for a certain period and then wakes up after a fixed interval to receive signals. The basic principle for eDRX is to extend DRX cycles to allow a device to remain in a power-saving state for a longer period of time</q> -- [[Ref]](https://www.everythingrf.com/community/what-is-edrx)
+                    Use extended discontinuous reception (eDRX) parameters. EDRX is an extension of the DRX feature that is used by IoT devices to reduce power consumption. <q>DRX is a mechanism in which a device goes into sleep mode for a certain period and then wakes up after a fixed interval to receive signals. The basic principle for eDRX is to extend DRX cycles to allow a device to remain in a power-saving state for a longer period of time</q> -- <a href="https://www.everythingrf.com/community/what-is-edrx" target="_blank">[REF]</a>.
                 </p>
                 <p>
-                    Good article: [[Low-power Optimization for Cellular Modules]](https://www.twilio.com/docs/iot/supersim/low-power-optimization-for-cellular-modules).</td>
+                    Good article: <a href="https://www.twilio.com/docs/iot/supersim/low-power-optimization-for-cellular-modules" target="_blank">Low-power Optimization for Cellular Modules</a>
                 </p>
+            </td>
         </tr>
 
 
@@ -229,7 +266,7 @@ These are just quick notes on some commands for quick reference. Not trying to d
 
         <tr>
             <td><p><code>AT+COPS</code></p></td>
-            <td><p>The +COPS command selects a Public Land Mobile Network (PLMN) automatically or manually, and reads and searches the current mobile network.</p></td>
+            <td><p>The `+COPS` command selects a Public Land Mobile Network (PLMN) automatically or manually, and reads and searches the current mobile network.</p></td>
         </tr>
   
     </tbody>
