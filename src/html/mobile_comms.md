@@ -224,8 +224,10 @@ AT commands take the following format:
                 <p>They had en even better explanation in another of their blogs:</p>
                 <blockquote>
                     <p>Power Saving Mode (PSM) - The PSM feature allows an IoT device to sleep for extended periods of time without being woken up by network paging. Typical cellular devices actively transition between two modes – IDLE and ACTIVE. When the device is not sending/receiving traffic it goes IDLE, which has a positive effect on battery life. If there are IP packets that need to be delivered to the device, the network pages for the device. The device must respond to the page and transition to ACTIVE mode to receive the traffic. This has an impact on IoT devices that are power-constrained. PSM allows these IoT devices to negotiate an extended sleep period (hours or days) with the network and avoid being paged during that sleep cycle. If there is any traffic that arrives for the device during the sleep period, the traffic is buffered in the network (at least the last 100 bytes) and delivered when the device becomes ACTIVE.</p>
-                    <footer>-- <a href="https://www.twilio.com/blog/when-to-use-lte-cat-m" target="_blank">When to Use LTE Cat M for IoT Devices</a>Twilio blog.</footer>
+                    <footer>-- <a href="https://www.twilio.com/blog/when-to-use-lte-cat-m" target="_blank">When to Use LTE Cat M for IoT Devices</a>Twilio blog.
+                    </footer>
                 </blockquote>
+                <p></p>
             </td>
         </tr>
 
@@ -235,8 +237,23 @@ AT commands take the following format:
                     Use extended discontinuous reception (eDRX) parameters. EDRX is an extension of the DRX feature that is used by IoT devices to reduce power consumption. <q>DRX is a mechanism in which a device goes into sleep mode for a certain period and then wakes up after a fixed interval to receive signals. The basic principle for eDRX is to extend DRX cycles to allow a device to remain in a power-saving state for a longer period of time</q> -- <a href="https://www.everythingrf.com/community/what-is-edrx" target="_blank">[REF]</a>.
                 </p>
                 <p>
-                    Good article: <a href="https://www.twilio.com/docs/iot/supersim/low-power-optimization-for-cellular-modules" target="_blank">Low-power Optimization for Cellular Modules</a>
+                    Twilio has the following to say about the difference between PSM and eDRX:
                 </p>
+                <blockquote>
+                    <p>While not providing the same levels of power reduction as PSM, eDRX can offer a good compromise between device reachability and power consumption. eDRX can be used alongside PSM to obtain additional power savings, or it can be used on its own.
+                    </p>
+                    <p>PSM is more power efficient because PSM cycles are much longer than eDRX cycles. As a result, the device can enter into a deeper, lower power sleep state with PSM than it can with eDRX.
+                    </p>
+                    <footer>-- <a href="https://www.twilio.com/docs/iot/supersim/low-power-optimization-for-cellular-modules" target="_blank">Low-power Optimization for Cellular Modules</a>, Twilio.</footer>
+                </blockquote>
+                <p>Their blog also gives a nice little bit of extra detail:
+                </p>
+                <blockquote>
+                    <p>PSM and eDRX are complementary and can both be used by a Cat M device. eDRX helps the device sleep a bit longer, wake up at fixed intervals, and generally reduce "chattiness" between the device and the network. PSM helps the device sleep for much longer - hours or days.</p>
+                     <footer>-- <a href="https://www.twilio.com/blog/when-to-use-lte-cat-m" target="_blank">When to Use LTE Cat M for IoT Devices</a>Twilio blog.
+                     </footer>
+                </blockquote>
+                <p></p>
             </td>
         </tr>
 
