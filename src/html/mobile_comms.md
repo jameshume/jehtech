@@ -156,6 +156,9 @@ See [Difference Between IMEI, IMSI, ICCID And MSISDN Numbers](https://commsbrief
 ## AT Commands
 These are just quick notes on some commands for quick reference. Not trying to duplicate the manual here so for details look at modem manual.
 
+AT commands take the following format:
+
+
 
 ### Standard
 
@@ -206,14 +209,23 @@ These are just quick notes on some commands for quick reference. Not trying to d
             <td><p><code>AT+CPSMS</code></p></td>
             <td><p>Power Saving Mode (PSM) settings.</p>
                 <blockquote>
-                    <p>PSM is ... designed for IoT devices ... it allows idling devices to be placed in a low-power mode,
-                       conserving a maximum amount of energy when the IoT device is not in use ...
+                    <p>IoT devices typically send or receive data intermittently. Between periods of data transmission and reception, a device can sleep to minimize power consumption and maximize battery charge. The energy cost of completely detaching from the network at sleep, then re-attaching upon wake is high, so LTE allows the device to maintain its network attachment during sleep. However, the host network will periodically page the device, which needs to wake and respond. The device will then sleep again until it receives the next page or has to wake to send data.
                     </p>
-                    <p>PSM keeps the device in a sleep state most of the time. The device connects to the network periodically to send data, idles to receive data and commands, and then returns to the PSM-induced sleep mode.
+                    <p>This wake-respond-sleep process consumes only a small amount of energy, but its cumulative energy consumption can become significant over the lifetime of a device. Power Save Mode addresses this by letting IoT devices agree to an extended sleep period with the network. During this time, the network doesn't page the device, which can then wake only when it needs to send data or when the sleep period expires.
                     </p>
-                    <footer>-- <a href="https://blog.velosiot.com/what-are-psm-edrx-features-in-lte-m-and-nb-iot#:~:text=What%20is%20PSM%3F,device%20is%20not%20in%20use." target="_blank">What are PSM & eDRX features in LTE-M and NB-IoT?</a>, Velosiot Blog.
+                    <p>...
+                    </p>
+                    <p>In an active PSM period, the modem's radio is fully shut down and the device cannot send data or be reached. During development, you should be aware that the device's AT channel may also be closed down.
+                    </p>
+                    <p>Data intended for the sleeping device is buffered: 3GPP requirements mandate that data packets must be stored by the network. 
+                    </p>
+                    <footer>-- <a href="https://www.twilio.com/docs/iot/supersim/low-power-optimization-for-cellular-modules" target="_blank">Low-power Optimization for Cellular Modules</a>, Twilio.</footer>
                 </blockquote>
-                <p></p>
+                <p>They had en even better explanation in another of their blogs:</p>
+                <blockquote>
+                    <p>Power Saving Mode (PSM) - The PSM feature allows an IoT device to sleep for extended periods of time without being woken up by network paging. Typical cellular devices actively transition between two modes – IDLE and ACTIVE. When the device is not sending/receiving traffic it goes IDLE, which has a positive effect on battery life. If there are IP packets that need to be delivered to the device, the network pages for the device. The device must respond to the page and transition to ACTIVE mode to receive the traffic. This has an impact on IoT devices that are power-constrained. PSM allows these IoT devices to negotiate an extended sleep period (hours or days) with the network and avoid being paged during that sleep cycle. If there is any traffic that arrives for the device during the sleep period, the traffic is buffered in the network (at least the last 100 bytes) and delivered when the device becomes ACTIVE.</p>
+                    <footer>-- <a href="https://www.twilio.com/blog/when-to-use-lte-cat-m" target="_blank">When to Use LTE Cat M for IoT Devices</a>Twilio blog.</footer>
+                </blockquote>
             </td>
         </tr>
 
