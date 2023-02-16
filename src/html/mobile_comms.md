@@ -399,15 +399,19 @@ AT commands look like "AT+U...".
 ### An Example Command Sequence
 
 1. See if the modem is there using a basic echo command:
-   |         |             |
-   |---------|-------------|
-   | Send    | `AT`        |
-   | Receive | `AT`<br>`OK`|
+
+|         |             |
+|---------|-------------|
+| Send    | `AT`        |
+| Receive | `AT`<br>`OK`|
+
 1. Enable extended error (CME) reports with numeric values:
-   |         |             |
-   |---------|-------------|
-   | Send    | `AT+CMEE=1`         |
-   | Receive | `AT+CMEE=1`<br>`OK` |
+
+|         |             |
+|---------|-------------|
+| Send    | `AT+CMEE=1`         |
+| Receive | `AT+CMEE=1`<br>`OK` |
+
    Why should we do this?
    > When controlling GSM devices using AT commands, the device can respond with either "OK" or "ERROR". 
    > Sometimes you will receive an error and you do not know the cause of this error.
@@ -419,15 +423,19 @@ AT commands look like "AT+U...".
    > you are trying to read a phonebook entry before entering a pincode
    >
    > -- [GSM Equipment and Network Error Codes, smssolutions.net](https://www.smssolutions.net/tutorials/gsm/gsmerrorcodes/)
+
 1. Get some information about the modem - its modem and firmware version numbers:
-   |         |             |
-   |---------|-------------|
-   | Send    | `ATI9`                               | 
-   | Receive | `ATI9`<br>`M0.10.00,A.02.14`<br>`OK` |
+
+|         |             |
+|---------|-------------|
+| Send    | `ATI9`                               | 
+| Receive | `ATI9`<br>`M0.10.00,A.02.14`<br>`OK` |
+
 1. Request the ICCID number of the SIM - the code that uniquely identifies the chip on the SIM card.
-   | Send    | `AT+CCID`                                    |
-   | Receive | `AT+CCID`<br>`+CCID: <19-20 digits>`<br>`OK` |
-4
+
+| Send    | `AT+CCID`                                    |
+| Receive | `AT+CCID`<br>`+CCID: <19-20 digits>`<br>`OK` |
+
 
 
 ## TODOs
