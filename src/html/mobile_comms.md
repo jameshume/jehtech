@@ -433,9 +433,37 @@ AT commands look like "AT+U...".
 
 1. Request the ICCID number of the SIM - the code that uniquely identifies the chip on the SIM card.
 
+    |         |             |
+    |---------|-------------|
     | Send    | `AT+CCID`                                    |
     | Receive | `AT+CCID`<br>`+CCID: <19-20 digits>`<br>`OK` |
 
+1. Query the PDP context definition.
+
+    <blockquote>
+        <p>A Packet Data Protocol (PDP) context offers a packet data connection over which a device and the mobile network can exchange IP packets.</p>
+        <footer>--<a href="https://learn.microsoft.com/en-us/windows-hardware/drivers/mobilebroadband/developing-apps-using-multiple-pdp-contexts" target="_blank">Developing apps using multiple PDP contexts</a></footer>
+    </blockquote>
+
+    |         |             |
+    |---------|-------------|
+    | Send    | `AT+CGDCONT?`                                    |
+    | Receive | `AT+CGDCONT?`<br>`+CGDCONT: 1,"IPV4V6","","0.0.0.0.0.0.0.0.0..."`<br>`OK` |
+
+1. Query the Power Saving Mode (PSM) settings:
+
+    |         |             |
+    |---------|-------------|
+    | Send    | `AT+CPSMS?`                                    |
+    | Receive | `AT+CPSMS?`<br>`+CPSMS:1,,,"10000101","00000011"`<br>`OK` |
+
+
+1. Query the xEDRX settings:
+
+    |         |             |
+    |---------|-------------|
+    | Send    | `AT+CEDRXS?`                                    |
+    | Receive | `AT+CEDRXS?`<br>`+CEDRXS: `<br>`OK` |
 
 
 ## TODOs
