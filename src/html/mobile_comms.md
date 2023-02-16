@@ -173,10 +173,19 @@ because this is a basic command
 
 For example, some basic AT commands include:
 ```
-ATI0 // Request type numbner of device
+ATI0 // Request type number of device
 ATI6 // Request mobile boot sequence version
 ATI9 // Request modem and application version
 ```
+
+Each command will be a two or more line replace with:
+```
+COMMAND-ECHOED
+....
+OK or ERROR
+```
+
+Note `ERROR` is not very informative which is why extended error reporting (CME errors) are usually enabled (`AT+CMEE=1`)
 
 Extended commands are prefixed with a "+":
 
@@ -386,6 +395,33 @@ AT commands look like "AT+U...".
         </tr>
     </tbody>
 </table>
+
+### An Example Command Sequence
+
+1. See if the modem is there using a basic echo command:
+   | Send    | `AT`        |
+   | Receive | `AT`<br>`OK`|
+1. Enable extended error (CME) reports with numeric values:
+   | Send    | `AT+CMEE=1`         |
+   | Receive | `AT+CMEE=1`<br>`OK` |
+   Why should we do this?
+   > When controlling GSM devices using AT commands, the device can respond with either "OK" or "ERROR". 
+   > Sometimes you will receive an error and you do not know the cause of this error.
+   > 
+   >  That's why most advanced GSM devices support extended errors. Instead of just displaying the "ERROR" message, 
+   >  it also shows an error number. The syntax of this extended error is either "+CMS ERROR: xxx" or "+CME ERROR: xxx".
+   >
+   > When the error starts with "+CME ERROR", it means that the error is a device specific error code. For instance,
+   > you are trying to read a phonebook entry before entering a pincode
+   >
+   > -- [GSM Equipment and Network Error Codes, smssolutions.net](https://www.smssolutions.net/tutorials/gsm/gsmerrorcodes/)
+1. Get some information about the modem - its modem and firmware version numbers:
+   | Send    | `ATI9`                               | 
+   | Receive | `ATI9`<br>`M0.10.00,A.02.14`<br>`OK` |
+1. Request the ICCID number of the SIM - the code that uniquely identifies the chip on the SIM card.
+   | Send    | `AT+CCID`                                    |
+   | Receive | `AT+CCID`<br>`+CCID: <19-20 digits>`<br>`OK` |
+4
 
 
 ## TODOs
