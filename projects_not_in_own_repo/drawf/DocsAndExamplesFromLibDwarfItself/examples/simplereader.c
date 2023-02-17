@@ -82,7 +82,7 @@
         make
         ./simplereader simplereader
 */
-#include "config.h"
+//#include "config.h"
 
 /* Windows specific header files */
 #ifdef HAVE_STDAFX_H
@@ -439,6 +439,7 @@ main(int argc, char **argv)
         /* Not a very useful errarg... */
         errarg = (Dwarf_Ptr)1;
     }
+    
     res = dwarf_init(fd,DW_DLC_READ,errhand,errarg, &dbg,errp);
     if(res != DW_DLV_OK) {
         printf("Giving up, cannot do DWARF processing\n");
@@ -1030,6 +1031,11 @@ print_die_data_i(Dwarf_Debug dbg, Dwarf_Die print_me,
         printf("Error in dwarf_tag , level %d \n",level);
         exit(1);
     }
+
+    if (tag == DW_TAG_enumerator) {
+        printf("\n\n\nFOUDN IT\n\n\n");
+    }
+
     res = dwarf_get_TAG_name(tag,&tagname);
     if(res != DW_DLV_OK) {
         printf("Error in dwarf_get_TAG_name , level %d \n",level);
@@ -1153,6 +1159,6 @@ close_a_file(int f)
 #ifdef _MSC_VER
     _close(f);
 #else
-    close(f);
+    //close(f);
 #endif
 }

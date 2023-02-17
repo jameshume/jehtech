@@ -1,5 +1,34 @@
+## Terminology
+
+<p></p>
+| Acronym | Meaning |
+|---------|---------|
+| APN     | Access Point Name |
+| BTS     | Base Transceiver System - aka Base Station |
+| EDGE    | Enhanced Data Rate for GSM Evolution |
+| EVDO    | EVolution Data optimized |
+| GPRS    | General Packet Radio Service |
+| GSM     | Global Systems for Mobile |
+| HSPA    | High Speed Packet Access |
+| HSPA+   | Evolved High Speed Packet Access |
+| ICCID   | Integrated Circuit Card Identifier - Identifies the chip of each SIM card. |
+| IMEI    | International Mobile Equipment Identity - Think MAC address of slot SIM is inserted into |
+| IMSI    | International Mobile Subscriber Identity - Unique identifier assigned to every SIM  |
+| LTE     | Long Term Evolution (of mobile networks) |
+| MS      | Mobile Station: your phone |
+| MSISDN  | Mobile Station International Subscriber Directory - Full mobile number with country code and all prefixes. |
+| NR      | New Radio |
+| PDN     | Public Data Network |
+| PSM     | Power Saving Mode |
+| TAU     | Tracking Area Updating period |
+| UE      | User Equipment |
+| UMTS    | Universal Mobile Telecommunications System |
+<p></p>
+
+
 ## Different Mobile Comms Standards
 
+<p></p>
 |      | Standards                                | Technology | SMS | Voice Switching | Data Switching       | Data Rates                               |
 |------|------------------------------------------|------------|-----|-----------------|----------------------|--------------                            |
 | 1G   | AMPS, TACS                               | Analog     | No  | Circuit         | Circuit              | N/A                                      |
@@ -9,6 +38,7 @@
 | 4/5G | LTE-M (aka Cat-M1), NB-IoT (aka Cat-NB1) | Digital    | ?   | ?               | ?                    | ?                                        |
 | 5G   |                                          | Digital    | Yes | Packet          | Packet               | ~20 Gbps                                 |
 [[Ref]](https://www.javatpoint.com/history-of-wireless-communication)
+<p></p>
 
 (1) GPRS is a packet-switched network and GSM is a circuit-switched network [[Ref]](https://byjus.com/gate/difference-between-gsm-and-gprs/#:~:text=The%20GSM%20is%20a%20circuit,packet%2Dswitched%20type%20of%20network.&text=The%20GSM%20technology%20provides%20a,for%20all%20of%20its%20users.)
 
@@ -69,7 +99,7 @@ Notes:
 * QAM - Quadrature Amplitude Modulation - varies both amplitude and phase to get more bits per symbol.
 
 European Commission has good infographic:
-![European Commission has good infographic](https://ec.europa.eu/newsroom/dae/document.cfm?doc_id=4541)
+<img alt="European Commission has good infographic" src="https://ec.europa.eu/newsroom/dae/document.cfm?doc_id=4541" style="width: 50%"/>
 
 ### 1G
 * 3 variants used:
@@ -131,6 +161,60 @@ See [Difference Between IMEI, IMSI, ICCID And MSISDN Numbers](https://commsbrief
 ## AT Commands
 These are just quick notes on some commands for quick reference. Not trying to duplicate the manual here so for details look at modem manual.
 
+AT commands come in at least two forms:
+1. Basic AT commands
+2. Extended AT commands
+
+Basic AT commands have the following format:
+
+```
+ATCMDb=123
+||||||^
+||^^^^Commands can have parameters
+^^ The basic command is "CMDb" (substitute an actual command here).
+All AT commands are prefexed with the charaters "AT". No space between "AT" and "CMDx"
+because this is a basic command
+```
+
+For example, some basic AT commands include:
+```
+ATI0 // Request type number of device
+ATI6 // Request mobile boot sequence version
+ATI9 // Request modem and application version
+```
+
+Each command will be a two or more line replace with:
+```
+COMMAND-ECHOED
+....
+OK or ERROR
+```
+
+Note `ERROR` is not very informative which is why extended error reporting (CME errors) are usually enabled (`AT+CMEE=1`)
+
+Extended commands are prefixed with a "+":
+
+```
+AT+<COMMAND><SUFFIX><DATA>
+```
+
+For example:
+
+```
+AT+CMDe=,,15
+```
+Because the prefix is "AT+" we know this is an extended AT command. The command itself is "CMDe" (not real), it is a set operation because the suffix is "=", and the data consists of three parameters. The first 2 are optional and not specified, the last is 15.
+
+Extended commands come in 3 flavours:
+1. Set: Suffix is "=". Think set a property. Property might enable/disable something, cause a specific behavior etc.
+2. Read: Suffix is "?".
+3. Execute: No suffix. Makes modem do something, think verb.
+4. Test: Suffix is "=?". Asks about capabilities and if command understood/supported.
+
+However, not all AT commands follow this convention religiously. For example, `AT+CIMI` has the same functionality as `AT_CIMI?`: the CIMI can be read without using a "?" suffix, so it looks like an execution command, but really is doing a read of sorts.
+
+Standard commands will be something like "AT+C....". Vendor specific commands usually replace the C with something. For example UBlox specific
+AT commands look like "AT+U...".
 
 ### Standard
 
@@ -142,24 +226,33 @@ These are just quick notes on some commands for quick reference. Not trying to d
 <!--
         <tr>
             <td><code></code></td>
-            <td></td>
+            <td><p></p></td>
         </tr>
 -->
         
         <tr>
             <td><p><code>AT+CREG</code></p></td>
-            <td><p>GSM network registration [status]</p></td>
+            <td><p>GSM network registration status/report.</p>
+                <p>The <i>set</i> command configures whether URCs are emitted by the modem. E.g., the set command <code>AT+CREG=2</code> enables network registration URCs, which will include network cell ID data. An example of such a URC could be <code>+CREG: 5,"090C","0696",3</code>, where <code>5</code> is the status (in this case registered, roaming), 
+                   <code>"090C"</code> is the Local Area Code (LAC) and `"0696"` is the Cell ID. `3` is the `AcTSatus` (a Ublox specific thing maybe?) and indicates that the
+                   RAT being used is GSM/GPRS.
+                </p>
+                <p>The <i>read</i> command reports the current mode and network registration status.
+                </p>
+            </td>
         </tr>
 
         <tr>
             <td><p><code>AT+CGREG</code></p></td>
-            <td><p>GPRS network registration [status]</p></td>
+            <td><p>GPRS network registration status/report.</p>
+                <p>Very similar to `AT+CREG` but for GRPS networks
+            </td>
         </tr>
 
 
         <tr>
             <td><p><code>AT+CEREG</code></p></td>
-            <td><p>LTE/EPS network registration [status]</p></td>
+            <td><p>LTE/EPS network registration status/report</p></td>
         </tr>
 
         <tr>
@@ -170,17 +263,54 @@ These are just quick notes on some commands for quick reference. Not trying to d
 
         <tr>
             <td><p><code>AT+CPSMS</code></p></td>
-            <td></td>
+            <td><p>Power Saving Mode (PSM) settings.</p>
+                <blockquote>
+                    <p>IoT devices typically send or receive data intermittently. Between periods of data transmission and reception, a device can sleep to minimize power consumption and maximize battery charge. The energy cost of completely detaching from the network at sleep, then re-attaching upon wake is high, so LTE allows the device to maintain its network attachment during sleep. However, the host network will periodically page the device, which needs to wake and respond. The device will then sleep again until it receives the next page or has to wake to send data.
+                    </p>
+                    <p>This wake-respond-sleep process consumes only a small amount of energy, but its cumulative energy consumption can become significant over the lifetime of a device. Power Save Mode addresses this by letting IoT devices agree to an extended sleep period with the network. During this time, the network doesn't page the device, which can then wake only when it needs to send data or when the sleep period expires.
+                    </p>
+                    <p>...
+                    </p>
+                    <p>In an active PSM period, the modem's radio is fully shut down and the device cannot send data or be reached. During development, you should be aware that the device's AT channel may also be closed down.
+                    </p>
+                    <p>Data intended for the sleeping device is buffered: 3GPP requirements mandate that data packets must be stored by the network. 
+                    </p>
+                    <footer>-- <a href="https://www.twilio.com/docs/iot/supersim/low-power-optimization-for-cellular-modules" target="_blank">Low-power Optimization for Cellular Modules</a>, Twilio.</footer>
+                </blockquote>
+                <p>They had en even better explanation in another of their blogs:</p>
+                <blockquote>
+                    <p>Power Saving Mode (PSM) - The PSM feature allows an IoT device to sleep for extended periods of time without being woken up by network paging. Typical cellular devices actively transition between two modes – IDLE and ACTIVE. When the device is not sending/receiving traffic it goes IDLE, which has a positive effect on battery life. If there are IP packets that need to be delivered to the device, the network pages for the device. The device must respond to the page and transition to ACTIVE mode to receive the traffic. This has an impact on IoT devices that are power-constrained. PSM allows these IoT devices to negotiate an extended sleep period (hours or days) with the network and avoid being paged during that sleep cycle. If there is any traffic that arrives for the device during the sleep period, the traffic is buffered in the network (at least the last 100 bytes) and delivered when the device becomes ACTIVE.</p>
+                    <footer>-- <a href="https://www.twilio.com/blog/when-to-use-lte-cat-m" target="_blank">When to Use LTE Cat M for IoT Devices</a>Twilio blog.
+                    </footer>
+                </blockquote>
+                <p></p>
+            </td>
         </tr>
 
         <tr>
             <td><p><code>AT+CEDRXS</code></p></td>
             <td><p>
-                    UEs extended discontinuous reception (eDRX) parameters. EDRX is an extension of the DRX feature that is used by IoT devices to reduce power consumption. <q>DRX is a mechanism in which a device goes into sleep mode for a certain period and then wakes up after a fixed interval to receive signals. The basic principle for eDRX is to extend DRX cycles to allow a device to remain in a power-saving state for a longer period of time</q> -- [[Ref]](https://www.everythingrf.com/community/what-is-edrx)
+                    Use extended discontinuous reception (eDRX) parameters. EDRX is an extension of the DRX feature that is used by IoT devices to reduce power consumption. <q>DRX is a mechanism in which a device goes into sleep mode for a certain period and then wakes up after a fixed interval to receive signals. The basic principle for eDRX is to extend DRX cycles to allow a device to remain in a power-saving state for a longer period of time</q> -- <a href="https://www.everythingrf.com/community/what-is-edrx" target="_blank">[REF]</a>.
                 </p>
                 <p>
-                    Good article: [[Low-power Optimization for Cellular Modules]](https://www.twilio.com/docs/iot/supersim/low-power-optimization-for-cellular-modules).</td>
+                    Twilio has the following to say about the difference between PSM and eDRX:
                 </p>
+                <blockquote>
+                    <p>While not providing the same levels of power reduction as PSM, eDRX can offer a good compromise between device reachability and power consumption. eDRX can be used alongside PSM to obtain additional power savings, or it can be used on its own.
+                    </p>
+                    <p>PSM is more power efficient because PSM cycles are much longer than eDRX cycles. As a result, the device can enter into a deeper, lower power sleep state with PSM than it can with eDRX.
+                    </p>
+                    <footer>-- <a href="https://www.twilio.com/docs/iot/supersim/low-power-optimization-for-cellular-modules" target="_blank">Low-power Optimization for Cellular Modules</a>, Twilio.</footer>
+                </blockquote>
+                <p>Their blog also gives a nice little bit of extra detail:
+                </p>
+                <blockquote>
+                    <p>PSM and eDRX are complementary and can both be used by a Cat M device. eDRX helps the device sleep a bit longer, wake up at fixed intervals, and generally reduce "chattiness" between the device and the network. PSM helps the device sleep for much longer - hours or days.</p>
+                     <footer>-- <a href="https://www.twilio.com/blog/when-to-use-lte-cat-m" target="_blank">When to Use LTE Cat M for IoT Devices</a>Twilio blog.
+                     </footer>
+                </blockquote>
+                <p></p>
+            </td>
         </tr>
 
 
@@ -221,7 +351,7 @@ These are just quick notes on some commands for quick reference. Not trying to d
 
         <tr>
             <td><p><code>AT+COPS</code></p></td>
-            <td><p>The +COPS command selects a Public Land Mobile Network (PLMN) automatically or manually, and reads and searches the current mobile network.</p></td>
+            <td><p>The `+COPS` command selects a Public Land Mobile Network (PLMN) automatically or manually, and reads and searches the current mobile network.</p></td>
         </tr>
   
     </tbody>
@@ -270,6 +400,82 @@ These are just quick notes on some commands for quick reference. Not trying to d
         </tr>
     </tbody>
 </table>
+
+### An Example Command Sequence
+
+1. See if the modem is there using a basic echo command:
+
+    |         |             |
+    |---------|-------------|
+    | Send    | `AT`        |
+    | Receive | `AT`<br>`OK`|
+
+1. Enable extended error (CME) reports with numeric values:
+
+    |         |             |
+    |---------|-------------|
+    | Send    | `AT+CMEE=1`         |
+    | Receive | `AT+CMEE=1`<br>`OK` |
+
+    Why should we do this?
+    > When controlling GSM devices using AT commands, the device can respond with either "OK" or "ERROR". 
+    > Sometimes you will receive an error and you do not know the cause of this error.
+    > 
+    >  That's why most advanced GSM devices support extended errors. Instead of just displaying the "ERROR" message, 
+    >  it also shows an error number. The syntax of this extended error is either "+CMS ERROR: xxx" or "+CME ERROR: xxx".
+    >
+    > When the error starts with "+CME ERROR", it means that the error is a device specific error code. For instance,
+    > you are trying to read a phonebook entry before entering a pincode
+    >
+    > -- [GSM Equipment and Network Error Codes, smssolutions.net](https://www.smssolutions.net/tutorials/gsm/gsmerrorcodes/)
+
+1. Get some information about the modem - its modem and firmware version numbers:
+
+    |         |             |
+    |---------|-------------|
+    | Send    | `ATI9`                               | 
+    | Receive | `ATI9`<br>`M0.10.00,A.02.14`<br>`OK` |
+
+1. Request the ICCID number of the SIM - the code that uniquely identifies the chip on the SIM card.
+
+    |         |             |
+    |---------|-------------|
+    | Send    | `AT+CCID`                                    |
+    | Receive | `AT+CCID`<br>`+CCID: <19-20 digits>`<br>`OK` |
+
+1. Query the PDP context definition.
+
+    <blockquote>
+        <p>A Packet Data Protocol (PDP) context offers a packet data connection over which a device and the mobile network can exchange IP packets.</p>
+        <footer>--<a href="https://learn.microsoft.com/en-us/windows-hardware/drivers/mobilebroadband/developing-apps-using-multiple-pdp-contexts" target="_blank">Developing apps using multiple PDP contexts</a>.</footer>
+    </blockquote>
+    
+    <blockquote>
+        <p>A PDP (Packet Data Protocol) Context is a logical association between a MS (Mobile Station) and PDN (Public Data Network) running across a GPRS network. The context defines aspects such as Routing, QoS (Quality of Service), Security, Billing etc.</p>
+        <footer>--<a href="https://www.mpirical.com/glossary/pdp-context#:~:text=A%20PDP%20(Packet%20Data%20Protocol,)%2C%20Security%2C%20Billing%20etc." target="_blank">PDP Context</a>, MPirical Glossary.</footer>
+    </blockquote>
+
+    TutorialsPoint has a [good explanation of PDP contexts for GPRS comms](https://www.tutorialspoint.com/gprs/gprs_pdp_context.htm).
+
+    |         |             |
+    |---------|-------------|
+    | Send    | `AT+CGDCONT?`                                    |
+    | Receive | `AT+CGDCONT?`<br>`+CGDCONT: 1,"IPV4V6","","0.0.0.0.0.0.0.0.0..."`<br>`OK` |
+
+1. Query the Power Saving Mode (PSM) settings:
+
+    |         |             |
+    |---------|-------------|
+    | Send    | `AT+CPSMS?`                                    |
+    | Receive | `AT+CPSMS?`<br>`+CPSMS:1,,,"10000101","00000011"`<br>`OK` |
+
+
+1. Query the xEDRX settings:
+
+    |         |             |
+    |---------|-------------|
+    | Send    | `AT+CEDRXS?`                                    |
+    | Receive | `AT+CEDRXS?`<br>`+CEDRXS: `<br>`OK` |
 
 
 ## TODOs

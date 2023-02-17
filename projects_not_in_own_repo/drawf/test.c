@@ -4,13 +4,18 @@
 
 #include <stdio.h>
 
+enum JAMES {
+    J1,
+    J2,
+    J3
+};
 
 void do_stuff(int my_arg)
 {
     int my_local = my_arg + 2;
-    int i;
+    int i = J1;
 
-    for (i = 0; i < my_local; ++i)
+    for (i = J1; i < my_local; ++i)
         printf("i = %d\n", i);
 }
 
