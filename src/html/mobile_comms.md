@@ -119,7 +119,7 @@ European Commission has good infographic:
 
 
 ## Network Architectures
-
+##IMG_DIR##/GSM_Architecture.png
 
 
 ## SIM and Phone Identifiers
