@@ -1,30 +1,34 @@
 ## Terminology
 
+<p></p>
 | Acronym | Meaning |
 |---------|---------|
-| GSM     | Global Systems for Mobile |
-| GPRS    | General Packet Radio Service |
+| APN     | Access Point Name |
+| BTS     | Base Transceiver System - aka Base Station |
 | EDGE    | Enhanced Data Rate for GSM Evolution |
-| UMTS    | Universal Mobile Telecommunications System |
+| EVDO    | EVolution Data optimized |
+| GPRS    | General Packet Radio Service |
+| GSM     | Global Systems for Mobile |
 | HSPA    | High Speed Packet Access |
 | HSPA+   | Evolved High Speed Packet Access |
-| EVDO    | EVolution Data optimized |
-| LTE     | Long Term Evolution (of mobile networks) |
-| NR      | New Radio |
-| MS      | Mobile Station: your phone |
-| BTS     | Base Transceiver System - aka Base Station |
+| ICCID   | Integrated Circuit Card Identifier - Identifies the chip of each SIM card. |
 | IMEI    | International Mobile Equipment Identity - Think MAC address of slot SIM is inserted into |
 | IMSI    | International Mobile Subscriber Identity - Unique identifier assigned to every SIM  |
-| ICCID   | Integrated Circuit Card Identifier - Identifies the chip of each SIM card. |
+| LTE     | Long Term Evolution (of mobile networks) |
+| MS      | Mobile Station: your phone |
 | MSISDN  | Mobile Station International Subscriber Directory - Full mobile number with country code and all prefixes. |
-| TAU     | Tracking Area Updating period |
+| NR      | New Radio |
+| PDN     | Public Data Network |
 | PSM     | Power Saving Mode |
+| TAU     | Tracking Area Updating period |
 | UE      | User Equipment |
-
+| UMTS    | Universal Mobile Telecommunications System |
+<p></p>
 
 
 ## Different Mobile Comms Standards
 
+<p></p>
 |      | Standards                                | Technology | SMS | Voice Switching | Data Switching       | Data Rates                               |
 |------|------------------------------------------|------------|-----|-----------------|----------------------|--------------                            |
 | 1G   | AMPS, TACS                               | Analog     | No  | Circuit         | Circuit              | N/A                                      |
@@ -34,6 +38,7 @@
 | 4/5G | LTE-M (aka Cat-M1), NB-IoT (aka Cat-NB1) | Digital    | ?   | ?               | ?                    | ?                                        |
 | 5G   |                                          | Digital    | Yes | Packet          | Packet               | ~20 Gbps                                 |
 [[Ref]](https://www.javatpoint.com/history-of-wireless-communication)
+<p></p>
 
 (1) GPRS is a packet-switched network and GSM is a circuit-switched network [[Ref]](https://byjus.com/gate/difference-between-gsm-and-gprs/#:~:text=The%20GSM%20is%20a%20circuit,packet%2Dswitched%20type%20of%20network.&text=The%20GSM%20technology%20provides%20a,for%20all%20of%20its%20users.)
 
@@ -442,8 +447,15 @@ AT commands look like "AT+U...".
 
     <blockquote>
         <p>A Packet Data Protocol (PDP) context offers a packet data connection over which a device and the mobile network can exchange IP packets.</p>
-        <footer>--<a href="https://learn.microsoft.com/en-us/windows-hardware/drivers/mobilebroadband/developing-apps-using-multiple-pdp-contexts" target="_blank">Developing apps using multiple PDP contexts</a></footer>
+        <footer>--<a href="https://learn.microsoft.com/en-us/windows-hardware/drivers/mobilebroadband/developing-apps-using-multiple-pdp-contexts" target="_blank">Developing apps using multiple PDP contexts</a>.</footer>
     </blockquote>
+    
+    <blockquote>
+        <p>A PDP (Packet Data Protocol) Context is a logical association between a MS (Mobile Station) and PDN (Public Data Network) running across a GPRS network. The context defines aspects such as Routing, QoS (Quality of Service), Security, Billing etc.</p>
+        <footer>--<a href="https://www.mpirical.com/glossary/pdp-context#:~:text=A%20PDP%20(Packet%20Data%20Protocol,)%2C%20Security%2C%20Billing%20etc." target="_blank">PDP Context</a>, MPirical Glossary.</footer>
+    </blockquote>
+
+    TutorialsPoint has a [good explanation of PDP contexts for GPRS comms](https://www.tutorialspoint.com/gprs/gprs_pdp_context.htm).
 
     |         |             |
     |---------|-------------|
