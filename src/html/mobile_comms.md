@@ -119,6 +119,7 @@ European Commission has good infographic:
 
 
 ## Network Architectures
+### GSM
 ![](##IMG_DIR##/GSM_Architecture.png)
 
 

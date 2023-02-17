@@ -90,33 +90,55 @@ def process_path_element(el, svg_height, svg_width):
     L 240 140"
 
     Good ref: https://css-tricks.com/svg-path-syntax-illustrated-guide/
+
+    TODO might be able to approximate bezier curves using arcs: https://pomax.github.io/bezierinfo/#arcapproximation | https://github.com/domoszlai/bezier2biarc/blob/master/Algorithm.cs
     """
     path_tokens = el['d'].split(" ")
+
+    home_set = False
+    home_x = 0
+    home_y = 0
     curr_x = 0
     curr_y = 0
-    
-    # should be multiple of three tokens
-    if len(path_tokens) % 3 != 0:
-        raise Exception(f"Bad number of tokens: {len(path_tokens)} - {path_tokens}")
-
-
-    for cursor in range(0, len(path_tokens), 3):
+    cursor = 0
+    while cursor < len(path_tokens):
         if path_tokens[cursor] == "M":
             curr_x = float(path_tokens[cursor + 1])
             curr_y = float(path_tokens[cursor + 2])
+            if not home_set:
+                home_set = True
+                home_x = curr_x
+                home_y = curr_y
+            cursor += 3
         elif path_tokens[cursor] == "L":
+            if not home_set:
+                home_set = True
+                home_x = curr_x
+                home_y = curr_y
             x1 = curr_x
             y1 = curr_y
             x2 = float(path_tokens[cursor + 1])
             y2 = float(path_tokens[cursor + 2])
             curr_x = x2
-            curr_y = y2
-
+            curr_y = y2            
+            cursor += 3
             x1_scaled = f"{x1} * (width / {svg_width})"
             y1_scaled = f"{y1} * (height / {svg_height})"
             x2_scaled = f"{x2} * (width / {svg_width})"
             y2_scaled = f"{y2} * (height / {svg_height})"
             print(f"drawLine({x1_scaled},{y1_scaled},{x2_scaled},{y2_scaled})")            
+        elif path_tokens[cursor] == "Z":
+            x1 = curr_x
+            y1 = curr_y
+            x2 = home_x
+            y2 = home_y
+            cursor += 1
+            x1_scaled = f"{x1} * (width / {svg_width})"
+            y1_scaled = f"{y1} * (height / {svg_height})"
+            x2_scaled = f"{x2} * (width / {svg_width})"
+            y2_scaled = f"{y2} * (height / {svg_height})"
+            print(f"drawLine({x1_scaled},{y1_scaled},{x2_scaled},{y2_scaled})")            
+
         else:
             raise Exception(f"Unsupported path command '{path_tokens[cursor]}'")
 
