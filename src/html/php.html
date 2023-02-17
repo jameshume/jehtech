@@ -36,15 +36,31 @@
 
 <h2>Check Your Code</h2>
 <div>
-<h3>PHP Synax checking</h3>
+<h3>PHP Syntax checking</h3>
 <p>
 	Just used the <code>php -l &lt;file&gt;</code> to syntax check a file.
 </p>
 <h3>PHP Code Sniffer</h3>
 <p>
-	PHP_CodeSniffer by Squiz Pty Ltd. (http://www.squiz.net). Helps
-	detect and fix violations of a defined set of coding standards.
+	PHP_CodeSniffer by Squiz Pty Ltd. (http://www.squiz.net). Helps detect and fix violations of a defined set of coding standards.
 </p>
+</div>
+
+<h2>PHP INI</h2>
+<div>
+	<p>
+		To find out where it is: <code>php -i | grep "Loaded Configuration File"</code>
+	</p>
+	<p>
+		Note that there are different INI files for the CLI and Apache:
+	</p>
+	<pre>/etc/php/x.y/cli/php.ini #&lt; For the PHP CLI program only
+/etc/php/x.y/apache/php.ini #&lt; For the PHP plugin used by Apache
+	</pre>
+	<p>
+		If you change the Apache INI file remember to restart Apache: <code>sudo systemctrl reload apache2</code>.
+	</p>
+
 </div>
 
 <h2>Autoloading Classes</h2>
@@ -80,16 +96,15 @@ spl_autoload_register('my_autoload'); // <--- You could use an anonymous func he
 <h2>Stream Filters</h2>
 <div>
 <p>
-	I know everyone frowns on using printf style debugging, but I still
-	like it. What I had is debug output that has no indentation because
-	it is harder to read. So here is a tiny little debug class that
-	is a stream filter that you can associate with any PHP resource.
-	When you print to it it will insert left-padding at the indent
-	you are currently at.
+	I know everyone frowns on using printf style debugging, but I still like it. What I had is debug output that has no
+	indentation because it is harder to read. So here is a tiny little debug class that is a stream filter that you can
+	associate with any PHP resource. When you print to it it will insert left-padding at the indent you are currently
+	at.
 </p>
 <blockquote>
 	<p>
-		A filter is a final piece of code which may perform operations on data as it is being read from or written to a stream. Any number of filters may be stacked onto a stream.
+		A filter is a final piece of code which may perform operations on data as it is being read from or written to a
+		stream. Any number of filters may be stacked onto a stream.
 	</p>
 	<footer>-- <a href="http://php.net/manual/en/stream.filters.php" target="_blank">PHP Docs</a>.
 	</footer>
