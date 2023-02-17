@@ -47,6 +47,7 @@ Also process very simple paths like
 
 
 import sys
+import re
 from bs4 import BeautifulSoup
 
 
@@ -80,6 +81,138 @@ def process_ellipse_element(el, svg_height, svg_width):
 
     print(f"drawEllipse({x_scaled},{y_scaled},{width_as_perc},{height_as_perc})")
 
+def process_polyline_element(el, svg_height, svg_width):
+    points_split = re.split(",|\s", el['points'])
+    points = []
+    
+    i = 0
+    while i < len(points_split):
+        x = points_split[i]
+        i += 1
+        y = points_split[i]
+        i += 1
+        points.append((x, y))
+
+    p1 = points[0]
+    for point in points[1:]:
+        x1, y1 = p1
+        x2, y2 = point
+        x1_scaled = f"{x1} * (width / {svg_width})"
+        y1_scaled = f"{y1} * (height / {svg_height})"
+        x2_scaled = f"{x2} * (width / {svg_width})"
+        y2_scaled = f"{y2} * (height / {svg_height})"
+        print(f"drawLine({x1_scaled},{y1_scaled},{x2_scaled},{y2_scaled})")    
+        p1 = point
+
+
+
+
+class CommandTokenizer:
+    def __init__(self, path_str):
+        self._path_str = path_str
+        self._path_str_len = len(path_str)
+        self._cursor = 0
+
+
+    def __eat_whitespace(self, check=False):
+        while (self._cursor < self._path_str_len) and (self._path_str[self._cursor] == ' '):
+            self._cursor += 1
+
+        if check and (self._cursor >= self._path_str_len):
+            raise Exception(f"Command {self._current_cmd} ended prematurely")
+
+    def __eat_comma(self, check=False):
+        if self._path_str[self._cursor] == ',':
+            self._cursor +=1
+        
+        if check and (self._cursor >= self._path_str_len):
+            raise Exception(f"Command {self._current_cmd} ended prematurely")
+
+    def __get_params(self):
+        params = []
+
+        num_dots = 0
+        next_minus = False
+
+        while (self._cursor < self._path_str_len):
+            self.__eat_whitespace(check=True)
+            
+            start = self._cursor            
+            while (self._cursor < self._path_str_len) and (self._path_str[self._cursor] in '-0123456789.'):
+                if self._path_str[self._cursor] == '.':
+                    num_dots += 1
+                if self._path_str[self._cursor] == '-' and self._cursor != start:
+                    next_minus = True
+                if num_dots > 1 or next_minus:
+                    break
+                self._cursor += 1
+            end = self._cursor
+            
+            if (self._cursor >= self._path_str_len):
+                raise Exception(f"Command {self._current_cmd} ended prematurely -- {params}")
+            elif start == end:
+                break
+            elif num_dots > 1 or next_minus:
+                # next param! see https://stackoverflow.com/q/51607857
+                params.append(self._path_str[start:end])
+                num_dots = 0
+                next_minus = False
+            elif self._path_str[self._cursor] == ',' or self._path_str[self._cursor] == ' ':
+                params.append(self._path_str[start:end])
+                num_dots = 0
+                self._cursor += 1
+            else:
+                params.append(self._path_str[start:end])
+                num_dots = 0
+                break
+
+
+        if len(params) == 0:
+            raise Exception(f"Command {self._current_cmd} had no parameters!")
+
+        return params
+
+    def __iter__(self):
+        self._cursor = 0
+        return self
+
+
+    def __next__(self):
+
+        # Skip over any whitespaces
+        self.__eat_whitespace(check=False)
+
+        # If we've reached the end of the string stop the iterator
+        if (self._cursor >= self._path_str_len):
+            raise StopIteration
+        
+        # Cursor should now be on the next command character
+        self._current_cmd = None
+        if self._path_str[self._cursor] in "MmLlHhVvZzCcSsQqTtAa":
+            self._current_cmd = self._path_str[self._cursor]
+            self._cursor += 1
+        else:
+            raise Exception(f"Unsupported path command '{self._path_str[self._cursor]}' -- |{self._path_str[:self._cursor+1]} <<<<<|>>>>> {self._path_str[self._cursor+1:]}")
+
+        # Now get all of the parameters for the command. Parameters can be split, it would seem,
+        # by either or both of ' ' and ','. Only the "Z" parameter has no commands I think.
+        if self._current_cmd == 'z' or self._current_cmd == 'Z':
+            return (self._current_cmd, [])
+        else:
+            return (self._current_cmd, self.__get_params())
+
+
+
+        
+
+        
+
+
+
+
+
+    
+
 def process_path_element(el, svg_height, svg_width):    
     """
         <path d="
@@ -92,55 +225,78 @@ def process_path_element(el, svg_height, svg_width):
     Good ref: https://css-tricks.com/svg-path-syntax-illustrated-guide/
 
     TODO might be able to approximate bezier curves using arcs: https://pomax.github.io/bezierinfo/#arcapproximation | https://github.com/domoszlai/bezier2biarc/blob/master/Algorithm.cs
-    """
-    path_tokens = el['d'].split(" ")
 
+    Hmm.... looks like SVG path does not need to have spaces between all the characters which will make parsing harder. thankkfully
+    the ones I've used so far use this syntax exactly.
+
+    For example a valid path is 
+        "M17.94,56.64a3.43,3.43,0,0,1,.82,2.43,3.49,3.49,0,0,1-1.12,2.37l-.1.08"
+
+    """
     home_set = False
     home_x = 0
     home_y = 0
     curr_x = 0
     curr_y = 0
-    cursor = 0
-    while cursor < len(path_tokens):
-        if path_tokens[cursor] == "M":
-            curr_x = float(path_tokens[cursor + 1])
-            curr_y = float(path_tokens[cursor + 2])
+    # Worlds worst copy past code below.... yes, it is shit!
+    for cmd, params in CommandTokenizer(el['d']):
+        if cmd == "M": # Move to the absolute coordinates x,y
+            curr_x = float(params[0])
+            curr_y = float(params[1])
             if not home_set:
                 home_set = True
                 home_x = curr_x
                 home_y = curr_y
-            cursor += 3
-        elif path_tokens[cursor] == "L":
+        elif cmd == "L": # Draw a straight line to the absolute coordinates x,y
             if not home_set:
                 home_set = True
                 home_x = curr_x
                 home_y = curr_y
             x1 = curr_x
             y1 = curr_y
-            x2 = float(path_tokens[cursor + 1])
-            y2 = float(path_tokens[cursor + 2])
+            x2 = float(params[0])
+            y2 = float(params[1])
             curr_x = x2
             curr_y = y2            
-            cursor += 3
             x1_scaled = f"{x1} * (width / {svg_width})"
             y1_scaled = f"{y1} * (height / {svg_height})"
             x2_scaled = f"{x2} * (width / {svg_width})"
             y2_scaled = f"{y2} * (height / {svg_height})"
             print(f"drawLine({x1_scaled},{y1_scaled},{x2_scaled},{y2_scaled})")            
-        elif path_tokens[cursor] == "Z":
+        elif cmd == "l": # Draw a straight line to a point that is relatively right x and down y (or left and up if negative values)
+            if not home_set:
+                home_set = True
+                home_x = curr_x
+                home_y = curr_y
+            x1 = curr_x
+            y1 = curr_y
+            x2 = x1 + float(params[0])
+            y2 = y1 + float(params[1])
+            curr_x = x2
+            curr_y = y2            
+            x1_scaled = f"{x1} * (width / {svg_width})"
+            y1_scaled = f"{y1} * (height / {svg_height})"
+            x2_scaled = f"{x2} * (width / {svg_width})"
+            y2_scaled = f"{y2} * (height / {svg_height})"
+            print(f"drawLine({x1_scaled},{y1_scaled},{x2_scaled},{y2_scaled})")    
+            
+        elif cmd == "Z" or cmd =="z":
             x1 = curr_x
             y1 = curr_y
             x2 = home_x
             y2 = home_y
-            cursor += 1
             x1_scaled = f"{x1} * (width / {svg_width})"
             y1_scaled = f"{y1} * (height / {svg_height})"
             x2_scaled = f"{x2} * (width / {svg_width})"
             y2_scaled = f"{y2} * (height / {svg_height})"
-            print(f"drawLine({x1_scaled},{y1_scaled},{x2_scaled},{y2_scaled})")            
-
+            print(f"drawLine({x1_scaled},{y1_scaled},{x2_scaled},{y2_scaled})")   
         else:
-            raise Exception(f"Unsupported path command '{path_tokens[cursor]}'")
+            print(f"// Ignoring unsupported path command '{cmd}'")
+
+        ## TODO
+        ## Not sure how to do arcs - SVG arcs have a rotation parameter that Umlet does not have.
+        ## 
+            
 
 
 
@@ -152,6 +308,7 @@ node_handlers = {
     "rect" : process_rect_element,
     "ellipse": process_ellipse_element,
     "path": process_path_element,
+    "polyline": process_polyline_element,
 }
 
 def process_group(group, svg_height, svg_width):
@@ -161,8 +318,9 @@ def process_group(group, svg_height, svg_width):
 
         if child.name in node_handlers:
             node_handlers[child.name](child, svg_height, svg_width)
-        else:
-            raise Exception(f"Unhandled SVG child '{child.name}'")
+        elif child.name == "g":
+            process_group(child, svg_height, svg_width)
+
 
 
 soup = None
@@ -171,7 +329,6 @@ with open(sys.argv[1], "r") as svgFile:
 
 print("customelement=")
 svg, = soup.find_all("svg")
-for group in svg.find_all("g"):
-    process_group(group, float(svg["height"][:-2]), float(svg["width"][:-2]))
+process_group(svg, float(svg["height"][:-2]), float(svg["width"][:-2]))
 
 
