@@ -27,6 +27,12 @@
 <div id="page_contents">
 </div>
 
+<h2>Convert Simple SVGs to Umlet Custom Elements</h2>
+<div>
+	<p>Use the <a href="https://github.com/jameshume/jehtech/blob/master/projects_not_in_own_repo/svg_to_umlet_drawing/svg2umlet.py" target="_blank">SVG2Umlet Python script</a> to convert simple SVG files to Umlet custom drawings.</p>
+	<p>The SVG must be simple: arcs and bezier curves are NOT supported.</p>
+</div>
+
 <h2>Useful Shapes</h2>
 <div>
 	<p>Very simple left-to-right arrow:</p>
@@ -90,6 +96,112 @@ drawArc(20, 0, 5, 5, 130, 360, true) bg=gray</pre>
 	drawLine(0,0,width/2,0)
 	drawLine(0,height,width/2,height)
 	drawLine(0,0,0,height)</pre>
+
+	<p>Mobile Phone</p>
+<pre>customelement=
+drawRectangleRound(0 * (width / 201.0),0 * (height / 386.0),width * 1.00,height * 1.00,30.0 * (height / 386.0))
+drawRectangleRound(80 * (width / 201.0),368 * (height / 386.0),width * 0.20,height * 0.03,1.5 * (height / 386.0))
+drawRectangle(14 * (width / 201.0),40 * (height / 386.0),width * 0.88,height * 0.83)
+drawEllipse(160.0 * (width / 201.0),10.0 * (height / 386.0),width * 0.10,height * 0.05)
+drawRectangleRound(80 * (width / 201.0),10 * (height / 386.0),width * 0.20,height * 0.03,1.5 * (height / 386.0))
+drawEllipse(123.0 * (width / 201.0),7.0 * (height / 386.0),width * 0.05,height * 0.03)
+drawEllipse(136.0 * (width / 201.0),7.0 * (height / 386.0),width * 0.05,height * 0.03)
+drawEllipse(64.0 * (width / 201.0),5.0 * (height / 386.0),width * 0.05,height * 0.03)</pre>
+
+	<p>Speech Bubble</p>
+<pre>customelement=
+drawLine(15.97 * (width / 101.0),43.97 * (height / 61.0),9.97 * (width / 101.0),46.78 * (height / 61.0))
+drawLine(9.97 * (width / 101.0),46.78 * (height / 61.0),11.9 * (width / 101.0),40.97 * (height / 61.0))
+drawLine(11.9 * (width / 101.0),40.97 * (height / 61.0),7.07 * (width / 101.0),43.97 * (height / 61.0))
+drawLine(7.07 * (width / 101.0),43.97 * (height / 61.0),8.9 * (width / 101.0),39.27 * (height / 61.0))
+drawLine(8.9 * (width / 101.0),39.27 * (height / 61.0),3.0 * (width / 101.0),40.87 * (height / 61.0))
+drawLine(3.0 * (width / 101.0),40.87 * (height / 61.0),7.07 * (width / 101.0),36.46 * (height / 61.0))
+drawLine(7.07 * (width / 101.0),36.46 * (height / 61.0),0.96 * (width / 101.0),36.26 * (height / 61.0))
+drawLine(0.96 * (width / 101.0),36.26 * (height / 61.0),6.22 * (width / 101.0),32.75 * (height / 61.0))
+drawLine(6.22 * (width / 101.0),32.75 * (height / 61.0),0.0 * (width / 101.0),30.85 * (height / 61.0))
+drawLine(0.0 * (width / 101.0),30.85 * (height / 61.0),5.68 * (width / 101.0),28.25 * (height / 61.0))
+drawLine(5.68 * (width / 101.0),28.25 * (height / 61.0),0.32 * (width / 101.0),25.64 * (height / 61.0))
+drawLine(0.32 * (width / 101.0),25.64 * (height / 61.0),6.32 * (width / 101.0),24.23 * (height / 61.0))
+drawLine(6.32 * (width / 101.0),24.23 * (height / 61.0),0.86 * (width / 101.0),19.93 * (height / 61.0))
+drawLine(0.86 * (width / 101.0),19.93 * (height / 61.0),6.97 * (width / 101.0),19.83 * (height / 61.0))
+drawLine(6.97 * (width / 101.0),19.83 * (height / 61.0),3.0 * (width / 101.0),15.13 * (height / 61.0))
+drawLine(3.0 * (width / 101.0),15.13 * (height / 61.0),8.79 * (width / 101.0),16.13 * (height / 61.0))
+drawLine(8.79 * (width / 101.0),16.13 * (height / 61.0),6.32 * (width / 101.0),11.32 * (height / 61.0))
+drawLine(6.32 * (width / 101.0),11.32 * (height / 61.0),12.33 * (width / 101.0),13.22 * (height / 61.0))
+drawLine(12.33 * (width / 101.0),13.22 * (height / 61.0),10.93 * (width / 101.0),8.71 * (height / 61.0))
+drawLine(10.93 * (width / 101.0),8.71 * (height / 61.0),16.83 * (width / 101.0),10.62 * (height / 61.0))
+drawLine(16.83 * (width / 101.0),10.62 * (height / 61.0),15.97 * (width / 101.0),6.16 * (height / 61.0))
+drawLine(15.97 * (width / 101.0),6.16 * (height / 61.0),20.58 * (width / 101.0),9.32 * (height / 61.0))
+drawLine(20.58 * (width / 101.0),9.32 * (height / 61.0),21.22 * (width / 101.0),4.31 * (height / 61.0))
+drawLine(21.22 * (width / 101.0),4.31 * (height / 61.0),25.08 * (width / 101.0),8.01 * (height / 61.0))
+drawLine(25.08 * (width / 101.0),8.01 * (height / 61.0),25.51 * (width / 101.0),3.41 * (height / 61.0))
+drawLine(25.51 * (width / 101.0),3.41 * (height / 61.0),30.55 * (width / 101.0),6.91 * (height / 61.0))
+drawLine(30.55 * (width / 101.0),6.91 * (height / 61.0),32.48 * (width / 101.0),1.3 * (height / 61.0))
+drawLine(32.48 * (width / 101.0),1.3 * (height / 61.0),35.69 * (width / 101.0),6.21 * (height / 61.0))
+drawLine(35.69 * (width / 101.0),6.21 * (height / 61.0),37.19 * (width / 101.0),0.6 * (height / 61.0))
+drawLine(37.19 * (width / 101.0),0.6 * (height / 61.0),40.94 * (width / 101.0),6.01 * (height / 61.0))
+drawLine(40.94 * (width / 101.0),6.01 * (height / 61.0),43.52 * (width / 101.0),0.0 * (height / 61.0))
+drawLine(43.52 * (width / 101.0),0.0 * (height / 61.0),45.87 * (width / 101.0),5.81 * (height / 61.0))
+drawLine(45.87 * (width / 101.0),5.81 * (height / 61.0),48.87 * (width / 101.0),0.0 * (height / 61.0))
+drawLine(48.87 * (width / 101.0),0.0 * (height / 61.0),50.48 * (width / 101.0),6.01 * (height / 61.0))
+drawLine(50.48 * (width / 101.0),6.01 * (height / 61.0),54.98 * (width / 101.0),1.0 * (height / 61.0))
+drawLine(54.98 * (width / 101.0),1.0 * (height / 61.0),54.45 * (width / 101.0),6.31 * (height / 61.0))
+drawLine(54.45 * (width / 101.0),6.31 * (height / 61.0),59.38 * (width / 101.0),0.6 * (height / 61.0))
+drawLine(59.38 * (width / 101.0),0.6 * (height / 61.0),59.06 * (width / 101.0),6.61 * (height / 61.0))
+drawLine(59.06 * (width / 101.0),6.61 * (height / 61.0),64.84 * (width / 101.0),1.4 * (height / 61.0))
+drawLine(64.84 * (width / 101.0),1.4 * (height / 61.0),65.49 * (width / 101.0),7.11 * (height / 61.0))
+drawLine(65.49 * (width / 101.0),7.11 * (height / 61.0),70.85 * (width / 101.0),2.7 * (height / 61.0))
+drawLine(70.85 * (width / 101.0),2.7 * (height / 61.0),70.95 * (width / 101.0),8.71 * (height / 61.0))
+drawLine(70.95 * (width / 101.0),8.71 * (height / 61.0),77.06 * (width / 101.0),4.41 * (height / 61.0))
+drawLine(77.06 * (width / 101.0),4.41 * (height / 61.0),75.56 * (width / 101.0),10.02 * (height / 61.0))
+drawLine(75.56 * (width / 101.0),10.02 * (height / 61.0),83.17 * (width / 101.0),6.21 * (height / 61.0))
+drawLine(83.17 * (width / 101.0),6.21 * (height / 61.0),80.28 * (width / 101.0),11.82 * (height / 61.0))
+drawLine(80.28 * (width / 101.0),11.82 * (height / 61.0),89.92 * (width / 101.0),7.81 * (height / 61.0))
+drawLine(89.92 * (width / 101.0),7.81 * (height / 61.0),85.85 * (width / 101.0),13.62 * (height / 61.0))
+drawLine(85.85 * (width / 101.0),13.62 * (height / 61.0),94.43 * (width / 101.0),11.92 * (height / 61.0))
+drawLine(94.43 * (width / 101.0),11.92 * (height / 61.0),91.32 * (width / 101.0),17.03 * (height / 61.0))
+drawLine(91.32 * (width / 101.0),17.03 * (height / 61.0),97.75 * (width / 101.0),16.93 * (height / 61.0))
+drawLine(97.75 * (width / 101.0),16.93 * (height / 61.0),93.25 * (width / 101.0),20.13 * (height / 61.0))
+drawLine(93.25 * (width / 101.0),20.13 * (height / 61.0),100.0 * (width / 101.0),21.24 * (height / 61.0))
+drawLine(100.0 * (width / 101.0),21.24 * (height / 61.0),94.21 * (width / 101.0),24.04 * (height / 61.0))
+drawLine(94.21 * (width / 101.0),24.04 * (height / 61.0),99.89 * (width / 101.0),25.84 * (height / 61.0))
+drawLine(99.89 * (width / 101.0),25.84 * (height / 61.0),93.03 * (width / 101.0),26.84 * (height / 61.0))
+drawLine(93.03 * (width / 101.0),26.84 * (height / 61.0),99.04 * (width / 101.0),30.35 * (height / 61.0))
+drawLine(99.04 * (width / 101.0),30.35 * (height / 61.0),92.82 * (width / 101.0),30.85 * (height / 61.0))
+drawLine(92.82 * (width / 101.0),30.85 * (height / 61.0),97.43 * (width / 101.0),34.86 * (height / 61.0))
+drawLine(97.43 * (width / 101.0),34.86 * (height / 61.0),90.25 * (width / 101.0),33.56 * (height / 61.0))
+drawLine(90.25 * (width / 101.0),33.56 * (height / 61.0),94.11 * (width / 101.0),38.86 * (height / 61.0))
+drawLine(94.11 * (width / 101.0),38.86 * (height / 61.0),87.89 * (width / 101.0),36.66 * (height / 61.0))
+drawLine(87.89 * (width / 101.0),36.66 * (height / 61.0),90.78 * (width / 101.0),41.77 * (height / 61.0))
+drawLine(90.78 * (width / 101.0),41.77 * (height / 61.0),84.89 * (width / 101.0),40.77 * (height / 61.0))
+drawLine(84.89 * (width / 101.0),40.77 * (height / 61.0),85.53 * (width / 101.0),46.08 * (height / 61.0))
+drawLine(85.53 * (width / 101.0),46.08 * (height / 61.0),81.78 * (width / 101.0),42.97 * (height / 61.0))
+drawLine(81.78 * (width / 101.0),42.97 * (height / 61.0),81.03 * (width / 101.0),48.68 * (height / 61.0))
+drawLine(81.03 * (width / 101.0),48.68 * (height / 61.0),77.17 * (width / 101.0),44.77 * (height / 61.0))
+drawLine(77.17 * (width / 101.0),44.77 * (height / 61.0),76.85 * (width / 101.0),51.29 * (height / 61.0))
+drawLine(76.85 * (width / 101.0),51.29 * (height / 61.0),72.88 * (width / 101.0),46.08 * (height / 61.0))
+drawLine(72.88 * (width / 101.0),46.08 * (height / 61.0),70.95 * (width / 101.0),52.19 * (height / 61.0))
+drawLine(70.95 * (width / 101.0),52.19 * (height / 61.0),68.27 * (width / 101.0),46.68 * (height / 61.0))
+drawLine(68.27 * (width / 101.0),46.68 * (height / 61.0),65.59 * (width / 101.0),53.79 * (height / 61.0))
+drawLine(65.59 * (width / 101.0),53.79 * (height / 61.0),63.99 * (width / 101.0),47.68 * (height / 61.0))
+drawLine(63.99 * (width / 101.0),47.68 * (height / 61.0),60.99 * (width / 101.0),53.89 * (height / 61.0))
+drawLine(60.99 * (width / 101.0),53.89 * (height / 61.0),58.95 * (width / 101.0),48.18 * (height / 61.0))
+drawLine(58.95 * (width / 101.0),48.18 * (height / 61.0),56.59 * (width / 101.0),53.99 * (height / 61.0))
+drawLine(56.59 * (width / 101.0),53.99 * (height / 61.0),54.56 * (width / 101.0),48.18 * (height / 61.0))
+drawLine(54.56 * (width / 101.0),48.18 * (height / 61.0),51.88 * (width / 101.0),54.59 * (height / 61.0))
+drawLine(51.88 * (width / 101.0),54.59 * (height / 61.0),50.38 * (width / 101.0),48.18 * (height / 61.0))
+drawLine(50.38 * (width / 101.0),48.18 * (height / 61.0),47.59 * (width / 101.0),53.79 * (height / 61.0))
+drawLine(47.59 * (width / 101.0),53.79 * (height / 61.0),46.3 * (width / 101.0),47.48 * (height / 61.0))
+drawLine(46.3 * (width / 101.0),47.48 * (height / 61.0),42.98 * (width / 101.0),54.29 * (height / 61.0))
+drawLine(42.98 * (width / 101.0),54.29 * (height / 61.0),41.59 * (width / 101.0),47.48 * (height / 61.0))
+drawLine(41.59 * (width / 101.0),47.48 * (height / 61.0),38.91 * (width / 101.0),54.79 * (height / 61.0))
+drawLine(38.91 * (width / 101.0),54.79 * (height / 61.0),38.16 * (width / 101.0),47.88 * (height / 61.0))
+drawLine(38.16 * (width / 101.0),47.88 * (height / 61.0),34.73 * (width / 101.0),55.19 * (height / 61.0))
+drawLine(34.73 * (width / 101.0),55.19 * (height / 61.0),33.12 * (width / 101.0),46.68 * (height / 61.0))
+drawLine(33.12 * (width / 101.0),46.68 * (height / 61.0),30.65 * (width / 101.0),53.39 * (height / 61.0))
+drawLine(30.65 * (width / 101.0),53.39 * (height / 61.0),28.72 * (width / 101.0),47.88 * (height / 61.0))
+drawLine(28.72 * (width / 101.0),47.88 * (height / 61.0),4.07 * (width / 101.0),60.0 * (height / 61.0))
+drawLine(4.07 * (width / 101.0),60.0 * (height / 61.0),15.97 * (width / 101.0),43.97 * (height / 61.0))</pre>
 </div> <!-- END H1 padding div -->
 </div>
 </body>
