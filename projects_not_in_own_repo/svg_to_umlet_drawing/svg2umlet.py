@@ -40,18 +40,34 @@ Rather than use absolute SVG coordinates I wanted the images to scale, so everyt
 as a percentage of the width and height of the Umlet custom element. This means that the SVG must
 include the total width and height as attributes in the <svg> tag. I have not implemented anything
 that will parse the file to find the maximum and minimum coordinates and calculate height and width.
+
+TODO: Annoyingly not all SVGs have the "width" and "height" attributes set in the <svg> element and
+also coordinates can be negative. Would be good to be able to get the min/max xyu coordindates in
+the file and then calculate the width and height from that, and also shift everything so there are
+no negative coordinates.
+
 """
 import sys
 import re
 from bs4 import BeautifulSoup
 
+gblGetBounds = False
 
-def scale_width_as_umlet_string(width, svg_width):
+def __output_umlet_code(output_str):
+    print(output_str)
+
+def __scale_width_as_umlet_string(width, svg_width):
     return f"width * {(float(width) / float(svg_width)):.3f}"
 
-
-def scale_height_as_umlet_string(height, svg_height):
+def __scale_height_as_umlet_string(height, svg_height):
     return f"height * {(float(height) / float(svg_height)):.3f}"
+
+output_umlet_code = __output_umlet_code
+scale_width_as_umlet_string = __scale_width_as_umlet_string
+scale_height_as_umlet_string = __scale_height_as_umlet_string
+
+
+
 
 def scale_point_as_umlet_string(x, y, svg_width, svg_height):
     x1_scaled = scale_width_as_umlet_string(float(x), svg_width)
@@ -75,9 +91,9 @@ def process_rect_element(el, svg_height, svg_width):
         # "max(width, height)".
         max_round      = max(float(el['rx']), float(el['ry']))
         round_scaled   = scale_height_as_umlet_string(max_round, svg_height)
-        print(f"drawRectangleRound({x_scaled}, {y_scaled}, {width_as_perc}, {height_as_perc}, {round_scaled})")
+        output_umlet_code(f"drawRectangleRound({x_scaled}, {y_scaled}, {width_as_perc}, {height_as_perc}, {round_scaled})")
     else:
-        print(f"drawRectangle({x_scaled}, {y_scaled}, {width_as_perc}, {height_as_perc})")
+        output_umlet_code(f"drawRectangle({x_scaled}, {y_scaled}, {width_as_perc}, {height_as_perc})")
 
 
 def process_ellipse_element(el, svg_height, svg_width):
@@ -86,7 +102,7 @@ def process_ellipse_element(el, svg_height, svg_width):
     height_as_perc = scale_height_as_umlet_string(float(el['ry']) * 2, svg_height)
     x_scaled       = scale_width_as_umlet_string(float(el['cx']) - float(el['rx']), svg_width)
     y_scaled       = scale_height_as_umlet_string(float(el['cy']) - float(el['ry']), svg_height)
-    print(f"drawEllipse({x_scaled}, {y_scaled}, {width_as_perc}, {height_as_perc})")
+    output_umlet_code(f"drawEllipse({x_scaled}, {y_scaled}, {width_as_perc}, {height_as_perc})")
 
 
 
@@ -101,7 +117,7 @@ def process_polyline_element(el, svg_height, svg_width):
         x1_scaled, y1_scaled, x2_scaled, y2_scaled = (
             scale_point_pair_as_umlet_string(x1, y1, x2, y2, svg_width, svg_height))
         p1 = point
-        print(f"drawLine({x1_scaled}, {y1_scaled}, {x2_scaled}, {y2_scaled})")    
+        output_umlet_code(f"drawLine({x1_scaled}, {y1_scaled}, {x2_scaled}, {y2_scaled})")    
 
 
 class SVGPathCommandTokenizer:
@@ -243,7 +259,7 @@ def process_path_element(el, svg_height, svg_width):
             update_home()
             x1_scaled, y1_scaled, x2_scaled, y2_scaled = scale_point_pair_as_umlet_string(
                 x1, y1, x2, y2, svg_width, svg_height)
-            print(f"drawLine({x1_scaled}, {y1_scaled}, {x2_scaled}, {y2_scaled})")            
+            output_umlet_code(f"drawLine({x1_scaled}, {y1_scaled}, {x2_scaled}, {y2_scaled})")            
 
         elif cmd == "l":
             # Draw a straight line to a point that is relatively right x and down y (or left and up
@@ -254,16 +270,16 @@ def process_path_element(el, svg_height, svg_width):
             update_home()
             x1_scaled, y1_scaled, x2_scaled, y2_scaled = scale_point_pair_as_umlet_string(
                 x1, y1, x2, y2, svg_width, svg_height)
-            print(f"drawLine({x1_scaled}, {y1_scaled}, {x2_scaled}, {y2_scaled})")    
+            output_umlet_code(f"drawLine({x1_scaled}, {y1_scaled}, {x2_scaled}, {y2_scaled})")    
 
         elif cmd == "Z" or cmd =="z":
             # Draw a line back to the home coordinate
             x1_scaled, y1_scaled, x2_scaled, y2_scaled = scale_point_pair_as_umlet_string(
                 curr_x, curr_y, home_x, home_y, svg_width, svg_height)
-            print(f"drawLine({x1_scaled}, {y1_scaled}, {x2_scaled}, {y2_scaled})")   
+            output_umlet_code(f"drawLine({x1_scaled}, {y1_scaled}, {x2_scaled}, {y2_scaled})")   
 
         else:
-            print(f"// Ignoring unsupported path command '{cmd}'")
+            output_umlet_code(f"// Ignoring unsupported path command '{cmd}'")
 
         ## TODO
         ## Not sure how to do arcs - SVG arcs have a rotation parameter that Umlet does not have.
@@ -294,6 +310,6 @@ if __name__ == "__main__":
     with open(sys.argv[1], "r") as svgFile:
         soup = BeautifulSoup(svgFile, "xml")
 
-    print("customelement=")
+    output_umlet_code("customelement=")
     svg, = soup.find_all("svg")
     process_group(svg, float(svg["height"][:-2]), float(svg["width"][:-2]))
