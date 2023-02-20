@@ -40,6 +40,9 @@ Rather than use absolute SVG coordinates I wanted the images to scale, so everyt
 as a percentage of the width and height of the Umlet custom element. This means that the SVG must
 include the total width and height as attributes in the <svg> tag. I have not implemented anything
 that will parse the file to find the maximum and minimum coordinates and calculate height and width.
+
+TODO: Deal with the likes of `transform="rotate(-180,50,30)"` attributes for <path> elements would be handy. Could do
+      the same for rectangles (would have to convert to paths)
 """
 import sys
 import re
@@ -230,11 +233,11 @@ def process_path_element(el, svg_height, svg_width):
             home_set = True
             home_x, home_y = curr_x, curr_y
 
-    # Worlds worst copy past code below.... yes, it is shit!
     for cmd, params in SVGPathCommandTokenizer(el['d']):
         if cmd == "M":
             # Move to the absolute coordinates x,y
             curr_x, curr_y = params
+            print(f"// Path M: {params}")
 
         elif cmd == "L":
             # Draw a straight line to the absolute coordinates x,y
@@ -243,7 +246,7 @@ def process_path_element(el, svg_height, svg_width):
             curr_x, curr_y = x2, y2
             x1_scaled, y1_scaled, x2_scaled, y2_scaled = scale_point_pair_as_umlet_string(
                 x1, y1, x2, y2, svg_width, svg_height)
-            print(f"drawLine({x1_scaled}, {y1_scaled}, {x2_scaled}, {y2_scaled})")            
+            print(f"drawLine({x1_scaled}, {y1_scaled}, {x2_scaled}, {y2_scaled}) // Path {cmd}: {[x1, y1]}->{params}")            
 
         elif cmd == "l":
             # Draw a straight line to a point that is relatively right x and down y (or left and up
@@ -253,17 +256,17 @@ def process_path_element(el, svg_height, svg_width):
             curr_x, curr_y = x2, y2
             x1_scaled, y1_scaled, x2_scaled, y2_scaled = scale_point_pair_as_umlet_string(
                 x1, y1, x2, y2, svg_width, svg_height)
-            print(f"drawLine({x1_scaled}, {y1_scaled}, {x2_scaled}, {y2_scaled})")    
+            print(f"drawLine({x1_scaled}, {y1_scaled}, {x2_scaled}, {y2_scaled}) // Path {cmd}: {[x1, y1]}->{[x2, y2]}")    
 
         elif cmd == "Z" or cmd =="z":
             # Draw a line back to the home coordinate
             x1_scaled, y1_scaled, x2_scaled, y2_scaled = scale_point_pair_as_umlet_string(
                 curr_x, curr_y, home_x, home_y, svg_width, svg_height)
             curr_x, curr_y = home_x, home_y
-            print(f"drawLine({x1_scaled}, {y1_scaled}, {x2_scaled}, {y2_scaled})")   
+            print(f"drawLine({x1_scaled}, {y1_scaled}, {x2_scaled}, {y2_scaled}) // Path {cmd}: {[curr_x, curr_y]}->{[home_x, home_y]}")   
 
         else:
-            print(f"// Ignoring unsupported path command '{cmd}'")
+            print(f"// Path Ignoring unsupported path command '{cmd}'")
 
         update_home()
         
