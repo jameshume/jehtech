@@ -1,13 +1,14 @@
 """
 A very simple script to convert basic SVG files to Umlet custom drawings.
 
-I use umlet for almost all of my diagrams, but sometimes I want a graphic of sorts in there. For
+I use Umlet for almost all of my diagrams, but sometimes I want a graphic of sorts in there. For
 example, a basic image of a mobile phone. What I wanted to be able to do was use something like
-draw.io, export to SVG and convert the SVG, automatically into an Umlet custom drawing.
+draw.io, export to SVG and convert that SVG, automatically, into an Umlet custom drawing.
 
 It turns out this is pretty easy to do, except for Umlet not, at the time of writing at least,
 supporting Bezier curves. If one is careful, one can avoid to use of these and get draw.io to use
-basic shapes and paths.
+basic shapes and paths. Arcs also turned out to be another issue as SVG arcs can be rotated whereas
+Umlet arcs do not support this.
 
 For example, here is a very basic mobile phone SVG fragment:
     <svg width="201px" height="386px" viewBox="-0.5 -0.5 201 386" #snipped content# >
@@ -26,93 +27,109 @@ For example, here is a very basic mobile phone SVG fragment:
 
 The Umlet script commands are almost exactly the same as these XML "commands".
 
-drawLine(x1,y1,x2,y2)
-drawRectangle(x,y,width,height)
-drawRectangleRound(x,y,width,height,radius)
-drawCircle(x,y,radius)
-drawEllipse(x,y,width,height)
-drawArc(x,y,width,height,start,extent,open)
-drawText(Text,x,y,horizontal alignment)
+A summary of the Umlet commands:
+    drawLine(x1,y1,x2,y2)
+    drawRectangle(x,y,width,height)
+    drawRectangleRound(x,y,width,height,radius)
+    drawCircle(x,y,radius)
+    drawEllipse(x,y,width,height)
+    drawArc(x,y,width,height,start,extent,open)
+    drawText(Text,x,y,horizontal alignment)
 
-Would be nice if everything resized too.
-
-Also process very simple paths like
-    <path d="
-    M 140 200
-    L 140 140
-    L 120 120
-    M 140 140
-    L 240 140"
+Rather than use absolute SVG coordinates I wanted the images to scale, so everything is expressed
+as a percentage of the width and height of the Umlet custom element. This means that the SVG must
+include the total width and height as attributes in the <svg> tag. I have not implemented anything
+that will parse the file to find the maximum and minimum coordinates and calculate height and width.
 """
-
-
 import sys
 import re
 from bs4 import BeautifulSoup
 
 
+def scale_width_as_umlet_string(width, svg_width):
+    return f"width * {(float(width) / float(svg_width)):.3f}"
+
+
+def scale_height_as_umlet_string(height, svg_height):
+    return f"height * {(float(height) / float(svg_height)):.3f}"
+
+def scale_point_as_umlet_string(x, y, svg_width, svg_height):
+    x1_scaled = scale_width_as_umlet_string(float(x), svg_width)
+    y1_scaled = scale_height_as_umlet_string(float(y), svg_height)
+    return (x1_scaled, y1_scaled)
+
+def scale_point_pair_as_umlet_string(x1, y1, x2, y2, svg_width, svg_height):
+    return (
+        *scale_point_as_umlet_string(x1, y2, svg_width, svg_height),
+        *scale_point_as_umlet_string(x2, y2, svg_width, svg_height)
+    )
+
 def process_rect_element(el, svg_height, svg_width):
+    width_as_perc      = scale_width_as_umlet_string(el["width"], svg_width)
+    height_as_perc     = scale_height_as_umlet_string(el["height"], svg_height)
+    x_scaled, y_scaled = scale_point_as_umlet_string(el["x"], el["y"], svg_width, svg_height)
+
     if el.has_attr("rx") or el.has_attr("ry"):
-        width_as_perc = f"width * {float(el['width']) / svg_width:.2f}"
-        height_as_perc = f"height * {float(el['height']) / svg_height:.2f}"
-        x_scaled = f"{el['x']} * (width / {svg_width})"
-        y_scaled = f"{el['y']} * (height / {svg_height})"
-        max_round = max(float(el['rx']), float(el['ry']))
-        # cant get max of umlet height and width so just choose height :(
-        round_scaled = f"{max_round} * (height / {svg_height})"
-        print(f"drawRectangleRound({x_scaled},{y_scaled},{width_as_perc},{height_as_perc},{round_scaled})")
+        # Deal with rounded rectangles. Unfortunately Umlet used the same dimension for the round's
+        # width and height and SVG does not so just pick height as we cannot do, in Umlet script,
+        # "max(width, height)".
+        max_round      = max(float(el['rx']), float(el['ry']))
+        round_scaled   = scale_height_as_umlet_string(max_round, svg_height)
+        print(f"drawRectangleRound({x_scaled}, {y_scaled}, {width_as_perc}, {height_as_perc}, {round_scaled})")
     else:
-        width_as_perc = f"width * {float(el['width']) / svg_width:.2f}"
-        height_as_perc = f"height * {float(el['height']) / svg_height:.2f}"
-        x_scaled = f"{el['x']} * (width / {svg_width})"
-        y_scaled = f"{el['y']} * (height / {svg_height})"
-        print(f"drawRectangle({x_scaled},{y_scaled},{width_as_perc},{height_as_perc})")
+        print(f"drawRectangle({x_scaled}, {y_scaled}, {width_as_perc}, {height_as_perc})")
+
 
 def process_ellipse_element(el, svg_height, svg_width):
-    x = float(el['cx']) - float(el['rx'])
-    wx = float(el['rx']) * 2
-    y = float(el['cy']) - float(el['ry'])
-    wy = float(el['ry']) * 2
+    # Convert from the SVG way of specifying an ellipse to the umlet way...
+    width_as_perc  = scale_width_as_umlet_string(float(el['rx']) * 2, svg_width)
+    height_as_perc = scale_height_as_umlet_string(float(el['ry']) * 2, svg_height)
+    x_scaled       = scale_width_as_umlet_string(float(el['cx']) - float(el['rx']), svg_width)
+    y_scaled       = scale_height_as_umlet_string(float(el['cy']) - float(el['ry']), svg_height)
+    print(f"drawEllipse({x_scaled}, {y_scaled}, {width_as_perc}, {height_as_perc})")
 
-    x_scaled = f"{x} * (width / {svg_width})"
-    y_scaled = f"{y} * (height / {svg_height})"
-    width_as_perc = f"width * {wx / svg_width:.2f}"
-    height_as_perc = f"height * {wy / svg_height:.2f}"
 
-    print(f"drawEllipse({x_scaled},{y_scaled},{width_as_perc},{height_as_perc})")
 
 def process_polyline_element(el, svg_height, svg_width):
     points_split = re.split(",|\s", el['points'])
-    points = []
+    points = [tup_xy for tup_xy in zip(points_split[::2], y[points_split::2])]
     
-    i = 0
-    while i < len(points_split):
-        x = points_split[i]
-        i += 1
-        y = points_split[i]
-        i += 1
-        points.append((x, y))
-
     p1 = points[0]
     for point in points[1:]:
         x1, y1 = p1
         x2, y2 = point
-        x1_scaled = f"{x1} * (width / {svg_width})"
-        y1_scaled = f"{y1} * (height / {svg_height})"
-        x2_scaled = f"{x2} * (width / {svg_width})"
-        y2_scaled = f"{y2} * (height / {svg_height})"
-        print(f"drawLine({x1_scaled},{y1_scaled},{x2_scaled},{y2_scaled})")    
+        x1_scaled, y1_scaled, x2_scaled, y2_scaled = (
+            scale_point_pair_as_umlet_string(x1, y1, x2, y2, svg_width, svg_height))
         p1 = point
+        print(f"drawLine({x1_scaled}, {y1_scaled}, {x2_scaled}, {y2_scaled})")    
 
 
+class SVGPathCommandTokenizer:
+    """
+    Iterator which when given an SVG path string returns, per iteration, a command and all
+    its parameters as a tuple (character, list-of-params-as-floats).
 
+    Used the following good reference to understand what the commands meant:
+        Good ref: https://css-tricks.com/svg-path-syntax-illustrated-guide/
 
-class CommandTokenizer:
+    When I looked at draw.io SVG exports I thought the paths were nice and easy:
+        <path d="M 140 200 L 140 140 L 120 120 M 140 140 L 240 140..." ...>
+
+    But, looked at BoxySVG exports and found out a valid path is  also:
+        "M17.94,56.64a3.43,3.43,0,0,1,.82,2.43,3.49,3.49,0,0,1-1.12,2.37l-.1.08"
+    Which made the parsing much harder... hence this class. Had to look up how strings like
+    "1-1" and ".1.08" were valid -- see https://stackoverflow.com/q/51607857.
+
+    TODO might be able to approximate bezier curves using arcs:
+        https://pomax.github.io/bezierinfo/#arcapproximation | https://github.com/domoszlai/bezier2biarc/blob/master/Algorithm.cs
+    Or not... depends on whether this requires arcs to have a rotation parameter, which Umlet does
+    not support.
+    """
+
     def __init__(self, path_str):
         self._path_str = path_str
         self._path_str_len = len(path_str)
         self._cursor = 0
-
 
     def __eat_whitespace(self, check=False):
         while (self._cursor < self._path_str_len) and (self._path_str[self._cursor] == ' '):
@@ -154,18 +171,17 @@ class CommandTokenizer:
                 break
             elif num_dots > 1 or next_minus:
                 # next param! see https://stackoverflow.com/q/51607857
-                params.append(self._path_str[start:end])
+                params.append(float(self._path_str[start:end]))
                 num_dots = 0
                 next_minus = False
             elif self._path_str[self._cursor] == ',' or self._path_str[self._cursor] == ' ':
-                params.append(self._path_str[start:end])
+                params.append(float(self._path_str[start:end]))
                 num_dots = 0
                 self._cursor += 1
             else:
-                params.append(self._path_str[start:end])
+                params.append(float(self._path_str[start:end]))
                 num_dots = 0
                 break
-
 
         if len(params) == 0:
             raise Exception(f"Command {self._current_cmd} had no parameters!")
@@ -175,7 +191,6 @@ class CommandTokenizer:
     def __iter__(self):
         self._cursor = 0
         return self
-
 
     def __next__(self):
 
@@ -202,106 +217,57 @@ class CommandTokenizer:
             return (self._current_cmd, self.__get_params())
 
 
-
-        
-
-        
-
-
-
-
-
-    
-
 def process_path_element(el, svg_height, svg_width):    
-    """
-        <path d="
-    M 140 200
-    L 140 140
-    L 120 120
-    M 140 140
-    L 240 140"
-
-    Good ref: https://css-tricks.com/svg-path-syntax-illustrated-guide/
-
-    TODO might be able to approximate bezier curves using arcs: https://pomax.github.io/bezierinfo/#arcapproximation | https://github.com/domoszlai/bezier2biarc/blob/master/Algorithm.cs
-
-    Hmm.... looks like SVG path does not need to have spaces between all the characters which will make parsing harder. thankkfully
-    the ones I've used so far use this syntax exactly.
-
-    For example a valid path is 
-        "M17.94,56.64a3.43,3.43,0,0,1,.82,2.43,3.49,3.49,0,0,1-1.12,2.37l-.1.08"
-
-    """
     home_set = False
-    home_x = 0
-    home_y = 0
-    curr_x = 0
-    curr_y = 0
+    home_x, home_y = 0.0, 0.0
+    curr_x, curr_y = 0.0, 0.0
+
+    def update_home():
+        nonlocal home_set, home_x, home_y
+        if not home_set:
+            home_set = True
+            home_x, home_y = curr_x, curr_y
+
     # Worlds worst copy past code below.... yes, it is shit!
-    for cmd, params in CommandTokenizer(el['d']):
-        if cmd == "M": # Move to the absolute coordinates x,y
-            curr_x = float(params[0])
-            curr_y = float(params[1])
-            if not home_set:
-                home_set = True
-                home_x = curr_x
-                home_y = curr_y
-        elif cmd == "L": # Draw a straight line to the absolute coordinates x,y
-            if not home_set:
-                home_set = True
-                home_x = curr_x
-                home_y = curr_y
-            x1 = curr_x
-            y1 = curr_y
-            x2 = float(params[0])
-            y2 = float(params[1])
-            curr_x = x2
-            curr_y = y2            
-            x1_scaled = f"{x1} * (width / {svg_width})"
-            y1_scaled = f"{y1} * (height / {svg_height})"
-            x2_scaled = f"{x2} * (width / {svg_width})"
-            y2_scaled = f"{y2} * (height / {svg_height})"
-            print(f"drawLine({x1_scaled},{y1_scaled},{x2_scaled},{y2_scaled})")            
-        elif cmd == "l": # Draw a straight line to a point that is relatively right x and down y (or left and up if negative values)
-            if not home_set:
-                home_set = True
-                home_x = curr_x
-                home_y = curr_y
-            x1 = curr_x
-            y1 = curr_y
-            x2 = x1 + float(params[0])
-            y2 = y1 + float(params[1])
-            curr_x = x2
-            curr_y = y2            
-            x1_scaled = f"{x1} * (width / {svg_width})"
-            y1_scaled = f"{y1} * (height / {svg_height})"
-            x2_scaled = f"{x2} * (width / {svg_width})"
-            y2_scaled = f"{y2} * (height / {svg_height})"
-            print(f"drawLine({x1_scaled},{y1_scaled},{x2_scaled},{y2_scaled})")    
-            
+    for cmd, params in SVGPathCommandTokenizer(el['d']):
+        if cmd == "M":
+            # Move to the absolute coordinates x,y
+            curr_x, curr_y = params
+            update_home()
+
+        elif cmd == "L":
+            # Draw a straight line to the absolute coordinates x,y
+            x1, y1 = curr_x, curr_y
+            x2, y2 = params
+            curr_x, curr_y = x2, y2
+            update_home()
+            x1_scaled, y1_scaled, x2_scaled, y2_scaled = scale_point_pair_as_umlet_string(
+                x1, y1, x2, y2, svg_width, svg_height)
+            print(f"drawLine({x1_scaled}, {y1_scaled}, {x2_scaled}, {y2_scaled})")            
+
+        elif cmd == "l":
+            # Draw a straight line to a point that is relatively right x and down y (or left and up
+            # if negative values)
+            x1, y1 = curr_x, curr_y
+            x2, y2 = x1 + float(params[0]), y1 + float(params[1])
+            curr_x, curr_y = x2, y2            
+            update_home()
+            x1_scaled, y1_scaled, x2_scaled, y2_scaled = scale_point_pair_as_umlet_string(
+                x1, y1, x2, y2, svg_width, svg_height)
+            print(f"drawLine({x1_scaled}, {y1_scaled}, {x2_scaled}, {y2_scaled})")    
+
         elif cmd == "Z" or cmd =="z":
-            x1 = curr_x
-            y1 = curr_y
-            x2 = home_x
-            y2 = home_y
-            x1_scaled = f"{x1} * (width / {svg_width})"
-            y1_scaled = f"{y1} * (height / {svg_height})"
-            x2_scaled = f"{x2} * (width / {svg_width})"
-            y2_scaled = f"{y2} * (height / {svg_height})"
-            print(f"drawLine({x1_scaled},{y1_scaled},{x2_scaled},{y2_scaled})")   
+            # Draw a line back to the home coordinate
+            x1_scaled, y1_scaled, x2_scaled, y2_scaled = scale_point_pair_as_umlet_string(
+                curr_x, curr_y, home_x, home_y, svg_width, svg_height)
+            print(f"drawLine({x1_scaled}, {y1_scaled}, {x2_scaled}, {y2_scaled})")   
+
         else:
             print(f"// Ignoring unsupported path command '{cmd}'")
 
         ## TODO
         ## Not sure how to do arcs - SVG arcs have a rotation parameter that Umlet does not have.
         ## 
-            
-
-
-
-
-    
 
 
 node_handlers = {
@@ -310,6 +276,7 @@ node_handlers = {
     "path": process_path_element,
     "polyline": process_polyline_element,
 }
+
 
 def process_group(group, svg_height, svg_width):
     for child in group.children:
@@ -322,13 +289,11 @@ def process_group(group, svg_height, svg_width):
             process_group(child, svg_height, svg_width)
 
 
+if __name__ == "__main__":
+    soup = None
+    with open(sys.argv[1], "r") as svgFile:
+        soup = BeautifulSoup(svgFile, "xml")
 
-soup = None
-with open(sys.argv[1], "r") as svgFile:
-    soup = BeautifulSoup(svgFile, "xml")
-
-print("customelement=")
-svg, = soup.find_all("svg")
-process_group(svg, float(svg["height"][:-2]), float(svg["width"][:-2]))
-
-
+    print("customelement=")
+    svg, = soup.find_all("svg")
+    process_group(svg, float(svg["height"][:-2]), float(svg["width"][:-2]))
