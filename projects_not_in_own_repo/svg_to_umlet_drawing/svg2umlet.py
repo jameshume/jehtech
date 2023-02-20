@@ -60,7 +60,7 @@ def scale_point_as_umlet_string(x, y, svg_width, svg_height):
 
 def scale_point_pair_as_umlet_string(x1, y1, x2, y2, svg_width, svg_height):
     return (
-        *scale_point_as_umlet_string(x1, y2, svg_width, svg_height),
+        *scale_point_as_umlet_string(x1, y1, svg_width, svg_height),
         *scale_point_as_umlet_string(x2, y2, svg_width, svg_height)
     )
 
@@ -217,7 +217,9 @@ class SVGPathCommandTokenizer:
             return (self._current_cmd, self.__get_params())
 
 
-def process_path_element(el, svg_height, svg_width):    
+def process_path_element(el, svg_height, svg_width):
+    ## TODO
+    ## Not sure how to do arcs - SVG arcs have a rotation parameter that Umlet does not have.
     home_set = False
     home_x, home_y = 0.0, 0.0
     curr_x, curr_y = 0.0, 0.0
@@ -233,14 +235,12 @@ def process_path_element(el, svg_height, svg_width):
         if cmd == "M":
             # Move to the absolute coordinates x,y
             curr_x, curr_y = params
-            update_home()
 
         elif cmd == "L":
             # Draw a straight line to the absolute coordinates x,y
             x1, y1 = curr_x, curr_y
             x2, y2 = params
             curr_x, curr_y = x2, y2
-            update_home()
             x1_scaled, y1_scaled, x2_scaled, y2_scaled = scale_point_pair_as_umlet_string(
                 x1, y1, x2, y2, svg_width, svg_height)
             print(f"drawLine({x1_scaled}, {y1_scaled}, {x2_scaled}, {y2_scaled})")            
@@ -250,8 +250,7 @@ def process_path_element(el, svg_height, svg_width):
             # if negative values)
             x1, y1 = curr_x, curr_y
             x2, y2 = x1 + float(params[0]), y1 + float(params[1])
-            curr_x, curr_y = x2, y2            
-            update_home()
+            curr_x, curr_y = x2, y2
             x1_scaled, y1_scaled, x2_scaled, y2_scaled = scale_point_pair_as_umlet_string(
                 x1, y1, x2, y2, svg_width, svg_height)
             print(f"drawLine({x1_scaled}, {y1_scaled}, {x2_scaled}, {y2_scaled})")    
@@ -260,14 +259,14 @@ def process_path_element(el, svg_height, svg_width):
             # Draw a line back to the home coordinate
             x1_scaled, y1_scaled, x2_scaled, y2_scaled = scale_point_pair_as_umlet_string(
                 curr_x, curr_y, home_x, home_y, svg_width, svg_height)
+            curr_x, curr_y = home_x, home_y
             print(f"drawLine({x1_scaled}, {y1_scaled}, {x2_scaled}, {y2_scaled})")   
 
         else:
             print(f"// Ignoring unsupported path command '{cmd}'")
 
-        ## TODO
-        ## Not sure how to do arcs - SVG arcs have a rotation parameter that Umlet does not have.
-        ## 
+        update_home()
+        
 
 
 node_handlers = {
