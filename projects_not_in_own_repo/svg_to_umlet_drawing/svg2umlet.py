@@ -41,11 +41,8 @@ as a percentage of the width and height of the Umlet custom element. This means 
 include the total width and height as attributes in the <svg> tag. I have not implemented anything
 that will parse the file to find the maximum and minimum coordinates and calculate height and width.
 
-TODO: Annoyingly not all SVGs have the "width" and "height" attributes set in the <svg> element and
-also coordinates can be negative. Would be good to be able to get the min/max xyu coordindates in
-the file and then calculate the width and height from that, and also shift everything so there are
-no negative coordinates.
-
+TODO: Deal with the likes of `transform="rotate(-180,50,30)"` attributes for <path> elements would be handy. Could do
+      the same for rectangles (would have to convert to paths)
 """
 import sys
 import re
@@ -62,28 +59,50 @@ def __scale_width_as_umlet_string(width, svg_width):
 def __scale_height_as_umlet_string(height, svg_height):
     return f"height * {(float(height) / float(svg_height)):.3f}"
 
-output_umlet_code = __output_umlet_code
-scale_width_as_umlet_string = __scale_width_as_umlet_string
-scale_height_as_umlet_string = __scale_height_as_umlet_string
+# Bit of a kludge because this will conflate widths with x's and heights with y's, but should
+# still work. Cheap and nasty.
+gblMinWidth = sys.maxsize
+gblMaxWidth = -sys.maxsize
+gblMinHeight = sys.maxsize
+gblMaxHeight = -sys.maxsize
+
+def __get_minmax_width(width, svg_width):
+    width = float(width)
+    global gblMinWidth, gblMaxWidth
+    if gblMinWidth > width:
+        gblMinWidth = width
+    
+    if gblMaxWidth < width:
+        gblMaxWidth = width
+
+def __get_minmax_height(height, svg_height):
+    height = float(height)
+    global gblMinHeight, gblMaxHeight
+    if gblMinHeight > height:
+        gblMinHeight = height
+    
+    if gblMaxHeight < height:
+        gblMaxHeight = height
+
+def __NO_output_umlet_code(output_str):
+    pass
 
 
-
-
-def scale_point_as_umlet_string(x, y, svg_width, svg_height):
+def scale_point_as_umlet_string(x, y, svg_height, svg_width):
     x1_scaled = scale_width_as_umlet_string(float(x), svg_width)
     y1_scaled = scale_height_as_umlet_string(float(y), svg_height)
     return (x1_scaled, y1_scaled)
 
-def scale_point_pair_as_umlet_string(x1, y1, x2, y2, svg_width, svg_height):
+def scale_point_pair_as_umlet_string(x1, y1, x2, y2, svg_height, svg_width):
     return (
-        *scale_point_as_umlet_string(x1, y2, svg_width, svg_height),
-        *scale_point_as_umlet_string(x2, y2, svg_width, svg_height)
+        *scale_point_as_umlet_string(x1, y1, svg_height, svg_width),
+        *scale_point_as_umlet_string(x2, y2, svg_height, svg_width)
     )
 
 def process_rect_element(el, svg_height, svg_width):
     width_as_perc      = scale_width_as_umlet_string(el["width"], svg_width)
     height_as_perc     = scale_height_as_umlet_string(el["height"], svg_height)
-    x_scaled, y_scaled = scale_point_as_umlet_string(el["x"], el["y"], svg_width, svg_height)
+    x_scaled, y_scaled = scale_point_as_umlet_string(el["x"], el["y"], svg_height, svg_width)
 
     if el.has_attr("rx") or el.has_attr("ry"):
         # Deal with rounded rectangles. Unfortunately Umlet used the same dimension for the round's
@@ -108,14 +127,14 @@ def process_ellipse_element(el, svg_height, svg_width):
 
 def process_polyline_element(el, svg_height, svg_width):
     points_split = re.split(",|\s", el['points'])
-    points = [tup_xy for tup_xy in zip(points_split[::2], y[points_split::2])]
+    points = [tup_xy for tup_xy in zip(points_split[::2], points_split[1::2])]
     
     p1 = points[0]
     for point in points[1:]:
         x1, y1 = p1
         x2, y2 = point
         x1_scaled, y1_scaled, x2_scaled, y2_scaled = (
-            scale_point_pair_as_umlet_string(x1, y1, x2, y2, svg_width, svg_height))
+            scale_point_pair_as_umlet_string(x1, y1, x2, y2, svg_height, svg_width))
         p1 = point
         output_umlet_code(f"drawLine({x1_scaled}, {y1_scaled}, {x2_scaled}, {y2_scaled})")    
 
@@ -233,7 +252,9 @@ class SVGPathCommandTokenizer:
             return (self._current_cmd, self.__get_params())
 
 
-def process_path_element(el, svg_height, svg_width):    
+def process_path_element(el, svg_height, svg_width):
+    ## TODO
+    ## Not sure how to do arcs - SVG arcs have a rotation parameter that Umlet does not have.
     home_set = False
     home_x, home_y = 0.0, 0.0
     curr_x, curr_y = 0.0, 0.0
@@ -244,46 +265,43 @@ def process_path_element(el, svg_height, svg_width):
             home_set = True
             home_x, home_y = curr_x, curr_y
 
-    # Worlds worst copy past code below.... yes, it is shit!
     for cmd, params in SVGPathCommandTokenizer(el['d']):
         if cmd == "M":
             # Move to the absolute coordinates x,y
             curr_x, curr_y = params
-            update_home()
+            output_umlet_code(f"// Path M: {params}")
 
         elif cmd == "L":
             # Draw a straight line to the absolute coordinates x,y
             x1, y1 = curr_x, curr_y
             x2, y2 = params
             curr_x, curr_y = x2, y2
-            update_home()
             x1_scaled, y1_scaled, x2_scaled, y2_scaled = scale_point_pair_as_umlet_string(
-                x1, y1, x2, y2, svg_width, svg_height)
-            output_umlet_code(f"drawLine({x1_scaled}, {y1_scaled}, {x2_scaled}, {y2_scaled})")            
+                x1, y1, x2, y2, svg_height, svg_width)
+            output_umlet_code(f"drawLine({x1_scaled}, {y1_scaled}, {x2_scaled}, {y2_scaled}) // Path {cmd}: {[x1, y1]}->{params}")            
 
         elif cmd == "l":
             # Draw a straight line to a point that is relatively right x and down y (or left and up
             # if negative values)
             x1, y1 = curr_x, curr_y
             x2, y2 = x1 + float(params[0]), y1 + float(params[1])
-            curr_x, curr_y = x2, y2            
-            update_home()
+            curr_x, curr_y = x2, y2
             x1_scaled, y1_scaled, x2_scaled, y2_scaled = scale_point_pair_as_umlet_string(
-                x1, y1, x2, y2, svg_width, svg_height)
-            output_umlet_code(f"drawLine({x1_scaled}, {y1_scaled}, {x2_scaled}, {y2_scaled})")    
+                x1, y1, x2, y2, svg_height, svg_width)
+            output_umlet_code(f"drawLine({x1_scaled}, {y1_scaled}, {x2_scaled}, {y2_scaled}) // Path {cmd}: {[x1, y1]}->{[x2, y2]}")    
 
         elif cmd == "Z" or cmd =="z":
             # Draw a line back to the home coordinate
             x1_scaled, y1_scaled, x2_scaled, y2_scaled = scale_point_pair_as_umlet_string(
-                curr_x, curr_y, home_x, home_y, svg_width, svg_height)
-            output_umlet_code(f"drawLine({x1_scaled}, {y1_scaled}, {x2_scaled}, {y2_scaled})")   
+                curr_x, curr_y, home_x, home_y, svg_height, svg_width)
+            curr_x, curr_y = home_x, home_y
+            output_umlet_code(f"drawLine({x1_scaled}, {y1_scaled}, {x2_scaled}, {y2_scaled}) // Path {cmd}: {[curr_x, curr_y]}->{[home_x, home_y]}")   
 
         else:
-            output_umlet_code(f"// Ignoring unsupported path command '{cmd}'")
+            output_umlet_code(f"// Path Ignoring unsupported path command '{cmd}'")
 
-        ## TODO
-        ## Not sure how to do arcs - SVG arcs have a rotation parameter that Umlet does not have.
-        ## 
+        update_home()
+        
 
 
 node_handlers = {
@@ -294,7 +312,7 @@ node_handlers = {
 }
 
 
-def process_group(group, svg_height, svg_width):
+def process_group(group, svg_height=None, svg_width=None):
     for child in group.children:
         if child.name is None:
             continue
@@ -310,6 +328,33 @@ if __name__ == "__main__":
     with open(sys.argv[1], "r") as svgFile:
         soup = BeautifulSoup(svgFile, "xml")
 
-    output_umlet_code("customelement=")
+    # Rather than rely on the SVG width and height attributes, go through all the coordinates and
+    # get the min and max.
+    # Setup the function "pointers" to functions that will keep track of the min/max coords
+    # (Note the slight kludge that I mix widths and heights with x and y's...)
+    output_umlet_code            = __NO_output_umlet_code
+    scale_width_as_umlet_string  = __get_minmax_width
+    scale_height_as_umlet_string = __get_minmax_height
+    
+    # Iterate through all the elements
     svg, = soup.find_all("svg")
-    process_group(svg, float(svg["height"][:-2]), float(svg["width"][:-2]))
+    process_group(svg)
+
+    # Get the width and height and make the top left zero
+    svgWidth  = gblMaxWidth - gblMinWidth
+    svgHeight = gblMaxHeight - gblMinHeight
+    xShift    = -gblMinWidth
+    yShift    = -gblMinHeight
+    
+
+    # Now output the actual Umlet code based on the min/max measurements found above.
+    output_umlet_code = __output_umlet_code
+    scale_width_as_umlet_string = __scale_width_as_umlet_string
+    scale_height_as_umlet_string = __scale_height_as_umlet_string
+
+    output_umlet_code("customelement=")
+    output_umlet_code(f"// Generated from {sys.argv[1]}")
+    output_umlet_code(f"// Calculated SVG as {svgWidth} x {svgHeight} with shift ({xShift},{yShift})")
+    output_umlet_code(f"// Width, height attrs, if present, were: {svg['width']} x {svg['height']}")
+    svg, = soup.find_all("svg")
+    process_group(svg, svgHeight, svgWidth)

@@ -118,9 +118,6 @@ European Commission has good infographic:
 ### 3G
 
 
-## Network Architectures
-### GSM
-![](##IMG_DIR##/GSM_Architecture.png)
 
 
 ## SIM and Phone Identifiers
@@ -158,8 +155,42 @@ See [Difference Between IMEI, IMSI, ICCID And MSISDN Numbers](https://commsbrief
       * -100 to -109 dBm = poor signal (1 to 2 bars).
       * -110 to -120 dBm = very poor signal or not-spot (0 to 1 bar).
 
+## Network Architectures
+### GSM
+![](##IMG_DIR##/GSM_Architecture.png)
 
-## AT Commands
+<blockquote>
+<p>The GSM architecture consists of three major interconnected subsystems that interact with themselves and with users through certain network interface. The subsystems are Base Station Subsystem (BSS), Network Switching Subsystem (NSS) and Operational Support Subsystem (OSS). Mobile Station (MS) is also a subsystem but it is considered as a part of BSS.</p>
+<footer><a href="https://www.ques10.com/p/5206/gsm-network-architecture-1/#:~:text=The%20GSM%20architecture%20consists%20of,Operational%20Support%20Subsystem%20(OSS)." target="_blank">GSM Network Architecture</a></footer>
+</blockquote>
+
+
+#### Base Status Subsystem
+The Base Station Subsystem (BSS) consists of the Base Transceiver Stations (BTS) and the Base Station Controller (BSC).
+
+Man BSS connect to a BTS and many BTS connect to a MSC.
+
+The BTS provides the radio link to your phone and communicates with the BSC, which manges the radio resources for the BTS,
+assigning frequencies and time slots. The BSC also handles call setup and handover. It also switches traffic to/from
+the MSC.
+
+The phone (ME) will measure the signal strength from the BTS it is connected to. It will also measure the signal strength
+of neighboring BTS's and sends them to the BSC, which sends them to the MSC. This is used byt the BSC to control MS handover and control
+power between the BTS and MS.
+
+#### Network Subsystem
+
+The NSS is responsible for all the call switching and routing and tracking the location of the mobile.
+
+The Mobil Switching Center (MSC) is a digital switch that performs call setup, routing between the MS & other MSCs or
+external networks.
+
+It also handles inter BSS and inter MSC handovers. When a mobile moves between two BSCs the handover has to be
+handled by the MSC as this is the common parent. If a mobile moved between two BTS within one BSC coverage area then the
+BSC could handle the handover.
+
+
+## Talking With A Modem: AT Commands
 These are just quick notes on some commands for quick reference. Not trying to duplicate the manual here so for details look at modem manual.
 
 AT commands come in at least two forms:
