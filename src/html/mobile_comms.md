@@ -3,7 +3,7 @@
 <p></p>
 | Acronym | Meaning |
 |---------|---------|
-| APN     | Access Point Name |
+| APN     | Access Point Name<br>An [Access Point Name (APN)](https://en.wikipedia.org/wiki/Access_Point_Name) is a gateway between a GSM, GPRS, 3G or 4G mobile network and another computer network, frequently the public Internet. A mobile device making a data connection must be configured with an APN to present to the carrier. |
 | BTS     | Base Transceiver System - aka Base Station |
 | EDGE    | Enhanced Data Rate for GSM Evolution |
 | EVDO    | EVolution Data optimized |
@@ -11,14 +11,14 @@
 | GSM     | Global Systems for Mobile |
 | HSPA    | High Speed Packet Access |
 | HSPA+   | Evolved High Speed Packet Access |
-| ICCID   | Integrated Circuit Card Identifier - Identifies the chip of each SIM card. |
-| IMEI    | International Mobile Equipment Identity - Think MAC address of slot SIM is inserted into |
-| IMSI    | International Mobile Subscriber Identity - Unique identifier assigned to every SIM  |
+| ICCID   | Integrated Circuit Card Identifier<br>Identifies the chip of each SIM card. |
+| IMEI    | International Mobile Equipment Identity<br>Think MAC address of slot SIM is inserted into |
+| IMSI    | International Mobile Subscriber Identity<br>Unique identifier assigned to every SIM  |
 | LTE     | Long Term Evolution (of mobile networks) |
-| MCC     | Mobile Country Code - For example the UK MCC is 234<br>[[See Mobile Country Codes (MCC) and Mobile Network Codes (MNC)]](https://mcc-mnc-list.com/list) |
-| MNC     | Mobile Network Code - A unique ID specific to a mobile operator network<br>[[See Mobile Country Codes (MCC) and Mobile Network Codes (MNC)]](https://mcc-mnc-list.com/list)|
+| MCC     | Mobile Country Code<br>For example the UK MCC is 234<br>[[See Mobile Country Codes (MCC) and Mobile Network Codes (MNC)]](https://mcc-mnc-list.com/list) |
+| MNC     | Mobile Network Code<br>A unique ID specific to a mobile operator network<br>[[See Mobile Country Codes (MCC) and Mobile Network Codes (MNC)]](https://mcc-mnc-list.com/list)|
 | MS      | Mobile Station: your phone |
-| MSISDN  | Mobile Station International Subscriber Directory - Full mobile number with country code and all prefixes. |
+| MSISDN  | Mobile Station International Subscriber Directory<br>Full mobile number with country code and all prefixes. |
 | NR      | New Radio |
 | PDN     | Public Data Network |
 | PSM     | Power Saving Mode |
@@ -165,6 +165,7 @@ See [Difference Between IMEI, IMSI, ICCID And MSISDN Numbers](https://commsbrief
 <p>The GSM architecture consists of three major interconnected subsystems that interact with themselves and with users through certain network interface. The subsystems are Base Station Subsystem (BSS), Network Switching Subsystem (NSS) and Operational Support Subsystem (OSS). Mobile Station (MS) is also a subsystem but it is considered as a part of BSS.</p>
 <footer><a href="https://www.ques10.com/p/5206/gsm-network-architecture-1/#:~:text=The%20GSM%20architecture%20consists%20of,Operational%20Support%20Subsystem%20(OSS)." target="_blank">GSM Network Architecture</a></footer>
 </blockquote>
+<p></p>
 
 
 #### Base Status Subsystem
@@ -193,6 +194,8 @@ BSC could handle the handover.
 
 
 ## Talking With A Modem: AT Commands
+The [Twilio Cellular Modem Knowledge Base](https://www.twilio.com/docs/iot/supersim/cellular-modem-knowledge-base) is a really good resource.
+
 These are just quick notes on some commands for quick reference. Not trying to duplicate the manual here so for details look at modem manual.
 
 AT commands come in at least two forms:
@@ -252,7 +255,7 @@ AT commands look like "AT+U...".
 
 ### Standard
 
-### Identifying Information About Modem, SIM, etc
+#### Identifying Information About Modem, SIM, etc
 <table class="jehtable">
     <thread>
         <td>Command</td><td>Description</td>
@@ -294,9 +297,9 @@ AT commands look like "AT+U...".
         </tr>
     </tbody>
 </table>
+<p></p>
 
-
-### Network Registration
+#### Network Registration
 
 <p></p>
 <blockquote>
@@ -341,7 +344,10 @@ are what you're looking for!
     </tbody>
 </table>
 
-### Modem Power Settings
+Easiest thing is to enable URCs for the registration to determine registration state. It is possible
+to poll using the query commands, but this is less efficient.
+
+#### Modem Power Settings
 <table class="jehtable">
     <thread>
         <td>Command</td><td>Description</td>
@@ -400,8 +406,9 @@ are what you're looking for!
         </tr>    
     </tbody>
 </table>
+<p></p>
 
-### Other
+#### Other
 
 <table class="jehtable">
     <thread>
@@ -432,7 +439,7 @@ are what you're looking for!
   
     </tbody>
 </table>
-
+<p></p>
 
 ### U-Blox
 
@@ -476,6 +483,7 @@ are what you're looking for!
         </tr>
     </tbody>
 </table>
+<p></p>
 
 ### An Example Command Sequence
 
