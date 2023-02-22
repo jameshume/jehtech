@@ -15,6 +15,8 @@
 | IMEI    | International Mobile Equipment Identity - Think MAC address of slot SIM is inserted into |
 | IMSI    | International Mobile Subscriber Identity - Unique identifier assigned to every SIM  |
 | LTE     | Long Term Evolution (of mobile networks) |
+| MCC     | Mobile Country Code - For example the UK MCC is 234<br>[[See Mobile Country Codes (MCC) and Mobile Network Codes (MNC)]](https://mcc-mnc-list.com/list) |
+| MNC     | Mobile Network Code - A unique ID specific to a mobile operator network<br>[[See Mobile Country Codes (MCC) and Mobile Network Codes (MNC)]](https://mcc-mnc-list.com/list)|
 | MS      | Mobile Station: your phone |
 | MSISDN  | Mobile Station International Subscriber Directory - Full mobile number with country code and all prefixes. |
 | NR      | New Radio |
@@ -250,18 +252,68 @@ AT commands look like "AT+U...".
 
 ### Standard
 
+### Identifying Information About Modem, SIM, etc
 <table class="jehtable">
     <thread>
         <td>Command</td><td>Description</td>
     </thread>
     <tbody>
-<!--
-        <tr>
-            <td><code></code></td>
-            <td><p></p></td>
+            <tr>
+            <td><p><code>ATI0</code></p></td>
+            <td><p>Module information: Module type number request.</p></td>
         </tr>
--->
-        
+
+        <tr>
+            <td><p><code>ATI9</code></p></td>
+            <td><p>Firmware information: Modem and application version request.</p></td>
+        </tr>
+
+        <tr>
+            <td><p><code>AT+CIMI</code></p></td>
+            <td><p>Request the IMSI (International Mobile Subscriber Identity).</p></td>
+        </tr>
+
+        <tr>
+            <td><p><code>AT+CGSN</code></p></td>
+            <td><p>Request the IMEI (International Mobile station Equipment Identity).</p></td>
+        </tr>
+
+        <tr>
+            <td><p><code>AT+CCID</code></p></td>
+            <td><p>Returns the ICCID (Integrated Circuit Card ID) of the SIM-card. ICCID is a serial number identifying the SIM.</p></td>
+        </tr>
+
+        <tr>
+            <td><code>AT+CRSM</code></td>
+            <td>
+                <p>Restricted SIM access: Allows easy access to the SIM database by sending SIM commands as defined in [ETSI TS 102221](https://www.etsi.org/deliver/etsi_ts/102200_102299/102221/15.00.00_60/ts_102221v150000p.pdf)
+                </p>
+                <p>For example, the command `AT+CRSM=176,28486,0,0,17` is a read binary command (176), reading elementary file (EF) identified by ID `28486 (0x6F46)` (EFs described in [3GPP TS 31.102](https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1803)). From the spec, on can see that `6F4F` is the service provider name (EF<sub>SPM</sub>). Both P1 and P2 are zero indicating no offset is applied.
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+### Network Registration
+
+<p></p>
+<blockquote>
+<p><b>Registration</b> takes place when a cellular module successfully connects to a cellular network via a cell tower. Until a modem is registered, it will not be able to establish a data session — a process called <b>attachment</b> — or even exchange SMS traffic. A modem can make multiple registrations depending on which radio access technologies (RATs) it supports and which are made available by the cell tower ... [but] Only a single registration is required to commence normal operations.</p>
+<footer>-- <a href="https://www.twilio.com/docs/iot/supersim/four-best-practices-for-cellular-module-registration" target="_blank">Four Best Practices for Cellular Module Registration</a>, Twilio.</footer>
+</blockquote>
+<p></p>
+
+All the registration commands have the same response: `+<CMD>=<urc_mode>,<registration_state>[,<additional_information>]`, where `<registration_state>` tells
+you whether the modem has registered with a network using that Radio Access Technology (RAT). States `1`, connected to home network, and `5`, connected and roaming,
+are what you're looking for!
+
+<table class="jehtable">
+    <thread>
+        <td>Command</td><td>Description</td>
+    </thread>
+    <tbody>
         <tr>
             <td><p><code>AT+CREG</code></p></td>
             <td><p>GSM network registration status/report.</p>
@@ -286,14 +338,16 @@ AT commands look like "AT+U...".
             <td><p><code>AT+CEREG</code></p></td>
             <td><p>LTE/EPS network registration status/report</p></td>
         </tr>
+    </tbody>
+</table>
 
-        <tr>
-            <td><p><code>AT+CIMI</code></p></td>
-            <td><p>Request the IMSI (International Mobile Subscriber Identity).</p></td>
-        </tr>
-
-
-        <tr>
+### Modem Power Settings
+<table class="jehtable">
+    <thread>
+        <td>Command</td><td>Description</td>
+    </thread>
+    <tbody>
+<tr>
             <td><p><code>AT+CPSMS</code></p></td>
             <td><p>Power Saving Mode (PSM) settings.</p>
                 <blockquote>
@@ -343,43 +397,33 @@ AT commands look like "AT+U...".
                 </blockquote>
                 <p></p>
             </td>
-        </tr>
+        </tr>    
+    </tbody>
+</table>
 
+### Other
 
+<table class="jehtable">
+    <thread>
+        <td>Command</td><td>Description</td>
+    </thread>
+    <tbody>
+<!--
         <tr>
-            <td><p><code>AT+CPSMS</code></p></td>
-            <td><p>Power saving mode settings</p></td>
+            <td><code></code></td>
+            <td><p></p></td>
         </tr>
+-->
+        
+
+
 
         <tr>
             <td><p><code>AT+CGDCONT</code></p></td>
             <td><p>Packet Data Protocol (PDP) context definition: Packet Data Protocol (PDP) context is a data structure that allows the device to transmit data using Internet Protocol. Eg APN name, IP address etc.</p></td>
         </tr>
 
-        <tr>
-            <td><p><code>ATI0</code></p></td>
-            <td><p>Module information: Module type number request.</p></td>
-        </tr>
 
-        <tr>
-            <td><p><code>ATI9</code></p></td>
-            <td><p>Firmware information: Modem and application version request.</p></td>
-        </tr>
-
-        <tr>
-            <td><p><code>AT+CCID</code></p></td>
-            <td><p>Returns the ICCID (Integrated Circuit Card ID) of the SIM-card. ICCID is a serial number identifying the SIM.</p></td>
-        </tr>
-
-        <tr>
-            <td><code>AT+CRSM</code></td>
-            <td>
-                <p>Restricted SIM access: Allows easy access to the SIM database by sending SIM commands as defined in [ETSI TS 102221](https://www.etsi.org/deliver/etsi_ts/102200_102299/102221/15.00.00_60/ts_102221v150000p.pdf)
-                </p>
-                <p>For example, the command `AT+CRSM=176,28486,0,0,17` is a read binary command (176), reading elementary file (EF) identified by ID `28486 (0x6F46)` (EFs described in [3GPP TS 31.102](https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1803)). From the spec, on can see that `6F4F` is the service provider name (EF<sub>SPM</sub>). Both P1 and P2 are zero indicating no offset is applied.
-                </p>
-            </td>
-        </tr>
 
         <tr>
             <td><p><code>AT+COPS</code></p></td>

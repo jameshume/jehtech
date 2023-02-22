@@ -43,6 +43,12 @@ that will parse the file to find the maximum and minimum coordinates and calcula
 
 TODO: Deal with the likes of `transform="rotate(-180,50,30)"` attributes for <path> elements would be handy. Could do
       the same for rectangles (would have to convert to paths)
+
+      Todo this - can't do it with ellipses - Umlet doesn't support this
+                - rectangles must become paths
+                - paths will need two iterations - one the find the center and then one to draw rotated
+                - lines easy enough
+                - everything else not gonna be doing!
 """
 import sys
 import re
