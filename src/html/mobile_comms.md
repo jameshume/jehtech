@@ -193,6 +193,39 @@ handled by the MSC as this is the common parent. If a mobile moved between two B
 BSC could handle the handover.
 
 
+##### Home Location Register (HLR)
+* Central DB for subscriber/mobile uer info
+    * Subscriber ID
+    * Auth Key
+    * Subscriber registration status
+    * Services a mobile subscriber can use
+    * Current location of subscriber
+
+##### Visitor Location Register (VLR)
+* Temporary data - reduce burden on HLR as this is a *central* database.
+
+##### Equipment Identity Register:
+* White list - authorised IMEs allowed to use network
+* Black list - list of IMEIs of mobiles that are barred
+* Gray list  - list of IMEIs of mobiles that are being traced
+
+#### Channels
+Two types:
+1. Traffic channels (TCHs)
+2. Control channels (MS registration, handover, etc etc)
+    1. Broadcast
+        1. Broadcast Control CHannel (BCCH) - Need FCCH and SCH to be able to device this channel.
+        2. Frequency Correction CHannel (FCCH)
+        3. Syncrhonization CHannel (SCH)
+    2. Common
+        1. Paging CHannel (PCH)
+        2. Random Access CHannel (RACH)
+        3. Access Grant CHannel (AGCH)
+        4. Standalone Dedicated Control CHannel (SDCCH)
+
+
+
+
 ## Talking With A Modem: AT Commands
 The [Twilio Cellular Modem Knowledge Base](https://www.twilio.com/docs/iot/supersim/cellular-modem-knowledge-base) is a really good resource.
 
