@@ -234,6 +234,7 @@ BSC could handle the handover.
 
 #### Channels
 Two types:
+
 1. Traffic channels (TCHs)
 2. Control channels (MS registration, handover, etc etc)
     1. Broadcast
@@ -266,6 +267,11 @@ station the mobile is connected to, so to page the mobile, the network has to pa
 mobile.
 
 
+### 3G
+The development of 3G was standardised by the 3rd Generation Partnership Project (3GPP) as formed in 1998. It was
+a group of telecom vendors and operators.
+
+They introduced he 3G Universal Mobile Telecoms Service (UMTS) technology in 2001, aka Wideband CDMA.
 
 
 ## Talking With A Modem: AT Commands
