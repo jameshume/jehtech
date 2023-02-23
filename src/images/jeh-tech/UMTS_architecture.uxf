@@ -1,0 +1,50 @@
+<diagram program="umletino" version="15.0.0"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>270</x><y>160</y><w>60</w><h>60</h></coordinates><panel_attributes>BTS
+valign=center</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>390</x><y>160</y><w>60</w><h>60</h></coordinates><panel_attributes>BSC
+valign=center</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>530</x><y>140</y><w>220</w><h>250</h></coordinates><panel_attributes>2G GPRS/Edge
+Core Network
+valign=center
+
+(with some evolution - originally
+R99, then Release 4, then
+Release 5)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>250</x><y>130</y><w>220</w><h>100</h></coordinates><panel_attributes>lt=..
+Base Station Subsystem (BSS)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLActor</id><coordinates><x>120</x><y>150</y><w>60</w><h>110</h></coordinates><panel_attributes>2G ME</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>160</x><y>170</y><w>130</w><h>40</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;20;110;20</additional_attributes></element><element><id>Relation</id><coordinates><x>320</x><y>170</y><w>90</w><h>40</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;20;70;20</additional_attributes></element><element><id>Relation</id><coordinates><x>440</x><y>170</y><w>110</w><h>40</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;20;90;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>270</x><y>300</y><w>60</w><h>60</h></coordinates><panel_attributes>Node
+B
+valign=center</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>390</x><y>300</y><w>60</w><h>60</h></coordinates><panel_attributes>RNC
+valign=center
+/Radio/
+/Network/
+/Controller/</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>260</x><y>270</y><w>200</w><h>100</h></coordinates><panel_attributes>lt=..
+RNS - Radio Network Subsystem</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLActor</id><coordinates><x>120</x><y>290</y><w>60</w><h>110</h></coordinates><panel_attributes>3G ME</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>160</x><y>310</y><w>130</w><h>40</h></coordinates><panel_attributes>WCDMA</panel_attributes><additional_attributes>10;20;110;20</additional_attributes></element><element><id>Relation</id><coordinates><x>320</x><y>310</y><w>90</w><h>40</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;20;70;20</additional_attributes></element><element><id>Relation</id><coordinates><x>460</x><y>310</y><w>90</w><h>40</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;20;70;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>250</x><y>260</y><w>220</w><h>170</h></coordinates><panel_attributes>lt=..
+
+
+
+
+
+
+
+
+UTRAN 
+/Universal Mobile Terrestrial Radio/
+/Access Network/</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>740</x><y>240</y><w>110</w><h>40</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;20;90;20</additional_attributes></element><element><id>Text</id><coordinates><x>800</x><y>150</y><w>230</w><h>200</h></coordinates><panel_attributes>
+
+
+
+
+ 
+                      Other networks
+                  PSTN, LMN, Internet...
+customelement=
+drawArc(80,140,30,40,180,180,true) transparency=100
+drawArc(110,140,30,40,180,180,true) transparency=100
+drawArc(140,135,30,40,200,180,true) transparency=100
+drawArc(167,117, 30,40,220,180,true) transparency=100
+drawArc(179,86, 30,40,270,180,true) transparency=100
+drawArc(175,48, 30,40,300,180,true) transparency=100
+drawArc(151,28, 30,40,350,180,true) transparency=100
+drawArc(121,28, 30,40,350,180,true) transparency=100
+drawArc(90,28, 30,40,10,180,true) transparency=100
+drawArc(60,37, 30,40,30,180,true) transparency=100
+drawArc(35,57, 30,40,50,180,true) transparency=100
+drawArc(30,94, 30,40,80,180,true) transparency=100
+drawArc(30,130, 30,40,120,180,true) transparency=100
+drawArc(52,150, 34,40,165,180,true) transparency=100</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1000</x><y>240</y><w>110</w><h>40</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;20;90;20</additional_attributes></element></diagram>
