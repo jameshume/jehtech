@@ -14,6 +14,7 @@
 | ICCID   | Integrated Circuit Card Identifier<br>Identifies the chip of each SIM card. |
 | IMEI    | International Mobile Equipment Identity<br>Think MAC address of slot SIM is inserted into |
 | IMSI    | International Mobile Subscriber Identity<br>Unique identifier assigned to every SIM  |
+| LAI     | Local Area Identity |
 | LTE     | Long Term Evolution (of mobile networks) |
 | MCC     | Mobile Country Code<br>For example the UK MCC is 234<br>[[See Mobile Country Codes (MCC) and Mobile Network Codes (MNC)]](https://mcc-mnc-list.com/list) |
 | MNC     | Mobile Network Code<br>A unique ID specific to a mobile operator network<br>[[See Mobile Country Codes (MCC) and Mobile Network Codes (MNC)]](https://mcc-mnc-list.com/list)|
@@ -27,6 +28,7 @@
 | UE      | User Equipment |
 | UMTS    | Universal Mobile Telecommunications System |
 <p></p>
+
 
 
 ## Different Mobile Comms Standards
@@ -119,8 +121,7 @@ European Commission has good infographic:<br>
 * Supported packet switching, roaming, encryption, SMS and data.
 
 ### 3G
-
-
+<p></p>
 
 
 ## SIM and Phone Identifiers
@@ -137,6 +138,7 @@ See [Difference Between IMEI, IMSI, ICCID And MSISDN Numbers](https://commsbrief
 (1) Format is `CCCNNIIIIIIIIII`, where `C` (the first 3 digits) are the mobile country code, `N` (the next 2 digits) are the mobile network code and the last 10 digits, `I`, are the Mobile Subscriber Identification Number. The <q>mobile network may use a temporary IMSI called TMSI (Temporary Mobile Subscriber Identity) instead of IMSI to ensure the subscriber's confidentiality</q>.
 
 (2) Usually 19 or 20 digits. Format is similar to `IICCSSSSUUUUUUUUUUU`, where `I` is the industry code, `C` is the country code, `S` is the issuer's code, and `U` is the unique identifier for the SIM.
+
 
 
 ## Signal Strength
@@ -157,6 +159,8 @@ See [Difference Between IMEI, IMSI, ICCID And MSISDN Numbers](https://commsbrief
       * -90 to -99 dBm = average signal (2 to 3 bars).
       * -100 to -109 dBm = poor signal (1 to 2 bars).
       * -110 to -120 dBm = very poor signal or not-spot (0 to 1 bar).
+
+
 
 ## Network Architectures
 ### GSM
@@ -206,7 +210,7 @@ BSC could handle the handover.
         The TMSI identifier is assigned by VLR entity after GSM mobile station establishes communication with the GSM network(i.e. Base station or BTS). The network then uses TMSI instead of IMSI during call processing and call management tasks.
     </p>
     <p>
-        This identifier is shorter compare to IMSI number. Hence it is more efficient to transmit. The purpose to use TMSI inplace of IMSI is to provide security to the mobile subscriber, as IMSI need not have to be transmitted continuously.
+        This identifier is shorter compare[d] to IMSI number. Hence it is more efficient to transmit. The purpose [is] to use TMSI inplace of IMSI is to provide security to the mobile subscriber, as IMSI need not have to be transmitted continuously.
     </p>
     <footer><a href="" target="_blank">IMEI vs IMSI vs TMSI-difference between IMEI,IMSI,TMSI</a>, RF Wireless World</footer>
 </blockquote>
@@ -241,6 +245,25 @@ Two types:
         2. Random Access CHannel (RACH)
         3. Access Grant CHannel (AGCH)
         4. Standalone Dedicated Control CHannel (SDCCH)
+
+#### Location Areas
+Each MSC area is subdivided into many local areas. Each such area has an identifier called the Local Area Identity (LAI).
+The LAI is structured like so:
+
+```
++-----+-----+-----------------------------+
+| MCC | MNC |             LAC             | < LAC is "Location Area Code" - only unique to the MSC service area, by...
++-----+-----+-----------------------------+   ...prefixing it with the MCC and MNC it makes it unique globally so... 
+ ^^^^^ ^^^^^                                  ...roaming is possible .
+ ^^^^^ 2/3 digits
+ 3 digits
+```
+
+Location areas do not all have to be the same size and contain different number of base stations per area.
+
+When a mobile is in the IDLE state, i.e, not in a call, only the location area is known, not exactly which base
+station the mobile is connected to, so to page the mobile, the network has to page all the base stations to find the
+mobile.
 
 
 
@@ -612,6 +635,7 @@ to poll using the query commands, but this is less efficient.
     |---------|-------------|
     | Send    | `AT+CEDRXS?`                                    |
     | Receive | `AT+CEDRXS?`<br>`+CEDRXS: `<br>`OK` |
+
 
 
 ## TODOs
