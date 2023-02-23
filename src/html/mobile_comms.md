@@ -5,6 +5,7 @@
 |---------|---------|
 | APN     | Access Point Name<br>An [Access Point Name (APN)](https://en.wikipedia.org/wiki/Access_Point_Name) is a gateway between a GSM, GPRS, 3G or 4G mobile network and another computer network, frequently the public Internet. A mobile device making a data connection must be configured with an APN to present to the carrier. |
 | BTS     | Base Transceiver System - aka Base Station |
+| CDMA    | Code Division Multiple Access |
 | EDGE    | Enhanced Data Rate for GSM Evolution |
 | EVDO    | EVolution Data optimized |
 | GPRS    | General Packet Radio Service |
@@ -271,8 +272,12 @@ mobile.
 The development of 3G was standardised by the 3rd Generation Partnership Project (3GPP) as formed in 1998. It was
 a group of telecom vendors and operators.
 
-They introduced he 3G Universal Mobile Telecoms Service (UMTS) technology in 2001, aka Wideband CDMA.
+They introduced he 3G Universal Mobile Telecoms Service (UMTS) technology in 2001, aka Wideband CDMA. [CDMA is
+Code Division Multiple Access](https://youtu.be/BkThmLtjQpE).
 
+Interestingly the 3G architecture kept the 2G GPRS/Edge *core network*! It only uses a different *access network*!
+
+![](##IMG_DIR##/UMTS_architecture.png)
 
 ## Talking With A Modem: AT Commands
 The [Twilio Cellular Modem Knowledge Base](https://www.twilio.com/docs/iot/supersim/cellular-modem-knowledge-base) is a really good resource.
