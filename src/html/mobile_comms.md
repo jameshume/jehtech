@@ -19,6 +19,7 @@
 | MNC     | Mobile Network Code<br>A unique ID specific to a mobile operator network<br>[[See Mobile Country Codes (MCC) and Mobile Network Codes (MNC)]](https://mcc-mnc-list.com/list)|
 | MS      | Mobile Station: your phone |
 | MSISDN  | Mobile Station International Subscriber Directory<br>Full mobile number with country code and all prefixes. |
+| MSRN    | Mobile Station Roaming Number<br>[[See this article]](https://medium.com/@cspsprotocols247/what-is-msrn-how-it-is-used-in-roaming-how-a-mobile-gets-msrn-d1c4570d8e85). |
 | NR      | New Radio |
 | PDN     | Public Data Network |
 | PSM     | Power Saving Mode |
@@ -171,7 +172,7 @@ See [Difference Between IMEI, IMSI, ICCID And MSISDN Numbers](https://commsbrief
 #### Base Status Subsystem
 The Base Station Subsystem (BSS) consists of the Base Transceiver Stations (BTS) and the Base Station Controller (BSC).
 
-Man BSS connect to a BTS and many BTS connect to a MSC.
+Many BSS connect to one BTS and many BTS connect to one MSC.
 
 The BTS provides the radio link to your phone and communicates with the BSC, which manges the radio resources for the BTS,
 assigning frequencies and time slots. The BSC also handles call setup and handover. It also switches traffic to/from
@@ -185,13 +186,31 @@ power between the BTS and MS.
 
 The NSS is responsible for all the call switching and routing and tracking the location of the mobile.
 
-The Mobil Switching Center (MSC) is a digital switch that performs call setup, routing between the MS & other MSCs or
+The Mobile Switching Center (MSC) is a digital switch that performs call setup, routing between the MS & other MSCs or
 external networks.
 
 It also handles inter BSS and inter MSC handovers. When a mobile moves between two BSCs the handover has to be
 handled by the MSC as this is the common parent. If a mobile moved between two BTS within one BSC coverage area then the
 BSC could handle the handover.
 
+<p></p>
+<blockquote>
+    <p>
+        IMEI of all the mobile stations are stored in the database known as EIR (Equipment Identification Register).
+        The network can check this list in order to confirm whether mobile has been stolen or not.
+    </p>
+    <p>
+        ...
+    </p>
+    <p>
+        The TMSI identifier is assigned by VLR entity after GSM mobile station establishes communication with the GSM network(i.e. Base station or BTS). The network then uses TMSI instead of IMSI during call processing and call management tasks.
+    </p>
+    <p>
+        This identifier is shorter compare to IMSI number. Hence it is more efficient to transmit. The purpose to use TMSI inplace of IMSI is to provide security to the mobile subscriber, as IMSI need not have to be transmitted continuously.
+    </p>
+    <footer><a href="" target="_blank">IMEI vs IMSI vs TMSI-difference between IMEI,IMSI,TMSI</a>, RF Wireless World</footer>
+</blockquote>
+<p></p>
 
 ## Talking With A Modem: AT Commands
 The [Twilio Cellular Modem Knowledge Base](https://www.twilio.com/docs/iot/supersim/cellular-modem-knowledge-base) is a really good resource.
