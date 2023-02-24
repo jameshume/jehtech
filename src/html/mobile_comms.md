@@ -30,7 +30,8 @@
 | UMTS    | Universal Mobile Telecommunications System |
 <p></p>
 
-
+## Good Links
+* [TutorialsPoint Telecom Tutorials](https://www.tutorialspoint.com/telecom_tutorials.htm)
 
 ## Different Mobile Comms Standards
 
@@ -71,12 +72,14 @@ Notes:
     * Can make voice calls and transmit data at the same time.
 * EDGE = Enhanced Data Rate for GSM Evolution
     * Improves upon the GSM/GPRS family: higher bit-rates per radio channel: 2.75 tech.
+
 * CDMA = Code Division Multiple Access
     * Can *_not_* make voice calls and transmit data at the same time,
     * GSM is widely used across the world, CDMA is mostly only common in the US/Asia
 * UMTS = Universal Mobile Telecommunications System
     * Fully compatible with GSM, but
     * Required upgrades to existing 2G networks (whether GSM, GPRS or EDGE) as UMTS uses different access technology (WCDMA) - new base stations required.
+
 * HSPA = High Speed Packet Access
     * Tech used to enhance UMTS to improve data rates.
     * Combination of HSUPA (High Speed Uplink Packet Access) and HSDPA (High Speed Downlink Packet Access)
@@ -266,6 +269,8 @@ Location areas do not all have to be the same size and contain different number 
 When a mobile is in the IDLE state, i.e, not in a call, only the location area is known, not exactly which base
 station the mobile is connected to, so to page the mobile, the network has to page all the base stations to find the
 mobile.
+
+![Location areas](##IMG_DIR##/mobile_comms_location_areas_bsc_msc.png)
 
 
 ### 3G

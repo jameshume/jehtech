@@ -301,7 +301,13 @@ class SVGPathCommandTokenizer:
             end = self._cursor
             
             if (self._cursor >= self._path_str_len):
-                raise Exception(f"Command {self._current_cmd} ended prematurely -- {params} -- {self._cursor} -- {self._path_str}")
+                if start == end:
+                    raise Exception(f"Command {self._current_cmd} ended prematurely -- {params} -- {start} -- {end} -- {self._cursor} -- {len(self._path_str)} -- {self._path_str}")
+                else:
+                    params.append(float(self._path_str[start:end]))
+                    num_dots = 0
+                    next_minus = False
+                    break
             elif start == end:
                 break
             elif num_dots > 1 or next_minus:
@@ -312,10 +318,12 @@ class SVGPathCommandTokenizer:
             elif self._path_str[self._cursor] == ',' or self._path_str[self._cursor] == ' ':
                 params.append(float(self._path_str[start:end]))
                 num_dots = 0
+                next_minus = False
                 self._cursor += 1
             else:
                 params.append(float(self._path_str[start:end]))
                 num_dots = 0
+                next_minus = False
                 break
 
         if len(params) == 0:
