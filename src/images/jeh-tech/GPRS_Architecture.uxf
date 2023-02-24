@@ -1,0 +1,72 @@
+<diagram program="umletino" version="15.0.0"><zoom_level>8</zoom_level><help_text></help_text><element><id>UMLClass</id><coordinates><x>104</x><y>112</y><w>104</w><h>32</h></coordinates><panel_attributes>Mobile Station
+(MS)
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>200</y><w>104</w><h>32</h></coordinates><panel_attributes>Mobile Equipment
+(ME)
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>208</x><y>200</y><w>104</w><h>32</h></coordinates><panel_attributes>Subscriber Identity 
+Module (SIM)
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>40</x><y>136</y><w>136</w><h>80</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>150;10;150;50;10;50;10;80</additional_attributes></element><element><id>Relation</id><coordinates><x>152</x><y>136</y><w>120</w><h>80</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;50;130;50;130;80</additional_attributes></element><element><id>UMLClass</id><coordinates><x>456</x><y>112</y><w>104</w><h>32</h></coordinates><panel_attributes>Base Transceiver 
+Station (BTS)
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>632</x><y>112</y><w>104</w><h>32</h></coordinates><panel_attributes>Base Station 
+Controller (BSC)
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>456</x><y>176</y><w>104</w><h>32</h></coordinates><panel_attributes>Base Transceiver 
+Station (BTS)
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>552</x><y>112</y><w>96</w><h>40</h></coordinates><panel_attributes>Abis
+(front haul)</panel_attributes><additional_attributes>10;20;100;20</additional_attributes></element><element><id>Relation</id><coordinates><x>552</x><y>120</y><w>96</w><h>88</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;90;100;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>408</x><y>64</y><w>368</w><h>168</h></coordinates><panel_attributes>lt=..
+The Radio Access Network (RAN) == Base Station Subsystem (BSS)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>200</x><y>112</y><w>272</w><h>32</h></coordinates><panel_attributes>wireless</panel_attributes><additional_attributes>10;20;320;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>840</x><y>64</y><w>368</w><h>336</h></coordinates><panel_attributes>lt=..
+The Core Network == Network Subsystem (NSS)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>880</x><y>112</y><w>104</w><h>32</h></coordinates><panel_attributes>Mobile Switching
+Center (MSC)
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1056</x><y>112</y><w>120</w><h>32</h></coordinates><panel_attributes>Gateway Mobile
+Switching Center (GMSC)
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>976</x><y>112</y><w>96</w><h>32</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;20;100;20</additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>880</x><y>176</y><w>40</w><h>32</h></coordinates><panel_attributes>EIR</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>936</x><y>176</y><w>40</w><h>32</h></coordinates><panel_attributes>VLR</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>992</x><y>176</y><w>40</w><h>32</h></coordinates><panel_attributes>HLR</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>1048</x><y>176</y><w>40</w><h>32</h></coordinates><panel_attributes>AUC</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>888</x><y>136</y><w>56</w><h>56</h></coordinates><panel_attributes></panel_attributes><additional_attributes>50;10;10;50</additional_attributes></element><element><id>Relation</id><coordinates><x>920</x><y>136</y><w>48</w><h>56</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;10;40;50</additional_attributes></element><element><id>Relation</id><coordinates><x>920</x><y>136</y><w>112</w><h>56</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;10;120;50</additional_attributes></element><element><id>Relation</id><coordinates><x>968</x><y>176</y><w>40</w><h>32</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;20;30;20</additional_attributes></element><element><id>Relation</id><coordinates><x>1024</x><y>176</y><w>40</w><h>32</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;20;30;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1304</x><y>96</y><w>120</w><h>32</h></coordinates><panel_attributes>Public Switched 
+Telephone network PTSN</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>24</x><y>240</y><w>48</w><h>80</h></coordinates><panel_attributes>customelement=
+drawRectangleRound(0 * (width / 201.0),0 * (height / 386.0),width * 1.00,height * 1.00,30.0 * (height / 386.0))
+drawRectangleRound(80 * (width / 201.0),368 * (height / 386.0),width * 0.20,height * 0.03,1.5 * (height / 386.0))
+drawRectangle(14 * (width / 201.0),40 * (height / 386.0),width * 0.88,height * 0.83)
+drawEllipse(160.0 * (width / 201.0),10.0 * (height / 386.0),width * 0.10,height * 0.05)
+drawRectangleRound(80 * (width / 201.0),10 * (height / 386.0),width * 0.20,height * 0.03,1.5 * (height / 386.0))
+drawEllipse(123.0 * (width / 201.0),7.0 * (height / 386.0),width * 0.05,height * 0.03)
+drawEllipse(136.0 * (width / 201.0),7.0 * (height / 386.0),width * 0.05,height * 0.03)
+drawEllipse(64.0 * (width / 201.0),5.0 * (height / 386.0),width * 0.05,height * 0.03)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>248</x><y>240</y><w>24</w><h>32</h></coordinates><panel_attributes>customelement=
+drawLine(0.0 * (width / 152.0),0.0 * (height / 182.0),120.0 * (width / 152.0),0.0 * (height / 182.0))
+drawLine(150.0 * (width / 152.0),180.0 * (height / 182.0),150.0 * (width / 152.0),30.0 * (height / 182.0))
+drawLine(150.0 * (width / 152.0),30.0 * (height / 182.0),120.0 * (width / 152.0),0.0 * (height / 182.0))
+drawLine(0.0 * (width / 152.0),180.0 * (height / 182.0),0.0 * (width / 152.0),0.0 * (height / 182.0))
+drawLine(0.0 * (width / 152.0),180.0 * (height / 182.0),150.0 * (width / 152.0),180.0 * (height / 182.0))
+drawRectangleRound(33 * (width / 152.0),80 * (height / 182.0),width * 0.53,height * 0.44,12.0 * (height / 182.0))
+drawLine(113.0 * (width / 152.0),140.0 * (height / 182.0),33.0 * (width / 152.0),140.0 * (height / 182.0))
+drawRectangle(58 * (width / 152.0),140 * (height / 182.0),width * 0.20,height * 0.11)
+drawLine(58.0 * (width / 152.0),100.0 * (height / 182.0),113.0 * (width / 152.0),100.0 * (height / 182.0))
+drawLine(60.0 * (width / 152.0),80.0 * (height / 182.0),60.0 * (width / 152.0),100.0 * (height / 182.0))
+drawRectangle(58 * (width / 152.0),80 * (height / 182.0),width * 0.16,height * 0.11)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>432</x><y>160</y><w>24</w><h>40</h></coordinates><panel_attributes>customelement=
+drawLine(0.93 * (width / 60.0),107.121 * (height / 110.0),29.603 * (width / 60.0),18.113 * (height / 110.0))
+drawLine(29.603 * (width / 60.0),18.113 * (height / 110.0),51.109 * (width / 60.0),107.718 * (height / 110.0))
+drawLine(51.109 * (width / 60.0),107.718 * (height / 110.0),10.488 * (width / 60.0),80.239 * (height / 110.0))
+drawLine(10.488 * (width / 60.0),80.239 * (height / 110.0),40.356 * (width / 60.0),64.708 * (height / 110.0))
+drawLine(40.356 * (width / 60.0),64.708 * (height / 110.0),19.448 * (width / 60.0),49.773 * (height / 110.0))
+drawLine(19.448 * (width / 60.0),49.773 * (height / 110.0),34.382 * (width / 60.0),39.021 * (height / 110.0))
+drawEllipse(26.397000000000002 * (width / 60.0),14.837 * (height / 110.0),width * 0.11,height * 0.06)
+drawEllipse(20.209 * (width / 60.0),10.77 * (height / 110.0),width * 0.32,height * 0.14)
+drawEllipse(16.497 * (width / 60.0),7.588000000000001 * (height / 110.0),width * 0.44,height * 0.20)
+drawEllipse(8.187999999999999 * (width / 60.0),0.9579999999999984 * (height / 110.0),width * 0.73,height * 0.33)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>432</x><y>88</y><w>24</w><h>40</h></coordinates><panel_attributes>customelement=
+drawLine(0.93 * (width / 60.0),107.121 * (height / 110.0),29.603 * (width / 60.0),18.113 * (height / 110.0))
+drawLine(29.603 * (width / 60.0),18.113 * (height / 110.0),51.109 * (width / 60.0),107.718 * (height / 110.0))
+drawLine(51.109 * (width / 60.0),107.718 * (height / 110.0),10.488 * (width / 60.0),80.239 * (height / 110.0))
+drawLine(10.488 * (width / 60.0),80.239 * (height / 110.0),40.356 * (width / 60.0),64.708 * (height / 110.0))
+drawLine(40.356 * (width / 60.0),64.708 * (height / 110.0),19.448 * (width / 60.0),49.773 * (height / 110.0))
+drawLine(19.448 * (width / 60.0),49.773 * (height / 110.0),34.382 * (width / 60.0),39.021 * (height / 110.0))
+drawEllipse(26.397000000000002 * (width / 60.0),14.837 * (height / 110.0),width * 0.11,height * 0.06)
+drawEllipse(20.209 * (width / 60.0),10.77 * (height / 110.0),width * 0.32,height * 0.14)
+drawEllipse(16.497 * (width / 60.0),7.588000000000001 * (height / 110.0),width * 0.44,height * 0.20)
+drawEllipse(8.187999999999999 * (width / 60.0),0.9579999999999984 * (height / 110.0),width * 0.73,height * 0.33)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>728</x><y>112</y><w>168</w><h>32</h></coordinates><panel_attributes>VOICE</panel_attributes><additional_attributes>10;20;90;20;80;20;190;20</additional_attributes></element><element><id>Relation</id><coordinates><x>1168</x><y>112</y><w>120</w><h>32</h></coordinates><panel_attributes>SS7</panel_attributes><additional_attributes>10;20;130;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1272</x><y>64</y><w>184</w><h>336</h></coordinates><panel_attributes>Public Networks
+lt=..</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1296</x><y>344</y><w>120</w><h>32</h></coordinates><panel_attributes>Data Network
+(PDN)
+lw=2</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>680</x><y>168</y><w>264</w><h>104</h></coordinates><panel_attributes>*DATA*</panel_attributes><additional_attributes>10;10;310;110</additional_attributes></element><element><id>UMLClass</id><coordinates><x>880</x><y>256</y><w>104</w><h>40</h></coordinates><panel_attributes>Serving GPRS 
+Supporting Node
+(SGSN)
+lw=2</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>880</x><y>336</y><w>104</w><h>40</h></coordinates><panel_attributes>Gateway GPRS 
+Supporting Node
+(GGSN)
+lw=2</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>920</x><y>288</y><w>48</w><h>64</h></coordinates><panel_attributes>DATA</panel_attributes><additional_attributes>10;10;10;60</additional_attributes></element><element><id>Relation</id><coordinates><x>976</x><y>344</y><w>336</w><h>32</h></coordinates><panel_attributes>DATA</panel_attributes><additional_attributes>10;20;400;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>648</x><y>144</y><w>72</w><h>32</h></coordinates><panel_attributes>Packet Ctrl Unit
+(PCU)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLNote</id><coordinates><x>520</x><y>272</y><w>136</w><h>64</h></coordinates><panel_attributes>The BSS has been upgraded with a Packet Control Unit (PCU) that routes data to the SGSN 
+style=wordwrap
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>636</x><y>168</y><w>32</w><h>120</h></coordinates><panel_attributes>lt=&lt;.</panel_attributes><additional_attributes>20;10;10;130</additional_attributes></element></diagram>

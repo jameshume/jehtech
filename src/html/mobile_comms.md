@@ -228,6 +228,8 @@ BSC could handle the handover.
     * Services a mobile subscriber can use
     * Current location of subscriber
 
+The network keeps track of the last known location of the MS in the VLR and HLR.
+
 ##### Visitor Location Register (VLR)
 * Temporary data - reduce burden on HLR as this is a *central* database.
 
@@ -246,13 +248,16 @@ Two types:
         2. Frequency Correction CHannel (FCCH)
         3. Syncrhonization CHannel (SCH)
     2. Common
-        1. Paging CHannel (PCH)
+        1. Paging CHannel (PCH) - Downlink only. This is how the BTS informs the MS of incoming calls.
         2. Random Access CHannel (RACH)
         3. Access Grant CHannel (AGCH)
         4. Standalone Dedicated Control CHannel (SDCCH)
 
 #### Location Areas
 Each MSC area is subdivided into many local areas. Each such area has an identifier called the Local Area Identity (LAI).
+
+![Location areas](##IMG_DIR##/mobile_comms_location_areas_bsc_msc.png)
+
 The LAI is structured like so:
 
 ```
@@ -270,8 +275,14 @@ When a mobile is in the IDLE state, i.e, not in a call, only the location area i
 station the mobile is connected to, so to page the mobile, the network has to page all the base stations to find the
 mobile.
 
-![Location areas](##IMG_DIR##/mobile_comms_location_areas_bsc_msc.png)
+### GPRS
+GPRS introduces new network elements to allow packet data transmission. Remember GSM is *analog* and has no
+data transmission capabilities. GPRS introduces the ability to use data.
 
+1. Serving GPRS Support Node (SGSN) - authenticates GPRS mobiles & network registration. charging info.
+2. Gateway GPRS Support Node (GGSN) - interface and router to external networks. routes packets through IP backbone.
+
+![GRPS architecture](##IMG_DIR##/GPRS_Architecture.png)
 
 ### 3G
 The development of 3G was standardised by the 3rd Generation Partnership Project (3GPP) as formed in 1998. It was
