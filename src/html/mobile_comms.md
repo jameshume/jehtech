@@ -141,7 +141,10 @@ See [Difference Between IMEI, IMSI, ICCID And MSISDN Numbers](https://commsbrief
 
 (1) Format is `CCCNNIIIIIIIIII`, where `C` (the first 3 digits) are the mobile country code, `N` (the next 2 digits) are the mobile network code and the last 10 digits, `I`, are the Mobile Subscriber Identification Number. The <q>mobile network may use a temporary IMSI called TMSI (Temporary Mobile Subscriber Identity) instead of IMSI to ensure the subscriber's confidentiality</q>.
 
-(2) Usually 19 or 20 digits. Format is similar to `IICCSSSSUUUUUUUUUUU`, where `I` is the industry code, `C` is the country code, `S` is the issuer's code, and `U` is the unique identifier for the SIM.
+(2) Usually 19 or 20 digits. Although [ITU-T E.118](https://www.itu.int/rec/dologin_pub.asp?lang=e&id=T-REC-E.118-200605-I!!PDF-E&type=items) says taht the <q>maximum length of the visible card number ... shall be 19 characters</q>, some vendors do use 20 characters (e.g. Twilio). Format is similar to `II-CC-SS-UUUUUUUUUUUUL`, where `I` is the industry code, `C` is the country code, `S` is the issuer's code, and `U` is the unique identifier for the SIM and 'L' is the Luhn check digit. See [ETSI TS 102 221 v17.3.0](https://www.etsi.org/deliver/etsi_ts/102200_102299/102221/17.03.00_60/ts_102221v170300p.pdf), which refers to [ITU-T E.118](https://www.itu.int/rec/dologin_pub.asp?lang=e&id=T-REC-E.118-200605-I!!PDF-E&type=items). The length of the country code (`C`) is variable: 1 to 3 digits. The issuer identity (`S`) is also <q>variable, but \[with\] a fixed number of digits within a country or world zone where appropriate</q>. Same for the unique identifier (`U`).
+
+The industry code differentiates a SIM from other types of chip cards, for example, a credit card. A SIM card will always start with the numbers 89, for example [[Ref]](https://www.zipitwireless.com/blog/what-are-iccid-imei-numbers-iot-sim-cards-explained#:~:text=An%20ICCID%20number%20follows%20this,making%20each%20SIM%20card%20unique.).
+
 
 
 
