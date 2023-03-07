@@ -22,6 +22,7 @@
 | LTE     | Long Term Evolution (of mobile networks) |
 | MCC     | Mobile Country Code<br>For example the UK MCC is 234<br>[[See Mobile Country Codes (MCC) and Mobile Network Codes (MNC)]](https://mcc-mnc-list.com/list) |
 | MNC     | Mobile Network Code<br>A unique ID specific to a mobile operator network<br>[[See Mobile Country Codes (MCC) and Mobile Network Codes (MNC)]](https://mcc-mnc-list.com/list)|
+| MO      | Mobile Originated (service) |
 | MS      | Mobile Station: your phone |
 | MSC     | Mobile SWitching Centre: core part of the GSM/CDMA network system |
 | MSISDN  | Mobile Station International Subscriber Directory<br>Full mobile number with country code and all prefixes. |
@@ -343,6 +344,26 @@ is used (can be efficiently amplified using cheap amplifiers in the ME) and in t
 
 ### 5G
 TODO
+
+## Power Saving
+
+There are two solutions that optimize device power consumption: PSM and eDRX.
+
+### PSM
+* See [POWER SAVINGS FOR CELLULAR IOT DEVICES by Yong Shi  January 31, 2022](https://incompliancemag.com/article/power-savings-for-cellular-iot-devices/)
+* Mobile does not monitor pagin and becomes unreachable for Mobile Terminated (MT) services, which are services where
+  the mobile is contacted via the network. For example an SMS is terminated at the mobile which receives it.
+     * This goes beyond Idle Mode behavior because in this mode power hungy tasks like neighbour cell measurements and
+       listening to the paging channel (maintinging reachability) are still performed.
+     * Device stays registered in network and maintains connection configuration. This means that when leaving PSM the device does
+       not need to re-attach to network and setup the connection, which is a power consuming activity.
+* PSM is left only when the device needs to do things like periodic Tracking Area Updates (TAUs) / Routing Area Updates (RAUs). In general these are refered to as Mobile Originated (MO) services.
+* An Active Timer is used after comms: device remains reachable (monitors paging channel) until the timer expires, at which
+  point device goes low power, and is unreachable, until the next event which causes it to leave this state.
+
+![PSM durations](##IMG_DIR##/power_saving_mode_PSM.png)
+
+All timers are negotiated on network connect. The T3142 timer can be very long which allows devices that infrequently send data (think IoT meters etc), to stay in lowe power mode for months at a time, if not longer.
 
 ## Talking With A Modem: AT Commands
 The [Twilio Cellular Modem Knowledge Base](https://www.twilio.com/docs/iot/supersim/cellular-modem-knowledge-base) is a really good resource.
