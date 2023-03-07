@@ -30,7 +30,8 @@
 | UMTS    | Universal Mobile Telecommunications System |
 <p></p>
 
-
+## Good Links
+* [TutorialsPoint Telecom Tutorials](https://www.tutorialspoint.com/telecom_tutorials.htm)
 
 ## Different Mobile Comms Standards
 
@@ -71,12 +72,14 @@ Notes:
     * Can make voice calls and transmit data at the same time.
 * EDGE = Enhanced Data Rate for GSM Evolution
     * Improves upon the GSM/GPRS family: higher bit-rates per radio channel: 2.75 tech.
+
 * CDMA = Code Division Multiple Access
     * Can *_not_* make voice calls and transmit data at the same time,
     * GSM is widely used across the world, CDMA is mostly only common in the US/Asia
 * UMTS = Universal Mobile Telecommunications System
     * Fully compatible with GSM, but
     * Required upgrades to existing 2G networks (whether GSM, GPRS or EDGE) as UMTS uses different access technology (WCDMA) - new base stations required.
+
 * HSPA = High Speed Packet Access
     * Tech used to enhance UMTS to improve data rates.
     * Combination of HSUPA (High Speed Uplink Packet Access) and HSDPA (High Speed Downlink Packet Access)
@@ -138,7 +141,10 @@ See [Difference Between IMEI, IMSI, ICCID And MSISDN Numbers](https://commsbrief
 
 (1) Format is `CCCNNIIIIIIIIII`, where `C` (the first 3 digits) are the mobile country code, `N` (the next 2 digits) are the mobile network code and the last 10 digits, `I`, are the Mobile Subscriber Identification Number. The <q>mobile network may use a temporary IMSI called TMSI (Temporary Mobile Subscriber Identity) instead of IMSI to ensure the subscriber's confidentiality</q>.
 
-(2) Usually 19 or 20 digits. Format is similar to `IICCSSSSUUUUUUUUUUU`, where `I` is the industry code, `C` is the country code, `S` is the issuer's code, and `U` is the unique identifier for the SIM.
+(2) Usually 19 or 20 digits. Although [ITU-T E.118](https://www.itu.int/rec/dologin_pub.asp?lang=e&id=T-REC-E.118-200605-I!!PDF-E&type=items) says that the <q>maximum length of the visible card number ... shall be 19 characters</q>, some vendors do use 20 characters (e.g. Twilio). Format is similar to `II-CC-SS-UUUUUUUUUUUUL`, where `I` is the industry code, `C` is the country code, `S` is the issuer's code, and `U` is the unique identifier for the SIM and 'L' is the Luhn check digit. See [ETSI TS 102 221 v17.3.0](https://www.etsi.org/deliver/etsi_ts/102200_102299/102221/17.03.00_60/ts_102221v170300p.pdf), which refers to [ITU-T E.118](https://www.itu.int/rec/dologin_pub.asp?lang=e&id=T-REC-E.118-200605-I!!PDF-E&type=items). The length of the country code (`C`) is variable: 1 to 3 digits. The issuer identity (`S`) is also <q>variable, but \[with\] a fixed number of digits within a country or world zone where appropriate</q>. Same for the unique identifier (`U`).
+
+The industry code differentiates a SIM from other types of chip cards, for example, a credit card. A SIM card will always start with the numbers 89, for example [[Ref]](https://www.zipitwireless.com/blog/what-are-iccid-imei-numbers-iot-sim-cards-explained#:~:text=An%20ICCID%20number%20follows%20this,making%20each%20SIM%20card%20unique.).
+
 
 
 
@@ -225,6 +231,8 @@ BSC could handle the handover.
     * Services a mobile subscriber can use
     * Current location of subscriber
 
+The network keeps track of the last known location of the MS in the VLR and HLR.
+
 ##### Visitor Location Register (VLR)
 * Temporary data - reduce burden on HLR as this is a *central* database.
 
@@ -243,13 +251,16 @@ Two types:
         2. Frequency Correction CHannel (FCCH)
         3. Syncrhonization CHannel (SCH)
     2. Common
-        1. Paging CHannel (PCH)
+        1. Paging CHannel (PCH) - Downlink only. This is how the BTS informs the MS of incoming calls.
         2. Random Access CHannel (RACH)
         3. Access Grant CHannel (AGCH)
         4. Standalone Dedicated Control CHannel (SDCCH)
 
 #### Location Areas
 Each MSC area is subdivided into many local areas. Each such area has an identifier called the Local Area Identity (LAI).
+
+![Location areas](##IMG_DIR##/mobile_comms_location_areas_bsc_msc.png)
+
 The LAI is structured like so:
 
 ```
@@ -267,6 +278,14 @@ When a mobile is in the IDLE state, i.e, not in a call, only the location area i
 station the mobile is connected to, so to page the mobile, the network has to page all the base stations to find the
 mobile.
 
+### GPRS
+GPRS introduces new network elements to allow packet data transmission. Remember GSM is *analog* and has no
+data transmission capabilities. GPRS introduces the ability to use data.
+
+1. Serving GPRS Support Node (SGSN) - authenticates GPRS mobiles & network registration. charging info.
+2. Gateway GPRS Support Node (GGSN) - interface and router to external networks. routes packets through IP backbone.
+
+![GRPS architecture](##IMG_DIR##/GPRS_Architecture.png)
 
 ### 3G
 The development of 3G was standardised by the 3rd Generation Partnership Project (3GPP) as formed in 1998. It was
@@ -655,3 +674,8 @@ to poll using the query commands, but this is less efficient.
               ***** https://www.etsi.org/deliver/etsi_ts/131100_131199/131111/13.03.00_60/ts_131111v130300p.pdf
 * Proactive SIMs https://deepsec.net/docs/Slides/2021/Proactive_SIMs_David_Burgess.pdf
 * FOTA - Frimware-Over-The_air https://www.soracom.io/iot-definitions/what-is-firmware-over-the-air-fota/
+* Looks like a good tutorial set on SIM card commands:
+    * https://nickvsnetworking.com/sim-smart-card-deep-dive/
+    * https://nickvsnetworking.com/sim-smart-card-deep-dive-part-2-meet-greet/
+    * https://nickvsnetworking.com/sim-smart-card-deep-dive-part-3-apdus-and-hello-card/
+    * https://nickvsnetworking.com/sim-smart-card-deep-dive-part-4-interacting-with-cards-irl/
