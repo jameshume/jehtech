@@ -7,7 +7,10 @@
 | BTS     | Base Transceiver System - aka Base Station |
 | CDMA    | Code Division Multiple Access |
 | EDGE    | Enhanced Data Rate for GSM Evolution |
+| EPC     | Evolved Packet Core: 4G core network |
+| EUTRAN  | Evolved Universal Terrestrial Radia Access Network: 4G access network |
 | EVDO    | EVolution Data optimized |
+| GGSN    | Gateway GPRS Support Node |
 | GPRS    | General Packet Radio Service |
 | GSM     | Global Systems for Mobile |
 | HSPA    | High Speed Packet Access |
@@ -20,14 +23,17 @@
 | MCC     | Mobile Country Code<br>For example the UK MCC is 234<br>[[See Mobile Country Codes (MCC) and Mobile Network Codes (MNC)]](https://mcc-mnc-list.com/list) |
 | MNC     | Mobile Network Code<br>A unique ID specific to a mobile operator network<br>[[See Mobile Country Codes (MCC) and Mobile Network Codes (MNC)]](https://mcc-mnc-list.com/list)|
 | MS      | Mobile Station: your phone |
+| MSC     | Mobile SWitching Centre: core part of the GSM/CDMA network system |
 | MSISDN  | Mobile Station International Subscriber Directory<br>Full mobile number with country code and all prefixes. |
 | MSRN    | Mobile Station Roaming Number<br>[[See this article]](https://medium.com/@cspsprotocols247/what-is-msrn-how-it-is-used-in-roaming-how-a-mobile-gets-msrn-d1c4570d8e85). |
 | NR      | New Radio |
 | PDN     | Public Data Network |
 | PSM     | Power Saving Mode |
+| SGSN    | Serving GPRS Support Node |
 | TAU     | Tracking Area Updating period |
 | UE      | User Equipment |
 | UMTS    | Universal Mobile Telecommunications System |
+| UTRAN   | Universal Terrestrial Radia Access Network: 3G access network |
 <p></p>
 
 ## Good Links
@@ -200,6 +206,8 @@ The NSS is responsible for all the call switching and routing and tracking the l
 The Mobile Switching Center (MSC) is a digital switch that performs call setup, routing between the MS & other MSCs or
 external networks.
 
+<q>A Mobile Switching Center (MSC) is a core part of the GSM/CDMA network system. It acts as a control center of a Network Switching Subsystem (NSS). The MSC connects calls between subscribers by switching the digital voice packets between network paths. It also provides information needed to support mobile service subscribers.</q> [[Ref]](https://www.simbase.com/iot-glossary-dictionary/mobile-switching-center#:~:text=A%20Mobile%20Switching%20Center%20(MSC,voice%20packets%20between%20network%20paths.)
+
 It also handles inter BSS and inter MSC handovers. When a mobile moves between two BSCs the handover has to be
 handled by the MSC as this is the common parent. If a mobile moved between two BTS within one BSC coverage area then the
 BSC could handle the handover.
@@ -282,21 +290,59 @@ mobile.
 GPRS introduces new network elements to allow packet data transmission. Remember GSM is *analog* and has no
 data transmission capabilities. GPRS introduces the ability to use data.
 
-1. Serving GPRS Support Node (SGSN) - authenticates GPRS mobiles & network registration. charging info.
-2. Gateway GPRS Support Node (GGSN) - interface and router to external networks. routes packets through IP backbone.
+1. Serving GPRS Support Node (SGSN) - authenticates GPRS mobiles & network registration. charging info. <q>Part of the GPRS infrastructure, the SGSN provides switching functionality, security and authentication via the HLR for GPRS users. The SGSN's primary interfaces are with the GGSN, HLR and PCU.</q> [[Ref]](https://www.gartner.com/en/information-technology/glossary/sgsn-serving-gprs-support-node). Coverage area of a MNO is divided into SGSN areas.
+2. Gateway GPRS Support Node (GGSN) - interface and router to external networks. routes packets through IP backbone: think router. GGSN assigns the ME and IP address and acts as the <b>anchor</b> for that address: as the ME roams through the network and changes SGSN areas the GGSN keeps track of which SGSN the ME is in and provides the constant IP address and routes traffic to and from the correct SGSN. <q>The gateway GPRS support node (GGSN) converts the incoming data traffic coming from the mobile users through the Service gateway GPRS support node (SGSN) and forwards it to the relevant network, and vice versa. The GGSN and the SGSN together form the GPRS support nodes (GSN).</q>[[Ref]](https://www.juniper.net/documentation/us/en/software/junos/gtp-sctp/topics/topic-map/security-gprs-ggsn-overview.html)
 
 ![GRPS architecture](##IMG_DIR##/GPRS_Architecture.png)
+
+
 
 ### 3G
 The development of 3G was standardised by the 3rd Generation Partnership Project (3GPP) as formed in 1998. It was
 a group of telecom vendors and operators.
 
-They introduced he 3G Universal Mobile Telecoms Service (UMTS) technology in 2001, aka Wideband CDMA. [CDMA is
+They introduced he 3G Universal Mobile Telecoms Service (UMTS) technology in 2001, aka Wideband CDMA (WCDMA). [CDMA is
 Code Division Multiple Access](https://youtu.be/BkThmLtjQpE).
 
 Interestingly the 3G architecture kept the 2G GPRS/Edge *core network*! It only uses a different *access network*!
 
 ![](##IMG_DIR##/UMTS_architecture.png)
+
+#### NodeB and RNC
+
+Node B is responsible for the wireless comms using the speading/despreading of the signal using code division multiplexing
+and for error correction.
+
+The power (signal strength) and Frame Error Rate (FER) is sent, be the ME, to node B and then to the Radio Network
+Controller (RNC)
+
+The RNC:
+
+* Switches traffic and signalling to/from the BSC and Core Network (CN). 
+* Manages the radio resources of the Node Bs that it controlles: handover and power control. 
+* Aggregates traffic from the NodeB's to the CN and vice versa including packet scheduling (QoS) and congestion (load)
+  control (can trigger handovers to less loaded NodeB's)
+* Does admission control and code allocation.
+
+
+#### Core Network
+There were three versions of the CN:
+
+1. Release 99: The GPRS CN?
+2. Release 4: The MSC is divided in two: it is split into the media gateway and the MSC server. The media gateway handles traffic and the MSC server handles signalling.
+3. Release 5: Adds IT Multimedia Subsystem (IMS) between the packet switched core and the IP network. Allows voice calls to be packet switched! Voice calls can now be routed over the circuit switched (CS) core *or now* the packet switched (PS) core.
+
+
+### 4G LTE
+The access network is called the "Evolved Universal Terrestrial Radia Access Network" or "EUTRAN". Base stations called eNodeB's (eNB).
+
+The core network is called the "Evolved Packet Core" or "EPC".
+
+The access technology is Orthogonal Frequency Division Multiplexing (OFDM). In the uplink direction Single Carrier Frequency Division Multiple Access (SC-FDMA)
+is used (can be efficiently amplified using cheap amplifiers in the ME) and in the downling direction Orthogonal Frequency Division Multiple Access (OFDMA) is used (BSCs can use more expensive amplification tech). Both are variants of OFDMA.
+
+### 5G
+TODO
 
 ## Talking With A Modem: AT Commands
 The [Twilio Cellular Modem Knowledge Base](https://www.twilio.com/docs/iot/supersim/cellular-modem-knowledge-base) is a really good resource.
