@@ -1,0 +1,44 @@
+<diagram program="umletino" version="15.0.0"><zoom_level>10</zoom_level><help_text>Space for diagram notes</help_text><element><id>Text</id><coordinates><x>190</x><y>170</y><w>30</w><h>50</h></coordinates><panel_attributes>customelement=
+drawLine(0.93 * (width / 60.0),107.121 * (height / 110.0),29.603 * (width / 60.0),18.113 * (height / 110.0))
+drawLine(29.603 * (width / 60.0),18.113 * (height / 110.0),51.109 * (width / 60.0),107.718 * (height / 110.0))
+drawLine(51.109 * (width / 60.0),107.718 * (height / 110.0),10.488 * (width / 60.0),80.239 * (height / 110.0))
+drawLine(10.488 * (width / 60.0),80.239 * (height / 110.0),40.356 * (width / 60.0),64.708 * (height / 110.0))
+drawLine(40.356 * (width / 60.0),64.708 * (height / 110.0),19.448 * (width / 60.0),49.773 * (height / 110.0))
+drawLine(19.448 * (width / 60.0),49.773 * (height / 110.0),34.382 * (width / 60.0),39.021 * (height / 110.0))
+drawEllipse(26.397000000000002 * (width / 60.0),14.837 * (height / 110.0),width * 0.11,height * 0.06)
+drawEllipse(20.209 * (width / 60.0),10.77 * (height / 110.0),width * 0.32,height * 0.14)
+drawEllipse(16.497 * (width / 60.0),7.588000000000001 * (height / 110.0),width * 0.44,height * 0.20)
+drawEllipse(8.187999999999999 * (width / 60.0),0.9579999999999984 * (height / 110.0),width * 0.73,height * 0.33)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>190</x><y>320</y><w>30</w><h>50</h></coordinates><panel_attributes>customelement=
+drawLine(0.93 * (width / 60.0),107.121 * (height / 110.0),29.603 * (width / 60.0),18.113 * (height / 110.0))
+drawLine(29.603 * (width / 60.0),18.113 * (height / 110.0),51.109 * (width / 60.0),107.718 * (height / 110.0))
+drawLine(51.109 * (width / 60.0),107.718 * (height / 110.0),10.488 * (width / 60.0),80.239 * (height / 110.0))
+drawLine(10.488 * (width / 60.0),80.239 * (height / 110.0),40.356 * (width / 60.0),64.708 * (height / 110.0))
+drawLine(40.356 * (width / 60.0),64.708 * (height / 110.0),19.448 * (width / 60.0),49.773 * (height / 110.0))
+drawLine(19.448 * (width / 60.0),49.773 * (height / 110.0),34.382 * (width / 60.0),39.021 * (height / 110.0))
+drawEllipse(26.397000000000002 * (width / 60.0),14.837 * (height / 110.0),width * 0.11,height * 0.06)
+drawEllipse(20.209 * (width / 60.0),10.77 * (height / 110.0),width * 0.32,height * 0.14)
+drawEllipse(16.497 * (width / 60.0),7.588000000000001 * (height / 110.0),width * 0.44,height * 0.20)
+drawEllipse(8.187999999999999 * (width / 60.0),0.9579999999999984 * (height / 110.0),width * 0.73,height * 0.33)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>180</x><y>210</y><w>30</w><h>130</h></coordinates><panel_attributes>lt=&lt;&lt;-&gt;&gt;</panel_attributes><additional_attributes>10;110;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>200</x><y>210</y><w>30</w><h>130</h></coordinates><panel_attributes>lt=&lt;&lt;..&gt;&gt;</panel_attributes><additional_attributes>10;110;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>390</x><y>370</y><w>100</w><h>30</h></coordinates><panel_attributes>S-GW</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>610</x><y>370</y><w>100</w><h>30</h></coordinates><panel_attributes>P-GW</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>480</x><y>370</y><w>150</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;-&gt;&gt;</panel_attributes><additional_attributes>130;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>480</x><y>380</y><w>150</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;..&gt;&gt;</panel_attributes><additional_attributes>10;10;130;10</additional_attributes></element><element><id>Text</id><coordinates><x>760</x><y>290</y><w>230</w><h>200</h></coordinates><panel_attributes>
+
+
+
+
+
+                            IP network
+customelement=
+drawArc(80,140,30,40,180,180,true) transparency=100
+drawArc(110,140,30,40,180,180,true) transparency=100
+drawArc(140,135,30,40,200,180,true) transparency=100
+drawArc(167,117, 30,40,220,180,true) transparency=100
+drawArc(179,86, 30,40,270,180,true) transparency=100
+drawArc(175,48, 30,40,300,180,true) transparency=100
+drawArc(151,28, 30,40,350,180,true) transparency=100
+drawArc(121,28, 30,40,350,180,true) transparency=100
+drawArc(90,28, 30,40,10,180,true) transparency=100
+drawArc(60,37, 30,40,30,180,true) transparency=100
+drawArc(35,57, 30,40,50,180,true) transparency=100
+drawArc(30,94, 30,40,80,180,true) transparency=100
+drawArc(30,130, 30,40,120,180,true) transparency=100
+drawArc(52,150, 34,40,165,180,true) transparency=100</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>610</x><y>260</y><w>100</w><h>30</h></coordinates><panel_attributes>PCRF</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>570</x><y>150</y><w>100</w><h>30</h></coordinates><panel_attributes>HSS</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>410</x><y>150</y><w>100</w><h>30</h></coordinates><panel_attributes>MME</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>650</x><y>280</y><w>30</w><h>110</h></coordinates><panel_attributes>lt=&lt;&lt;..&gt;&gt;</panel_attributes><additional_attributes>10;90;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>610</x><y>170</y><w>70</w><h>110</h></coordinates><panel_attributes>lt=&lt;&lt;..&gt;&gt;</panel_attributes><additional_attributes>50;90;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>500</x><y>150</y><w>90</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;..&gt;&gt;</panel_attributes><additional_attributes>70;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>210</x><y>150</y><w>220</w><h>70</h></coordinates><panel_attributes>lt=&lt;&lt;..&gt;&gt;</panel_attributes><additional_attributes>200;10;10;50</additional_attributes></element><element><id>Relation</id><coordinates><x>210</x><y>170</y><w>220</w><h>190</h></coordinates><panel_attributes>lt=&lt;&lt;..&gt;&gt;</panel_attributes><additional_attributes>200;10;10;170</additional_attributes></element><element><id>Relation</id><coordinates><x>210</x><y>340</y><w>200</w><h>70</h></coordinates><panel_attributes>lt=&lt;&lt;-&gt;&gt;</panel_attributes><additional_attributes>180;50;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>210</x><y>200</y><w>200</w><h>200</h></coordinates><panel_attributes>lt=&lt;&lt;-&gt;&gt;</panel_attributes><additional_attributes>180;180;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>700</x><y>370</y><w>110</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;-&gt;&gt;</panel_attributes><additional_attributes>90;10;10;10</additional_attributes></element><element><id>Text</id><coordinates><x>150</x><y>180</y><w>40</w><h>30</h></coordinates><panel_attributes>eNB</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>150</x><y>330</y><w>40</w><h>30</h></coordinates><panel_attributes>eNB</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>340</x><y>120</y><w>420</w><h>340</h></coordinates><panel_attributes>lt=.
+valign=bottom
+*EPC*</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>810</x><y>130</y><w>80</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;-&gt;&gt;</panel_attributes><additional_attributes>60;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>810</x><y>160</y><w>80</w><h>30</h></coordinates><panel_attributes>lt=&lt;&lt;..&gt;&gt;</panel_attributes><additional_attributes>60;10;10;10</additional_attributes></element><element><id>Text</id><coordinates><x>870</x><y>130</y><w>40</w><h>30</h></coordinates><panel_attributes>Data</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>870</x><y>160</y><w>60</w><h>30</h></coordinates><panel_attributes>Signalling</panel_attributes><additional_attributes></additional_attributes></element></diagram>

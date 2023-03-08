@@ -116,22 +116,6 @@ Notes:
 
 European Commission has good infographic:<br>
 <img alt="European Commission has good infographic" src="https://ec.europa.eu/newsroom/dae/document.cfm?doc_id=4541" style="width: 50%"/>
-
-### 1G
-* 3 variants used:
-    * Advanced Mobile Phone (AMP). USA.
-    * Noridic Mobile Telephone (NMT). Scandinavia.
-    * Total Access Communications (TAC). Europe.
-* All used FDMA with analog FM.
-* Weak security and no roaming.
-
-### 2G
-* GSM developed in 1991 by European Telecomms Standards Institute (ETSI).
-    * Combination of FDMA and TDMA used.
-* Ditigal AMP used in USA.
-* Supported packet switching, roaming, encryption, SMS and data.
-
-### 3G
 <p></p>
 
 
@@ -335,15 +319,54 @@ There were three versions of the CN:
 
 
 ### 4G LTE
-The access network is called the "Evolved Universal Terrestrial Radia Access Network" or "EUTRAN". Base stations called eNodeB's (eNB).
+The access network is called the "Evolved Universal Terrestrial Radia Access Network" or "EUTRAN". Base stations called eNodeB's (eNB). Unlike 3G, there is no entity that acts as a Radio Network Controller (RNC): some of its functions have been pushed onto the eNB and other functions into the core network.
 
-The core network is called the "Evolved Packet Core" or "EPC".
+The core network is called the "Evolved Packet Core" or "EPC". Everying is IP. There is no Circuit Switched (CS) core... there is only a Packet Switched (PS) core. I.e., voice is over IP.
 
 The access technology is Orthogonal Frequency Division Multiplexing (OFDM). In the uplink direction Single Carrier Frequency Division Multiple Access (SC-FDMA)
 is used (can be efficiently amplified using cheap amplifiers in the ME) and in the downling direction Orthogonal Frequency Division Multiple Access (OFDMA) is used (BSCs can use more expensive amplification tech). Both are variants of OFDMA.
 
+![Image of general 4G architecture](##IMG_DIR##/4g_overall_architecture.png)
+
+#### Mobile Management Entity (MME)
+* Similar to VLR in 2G/3G
+* Manages UE registration, authentication
+* Stores UE temporary data/context
+* Performs bearer management and establishment
+
+#### Home Subscriber Service (HSS)
+* Central DB for *all* subscriber information
+* Stores security keys for authentication
+* Stores user/subscriber info such as ID, roaming restrictuions, QoS etc.
+
+#### Serving Gateway (S-GW)
+* Handles user data connectivity between the UE and EPC
+* Simply a router - packet routing and forwarding between eNB and P-GW
+* QoS
+* Data path anchor for handover between eNBs and inter 3GPP networks (2G/3G)
+* Idle mode downlink packet buffering
+
+#### PDN Gateway (P-GW)
+* Allocates IP addresses to UE during bearer establishment.
+* Deep packet inspection for unorthorised or malicious packets
+* QoS
+
+#### Policy and Charging Rules Function (PCRF)
+* TODO
+
 ### 5G
-TODO
+* Usage scenarios:
+    * Support for Enhanced Mobile Broadband (eMMB) for UHD streaming etc: high data rate, high area traffic capcity etc.
+    * Support for Massive Machine Type Communications (mMTC): sensors etc: high connection density and low power requirements.
+    * Support for Ulta-Reliable and Low Latency Communications (uRRLC): e.g. industrial automation, remote control.
+* Uses OFDMA with scalable sub-carrier spacing.
+* Uses Massive Multiple Input Output (MIMO) technology in which a large number of antennas work together to improve both coverage and data rate. Sometimes known as "beamforming" technology.
+    * MIMO uses large antenna array on base station.
+    * Number of antenna array lements is meant to be much larger than the number of UEs.
+    * Narrower beams can be directed at different UEs, which improves the SNR.
+
+
+
 
 ## Power Saving
 
@@ -364,6 +387,9 @@ There are two solutions that optimize device power consumption: PSM and eDRX.
 ![PSM durations](##IMG_DIR##/power_saving_mode_PSM.png)
 
 All timers are negotiated on network connect. The T3142 timer can be very long which allows devices that infrequently send data (think IoT meters etc), to stay in lowe power mode for months at a time, if not longer.
+
+## eDRX
+* Extends the DRX cycles to allow a device to remain in a lower power state for longer <b>between paging occasions</b>. This has the advantage, v.s. PSM, that the device is periodically available for longer for MT terminated services without requiring an MO trigger.
 
 ## Talking With A Modem: AT Commands
 The [Twilio Cellular Modem Knowledge Base](https://www.twilio.com/docs/iot/supersim/cellular-modem-knowledge-base) is a really good resource.
