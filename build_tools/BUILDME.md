@@ -1,6 +1,6 @@
 # Build
 
-The build uses a Docker image to elliminate build environment differences and general
+The build uses a Docker image to eliminate build environment differences and general
 dependency differences. Generally built on a Windows machine, untested running in *nix
 environment.
 

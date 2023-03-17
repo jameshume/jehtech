@@ -1,5 +1,42 @@
 ===================================================================================================
 ===================================================================================================
+AWS CLI
+===================================================================================================
+https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+
+To install from scratch:
+
+$ curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+$ unzip awscliv2.zip
+$ sudo ./aws/install
+
+If already installed and needs updating:
+
+$ sudo ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
+
+To quick-configure the CLI use
+
+$ aws configure [--profile user-name]
+                ^^^^^^^^^^^^^^^^^^^^^
+				Use if you want to have many separate profiles with separate permissions
+				The access keys will link to the "user" permissions.
+
+You will be able to find the credential files here: ~/.aws/credentials
+You will be able to find the config file here: ~/.aws/config
+
+Other useful commands:
+
+To list all configuration data
+$ aws configure list
+
+To list just the profiles available
+$ aws configure list-profiles
+
+To get or set configuration attributes like "region", "output" etc etc...
+$ aws configure (get|set) <attr-name> [<attr-value-for-set>] [--profile profile-name]
+
+===================================================================================================
+===================================================================================================
 AWS Samples
 ===================================================================================================
 https://github.com/aws-samples
