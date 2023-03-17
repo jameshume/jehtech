@@ -1461,7 +1461,7 @@ dnl ---- END M4 MACROS ----
 				<p>
 					By forward biasing the emitter to base junction with even a small current, the
 					transistor's resistance between the emitter and collector quickly decreses, allowing
-					a relatively large current to from from the emitter to collector. I.e., <b>base current
+					a relatively large current to flow from the emitter to collector. I.e., <b>base current
 					controls current at emitter and collector</b>.
 				</p>
 				<p>
@@ -1577,6 +1577,20 @@ dnl ---- END M4 MACROS ----
 							voltage in case of silicon transistor and 0.3 in case of germanium transistor.</li>
 					</ul>
 					<footer>-- REF(`REF_TRANS_CONFIGS', `Transistor Configurations: Circuit Configurations'), emphasis mine.</footer>
+				</blockquote>
+				
+				<p>I like this explanation by "Papabravo" on ["All About Circuits"](https://forum.allaboutcircuits.com/threads/bjts-and-base-emitter-saturation-voltage-vbe-sat.6664/) (emphasis mine):</p>
+
+				<blockquote>
+					<p>
+						Like a conventional diode the Base-Emitter junction becomes saturated when the voltage difference
+						between the base and the emitter is greater than about 0.7V. <b>It is very difficult to further increase
+						the voltage across the junction because the current increases exponentially for small increases in Vbe</b>.
+						That's the how. The why is related to the behavior of a p-n junction according to the diode equation.
+						If you try to force more than Vbe(sat) across the junction then the device will conduct enough current
+						to destroy itself. That is the principal reason for the base resistor in switching circuits: to limit
+						the base current.
+					</p>
 				</blockquote>
 				<p></p>
 				
@@ -1765,6 +1779,21 @@ dnl ---- END M4 MACROS ----
 			</ul>
 		</div>
 
+		<!-- --------------------------------------------------------------------------------------- -->
+		<h2 style="clear:both;">SR Latch</h2>
+		<div>
+			<p>The SR latch has the following symbol:</p>
+			<p>
+				<img src="##IMG_DIR##/electronics-sr-latch-symbol.png"/>
+			</p>
+			<p>
+				It has the following states:
+			</p>
+			<p>
+				<img src="##IMG_DIR##/electronics-sr-latch-states-detailed.png"/>
+			</p>
+
+		</div>
 
 		<!-- --------------------------------------------------------------------------------------- -->
 		<h2 style="clear:both;">Decibels</h2>
