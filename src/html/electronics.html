@@ -1295,9 +1295,35 @@ dnl ---- END M4 MACROS ----
 				So, to eliminate the sinusoids, we could express sine as a rot
 			</p>
 
+			<h3>Decoupling Capacitors</h3>
+			<p>
+			</p>
+			<blockquote>
+				<p>A lot of the capacitors you see in circuits, especially those featuring an integrated circuit, are decoupling. 
+					A decoupling capacitor's job is to supress high-frequency noise in power supply signals. They take tiny voltage
+					ripples, which could otherwise be harmful to delicate ICs, out of the voltage supply.</p>
 
 
-
+				<p>In a way, decoupling capacitors act as a very small, local power supply for ICs ... If the power supply very
+					temporarily drops its voltage (which is actually pretty common, especially when the circuit it's powering is
+					constantly switching its load requirements), a decoupling capacitor can briefly supply power at the correct voltage. 
+					...</p>
+				<footer>-- <a href="https://learn.sparkfun.com/tutorials/capacitors/application-examples" target="_blank">Sparkfun - Electronics - Capacitors</a>.</footer>
+			</blockquote>
+			<p>
+			</p>
+			<blockquote>
+				<p>The performance of many circuits is impaired by the presence of HF noise on their supplies, so any HF noise which might 
+					be present on an IC's supply must be shorted to ground. We cannot use a conductor for this as it will short circuit dc 
+					and blow fuses, but a capacitor (usually in the 1-nF to 100-nF range) blocks dc while acting as a short circuit for HF.</p>
+				<p>1 cm of wire or PC track has ~8 nH inductance (5 Ω at 100 MHz), which is scarcely a short circuit. A capacitor acting as 
+					an HF short circuit must have low lead and PC track inductance, so each supply capacitor must be located very close to the 
+					two terminals of the IC it is decoupling. It is also important to choose capacitors with low internal inductance - 
+					usually ceramic ones.</p>
+				<footer>--<a href="" target="_blank">In and Out - or - Why Have a Capacitor?</a>, James Byrant, AnalgueDialogue.com</footer>
+			</blockquote>
+			<p>
+			</p>
 
 			<h3>References</h3>
 			<ul>
