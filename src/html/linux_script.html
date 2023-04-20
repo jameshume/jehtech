@@ -1511,6 +1511,7 @@ sed '$!N;s/\n/ /'</pre>
                        When in copy mode these keys are useful...
                           - B|b, E|e       - move the cursor WORD by WORD
                           - Ctrl+b, Crel+f - scroll the display up/down a full screen.
+                       Press ESC to exit this mode.
        # Ctrl+a, r   -   Toggle the current window's line-wrap setting.
        # Ctrl+a, *   - List users connected to your screen session.
        # Ctrl+a, w   - List all windows.
@@ -1555,6 +1556,28 @@ sed '$!N;s/\n/ /'</pre>
       <pre>screen -D [<i>screenName</i>]</pre>
     </div> <!-- END Screen sessions -->
 
+   
+   <h2>Barrier - Software KWM</h2>
+   <div>
+      <p>
+         Configure the SLL certificates on both client and server using this:
+      </p>
+      <pre>
+         See https://stackoverflow.com/a/67343805
+         mkdir -p Fingerprints
+         openssl req -x509 -nodes -days 365 -subj /CN=barrier -newkey rsa:4096 -keyout Barrier.pem -out Barrier.pem
+         openssl x509 -fingerprint -sha1 -noout -in Barrier.pem > Fingerprints/Local.txt
+         sed -e "s/.*=//" -i Fingerprints/Local.txt
+      </pre>
+      <p>
+         The configure server with exact name of client to allow client to connect.
+      </p>
+      <p>
+         Note, at the time of writing, Dec 2022, Barrier does <b>not support the Wayland display server</b>. To use it you must use Ubuntu with X11.
+      </p>
+   </div>
+   
+   
    </div> <!-- END H1 padding div -->
    </div>
 </body>

@@ -2,6 +2,10 @@ dnl USEM4
 dnl ---- START M4 MACROS ----
 define(`OHM', `&#x2126;')
 define(`REF', `<a href="$1" target="_blank">$2</a>')dnl
+define(`REF_POW_VS_ENERGY', `https://cleantechnica.com/2015/02/02/power-vs-energy-explanation/')
+define(`REF_KHAN_ELEC_POT', `https://youtu.be/elJUghWSVh4')
+define(`REF_KIRCHOFF', `https://www.cpp.edu/~elab/projects/project_02/index.html')
+define(`REF_TEXTBOOK_KVL_STACK_QUESTION', `https://electronics.stackexchange.com/q/641627/325669')
 define(`REF_KHAN_CAP_PULSE', `https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/ee-natural-and-forced-response/a/ee-capacitor-equation-in-action')
 define(`REF_KHAN_CAP_EQUATIONS', `https://www.youtube.com/watch?v=gd7caHXKtp8')
 define(`REF_SO_CAP_EQUATIONS', `https://electronics.stackexchange.com/a/264282/26358')
@@ -13,7 +17,14 @@ define(`REF_UDEMY_ROBOTS', `https://www.udemy.com/course/analog-electronics-robo
 define(`REF_NPN_INTRO', `https://www.theengineeringprojects.com/2018/05/introduction-to-npn-transistor.html')
 define(`REF_TRANS_CONFIGS', `https://www.electronics-notes.com/articles/analogue_circuits/transistor/transistor-circuit-configurations.php')
 define(`REF_2N2222', `https://www.electroschematics.com/wp-content/uploads/2009/04/2n2222-datasheet.pdf')
-dnl ---- END M4 MACROS ----
+define(`REF_NPN_ELECTRONICS_TUTS', `https://www.electronics-tutorials.ws/transistor/tran_2.html')
+define(`REF_CIRCUIT_LAB', `https://www.circuitlab.com/')
+define(`REF_CIRCUIT_LAB_BOOK', `https://ultimateelectronicsbook.com/')
+define(`REF_CALC_RESISTOR_FOR_TRANSITOR', `https://raspberrypi.stackexchange.com/questions/75520/calculating-resistor-value-for-transistor')
+define(`REF_CE_TRANSITOR_CONFIG', `https://circuitglobe.com/common-emitter-connection-or-ce-configuration.html')
+define(`REF_KHAN_PASSIVE_SIGN', `https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/circuit-elements/v/ee-passive-sign-convention')
+define(`REF_LABEL_V_I_NODE', `https://ultimateelectronicsbook.com/labeling-voltages-currents-nodes/')
+dnl ---- END M4 MACROS ---- 
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -38,153 +49,136 @@ dnl ---- END M4 MACROS ----
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
 
 	<script>
-		jCanv = com_JEHTech_www_Canvas();
+		if (typeof(com_JEHTech_www_Canvas) !== 'undefined') {
+			jCanv = com_JEHTech_www_Canvas();
 
-		function JEHResistor(owner, x, y, width, height, numBands) {
-			jCanv.CanvasElement.call(this, owner, null);
-			this.x = x;
-			this.y = y;
-			this.width = width;
-			this.height = height;
-			console.log("CREATE WITH " + numBands + " BANDS");
-			this.numBands = numBands;
-			this.bandColours = new Array(numBands);
-			for( var i=0; i < numBands; ++i)
-				this.bandColours[i] = null;
-			this.r1  = 0;
-			this.r2  = 0;
-			this.tol = 0;
-			this.mul = 0;
-		}
-
-		JEHResistor.prototype = 
-			Object.create(jCanv.CanvasElement.prototype, {
-				constructor: {
-					value: JEHResistor
-				}
-			});
-
-		JEHResistor.prototype.getResistanceValue = function () {
-			if( this.r1 == 0 || this.r2 == 0 || this.mul == 0)
-				return 0;
-			else
-				return (this.r1 + this.r2) * this.mul;
-		}
-
-		JEHResistor.prototype.setBandColour = function(bandNum, bandColour, val, bartype) {
-			if (bandNum >= this.numBands)
-				throw "JEHResistor: Band index too large";
-			
-			this.bandColours[bandNum] = bandColour;
-			this.drawOnCanvas(this._jehCanvasOwner);
-
-			if( bartype == "resistance" ) {
-				console.log("SETTING RES");
-				if(bandNum == 0)      this.r1 = val;
-				else if(bandNum == 1) this.r2 = val;
-				else                  throw "ERROR: band is not a resistance";
-			} else if( bartype == "multiplier" ) {
-				console.log("SETTING MUL");
-				this.mul = val;
+			function JEHResistor(owner, x, y, width, height, numBands) {
+				jCanv.CanvasElement.call(this, owner, null);
+				this.x = x;
+				this.y = y;
+				this.width = width;
+				this.height = height;
+				console.log("CREATE WITH " + numBands + " BANDS");
+				this.numBands = numBands;
+				this.bandColours = new Array(numBands);
+				for( var i=0; i < numBands; ++i)
+					this.bandColours[i] = null;
+				this.r1  = 0;
+				this.r2  = 0;
+				this.tol = 0;
+				this.mul = 0;
 			}
-		}
 
-		JEHResistor.prototype.drawOnCanvas = function(jehCanvas) {
-			var ctx = jehCanvas.ctx;
-			var midY = this.y + this.height/2;
+			JEHResistor.prototype = 
+				Object.create(jCanv.CanvasElement.prototype, {
+					constructor: {
+						value: JEHResistor
+					}
+				});
 
-			ctx.clearRect(this.x, this.y, this.width, this.height);
+			JEHResistor.prototype.getResistanceValue = function () {
+				if( this.r1 == 0 || this.r2 == 0 || this.mul == 0)
+					return 0;
+				else
+					return (this.r1 + this.r2) * this.mul;
+			}
 
-			// Draw the legs
-			console.log("Resistor: Drawing legs");
-			var legWidth = 10;
-			jehCanvas.drawLine(this.x, midY, this.x+legWidth, midY);
-			jehCanvas.drawLine(this.x+this.width-legWidth, midY, this.x+this.width, midY);
+			JEHResistor.prototype.setBandColour = function(bandNum, bandColour, val, bartype) {
+				if (bandNum >= this.numBands)
+					throw "JEHResistor: Band index too large";
+				
+				this.bandColours[bandNum] = bandColour;
+				this.drawOnCanvas(this._jehCanvasOwner);
 
-			// Draw the main resistor body
-			console.log("Resistor: Drawing main body");
-			gr = ctx.createLinearGradient(0, 0, 0, this.height);
-			gr.addColorStop(0,   "#DCDCDC");
-			gr.addColorStop(0.5, "#FFFFFF");
-			gr.addColorStop(1,   "#DCDCDC");
-			ctx.fillStyle = gr;
-			ctx.fillRect(this.x+legWidth, this.y, this.width-2*legWidth, this.height);
-			ctx.beginPath();
-			ctx.strokeStyle = "black";
-			ctx.lineWidth = 1;
-			ctx.rect(this.x+legWidth, this.y, this.width-2*legWidth, this.height);
-			ctx.stroke();
-
-			// Draw the colour code bars
-			console.log("Drawing the " + this.numBands + " colour bars");
-			var bandWidth = 15;
-			var spacerWidth = ((this.width-2*legWidth) - this.numBands*bandWidth) / (this.numBands + 2);
-			for(var i = 0; i < this.numBands; ++i) {
-				extraSpace = (i == (this.numBands - 1)) ? spacerWidth : 0;
-				console.log(extraSpace);
-				if (this.bandColours[i] !== null) {
-					ctx.fillStyle = this.bandColours[i];
-					ctx.fillRect(this.x+legWidth+spacerWidth*(i+1)+bandWidth*i+extraSpace, this.y, bandWidth, this.height);
+				if( bartype == "resistance" ) {
+					console.log("SETTING RES");
+					if(bandNum == 0)      this.r1 = val;
+					else if(bandNum == 1) this.r2 = val;
+					else                  throw "ERROR: band is not a resistance";
+				} else if( bartype == "multiplier" ) {
+					console.log("SETTING MUL");
+					this.mul = val;
 				}
+			}
+
+			JEHResistor.prototype.drawOnCanvas = function(jehCanvas) {
+				var ctx = jehCanvas.ctx;
+				var midY = this.y + this.height/2;
+
+				ctx.clearRect(this.x, this.y, this.width, this.height);
+
+				// Draw the legs
+				console.log("Resistor: Drawing legs");
+				var legWidth = 10;
+				jehCanvas.drawLine(this.x, midY, this.x+legWidth, midY);
+				jehCanvas.drawLine(this.x+this.width-legWidth, midY, this.x+this.width, midY);
+
+				// Draw the main resistor body
+				console.log("Resistor: Drawing main body");
+				gr = ctx.createLinearGradient(0, 0, 0, this.height);
+				gr.addColorStop(0,   "#DCDCDC");
+				gr.addColorStop(0.5, "#FFFFFF");
+				gr.addColorStop(1,   "#DCDCDC");
+				ctx.fillStyle = gr;
+				ctx.fillRect(this.x+legWidth, this.y, this.width-2*legWidth, this.height);
 				ctx.beginPath();
 				ctx.strokeStyle = "black";
 				ctx.lineWidth = 1;
-				ctx.rect(this.x+legWidth+spacerWidth*(i+1)+bandWidth*i+extraSpace, this.y, bandWidth, this.height);
+				ctx.rect(this.x+legWidth, this.y, this.width-2*legWidth, this.height);
 				ctx.stroke();
-				
-			}
-		}
 
-
-		$(function(){
-			var jCanvas = new jCanv.Canvas("#myCanvas", null);
-			console.log(jCanvas);
-			var bwidth = 60;
-			var bgap = 10;
-			var bheight = 25;
-			var colours = ['gold', 'silver', 'black', 'brown', 'red', 'orange', 'yellow', 'green', 'blue', 'violet', 'gray', 'white'];
-			var tolerances = [10, 5, 0, 1, 2, 0, 0, 0.5, 0.25, 0.1];
-			var numberOfResistanceBands = 2;
-
-			var totalNumberOfColumns = 3 + numberOfResistanceBands;
-			var totalGridWidth = totalNumberOfColumns * bwidth + totalNumberOfColumns * (bgap-1);
-
-			var resistorWidth = 200;
-			var resistorX = (totalGridWidth - resistorWidth)/2;
-			var resistorY = 5;
-			var resistor = jCanvas.addObject(new JEHResistor(jCanvas, resistorX, resistorY, resistorWidth, 40, 4));
-
-			var txtBoxY = resistorY + resistor.height + 20;
-			var txtBox = jCanvas.addObject(new jCanv.ValueBox(jCanvas, resistorX, txtBoxY, resistor.width, bheight, "Select all colour bands", "", "Ohms", {lineColour: null, text: "james"})); 
-
-			var gridYOffset = txtBoxY + bheight + 20;
-			console.log("########");
-			console.log(gridYOffset);
-			var gridXOffset = 0;
-			for (var rowIdx = 0; rowIdx < 12; ++rowIdx)
-			{
-				var box = null;
-				for (var colIdx = 0; colIdx < totalNumberOfColumns; ++colIdx) {
-					var bindToClickHandler = true;
-					if (colIdx == 0) {
-						bindToClickHandler = false;
-						box = jCanvas.addObject(new jCanv.Box(
-							jCanvas, 
-							(bwidth + bgap) * colIdx + gridXOffset, 
-							(bheight +bgap) * rowIdx + gridYOffset, 
-							bwidth, 
-							bheight, 
-							{
-								lineColour: null, 
-								fillColour: null, 
-								text: colours[rowIdx]
-							},
-							null
-						));
+				// Draw the colour code bars
+				console.log("Drawing the " + this.numBands + " colour bars");
+				var bandWidth = 15;
+				var spacerWidth = ((this.width-2*legWidth) - this.numBands*bandWidth) / (this.numBands + 2);
+				for(var i = 0; i < this.numBands; ++i) {
+					extraSpace = (i == (this.numBands - 1)) ? spacerWidth : 0;
+					console.log(extraSpace);
+					if (this.bandColours[i] !== null) {
+						ctx.fillStyle = this.bandColours[i];
+						ctx.fillRect(this.x+legWidth+spacerWidth*(i+1)+bandWidth*i+extraSpace, this.y, bandWidth, this.height);
 					}
-					else if(colIdx <= numberOfResistanceBands) {
-						if( rowIdx > 1 ) {
-							var resistance =  (rowIdx-1) * Math.pow(10, numberOfResistanceBands - colIdx);
+					ctx.beginPath();
+					ctx.strokeStyle = "black";
+					ctx.lineWidth = 1;
+					ctx.rect(this.x+legWidth+spacerWidth*(i+1)+bandWidth*i+extraSpace, this.y, bandWidth, this.height);
+					ctx.stroke();
+					
+				}
+			}
+
+			$(function(){
+				var jCanvas = new jCanv.Canvas("#myCanvas", null);
+				console.log(jCanvas);
+				var bwidth = 60;
+				var bgap = 10;
+				var bheight = 25;
+				var colours = ['gold', 'silver', 'black', 'brown', 'red', 'orange', 'yellow', 'green', 'blue', 'violet', 'gray', 'white'];
+				var tolerances = [10, 5, 0, 1, 2, 0, 0, 0.5, 0.25, 0.1];
+				var numberOfResistanceBands = 2;
+
+				var totalNumberOfColumns = 3 + numberOfResistanceBands;
+				var totalGridWidth = totalNumberOfColumns * bwidth + totalNumberOfColumns * (bgap-1);
+
+				var resistorWidth = 200;
+				var resistorX = (totalGridWidth - resistorWidth)/2;
+				var resistorY = 5;
+				var resistor = jCanvas.addObject(new JEHResistor(jCanvas, resistorX, resistorY, resistorWidth, 40, 4));
+
+				var txtBoxY = resistorY + resistor.height + 20;
+				var txtBox = jCanvas.addObject(new jCanv.ValueBox(jCanvas, resistorX, txtBoxY, resistor.width, bheight, "Select all colour bands", "", "Ohms", {lineColour: null, text: "james"})); 
+
+				var gridYOffset = txtBoxY + bheight + 20;
+				console.log("########");
+				console.log(gridYOffset);
+				var gridXOffset = 0;
+				for (var rowIdx = 0; rowIdx < 12; ++rowIdx)
+				{
+					var box = null;
+					for (var colIdx = 0; colIdx < totalNumberOfColumns; ++colIdx) {
+						var bindToClickHandler = true;
+						if (colIdx == 0) {
+							bindToClickHandler = false;
 							box = jCanvas.addObject(new jCanv.Box(
 								jCanvas, 
 								(bwidth + bgap) * colIdx + gridXOffset, 
@@ -192,93 +186,111 @@ dnl ---- END M4 MACROS ----
 								bwidth, 
 								bheight, 
 								{
-									lineColour: "black", 
-									fillColour: colours[rowIdx], 
-									text: resistance.toString(),
-									textColour: colours[rowIdx] !== "black" ? "black" : "white"
+									lineColour: null, 
+									fillColour: null, 
+									text: colours[rowIdx]
 								},
-								{
-									value:      resistance,
-									type:       "resistance",
-									bandIdx:    colIdx - 1,
-									bandColour: colours[rowIdx] 
-								}
+								null
 							));
 						}
-					}
-					else if(colIdx == numberOfResistanceBands + 1) {
-						if( rowIdx < 10 ) {
-							var multiplierValue = Math.pow(10, rowIdx -2);
-							box = jCanvas.addObject(new jCanv.ValueBox(
-								jCanvas, 
-								(bwidth + bgap) * colIdx + gridXOffset, 
-								(bheight +bgap) * rowIdx + gridYOffset, 
-								bwidth, 
-								bheight, 
-								multiplierValue,
-								"",
-								"",
-								{
-									lineColour: "black", 
-									fillColour: colours[rowIdx], 
-									textColour: colours[rowIdx] !== "black" ? "black" : "white"
-								},
-								{
-									value: multiplierValue,
-									type:  "multiplier",
-									bandIdx:    colIdx - 1,
-									bandColour: colours[rowIdx] 
-								}
-							));
+						else if(colIdx <= numberOfResistanceBands) {
+							if( rowIdx > 1 ) {
+								var resistance =  (rowIdx-1) * Math.pow(10, numberOfResistanceBands - colIdx);
+								box = jCanvas.addObject(new jCanv.Box(
+									jCanvas, 
+									(bwidth + bgap) * colIdx + gridXOffset, 
+									(bheight +bgap) * rowIdx + gridYOffset, 
+									bwidth, 
+									bheight, 
+									{
+										lineColour: "black", 
+										fillColour: colours[rowIdx], 
+										text: resistance.toString(),
+										textColour: colours[rowIdx] !== "black" ? "black" : "white"
+									},
+									{
+										value:      resistance,
+										type:       "resistance",
+										bandIdx:    colIdx - 1,
+										bandColour: colours[rowIdx] 
+									}
+								));
+							}
 						}
-					}
-					else {
-						if(rowIdx in {0:0, 1:1, 3:3, 4:4, 7:7, 8:8, 9:9}) {
-							box = jCanvas.addObject(new jCanv.ValueBox(
-								jCanvas, 
-								(bwidth + bgap) * colIdx + gridXOffset, 
-								(bheight +bgap) * rowIdx + gridYOffset, 
-								bwidth, 
-								bheight, 
-								tolerances[rowIdx],
-								"±",
-								"%",
-								{
-									lineColour: "black", 
-									fillColour: colours[rowIdx], 
-									textColour: colours[rowIdx] !== "black" ? "black" : "white"
-								},
-								{
-									value: multiplierValue,
-									type:  "tolerance",
-									bandIdx:    colIdx - 1,
-									bandColour: colours[rowIdx] 
-								}
-							));
+						else if(colIdx == numberOfResistanceBands + 1) {
+							if( rowIdx < 10 ) {
+								var multiplierValue = Math.pow(10, rowIdx -2);
+								box = jCanvas.addObject(new jCanv.ValueBox(
+									jCanvas, 
+									(bwidth + bgap) * colIdx + gridXOffset, 
+									(bheight +bgap) * rowIdx + gridYOffset, 
+									bwidth, 
+									bheight, 
+									multiplierValue,
+									"",
+									"",
+									{
+										lineColour: "black", 
+										fillColour: colours[rowIdx], 
+										textColour: colours[rowIdx] !== "black" ? "black" : "white"
+									},
+									{
+										value: multiplierValue,
+										type:  "multiplier",
+										bandIdx:    colIdx - 1,
+										bandColour: colours[rowIdx] 
+									}
+								));
+							}
 						}
-					}
+						else {
+							if(rowIdx in {0:0, 1:1, 3:3, 4:4, 7:7, 8:8, 9:9}) {
+								box = jCanvas.addObject(new jCanv.ValueBox(
+									jCanvas, 
+									(bwidth + bgap) * colIdx + gridXOffset, 
+									(bheight +bgap) * rowIdx + gridYOffset, 
+									bwidth, 
+									bheight, 
+									tolerances[rowIdx],
+									"±",
+									"%",
+									{
+										lineColour: "black", 
+										fillColour: colours[rowIdx], 
+										textColour: colours[rowIdx] !== "black" ? "black" : "white"
+									},
+									{
+										value: multiplierValue,
+										type:  "tolerance",
+										bandIdx:    colIdx - 1,
+										bandColour: colours[rowIdx] 
+									}
+								));
+							}
+						}
 
-					if(bindToClickHandler) {
-						box.bindToEvent(jCanv.Canvas.prototype.EVENT_TYPES.click, function() {
-								console.log("Button clicked...");
-								console.log(this);
-								if(this.opaqueUserData !== null) {
-									resistor.setBandColour(
-										this.opaqueUserData.bandIdx, 
-										this.opaqueUserData.bandColour, 
-										this.opaqueUserData.value, 
-										this.opaqueUserData.type);
-									var res = resistor.getResistanceValue();
-									if( res > 0 )
-										txtBox.setValue(res);
-								}
-							});
+						if(bindToClickHandler) {
+							box.bindToEvent(jCanv.Canvas.prototype.EVENT_TYPES.click, function() {
+									console.log("Button clicked...");
+									console.log(this);
+									if(this.opaqueUserData !== null) {
+										resistor.setBandColour(
+											this.opaqueUserData.bandIdx, 
+											this.opaqueUserData.bandColour, 
+											this.opaqueUserData.value, 
+											this.opaqueUserData.type);
+										var res = resistor.getResistanceValue();
+										if( res > 0 )
+											txtBox.setValue(res);
+									}
+								});
+						}
 					}
 				}
-			}
-			//jCanvas.fit(10);
-			jCanvas.render();
-		});
+				//jCanvas.fit(10);
+				jCanvas.render();
+			});
+		}
 	</script>
 </head>
 
@@ -302,116 +314,162 @@ dnl ---- END M4 MACROS ----
 		<div id="page_contents">
 		</div>
 
+		<h2>References</h2>
+		<div>
+			<ul>
+				<li>REF(`REF_KHAN_CAP_PULSE', `Capacitor i-v equation in action'), Khan Academy.</li>
+				<li>REF(`REF_KHAN_CAP_EQUATIONS', `Derivation of Charging and Discharging Equations for RC Circuit'), JKTekker, YouTube.com.</li>
+				<li>REF(`REF_SO_CAP_EQUATIONS', `Deriving the formula from 'scratch' for charging a capacitor'), StackOverflow.</li>
+				<li>REF(`REF_SO_I_SRC', `What exactly is a current source?'), StockOverflow.</li>
+				<li>REF(`REF_BATT_INT_RES', `Battery Internal Resistance'), LeanAboutElectronics.com.</li>
+				<li>REF(`REF_UTUBE_CIRC_ANAL', `Essential & Practical Circuit Analysis: Part 1- DC Circuits'), Solid State Workshop, YouTube.com.</li>
+				<li>REF(`REF_NPN_CURVES', `NPN Curves (seems broken?)')</li>
+				<li>REF(`REF_UDEMY_ROBOTS', `Electricity & electronics - Robotics, learn by building'), Ian Juby, Udemy.com.</li>
+				<li>REF(`REF_NPN_INTRO', `Introduction to NPN Transistor'), The Engineering Projects.</li>
+				<li>REF(`REF_TRANS_CONFIGS', `Transistor Configurations: circuit configurations'), ElectonicsNotes.</li>
+				<li>REF(`REF_2N2222', `2N2222; 2N2222A Data Sheet'), Philips Semiconductors.</li>
+				<li>REF(`REF_NPN_ELECTRONICS_TUTS', `NPN Transistor'), ElectronicsTutorials.</li>
+				<li>REF(`REF_CIRCUIT_LAB', `Circuit Lab Website').</li>
+				<li>REF(`REF_CIRCUIT_LAB_BOOK', `Ultimate Electronics eBook').</li>
+				<li>REF(`REF_CALC_RESISTOR_FOR_TRANSITOR', `Calculating resistor value for transistor'), StackOverflow.</li>
+				<li>REF(`REF_CE_TRANSITOR_CONFIG', `Common Emitter Connection (or CE Configuration)'), Circuit Globe.</li>
+				<li>REF(`REF_KHAN_PASSIVE_SIGN', `Sign convention for passive components'), Khan Academy.</li>
+				<li>REF(`REF_LABEL_V_I_NODE', `Labeling Voltages, Currents, and Nodes'), Ultimate Electronics eBook.</li>
+				<li>REF(`REF_POW_VS_ENERGY', `The Great "Power Vs. Energy" Confusion'), Rob Lewis, CleanTechnica.</li>
+				<li>REF(`REF_KHAN_ELEC_POT', `Electric potential energy'), Khan Academy, YouTube.com.</li>
+				<li>REF(`REF_TEXTBOOK_KVL_STACK_QUESTION', `Textbook's way of determining KVL polarities'), StackOverflow.</li>
+			</ul>
+		</div>
 
 
 		<!-- --------------------------------------------------------------------------------------- -->
-		<h2>Charge, Current, Voltage</h2>
+		<h2>Charge, Current, Voltage, Power</h2>
 		<div>
 			<h3>References</h3>
-			<ul>
-				<li>
-					<a href="https://cleantechnica.com/2015/02/02/power-vs-energy-explanation/" target="_blank">The Great Power vs. Energy Confusion</a>, Rob Lewis.
-				</li>
-				<li>
-					<a href="https://youtu.be/elJUghWSVh4" target="_blank">Electric potential energy</a>, Khan Academy.</li>
-				<li>
-					REF(`REF_UTUBE_CIRC_ANAL',`Essential &amp; Practical Circuit Analysis: Part 1- DC Circuits'), Solid State Workship, YouTube.
-				</li> 
-			</ul>
-
+			<div>
+				<ul>
+					<li>REF(`REF_POW_VS_ENERGY', `The Great "Power Vs. Energy" Confusion'), Rob Lewis, CleanTechnica.</li>
+					<li>REF(`REF_KHAN_ELEC_POT', `Electric potential energy'), Khan Academy, YouTube.com.</li>
+					<li>REF(`REF_UTUBE_CIRC_ANAL',`Essential &amp; Practical Circuit Analysis: Part 1- DC Circuits'), Solid State Workshop, YouTube.</li> 
+				</ul>
+			</div>
+			
 			<h3>Conventional Current And Charge</h3>
-			<p>
-				<img src="##IMG_DIR##/conventional_current.png" width="150" style="float:left">
-				Historically positive charge moves through the circuit from the positive to negative terminals. This is called <em>conventional</em> current.
-				We now know that it is, in fact, the flow of electrons from the negative to positive terminals that is current. Due to the historical precedent,
-				current is still often shown as conventional current.
-			</p>
-			<p>
-				From Wikipedia: <q>Conventional current flows from the positive pole (terminal) to the negative pole. Electrons flow from negative to positive. In a direct current (DC) circuit, current flows in one direction only, and one pole is always negative and the other pole is always positive. In an alternating current (AC) circuit the two poles alternate between negative and positive and the direction of the current (electron flow) reverses periodically.</q>.
-			</p>
-			<p>
-				Note that voltages are relative, which is why the negative terminal of the battery can be negative - it depends what
-				the reference voltage you are measuring against is - e.g. if ground is midway between the two terminals then they will
-				have voltages -A and +A respectively.
-			</p>
-			<p>
-				Informally, <b>current is a flow of electric charge</b>.
-			</p>
-			<p>
-				Current, $i$, is the amount of charge, $q$, that moves through a point in the circuit at any time.
-				$$i = \frac{\mathrm dq}{\mathrm dt}$$
-				Charge, $q$, is measured in Coulombs. One electron has a charge of $-1.6 \times 10^{-19}$ Coulombs. This is the smallest
-				unit of charge possible.
-			</p>
-			<p>
-				We can integrate the above to get $I = \frac{Q}{t}$ and therefore $Q = It$.
-			</p>
+			<div>
+				<p>
+					<img src="##IMG_DIR##/conventional_current.png" width="150" style="float:left">
+					Historically positive charge moves through the circuit from the positive to negative terminals. This is called <em>conventional</em> current.
+					We now know that it is, in fact, the flow of electrons from the negative to positive terminals that is current. Due to the historical precedent,
+					current is still often shown as conventional current.
+				</p>
+				<p>
+					From Wikipedia: <q>Conventional current flows from the positive pole (terminal) to the negative pole. Electrons flow from negative to positive. In a direct current (DC) circuit, current flows in one direction only, and one pole is always negative and the other pole is always positive. In an alternating current (AC) circuit the two poles alternate between negative and positive and the direction of the current (electron flow) reverses periodically.</q>.
+				</p>
+				<p>
+					Note that voltages are relative, which is why the negative terminal of the battery can be negative - it depends what
+					the reference voltage you are measuring against is - e.g. if ground is midway between the two terminals then they will
+					have voltages -A and +A respectively.
+				</p>
+				<p>
+					Informally, <b>current is a flow of electric charge</b>.
+				</p>
+				<p>
+					Current, $i$, is the amount of charge, $q$, that moves through a point in the circuit at any time.
+					$$i = \frac{\mathrm dq}{\mathrm dt}$$
+					Charge, $q$, is measured in Coulombs. One electron has a charge of $-1.6 \times 10^{-19}$ Coulombs. This is the smallest
+					unit of charge possible.
+				</p>
+				<p>
+					We can integrate the above to get $I = \frac{Q}{t}$ and therefore $Q = It$.
+				</p>
+			</div>
 
 			<h3 style="clear: both;">Voltage</h3>
-			<p>
-				Voltage, $V$, is the amount of work (in Joules) that must be done per unit charge to move between two points in a field.
-				$$V_{ab} = \frac{\mathrm dw}{\mathrm dq}$$
-				I.e. 1 volt is 1 Joule per Coulomb.
-			</p>
-			<p>
-				If we integrate both sides of the abote w.r.t to charge we get:
-				$$VQ = W\ \therefore W = QV$$
-			</p>
-			<p>
-				To help understand this let's revisit the terms energy, work and power.<br/>
-			</p>
-			<p style="padding-left: 16pt;">
-				<b>Energy</b> is the ability to do work.<br/>
-				<b>Work</b> is the force that must be exerted to move a mass a certain distance.<br/>
-				<b>Power</b> is the rate at which energy is generator/consumed.
-			</p>
-			<p>
-				Energy is what makes it possible to move things. Moving things involves doing work and it takes energy to do this. <b>Energy measures
-					the total amount of work done</b>. It does not say how fast the energy was used/produced.
-			</p>
-			<p>
-				<b>Power gives that rate at which energy is used/produced</b>. Power measures how <b>fast</b> the work gets done.
-			</p>
-			<p>
-				<img src="##IMG_DIR##/work_evergy_power.svg" alt="Image showing work and energy vs power"/>
-			</p>
-			<p>
-				Give these definitions we can see how they are defined for electronics. Using some crude (read incorrect as we're using multiplication not integration to make it seem simpler) we see:
+			<div>
+				<p>
+					Voltage, $V$, is the amount of work (in Joules) that must be done per unit charge to move between two points in a field.
+					$$V_{ab} = \frac{\mathrm dw}{\mathrm dq}$$
+					I.e. 1 volt is 1 Joule per Coulomb.
+				</p>
+				<p>
+					If we integrate both sides of the abote w.r.t to charge we get:
+					$$VQ = W\ \therefore W = QV$$
+				</p>
+			</div>
 
-				$$
-				\begin{align}
-				E &= IVt \\
-				  &= \frac{\mathrm dq}{\mathrm dt} \cdot \frac{\mathrm dw}{\mathrm dq} \cdot t\\
-				  &= \frac{\mathrm dW}{\mathrm dt} \cdot t \\
-				  &= W
-				\end{align}
-				$$
+			<h3 style="clear: both;">Energy, Work and Power</h3>
+			<div>
+				<p>
+					To help understand this let's revisit the terms energy, work and power.<br/>
+				</p>
+				<p style="padding-left: 16pt;">
+					<b>Energy</b> is the ability to do work.<br/>
+					<b>Work</b> is the force that must be exerted to move a mass a certain distance.<br/>
+					<b>Power</b> is the rate at which energy is generator/consumed.
+				</p>
+				<p>
+					Energy is what makes it possible to move things. Moving things involves doing work and it takes energy to do this. <b>Energy measures
+						the total amount of work done</b>. It does not say how fast the energy was used/produced.
+				</p>
+				<p>
+					<b>Power gives that rate at which energy is used/produced</b>. Power measures how <b>fast</b> the work gets done.
+				</p>
+				<p>
+					<img src="##IMG_DIR##/work_evergy_power.svg" alt="Image showing work and energy vs power"/>
+				</p>
+				<p>
+					Give these definitions we can see how they are defined for electronics. Using some crude (read incorrect as we're using multiplication not integration to make it seem simpler) we see:
 
-				So energy is indeed the total work required to move a charge between two points in an electric field.
+					$$
+					\begin{align}
+					E &= IVt \\
+					&= \frac{\mathrm dq}{\mathrm dt} \cdot \frac{\mathrm dw}{\mathrm dq} \cdot t\\
+					&= \frac{\mathrm dW}{\mathrm dt} \cdot t \\
+					&= W
+					\end{align}
+					$$
 
-				And because 
+					So energy is indeed the total work required to move a charge between two points in an electric field.
 
-				$$
-				P = IV = \frac{E}{t}
-				$$
+					And because 
 
-				We can see that electrical power (measured in <b>Watts</b>) is the rate of consumption/generation of electrical energy.
-			</p>
-			<p>
-				Note that electric potential energy is measured with respect to a reference point. In the
-				image below one can see that the voltage either side of the resistor is measured w.r.t ground.
-				Ground is the normal reference point, but any point in a circuit can be used as long as it is
-				used consistently.
-			</p>
-			<p>
-				<img src="##IMG_DIR##/voltage_needs_a_reference.svg" alt="Measuring potential requires a reference voltage, usually ground"/>
-			</p>
-			<p>
-				Note then, that potential <em>difference</em>, is the difference between to points, each of which has
-				a potential <em>energy</em> w.r.t to a reference. The potential <em>difference</em> is the difference between these
-				two points, but <em>only make sense if the potential of each point is measured w.r.t to the same reference</em>.
-			</p>
+					$$
+					P = IV = \frac{E}{t}
+					$$
 
+					We can see that electrical power (measured in <b>Watts</b>) is the rate of consumption/generation of electrical energy.
+				</p>
+				<p>When current flows through a resistor it dissipates power in the form of heat. When it flows
+					through an LED it dissipates power in the form of both heat and light.
+				</p>
+				<p>
+					Power, measured in <b>watts</b>, is also defined as:
+					$$
+					P = IV = I^2R = \frac{V^2}{R}
+					$$
+				</p>
+				<p>
+					Resistors usually have a power rating (the power they can dissipate) associated with them.
+					This means that if you know
+					the resistor's power rating you can calculate the maximum voltage or current you can
+					put across/through them without breaking the resistor.
+				</p>
+				<p>
+					Note that electric potential energy is measured with respect to a reference point. In the
+					image below one can see that the voltage either side of the resistor is measured w.r.t ground.
+					Ground is the normal reference point, but any point in a circuit can be used as long as it is
+					used consistently.
+				</p>
+				<p>
+					<img src="##IMG_DIR##/voltage_needs_a_reference.svg" alt="Measuring potential requires a reference voltage, usually ground"/>
+				</p>
+				<p>
+					Note then, that potential <em>difference</em>, is the difference between to points, each of which has
+					a potential <em>energy</em> w.r.t to a reference. The potential <em>difference</em> is the difference between these
+					two points, but <em>only make sense if the potential of each point is measured w.r.t to the same reference</em>.
+				</p>
+			</div>
+			
 			<h3 style="clear: both;">Ohm's Law</h3>
 			<div>
 				<p>Ohm's law gives the relationship between voltage, current and resistance:
@@ -420,68 +478,227 @@ dnl ---- END M4 MACROS ----
 					$$V = IR$$
 				</p>
 			</div>
-			<h3 style="clear: both;">Kirchoff's Laws</h3>
 
-			<h4>Nodes, Branches and Loops</h4>
-			<p>
-				<b>Branch</b>: A branch represents a single element such as a resistor. I.e., any two terminal element.
-			</p>
-			<p>
-				<b>Node</b>: A node is the point of connection between 2 or more branches. Every point going into the
-				node, at the node, is at the same potential.
-			</p>
-			<p>
-				<b>Loop</b>: A loops is any closed path in a circuit. Starts and ends at the same node
-				and does not pass through a node more than once.
-			</p>
-			<p>
-				<img src="##IMG_DIR##/loops_nodes_branches.png" alt="Branches, loops and nodes in a ciruite"/>
-			</p>
 
-			<h4>The Laws...</h4>
-			<p>
-				Two important laws: <em>Kirchoff's voltage law</em> and <em>Kirchoff's current law</em>.
-			</p>
-			<h5>KCL</h5>
-			<p>
-				Kirchoff's current law says that the <b>sum of currents flowing into a node must equal the sum of currents leaving</b> a node.
-				This is often expressed in another way: the sum of currents entering and leaving a node must always be zero. This works because we label, by convention, all currents entering the node as positive and all currents leaving the node as negative.
-			</p>
-			<p>
-				<img src="##IMG_DIR##/kcl_kvl.png" alt="KCL"/>
-			</p>
-			<p>
-				This can be written most compactly as:
+			<h3 style="clear: both;">Passive Sign Convention</h3>
+			<div>
+				<p>
+					<b>See the following references:</b>
+				</p>
+				<ol>
+					<li>REF(`REF_KHAN_PASSIVE_SIGN', `Sign convention for passive components'), Khan Academy.</li>
+					<li>REF(`REF_LABEL_V_I_NODE', `Labeling Voltages, Currents, and Nodes'), Ultimate Electronics eBook.</li>
+				</ol>
+				<p>
+					&quot;Passive&quot; describes components that do not create power and do not amplify signals. For example, resistors, capacitors
+					and inductors are passive components because they do not create power and do not amplify signals.
+				</p>
+				<p>
+					Sometimes a voltage source, like a battery, can be said to be passive because although it creates power it does not amplify signals.
+				</p>
+				<p>
+					The sign convention for passive components is that <b>the current goes into the positive terminal (terminal with higher V)</b>.
+				</p>
+				<p>
+					When analysing a circuit, as we'll see below when using Kirchhoff's laws, we have to label each component with a voltage and current.
+					The passive sign convention makes sure that when we use Ohm's law, it comes out with the <em>correct sign</em>.
+				</p>
+				<p>
+					Take the following resistor. If we label the voltage across it as so:
+				</p>
+				<p>
+					<img src="##IMG_DIR##/electronics_passive_sign_voltage_first_then_determine_current_1.png">
+				</p>
+				<p>
+					We then know that, using the passive sign convention, that the current must be labelled so that it flows into the
+					positive terminal, like so:
+				</p>
+				<p>
+					<img src="##IMG_DIR##/electronics_passive_sign_voltage_first_then_determine_current_2.png">
+				</p>
+				<p>
+					We're clearly talking about <em>conventional current</em> here, by the way.
+				</p>
+				<p>
+					What it means is that if we labelled either the voltage or the current incorrectly, Ohm's law will give a negative answer, because
+					if we label the current going into the negative terminal, we must consider it to be negative current as it is going in the
+					wrong direction. Why would we label a circuit wrong? Because sometimes in circuit analysis we do not know the polarity of an
+					element, so we just guess, and then if the sign comes out negative we know we labeled the polarity wrong and change the labelling.
+				</p>
+				<p></p>
+				<blockquote>
+					<p>
+						The convention to label current as positive when flowing into the + terminal is arbitrary, but it makes a few things work out simply and consistently:
+					</p>
+					<ol>
+						<li>First, V-I relationships like the definition of Ohm's Law don't need a minus sign.</li>
+						<li>Second, power consumption is defined correctly with $P = vi$, where $P>0$ for ordinary components which are consuming power like a resistor, and $P<0$ for components which are supplying power like a battery.</li>
+					</ol>
+					<footer>-- REF(`REF_LABEL_V_I_NODE', `Labeling Voltages, Currents, and Nodes'), Ultimate Electronics eBook.</footer>
+				</blockquote>
+				<p></p>
+				<p>
+					Why would incorrectly labelling a branch (i.e., we labelled the terminal that current was going into as negative (-)) require a sign change? Simply because
+					of this convention! If current moving in one direction is positive then moving in the other direction must be negative!
+				</p>
+			</div>
 
-				$$
-					\sum_{j=0}^{n} I_j = 0
-				$$
-			</p>
-			<p>
-				Lets look at the following example REF(`REF_UTUBE_CIRC_ANAL',`[Ref]'):
-			</p>
-			<p>
+			<h3 style="clear: both;">Kirchhoff's Laws</h3>
+			<div>
+				<h4>Nodes, Branches and Loops</h4>
+				<p>
+					<b>Branch</b>: A branch represents a single element such as a resistor. I.e., any two terminal element.
+				</p>
+				<p>
+					<b>Node</b>: A node is the point of connection between 2 or more branches. Every point going into the
+					node, at the node, is at the same potential.
+				</p>
+				<p>
+					<b>Loop</b>: A loops is any closed path in a circuit. Starts and ends at the same node
+					and does not pass through a node more than once.
+				</p>
+				<p>
+					<img src="##IMG_DIR##/loops_nodes_branches.png" alt="Branches, loops and nodes in a ciruite"/>
+				</p>
 
-			</p>
-			<h5>KVL</h5>
-			<p>
-				Kirchoff's voltage law says that the <b>sum of voltages around a closed circuit must be zero</b>.
-			</p>
-			<p>
-				<img src="##IMG_DIR##/kvl.png" alt="KVL"/>
-			</p>
-			<p>
-				This can be written most compactly as:
+				<h4>The Laws...</h4>
+				<p>
+					Two important laws: <em>Kirchoff's voltage law</em> and <em>Kirchoff's current law</em>.
+				</p>
+				<h5>KCL</h5>
+				<p>
+					Kirchoff's current law says that the <b>sum of currents flowing into a node must equal the sum of currents leaving</b> a node.
+					This is often expressed in another way: the sum of currents entering and leaving a node must always be zero. This works because we label, by convention, all currents entering the node as positive and all currents leaving the node as negative.
+				</p>
+				<p>
+					<img src="##IMG_DIR##/kcl_kvl.png" alt="KCL"/>
+				</p>
+				<p>
+					This can be written most compactly as:
 
-				$$
-					\sum_{j=0}^{n} V_j = 0
-				$$
-			</p>
-			<p>
+					$$
+						\sum_{j=0}^{n} I_j = 0
+					$$
+				</p>
+				<p>
+					Lets look at the following example REF(`REF_UTUBE_CIRC_ANAL',`[Ref]'):
+				</p>
+				<p>
+
+				</p>
+				<h5>KVL</h5>
+				<p>
+					Kirchoff's voltage law says that the <b>sum of voltages around a closed circuit must be zero</b>,
+					where the sign on each voltage is the polarity of the terminal encountered first as the loops is
+					traveled around. Another way of saying it is that one way to assign the +'s and -'s is REF(`REF_KIRCHOFF', `[Ref]'):
+				</p>
+				<ol>
+					<li>if the positive (+) side of the voltage is encountered first, assign a positive "+" sign to the voltage across the element.</li>
+					<li>If the negative (-) side of the voltage is encountered first, assign a negative "-" sign to the voltage across the element.</li>
+				</ol>
+				<p>
+					However, for passive components, one might not know apriori how to label the terminals. The choice can be arbitrary, so long as the
+					passive sign convention is used, such that in a loop, because we know current can only flow in one direction, whatever arbitrary
+					direction we decided to think of it as going, if it enters the positive terminal then the result is a positive current, otherwise
+					it is a negative current. We will see an example below.
+				</p>
+				<p>
+					<img src="##IMG_DIR##/kvl.png" alt="KVL"/>
+				</p>
+				<p>
+					This can be written most compactly as:
+
+					$$
+						\sum_{j=0}^{n} V_j = 0
+					$$
+				</p>
+				<p>
 					Say, for example, that $V_1$ is 12V, R2 is $4 \Omega$, R3 is $6 \Omega$, $V_2$ is 3V and R5 is $1 \Omega$.
 					Then we know $-12 + 4i + 6i - 4 + i = 0$. We can then work out the current in the circuit using KVL
 					by re-arranging the formula.
-			</p>
+				</p>
+				<p>
+					In this example it was trivial to know, apriori, what direction the current would flow. Sometimes we may not. 
+				</p>
+				<p><u>Example #1</p>
+				<p>
+					The following is
+					a simple example from the book "Fundamentals of Electric Circuits", fourth edition. This demonstrates the way that passive
+					components can have their terminals labelled in an "arbitrary" fashion of our choosing (as long as we consistently apply
+					the passive sign convention to know whether current is + or - whilst considering each branch). It stumped me for a while,
+					so I asked, REF(`REF_TEXTBOOK_KVL_STACK_QUESTION', `and got some very helpful answers on good old StackOverflow').
+				</p>
+				<p>
+					<img src="##IMG_DIR##/electronics_kvl_book_ex_1.png">
+				</p>
+				<p>
+					Conventional current flow is used, as indicated by the circular arrow. Going around the loop, because the current enters the
+					negative terminal of R2, the current current and voltage <em>must be negative!</em>. See the section "Passive Sign Convention" above.
+				</p>
+				<p>
+					By Ohms, law $V = iR$, we therefore know that $v_2 = -3i$. Note it is <em>negative</em>!
+				</p>
+				<p>
+					So, going around the loop we get $v_1 = 2i$ and $v_2 = -3i$. Applying KVL gives us,
+
+					$$
+					\begin{align}
+					-20 - v_1 - v_2 &= 0 \\
+					\therefore -20 -2i + 3i &= 0 
+					\end{align}
+					$$
+
+					And thus, $i = 4\text{A}$, $v_1 = 8\text{V}$ and $v_2 = -12\text{V}$.
+				</p>
+				<p>
+					We know that the voltage drop across $v_2$ isn't really negative. This means we just labelled the terminals incorrectly, so to fix it,
+					just flip the labels around and we get the correct positive voltage for $v_2$ :)
+				</p>
+				<p><u>Example #2</p>
+				<p>
+					Another example. In this example we are required to find the voltage supplied by the voltage controlled voltage supply,
+					which provides $2v_0$ volts. Hence we need to find out what $v_0$ is.
+				</p>
+				<p>
+					<img src="##IMG_DIR##/electronics_kvl_book_ex_2.png">
+				</p>
+				<p>
+					The power supplies can use the polarities already indicated on them. The
+					resistors we can assign polarities arbitrarily to, but the ones shown are the ones shown in the book's example,
+					so lets use them!
+				</p>
+				<p>
+					Using KVL:
+
+					$$
+					-12 + v_r + 2v_0 - 4 - v_0 = 0
+					$$
+
+					Where, due to the passive sign convention:
+
+					$$
+					v_0 = -6i,\ v_r = +4i
+					$$
+
+					Substituting these values in:
+
+					$$
+					-12 + 4i -12i -4 + 6i = 0 \\
+					\therefore 2i = 16 \\
+					\therefore i = -8A 
+					$$
+
+					This means that we labelled the current flow in the wrong direction. So, the current
+					is $8A$ is the anti-clockwise direction and the polarity labels on the $6\Omega$
+					resistor are switched.
+
+					$$
+					v_o = 6i = 6 * 8 = 48V
+					$$
+
+					This means that the voltage controlled power supply is supplying $96$ volts!
+				</p>
+			</div>
 		</div>
 
 
@@ -576,7 +793,7 @@ dnl ---- END M4 MACROS ----
 
 			<h3 style="clear:both;">Voltage Divider</h3>
 			<div>
-				<a name="voltage_divider"></a>>
+				<a name="voltage_divider"></a>
 				<img src="##IMG_DIR##/voltage_divider.png" width="200" style="float:left"/>
 				<p>
 					Using Ohm's law we know the following.
@@ -701,32 +918,13 @@ dnl ---- END M4 MACROS ----
 					the same using a simple voltage divider? The answer lies in the <em>sensitivity</em> of the measurement
 					system. This is covered in the next section.
 				</p>
-			</div>
-
-			<h3 style="clear:both;">Power</h3>
-			<div>
-				<p>When current flows through a resistor it dissipates power in the form of heat. When it flows
-					through an LED it dissipates power in the form of both heat and light.
-				</p>
-				<p>
-					Power, measured in <b>watts</b>, is defined as:
-					$$
-					P = VI = I^2R = \frac{V^2}{R}
-					$$
-				</p>
-				<p>
-					Resistors usually have a power rating (the power they can dissipate) associated with them.
-					This means that if you know
-					the resistor's power rating you can calculate the maximum voltage or current you can
-					put across/through them without breaking the resistor.
-				</p>
-			</div>
+			</div>			
 		</div> <!-- End H2 -->
 
 
 
 		<!-- --------------------------------------------------------------------------------------- -->
-		<h2>Voltage Sources &amp; Current Sources, Ideal v.s. Real World</h2>
+		<h2 style="clear: both;">Voltage Sources &amp; Current Sources, Ideal v.s. Real World</h2>
 		<div>
 			<h3>Voltage Sources</h3>
 			<div>
@@ -741,7 +939,8 @@ dnl ---- END M4 MACROS ----
 				<p>
 					But, <a href="electronics-batteries.html">batteries</a>, even power supplies etc etc
 					are <em>not</em> ideal. In the real world
-					they have a small internal resistance, anywhere between approx 0.1 OHM() to 2 OHM() depending on the battery
+					they have a small internal resistance, anywhere between approx 0.1 OHM() to 
+					2.0 OHM() depending on the battery
 					REF(`REF_BATT_INT_RES', `[Ref]'), which means they are modelled more like this:
 				</p>
 				<p>
@@ -819,7 +1018,7 @@ dnl ---- END M4 MACROS ----
 						REF(REF_BATT_INT_RES, `Battery Internal Resistance'), LearningAboutElectronics.com.
 					</li>
 					<li>
-						REF(`REF_UTUBE_CIRC_ANAL',`Essential &amp; Practical Circuit Analysis: Part 1- DC Circuits'), Solid State Workship, YouTube.
+						REF(`REF_UTUBE_CIRC_ANAL',`Essential &amp; Practical Circuit Analysis: Part 1- DC Circuits'), Solid State Workshop, YouTube.
 					</li>
 				</ul>
 			</div>
@@ -887,7 +1086,7 @@ dnl ---- END M4 MACROS ----
 					I = C\frac{\mathrm{d}V}{\mathrm{d}t}
 				$$
 				This gives us in important property of caps. Because for DC current the voltage does not change,
-				$\frac{\mathrm{d}Q}{\mathrm{d}t}$ is zero, so a <b>capacitor is an open circuit to DC</b>! (But it
+				$\frac{\mathrm{d}V}{\mathrm{d}t}$ is zero, so a <b>capacitor is an open circuit to DC</b>! (But it
 				does charge).
 				Because of the definition of a derivative, we also know that the voltage across a cap must
 				be smooth - i.e., it cannot change abruptly.
@@ -898,6 +1097,13 @@ dnl ---- END M4 MACROS ----
 			<p>
 				<b>Capacitors resist abrupt changes in voltage</b>, which is why the function
 				as <b>low pass filters</b>.
+			</p>
+			<p>
+				Example graphs showing voltage across a capacitor whilst charging and current
+				over time:
+			</p>
+			<p>
+				<img src="##IMG_DIR##/electronics_capacitor_charge_graphs.png" alt="Example graphs showing voltage across a capacitor whilst charging and current over time">
 			</p>
 
 			<h3>Energy And Work</h3>
@@ -955,10 +1161,12 @@ dnl ---- END M4 MACROS ----
 				from the battery and the <em>capacitor stores the current's flowing charge</em> <a href="http://www.columbia.edu/~nas2173/Lab8_CapacitanceAndTheOscilloscopeNS.pdf" target="_blank">[Ref]</a>.
 
 				$$
+				\begin{array}{l}
 					\tau \ \text{(in seconds)} = RC \\
 					\\
 					63\% \text{ charge in } 1\cdot RC \text{ seconds} \\
 					99\% \text{ charge in } 5\cdot RC \text{ seconds}
+				\end{array}
 				$$
 			</p>
 			<p>
@@ -1087,9 +1295,35 @@ dnl ---- END M4 MACROS ----
 				So, to eliminate the sinusoids, we could express sine as a rot
 			</p>
 
+			<h3>Decoupling Capacitors</h3>
+			<p>
+			</p>
+			<blockquote>
+				<p>A lot of the capacitors you see in circuits, especially those featuring an integrated circuit, are decoupling. 
+					A decoupling capacitor's job is to supress high-frequency noise in power supply signals. They take tiny voltage
+					ripples, which could otherwise be harmful to delicate ICs, out of the voltage supply.</p>
 
 
-
+				<p>In a way, decoupling capacitors act as a very small, local power supply for ICs ... If the power supply very
+					temporarily drops its voltage (which is actually pretty common, especially when the circuit it's powering is
+					constantly switching its load requirements), a decoupling capacitor can briefly supply power at the correct voltage. 
+					...</p>
+				<footer>-- <a href="https://learn.sparkfun.com/tutorials/capacitors/application-examples" target="_blank">Sparkfun - Electronics - Capacitors</a>.</footer>
+			</blockquote>
+			<p>
+			</p>
+			<blockquote>
+				<p>The performance of many circuits is impaired by the presence of HF noise on their supplies, so any HF noise which might 
+					be present on an IC's supply must be shorted to ground. We cannot use a conductor for this as it will short circuit dc 
+					and blow fuses, but a capacitor (usually in the 1-nF to 100-nF range) blocks dc while acting as a short circuit for HF.</p>
+				<p>1 cm of wire or PC track has ~8 nH inductance (5 Ω at 100 MHz), which is scarcely a short circuit. A capacitor acting as 
+					an HF short circuit must have low lead and PC track inductance, so each supply capacitor must be located very close to the 
+					two terminals of the IC it is decoupling. It is also important to choose capacitors with low internal inductance - 
+					usually ceramic ones.</p>
+				<footer>--<a href="" target="_blank">In and Out - or - Why Have a Capacitor?</a>, James Byrant, AnalgueDialogue.com</footer>
+			</blockquote>
+			<p>
+			</p>
 
 			<h3>References</h3>
 			<ul>
@@ -1170,13 +1404,57 @@ dnl ---- END M4 MACROS ----
 				Diodes drop the same voltage across them no matter the voltage source rating. So, for example,
 				silicon diode needs about 0.7V to fwd bias, but won't let the voltage drop across it
 				exceed this. So if you don't protect it with a resistor it will allow too much current to
-				flow an potentially overheat!
+				flow and potentially overheat!
 			</p>
 			<p>
 				<img src="##IMG_DIR##/diode_with_resistor_current.png"/>
 			</p>
 			<p>
 			</p>
+			<h3>Forward and Reverse Voltages - Some Terminology</h3>
+			<p></p>
+			<blockquote>
+				The <b>forward voltage</b> is the voltage drop across the diode if the voltage at the anode
+				is more positive than the voltage at the cathode (if you connect + to the anode). [I.e.,
+				voltage drop when forward biased.]
+
+				You will be using this value to calculate the power dissipation of the diode and the
+				voltage after the diode.
+
+				The <b>reverse voltage</b> is the voltage drop across the diode if the voltage at the cathode
+				is more positive than the voltage at the anode (if you connect + to the cathode).
+				[I.e., voltage drop when reverse biased.]
+
+				This is usually much higher than the forward voltage. As with forward voltage, a current
+				will flow if the connected voltage exceeds this value. This is called a "breakdown".
+				Common diodes are usually destroyed but with Z and Zener diodes this effect is used deliberately.
+				<footer>-- <a href="https://electronics.stackexchange.com/a/10968" target="_blanK">StackOverflow</a>.</footer>
+			</blockquote>
+			<p></p>
+
+			<h3>Light Emitting Diode (LED)</h3>
+			<p>
+				Lets look at a standard
+				<a href="https://www.farnell.com/datasheets/1498852.pdf" target="_blank">red LED datasheet</a>:
+			</p>
+			<p>
+				<img src="##IMG_DIR##/../standard_led_datasheet_screenshot.png">
+			</p>
+			<p>
+				The data sheet shows that we should be putting about 20mA through the LED, with
+				about 2V across it.
+			</p>
+			<p>
+				That data sheet also shows us that if we reverse bias the LED and put more than
+				100 micro-amps through it it will break down.
+			</p>
+			<p>
+				Let's try figuring out some values for a really simple circuit:
+			</p>
+			<p>
+				<img src="##IMG_DIR##/electronics_quick_diode_calc_example.png">
+			</p>
+
 
 			<h3>References</h3>
 			<ul>
@@ -1184,6 +1462,271 @@ dnl ---- END M4 MACROS ----
 				<li><a href="https://electronics.stackexchange.com/a/76372/26358" target="_blank">Accounting for LED resistance</a>, StackExchange.</li>
 			</ul>
 		</div>
+
+
+
+		
+
+
+
+		<!-- --------------------------------------------------------------------------------------- -->
+		<a name="bjt"></a>
+		<h2 style="clear:both;">Bipolar Junction Transistors (BJT)</h2>
+		<div>
+			<h3>NPN Transistor in Common Emitter Configuration</h3>
+			<div>
+				<p>
+					NPN transistors consist of two N-type (negatively doped - excess electroncs) silicon &quot;chunks&quot;
+					sandwiching a P-type (positively doped - exess holes or lacking electrons) as shown below. They are
+					<b>current controlled</b>.
+				</p>
+				<p>
+					<img src="##IMG_DIR##/npn_transistor.png"/>
+					REF(`REF_UDEMY_ROBOTS', `[Ref]')
+				</p>
+				<p>
+					By forward biasing the emitter to base junction with even a small current, the
+					transistor's resistance between the emitter and collector quickly decreses, allowing
+					a relatively large current to flow from the emitter to collector. I.e., <b>base current
+					controls current at emitter and collector</b>.
+				</p>
+				<p>
+					The circuit in its most basic form looks like:
+				</p>
+				<p>
+					<img src="##IMG_DIR##/electronics_npm_circuit_basic.png">
+				</p>
+				<p>
+					<img src="##IMG_DIR##/electronics_npm_in_voltage_divider.png">
+				</p>
+				<p>
+					The above configuration is called the <b>common emitter</b> configuration and is
+					probably the most widely used REF(`REF_TRANS_CONFIGS', `[Ref]').
+				</p>
+				<blockquote>
+					The configuration in which the emitter is connected between the collector and base
+					is known as a common emitter configuration. The input circuit is connected between
+					emitter and base, and the output circuit is taken from the collector and emitter.
+					Thus, the emitter is common to both the input and the output circuit, and hence the
+					name is the common emitter configuration. 
+					<footer>-- REF(`REF_CE_TRANSITOR_CONFIG', `Common Emitter Connection (or CE Configuration)').</footer>
+				</blockquote>
+				<p></p>			
+				<p>
+					NPN transistors can <b>typically handle up to about 0.8 A</b>. Thus, they are <b>low current</b>
+					devices. For large currents MOSFETs are used (later section).
+				</p>
+				<p><b>Saturation region</b> is where the maximum collector current flows and the transistor
+				is basically a closed switch from collector to emitter.
+				</p>
+				<p><b>Active mode / region</b> is where there is an almost linear relationship between the
+					terminal currents at the base, collector and emitter. The transistor has some resistance,
+					that is determined by the emitter/base current.
+				</p>
+				<p><b>Cut-off region</b> is where the transistor acts like an open switch.
+				</p>
+				<p>
+					The following is taken from the Semtech 2N2222 datasheet:
+				</p>
+				<p>
+					<img src="##IMG_DIR##/../electronics_2N222_Vce_vs_Ic.png">
+				</p>
+				<p>
+					A common NPN transistor is the 2N2222. Looking at the data sheet REF(`REF_2N2222', `[Ref]')
+					we can find the following properties:
+				</p>
+				<table class="jehtable">
+					<thead>
+						<tr><td>Parameter</td><td>Max</td></tr>
+					</thead>
+					<tbody>
+						<tr><td>Collector-base voltage V<sub>CBO</sub></td><td>60 V</td></tr>
+						<tr><td>Collector-emitter voltage V<sub>CEO</sub></td><td>30 V</td></tr>
+						<tr><td>Emitter-base voltage V<sub>EBO</sub></td><td>5 V</td></tr>
+						<tr><td>Peak collector current</td><td>800 mA</td></tr>
+						<tr><td>Peak base current</td><td>200mA</td></tr>
+						<tr><td>Total power disipation</td><td>500 mW</td></tr>
+					</tbody>
+				</table>
+				<p>
+					We can see that this device can handle a maximum of 0.8A though its emitter-collector and
+					only 0.2A at the base. It is however, able to tolerate relatively high voltages, just not
+					high currents, which as we said above, you'd need MOSFETs, or even relays for.
+				</p>
+				<p>
+					Other useful numbers from the datasheet include:
+				</p>
+				<table class="jehtable">
+					<thead>
+						<tr><td>Parameter</td><td>Max</td></tr>
+					</thead>
+					<tbody>
+						<tr><td>V<sub>CEsat</sub><br>Voltage from collector-emitter when saturated (i.e fully on)</td> <td>400mV</td></tr>
+						<tr><td>V<sub>BEsat</sub><br>Voltage from base-emitter when saturated (i.e fully on)</td> <td>1.3V</td></tr>
+						<tr><td>
+								H<sub>FE</sub><br>
+								DC current gain<br>
+								@ I<sub>C</sub> = 0.1 mA; V<sub>CE</sub> = 10 V<br>
+								@ I<sub>C</sub> = 1 mA; V<sub>CE</sub> = 10 V<br>
+								@ I<sub>C</sub> = 10 mA; V<sub>CE</sub> = 10 V<br>
+								@ I<sub>C</sub> = 150 mA; V<sub>CE</sub> = 1 V<br>
+								@ I<sub>C</sub> = 150 mA; V<sub>CE</sub> = 10 V<br>
+							</td>
+							<td>
+								<br>
+								<br>
+								35<br>
+								50<br>
+								75<br>
+								50<br>
+								100-300<br>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<blockquote>
+					<ul>
+						<li>The <b>base is responsible for initiating transistor action</b>. When a voltage 
+							is applied at the base, it gets biased and draws <b>small current which is then
+								used to control large</b> current at the collector and emitter side.
+						</li>
+						<li>The base action is considered as an ON-OFF valve which generates current when a
+							proper bias voltage is applied at this terminal.
+						</li>
+						<li>The small change at the voltage applied at the base terminal shows a large impact
+							at the output terminals. Actually, base acts as an input and collector acts as an output
+							in NPN transistor.</li>
+						<li>In case of <b>silicon transistor emitter-base junction draws voltage around 0.7V</b>
+							when there is no voltage at the base terminal, in order to initiate the electron action
+							and put the transistor in running condition, the base voltage must be greater than 0.7
+							voltage in case of silicon transistor and 0.3 in case of germanium transistor.</li>
+					</ul>
+					<footer>-- REF(`REF_TRANS_CONFIGS', `Transistor Configurations: Circuit Configurations'), emphasis mine.</footer>
+				</blockquote>
+				
+				<p>I like this explanation by "Papabravo" on ["All About Circuits"](https://forum.allaboutcircuits.com/threads/bjts-and-base-emitter-saturation-voltage-vbe-sat.6664/) (emphasis mine):</p>
+
+				<blockquote>
+					<p>
+						Like a conventional diode the Base-Emitter junction becomes saturated when the voltage difference
+						between the base and the emitter is greater than about 0.7V. <b>It is very difficult to further increase
+						the voltage across the junction because the current increases exponentially for small increases in Vbe</b>.
+						That's the how. The why is related to the behavior of a p-n junction according to the diode equation.
+						If you try to force more than Vbe(sat) across the junction then the device will conduct enough current
+						to destroy itself. That is the principal reason for the base resistor in switching circuits: to limit
+						the base current.
+					</p>
+				</blockquote>
+				<p></p>
+				
+				<h4>Current Amplification Factor: $\alpha$ &amp; Base Current Amplification Factor: $\beta$</h4>
+				<div>
+					<p>
+						The current gain from Collector (C) to Emitter (E): i.e., the ratio of change in collector current to
+						the change in emitter current when <em>emitter voltage is kept constant</em>:
+
+						$$
+						\alpha = \frac{\Delta I_C}{\Delta I_E}\ \text{at constant } V_{CE}
+						$$
+
+						Note that <b>$\alpha$ is always less than 1!</b>. This is because the collector current cannot be
+						greater than the emitter current: KCL: $i_e = i_b + i_c$, so therefore, $i_c = i_e - i_b$, which means that,
+						because $i_b \neq 0$, $i_e > i_c$.
+					</p>
+					<p>
+						Ah, it seems <b>$\alpha$ is more relevant to the common base</b> configuration?! Although still useful here because
+
+						$$
+						 I_c = \alpha I_e
+						$$
+					</p>
+					<p>
+						Ratio of output and input current in CE config:
+
+						$$
+						\beta = \frac{\Delta I_C}{\Delta I_B}
+						$$
+					</p>
+					<p>
+						The two are related as follows:
+
+						$$
+						\beta = \frac{\alpha}{1 - \alpha}\ \text{OR } \alpha = \beta(1 - alpha)
+						$$
+					</p>
+					<p>
+						And,
+
+						$$
+						I_c = \beta I_b
+						$$
+					</p>
+					
+					<p>
+						Some examples, taken verbatim, from REF(`REF_NPN_ELECTRONICS_TUTS', `electronics-tutorials.ws on the NPN Transitor')
+						will help understand why these are useful.
+					</p>
+					<p>
+						A bipolar NPN transistor has a DC current gain, $\beta$, value of 200. Calculate the base current $I_b$
+						required to switch a resistive load of 4mA.
+
+						$$
+						I_B = \frac{I_C}{\beta} = \frac{4 \times 10^{-3}}{200} = 20 \mu A
+						$$
+					</p>
+				</div>
+
+
+				<h4>Calculating Resistor Values</h4>
+				<div>
+					<p>
+						All based on an answer from StackOverflow REF(`REF_CALC_RESISTOR_FOR_TRANSITOR', `[Ref]').
+					</p>
+					<p>
+						<img src="##IMG_DIR##/electronics_determine_transistor_resistors.png">
+					</p>
+				</div>
+			</div>
+
+			<h3>References</h3>
+			<div>
+				<ul>
+					<li>
+						REF(`REF_UDEMY_ROBOTS', `Electricity &amp; Electronics - Robotics, Learn By Building'), Ian Juby on Udemy.
+					</li>
+					<li>
+						REF(`REF_NPN_CURVES', `NPN Characteristic Curves').
+					</li>
+					<li>
+						REF(`REF_NPN_INTRO', `Introduction To The NPN Transistor'), TheEngineeringProjects.com.
+					</li>
+					<li>
+						REF(`REF_TRANS_CONFIGS', `Transistor Configurations: Circuit Configurations'), Electronics-Notes.com.
+					</li>
+					<li>
+						REF(`REF_2N2222', `NPN Transistor 2N2222 DataSheet').
+					</li>
+					<li>
+						REF(`REF_CALC_RESISTOR_FOR_TRANSITOR', `TODO')
+					</li>
+					<li>
+						REF(`REF_CE_TRANSITOR_CONFIG', `TODO')
+					</li>
+				</ul>
+			</div>
+		</div>
+
+
+
+		<!-- --------------------------------------------------------------------------------------- -->
+		<a name="mosfet"></a>
+		<h2 style="clear:both;">Metal Oxide Semiconductor Field Effect Transistor (MOSFET)</h2>
+		<div>
+			<p>
+			</p>
+		</div>
+
 
 
 
@@ -1228,7 +1771,7 @@ dnl ---- END M4 MACROS ----
 				charged plate to the positive plate of the capacitor as it discharges. I think normally it would
 				be shown using conventional current flow, but this animation uses actual electron flow. meh.
 			</p>
-			<video autoplay loop>
+			<video playsinline autoplay muted loop>
 				<source src="##IMG_DIR##/555_cap_discharge_anim2.mp4" type="video/mp4">
 			</video><br/>
 			<p>
@@ -1262,115 +1805,86 @@ dnl ---- END M4 MACROS ----
 			</ul>
 		</div>
 
+		<!-- --------------------------------------------------------------------------------------- -->
+		<h2 style="clear:both;">SR Latch</h2>
+		<div>
+			<p>The SR latch has the following symbol:</p>
+			<p>
+				<img src="##IMG_DIR##/electronics-sr-latch-symbol.png"/>
+			</p>
+			<p>
+				It has the following states:
+			</p>
+			<p>
+				<img src="##IMG_DIR##/electronics-sr-latch-states-detailed.png"/>
+			</p>
 
+		</div>
 
 		<!-- --------------------------------------------------------------------------------------- -->
-		<a name="bjt"></a>
-		<h2 style="clear:both;">Bipolar Junction Transistors (BJT)</h2>
+		<h2 style="clear:both;">Decibels</h2>
 		<div>
+			Decibels:
+			<ul>
+				<li>Are a consistent way to compare signal strengths.</li>
+				<li>Are a ratio of two power values.</li>
+				<li>Uses logarithmic values so large and small ratios alike can be worked with.</li>
+				<li>1 Bel == x10 power gain or loss. Too big for most measurements, hence the decibel (dB) which is x0.1 power gain or loss.</li>
+			</ul>
 			<p>
-				NPN transistors consist of two N-type (negatively doped - excess electroncs) silicon &quot;chunks&quot;
-				sandwiching a P-type (positively doped - exess holes or lacking electrons) as shown below. They are
-				<b>current controlled</b>.
-			</p>
-			<p>
-				<img src="##IMG_DIR##/npn_transistor.png"/>
-				REF(`REF_UDEMY_ROBOTS', `[Ref]')
-			</p>
-			<p>
-				By forward biasing the emitter to base junction with even a small current, the
-				transistor's resistance between the emitter and collector quickly decreses, allowing
-				a relatively large current to from from the emitter to collector. I.e., <b>base current
-				controls current at emitter and collector</b>.
-			</p>
-			<p>
-				The above configuration is called the <b>common emitter</b> configuration and is
-				probably the most widely used REF(`REF_TRANS_CONFIGS', `[Ref]').
+				$$
+				\text{Power Gain (dB)} = 10\log\left(\frac{\text{power}}{\text{reference power}}\right)
+				$$
+
+				The number of dB is 10 times the number of bels (hence the multiplication by 10 of the log of the power ratio).
 			</p>
 			<p>
-				NPN transistors can <b>typically handle up to about 0.8 A</b>. Thus, they are <b>low current</b>
-				devices. For large currents MOSFETs are used (later section).
-			</p>
-			<p><b>Saturation region</b> is where the maximum collector current flows and the transistor
-			is basically a closed switch from collector to emitter.
-			</p>
-			<p><b>Active mode / region</b> is where there is an almost linear relationship between the
-				terminal currents at the base, collector and emitter. The transistor has some resistance,
-				that is determined by the emitter/base current.
-			</p>
-			<p><b>Cut-off region</b> is where the transistor acts like an open switch.
-			</p>
-			<p>
-				A common NPN transistor is the 2N2222. Looking at the data sheet REF(`REF_2N2222', `[Ref]')
-				we can find the following properties:
+				If the reference power is 1, then,
 			</p>
 			<table class="jehtable">
 				<thead>
-					<tr><td>Parameter</td><td>Max</td></tr>
+					<tr><td>Measured power</td> <td>Gain in dB</td></tr>
 				</thead>
 				<tbody>
-					<tr><td>Collector-base voltage V<sub>CBO</sub></td><td>60 V</td></tr>
-					<tr><td>Collector-emitter voltage V<sub>CEO</sub></td><td>30 V</td></tr>
-					<tr><td>Emitter-base voltage V<sub>EBO</sub></td><td>5 V</td></tr>
-					<tr><td>Peak collector current</td><td>800 mA</td></tr>
-					<tr><td>Peak base current</td><td>200mA</td></tr>
-					<tr><td>Total power disipation</td><td>500 mW</td></tr>
+					<tr><td>...</td><td>...</td></tr>
+					<tr><td>0.001</td><td>-30</td></tr>
+					<tr><td>0.01</td><td>-20</td></tr>
+					<tr><td>0.1</td><td>-10</td></tr>
+					<tr><td>1</td><td>0</td></tr>
+					<tr><td>10</td><td>10</td></tr>
+					<tr><td>100</td><td>20</td></tr>
+					<tr><td>1000</td><td>30</td></tr>
+					<tr><td>...</td><td>...</td></tr>
 				</tbody>
 			</table>
 			<p>
-				We can see that this device can handle a maximum of 0.8A though its emitter-collector and
-				only 0.2A at the base. It is however, able to tolerate relatively high voltages, just not
-				high currents, which as we said above, you'd need MOSFETs, or even relays for.
+				If the measured signal is 10 time stronger than the
+				reference then the gain is 10 dB. If the measured signal is 100 times stronger than
+				the reference then the gain is 20 dB and so on... <b>I.e., +10dB means x10 power gain</b>.
 			</p>
-			<p>
-				Lets represent the above common emitter example as a circuit diagram:
-			</p>
-			<p>
-				<img src="##IMG_DIR##/npn_common_emitter.png" alt="Basic NPN common-emitter curcuit diagram"/>
-			</p>
-			<blockquote>
-				<ul>
-					<li>The <b>base is responsible for initiating transistor action</b>. When a voltage is applied at the base, it gets biased and draws <b>small current which is then used to control large</b> current at the collector and emitter side.</li>
-					<li>The base action is considered as an ON-OFF valve which generates current when a proper bias voltage is applied at this terminal.</li>
-					<li>The small change at the voltage applied at the base terminal shows a large impact at the output terminals. Actually, base acts as an input and collector acts as an output in NPN transistor.</li>
-					<li>In case of <b>silicon transistor emitter-base junction draws voltage around 0.7</b> when there is no voltage at the base terminal, in order to initiate the electron action and put the transistor in running condition, the base voltage must be greater than 0.7 voltage in case of silicon transistor and 0.3 in case of germanium transistor.</li>
-				</ul>
-				<footer>-- REF(`REF_TRANS_CONFIGS', `Transistor Configurations: Circuit Configurations'), emphasis mine.</footer>
-			</blockquote>
-			<p></p>
-
-			<h3>References</h3>
-			<div>
-				<ul>
-					<li>
-						REF(`REF_UDEMY_ROBOTS', `Electricity &amp; Electronics - Robotics, Learn By Building'), Ian Juby on Udemy.
-					</li>
-					<li>
-						REF(`REF_NPN_CURVES', `NPN Characteristic Curves').
-					</li>
-					<li>
-						REF(`REF_NPN_INTRO', `Introduction To The NPN Transistor'), TheEngineeringProjects.com.
-					</li>
-					<li>
-						REF(`REF_TRANS_CONFIGS', `Transistor Configurations: Circuit Configurations'), Electronics-Notes.com.
-					</li>
-					<li>
-						REF(`REF_2N2222', `NPN Transistor 2N2222 DataSheet').
-					</li>
-				</ul>
+			<div class="box_container">
+				<div class="info">
+					<p>+10dB means x10 power gain.</p>
+				</div>
 			</div>
-		</div>
-
-
-
-		<!-- --------------------------------------------------------------------------------------- -->
-		<a name="mosfet"/>
-		<h2 style="clear:both;">Metal Oxide Semiconductor Field Effect Transistor (MOSFET)</h2>
-		<div>
 			<p>
-			</p>
-		</div>
+				Note that the decibels difference between two voltage or currents is:
 
+				$$
+					\text{V Power Gain (dB)} = \textbf{20}\log\left(\frac{\text{V}_{\text{out}}}{\text{V}_{\text{in}}}\right)
+				$$
+
+				Note the multiply-by-20 as opposed to the multiply-by-10. This is so that a x10 increased in power would be equivalent to adding 10dB and
+				becase power is proportional to the square of the voltage.
+			</p>
+
+			<h3>Specific Reference Values</h3>
+			<div>
+				If the value is x dB?, where ? is a letter, ? says *what* the decibel value is relative to. If, for example, the value is 
+				x dBm, then because "m" stands for milliwatt (mW), the value is relative to a reference power of 1 mW. Thus, 10 dBm would be q 10 mW gain and so on...
+			</div>
+
+		</div>
 	</div>
 </body>
 </html>

@@ -1,0 +1,10 @@
+<diagram program="umletino" version="15.0.0"><zoom_level>8</zoom_level><element><id>UMLClass</id><coordinates><x>480</x><y>224</y><w>80</w><h>72</h></coordinates><panel_attributes>
+group=group-0</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>480</x><y>224</y><w>24</w><h>32</h></coordinates><panel_attributes>R
+fontsize=20
+group=group-0</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>480</x><y>264</y><w>24</w><h>32</h></coordinates><panel_attributes>S
+fontsize=20
+group=group-0</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>536</x><y>224</y><w>24</w><h>32</h></coordinates><panel_attributes>Q
+fontsize=20
+group=group-0</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>528</x><y>264</y><w>32</w><h>32</h></coordinates><panel_attributes>¬Q 
+fontsize=20
+group=group-0</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>424</x><y>224</y><w>72</w><h>32</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;20;70;20</additional_attributes></element><element><id>Relation</id><coordinates><x>424</x><y>264</y><w>72</w><h>32</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;20;70;20</additional_attributes></element><element><id>Relation</id><coordinates><x>552</x><y>264</y><w>72</w><h>32</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;20;70;20</additional_attributes></element><element><id>Relation</id><coordinates><x>552</x><y>224</y><w>72</w><h>32</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;20;70;20</additional_attributes></element></diagram>

@@ -1,0 +1,52 @@
+<diagram program="umletino" version="15.0.0"><zoom_level>10</zoom_level><help_text>Space for diagram notes
+</help_text><element><id>UMLClass</id><coordinates><x>150</x><y>200</y><w>140</w><h>80</h></coordinates><panel_attributes>*&lt;&lt;Thread mode&gt;&gt;*
+*Privileged*
+CONTROL[0]=0
+*MSP selected*
+CONTROL[1] = 0
+bg=green</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>460</x><y>200</y><w>140</w><h>80</h></coordinates><panel_attributes>*&lt;&lt;Thread mode&gt;&gt;*
+*NOT Privileged*
+CONTROL[0]=1
+*PSP selected*
+CONTROL[1] = 1
+bg=yellow</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>310</x><y>30</y><w>140</w><h>90</h></coordinates><panel_attributes>*&lt;&lt;Handler mode&gt;&gt;*
+*ALWAYS privileged*
+CONTROL[1] = 0
+*MSP ALWAYS selected*
+CONTROL[1] = 0
+bg=green</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>280</x><y>210</y><w>200</w><h>40</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-
+Set CONTROL[0] bit</panel_attributes><additional_attributes>180;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>270</x><y>110</y><w>100</w><h>90</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-
+Exception
+request</panel_attributes><additional_attributes>40;10;10;70</additional_attributes></element><element><id>Relation</id><coordinates><x>440</x><y>110</y><w>90</w><h>90</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-
+Exception
+request</panel_attributes><additional_attributes>10;10;30;70</additional_attributes></element><element><id>Relation</id><coordinates><x>440</x><y>80</y><w>110</w><h>120</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-
+Exception
+return</panel_attributes><additional_attributes>90;100;80;40;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>210</x><y>80</y><w>120</w><h>120</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-
+Exception
+return</panel_attributes><additional_attributes>10;100;30;30;100;10</additional_attributes></element><element><id>UMLSpecialState</id><coordinates><x>50</x><y>220</y><w>20</w><h>20</h></coordinates><panel_attributes>type=final</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>60</x><y>210</y><w>110</w><h>40</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-
+Start</panel_attributes><additional_attributes>90;20;10;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>150</x><y>360</y><w>140</w><h>80</h></coordinates><panel_attributes>*&lt;&lt;Thread mode&gt;&gt;*
+Privileged
+CONTROL[0]=0
+*PSP selected (unusual)*
+CONTROL[1] = 1
+lt=..
+bg=green</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>460</x><y>360</y><w>140</w><h>80</h></coordinates><panel_attributes>*&lt;&lt;Thread mode&gt;&gt;*
+NOT Privileged
+CONTROL[0]=1
+*MSP selected*
+CONTROL[1] = 0
+lt=..
+bg=yellow</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>210</x><y>270</y><w>120</w><h>110</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;..&gt;&gt;&gt;
+Set
+CONTROL[1] bit</panel_attributes><additional_attributes>10;90;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>280</x><y>380</y><w>200</w><h>60</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;..
+Clear
+CONTROL[1]
+bit</panel_attributes><additional_attributes>180;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>270</x><y>270</y><w>220</w><h>110</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;..
+                                Set CONTROL[0] bit</panel_attributes><additional_attributes>190;90;20;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>40</x><y>490</y><w>100</w><h>30</h></coordinates><panel_attributes>Privilieged
+bg=green</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>160</x><y>490</y><w>100</w><h>30</h></coordinates><panel_attributes>UNprivilieged
+bg=yellow</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLNote</id><coordinates><x>710</x><y>150</y><w>170</w><h>130</h></coordinates><panel_attributes>Note that NOT priviliged mode only has read only access to the CONTROL register so cannot directly enter priviliged mode. To go mack to priviliged mode an exception is required.
+style=wordwrap</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>590</x><y>170</y><w>140</w><h>80</h></coordinates><panel_attributes>lt=..</panel_attributes><additional_attributes>120;10;10;60</additional_attributes></element><element><id>UMLNote</id><coordinates><x>710</x><y>410</y><w>140</w><h>70</h></coordinates><panel_attributes>A pragmatic option? - halfway house between nPriv and PSP  and priv and MSP when not using an OS?
+style=wordwrap
+lt=..</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>590</x><y>390</y><w>140</w><h>70</h></coordinates><panel_attributes>lt=..</panel_attributes><additional_attributes>120;50;10;10</additional_attributes></element><element><id>UMLNote</id><coordinates><x>370</x><y>510</y><w>140</w><h>70</h></coordinates><panel_attributes>This would be quite a strange state to use. Not sure why you'd use it?!
+style=wordwrap
+lt=..</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>280</x><y>430</y><w>110</w><h>100</h></coordinates><panel_attributes>lt=..</panel_attributes><additional_attributes>90;80;10;10</additional_attributes></element><element><id>UMLState</id><coordinates><x>140</x><y>180</y><w>160</w><h>270</h></coordinates><panel_attributes></panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLState</id><coordinates><x>450</x><y>180</y><w>160</w><h>270</h></coordinates><panel_attributes></panel_attributes><additional_attributes></additional_attributes></element></diagram>

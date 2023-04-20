@@ -1412,6 +1412,19 @@ Fake online REST API for Testing and Prototyping: https://jsonplaceholder.typico
 		Handle GET requests similarly using axios.get().
 
 
+    REST Generally
+    --------------
+    resource - nouns - separate API into resources
+    resource based URLS
+    HTTP methods are the verbs that act on resources
+    SATELESS
+    /addNewTour --> POST /tours
+    /getTour    --> GET /tours/7
+    /updateTour --> PUT /touts/7
+                    PATCH /touts/7
+    /deleteTour --> DELETE /touts/7
+
+
 
 ====================================================================================================
 ====================================================================================================

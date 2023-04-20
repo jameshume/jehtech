@@ -34,11 +34,86 @@
 </ul>
 </div> <!-- END References / useful Links -->
 
+<h2>Pin Multiplexing</h2>
+<div>
+	<p>
+		<img src="##IMG_DIR##/smal21-pin-muxing.png">
+	</p>
+</div>
+
 <h2>Event Subsystem</h2>
 <div>
 	<p>
+		The Event System consists of several channels which route the internal events from peripherals (generators) to other
+		internal peripherals or IO pins (users).
+	</p>
+	<p>
 		<img src="##IMG_DIR##/sam21l_event_subsystem.png" alt="Block diagram of SAML21 event subsystem"/>
 	</p>
+
+	<h3>Initialisation</h3>
+	<p>
+		The datasheet suggests the following sequence:
+	</p>
+	<ol>
+		<li>
+			<p>
+				Enable output in event generator peripheral. E.g. <code>RTC.EVCTRL</code>: the RTC can generate events on
+				overflow, comparison, and periodic intervals.
+			</p>
+		</li>
+		<li>
+			<p>
+				Then confgure EVSYS: from the above diagram we see we need to configure <code>CHANNEL[0-11].EVGEN</code>
+				and <code>USER[0-41].CHANNEL</code>.
+			</p>
+			<p>
+				The <code>CHANNEL[0-11]</code> register can be used to set things like whether the channel runs in sleep mode,
+				edge detection selection, path selection, event generator etc. The event generator bits choose which 
+				event generator to connect to the selected channel. For example, where we to use the RTC overflow to
+				channel 0 we would set <code>CHANNEL0.EVGEN</code> to the value <code>0x03</code>.
+			</p>
+			<p>
+				<code>USER[0-14].CHANNEL</code> tells us to which event <em>user</em> the channel output should go. I.e. setting
+				<code>USER0.CHANNEL</code> dictates which channel is sent to user 0.
+			</p>
+		</li>
+		<li>
+			Configure the event user to use the event via the <code>EVCTRL.EVACT</code> in said user's registers. E.g., could count
+			events by getting <code>TC</code> to be an event user via its <code>TC.EVCTRL.EVACT</code> register.
+		</li>
+		<li>
+			Enable the event in the user: <code>TC.EVCTRL.STARTEI</code>.
+		</li>
+	</ol>
+
+	<h3>Channel Paths</h3>
+	<p>
+		<b>Asynchronous</b>: 
+	</p>
+	<ul>
+		<li>Event from generator sent to user without event system interaction.</li>
+		<li>No clock latency. Routing latency device dependent.</li>
+		<li>Can<b>not</b> generate interrupts.</li>
+	</ul>
+	<p>
+		<b>Synchronous</b>:
+	</p>
+	<ul>
+		<li>Event generator and channel <b>must share same generator for generic clock</b>.</li>
+		<li>Can generate interrupts.</li>
+		<li>Routing latency is one <code>GCLK_EVSYS_CHANNEL_n</code> clock cycle.</li>
+	</ul>
+
+	<p>
+		<b>Resynchonized</b>:
+	</p>
+	<ul>
+		<li>Event generator and channel do <b>not</b> share same generator for generic clock.</li>
+		<li>Routing latency is three <code>GCLK_EVSYS_CHANNEL_n</code> clock cycles.</li>
+	</ul>
+
+	<p></p>
 </div> <!-- End Misc -->
 
 </div> <!-- END H1 padding div -->

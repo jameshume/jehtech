@@ -41,6 +41,10 @@
 	<li>https://davmac.wordpress.com/2010/02/26/c99-revisited/</li>
 	<li>https://www.cocoawithlove.com/2008/04/using-pointers-to-recast-in-c-is-bad.html</li>
 	<li>https://blog.regehr.org/archives/959<li>
+	<li>https://developers.redhat.com/blog/2020/06/02/the-joys-and-perils-of-c-and-c-aliasing-part-1 -- REALLY GOOD!</li>
+	<li>https://developers.redhat.com/blog/2020/06/03/the-joys-and-perils-of-aliasing-in-c-and-c-part-2 -- REALLY GOOD!</li>
+	<li>https://mail.python.org/pipermail/python-dev/2003-July/036909.html</li>
+	<li>https://en.wikipedia.org/wiki/Aliasing_(computing)#Aliased_pointers</li>
 </ul>
 
 <h2>To Read</h2>
@@ -302,7 +306,7 @@ if (u.n.alltypes == 1)
 		definitions. Why can we not alias/type-pun an int as shown below?
 	</p>
 	<pre class="prettyprint">int a = 10;
-short *b = (short *)&a; // b aliases a or is a type pun of a
+short *b = (short *)&amp;a; // b aliases a or is a type pun of a
 printf("%hd\n", *b);    // What value does this print out??</pre>
 	<p>
 		Why is type puning sometimes seen as dangerous? The biggest problem is the mention of

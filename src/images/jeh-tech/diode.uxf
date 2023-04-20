@@ -1,39 +1,41 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<diagram program="umlet" version="14.3.0">
-  <zoom_level>11</zoom_level>
+<diagram program="umlet" version="15.0.0">
+  <zoom_level>9</zoom_level>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>737</x>
-      <y>132</y>
-      <w>88</w>
-      <h>66</h>
+      <x>594</x>
+      <y>207</y>
+      <w>72</w>
+      <h>54</h>
     </coordinates>
     <panel_attributes>+ + + + + +
  + + P + + 
-+ + + + + +</panel_attributes>
++ + + + + +
+lw=2</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>616</x>
-      <y>132</y>
-      <w>88</w>
-      <h>66</h>
+      <x>495</x>
+      <y>207</y>
+      <w>72</w>
+      <h>54</h>
     </coordinates>
     <panel_attributes>- - - - - -
  - - N - -
-- - - - - -</panel_attributes>
+- - - - - -
+lw=2</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>539</x>
-      <y>143</y>
-      <w>99</w>
-      <h>44</h>
+      <x>432</x>
+      <y>216</y>
+      <w>81</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes/>
     <additional_attributes>10.0;20.0;70.0;20.0</additional_attributes>
@@ -41,10 +43,10 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>814</x>
-      <y>143</y>
-      <w>99</w>
-      <h>44</h>
+      <x>657</x>
+      <y>216</y>
+      <w>81</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes/>
     <additional_attributes>10.0;20.0;70.0;20.0</additional_attributes>
@@ -52,10 +54,10 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>814</x>
-      <y>55</y>
-      <w>110</w>
-      <h>99</h>
+      <x>657</x>
+      <y>144</y>
+      <w>90</w>
+      <h>81</h>
     </coordinates>
     <panel_attributes>lt=&lt;..</panel_attributes>
     <additional_attributes>10.0;70.0;80.0;10.0</additional_attributes>
@@ -63,10 +65,10 @@
   <element>
     <id>Text</id>
     <coordinates>
-      <x>902</x>
-      <y>44</y>
-      <w>231</w>
-      <h>77</h>
+      <x>729</x>
+      <y>135</y>
+      <w>189</w>
+      <h>63</h>
     </coordinates>
     <panel_attributes>P-type silicon is doped so it has
 too few electrons - a +ve charge.
@@ -78,10 +80,10 @@ ANODE</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>704</x>
-      <y>132</y>
-      <w>33</w>
-      <h>66</h>
+      <x>567</x>
+      <y>207</y>
+      <w>27</w>
+      <h>54</h>
     </coordinates>
     <panel_attributes>+ -
 - +
@@ -91,10 +93,10 @@ ANODE</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>374</x>
-      <y>0</y>
-      <w>231</w>
-      <h>77</h>
+      <x>297</x>
+      <y>99</y>
+      <w>189</w>
+      <h>63</h>
     </coordinates>
     <panel_attributes>N-type silicon is doped so it has
 too many electrons.
@@ -105,10 +107,10 @@ CATHODE</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>539</x>
-      <y>55</y>
-      <w>99</w>
-      <h>99</h>
+      <x>432</x>
+      <y>144</y>
+      <w>81</w>
+      <h>81</h>
     </coordinates>
     <panel_attributes>lt=&lt;..</panel_attributes>
     <additional_attributes>70.0;70.0;10.0;10.0</additional_attributes>
@@ -116,66 +118,64 @@ CATHODE</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>704</x>
-      <y>187</y>
-      <w>55</w>
-      <h>99</h>
+      <x>567</x>
+      <y>252</y>
+      <w>27</w>
+      <h>63</h>
     </coordinates>
     <panel_attributes>lt=&lt;..</panel_attributes>
-    <additional_attributes>10.0;10.0;30.0;70.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>627</x>
-      <y>264</y>
-      <w>231</w>
-      <h>176</h>
+      <x>297</x>
+      <y>297</y>
+      <w>630</w>
+      <h>81</h>
     </coordinates>
-    <panel_attributes>Where the 2 chunks of silicon
-are joined together is a
-"depletion zone" where the
-charges balance out.
+    <panel_attributes>^^ Where the 2 chunks of silicon are joined together is a "depletion zone" where the charges balance out: no excess or shortage of electrons.
 
-no excess or shortage of
-electrons.
+*HIGH resistance*
 
-HIGH resistance</panel_attributes>
+style=wordwrap</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>506</x>
-      <y>605</y>
-      <w>66</w>
-      <h>66</h>
+      <x>450</x>
+      <y>531</y>
+      <w>54</w>
+      <h>54</h>
     </coordinates>
     <panel_attributes>+ + + + + +
  + + P + + 
-+ + + + + +</panel_attributes>
++ + + + + +
+lw=2</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>363</x>
-      <y>605</y>
-      <w>66</w>
-      <h>66</h>
+      <x>333</x>
+      <y>531</y>
+      <w>54</w>
+      <h>54</h>
     </coordinates>
     <panel_attributes>- - - - - -
  - - N - -
-- - - - - -</panel_attributes>
+- - - - - -
+lw=2</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>308</x>
-      <y>627</y>
-      <w>176</w>
-      <h>231</h>
+      <x>288</x>
+      <y>549</y>
+      <w>144</w>
+      <h>189</h>
     </coordinates>
     <panel_attributes/>
     <additional_attributes>140.0;190.0;10.0;190.0;10.0;10.0;50.0;10.0</additional_attributes>
@@ -183,10 +183,10 @@ HIGH resistance</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>462</x>
-      <y>627</y>
-      <w>176</w>
-      <h>231</h>
+      <x>414</x>
+      <y>549</y>
+      <w>144</w>
+      <h>189</h>
     </coordinates>
     <panel_attributes/>
     <additional_attributes>100.0;10.0;140.0;10.0;140.0;190.0;10.0;190.0</additional_attributes>
@@ -194,10 +194,10 @@ HIGH resistance</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>429</x>
-      <y>605</y>
-      <w>77</w>
-      <h>66</h>
+      <x>387</x>
+      <y>531</y>
+      <w>63</w>
+      <h>54</h>
     </coordinates>
     <panel_attributes>+ - + - + -
 - + - + - +
@@ -207,10 +207,10 @@ HIGH resistance</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>451</x>
-      <y>803</y>
-      <w>33</w>
-      <h>77</h>
+      <x>405</x>
+      <y>693</y>
+      <w>27</w>
+      <h>63</h>
     </coordinates>
     <panel_attributes>lw=3</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
@@ -218,10 +218,10 @@ HIGH resistance</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>462</x>
-      <y>814</y>
-      <w>33</w>
-      <h>55</h>
+      <x>414</x>
+      <y>702</y>
+      <w>27</w>
+      <h>45</h>
     </coordinates>
     <panel_attributes>lw=5</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;30.0</additional_attributes>
@@ -229,10 +229,10 @@ HIGH resistance</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>440</x>
-      <y>803</y>
-      <w>22</w>
-      <h>33</h>
+      <x>396</x>
+      <y>693</y>
+      <w>18</w>
+      <h>27</h>
     </coordinates>
     <panel_attributes>+</panel_attributes>
     <additional_attributes/>
@@ -240,10 +240,10 @@ HIGH resistance</panel_attributes>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>473</x>
-      <y>803</y>
-      <w>33</w>
-      <h>33</h>
+      <x>423</x>
+      <y>693</y>
+      <w>27</w>
+      <h>27</h>
     </coordinates>
     <panel_attributes> -</panel_attributes>
     <additional_attributes/>
@@ -251,10 +251,10 @@ HIGH resistance</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>275</x>
-      <y>605</y>
-      <w>88</w>
-      <h>187</h>
+      <x>261</x>
+      <y>531</y>
+      <w>72</w>
+      <h>153</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;150.0;10.0;10.0;60.0;10.0</additional_attributes>
@@ -262,23 +262,24 @@ HIGH resistance</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>583</x>
-      <y>605</y>
-      <w>275</w>
-      <h>187</h>
+      <x>513</x>
+      <y>531</y>
+      <w>207</w>
+      <h>153</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;&gt;
-Electrons are repelled away
-from the -ve battery terminal </panel_attributes>
+Electrons are repelled 
+away from the -ve 
+battery terminal </panel_attributes>
     <additional_attributes>60.0;150.0;60.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>77</x>
-      <y>660</y>
-      <w>231</w>
-      <h>77</h>
+      <x>99</x>
+      <y>576</y>
+      <w>189</w>
+      <h>63</h>
     </coordinates>
     <panel_attributes>Electrons are attracted to the
 +ve battery terminal</panel_attributes>
@@ -287,35 +288,35 @@ from the -ve battery terminal </panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>385</x>
-      <y>528</y>
-      <w>99</w>
+      <x>315</x>
+      <y>450</y>
+      <w>117</w>
       <h>99</h>
     </coordinates>
     <panel_attributes>lt=&lt;..</panel_attributes>
-    <additional_attributes>70.0;70.0;10.0;10.0</additional_attributes>
+    <additional_attributes>110.0;90.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>231</x>
-      <y>495</y>
-      <w>231</w>
-      <h>77</h>
+      <x>189</x>
+      <y>432</y>
+      <w>189</w>
+      <h>63</h>
     </coordinates>
     <panel_attributes>The upshot is that the depletion
 zone widens.
 
-Even HIGHER resistance</panel_attributes>
+*Even HIGHER resistance*</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>363</x>
-      <y>671</y>
-      <w>209</w>
-      <h>55</h>
+      <x>333</x>
+      <y>585</y>
+      <w>171</w>
+      <h>45</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
 lw=3
@@ -327,36 +328,38 @@ fg=red
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1133</x>
-      <y>605</y>
-      <w>99</w>
-      <h>66</h>
+      <x>963</x>
+      <y>531</y>
+      <w>81</w>
+      <h>54</h>
     </coordinates>
     <panel_attributes>+ + + + + +
  + + P + + 
-+ + + + + +</panel_attributes>
++ + + + + +
+lw=2</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1023</x>
-      <y>605</y>
-      <w>99</w>
-      <h>66</h>
+      <x>873</x>
+      <y>531</y>
+      <w>81</w>
+      <h>54</h>
     </coordinates>
     <panel_attributes>- - - - - -
  - - N - -
-- - - - - -</panel_attributes>
+- - - - - -
+lw=2</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1023</x>
-      <y>682</y>
-      <w>209</w>
-      <h>55</h>
+      <x>873</x>
+      <y>594</y>
+      <w>171</w>
+      <h>45</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;&gt;
 lw=3
@@ -368,10 +371,10 @@ fg=green
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1100</x>
-      <y>583</y>
-      <w>66</w>
-      <h>44</h>
+      <x>936</x>
+      <y>513</y>
+      <w>54</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes/>
     <additional_attributes>10.0;20.0;40.0;20.0</additional_attributes>
@@ -379,10 +382,10 @@ fg=green
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1100</x>
-      <y>649</y>
-      <w>66</w>
-      <h>44</h>
+      <x>936</x>
+      <y>567</y>
+      <w>54</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes/>
     <additional_attributes>10.0;20.0;40.0;20.0</additional_attributes>
@@ -390,10 +393,10 @@ fg=green
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1122</x>
-      <y>803</y>
-      <w>33</w>
-      <h>77</h>
+      <x>954</x>
+      <y>693</y>
+      <w>27</w>
+      <h>63</h>
     </coordinates>
     <panel_attributes>lw=3</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
@@ -401,10 +404,10 @@ fg=green
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1111</x>
-      <y>814</y>
-      <w>33</w>
-      <h>55</h>
+      <x>945</x>
+      <y>702</y>
+      <w>27</w>
+      <h>45</h>
     </coordinates>
     <panel_attributes>lw=5</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;30.0</additional_attributes>
@@ -412,10 +415,10 @@ fg=green
   <element>
     <id>Text</id>
     <coordinates>
-      <x>1100</x>
-      <y>803</y>
-      <w>22</w>
-      <h>33</h>
+      <x>936</x>
+      <y>693</y>
+      <w>18</w>
+      <h>27</h>
     </coordinates>
     <panel_attributes> -</panel_attributes>
     <additional_attributes/>
@@ -423,10 +426,10 @@ fg=green
   <element>
     <id>Text</id>
     <coordinates>
-      <x>1133</x>
-      <y>803</y>
-      <w>33</w>
-      <h>33</h>
+      <x>963</x>
+      <y>693</y>
+      <w>27</w>
+      <h>27</h>
     </coordinates>
     <panel_attributes> +</panel_attributes>
     <additional_attributes/>
@@ -434,10 +437,10 @@ fg=green
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>968</x>
-      <y>627</y>
-      <w>176</w>
-      <h>231</h>
+      <x>828</x>
+      <y>549</y>
+      <w>144</w>
+      <h>189</h>
     </coordinates>
     <panel_attributes/>
     <additional_attributes>140.0;190.0;10.0;190.0;10.0;10.0;50.0;10.0</additional_attributes>
@@ -445,10 +448,10 @@ fg=green
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1122</x>
-      <y>627</y>
-      <w>176</w>
-      <h>231</h>
+      <x>954</x>
+      <y>549</y>
+      <w>144</w>
+      <h>189</h>
     </coordinates>
     <panel_attributes/>
     <additional_attributes>100.0;10.0;140.0;10.0;140.0;190.0;10.0;190.0</additional_attributes>
@@ -456,10 +459,10 @@ fg=green
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1056</x>
-      <y>528</y>
-      <w>99</w>
-      <h>99</h>
+      <x>900</x>
+      <y>468</y>
+      <w>81</w>
+      <h>81</h>
     </coordinates>
     <panel_attributes>lt=&lt;..</panel_attributes>
     <additional_attributes>70.0;70.0;10.0;10.0</additional_attributes>
@@ -467,15 +470,15 @@ fg=green
   <element>
     <id>Text</id>
     <coordinates>
-      <x>891</x>
-      <y>495</y>
-      <w>231</w>
-      <h>220</h>
+      <x>765</x>
+      <y>441</y>
+      <w>189</w>
+      <h>180</h>
     </coordinates>
     <panel_attributes>Depletion zone shrinks until
 electrons can cross it!
 
-Very LOW resistance.
+*Very LOW resistance.*
 
 Silicon diodes
 need ~ 0.7V to
@@ -485,5 +488,93 @@ zone.
 Germainium
 ~0.3V.</panel_attributes>
     <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>432</x>
+      <y>468</y>
+      <w>63</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>lw=2</panel_attributes>
+    <additional_attributes>50.0;10.0;10.0;30.0;50.0;50.0;50.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>432</x>
+      <y>468</y>
+      <w>27</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>lw=2</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>972</x>
+      <y>468</y>
+      <w>63</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>lw=2</panel_attributes>
+    <additional_attributes>50.0;10.0;10.0;30.0;50.0;50.0;50.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>972</x>
+      <y>468</y>
+      <w>27</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>lw=2</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>558</x>
+      <y>144</y>
+      <w>63</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>lw=2</panel_attributes>
+    <additional_attributes>50.0;10.0;10.0;30.0;50.0;50.0;50.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>558</x>
+      <y>144</y>
+      <w>27</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>lw=2</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>594</x>
+      <y>153</y>
+      <w>99</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>anode +</panel_attributes>
+    <additional_attributes>10.0;20.0;90.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>477</x>
+      <y>153</y>
+      <w>108</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>cathode -</panel_attributes>
+    <additional_attributes>10.0;20.0;100.0;20.0</additional_attributes>
   </element>
 </diagram>

@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="13.3">
+  <zoom_level>20</zoom_level>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>480</x>
+      <y>40</y>
+      <w>60</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>400</x>
+      <y>0</y>
+      <w>200</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>_Producer_</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>820</x>
+      <y>40</y>
+      <w>60</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>740</x>
+      <y>0</y>
+      <w>200</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>_Consumer_</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>480</x>
+      <y>140</y>
+      <w>40</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>820</x>
+      <y>140</y>
+      <w>40</w>
+      <h>940</h>
+    </coordinates>
+    <panel_attributes>
+layer=0</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>500</x>
+      <y>120</y>
+      <w>360</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-
+A</panel_attributes>
+    <additional_attributes>160.0;30.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>840</x>
+      <y>200</y>
+      <w>40</w>
+      <h>340</h>
+    </coordinates>
+    <panel_attributes>transparency=100
+fg=black
+bg=white
+layer=101
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>500</x>
+      <y>180</y>
+      <w>360</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-
+B</panel_attributes>
+    <additional_attributes>160.0;30.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>480</x>
+      <y>220</y>
+      <w>200</w>
+      <h>380</h>
+    </coordinates>
+    <panel_attributes>lt=.
+
+
+
+Producer is
+*blocked*
+until A is
+processed</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;170.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>900</x>
+      <y>200</y>
+      <w>240</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>Consumer is processing message A
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>480</x>
+      <y>560</y>
+      <w>40</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>900</x>
+      <y>140</y>
+      <w>240</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>/Sem taken/
+bg=green</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>540</x>
+      <y>260</y>
+      <w>260</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>Tries to take sem (again)
+/Blocked on sem/
+bg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLSpecialState</id>
+    <coordinates>
+      <x>800</x>
+      <y>220</y>
+      <w>40</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>type=termination
+fg=red
+lw=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>900</x>
+      <y>540</y>
+      <w>240</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>/Sem released/
+bg=green</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>500</x>
+      <y>500</y>
+      <w>380</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+
+/Sem released/</panel_attributes>
+    <additional_attributes>10.0;30.0;170.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>900</x>
+      <y>680</y>
+      <w>240</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>Consumer is processing message B
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>900</x>
+      <y>620</y>
+      <w>240</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>/Sem taken/
+bg=green</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>840</x>
+      <y>620</y>
+      <w>40</w>
+      <h>400</h>
+    </coordinates>
+    <panel_attributes>transparency=100
+fg=black
+bg=white
+layer=101
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>500</x>
+      <y>560</y>
+      <w>360</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-
+
+B unblocks</panel_attributes>
+    <additional_attributes>160.0;30.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>500</x>
+      <y>640</y>
+      <w>360</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-
+C</panel_attributes>
+    <additional_attributes>160.0;30.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLSpecialState</id>
+    <coordinates>
+      <x>800</x>
+      <y>680</y>
+      <w>40</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>type=termination
+fg=red
+lw=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>540</x>
+      <y>720</y>
+      <w>260</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>Tries to take sem (again)
+/Blocked on sem/
+bg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>480</x>
+      <y>700</y>
+      <w>200</w>
+      <h>420</h>
+    </coordinates>
+    <panel_attributes>lt=.
+
+Producer is
+*blocked*
+until B is
+processed</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;190.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>480</x>
+      <y>980</y>
+      <w>380</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+
+/Sem released/</panel_attributes>
+    <additional_attributes>10.0;30.0;170.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>880</x>
+      <y>1020</y>
+      <w>240</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>/Sem released/
+bg=green</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLInterface</id>
+    <coordinates>
+      <x>480</x>
+      <y>1060</y>
+      <w>40</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>
+bg=black</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLInterface</id>
+    <coordinates>
+      <x>480</x>
+      <y>1120</y>
+      <w>40</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>
+bg=black</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLInterface</id>
+    <coordinates>
+      <x>480</x>
+      <y>1180</y>
+      <w>40</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>
+bg=black</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLInterface</id>
+    <coordinates>
+      <x>820</x>
+      <y>1120</y>
+      <w>40</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>
+bg=black</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLInterface</id>
+    <coordinates>
+      <x>820</x>
+      <y>1180</y>
+      <w>40</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>
+bg=black</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLInterface</id>
+    <coordinates>
+      <x>820</x>
+      <y>1060</y>
+      <w>40</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>
+bg=black</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

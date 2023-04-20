@@ -61,8 +61,8 @@ function __CreatePageContents() {
 
 	while(el_list.length > 0) {
 		const node = el_list.pop();
-		// Chec if there are still nodes left in the list
-		if (node !== undefined) {
+		// Check if there are still nodes left in the list
+		if (node !== undefined && node !== null) {
 			// There is a node left. Add the first sibling of this node that can contain an H[16]
 			// tag to the list. It will be visited after any children of this node have been
 			// visited.		
