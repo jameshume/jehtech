@@ -1454,7 +1454,7 @@ ENABLE:
 	the <BrowserRouter> tag will be able to access its routing functionalities:
 
 		import React, {Component} from 'react';
-		import {BrowserRouter} from 'react-router-dom'; // << INCLUDE THIS
+		import {BrowserRouter, Route, Link} from 'react-router-dom'; // << INCLUDE THIS
 
 		class App extends Component {
 			render() {
@@ -1506,6 +1506,14 @@ USE:
 				[exact]
 				component={Ref to function or class to use}
 			/>
+
+		I think in router v6 (https://stackoverflow.com/a/70008235) it needs to be a JSX
+		element.
+			<Route path="..." component={<MyElement/>} />
+
+		Also in v6 activeClassName also no longer works: https://stackoverflow.com/a/70008545
+
+		SEE: https://reactrouter.com/docs/en/v6
 
 	Prevent reloads on link navigation:
 	-----------------------------------
@@ -1584,6 +1592,19 @@ USE:
 
 	To pass route parameters via our links just do something like
 		<Link to={'/path/' + this.props.id}> ... child elements or text ... </Link>
+
+	Can restrict values of :id using https://stackoverflow.com/a/54113392:
+		{/* It's possible to use regular expressions to control what param values should be matched.
+		  * "/order/asc"  - matched
+		  * "/order/desc" - matched
+		  * "/order/foo"  - not matched*/}
+		<Route
+			path="/blah/:id(asc|desc)"
+			component={ComponentWithRegex}
+		/>
+		-- anything https://github.com/pillarjs/path-to-regexp/tree/v1.7.0 can understand!!
+	But, apparently v5 supports this but v6 does not - see the discussion in their faq
+	here - https://reactrouter.com/docs/en/v6/getting-started/faq#what-happened-to-regexp-routes-paths
 
 	To get the value of "id" in the component we need to access the magic props attributes that
 	Router added for us:
@@ -3245,3 +3266,13 @@ From https://stackoverflow.com/a/38549837/1517244
 Using Electron dialogs from React App
 -------------------------------------
 
+
+
+====================================================================================================
+====================================================================================================
+TYPESCRIPT & REACT
+====================================================================================================
+Start a new project using:
+	create-react-app my-app --template typescript
+Add to an existing using:
+	npm install --save-dev typescript @types/node @types/react @types/react-dom @types/jest @types/react-router-dom
