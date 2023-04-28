@@ -3,7 +3,7 @@
 An almost Raspberry Pi 3 replacement. Notably no WiFi, but at least I could buy one at the moment,
 as rPi's are like gold dust...
 
-![High level board diagram with pinout for Le Potatoe SBC](##IMG_DIR##/le-potatoe-board-diagram-pinouts.png)
+![High level board diagram with pinout for Le Potatoe SBC](##IMG_DIR##/../le-potatoe-board-diagram-pinouts.png)
 [[Ref]](https://docs.google.com/spreadsheets/d/1U3z0Gb8HUEfCIMkvqzmhMpJfzRqjPXq7mFLC-hvbKlE/edit#gid=0)
 
 ## Installing Ubuntu 18 (Bionic)
