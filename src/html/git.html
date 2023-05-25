@@ -322,8 +322,11 @@ git checkout new-branch-name</pre>
     <p>The shorthand for the above is:</p>
     <pre>git checkout <b>-b</b> new-branch-name</pre>
 
-    <p>To &quot;delete&quot; a branch (branch history still exists and is recoverable):</p>
+    <p>To locally delete a branch (branch history still exists and is recoverable):</p>
     <pre>git branch <b>-d</b> branch-name</pre>
+
+    <p>To delete a branch on the remote:</p>
+    <pre>git push origin --delete branch-name</pre>
 
     <p>To switch branches use:</p>
     <pre>git checkout branch-name</pre>
