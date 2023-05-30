@@ -583,10 +583,11 @@ git log --all --grep='your-regexp-here' -i</pre>
 
     <!-- ++++++++++++++++++++++++++++++++ -->
     <h3>Diffing With Git</h3>
-    <pre>git diff: What you have changed but NOT staged
+    <pre>git config --global difftool.prompt false
+git diff: What you have changed but NOT staged
 git diff --staged: What will go into next commit
 git diff --cached: Synonym for --staged
-git difftool -y [tool=(kdiff3|p4merge|...):      To use external diff tool</pre>
+git difftool -y [--dir-diff dir] [tool=(kdiff3|p4merge|...)] :      To use external diff tool</pre>
 
     <p>To view only the names of files changed between two commits:</p>
     <pre>git diff 99f6eae 0544f6a --name-only</pre>
