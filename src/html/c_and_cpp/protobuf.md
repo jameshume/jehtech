@@ -19,6 +19,102 @@ xxd -r -ps hex.txt | ~/go/bin/protoscope
 ## NanoPB
 [NanoPB](https://github.com/nanopb/nanopb) is a miniature C implementation of the Google's Protocol Buffer specification.
 
+### Short Names For Enums
+I really didn't like the way the Protobuf generator prefixes all of the enum names with the tag of the enum. Its a useful thing if you
+need to guarantee unqiue names, which in a big project you might need to, but for smaller stuff, and for me just generally, I like
+my enum names to be named exactly as I write them.
+
+For example, the following definition:
+
+```
+// myenum.proto
+enum MyEnum {
+    VAL1 = 0;
+    VAL2 = 1;
+}
+```
+
+Generates the following C code:
+```
+// myenum.pb.h
+typedef enum _MyEnum {
+    MyEnum_VAL1;
+    MyEnum_VAL2;
+} MyEnum;
+```
+
+Whereas what I want is the same but without `MyEnum_` prefixed onto `VAL1` and `VAL2`. To accomplish
+this one must use the NanoPB options file. Name it as per your definitions file but with the extension `.options`.
+In this case `myenum.options`. It would have the following contents to achieve what we want here:
+
+```
+MyEnum long_names:false;
+```
+
+### Fixed Sized Arrays
+#### Repeated Types
+Lets say we have an array of 4 `MyEnum` (see above) values. To make NanoPB implement it as a fixed
+size array, i.e., generate `MyEnum my_enum_values[4]` one needs to do this:
+
+```
+message MyMessage {
+    repeated MyEnum my_enum_values = 1 [(nanopb).max_count = 4, (nanopb).fixed_count = true];
+    //                                  ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
+    //                                  Will be implemented     The message will always contain
+    //                                  as an array rather      4 values. If this was missing then
+    //                                  than a callback         the array size could be set so &lt;= 4 values
+    //                                                          could be transmitted in the message.
+}
+```
+
+Or use the `.options` file:
+
+```
+MyMessage.my_enum_values max_count:4 fixed_count:4; // TODO - check syntax
+```
+
+#### Bytes and Strings
+If you have a message containing bytes or strings, you will need to use a callback to populate those
+fields. Can be a faff. If you just want to copy to an array you can set a maximum size. Then NanoPB
+will generate an array of that size as part of the message. You then set the number of array elements
+used and write to the array.... simpler than callback stuff.
+
+```
+// .proto file
+message Blah {
+  ...
+  bytes payload = 3;
+  ...
+}
+
+
+// .options file
+Blah.payload max_size:512;
+
+
+// Generated H file
+typedef PB_BYTES_ARRAY_T(512) Blah_payload_t;
+
+typedef struct _Blah {
+    ...
+    Blah_payload_t payload;
+    ...
+} Blah;
+```
+
+Where `Blah_payload_t` is a struct with the following structure:
+```
+typedef struct {
+    pb_size_t size;
+    pb_byte_t bytes[512];
+} Blah_payload_t;
+```
+
+To initialise the message for encoding you just set `blah.payload.size` to the number of bytes actually
+used and copy the same number of bytes into `blah.payload.bytes`. Much less faff than having to implement
+a callback.
+
+
 ### Arduino and NanoPB
 Assuming you're using the IDE and not you're own makefile, generate the C files as usual, except you
 will need to use the `-L quote` and `-Q quote` `nanopb_generator.py` options and just copy them into your projects directory.
@@ -98,7 +194,7 @@ pb_istream_t stream = pb_istream_from_stream(arduino_stream);
 pb_decode(&stream, ...);
 ```
 
-#### An Annoyance With Python
+### An Annoyance With Python
 On the other end of your connection you might have a Python script doing some processing. The annoying thing
 is that although the C implementation can read and write from streams, the Python implementation does not
 support this. So annoyingly the only thing I could think of was to us `pb_encode_ex(..., PB_ENCODE_DELIMITED)`
