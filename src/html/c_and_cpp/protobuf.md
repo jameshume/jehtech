@@ -194,6 +194,80 @@ pb_istream_t stream = pb_istream_from_stream(arduino_stream);
 pb_decode(&stream, ...);
 ```
 
+#### Embedding Messages As Sub Messages
+To do this you must use `pb_encode_submessage()` as this prefixes the message with a varint length
+that is required for submessages. NOTE that this will **encode the submessage twice**, first to
+calculate message size and then to actually write it out.
+
+#### Embedding Messages As Bytes
+I wanted to send any number of messages in the stream. To do this I borrow the idea of the `Any`
+type, except that instead of using a string to identify the message I used an enum. An alternative
+would have been to use the `oneof` union-like type... not sure if it would have been a better way
+to go?
+
+```
+// .proto snippet
+message MyMessage {
+  MessageId_t id  = 1;
+  bytes payload   = 2;
+  uint32 crc      = 3;
+}
+
+// .options snipped
+MyMessage.payload max_size:512;
+```
+
+In the above, `payload` will hold other message types. This is how to write embedded messages (note you
+do not have to encode the `payload` as a sub message as its just a sequence of bytes from `MyMessage`'s point
+of view:
+
+```
+static bool write_message_to_stream(
+    Stream &arduino_stream,
+    const MessageId_t id,
+    const pb_msgdesc_t *const payload_fields,
+    const void *const payload
+)
+{
+    // Precond - assumes payload_fields and payload are not NULL. Could be made optional.
+    MyMessage response;
+    
+    /* Encode the payload */
+    response.has_payload = true;   
+    pb_ostream_t payload_stream = pb_ostream_from_buffer(response.payload.bytes, sizeof(response.payload.bytes));
+    if (!pb_encode(&payload_stream, payload_fields, payload)) {
+        return false;
+    }
+    response.payload.size = payload_stream.bytes_written;
+
+    /* Encode the rest of the message */
+    response.id = id;
+    response.crc = static_cast<uint8_t>(response.id);
+    response.crc = update_crc_8(response.crc, response.payload.bytes, response.payload.size);
+
+    /* Write out the message on the stream */
+    pb_ostream_t response_stream = pb_ostream_from_stream(arduino_stream);
+    
+    // Use PB_ENCODE_DELIMITED in this scenario so that message prefixed with length over Serial
+    // so Python script at other end can read it. See section "An annoyance with Python".
+    return pb_encode_ex(&response_stream, ResponseMsg_t_fields, &response, PB_ENCODE_DELIMITED);
+```
+
+Then the encode function for messages to be wrapped inside of `MyMessage` become:
+
+```
+bool write_specific_msg(Stream &arduino_stream)
+{
+    MySpecificMessage wrapped;
+    ... Construct MySpecficMessage ...
+
+    return write_message_to_stream(
+        arduino_stream, LED_TIMELINE_STOP_RSP_MSG_ID, MySpecficMessage_fields, (void *)&wrapped
+    );   
+}
+```
+
+
 ### An Annoyance With Python
 On the other end of your connection you might have a Python script doing some processing. The annoying thing
 is that although the C implementation can read and write from streams, the Python implementation does not
