@@ -116,29 +116,29 @@ eval "$(pyenv virtualenv-init -)"            </pre>
 
         PyEnv will try to build Python versions you install so add the following:
         <pre>sudo apt update && sudo apt install -y \
-build-essential \
-checkinstall \
-zlib1g-dev  \
-libbz2-dev \
-libncurses5-dev \
-libncursesw5-dev \
-readline-common \
-libreadline-dev \
-libffi-dev \
-libssl-dev \
-liblzma-dev \
-tk \
-tk-dev \
-libsqlite3-dev</pre>
+    build-essential \
+    checkinstall \
+    zlib1g-dev  \
+    libbz2-dev \
+    libncurses5-dev \
+    libncursesw5-dev \
+    readline-common \
+    libreadline-dev \
+    libffi-dev \
+    libssl-dev \
+    liblzma-dev \
+    tk \
+    tk-dev \
+    libsqlite3-dev</pre>
 
         <p>To install a Python version in PyEnv:</p>
         <pre>pyenv update
-  pyenv install 3.7:latest
-  pyenv install 3.8:latest
+pyenv install 3.7:latest
+pyenv install 3.8:latest
 
-  # Instruct Pyenv to first use system Python version, then versions
-  # 3.7 and 3.8.
-  pyenv global system 3.7.13 3.8.13</pre>
+# Instruct Pyenv to first use system Python version, then versions
+# 3.7 and 3.8.
+pyenv global system 3.7.13 3.8.13</pre>
     </div>
 
     <h2>Pipenv - Python Virtual Environments and Package Management In One</h2>
