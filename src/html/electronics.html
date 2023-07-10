@@ -24,6 +24,7 @@ define(`REF_CALC_RESISTOR_FOR_TRANSITOR', `https://raspberrypi.stackexchange.com
 define(`REF_CE_TRANSITOR_CONFIG', `https://circuitglobe.com/common-emitter-connection-or-ce-configuration.html')
 define(`REF_KHAN_PASSIVE_SIGN', `https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/circuit-elements/v/ee-passive-sign-convention')
 define(`REF_LABEL_V_I_NODE', `https://ultimateelectronicsbook.com/labeling-voltages-currents-nodes/')
+define(`REF_HYPER_PHYS_ELECTMAG', `http://hyperphysics.phy-astr.gsu.edu/hbase/emcon.htm')
 dnl ---- END M4 MACROS ---- 
 <!DOCTYPE HTML>
 <html>
@@ -338,6 +339,7 @@ dnl ---- END M4 MACROS ----
 				<li>REF(`REF_POW_VS_ENERGY', `The Great "Power Vs. Energy" Confusion'), Rob Lewis, CleanTechnica.</li>
 				<li>REF(`REF_KHAN_ELEC_POT', `Electric potential energy'), Khan Academy, YouTube.com.</li>
 				<li>REF(`REF_TEXTBOOK_KVL_STACK_QUESTION', `Textbook's way of determining KVL polarities'), StackOverflow.</li>
+				<li>REF(`REF_HYPER_PHYS_ELECTMAG', `Electricity And Magnetism'), HyperPhysics</li>
 			</ul>
 		</div>
 
@@ -351,9 +353,42 @@ dnl ---- END M4 MACROS ----
 					<li>REF(`REF_POW_VS_ENERGY', `The Great "Power Vs. Energy" Confusion'), Rob Lewis, CleanTechnica.</li>
 					<li>REF(`REF_KHAN_ELEC_POT', `Electric potential energy'), Khan Academy, YouTube.com.</li>
 					<li>REF(`REF_UTUBE_CIRC_ANAL',`Essential &amp; Practical Circuit Analysis: Part 1- DC Circuits'), Solid State Workshop, YouTube.</li> 
+					<li>REF(`REF_HYPER_PHYS_ELECTMAG', `Electricity And Magnetism'), HyperPhysics</li>
 				</ul>
 			</div>
 			
+			<h3>Electric Fields &amp; Energy</h3>
+			<div>
+				<p>
+					Electric fields are created by charges. The field itself produces an electric force per unit charge, the direction
+					of which is defined as being the force it would exert on a positive test charge REF(`REF_HYPER_PHYS_ELECTMAG', `[REF]').
+
+					$$
+					\vec{E} = \frac{\vec{F}}{q}
+					$$
+
+					The electric field, $\vec{E}$, as defined above, is force per unit charge and is measured in Newtons/Coulomb or
+					Volts/Meter, where $\vec{F}$ is electric force in Newtons and $q$ is charge in Coulombs.
+				</p>
+				<p>
+					Energy is defined as the ability to do work. Work is what transfers energy from one form to another (energy is never destoyed).
+					For example, work can turn potential energy into kinetic energy.
+				</p>
+				<p>
+					Energy is measured in Joules. 1 Joule is the energy transferred when a force of 1 Newton is applied to an
+					object and moves it through a distance on 1 meter.
+				</p>
+				<p>
+					Work is defined as...
+
+					$$
+					W = F\dot\delta{\text{distance}}
+					$$
+
+					This is why an electric field can be measured in Volts per meter (see voltage section below).
+				</p>
+			</div>
+
 			<h3>Conventional Current And Charge</h3>
 			<div>
 				<p>
@@ -387,9 +422,12 @@ dnl ---- END M4 MACROS ----
 			<h3 style="clear: both;">Voltage</h3>
 			<div>
 				<p>
-					Voltage, $V$, is the amount of work (in Joules) that must be done per unit charge to move between two points in a field.
+					Voltage, $V$, is the amount of work (in Joules) that must be done per unit charge to move between two points in a, electric field.
 					$$V_{ab} = \frac{\mathrm dw}{\mathrm dq}$$
 					I.e. 1 volt is 1 Joule per Coulomb.
+				</p>
+				<p>
+					<img src="##IMG_DIR##/electric_field.png">
 				</p>
 				<p>
 					If we integrate both sides of the abote w.r.t to charge we get:
