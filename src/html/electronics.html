@@ -24,7 +24,7 @@ define(`REF_CALC_RESISTOR_FOR_TRANSITOR', `https://raspberrypi.stackexchange.com
 define(`REF_CE_TRANSITOR_CONFIG', `https://circuitglobe.com/common-emitter-connection-or-ce-configuration.html')
 define(`REF_KHAN_PASSIVE_SIGN', `https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/circuit-elements/v/ee-passive-sign-convention')
 define(`REF_LABEL_V_I_NODE', `https://ultimateelectronicsbook.com/labeling-voltages-currents-nodes/')
-define(`REF_HYPER_PHYS_ELECTMAG', `http://hyperphysics.phy-astr.gsu.edu/hbase/emcon.htm')
+define(`REF_HYPER_PHYS_ELECTMAG', `http://hyperphysics.phy-astr.gsu.edu/hbase/emcon.html')
 dnl ---- END M4 MACROS ---- 
 <!DOCTYPE HTML>
 <html>
@@ -356,38 +356,6 @@ dnl ---- END M4 MACROS ----
 					<li>REF(`REF_HYPER_PHYS_ELECTMAG', `Electricity And Magnetism'), HyperPhysics</li>
 				</ul>
 			</div>
-			
-			<h3>Electric Fields &amp; Energy</h3>
-			<div>
-				<p>
-					Electric fields are created by charges. The field itself produces an electric force per unit charge, the direction
-					of which is defined as being the force it would exert on a positive test charge REF(`REF_HYPER_PHYS_ELECTMAG', `[REF]').
-
-					$$
-					\vec{E} = \frac{\vec{F}}{q}
-					$$
-
-					The electric field, $\vec{E}$, as defined above, is force per unit charge and is measured in Newtons/Coulomb or
-					Volts/Meter, where $\vec{F}$ is electric force in Newtons and $q$ is charge in Coulombs.
-				</p>
-				<p>
-					Energy is defined as the ability to do work. Work is what transfers energy from one form to another (energy is never destroyed).
-					For example, work can turn potential energy into kinetic energy.
-				</p>
-				<p>
-					Energy is measured in Joules. 1 Joule is the energy transferred when a force of 1 Newton is applied to an
-					object and moves it through a distance on 1 meter.
-				</p>
-				<p>
-					Work is defined as...
-
-					$$
-					W = F\cdot\Delta{\text{distance}}
-					$$
-
-					This is why an electric field can be measured in Volts per meter (see voltage section below).
-				</p>
-			</div>
 
 			<h3>Conventional Current And Charge</h3>
 			<div>
@@ -399,11 +367,6 @@ dnl ---- END M4 MACROS ----
 				</p>
 				<p>
 					From Wikipedia: <q>Conventional current flows from the positive pole (terminal) to the negative pole. Electrons flow from negative to positive. In a direct current (DC) circuit, current flows in one direction only, and one pole is always negative and the other pole is always positive. In an alternating current (AC) circuit the two poles alternate between negative and positive and the direction of the current (electron flow) reverses periodically.</q>.
-				</p>
-				<p>
-					Note that voltages are relative, which is why the negative terminal of the battery can be negative - it depends what
-					the reference voltage you are measuring against is - e.g. if ground is midway between the two terminals then they will
-					have voltages -A and +A respectively.
 				</p>
 				<p>
 					Informally, <b>current is a flow of electric charge</b>.
@@ -418,9 +381,59 @@ dnl ---- END M4 MACROS ----
 					We can integrate the above to get $I = \frac{Q}{t}$ and therefore $Q = It$.
 				</p>
 			</div>
-
-			<h3 style="clear: both;">Voltage</h3>
+			
+			<h3>Electric Fields, Energy, Work &amp; Voltage</h3>
 			<div>
+				<p>
+					Let's revisit the terms energy, work and power.<br/>
+				</p>
+				<p style="padding-left: 16pt;">
+					<b>Energy</b> is the ability to do work.<br/>
+					<b>Work</b> is the force that must be exerted to move a mass a certain distance.<br/>
+					<b>Power</b> is the rate at which energy is generator/consumed.
+				</p>
+
+				<h4>Energy</h4>
+				<p>
+					<b>Energy</b> is defined as the ability to do work. Work is what transfers energy from one form to another (energy is never destroyed).
+					For example, work can turn potential energy into kinetic energy.
+				</p>
+				<p>
+					Energy is measured in Joules. 1 Joule is the energy transferred when a force of 1 Newton is applied to an
+					object and moves it through a distance on 1 meter.
+				</p>
+
+				<h4>Work</h4>
+				<p>
+					<b>Work</b> is defined as...
+
+					$$
+					W = F\cdot\Delta{\text{distance}}
+					$$
+				</p>
+
+				<h4>Power</h4>
+				<p>
+					<b>Power</b> gives that <em>rate</em> at which energy is used/produced. Power measures how <em>fast</em> the work gets done.
+				</p>
+				<p>
+					<img src="##IMG_DIR##/work_evergy_power.svg" alt="Image showing work and energy vs power"/>
+				</p>
+
+				<h4>Electric Fields</h4>
+				<p>
+					Electric fields are created by charges. The field itself produces an electric force per unit charge, the direction
+					of which is defined as being the force it would exert on a positive test charge REF(`REF_HYPER_PHYS_ELECTMAG', `[REF]').
+
+					$$
+					\vec{E} = \frac{\vec{F}}{q}
+					$$
+
+					The electric field, $\vec{E}$, as defined above, is force per unit charge and is measured in Newtons/Coulomb or
+					Volts/Meter, where $\vec{F}$ is electric force in Newtons and $q$ is charge in Coulombs.
+				</p>
+
+				<h4>Voltage</h4>
 				<p>
 					Voltage, $V$, is the amount of work (in Joules) that must be done per unit charge to move between two points in a, electric field.
 					$$V_{ab} = \frac{\mathrm dw}{\mathrm dq}$$
@@ -433,28 +446,16 @@ dnl ---- END M4 MACROS ----
 					If we integrate both sides of the abote w.r.t to charge we get:
 					$$VQ = W\ \therefore W = QV$$
 				</p>
+				<p>
+					Note that voltages are relative, which is why the negative terminal of the battery can be negative - it depends what
+					the reference voltage you are measuring against is - e.g. if ground is midway between the two terminals then they will
+					have voltages -A and +A respectively.
+				</p>
+
 			</div>
 
-			<h3 style="clear: both;">Energy, Work and Power</h3>
-			<div>
-				<p>
-					To help understand this let's revisit the terms energy, work and power.<br/>
-				</p>
-				<p style="padding-left: 16pt;">
-					<b>Energy</b> is the ability to do work.<br/>
-					<b>Work</b> is the force that must be exerted to move a mass a certain distance.<br/>
-					<b>Power</b> is the rate at which energy is generator/consumed.
-				</p>
-				<p>
-					Energy is what makes it possible to move things. Moving things involves doing work and it takes energy to do this. <b>Energy measures
-						the total amount of work done</b>. It does not say how fast the energy was used/produced.
-				</p>
-				<p>
-					<b>Power gives that rate at which energy is used/produced</b>. Power measures how <b>fast</b> the work gets done.
-				</p>
-				<p>
-					<img src="##IMG_DIR##/work_evergy_power.svg" alt="Image showing work and energy vs power"/>
-				</p>
+			<h3 style="clear: both;">Energy &amp; Power In Terms Of Current &amp; Voltage</h3>
+			<div>				
 				<p>
 					Give these definitions we can see how they are defined for electronics. Using some crude (read incorrect as we're using multiplication not integration to make it seem simpler) we see:
 
@@ -477,7 +478,8 @@ dnl ---- END M4 MACROS ----
 
 					We can see that electrical power (measured in <b>Watts</b>) is the rate of consumption/generation of electrical energy.
 				</p>
-				<p>When current flows through a resistor it dissipates power in the form of heat. When it flows
+				<p>
+					When current flows through a resistor it dissipates power in the form of heat. When it flows
 					through an LED it dissipates power in the form of both heat and light.
 				</p>
 				<p>
