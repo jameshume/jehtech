@@ -1,7 +1,7 @@
 ## References
 * [DWARF Debugging Information Format, Version 5, February 13, 2017](https://dwarfstd.org/doc/DWARF5.pdf)
 * [How debuggers work: Part 3 - Debugging information](https://eli.thegreenplace.net/2011/02/07/how-debuggers-work-part-3-debugging-information)
-* [Introduction to the DWARF Debugging Format] (https://dwarfstd.org/doc/Debugging%20using%20DWARF-2012.pdf)
+* [Introduction to the DWARF Debugging Format](https://dwarfstd.org/doc/Debugging%20using%20DWARF-2012.pdf)
 * [Some things I learned about libdwarf, Kamal Marhubi](https://kamalmarhubi.com/blog/2016/07/25/some-things-i-learned-about-libdwarf/)
 * !! [libdwarf API documentation](https://www.prevanders.net/libdwarfdoc/index.html)
 
