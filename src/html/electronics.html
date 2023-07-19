@@ -24,6 +24,7 @@ define(`REF_CALC_RESISTOR_FOR_TRANSITOR', `https://raspberrypi.stackexchange.com
 define(`REF_CE_TRANSITOR_CONFIG', `https://circuitglobe.com/common-emitter-connection-or-ce-configuration.html')
 define(`REF_KHAN_PASSIVE_SIGN', `https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/circuit-elements/v/ee-passive-sign-convention')
 define(`REF_LABEL_V_I_NODE', `https://ultimateelectronicsbook.com/labeling-voltages-currents-nodes/')
+define(`REF_HYPER_PHYS_ELECTMAG', `http://hyperphysics.phy-astr.gsu.edu/hbase/emcon.html')
 dnl ---- END M4 MACROS ---- 
 <!DOCTYPE HTML>
 <html>
@@ -338,6 +339,7 @@ dnl ---- END M4 MACROS ----
 				<li>REF(`REF_POW_VS_ENERGY', `The Great "Power Vs. Energy" Confusion'), Rob Lewis, CleanTechnica.</li>
 				<li>REF(`REF_KHAN_ELEC_POT', `Electric potential energy'), Khan Academy, YouTube.com.</li>
 				<li>REF(`REF_TEXTBOOK_KVL_STACK_QUESTION', `Textbook's way of determining KVL polarities'), StackOverflow.</li>
+				<li>REF(`REF_HYPER_PHYS_ELECTMAG', `Electricity And Magnetism'), HyperPhysics</li>
 			</ul>
 		</div>
 
@@ -351,9 +353,10 @@ dnl ---- END M4 MACROS ----
 					<li>REF(`REF_POW_VS_ENERGY', `The Great "Power Vs. Energy" Confusion'), Rob Lewis, CleanTechnica.</li>
 					<li>REF(`REF_KHAN_ELEC_POT', `Electric potential energy'), Khan Academy, YouTube.com.</li>
 					<li>REF(`REF_UTUBE_CIRC_ANAL',`Essential &amp; Practical Circuit Analysis: Part 1- DC Circuits'), Solid State Workshop, YouTube.</li> 
+					<li>REF(`REF_HYPER_PHYS_ELECTMAG', `Electricity And Magnetism'), HyperPhysics</li>
 				</ul>
 			</div>
-			
+
 			<h3>Conventional Current And Charge</h3>
 			<div>
 				<p>
@@ -364,11 +367,6 @@ dnl ---- END M4 MACROS ----
 				</p>
 				<p>
 					From Wikipedia: <q>Conventional current flows from the positive pole (terminal) to the negative pole. Electrons flow from negative to positive. In a direct current (DC) circuit, current flows in one direction only, and one pole is always negative and the other pole is always positive. In an alternating current (AC) circuit the two poles alternate between negative and positive and the direction of the current (electron flow) reverses periodically.</q>.
-				</p>
-				<p>
-					Note that voltages are relative, which is why the negative terminal of the battery can be negative - it depends what
-					the reference voltage you are measuring against is - e.g. if ground is midway between the two terminals then they will
-					have voltages -A and +A respectively.
 				</p>
 				<p>
 					Informally, <b>current is a flow of electric charge</b>.
@@ -383,40 +381,87 @@ dnl ---- END M4 MACROS ----
 					We can integrate the above to get $I = \frac{Q}{t}$ and therefore $Q = It$.
 				</p>
 			</div>
-
-			<h3 style="clear: both;">Voltage</h3>
+			
+			<h3>Electric Fields, Energy, Work &amp; Voltage</h3>
 			<div>
 				<p>
-					Voltage, $V$, is the amount of work (in Joules) that must be done per unit charge to move between two points in a field.
-					$$V_{ab} = \frac{\mathrm dw}{\mathrm dq}$$
-					I.e. 1 volt is 1 Joule per Coulomb.
-				</p>
-				<p>
-					If we integrate both sides of the abote w.r.t to charge we get:
-					$$VQ = W\ \therefore W = QV$$
-				</p>
-			</div>
-
-			<h3 style="clear: both;">Energy, Work and Power</h3>
-			<div>
-				<p>
-					To help understand this let's revisit the terms energy, work and power.<br/>
+					Let's revisit the terms energy, work and power.<br/>
 				</p>
 				<p style="padding-left: 16pt;">
 					<b>Energy</b> is the ability to do work.<br/>
 					<b>Work</b> is the force that must be exerted to move a mass a certain distance.<br/>
 					<b>Power</b> is the rate at which energy is generator/consumed.
 				</p>
+
+				<h4>Energy &amp; Work</h4>
 				<p>
-					Energy is what makes it possible to move things. Moving things involves doing work and it takes energy to do this. <b>Energy measures
-						the total amount of work done</b>. It does not say how fast the energy was used/produced.
+					<b>Energy</b> is defined as the ability to do work. Work is what transfers energy from one form to another (energy is never destroyed).
+					For example, work can turn potential energy into kinetic energy.
 				</p>
 				<p>
-					<b>Power gives that rate at which energy is used/produced</b>. Power measures how <b>fast</b> the work gets done.
+					Energy is measured in Joules. 1 Joule is the energy transferred when a force of 1 Newton is applied to an
+					object and moves it through a distance on 1 meter.
+				</p>
+
+				<p>
+					<b>Work</b> is defined as...
+
+					$$
+					W = F\cdot\Delta{\text{distance}}
+					$$
+				</p>
+
+
+				<h4>Power</h4>
+				<p>
+					<b>Power</b> gives that <em>rate</em> at which energy is used/produced. Power measures how <em>fast</em> the work gets done.
+					Put another way, <em>working faster == more power</em>.
 				</p>
 				<p>
 					<img src="##IMG_DIR##/work_evergy_power.svg" alt="Image showing work and energy vs power"/>
 				</p>
+
+				<h4>Electric Fields</h4>
+				<p>
+					Electric fields are created by charges. The field itself produces an electric force per unit charge, the direction
+					of which is defined as being the force it would exert on a positive test charge [REF(`REF_HYPER_PHYS_ELECTMAG', `REF')].
+
+					$$
+					\vec{E} = \frac{\vec{F}}{q}
+					$$
+
+					The electric field, $\vec{E}$, as defined above, is force per unit charge and is measured in Newtons/Coulomb or
+					Volts/Meter, where $\vec{F}$ is electric force in Newtons and $q$ is charge in Coulombs.
+				</p>
+				<p>
+					But what is force? It is measured in Newtons, where 1 Newton is the force required to give a 1 kg mass an acceleration
+					of 1 meter per second per second. I.e. $1 \text{Newton} = 1\text{kg} \cdot /frac{m}{s^2}$. Remember it is the electric
+					field that generates this action-at-a-distance force.
+				</p>
+
+				<h4>Voltage</h4>
+				<p>
+					Voltage, $V$, is the amount of work (in Joules) that must be done per unit charge to move between two points in a, electric field.
+					$$V_{ab} = \frac{\mathrm dw}{\mathrm dq}$$
+					I.e. 1 volt is 1 Joule per Coulomb.
+				</p>
+				<p>
+					<img src="##IMG_DIR##/electric_field.png">
+				</p>
+				<p>
+					If we integrate both sides of the abote w.r.t to charge we get:
+					$$VQ = W\ \therefore W = QV$$
+				</p>
+				<p>
+					Note that voltages are relative, which is why the negative terminal of the battery can be negative - it depends what
+					the reference voltage you are measuring against is - e.g. if ground is midway between the two terminals then they will
+					have voltages -A and +A respectively.
+				</p>
+
+			</div>
+
+			<h3 style="clear: both;">Energy &amp; Power In Terms Of Current &amp; Voltage</h3>
+			<div>				
 				<p>
 					Give these definitions we can see how they are defined for electronics. Using some crude (read incorrect as we're using multiplication not integration to make it seem simpler) we see:
 
@@ -439,7 +484,8 @@ dnl ---- END M4 MACROS ----
 
 					We can see that electrical power (measured in <b>Watts</b>) is the rate of consumption/generation of electrical energy.
 				</p>
-				<p>When current flows through a resistor it dissipates power in the form of heat. When it flows
+				<p>
+					When current flows through a resistor it dissipates power in the form of heat. When it flows
 					through an LED it dissipates power in the form of both heat and light.
 				</p>
 				<p>
@@ -1295,9 +1341,35 @@ dnl ---- END M4 MACROS ----
 				So, to eliminate the sinusoids, we could express sine as a rot
 			</p>
 
+			<h3>Decoupling Capacitors</h3>
+			<p>
+			</p>
+			<blockquote>
+				<p>A lot of the capacitors you see in circuits, especially those featuring an integrated circuit, are decoupling. 
+					A decoupling capacitor's job is to supress high-frequency noise in power supply signals. They take tiny voltage
+					ripples, which could otherwise be harmful to delicate ICs, out of the voltage supply.</p>
 
 
-
+				<p>In a way, decoupling capacitors act as a very small, local power supply for ICs ... If the power supply very
+					temporarily drops its voltage (which is actually pretty common, especially when the circuit it's powering is
+					constantly switching its load requirements), a decoupling capacitor can briefly supply power at the correct voltage. 
+					...</p>
+				<footer>-- <a href="https://learn.sparkfun.com/tutorials/capacitors/application-examples" target="_blank">Sparkfun - Electronics - Capacitors</a>.</footer>
+			</blockquote>
+			<p>
+			</p>
+			<blockquote>
+				<p>The performance of many circuits is impaired by the presence of HF noise on their supplies, so any HF noise which might 
+					be present on an IC's supply must be shorted to ground. We cannot use a conductor for this as it will short circuit dc 
+					and blow fuses, but a capacitor (usually in the 1-nF to 100-nF range) blocks dc while acting as a short circuit for HF.</p>
+				<p>1 cm of wire or PC track has ~8 nH inductance (5 Ω at 100 MHz), which is scarcely a short circuit. A capacitor acting as 
+					an HF short circuit must have low lead and PC track inductance, so each supply capacitor must be located very close to the 
+					two terminals of the IC it is decoupling. It is also important to choose capacitors with low internal inductance - 
+					usually ceramic ones.</p>
+				<footer>--<a href="" target="_blank">In and Out - or - Why Have a Capacitor?</a>, James Byrant, AnalgueDialogue.com</footer>
+			</blockquote>
+			<p>
+			</p>
 
 			<h3>References</h3>
 			<ul>

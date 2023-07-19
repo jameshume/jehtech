@@ -99,6 +99,70 @@ pip install -r requirements.txt
         </div>
     </div> <!-- END Virtual Environments -->
 
+    <h2>PyEnv</h2>
+    <div>
+        <p>
+            Install virtualenv: <code>curl https://pyenv.run | bash</code>
+        </p>
+        
+        <p>
+            Add this to `~/.bashrc` and source:            
+            <pre>export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"            </pre>
+        </p>  
+
+
+        PyEnv will try to build Python versions you install so add the following:
+        <pre>sudo apt update && sudo apt install -y \
+    build-essential \
+    checkinstall \
+    zlib1g-dev  \
+    libbz2-dev \
+    libncurses5-dev \
+    libncursesw5-dev \
+    readline-common \
+    libreadline-dev \
+    libffi-dev \
+    libssl-dev \
+    liblzma-dev \
+    tk \
+    tk-dev \
+    libsqlite3-dev</pre>
+
+        <p>To install a Python version in PyEnv:</p>
+        <pre>pyenv update
+pyenv install 3.7:latest
+pyenv install 3.8:latest
+
+# Instruct Pyenv to first use system Python version, then versions
+# 3.7 and 3.8.
+pyenv global system 3.7.13 3.8.13</pre>
+
+        <p>
+            To create a virtual environment with PyEnv:
+        </p>
+        <pre># Generally...
+pyenv virtualenv &lt;python-version&gt; &lt;environment-name&gt;
+
+# For example...
+pyenv virtualenv 3.7.4 my_new_project</pre>
+
+        <p>
+            To activate a virtual environment its:
+        </p>
+        <pre>pyenv activate &lt;environment-name&gt;</pre>
+
+        <p>
+            To automatically use an environment when in a development directory do:
+        </p>
+        <pre>cd ~/my/dev/directory
+pyenv local &lt;my-dev-environment-name&gt;</pre>
+        
+        <p> </p>
+    </div>
+
     <h2>Pipenv - Python Virtual Environments and Package Management In One</h2>
     <div>
         <p>
