@@ -25,7 +25,7 @@ define(`REF_CE_TRANSITOR_CONFIG', `https://circuitglobe.com/common-emitter-conne
 define(`REF_KHAN_PASSIVE_SIGN', `https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/circuit-elements/v/ee-passive-sign-convention')
 define(`REF_LABEL_V_I_NODE', `https://ultimateelectronicsbook.com/labeling-voltages-currents-nodes/')
 define(`REF_HYPER_PHYS_ELECTMAG', `http://hyperphysics.phy-astr.gsu.edu/hbase/emcon.html')
-dnl ---- END M4 MACROS ---- 
+dnl ---- END M4 MACROS ----
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -70,7 +70,7 @@ dnl ---- END M4 MACROS ----
 				this.mul = 0;
 			}
 
-			JEHResistor.prototype = 
+			JEHResistor.prototype =
 				Object.create(jCanv.CanvasElement.prototype, {
 					constructor: {
 						value: JEHResistor
@@ -87,7 +87,7 @@ dnl ---- END M4 MACROS ----
 			JEHResistor.prototype.setBandColour = function(bandNum, bandColour, val, bartype) {
 				if (bandNum >= this.numBands)
 					throw "JEHResistor: Band index too large";
-				
+
 				this.bandColours[bandNum] = bandColour;
 				this.drawOnCanvas(this._jehCanvasOwner);
 
@@ -144,7 +144,6 @@ dnl ---- END M4 MACROS ----
 					ctx.lineWidth = 1;
 					ctx.rect(this.x+legWidth+spacerWidth*(i+1)+bandWidth*i+extraSpace, this.y, bandWidth, this.height);
 					ctx.stroke();
-					
 				}
 			}
 
@@ -167,7 +166,7 @@ dnl ---- END M4 MACROS ----
 				var resistor = jCanvas.addObject(new JEHResistor(jCanvas, resistorX, resistorY, resistorWidth, 40, 4));
 
 				var txtBoxY = resistorY + resistor.height + 20;
-				var txtBox = jCanvas.addObject(new jCanv.ValueBox(jCanvas, resistorX, txtBoxY, resistor.width, bheight, "Select all colour bands", "", "Ohms", {lineColour: null, text: "james"})); 
+				var txtBox = jCanvas.addObject(new jCanv.ValueBox(jCanvas, resistorX, txtBoxY, resistor.width, bheight, "Select all colour bands", "", "Ohms", {lineColour: null, text: "james"}));
 
 				var gridYOffset = txtBoxY + bheight + 20;
 				console.log("########");
@@ -181,14 +180,14 @@ dnl ---- END M4 MACROS ----
 						if (colIdx == 0) {
 							bindToClickHandler = false;
 							box = jCanvas.addObject(new jCanv.Box(
-								jCanvas, 
-								(bwidth + bgap) * colIdx + gridXOffset, 
-								(bheight +bgap) * rowIdx + gridYOffset, 
-								bwidth, 
-								bheight, 
+								jCanvas,
+								(bwidth + bgap) * colIdx + gridXOffset,
+								(bheight +bgap) * rowIdx + gridYOffset,
+								bwidth,
+								bheight,
 								{
-									lineColour: null, 
-									fillColour: null, 
+									lineColour: null,
+									fillColour: null,
 									text: colours[rowIdx]
 								},
 								null
@@ -198,14 +197,14 @@ dnl ---- END M4 MACROS ----
 							if( rowIdx > 1 ) {
 								var resistance =  (rowIdx-1) * Math.pow(10, numberOfResistanceBands - colIdx);
 								box = jCanvas.addObject(new jCanv.Box(
-									jCanvas, 
-									(bwidth + bgap) * colIdx + gridXOffset, 
-									(bheight +bgap) * rowIdx + gridYOffset, 
-									bwidth, 
-									bheight, 
+									jCanvas,
+									(bwidth + bgap) * colIdx + gridXOffset,
+									(bheight +bgap) * rowIdx + gridYOffset,
+									bwidth,
+									bheight,
 									{
-										lineColour: "black", 
-										fillColour: colours[rowIdx], 
+										lineColour: "black",
+										fillColour: colours[rowIdx],
 										text: resistance.toString(),
 										textColour: colours[rowIdx] !== "black" ? "black" : "white"
 									},
@@ -213,7 +212,7 @@ dnl ---- END M4 MACROS ----
 										value:      resistance,
 										type:       "resistance",
 										bandIdx:    colIdx - 1,
-										bandColour: colours[rowIdx] 
+										bandColour: colours[rowIdx]
 									}
 								));
 							}
@@ -222,24 +221,24 @@ dnl ---- END M4 MACROS ----
 							if( rowIdx < 10 ) {
 								var multiplierValue = Math.pow(10, rowIdx -2);
 								box = jCanvas.addObject(new jCanv.ValueBox(
-									jCanvas, 
-									(bwidth + bgap) * colIdx + gridXOffset, 
-									(bheight +bgap) * rowIdx + gridYOffset, 
-									bwidth, 
-									bheight, 
+									jCanvas,
+									(bwidth + bgap) * colIdx + gridXOffset,
+									(bheight +bgap) * rowIdx + gridYOffset,
+									bwidth,
+									bheight,
 									multiplierValue,
 									"",
 									"",
 									{
-										lineColour: "black", 
-										fillColour: colours[rowIdx], 
+										lineColour: "black",
+										fillColour: colours[rowIdx],
 										textColour: colours[rowIdx] !== "black" ? "black" : "white"
 									},
 									{
 										value: multiplierValue,
 										type:  "multiplier",
 										bandIdx:    colIdx - 1,
-										bandColour: colours[rowIdx] 
+										bandColour: colours[rowIdx]
 									}
 								));
 							}
@@ -247,24 +246,24 @@ dnl ---- END M4 MACROS ----
 						else {
 							if(rowIdx in {0:0, 1:1, 3:3, 4:4, 7:7, 8:8, 9:9}) {
 								box = jCanvas.addObject(new jCanv.ValueBox(
-									jCanvas, 
-									(bwidth + bgap) * colIdx + gridXOffset, 
-									(bheight +bgap) * rowIdx + gridYOffset, 
-									bwidth, 
-									bheight, 
+									jCanvas,
+									(bwidth + bgap) * colIdx + gridXOffset,
+									(bheight +bgap) * rowIdx + gridYOffset,
+									bwidth,
+									bheight,
 									tolerances[rowIdx],
 									"±",
 									"%",
 									{
-										lineColour: "black", 
-										fillColour: colours[rowIdx], 
+										lineColour: "black",
+										fillColour: colours[rowIdx],
 										textColour: colours[rowIdx] !== "black" ? "black" : "white"
 									},
 									{
 										value: multiplierValue,
 										type:  "tolerance",
 										bandIdx:    colIdx - 1,
-										bandColour: colours[rowIdx] 
+										bandColour: colours[rowIdx]
 									}
 								));
 							}
@@ -276,9 +275,9 @@ dnl ---- END M4 MACROS ----
 									console.log(this);
 									if(this.opaqueUserData !== null) {
 										resistor.setBandColour(
-											this.opaqueUserData.bandIdx, 
-											this.opaqueUserData.bandColour, 
-											this.opaqueUserData.value, 
+											this.opaqueUserData.bandIdx,
+											this.opaqueUserData.bandColour,
+											this.opaqueUserData.value,
 											this.opaqueUserData.type);
 										var res = resistor.getResistanceValue();
 										if( res > 0 )
@@ -352,7 +351,7 @@ dnl ---- END M4 MACROS ----
 				<ul>
 					<li>REF(`REF_POW_VS_ENERGY', `The Great "Power Vs. Energy" Confusion'), Rob Lewis, CleanTechnica.</li>
 					<li>REF(`REF_KHAN_ELEC_POT', `Electric potential energy'), Khan Academy, YouTube.com.</li>
-					<li>REF(`REF_UTUBE_CIRC_ANAL',`Essential &amp; Practical Circuit Analysis: Part 1- DC Circuits'), Solid State Workshop, YouTube.</li> 
+					<li>REF(`REF_UTUBE_CIRC_ANAL',`Essential &amp; Practical Circuit Analysis: Part 1- DC Circuits'), Solid State Workshop, YouTube.</li>
 					<li>REF(`REF_HYPER_PHYS_ELECTMAG', `Electricity And Magnetism'), HyperPhysics</li>
 				</ul>
 			</div>
@@ -381,7 +380,7 @@ dnl ---- END M4 MACROS ----
 					We can integrate the above to get $I = \frac{Q}{t}$ and therefore $Q = It$.
 				</p>
 			</div>
-			
+
 			<h3>Electric Fields, Energy, Work &amp; Voltage</h3>
 			<div>
 				<p>
@@ -461,7 +460,7 @@ dnl ---- END M4 MACROS ----
 			</div>
 
 			<h3 style="clear: both;">Energy &amp; Power In Terms Of Current &amp; Voltage</h3>
-			<div>				
+			<div>
 				<p>
 					Give these definitions we can see how they are defined for electronics. Using some crude (read incorrect as we're using multiplication not integration to make it seem simpler) we see:
 
@@ -476,7 +475,7 @@ dnl ---- END M4 MACROS ----
 
 					So energy is indeed the total work required to move a charge between two points in an electric field.
 
-					And because 
+					And because
 
 					$$
 					P = IV = \frac{E}{t}
@@ -515,7 +514,7 @@ dnl ---- END M4 MACROS ----
 					two points, but <em>only make sense if the potential of each point is measured w.r.t to the same reference</em>.
 				</p>
 			</div>
-			
+
 			<h3 style="clear: both;">Ohm's Law</h3>
 			<div>
 				<p>Ohm's law gives the relationship between voltage, current and resistance:
@@ -664,7 +663,7 @@ dnl ---- END M4 MACROS ----
 					by re-arranging the formula.
 				</p>
 				<p>
-					In this example it was trivial to know, apriori, what direction the current would flow. Sometimes we may not. 
+					In this example it was trivial to know, apriori, what direction the current would flow. Sometimes we may not.
 				</p>
 				<p><u>Example #1</p>
 				<p>
@@ -690,7 +689,7 @@ dnl ---- END M4 MACROS ----
 					$$
 					\begin{align}
 					-20 - v_1 - v_2 &= 0 \\
-					\therefore -20 -2i + 3i &= 0 
+					\therefore -20 -2i + 3i &= 0
 					\end{align}
 					$$
 
@@ -731,7 +730,7 @@ dnl ---- END M4 MACROS ----
 					$$
 					-12 + 4i -12i -4 + 6i = 0 \\
 					\therefore 2i = 16 \\
-					\therefore i = -8A 
+					\therefore i = -8A
 					$$
 
 					This means that we labelled the current flow in the wrong direction. So, the current
@@ -770,9 +769,9 @@ dnl ---- END M4 MACROS ----
 					doesn't work, persevere :)
 				</p>
 				<p>
-				Some popular ways of remembering the resistor colour codes include 
-				&quot;<u>B</u>ad <u>B</u>oys <u>R</u>avish <u>O</u>ur <u>Y</u>oung <u>G</u>irls <u>B</u>ut <u>V</u>iolet <u>G</u>ives <u>W</u>illingly&quot; 
-				and my fav, 
+				Some popular ways of remembering the resistor colour codes include
+				&quot;<u>B</u>ad <u>B</u>oys <u>R</u>avish <u>O</u>ur <u>Y</u>oung <u>G</u>irls <u>B</u>ut <u>V</u>iolet <u>G</u>ives <u>W</u>illingly&quot;
+				and my fav,
 				&quot;<u>B</u>ad <u>B</u>ooze <u>R</u>ots <u>O</u>ur <u>Y</u>oung <u>G</u>uts, <u>B</u>ut <u>V</u>odka <u>G</u>oes <u>W</u>ell&quot;.
 				</p>
 			</div>
@@ -871,7 +870,7 @@ dnl ---- END M4 MACROS ----
 				</p>
 				<p>
 					One issue to be aware of is that any load placed across $R_2$, i.e., in parallel with $R_2$, will
-					change the effective resistance of that node (remember resistors in parallel can be &quot;collapsed&quot; into an equivalent 
+					change the effective resistance of that node (remember resistors in parallel can be &quot;collapsed&quot; into an equivalent
 					single resistor). Therefore, be aware that the load across $R_2$ will also influence the ratio of voltage division.
 				</p>
 				<iframe src="electronics_resistors.html" style="border: 0px; width:260px; height: 310px; padding: 0px; margin: 0px;">
@@ -895,7 +894,7 @@ dnl ---- END M4 MACROS ----
 			<div>
 				<img src="##IMG_DIR##/wheatstone_bridge.png" width="300" style="float:left">
 				<p>
-					The <a href="http://www.ti.com/lit/ml/slyp163/slyp163.pdf" target="_blank">Wheatstone Bridge</a> is a circuit for measuring resistance 
+					The <a href="http://www.ti.com/lit/ml/slyp163/slyp163.pdf" target="_blank">Wheatstone Bridge</a> is a circuit for measuring resistance
 					very accurately. This material is based on the link to the Texas Instrument tutorial...
 				</p>
 				<p>
@@ -964,7 +963,7 @@ dnl ---- END M4 MACROS ----
 					the same using a simple voltage divider? The answer lies in the <em>sensitivity</em> of the measurement
 					system. This is covered in the next section.
 				</p>
-			</div>			
+			</div>
 		</div> <!-- End H2 -->
 
 
@@ -985,7 +984,7 @@ dnl ---- END M4 MACROS ----
 				<p>
 					But, <a href="electronics-batteries.html">batteries</a>, even power supplies etc etc
 					are <em>not</em> ideal. In the real world
-					they have a small internal resistance, anywhere between approx 0.1 OHM() to 
+					they have a small internal resistance, anywhere between approx 0.1 OHM() to
 					2.0 OHM() depending on the battery
 					REF(`REF_BATT_INT_RES', `[Ref]'), which means they are modelled more like this:
 				</p>
@@ -1185,16 +1184,20 @@ dnl ---- END M4 MACROS ----
 				$$
 				\begin{align}
 					W &= \frac{1}{2}CV^2 \\
-            &= \frac{1}{2}\cdot 5\cdot 10^{-6} \cdot 10^2 \\
-						&= 2.5\cdot 10^{-4} \text{Joules}
+            		  &= \frac{1}{2}\cdot 5\cdot 10^{-6} \cdot 10^2 \\
+					  &= 2.5\cdot 10^{-4} \text{Joules}
 				\end{align}
 				$$
+
 				We should now be able to plug the value for $W$, and $V$ back into the equation for the work done by the battery, $W = \frac{1}{2}QV$:
+
 				$$
 					2.5\cdot 10^{-4} = \frac{1}{2}Q\cdot 10 \\
 					\therefore Q = 5\cdot 10^{-5} \text{Coulombs}
 				$$
-			
+
+				The two do not agree and the reason is that half of the energy is dissipated at the start by the spark at the switch.
+
 			</p>
 
 
@@ -1231,9 +1234,9 @@ dnl ---- END M4 MACROS ----
 				\end{array}
 				$$
 
-				I.e., the current at time $t$ is proportional to the difference
+				I.e., <b>the current at time $t$ is proportional to the difference
 				in voltages across the supply and the capacitor, the constant of proportionality being the
-				resistance.
+				resistance.</b>
 			</p>
 			<p>
 				Now a quick aside to derive something we're going to need:
@@ -1277,8 +1280,21 @@ dnl ---- END M4 MACROS ----
 				$$
 
 				We can see that as the value of RC increases, the exponential value will decrease,
-				which means that <b>the time it takes to charge the capacitor increases with either
-				, or both of, $R$ and $C$</b>.
+				which means that <b>the time it takes to charge the capacitor increases with either,
+				or both of, $R$ and $C$</b>.
+			</p>
+			<p>
+				When selecting the resistance through which to charge a capacitor consider:
+			</p>
+			<ol>
+				<li>Charging time - how quickly do you need it to charge?</li>
+				<li>Capacictor specs - maximum rated currents etc.</li>
+				<li>Power source limitations - maximum current supply can provide.</li>
+				<li>Steady state current - don't want too large a voltage drop over in-series
+					resistor so that charging is efficient but not so small that current is excessive.</li>
+			</ol>
+			<p>
+				In-series resistor could be anywhere between a hundred ohms to a couple of kilohms.
 			</p>
 
 			<h3>Capacitors In Series</h3>
@@ -1287,6 +1303,7 @@ dnl ---- END M4 MACROS ----
 					\frac{1}{C_{eq}} = \frac{1}{C_1} + \frac{1}{C_2} + \cdots +  \frac{1}{C_n}
 				$$
 			</p>
+
 			<h3>Capacitors In Parallel</h3>
 			<p>
 				$$
@@ -1345,26 +1362,26 @@ dnl ---- END M4 MACROS ----
 			<p>
 			</p>
 			<blockquote>
-				<p>A lot of the capacitors you see in circuits, especially those featuring an integrated circuit, are decoupling. 
+				<p>A lot of the capacitors you see in circuits, especially those featuring an integrated circuit, are decoupling.
 					A decoupling capacitor's job is to supress high-frequency noise in power supply signals. They take tiny voltage
 					ripples, which could otherwise be harmful to delicate ICs, out of the voltage supply.</p>
 
 
 				<p>In a way, decoupling capacitors act as a very small, local power supply for ICs ... If the power supply very
 					temporarily drops its voltage (which is actually pretty common, especially when the circuit it's powering is
-					constantly switching its load requirements), a decoupling capacitor can briefly supply power at the correct voltage. 
+					constantly switching its load requirements), a decoupling capacitor can briefly supply power at the correct voltage.
 					...</p>
 				<footer>-- <a href="https://learn.sparkfun.com/tutorials/capacitors/application-examples" target="_blank">Sparkfun - Electronics - Capacitors</a>.</footer>
 			</blockquote>
 			<p>
 			</p>
 			<blockquote>
-				<p>The performance of many circuits is impaired by the presence of HF noise on their supplies, so any HF noise which might 
-					be present on an IC's supply must be shorted to ground. We cannot use a conductor for this as it will short circuit dc 
+				<p>The performance of many circuits is impaired by the presence of HF noise on their supplies, so any HF noise which might
+					be present on an IC's supply must be shorted to ground. We cannot use a conductor for this as it will short circuit dc
 					and blow fuses, but a capacitor (usually in the 1-nF to 100-nF range) blocks dc while acting as a short circuit for HF.</p>
-				<p>1 cm of wire or PC track has ~8 nH inductance (5 Ω at 100 MHz), which is scarcely a short circuit. A capacitor acting as 
-					an HF short circuit must have low lead and PC track inductance, so each supply capacitor must be located very close to the 
-					two terminals of the IC it is decoupling. It is also important to choose capacitors with low internal inductance - 
+				<p>1 cm of wire or PC track has ~8 nH inductance (5 Ω at 100 MHz), which is scarcely a short circuit. A capacitor acting as
+					an HF short circuit must have low lead and PC track inductance, so each supply capacitor must be located very close to the
+					two terminals of the IC it is decoupling. It is also important to choose capacitors with low internal inductance -
 					usually ceramic ones.</p>
 				<footer>--<a href="" target="_blank">In and Out - or - Why Have a Capacitor?</a>, James Byrant, AnalgueDialogue.com</footer>
 			</blockquote>
@@ -1411,6 +1428,10 @@ dnl ---- END M4 MACROS ----
 				i = \frac{1}{L}\int_{t_0}^{t} v(t)\ \mathrm{d}t - i(t_0)
 				$$
 			</p>
+			<p>
+				Whilst capacitors are low pass filters, inductors are <b>high pass filters</b>.
+			</p>
+
 			<h3>Inductors In Series</h3>
 			<p>
 				$$
@@ -1511,7 +1532,7 @@ dnl ---- END M4 MACROS ----
 
 
 
-		
+
 
 
 
@@ -1554,10 +1575,10 @@ dnl ---- END M4 MACROS ----
 					is known as a common emitter configuration. The input circuit is connected between
 					emitter and base, and the output circuit is taken from the collector and emitter.
 					Thus, the emitter is common to both the input and the output circuit, and hence the
-					name is the common emitter configuration. 
+					name is the common emitter configuration.
 					<footer>-- REF(`REF_CE_TRANSITOR_CONFIG', `Common Emitter Connection (or CE Configuration)').</footer>
 				</blockquote>
-				<p></p>			
+				<p></p>
 				<p>
 					NPN transistors can <b>typically handle up to about 0.8 A</b>. Thus, they are <b>low current</b>
 					devices. For large currents MOSFETs are used (later section).
@@ -1633,7 +1654,7 @@ dnl ---- END M4 MACROS ----
 
 				<blockquote>
 					<ul>
-						<li>The <b>base is responsible for initiating transistor action</b>. When a voltage 
+						<li>The <b>base is responsible for initiating transistor action</b>. When a voltage
 							is applied at the base, it gets biased and draws <b>small current which is then
 								used to control large</b> current at the collector and emitter side.
 						</li>
@@ -1650,7 +1671,7 @@ dnl ---- END M4 MACROS ----
 					</ul>
 					<footer>-- REF(`REF_TRANS_CONFIGS', `Transistor Configurations: Circuit Configurations'), emphasis mine.</footer>
 				</blockquote>
-				
+
 				<p>I like this explanation by "Papabravo" on ["All About Circuits"](https://forum.allaboutcircuits.com/threads/bjts-and-base-emitter-saturation-voltage-vbe-sat.6664/) (emphasis mine):</p>
 
 				<blockquote>
@@ -1665,7 +1686,7 @@ dnl ---- END M4 MACROS ----
 					</p>
 				</blockquote>
 				<p></p>
-				
+
 				<h4>Current Amplification Factor: $\alpha$ &amp; Base Current Amplification Factor: $\beta$</h4>
 				<div>
 					<p>
@@ -1708,7 +1729,7 @@ dnl ---- END M4 MACROS ----
 						I_c = \beta I_b
 						$$
 					</p>
-					
+
 					<p>
 						Some examples, taken verbatim, from REF(`REF_NPN_ELECTRONICS_TUTS', `electronics-tutorials.ws on the NPN Transitor')
 						will help understand why these are useful.
@@ -1809,7 +1830,7 @@ dnl ---- END M4 MACROS ----
 			</p>
 			<p>
 				As the switch also controls the connection between the reference voltage and the output, this
-				produces a pulse train who's frequency is determined by the two resistors and the capacitor, and 
+				produces a pulse train who's frequency is determined by the two resistors and the capacitor, and
 				with a duty cycle that is determined by the two resistors.
 			</p>
 			<p style="float: left;">
@@ -1836,7 +1857,7 @@ dnl ---- END M4 MACROS ----
 				<img src="##IMG_DIR##/555_timer_copy_of_wikimedia_plus_surrounding_circuit.png" alt="Picture of 555 astable vibrator with internals representation of 555 shown"/>
 			</p>
 			<p>
-				Each of the components, like the RS flip flop, comparitors and other gates can be further broken down into their transitor/resitor combinations, so 
+				Each of the components, like the RS flip flop, comparitors and other gates can be further broken down into their transitor/resitor combinations, so
 				the above is just another, slightly more detailed abstraction. The real circuit is far, far more complex when broken down into its &quot;atomic&quot;
 				building blocks!
 			</p>
@@ -1933,7 +1954,7 @@ dnl ---- END M4 MACROS ----
 
 			<h3>Specific Reference Values</h3>
 			<div>
-				If the value is x dB?, where ? is a letter, ? says *what* the decibel value is relative to. If, for example, the value is 
+				If the value is x dB?, where ? is a letter, ? says *what* the decibel value is relative to. If, for example, the value is
 				x dBm, then because "m" stands for milliwatt (mW), the value is relative to a reference power of 1 mW. Thus, 10 dBm would be q 10 mW gain and so on...
 			</div>
 
