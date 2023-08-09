@@ -65,11 +65,11 @@ args = parser.parse_args()</pre>
 
 	<p>
 		You can <tt>add_argument()</tt>'s to the parser. Arguments can be positional
-		or optional.Optional arguments are generally specified
+		or optional. Optional arguments are generally specified
 		as a short command, e.g. <tt>-h</tt>, and/or as a long command, e.g.
 		<tt>--help</tt> along with an <tt>action</tt> to perform if the command
-		is received. Positional arguments are just defined as a name with no preceeding 
-		hypenated prefix.
+		is received. Positional arguments are just defined as a name with no preceding 
+		hyphenated prefix.
 	</p>
 
 	<h3>Actions</h3>
@@ -77,11 +77,13 @@ args = parser.parse_args()</pre>
 		<p>
 			For example, to add version information to the command line you could do:
 		</p>
-		<pre class="prettyprint linenums lang-python">parser.add_argument( "-v", "--version"
-					, action   = 'version'
-					, version  = '%(prog)s {version}'.format(version=__version__)
-					, help     = ("print version information")
-					)</pre>
+		<pre class="prettyprint linenums lang-python">
+parser.add_argument(
+    "-v", "--version",
+    action   = 'version',
+    version  = '%(prog)s {version}'.format(version=__version__),
+    help     = ("print version information"),
+)</pre>
 		<p>
 			If you want to store the value of an argument in some way you will want
 			to use one of the following actions (there are more possibilities - 
@@ -91,18 +93,20 @@ args = parser.parse_args()</pre>
 			<li><p><b><tt>store</tt></b></p>
 			<p>To store a <em>conditional</em> you would do something like this:
 				</p>
-				<pre class="prettyprint linenums lang-python">parser.add_argument("-j", "--jehtech", action="store")
-	args = parser.parse_args() 
-	print args.jehtech</pre>
+				<pre class="prettyprint linenums lang-python">
+parser.add_argument("-j", "--jehtech", action="store")
+args = parser.parse_args() 
+print args.jehtech</pre>
 				<p>If you then ran your program with the command line argument
 				<tt>python prog.py --jehtech "Hi JehTech"</tt> the variable
 				<tt>args.jehtech</tt> would hold the string &quot;Hi JehTech&quot;
 				</p>
 				<p>To store a <em>positional</em> you would do something like this:
 				</p>
-				<pre class="prettyprint linenums lang-python">parser.add_argument("jehtech_positional")
-	args = parser.parse_args() 
-	print args.jehtech_positional</pre>
+				<pre class="prettyprint linenums lang-python">
+parser.add_argument("jehtech_positional")
+args = parser.parse_args() 
+print args.jehtech_positional</pre>
 				<p>If you want your program as <tt>python prog.py "Hi positional"</tt>
 				the variable <tt>args.jehtech_positional</tt> would hold the string
 				&quot;Hi positional&quot;.
@@ -114,11 +118,13 @@ args = parser.parse_args()</pre>
 					have a value associated with it. The <tt>const</tt> value is what is stored
 					in the parser variable.
 				</p>
-				<pre class="prettyprint linenums lang-python">parser.add_argument( "-T", "--test_mode"
-					, const    = "This the value to store"
-					, action   = 'store_const'
-					)
-	args = parser.parse_args()</pre>
+				<pre class="prettyprint linenums lang-python">
+parser.add_argument(
+    "-T", "--test_mode",
+    const    = "This the value to store",
+    action   = 'store_const',
+)
+args = parser.parse_args()</pre>
 				<p>
 					If the option is specified on the command line the property
 					<tt>args.test_mode</tt> will contain the string &quot;This is the value to store&quot;. If
@@ -129,12 +135,14 @@ args = parser.parse_args()</pre>
 					not specified on the command line using the <tt>default=...</tt>
 					argument to <tt>add_argument()</tt>.
 				</p>
-				<pre class="prettyprint linenums lang-python">parser.add_argument( "-T", "--test_mode"
-					, const    = "This the value to store"
-					, <b>default</b>  = "Default value if --test_mode not specified"
-					, action   = 'store_const'
-					)
-	args = parser.parse_args()</pre>
+				<pre class="prettyprint linenums lang-python">
+parser.add_argument(
+	"-T", "--test_mode",
+    const    = "This the value to store",
+    <b>default</b>  = "Default value if --test_mode not specified",
+    action   = "store_const",
+)
+args = parser.parse_args()</pre>
 				<p>
 					The actions <tt>store_true</tt> and <tt>store_false</tt> are just shorthand 
 					actions for when you would normally set <tt>const</tt> to either
@@ -143,16 +151,18 @@ args = parser.parse_args()</pre>
 				<p>
 					I.e.,
 				</p>
-				<pre class="prettyprint linenums lang-python">parser.add_argument( "-T", "--test_mode"
-					, const    = True
-					, action   = 'store_const'
-					)</pre>
+				<pre class="prettyprint linenums lang-python">
+parser.add_argument(
+    "-T", "--test_mode"
+    const    = True
+    action   = 'store_const'
+)</pre>
 				<p>
 					Is equivalent to...
 				</p>
 				<pre class="prettyprint linenums lang-python">parser.add_argument( "-T", "--test_mode", action="store_true")</pre>
 			</li>
-			<li><p><b><tt>append</tt></b></p>
+			<li><p><b><code>append</code></b></p>
 				<p>This will append values to a list. See Python docs...</p>
 			</li>
 		</ul>
@@ -165,22 +175,26 @@ args = parser.parse_args()</pre>
 		</p>
 		<p>The <code>type=</code> argument takes any callable that accepts a string parameter and returns a type.</p>
 		<p>So, for example, the <code>int</code> function can be passed to <code>add_argument</code>.</p>
-		<pre class="prettyprint linenums lang-python">parser.add_argument( "-i", "--an-int-param"
-			, action  = 'store'
-			, type    = int
-			)</pre>
+		<pre class="prettyprint linenums lang-python">
+parser.add_argument(
+    "-i", "--an-int-param"
+    action  = 'store'
+    type    = int
+)</pre>
 
 		<p>If you wanted a positive integer, for example, you could define your own callable...</p>
-		<pre class="prettyprint linenums lang-python">positive_int(value):
-    		ivalue = int(value)
-    		if ivalue &lt= 0:
-        		raise argparse.ArgumentTypeError("Negative integers are not allowed")
-    		return ivalue
+		<pre class="prettyprint linenums lang-python">
+positive_int(value):
+    ivalue = int(value)
+    if ivalue &lt= 0:
+        raise argparse.ArgumentTypeError("Negative integers are not allowed")
+    return ivalue
 
-			parser = argparse.ArgumentParser(...)
-			parser.add_argument( "-u", "--a-uint-param"
-				, action = "store"
-				, type   = positive_int)</pre>
+parser = argparse.ArgumentParser(...)
+parser.add_argument(
+    "-u", "--a-uint-param",
+    action = "store",
+    type   = positive_int)</pre>
 		<p></p>
 	</div>
 
@@ -193,16 +207,40 @@ args = parser.parse_args()</pre>
 	</div>
 
 	<h3>Optional Posisitional When Named Argument Provided</h3>
+	<div>
 	<p>
 		If you want to have <code>command --some-arg xxx</code> work when otherwise a positional would be required,
 		e.g., <code>command --any-other-arg xxx position-arg</code>.
 	</p>
 	<p>
-		Argprase can't do this out-of-the-box. The easiest way appears to be:
+		Argprase can't do this out-of-the-box. The easiest way appears to be to use <code>nargs="?"</code>
+		for the positional argument and check manually once the arguments have been parsed:
+		</code>
 	</p>
 	<pre class="prettyprint linenums lang-python">
-		TODO
-	</pre>
+parser.add_argument("positional1", nargs="?")
+parser.add_argument("positional-not-needed", required=False)
+args = parser.parse_args()
+
+if args.positional_not_needed is None and args.positional1 is None:
+    parser.print_usage()
+    parser.exit(1, "Positional argument required")
+</pre>
+	</div>
+
+	<h3>Help And Epilog</h3>
+	<div>
+		<p>
+			If you want a chunk of text at the bottom of the help message there are two options.
+		</p>
+		<ol>
+			<li>Pass in the epilog as an argument to the <code>ArgumentParser()</code> constructor using the <code>epilog</code> keyword.</li>
+			<li>Or, set the <code>epilog</code> property on the <code>ArgumentParser</code> instance.</li>
+		</ol>
+		<p></p>
+	</div>
+
+
 </div>
 
 	</div> <!-- End content div -->
