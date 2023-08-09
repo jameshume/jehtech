@@ -191,6 +191,18 @@ args = parser.parse_args()</pre>
 		<p>To restrict a param to a range of integers use <code>choices=range(min,max)</code>, or to restrict
 		a string to a list of values use <code>choices=["some", "list", "of", "strings]</code>.</p>
 	</div>
+
+	<h3>Optional Posisitional When Named Argument Provided</h3>
+	<p>
+		If you want to have <code>command --some-arg xxx</code> work when otherwise a positional would be required,
+		e.g., <code>command --any-other-arg xxx position-arg</code>.
+	</p>
+	<p>
+		Argprase can't do this out-of-the-box. The easiest way appears to be:
+	</p>
+	<pre class="prettyprint linenums lang-python">
+		TODO
+	</pre>
 </div>
 
 	</div> <!-- End content div -->
