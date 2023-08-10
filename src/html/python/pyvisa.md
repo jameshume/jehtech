@@ -70,6 +70,18 @@ IEEE 488.2 defines precisely the format of commands sent to instruments and the 
 </blockquote>
 <p></p>
 
+
+### VISA - Virtual Instrument Software Architecture
+First off, a virtual instrument is one that displays a front panel GUI or image on a computer screen, rather than
+presenting its own. But, many VISA compliant instruments will also have their own screen.
+
+VISA is a big wrapper around a lot of the different protocols/transport methods that can be used to talk to a device, be it GPIB, USBTMC,
+VXI, Ethernet, serial etc etc. It hides all this complexity so that it becomes easier to connect to devices and help interoperability.
+
+The IVI foundation is responsible for the VISA API.
+
+PyVISA is an open source implementation of the VISA standard. The other option is the NI libvisa library.
+
 ### USBTMC - USBTest and Measurement Class
 USBTMC stands for USBTest and Measurement Class and allows GPIB-style communication over USB using USBTMC-compliant VISA layers.
 
@@ -85,11 +97,42 @@ echo "*IDN?" > /dev/usbtmc0
 cat /dev/usbtmc0
 ```
 
+## Some PyVISA Examples
+
+For example, to automatically find my N6705B:
+
+```python
+import pyvisa
+
+rm = pyvisa.ResourceManager("@py")
+
+# Search all connected devices for the N6705B
+n6705b_dev = None
+for device_string in rm.list_resources():     
+    tmp_dev = rm.open_resource(device_string)
+    device_idn = tmp_dev.query('*IDN?')
+    if "N6705B" in device_idn:
+        print(f"Using N6705B device {device_string}")
+        n6705b_dev = tmp_dev
+        break
+    tmp_dev.close()
+
+if n6705b_dev is None:
+    print("Could not find an N6705B device!")
+    print("Devices found where:", file=outfile)
+    for device_string in resman.list_resources():     
+        n6705b_dev = resman.open_resource(device_string)
+        device_idn = n6705b_dev.query('*IDN?')
+        print(f"   - {device_string} -- {device_idn}", file=outfile)
+        n6705b_dev.close()
+
+rm.close()
+```
 
 
 ## Using the NI Backend
 
-
+### Installing The NI's `libvisa`
 You have to install the NI drivers, which on Ubuntu is pretty easy:
 ```
 apt-get install -y ./ni-ubuntu1804firstlook-drivers-stream.deb && \
@@ -97,6 +140,7 @@ apt-get update && \
 apt-get install -y --no-install-recommends libvisa-dev
 ```
 
+### Making Sure Your Device Is Accessible
 Once the drivers are installed, accessing the device is a bit of a pain, however:
 
 In a terminal type:
@@ -263,4 +307,71 @@ You can then use this information to create a udev rule:
 
 ```
 KERNEL=="usbtmc[0-9]", ATTRS{idVendor}=="0957", ATTRS{idProduct}=="0f07", GROUP="usbtmc", MODE="0660"
+```
+
+
+### Configure PyVISA To Use `libvisa.so`
+
+Installing `libvisa-dev` on Ubuntu 22 I find the driver installed at `/usr/lib/x86_64-linux-gnu/libvisa.so`. So,
+to make PyVISA use it:
+
+```
+rm = pyvisa.ResourceManager('/usr/lib/x86_64-linux-gnu/libvisa.so')
+```
+
+### Simple Example Using `libvisa.so` directly:
+
+```c
+// A silly little test program to list the resources found by NI's libvisa
+// independently of PyVisa. Was used to debug NI libvisa not finding USBTMC
+// devices.
+//
+// To compile and run:
+//    gcc test_nivisa.c -lvisa -o test_nivisa && ./test_nivisa
+#include "visa.h"
+#include "visa_version.h"
+
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+    // Get VISA resource manager
+    ViSession resource_manager;
+    ViStatus  status;
+    ViFindList find_list;
+    ViUInt32 num_found;
+    ViChar descr[VI_FIND_BUFLEN];
+    ViChar errorString[256]; // From the docs: "The size of the desc parameter should be at least 256 bytes." [https://www.ni.com/docs/en-US/bundle/ni-visa/page/ni-visa/vistatusdesc.html]
+    
+    printf("You are using an libvisa v%u.%u.%u\n",
+        (unsigned int)VI_VERSION_MAJOR(VI_SPEC_VERSION),
+        (unsigned int)VI_VERSION_MINOR(VI_SPEC_VERSION),
+        (unsigned int)VI_VERSION_SUBMINOR(VI_SPEC_VERSION));
+
+    status = viOpenDefaultRM(&resource_manager);
+    if (status != VI_SUCCESS) {
+        printf("Could not open VISA resource manager.\n");
+        return 1;
+    }
+
+    status = viFindRsrc(resource_manager, "?*", &find_list, &num_found, descr);
+    if (status != VI_SUCCESS) {
+#if VI_SPEC_VERSION >= 0x00500800UL
+        viStatusDesc(resource_manager, status, errorString);
+        printf("Could not find resources because '%s'\n", errorString);
+#else
+        // On Ubuntu 18 the install it would appear that libvisa does not support viStatusDesc()
+        printf("Could not find resources\n");
+#endif
+        viClose(resource_manager);
+        return 1;
+    }
+
+    printf("Found %s\n", descr);
+    
+    viClose(find_list);
+    viClose(resource_manager);
+    return 0;
+}
 ```
