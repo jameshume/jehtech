@@ -1,9 +1,9 @@
 ## GPIB / IEEE-448, USBTMC, VISA, SCPI... What Does It All Mean?
 
 ### References
-* (GPIB Tutorial, NI)[http://lmu.web.psi.ch/docu/manuals/software_manuals/GPIB/GPIB_tutorial.pdf]
-* (Making Sense of Test and Measurement Protocols)[https://tomverbeure.github.io/2020/06/07/Making-Sense-of-Test-and-Measurement-Protocols.html]
-* (GPIB 101 - A Tutorial About The GPIB Bus)[https://www.icselect.com/pdfs/ab48_11%20GPIB-101.pdf]
+* [GPIB Tutorial, NI](http://lmu.web.psi.ch/docu/manuals/software_manuals/GPIB/GPIB_tutorial.pdf)
+* [Making Sense of Test and Measurement Protocols](https://tomverbeure.github.io/2020/06/07/Making-Sense-of-Test-and-Measurement-Protocols.html)
+* [GPIB 101 - A Tutorial About The GPIB Bus](https://www.icselect.com/pdfs/ab48_11%20GPIB-101.pdf)
 
 
 ### GPIB / IEEE-448.x
@@ -35,7 +35,7 @@ renumbered to 488.1.
 <p>The required common commands simplified instrument programming
 by giving the programmer a minimal set of commands that he can
 count on being recognized by each 488.2 instrument</p>
-<footer>-- (GPIB 101 - A Tutorial About The GPIB Bus)[https://www.icselect.com/pdfs/ab48_11%20GPIB-101.pdf]</footer>
+<footer>-- [GPIB 101 - A Tutorial About The GPIB Bus](https://www.icselect.com/pdfs/ab48_11%20GPIB-101.pdf)</footer>
 </blockquote>
 
 IEEE-488.2 defines the following mandator common commands:
@@ -66,7 +66,201 @@ Status Byte Register (use <code>*STB?</code>).
 <p>
 IEEE 488.2 defines precisely the format of commands sent to instruments and the format and coding of responses sent by instruments
 </p>
-<footer>-- (GPIB Tutorial, NI)[http://lmu.web.psi.ch/docu/manuals/software_manuals/GPIB/GPIB_tutorial.pdf]</footer>
+<footer>-- [GPIB Tutorial, NI](http://lmu.web.psi.ch/docu/manuals/software_manuals/GPIB/GPIB_tutorial.pdf)</footer>
 </blockquote>
 <p></p>
 
+### USBTMC - USBTest and Measurement Class
+USBTMC stands for USBTest and Measurement Class and allows GPIB-style communication over USB using USBTMC-compliant VISA layers.
+
+The [standard is freely available](https://www.usb.org/sites/default/files/USBTMC_1_006a.zip).
+
+Linux includes an usbtmc kernel module, so you should just be able to plug in a usbtmc device straight into a linux
+box and use it.
+
+For example, a quick and dirty way to verify you can talk to a device is:
+
+```
+echo "*IDN?" > /dev/usbtmc0
+cat /dev/usbtmc0
+```
+
+
+
+## Using the NI Backend
+
+
+You have to install the NI drivers, which on Ubuntu is pretty easy:
+```
+apt-get install -y ./ni-ubuntu1804firstlook-drivers-stream.deb && \
+apt-get update && \
+apt-get install -y --no-install-recommends libvisa-dev
+```
+
+Once the drivers are installed, accessing the device is a bit of a pain, however:
+
+In a terminal type:
+
+```
+$ usb-devices
+```
+
+I'm using an N6705B. Part of the output will look something like this, if the device is connected:
+
+```
+T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  8 Spd=480 MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=0957 ProdID=0f07 Rev=01.00
+S:  Manufacturer=Agilent Technologies
+S:  Product=N6705B
+S:  SerialNumber=MY53000921
+C:  #Ifs= 1 Cfg#= 1 Atr=c0 MxPwr=0mA
+I:  If#= 0 Alt= 0 #EPs= 3 Cls=fe(app. ) Sub=03 Prot=01 Driver=usbtmc
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=88(I) Atr=03(Int.) MxPS=   2 Ivl=125us
+
+```
+
+The `Bus` and `Lev` will vary. If you see `Driver=usbtmc` it means that the <em>linux USBTMC kernel
+driver</em> has claimed the device. This means that the `libvisa` be not be able to. You can see this
+by doing an `strace` of `./test_nivisa`, where you will see something similar to the following:
+
+```
+stat("/dev/bus/usb/001/001", {st_mode=S_IFCHR|0664, st_rdev=makedev(0xbd, 0), ...}) = 0
+openat(AT_FDCWD, "/dev/bus/usb/001/001", O_RDWR) = 5
+lseek(5, 0, SEEK_SET)                   = 0
+read(5, "\22\1\0\2\t\0\1@k\35\2\0\31\5\3\2\1\1", 18) = 18
+lseek(5, 18, SEEK_SET)                  = 18
+read(5, "\t\2\31\0\1\1\0\340\0\t", 10)  = 10
+lseek(5, 18, SEEK_SET)                  = 18
+read(5, "\t\2\31\0\1\1\0\340\0\t\4\0\0\1\t\0\0\0\7\5\201\3\4\0\f", 25) = 25
+ioctl(5, USBDEVFS_CONTROL, 0x7ffca43b9a40) = 4
+ioctl(5, USBDEVFS_CONTROL, 0x7ffca43b9a10) = 26
+ioctl(5, USBDEVFS_CLAIMINTERFACE, 0x7ffca43b9cac) = -1 EBUSY (Device or resource busy)
+ioctl(5, USBDEVFS_GETDRIVER, 0x7ffca43b9ba0) = 0
+```
+
+One can see that the Agilent device is busy when `libvisa` tries to open it. This is why
+it cannot find the device.
+
+To allow it access to the device the USBTMC kernel driver module must be unloaded. To do this
+type:
+
+```
+sudo rmmod usbtmc
+```
+
+The next problem you will face is that `/dev/bus/usb/001/001` is owned by `root` and is in the
+group `root`. This isn't great, so do a `sudo chgroup plugdev /dev/bus/usb/001/001`. 
+
+If you wanted to do this every time you ran a test setting up a udev rule would be preferable.
+
+### Setting Up A udev Rule
+
+You can use the `udevadm monitor` command to monitor udev events in real time. Simply run the command and plug in your
+device. I am using an N6705B device...
+
+```
+$ sudo udevadm monitor
+monitor will print the received events for:
+UDEV - the event which udev sends out after rule processing
+KERNEL - the kernel uevent
+
+KERNEL[2958.347940] add      /devices/pci0000:00/0000:00:14.0/usb1/1-2 (usb)
+KERNEL[2958.349495] add      /devices/pci0000:00/0000:00:14.0/usb1/1-2/1-2:1.0 (usb)
+KERNEL[2958.355912] add      /class/usbmisc (class)
+KERNEL[2958.355962] add      /devices/pci0000:00/0000:00:14.0/usb1/1-2/1-2:1.0/usbmisc/usbtmc0 (usbmisc)
+KERNEL[2958.355990] bind     /devices/pci0000:00/0000:00:14.0/usb1/1-2/1-2:1.0 (usb)
+KERNEL[2958.356653] bind     /devices/pci0000:00/0000:00:14.0/usb1/1-2 (usb)
+UDEV  [2958.357886] add      /class/usbmisc (class)
+UDEV  [2958.376286] add      /devices/pci0000:00/0000:00:14.0/usb1/1-2 (usb)
+UDEV  [2958.379804] add      /devices/pci0000:00/0000:00:14.0/usb1/1-2/1-2:1.0 (usb)
+UDEV  [2958.381957] add      /devices/pci0000:00/0000:00:14.0/usb1/1-2/1-2:1.0/usbmisc/usbtmc0 (usbmisc)
+UDEV  [2958.384157] bind     /devices/pci0000:00/0000:00:14.0/usb1/1-2/1-2:1.0 (usb)
+UDEV  [2958.393828] bind     /devices/pci0000:00/0000:00:14.0/usb1/1-2 (usb)
+```
+
+Once you have your device you can get more info on the device:
+
+```
+$ sudo udevadm info -a -n /dev/usbtmc0
+
+Udevadm info starts with the device specified by the devpath and then
+walks up the chain of parent devices. It prints for every device
+found, all possible attributes in the udev rules key format.
+A rule to match, can be composed by the attributes of the device
+and the attributes from one single parent device.
+
+  looking at device '/devices/pci0000:00/0000:00:14.0/usb1/1-2/1-2:1.0/usbmisc/usbtmc0':
+    KERNEL=="usbtmc0"
+    SUBSYSTEM=="usbmisc"
+    DRIVER==""
+    ATTR{power/async}=="disabled"
+    ATTR{power/control}=="auto"
+    ATTR{power/runtime_active_kids}=="0"
+    ATTR{power/runtime_active_time}=="0"
+    ATTR{power/runtime_enabled}=="disabled"
+    ATTR{power/runtime_status}=="unsupported"
+    ATTR{power/runtime_suspended_time}=="0"
+    ATTR{power/runtime_usage}=="0"
+
+  looking at parent device '/devices/pci0000:00/0000:00:14.0/usb1/1-2/1-2:1.0':
+    KERNELS=="1-2:1.0"
+    SUBSYSTEMS=="usb"
+    DRIVERS=="usbtmc"
+    ATTRS{authorized}=="1"
+    ATTRS{bAlternateSetting}==" 0"
+    ATTRS{bInterfaceClass}=="fe"
+    ATTRS{bInterfaceNumber}=="00"
+    ATTRS{bInterfaceProtocol}=="01"
+    ATTRS{bInterfaceSubClass}=="03"
+    ATTRS{bNumEndpoints}=="03"
+    ATTRS{device_capabilities}=="1"
+    ATTRS{interface_capabilities}=="0"
+    ATTRS{physical_location/dock}=="no"
+    ATTRS{physical_location/horizontal_position}=="left"
+    ATTRS{physical_location/lid}=="no"
+    ATTRS{physical_location/panel}=="top"
+    ATTRS{physical_location/vertical_position}=="upper"
+    ATTRS{power/async}=="enabled"
+    ATTRS{power/runtime_active_kids}=="0"
+    ATTRS{power/runtime_enabled}=="disabled"
+    ATTRS{power/runtime_status}=="unsupported"
+    ATTRS{power/runtime_usage}=="0"
+    ATTRS{supports_autosuspend}=="0"
+    ATTRS{usb488_device_capabilities}=="15"
+    ATTRS{usb488_interface_capabilities}=="7"
+
+  looking at parent device '/devices/pci0000:00/0000:00:14.0/usb1/1-2':
+    KERNELS=="1-2"
+    SUBSYSTEMS=="usb"
+    DRIVERS=="usb"
+    ATTRS{authorized}=="1"
+    ATTRS{avoid_reset_quirk}=="0"
+    ATTRS{bConfigurationValue}=="1"
+    ATTRS{bDeviceClass}=="00"
+    ATTRS{bDeviceProtocol}=="00"
+    ATTRS{bDeviceSubClass}=="00"
+    ATTRS{bMaxPacketSize0}=="64"
+    ATTRS{bMaxPower}=="0mA"
+    ATTRS{bNumConfigurations}=="1"
+    ATTRS{bNumInterfaces}==" 1"
+    ATTRS{bcdDevice}=="0100"
+    ATTRS{bmAttributes}=="c0"
+    ATTRS{busnum}=="1"
+    ATTRS{configuration}==""
+    ATTRS{devnum}=="10"
+    ATTRS{devpath}=="2"
+    ATTRS{idProduct}=="0f07"
+    ATTRS{idVendor}=="0957"
+    ATTRS{ltm_capable}=="no"
+    ATTRS{manufacturer}=="Agilent Technologies"
+    ATTRS{maxchild}=="0"
+```
+
+You can then use this information to create a udev rule:
+
+```
+KERNEL=="usbtmc[0-9]", ATTRS{idVendor}=="0957", ATTRS{idProduct}=="0f07", GROUP="usbtmc", MODE="0660"
+```
