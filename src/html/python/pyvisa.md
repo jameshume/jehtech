@@ -96,6 +96,9 @@ The IVI foundation is responsible for the VISA API.
 
 PyVISA is an open source implementation of the VISA standard. The other option is the NI libvisa library.
 
+All VISA devices have their own unique resource name. For example, `USB::0x1234::125::A22-5::INSTR` is resource name for
+a USBTMC device with manufacturer ID 0x1234, model code 125, and serial number A22-5.
+
 ### USBTMC - USBTest and Measurement Class
 USBTMC stands for USBTest and Measurement Class and allows GPIB-style communication over USB using USBTMC-compliant VISA layers.
 
