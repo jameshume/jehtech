@@ -70,6 +70,20 @@ IEEE 488.2 defines precisely the format of commands sent to instruments and the 
 </blockquote>
 <p></p>
 
+### SCPI - Standard Commands for Programmable Instruments
+A level above the transport layer.
+
+<p></p>
+<blockquote>
+<p>
+SCPI simplifies the programming task by defining a single comprehensive command set for programmable instrumentation, regardless of type or manufacturer. 
+</p>
+<p>...</p>
+<p>SCPI built on the IEEE 488.2 standard and defined device-specific commands that standardize programming instruments.
+SCPI systems are much easier to program and maintain. </p>
+<footer>-- [GPIB Tutoria](http://lmu.web.psi.ch/docu/manuals/software_manuals/GPIB/GPIB_tutorial.pdf)</footer>
+</blockquote>
+<p></p>
 
 ### VISA - Virtual Instrument Software Architecture
 First off, a virtual instrument is one that displays a front panel GUI or image on a computer screen, rather than
