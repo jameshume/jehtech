@@ -4,7 +4,7 @@
 * [GPIB Tutorial, NI](http://lmu.web.psi.ch/docu/manuals/software_manuals/GPIB/GPIB_tutorial.pdf)
 * [Making Sense of Test and Measurement Protocols](https://tomverbeure.github.io/2020/06/07/Making-Sense-of-Test-and-Measurement-Protocols.html)
 * [GPIB 101 - A Tutorial About The GPIB Bus](https://www.icselect.com/pdfs/ab48_11%20GPIB-101.pdf)
-
+* [Tutorial: Introduction to SCPI Automation of Test Equipment with pyvisa](https://goughlui.com/2021/03/28/tutorial-introduction-to-scpi-automation-of-test-equipment-with-pyvisa/)
 
 ### GPIB / IEEE-448.x
 
@@ -119,6 +119,7 @@ cat /dev/usbtmc0
 A silly little note, but don't be tempted to name you script something like <code>gpib.py</code> or <code>visa.py</code> as
 otherwise you'll shadow one of the module's own files and you'll get strange things like your script appearing to load twice!
 
+### Automatically Find A Device
 For example, to automatically find my N6705B:
 
 ```python
@@ -149,6 +150,14 @@ if n6705b_dev is None:
 rm.close()
 ```
 
+### <code>query()</code> vs <code>query_ascii_values()</code>
+<p></p>
+<blockquote>
+<p>
+You will notice that set commands are written using the .write function while queries are written using the .query_ascii_values function. In fact, there are several ways you can go about writing query functions – you could use a .write followed by a .read which will return you a Python object containing the raw response. However, many queries to instruments result in one or more comma-separated numerical values being returned, so in that case, using .query_ascii_values will very helpfully convert it into a Python list of numeric objects – so instead of working with a string that might say “2.9777E+02”, you get to work with the actual number so comparisons and mathematical operations can be run directly on the result. However, even if the return value is just a single value, the function returns a list,</p>
+<footer>-- [Tutorial: Introduction to SCPI Automation of Test Equipment with pyvisa](https://goughlui.com/2021/03/28/tutorial-introduction-to-scpi-automation-of-test-equipment-with-pyvisa/)</footer>
+</blockquote>
+<p></p>
 
 ## Using the NI Backend
 
