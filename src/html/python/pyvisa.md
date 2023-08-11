@@ -56,7 +56,7 @@ IEEE-488.2 defines the following mandator common commands:
 | *TST?    | Internal         | Operations Self-test query        |
 | *WAI     | Synchronization  | Wait to complete                  |
 
-For example, when I send the N6705B the <code>*IDN?</code> it replies with the string <code>TODO</code>.
+For example, when I send the N6705B the <code>*IDN?</code> it replies with the string <code>TCPIP::192.168.7.77::INSTR</code>.
 
 IEEE-488.2 also defines a status reporting model via the Standard Event Status Register (use <code>*ESR></code>) and
 Status Byte Register (use <code>*STB?</code>).
@@ -115,6 +115,9 @@ cat /dev/usbtmc0
 ```
 
 ## Some PyVISA Examples
+
+A silly little note, but don't be tempted to name you script something like <code>gpib.py</code> or <code>visa.py</code> as
+otherwise you'll shadow one of the module's own files and you'll get strange things like your script appearing to load twice!
 
 For example, to automatically find my N6705B:
 
@@ -392,3 +395,14 @@ int main()
     return 0;
 }
 ```
+
+## IVI Visa Library
+The IVI foundation also has a VISA library but apparently <q>will only be able to communicate via VISA IO with
+instruments if there is a vendor IO Library installed (i,e. Keysight IO Libraries or another vendor) and registered with
+the IVI foundation's libivivisa.so as an available vendor VISA IO library installed on the system</q> [[Ref]](https://edadocs.software.keysight.com/display/engdociccap/ICCAP+2020+Update+2.0+Release+Notes).
+
+To install the KeySight drivers you need to find `iokerneldrivers-installer_20_0_26913_1.run` and run it. You can use 
+options like `--mode unattended` or `--mode text` if you don't want to use the GUI installed: <q>This installer (iokerneldrivers-installer.run)
+... installs a set of kernel drivers for users wishing to establish USBTMC or USB-to-GPIB (82357) converter connections...</q>[[Ref]](https://www.keysight.com/us/en/assets/9018-80117/release-notes/9018-80117.htm?success=true).
+
+One point of confusion for me is that if Linux has a built in USBTMC driver, why do I need the KeySight drivers to establish a USBTMC connection?
