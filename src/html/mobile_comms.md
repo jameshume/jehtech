@@ -21,18 +21,21 @@
 | LAI     | Local Area Identity |
 | LTE     | Long Term Evolution (of mobile networks) |
 | MCC     | Mobile Country Code<br>For example the UK MCC is 234<br>[[See Mobile Country Codes (MCC) and Mobile Network Codes (MNC)]](https://mcc-mnc-list.com/list) |
+| ME      | Mobile Equipment.<br>The physical UE consisting of one of more Mobile Termination (MT) and one or more Terminal Equipment (TE).|
 | MNC     | Mobile Network Code<br>A unique ID specific to a mobile operator network<br>[[See Mobile Country Codes (MCC) and Mobile Network Codes (MNC)]](https://mcc-mnc-list.com/list)|
 | MO      | Mobile Originated (service) |
 | MS      | Mobile Station: your phone |
-| MSC     | Mobile SWitching Centre: core part of the GSM/CDMA network system |
+| MSC     | Mobile Switching Centre: core part of the GSM/CDMA network system |
 | MSISDN  | Mobile Station International Subscriber Directory<br>Full mobile number with country code and all prefixes. |
 | MSRN    | Mobile Station Roaming Number<br>[[See this article]](https://medium.com/@cspsprotocols247/what-is-msrn-how-it-is-used-in-roaming-how-a-mobile-gets-msrn-d1c4570d8e85). |
+| MT      | Mobile Termination (MT)<br>A component of the Mobile Equipment (ME) performing functions specific to management of the radio interface. The R interface between TE and MT uses the AT command set. The IMEI code is attached to the MT. I.e., this is, for example, the UBlox module. |
 | NR      | New Radio |
 | PDN     | Public Data Network |
 | PSM     | Power Saving Mode |
 | SGSN    | Serving GPRS Support Node |
 | TAU     | Tracking Area Updating period |
-| UE      | User Equipment |
+| TE      | Terminal Equipment (TE)<br>Communications equipment at either end of a communications link, used to permit the stations involved to accomplish the mission for which the link was established. |
+| UE      | User Equipment.<br>Any device used by an end-user to communicate. The UE consists of the Mobile Equipment (ME) and the Universal Integrated Circuit Card (UICC). |
 | UMTS    | Universal Mobile Telecommunications System |
 | UTRAN   | Universal Terrestrial Radia Access Network: 3G access network |
 <p></p>
@@ -144,7 +147,7 @@ The industry code differentiates a SIM from other types of chip cards, for examp
 ## Signal Strength
 * See [[Ref]](https://www.metageek.com/training/resources/understanding-rssi/)
 
-### RSSI
+### RSSI - Received Signal Strength Indicator
 * A relative measure
 * Values in range [0, 255], *however* each chipset vendor can choose their own maximum value within this range, so RSSI numbers between vendors *may not* be comparable!
 * Use dBm for a comparable metric.
@@ -605,10 +608,10 @@ Extended commands come in 3 flavours:
 3. Execute: No suffix. Makes modem do something, think verb.
 4. Test: Suffix is "=?". Asks about capabilities and if command understood/supported.
 
-However, not all AT commands follow this convention religiously. For example, `AT+CIMI` has the same functionality as `AT_CIMI?`: the CIMI can be read without using a "?" suffix, so it looks like an execution command, but really is doing a read of sorts.
+However, not all AT commands follow this convention religiously. For example, `AT+CIMI` has the same functionality as `AT+CIMI?`: the CIMI can be read without using a "?" suffix, so it looks like an execution command, but really is doing a read of sorts.
 
 Standard commands will be something like "AT+C....". Vendor specific commands usually replace the C with something. For example UBlox specific
-AT commands look like "AT+U...".
+AT commands look like "AT+U..." and Spredtrum devices like the SM5100B look like "AT_S..." etc etc.
 
 A more concrete example on the UBlox R4, requesting the IMEI:
 
@@ -620,6 +623,22 @@ OK
 ```
 
 ### Standard
+
+#### Information About Base Station / Cell
+<p></p>
+| Command     | MCC  | MNC  | RAT  | LAC  | CI   | RAC  | dBm  | Qual | BSIC | ARFCN | ULF  | DLF  | SC   |
+| ----------- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ----- | ---- | ---- | ---- |
+| AT+COPS?    | Y    | Y    | Y    |      |      |      |      |      |      |       |      |      |      |
+| AT+CGREG=2  |      |      | Y    | Y    | Y    | Y    |      |      |      |       |      |      |      |
+| AT+CGED=4,1 | Y    | Y    | Y    | Y    | Y    |      |      |      | Y    | Y     | Y    | Y    | Y    |
+| AT+CSQ      |      |      |      |      |      |      | Y    | Y    |      |       |      |      |      |
+<p></p>
+
+BSIC = Base Station Identity Code
+ARFCN = Absolute Radio Frequency Channel Number
+ULF = Uplink Frequency
+DLF = Downlink Frequency
+SC = Scrambling Code.
 
 #### Identifying Information About Modem, SIM, etc
 <table class="jehtable">
@@ -755,7 +774,6 @@ are what you're looking for!
             </td>
         </tr>
 
-
         <tr>
             <td><p><code>AT+CEREG</code></p></td>
             <td><p>LTE/EPS network registration status/report</p></td>
@@ -766,12 +784,25 @@ are what you're looking for!
             <td><p>The `+COPS` command selects a Public Land Mobile Network (PLMN) automatically or manually, and reads and searches the current mobile network.</p></td>
         </tr>
 
+        <tr>
+            <td><p><code>AT+CPOL</code></p></td>
+            <td><p>Preferred operator list.</p>
+            </td>
+        </tr>
+
+        <tr>
+            <td><p><code>AT+CPLS</code></p></td>
+            <td><p>Preferred PLMN list selection.</p>
+            </td>
+        </tr>
+
     </tbody>
 </table>
 
 Easiest thing is to enable URCs for the registration to determine registration state. It is possible
 to poll using the query commands, but this is less efficient.
 
+##### An Example Network Registration Sequence
 Some worked example sequences:
 
 A. Deregister from the current network:
@@ -895,6 +926,50 @@ OK                  # AT command completes
 +CGREG: 5 #<<<< THIS IS A URC!!! Says its registered and roaming
 ```
 
+##### MNO Profiles
+
+This is a Ublox concept, I think.
+
+<p></p>
+<blockquote>
+    <p>
+    MNO profiles provide a powerful and flexible method to configure the SARA-R4 series module to
+    seamlessly work with the SIM of the selected network operator.
+    </p><p>
+    Using the MNO profiles the module is dynamically configured to use the proper bands, RATs, and the
+    operator-dependent protocol stack settings needed to operate on the home network in full
+    compliance with the mobile operator requirements. 
+    </p>
+    <footer>-- <a href="https://content.u-blox.com/sites/default/files/SARA-R42-Application-Development_AppNote_UBX-20050829.pdf">SARA-R42 series, Application development guide, Application note</a>.</foooter>
+</blockquote>
+
+This might be, in part, why the above registration example was "simple". On the device if I query the
+MNO profile in use I get the following:
+
+```
+AT+UMNOPROF?
+
++UMNOPROF: 100
+
+OK
+```
+
+This means that the currently configured profile is Europe.
+
+From the R4 manual one can see that the MNO profile sets:
+
+* The band mask
+* The RAT
+* PDP context type
+* Service domain
+* LwM2M features (Lightwieght machine to machine protocol - for low power devices)
+* Radio Manager Policy settings
+* CIoT optimization configuration
+* CIoT capabilities configuration
+* MAC QoS inactivity timer(s)
+* MTU size
+
+Thus, I didn't have to configure any of the above myself.
 
 #### Modem Power Settings
 <table class="jehtable">
@@ -921,7 +996,7 @@ OK                  # AT command completes
 </table>
 <p></p>
 
-#### Internet Access
+#### Internet Access (IP)
 
 <table class="jehtable">
     <thead>
@@ -964,7 +1039,7 @@ OK                  # AT command completes
 #         cid - used to identify the definition
 
 OK</pre>            
-                <p>The above was already stored on my device, i.e., it had previously been configured (for a Twillio super SIM). If I needed other PDP context definitions I could use the set command to store more, for example <code>AT+CGDCONT=1,"IP","the-apn-name-goes-here","0.0.0.0"'</code>. Vodaphone's APN name is <code>xxxx</code>, for example. O2's M2M network APN is <code>xxxx</code>. On the Ublox R4, at least, these are stored to persistent memory.</p>
+                <p>The above was already stored on my device, i.e., it had previously been configured (for a Twillio super SIM). If I needed other PDP context definitions I could use the set command to store more, for example <code>AT+CGDCONT=1,"IP","the-apn-name-goes-here","0.0.0.0"'</code>. Twilio's APN name is <code>super</code>, for example. O2's M2M network APN is <code>xxxx</code> (redacted as its a business APN name). On the Ublox R4, at least, these are stored to persistent memory.</p>
                 <p>Some APNs have usernames and passwords but these are essentially useless as they are well-known. Presumably when the system was designed it was envisaged providers might have different usernames and passwords for different SIMs etc, but that never happended!</p>
             </td>
         </tr>
@@ -1017,34 +1092,36 @@ For Ublox see the `AT+UAUTHREQ` command.
 
 Once the modem has registered with a network it can activate a packet data bearer. Remember, a "bearer" just refers to the underlying network technology that carries the data traffic between the mobile device and the network infrastructure.
 
-A. Use the `AT+CGDCONT?` to see what PDP context definitions are stored by the modem.
+*A*. Use the `AT+CGDCONT?` to see what PDP context definitions are stored by the modem.
 
 ```
 > AT+CGDCONT?
 
-+CGDCONT: 1,"IP","xxxx","0.0.0.0",0,0,0,0
++CGDCONT: 1,"IP","super","0.0.0.0",0,0,0,0
 
 OK
 ```
 
-The above is an IP context for Twillio (we know this because "xxxx" is their APN name).
+The above is an IP context for Twillio (we know this because "super" is their APN name).
 
-I have an O2 (UK) M2M SIM inserted so first I need to find out O2's APN name, which is publicly available, and is "xxxx".
+I have an O2 (UK) M2M SIM inserted so first I need to find out O2's APN name, which is not publicly available, and is "xxxx" (redacted).
 
 I therefore need to...
 
-B. Create a new PDP context definition for O2:
+*B*. Create a new PDP context definition for O2:
 
 ```
 > AT+CGDCONT=2,"IP","xxxx"
+
+OK
 ```
 
-C. Re-list the available PDP context definitions to check this really worked:
+*C*. Re-list the available PDP context definitions to check this really worked:
 
 ```
 > AT+CGDCONT?
 
-+CGDCONT: 1,"IP","xxxx","0.0.0.0",0,0,0,0
++CGDCONT: 1,"IP","super","0.0.0.0",0,0,0,0
 +CGDCONT: 2,"IP","xxxx","0.0.0.0",0,0,0,0
 
 OK
@@ -1052,7 +1129,7 @@ OK
 
 It did, so now...
 
-D. Use the `AT+CGACT?` command to query the PDP contexts stats (active or inactive). The command should respond with `+CGACT: <cid>,<status>`, where `<cid>` is just a number that uniquely identifies a bearer and `<status>` is either `0` for deactivated or `1` for activated.
+*D*. Use the `AT+CGACT?` command to query the PDP contexts stats (active or inactive). The command should respond with `+CGACT: <cid>,<status>`, where `<cid>` is just a number that uniquely identifies a bearer and `<status>` is either `0` for deactivated or `1` for activated.
 
 ```
 > AT+CGACT?
@@ -1065,21 +1142,249 @@ OK
 
 In the above example, there is are 2 inactive PDP contexts with `cid`s of `1` and `2`. 
 
-C. Let's enable the PDP context we just created...
+*E*. Let's enable the PDP context we just created...
 
 ```
 > AT+CGACT=1,2
+
++CME ERROR: requested service option not subscribed
+```
+
+Oops! What happened here? I made a mistake. Although the SIM connected to the O2 network, it is not an O2 SIM. What is happening behind the scenes is that there is a RADIUS query being sent to O2's RADIUS server. As the SIM is not an O2 SIM, the server denies the request. 
+
+It is an ARM Pellion SIM so I need to modify the PDP context to use the correct APN name!
+
+*F*. Correct the APN name:
+
+```
+> AT+CGDCONT=2,"IP","arm-pellion-stream-apn-name-goes-here"
+
+OK
+```
+
+*G*. Retry activating the context...
+
+```
+> AT+CGACT=1,2
+
+OK
+```
+
+Yay!
+
+*H*. Use the `AT+CGCONTRDP=<cid>` command to query the dynamic parameters for the PDP context e.g. the IPv4 address assigned to the device and the IPv4 addresses for the primary and secondary DNS servers.
+
+```
+> AT+CGCONTRDP=2
+
++CGCONTRDP: 2,5,--ip redacted--,--ip redacted--,,--ip redacted--,--ip redacted--
+
+OK
+```
+
+The above command returned us the following information:
+
+1. CID - 2
+2. Bearer ID - 5
+3. Local IP address (and possibly netmask), i.e. the IP address and subnet mask of the phone
+4. Gatway address
+5. DNS server primary address - not given
+6. DNS server secondary address
+7. P-CSCF (Proxy Call Session Control Function) server primary address
+
+#### Internet Access (TCP/IP)
+
+Opening sockets looks to be a vendor specific thing as I guess a modem doesn't have to support this
+as the modem client could implement the TCP/IP stack on top of the IP connection provided.
+
+However, some devices add in this functionality for you. Ublox does as well as other vendors. I'll
+concentrate on Ublox here because that's what I'm learning with...
+
+First thing is to set some of the security parameters
+```
+AT+USECPRF command to reset the security profile to defaults:
+Use the AT+USECPRF command to configure the certificate validation to be level 3 i.e root certificate validation with check of certificate validity date
+AT+USECPRF command to configure the minimum SSL/TLS version to be TLSv1.2
+Use the AT+USECPRF command to configure the cipher suites to use cipher suite (0x003D) TLS_RSA_WITH_AES_256_CBC_SHA256
+AT+CCLK={time}
+```
+
+The <a href="https://content.u-blox.com/sites/default/files/EVK-R4_UserGuide_UBX-16029216.pdf">EVK-R4 user guide</a>
+gives a good example of opening a socket, which I have just plugged into my terminal session with the board...
+
+See also <a href="https://content.u-blox.com/sites/default/files/products/documents/TestServerForSocketOperations_ApplicationNote_UBX-14005690.pdf">Test servier for cellular data modules, Ublox</a>.
+
+```
+> AT+COPS?
+
++COPS: 0,0,"234 10 Stream",3
+
+OK
+
+> AT+USOCR=6 
+
++CME ERROR: No connection to phone
+```
+
+Ooh, what happended here? I had rebooted the EVK and not re started the PDP context. Once the PDP
+context was reactivated it, well... you'll see...
+
+```
+# Activate the PDP context
+> AT+CGACT=1,2
+
+OK
+
+# Create the TCP socket -- AT+USOCR=<protocol>[,<local_port>[,<preferred_protocol_type>[,<cid>]]]
+# Where
+#   protocol:  6: TCP
+#             17: UDP
+#
+> AT+USOCR=6
+
+# The response is +USOCR: <socket>, so the socket numnber/ID we've been assigned is 0
++USOCR: 0
+
+OK
+
+# Connect to the server -- AT+USOCO=<socket>,<remote_addr>,<remote_port>[,<async_connect>]
+# The echo server details are provided by Ublox in their "Test server for cellular data modules" application note.
+> AT+USOCO=0,"echo.u-blox.com",7
+
++CME ERROR: Operation not allowed
+```
+
+Oops! Something has gone wrong.
+
+There are two PDP contexts available but only one is active, so one might hope that the R4 would
+known to ***associated the socket with the PDP context***. 
+
+So ***how does it associated PDP contexts with sockets?***. The answer is via the PDP context CID.
+Looking at the manual a little more closely one can see that the command syntax in full is...
+
+```
+AT+USOCR=<protocol>[,<local_port>[,<preferred_protocol_type>[,<cid>]]]
+#                                                             ^^^^^
+#                                                             Aha! Associate socket with PDP context
+```
+
+In the above `<cid>` <q>specifies the PDP context that will be used for the socket operations</q>.
+
+So try the following:
+
+```
+# Close the socket
+> AT+USOCL=0
+
+OK
+
+# Re-open the socket and associate with PDP context 2
+> AT+USOCR=6,,0,0,2   
+
++CME ERROR: Operation not allowed
+```
+
+That didn't work either... reading a little further down the manual:
+
+<p></p>
+<blockquote>
+    <p>
+        SARA-R4 / SARA-N4
+    </p>
+    <ul>
+        <li>The `<local_port>` parameter is not supported; a random local port will be used while sending data.</li>
+        <li>The `<preferred_protocol_type>` parameter is not supported.</li>
+        <li>The `<cid>` parameter is not supported.</li>
+    </ul>
+    <footer>-- SARA-R4 series AT commands manual UBX-17003787 - R27</footer>
+</blockquote>
+<p></p>
+
+Oh great! So, it would appear that we can only use the first PDP context "slot"...
+
+Delete all the PDP contexts defined on the board:
+
+```
+> AT+CGDCONT=1
+
+OK
+
+> AT+CGDCONT=2
+
+OK
+
+> AT+CGDCONT?
+
+OK
+
+```
+
+Now that all the context definitions have been delated add a new context so that from the examples
+above, what was PDP context #2 effectively becomes context #1...
+
+```
+> AT+CGDCONT=1,"IP","arm-pellion-stream-apn-name-goes-here"
+
+OK
+
+> AT+CGDCONT?
+
++CGDCONT: 1,"IP","--redacted--","0.0.0.0",0,0,0,0
+
+OK
 ```
 
 
-B. Use the `AT+CGCONTRDP=<cid>` command to query the dynamic parameters for the PDP context e.g. the IPv4 address assigned to the device and the IPv4 addresses for the primary and secondary DNS servers.
-From above we say we have one PDP context with a `cid` of 0, hence `AT+CGCONTRDP=1` will query the settings:
+OK, now try to create the socket...
 
 ```
-> AT+CGCONTRDP=1
+> AT+USOCR=6
 
++CME ERROR: No connection to phone
 ```
 
+
+Ah, for got to activate the context!!
+
+```
+# Activate the context
+> AT+CGACT=1,1
+
+OK
+
+# Then create the socket
+> AT+USOCR=6
+
++USOCR: 0
+
+OK
+```
+
+
+Hooray. Lets continue with UBlox's example and connect to their echo server...
+
+```
+> AT+USOCO=0,"echo.u-blox.com",7
+
+OK
+
+# Receive a URC from the modem indicating that receive data is available (28 bytes)
++UUSORD: 0,28
+
+
+# Retrieve the message
+> AT+USORD=0,28
+
++USORD: 0,28,"u-blox TCP/UDP test service
+                                         "
+
+OK
+
+# Close the socket
+AT+USOCL=0
+
+OK 
+```
 
 ### U-Blox
 
