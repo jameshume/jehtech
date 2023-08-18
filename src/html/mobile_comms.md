@@ -358,15 +358,20 @@ Some verbage for the IoT world:
 >
 > -- [[Ref]](https://www.zipitwireless.com/blog/lte-cat-m1-explained-pros-and-cons-of-lte-m-for-iot-devices#:~:text=LTE%20Cat%2DM1%20vs.,-LTE%20Cat%2D1&text=In%20addition%20to%20LTE%20Cat,more%20power%20than%20Cat%2DM1.)
 
+<p></p>
 
 > NarrowBand Internet of Things (NB-IoT): NB-IoT is a non-backward compatible variant of E-UTRAN supporting a
 > reduced set of functionality See [ETSI TS 123 122 V14.2.0)](https://www.etsi.org/deliver/etsi_ts/123100_123199/123122/14.02.00_60/ts_123122v140200p.pdf)
+
+<p></p>
 
 > LTE-M is perfect for medium-throughput applications requiring low power, low latency, and/or mobility, like asset tracking, wearables, medical, POS and home security applications.
 > ...
 > NB-IoT is perfect for static, low throughput applications requiring low power and long-range, like smart metering, smart agriculture and smart city applications. It also provides better penetration in, for example, cellars and parking garages compared to LTE-M.
 >
 > -- [[Ref]](https://www.nordicsemi.com/Products/Low-power-cellular-IoT/What-is-cellular-IoT?utm_term=lte%20m%20vs%20cat%20m1&utm_campaign=C_ALL_GE_US&utm_source=adwords&utm_medium=ppc&hsa_tgt=kwd-1816041764053&hsa_grp=140041011577&hsa_src=g&hsa_net=adwords&hsa_mt=e&hsa_ver=3&hsa_ad=626926857289&hsa_acc=1116845495&hsa_kw=lte%20m%20vs%20cat%20m1&hsa_cam=18540947953&gad=1&gclid=Cj0KCQjwrfymBhCTARIsADXTabl_lLB6nu6t4uZKOj1SLmE_MmOpA9qFYxXNHqrsyl1l9akg9xgNaPgaAui9EALw_wcB)
+
+<p></p>
 
 #### Mobile Management Entity (MME)
 * Similar to VLR in 2G/3G
