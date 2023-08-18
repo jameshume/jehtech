@@ -8,7 +8,8 @@
 | CDMA    | Code Division Multiple Access |
 | EDGE    | Enhanced Data Rate for GSM Evolution |
 | EPC     | Evolved Packet Core: 4G core network |
-| EUTRAN  | Evolved Universal Terrestrial Radia Access Network: 4G access network |
+| EUTRAN  | Evolved Universal Terrestrial Radia Access Network: 4G access network - combination of E-UTRA, UE and Node-B or eNodeB |
+| EUTRA   | E-UTRA is the air interface of LTE |
 | EVDO    | EVolution Data optimized |
 | GGSN    | Gateway GPRS Support Node |
 | GPRS    | General Packet Radio Service |
@@ -324,17 +325,13 @@ There were three versions of the CN:
 
 
 ### 4G LTE
+
 The access network is called the "Evolved Universal Terrestrial Radia Access Network" or "EUTRAN". Base stations called eNodeB's (eNB). Unlike 3G, there is no entity that acts as a Radio Network Controller (RNC): some of its functions have been pushed onto the eNB and other functions into the core network.
 
 The core network is called the "Evolved Packet Core" or "EPC". Everying is IP. There is no Circuit Switched (CS) core... there is only a Packet Switched (PS) core. I.e., voice is over IP.
 
 The access technology is Orthogonal Frequency Division Multiplexing (OFDM). In the uplink direction Single Carrier Frequency Division Multiple Access (SC-FDMA)
 is used (can be efficiently amplified using cheap amplifiers in the ME) and in the downling direction Orthogonal Frequency Division Multiple Access (OFDMA) is used (BSCs can use more expensive amplification tech). Both are variants of OFDMA.
-
-Some verbage for the IoT world:
-
-* 4G LTE Cat M1 is LTE-M
-* 4G LTE Cat NB1 is NB-IoT, also known by "E-UTRAN NB-S1 mode"
 
 ![Image of general 4G architecture](##IMG_DIR##/4g_overall_architecture.png)
 
@@ -344,6 +341,32 @@ Some verbage for the IoT world:
     <footer><a href="https://www.netmanias.com/en/post/techdocs/5904/lte-network-architecture/lte-network-architecture-basic#:~:text=The%20LTE%20network%20called%20EPS,related%20to%20a%20core%20network.">-- LTE Network Architecture: Basic</a>.</footer>
 </blockquote>
 <p></p>
+
+Some verbage for the IoT world:
+
+* 4G LTE Cat-M1 is LTE-M, aka eMTC
+* 4G LTE Cat-NB1/2 is NB-IoT, also known by "E-UTRAN NB-S1/2 mode"
+
+> LTE Cat-M1 is a Low-Power, Wide-Area Network (LP-WAN) designed specifically for purpose-built devices,
+> like trackers or water meters, that transmit small to medium amounts of data over wide ranges. LTE
+> Cat-M1 is a category of 4G long-term evolution (LTE) technology for machines (M). LTE-M is an
+> abbreviated name for LTE Cat-M1. 
+> ...
+> LTE Cat-M1 was created to replace 3G. Cat-M1 and other low-power devices strip out that legacy technology
+>
+> LTE Cat-M1 and NB-IoT are complementary LPWAN networks but use different technologies. 
+>
+> -- [[Ref]](https://www.zipitwireless.com/blog/lte-cat-m1-explained-pros-and-cons-of-lte-m-for-iot-devices#:~:text=LTE%20Cat%2DM1%20vs.,-LTE%20Cat%2D1&text=In%20addition%20to%20LTE%20Cat,more%20power%20than%20Cat%2DM1.)
+
+
+> NarrowBand Internet of Things (NB-IoT): NB-IoT is a non-backward compatible variant of E-UTRAN supporting a
+> reduced set of functionality See [ETSI TS 123 122 V14.2.0)](https://www.etsi.org/deliver/etsi_ts/123100_123199/123122/14.02.00_60/ts_123122v140200p.pdf)
+
+> LTE-M is perfect for medium-throughput applications requiring low power, low latency, and/or mobility, like asset tracking, wearables, medical, POS and home security applications.
+> ...
+> NB-IoT is perfect for static, low throughput applications requiring low power and long-range, like smart metering, smart agriculture and smart city applications. It also provides better penetration in, for example, cellars and parking garages compared to LTE-M.
+>
+> -- [[Ref]](https://www.nordicsemi.com/Products/Low-power-cellular-IoT/What-is-cellular-IoT?utm_term=lte%20m%20vs%20cat%20m1&utm_campaign=C_ALL_GE_US&utm_source=adwords&utm_medium=ppc&hsa_tgt=kwd-1816041764053&hsa_grp=140041011577&hsa_src=g&hsa_net=adwords&hsa_mt=e&hsa_ver=3&hsa_ad=626926857289&hsa_acc=1116845495&hsa_kw=lte%20m%20vs%20cat%20m1&hsa_cam=18540947953&gad=1&gclid=Cj0KCQjwrfymBhCTARIsADXTabl_lLB6nu6t4uZKOj1SLmE_MmOpA9qFYxXNHqrsyl1l9akg9xgNaPgaAui9EALw_wcB)
 
 #### Mobile Management Entity (MME)
 * Similar to VLR in 2G/3G
