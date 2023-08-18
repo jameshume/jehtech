@@ -1292,9 +1292,9 @@ That didn't work either... reading a little further down the manual:
         SARA-R4 / SARA-N4
     </p>
     <ul>
-        <li>The `<local_port>` parameter is not supported; a random local port will be used while sending data.</li>
-        <li>The `<preferred_protocol_type>` parameter is not supported.</li>
-        <li>The `<cid>` parameter is not supported.</li>
+        <li>The `&lt;local_port&gt;` parameter is not supported; a random local port will be used while sending data.</li>
+        <li>The `&lt;preferred_protocol_type&gt;` parameter is not supported.</li>
+        <li>The `&lt;cid&gt;` parameter is not supported.</li>
     </ul>
     <footer>-- SARA-R4 series AT commands manual UBX-17003787 - R27</footer>
 </blockquote>
