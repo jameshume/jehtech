@@ -331,6 +331,11 @@ The core network is called the "Evolved Packet Core" or "EPC". Everying is IP. T
 The access technology is Orthogonal Frequency Division Multiplexing (OFDM). In the uplink direction Single Carrier Frequency Division Multiple Access (SC-FDMA)
 is used (can be efficiently amplified using cheap amplifiers in the ME) and in the downling direction Orthogonal Frequency Division Multiple Access (OFDMA) is used (BSCs can use more expensive amplification tech). Both are variants of OFDMA.
 
+Some verbage for the IoT world:
+
+* 4G LTE Cat M1 is LTE-M
+* 4G LTE Cat NB1 is NB-IoT, also known by "E-UTRAN NB-S1 mode"
+
 ![Image of general 4G architecture](##IMG_DIR##/4g_overall_architecture.png)
 
 <p></p>
@@ -796,6 +801,12 @@ are what you're looking for!
             </td>
         </tr>
 
+        <tr>
+            <td><p><code>AT+URAT</code></p></td>
+            <td><p>UBlox specific Radio Access Technology selection. Can be used to set the allowable RATs to be used when connecting to networks.</p>
+            </td>
+        </tr>
+
     </tbody>
 </table>
 
@@ -837,9 +848,9 @@ The reply means the following:
 
 So we have the following network operators in the format MMC, MNC, name:
 
-* 234 15 Vodafone UK
-* 234 10 O2 UK
-* 234 30 T-Mobile UK
+* 234 15 Vodafone UK, GSM
+* 234 10 O2 UK, GSM
+* 234 30 T-Mobile UK, GSM
 
 C. Lets try to get the device to automatically register on the network.
 
@@ -925,6 +936,31 @@ OK                  # AT command completes
 
 +CGREG: 5 #<<<< THIS IS A URC!!! Says its registered and roaming
 ```
+
+##### Radio Access Technology
+One thing you might have noticed when we used the `AT+COPS=?` command to see what networks were
+available was that they were *all* GSM networks. Really? Not newer technologies visible?
+
+Turns out, of course there are. I need to configure the allowed RATs...
+
+```
+# Set the RAT order of preference to be LTE, NB-IoT, GPRS/eGPRS
+> AT+URAT=7,8,9
+
+OK
+
+# Now lets see what networks are available....
+> AT+COPS=?
+
+0),(0,"234 10","234 10","23410",0),(0,"234 30","234 30","23430",0),(0,"234 15","234 15","23415",7),(0,"234 15","234 15","23415",9),(0,"234 30","234 30","23430",9),(0,"234 10","234 10","23410",9),,(0,1,2,3,4),(0,1,2)
+
+OK
+```
+
+Ah! Quote the list now! Each of the previously visible MNOs now has an additional E-UTRAN (4G/LTE) network. In the examples
+that follow only the GSM RAT was enabled, but could have resily enabled LTE too...
+
+NOTE: You must **reset the device for the URAT changes to become effective**. Use `AT+CFUN=15` (or `=16` to include a SIM reset, which you dont need in this case though).
 
 ##### MNO Profiles
 
