@@ -667,11 +667,13 @@ OK
 | AT+CSQ      |      |      |      |      |      |      | Y    | Y    |      |       |      |      |      |
 <p></p>
 
-BSIC = Base Station Identity Code
-ARFCN = Absolute Radio Frequency Channel Number
-ULF = Uplink Frequency
-DLF = Downlink Frequency
-SC = Scrambling Code.
+Where:
+
+* BSIC = Base Station Identity Code
+* ARFCN = Absolute Radio Frequency Channel Number
+* ULF = Uplink Frequency
+* DLF = Downlink Frequency
+* SC = Scrambling Code.
 
 #### Identifying Information About Modem, SIM, etc
 <table class="jehtable">
