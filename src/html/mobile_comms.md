@@ -559,6 +559,20 @@ The [ETSI standard](https://www.etsi.org/deliver/etsi_ts/127000_127099/127007/14
 
 ![](##IMG_DIR##/at_command_syntax_etsi_spec.png)
 
+As a colleague of mine warned me about: When parameters are omitted the **default** value is used.
+You need to check what the default value
+is defined as. If the default value is an empty string, then ,, and ,"", are logically equivalent.
+If the default value is "chicken" for example, then ,, would keep the default value of "chicken",
+whereas ,"", would not!
+
+For a concrete example, consider `AT+CGDCONT`...
+
+You have to pay attention to the device manuals notes:
+> <PDP_addr> Number See <PDP_addr>. The default value is "0.0.0.0"
+
+So if you want the default IP address assignment, you either need to use ,, or ,"0.0.0.0". Using ,"",
+could well fail with an error, or at the very least be reliant upon undefined behaviour.
+
 For example, some basic AT commands include:
 ```
 ATI  // Display Product Identification Information
