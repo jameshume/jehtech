@@ -557,7 +557,7 @@ because this is a basic command
 
 The [ETSI standard](https://www.etsi.org/deliver/etsi_ts/127000_127099/127007/14.03.00_60/ts_127007v140300p.pdf) has a good figure in it, replicated below....
 
-![](##IMG_DIR##/at_command_syntax_etsi_spec.png)
+![](##IMG_DIR##/../at_command_syntax_etsi_spec.png)
 
 As a colleague of mine warned me about: When parameters are omitted the **default** value is used.
 You need to check what the default value
@@ -568,7 +568,7 @@ whereas ,"", would not!
 For a concrete example, consider `AT+CGDCONT`...
 
 You have to pay attention to the device manuals notes:
-> <PDP_addr> Number See <PDP_addr>. The default value is "0.0.0.0"
+> &lt;PDP_addr&gt; Number See &lt;PDP_addr&gt;. The default value is "0.0.0.0"
 
 So if you want the default IP address assignment, you either need to use ,, or ,"0.0.0.0". Using ,"",
 could well fail with an error, or at the very least be reliant upon undefined behaviour.
