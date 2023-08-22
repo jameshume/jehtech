@@ -555,6 +555,10 @@ All AT commands are prefexed with the charaters "AT". No space between "AT" and 
 because this is a basic command
 ```
 
+The [ETSI standard](https://www.etsi.org/deliver/etsi_ts/127000_127099/127007/14.03.00_60/ts_127007v140300p.pdf) has a good figure in it, replicated below....
+
+![](##IMG_DIR##/at_command_syntax_etsi_spec.png)
+
 For example, some basic AT commands include:
 ```
 ATI  // Display Product Identification Information
