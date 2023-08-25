@@ -1639,14 +1639,26 @@ GHz band will cause harmful interference to radar altimeters on all types of civ
 
 uBlox modems support the `AT+UBANDMASK` command to configure bandmasks.
 
-## TODOs
+
+## SIM Cards
+
 * SIM Toolkit https://www.techopedia.com/definition/30501/sim-toolkit-stk#techopedia-explains-sim-toolkit-stk
               https://web.archive.org/web/20061207010523/http://www.cellular.co.za/sim_toolkit.htm
               ***** https://www.etsi.org/deliver/etsi_ts/131100_131199/131111/13.03.00_60/ts_131111v130300p.pdf
 * Proactive SIMs https://deepsec.net/docs/Slides/2021/Proactive_SIMs_David_Burgess.pdf
-* FOTA - Frimware-Over-The_air https://www.soracom.io/iot-definitions/what-is-firmware-over-the-air-fota/
 * Looks like a good tutorial set on SIM card commands:
     * https://nickvsnetworking.com/sim-smart-card-deep-dive/
     * https://nickvsnetworking.com/sim-smart-card-deep-dive-part-2-meet-greet/
     * https://nickvsnetworking.com/sim-smart-card-deep-dive-part-3-apdus-and-hello-card/
     * https://nickvsnetworking.com/sim-smart-card-deep-dive-part-4-interacting-with-cards-irl/
+
+
+### Bearer Independent Protocol (BIP)
+<p></p>
+<blockquote>
+    <p>The BIP is defined in the ETSI TS 102 223 technical specification, which is part of the 3GPP (3rd Generation Partnership Project) standards. It enables the exchange of data and commands between a Universal Integrated Circuit Card (UICC) and a remote server by utilizing various bearers. This protocol is designed to be flexible, as it supports various data transport mechanisms such as SMS, USSD, and GPRS, enabling seamless communication across different network types.</p>
+    <footer>-- <a href="">An In-Depth Guide to Bearer Independent Protocol (BIP)</a></footer>
+</blockquote>
+<p></p>
+
+The Ublox SARA devices support `AT+UBIP` to enable URCs that report BIP activity.
