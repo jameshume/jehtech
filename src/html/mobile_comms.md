@@ -1661,4 +1661,4 @@ uBlox modems support the `AT+UBANDMASK` command to configure bandmasks.
 </blockquote>
 <p></p>
 
-The Ublox SARA devices support `AT+UBIP` to enable URCs that report BIP activity.
+The Ublox SARA devices support `AT+UBIP` to enable URCs that report BIP activity. See also `AT+UCUSATA` and `AT+USIMSTAT`.
