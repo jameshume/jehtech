@@ -1,0 +1,93 @@
+<diagram program="umletino" version="15.1"><zoom_level>15</zoom_level><help_text>Space for diagram notes</help_text><element><id>Relation</id><coordinates><x>259</x><y>360</y><w>45</w><h>135</h></coordinates><panel_attributes>lw=4</panel_attributes><additional_attributes>10;10;10;70</additional_attributes></element><element><id>Relation</id><coordinates><x>259</x><y>420</y><w>105</w><h>90</h></coordinates><panel_attributes>lt=-&gt;&gt;&gt;</panel_attributes><additional_attributes>10;10;50;40</additional_attributes></element><element><id>Relation</id><coordinates><x>259</x><y>345</y><w>105</w><h>90</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;40;50;10</additional_attributes></element><element><id>Relation</id><coordinates><x>319</x><y>465</y><w>45</w><h>120</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;10;10;60</additional_attributes></element><element><id>Relation</id><coordinates><x>319</x><y>315</y><w>45</w><h>75</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;10;10;30</additional_attributes></element><element><id>Relation</id><coordinates><x>199</x><y>390</y><w>105</w><h>60</h></coordinates><panel_attributes></panel_attributes><additional_attributes>50;20;10;20</additional_attributes></element><element><id>Text</id><coordinates><x>289</x><y>330</y><w>45</w><h>30</h></coordinates><panel_attributes>C</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>229</x><y>390</y><w>45</w><h>30</h></coordinates><panel_attributes>B</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>289</x><y>465</y><w>45</w><h>45</h></coordinates><panel_attributes>E</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>154</x><y>405</y><w>60</w><h>30</h></coordinates><panel_attributes></panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>94</x><y>390</y><w>90</w><h>60</h></coordinates><panel_attributes></panel_attributes><additional_attributes>40;20;10;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>319</x><y>270</y><w>30</w><h>60</h></coordinates><panel_attributes>R₁
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>319</x><y>225</y><w>45</w><h>75</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;10;10;30</additional_attributes></element><element><id>Text</id><coordinates><x>319</x><y>210</y><w>75</w><h>45</h></coordinates><panel_attributes>style=wordwrap
+*Vₛ*</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>304</x><y>555</y><w>75</w><h>45</h></coordinates><panel_attributes>Gnd</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>319</x><y>315</y><w>105</w><h>60</h></coordinates><panel_attributes></panel_attributes><additional_attributes>50;20;10;20</additional_attributes></element><element><id>Text</id><coordinates><x>394</x><y>330</y><w>90</w><h>45</h></coordinates><panel_attributes>style=wordwrap
+*V*
+group=group-0</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>409</x><y>345</y><w>90</w><h>45</h></coordinates><panel_attributes>style=wordwrap
+*CE*
+fontsize=10
+group=group-0</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>64</x><y>405</y><w>90</w><h>45</h></coordinates><panel_attributes>style=wordwrap
+*BE*
+fontsize=10
+group=group-1</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>49</x><y>390</y><w>90</w><h>45</h></coordinates><panel_attributes>style=wordwrap
+*V*
+group=group-1</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>574</x><y>180</y><w>90</w><h>45</h></coordinates><panel_attributes>style=wordwrap
+V</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>589</x><y>195</y><w>90</w><h>45</h></coordinates><panel_attributes>style=wordwrap
+BE
+fontsize=10</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>514</x><y>135</y><w>405</w><h>630</h></coordinates><panel_attributes>style=wordwrap
+*CUT OFF STATE*
+
+When            &lt; ~0.7V,           ==  Vₛ  and I   ~= 0
+
+Transistor is like an OPEN CIRCUIT. This is called the CUT-OFF state.
+
+
+Here,          &lt;         , and           &lt;
+
+
+*SATURATION REGION*
+
+When V_b &gt; V_c
+
+At some point if I_b increases, the voltage can't drop any further and the transistor is said to be saturated.
+
+*Note Vₛ is 0 at this point but current is at its MAXIMUM value*
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>709</x><y>195</y><w>90</w><h>45</h></coordinates><panel_attributes>style=wordwrap
+*CE*
+fontsize=10</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>694</x><y>180</y><w>90</w><h>45</h></coordinates><panel_attributes>style=wordwrap
+*V*</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>829</x><y>195</y><w>90</w><h>45</h></coordinates><panel_attributes>style=wordwrap
+  C
+fontsize=10</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>634</x><y>315</y><w>90</w><h>45</h></coordinates><panel_attributes>style=wordwrap
+V</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>574</x><y>315</y><w>90</w><h>45</h></coordinates><panel_attributes>style=wordwrap
+V</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>964</x><y>135</y><w>510</w><h>690</h></coordinates><panel_attributes>style=wordwrap
+*ACTIVE/LINEAR REGION*
+
+When          &lt;          and         &gt;
+
+Transistor acts like an AMPLIFER.
+
+Recall β = I_c / I_b, or I_c = β · I_b...
+
+The voltage drop across R₁ is..
+     V_r₁ = I_c · R₁
+∴   V_r₁ = β · I_b · R₁
+
+Also note
+    V_ce = Vₛ - V_r₁
+∴  V_ce = Vₛ  - (β · I_b · R₁)
+
+Replace constant β x R₁ with K...
+∴  V_ce = Vₛ  - (K · I_b)
+
+As Vₛ, β, and r₁ are fixed values, this means that V_ce is completely determined by the R₁, value and the base current.
+
+*Thus R controls the current gain for a fixed V_be and V_be!*
+
+Note also that
+    V_ce = Vₛ  - (K · I_b)
+Implies a 180 degree phase shift in the output signal.</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>574</x><y>330</y><w>90</w><h>45</h></coordinates><panel_attributes>style=wordwrap
+   B
+fontsize=10</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>634</x><y>330</y><w>90</w><h>45</h></coordinates><panel_attributes>style=wordwrap
+   C
+fontsize=10</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>784</x><y>315</y><w>90</w><h>45</h></coordinates><panel_attributes>style=wordwrap
+V</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>724</x><y>315</y><w>90</w><h>45</h></coordinates><panel_attributes>style=wordwrap
+V</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>724</x><y>330</y><w>90</w><h>45</h></coordinates><panel_attributes>style=wordwrap
+   B
+fontsize=10</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>784</x><y>330</y><w>90</w><h>45</h></coordinates><panel_attributes>style=wordwrap
+   E
+fontsize=10</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>1024</x><y>180</y><w>45</w><h>45</h></coordinates><panel_attributes>style=wordwrap
+V</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>1024</x><y>195</y><w>60</w><h>45</h></coordinates><panel_attributes>style=wordwrap
+   B
+fontsize=10</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>1084</x><y>180</y><w>45</w><h>45</h></coordinates><panel_attributes>style=wordwrap
+V</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>1084</x><y>195</y><w>60</w><h>45</h></coordinates><panel_attributes>style=wordwrap
+   C
+fontsize=10</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>1159</x><y>180</y><w>45</w><h>45</h></coordinates><panel_attributes>style=wordwrap
+V</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>1159</x><y>195</y><w>60</w><h>45</h></coordinates><panel_attributes>style=wordwrap
+   B
+fontsize=10</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>1219</x><y>180</y><w>45</w><h>45</h></coordinates><panel_attributes>style=wordwrap
+V</panel_attributes><additional_attributes></additional_attributes></element><element><id>Text</id><coordinates><x>1219</x><y>195</y><w>60</w><h>45</h></coordinates><panel_attributes>style=wordwrap
+   E
+fontsize=10</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>469</x><y>345</y><w>480</w><h>60</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;20;300;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>514</x><y>180</y><w>390</w><h>45</h></coordinates><panel_attributes>transparency=77
+bg=red</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>964</x><y>180</y><w>300</w><h>45</h></coordinates><panel_attributes>transparency=77
+bg=red</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>514</x><y>420</y><w>150</w><h>45</h></coordinates><panel_attributes>transparency=77
+bg=red</panel_attributes><additional_attributes></additional_attributes></element></diagram>
