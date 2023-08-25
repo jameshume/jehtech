@@ -1472,6 +1472,8 @@ OK
 
 ### U-Blox
 
+<span style="color:red">***For the UBlox devices it seems that, each command must be sent at least 20ms after the "OK" from the previous command!!!***</span>
+
 <table class="jehtable">
     <thead>
         <td>Command</td><td>Description</td>
@@ -1515,6 +1517,13 @@ OK
     </tbody>
 </table>
 <p></p>
+
+#### uFOTO
+If you have occasional problems activing a PDP context because it is already active it means that another processes is using the context. It could be that the uFOTA applet is using this.
+
+> For 2G RAT, on the SARA-R412M the PDP context will be activated by the uFOTA client and released by the uFOTA client when the data call to the uFOTA server is complete. During this time the PDP context cannot be activated by the host via +CGACT nor can it deactivate the context that is established by the uFOTA client. The host needs to monitor the PDP context upon the boot and start the DUN call when the PDP context is not activated and available to be used.
+
+To disable uFOTO use `AT+UFOTACONF=2,-1`.
 
 ### An Example Command Sequence
 
