@@ -65,11 +65,11 @@ args = parser.parse_args()</pre>
 
 	<p>
 		You can <tt>add_argument()</tt>'s to the parser. Arguments can be positional
-		or optional.Optional arguments are generally specified
+		or optional. Optional arguments are generally specified
 		as a short command, e.g. <tt>-h</tt>, and/or as a long command, e.g.
 		<tt>--help</tt> along with an <tt>action</tt> to perform if the command
-		is received. Positional arguments are just defined as a name with no preceeding 
-		hypenated prefix.
+		is received. Positional arguments are just defined as a name with no preceding 
+		hyphenated prefix.
 	</p>
 
 	<h3>Actions</h3>
@@ -207,6 +207,7 @@ parser.add_argument(
 	</div>
 
 	<h3>Optional Posisitional When Named Argument Provided</h3>
+	<div>
 	<p>
 		If you want to have <code>command --some-arg xxx</code> work when otherwise a positional would be required,
 		e.g., <code>command --any-other-arg xxx position-arg</code>.
@@ -225,6 +226,21 @@ if args.positional_not_needed is None and args.positional1 is None:
     parser.print_usage()
     parser.exit(1, "Positional argument required")
 </pre>
+	</div>
+
+	<h3>Help And Epilog</h3>
+	<div>
+		<p>
+			If you want a chunk of text at the bottom of the help message there are two options.
+		</p>
+		<ol>
+			<li>Pass in the epilog as an argument to the <code>ArgumentParser()</code> constructor using the <code>epilog</code> keyword.</li>
+			<li>Or, set the <code>epilog</code> property on the <code>ArgumentParser</code> instance.</li>
+		</ol>
+		<p></p>
+	</div>
+
+
 </div>
 
 	</div> <!-- End content div -->

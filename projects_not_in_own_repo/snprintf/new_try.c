@@ -37,115 +37,156 @@ format string
   parse length
   parse specified
 #endif
+
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
 
-typedef enum flags_tag {
-    LEFT_JUSTIFY                      = 0x01,
-    RIGHT_JUSTIFY                     = 0x02, // default
-    FORCE_SIGN                        = 0x04,
-    SPACE_FOR_SIGN                    = 0x08,
-    FORCE_HEX_PREFIX_OR_DECIMAL_POINT = 0x10,
-    LEFT_PAD_ZEROS                    = 0x20
-} flags_t;
+#define FMT_FLAG_NONE                               0x0000
+#define FMT_FLAG_LEFT_JUSTIFY                       0x0001
+#define FMT_FLAG_RIGHT_JUSTIFY                      0x0002
+#define FMT_FLAG_FORCE_SIGN                         0x0004
+#define FMT_FLAG_SPACE_FOR_SIGN                     0x0008
+#define FMT_FLAG_FORCE_HEX_PREFIX_OR_DECIMAL_POINT  0x0010
+#define FMT_FLAG_LEFT_PAD_ZEROS                     0x0020
+#define FMT_FLAG_MASK                               0x003F
+#define FMT_FLAG_SET(flag, ctx)                     (ctx)->err_args_flags_bitmask |= (flag)
+#define FMT_FLAG_CLEAR(flag, ctx)                   (ctx)->err_args_flags_bitmask &= ~(flag)
+#define FMT_FLAG_IS_SET(flat, ctx)                  ((ctx)->err_args_flags_bitmask & (flag))
 
-typedef enum printf_error_tag {
-    PRINTF_ERROR_NONE,
-    PRINTF_ERROR_EINVAL,
-    PRINTF_ERROR_FORMAT_STRING_SYNTAX,
-} printf_error_t;
+#define ARG_PRESENT_WIDTH                           0x0040
+#define ARG_WIDTH_AS_ARG                            0x0080
+#define ARG_PRESENT_PRECISION                       0x0100
+#define ARG_PRECISION_AS_ARG                        0x0200
+#define ARG_MASK                                    0x03C0
+#define ARG_SET(flag, ctx)                          (ctx)->err_args_flags_bitmask |= (flag)
+#define ARG_CLEAR(flag, ctx)                        (ctx)->err_args_flags_bitmask &= ~(flag)
+#define ARG_IS_SET(flat, ctx)                       ((ctx)->err_args_flags_bitmask & (flag))
+
+#define PRINTF_ERROR_NONE                           0x0400
+#define PRINTF_ERROR_EINVAL                         0x0800
+#define PRINTF_ERROR_FORMAT_STRING_SYNTAX           0x1000
+#define PRINTF_ERROR_MASK                           0x1C00
+#define PRINTF_ERROR_SET(err, ctx)                  do { (ctx)->err_args_flags_bitmask &= ~PRINTF_ERROR_MASK; (ctx)->err_args_flags_bitmask |= (err); } while(0)
+#define PRINTF_ERROR_CLEAR(err, ctx)                (ctx)->err_args_flags_bitmask &= ~(err)
+#define PRINTF_ERROR_IS_SET(flag, ctx)              ((ctx)->err_args_flags_bitmask & (flag))
+
+#define LENGTH_SUB_SPECIFIER_HH                     0x2000
+#define LENGTH_SUB_SPECIFIER_H                      0x4000
+#define LENGTH_SUB_SPECIFIER_LL                     0x6000
+#define LENGTH_SUB_SPECIFIER_L                      0x8000
+#define LENGTH_SUB_SPECIFIER_J                      0xA000
+#define LENGTH_SUB_SPECIFIER_Z                      0xC000
+#define LENGTH_SUB_SPECIFIER_T                      0xE000
+#define LENGTH_SUB_SPECIFIER_MASK                   0xE000
+#define LENGTH_SUB_SPECIFIER_SET(spec, ctx)         do { (ctx)->err_args_flags_bitmask &= ~LENGTH_SUB_SPECIFIER_MASK; (ctx)->err_args_flags_bitmask |= (spec); } while(0)
+#define LENGTH_SUB_SPECIFIER_GET(ctx)               (((ctx)->err_args_flags_bitmask & LENGTH_SUB_SPECIFIER_MASK) >> 13)
+
+#define SPECIFIER_UINT                              0x1
+#define SPECIFIER_INT                               0x2
+#define SPECIFIER_OCTAL                             0x3
+#define SPECIFIER_HEX_LOWER                         0x4
+#define SPECIFIER_HEX_UPPER                         0x5
+#define SPECIFIER_CHAR                              0x6
+#define SPECIFIER_STRING                            0x7
+#define SPECIFIER_POINTER                           0x8
+#define SPECIFIER_NOTHING                           0x9
+#define SPECIFIER_PERCENT                           0xA
+
+#define ASCCI_CODE_0                                ((char)48)
+#define ASCCI_CODE_9                                ((char)57)
 
 typedef struct context_tag {
-    flags_t flags;
-    
-    bool width_present;
-    bool width_as_arg;
-    unsigned int width; 
-
-    bool precision_present;
-    bool precision_as_arg;
-    unsigned int precision;
-    
-    printf_error_t error;
-    unsigned int string_len;
+    uint16_t err_args_flags_bitmask;  
+    uint16_t width; 
+    uint16_t precision;
+    uint16_t string_len;
+    uint8_t  specifier;
 } context_t;
+
+#define CONTEXT_INIT_ZERO { 0, 0, 0, 0, 0}
 
 static const char* parse_format_specifier_flags(context_t *const context, const char *fmt)
 {
-    context->flags = RIGHT_JUSTIFY;
+    uint16_t flag;
+    
+    FMT_FLAG_SET(FMT_FLAG_RIGHT_JUSTIFY, context);
 
-    while(true) {
-        flags_t flag;
+    do {
+        flag = FMT_FLAG_NONE;
 
         switch(*fmt)
         {
-            case '-': flag = LEFT_JUSTIFY;
-            case '+': flag = FORCE_SIGN;
-            case ' ': flag = SPACE_FOR_SIGN;
-            case '#': flag = FORCE_HEX_PREFIX_OR_DECIMAL_POINT;
-            case '0': flag = LEFT_PAD_ZEROS;
-            default : break;
+            case '-': FMT_FLAG_CLEAR(FMT_FLAG_RIGHT_JUSTIFY, context);
+                      flag = FMT_FLAG_LEFT_JUSTIFY;                      break;
+            case '+': flag = FMT_FLAG_FORCE_SIGN;                        break;
+            case ' ': flag = FMT_FLAG_SPACE_FOR_SIGN;                    break;
+            case '#': flag = FMT_FLAG_FORCE_HEX_PREFIX_OR_DECIMAL_POINT; break;
+            case '0': flag = FMT_FLAG_LEFT_PAD_ZEROS;                    break;
+            default :                                                    break;
         }
 
-        if (context->flags & flag)
+        if (FMT_FLAG_IS_SET(flag, context))
         {
-            context->error = PRINTF_ERROR_FORMAT_STRING_SYNTAX;
+            PRINTF_ERROR_SET(PRINTF_ERROR_FORMAT_STRING_SYNTAX, context);
             break;
         }
 
-        context->flags |= flag;
-        ++fmt;
-    }
+        if (flag != FMT_FLAG_NONE)
+        {
+            FMT_FLAG_SET(flag, context);
+            ++fmt;
+        }
+    } while (flag != FMT_FLAG_NONE);
 
     return fmt;
 }
 
-#define ASCCI_CODE_0 ((char)48)
-#define ASCCI_CODE_9 ((char)57)
 
-static unsigned int string_to_uint(const char *const start, const char *const end_inclusive)
+
+static uint16_t string_to_uint16(const char *const start, const char *const end_inclusive)
 {
-    ptrdiff_t num_chars = end_inclusive - start;
-    
+    const ptrdiff_t num_chars = end_inclusive - start;
+
     unsigned int number = 0;
-    while(num_chars)
+    for(ptrdiff_t idx = 0; idx < num_chars; ++idx)
     {
         number *= 10;
-        number += start[num_chars - 1] - ASCCI_CODE_0;
-        --num_chars;
+        number += start[idx] - '0';
     }
 
     return number;
 }
 
 
-static const char* parse_width_or_precision_value(const char *fmt, bool *const present, bool *const as_arg, unsigned int *const value, printf_error_t *const error)
+static const char* parse_width_or_precision_value(
+        const char *fmt, uint16_t *const value, const uint16_t present_bitmask,
+        const uint16_t as_arg_bitmask, context_t *const context)
 {
-    *present = false;
-
     if (*fmt == '*')
     {
+        /* The value is not part of the format string. It is provided as a parameter */
         ++fmt;
-        *present = true;
-        *as_arg  = true;
+        ARG_SET(present_bitmask, context);
+        ARG_SET(as_arg_bitmask, context);
     }
     else
     {
+        /* The value is part of the format string. Parse it out. */
         const char *const start = fmt;
-        while((*fmt != '\0') && (*fmt <= ASCCI_CODE_9) && (*fmt >= ASCCI_CODE_9))
+        while((*fmt != '\0') && (*fmt <= '9') && (*fmt >= '0'))
         {
             ++fmt;
         }
 
-        if (fmt > start + 1)
+        if (fmt > start)
         {
-            *present = true;
-            *as_arg  = false;
-            *value = string_to_uint(start, fmt - 1);
+            ARG_SET(present_bitmask, context);            
+            *value = string_to_uint16(start, fmt);
         }
         else
         {
-            *error = PRINTF_ERROR_FORMAT_STRING_SYNTAX;
+            /* The field is not present */
         }
     }
 
@@ -154,26 +195,8 @@ static const char* parse_width_or_precision_value(const char *fmt, bool *const p
 
 static const char* parse_format_specifier_width(context_t *const context, const char *fmt)
 {
-    parse_width_or_precision_value(fmt, &context->width_present, &context->width_as_arg, unsigned int *const value, printf_error_t *const error)
-
-    context->width_present = false;
-
-
-    const char *const start = fmt;
-
-    while((*fmt != '\0') && (*fmt <= ASCCI_CODE_9) && (*fmt >= ASCCI_CODE_9))
-    {
-        ++fmt;
-    }
-
-    if (fmt != start)
-    {
-        context->width_present = true;
-        context->width = string_to_uint(start, fmt);
-    }
-
-    return fmt;
-
+    return parse_width_or_precision_value(
+        fmt, &context->width, ARG_PRESENT_WIDTH, ARG_WIDTH_AS_ARG, context);
 }
 
 
@@ -183,80 +206,183 @@ static const char* parse_format_specifier_precision(context_t *const context, co
     {
         ++fmt;
 
-        if (*fmt == '*')
-        {
+        fmt = parse_width_or_precision_value(
+            fmt, &context->precision, ARG_PRESENT_PRECISION, ARG_PRECISION_AS_ARG, context);
+
+    }
+    return fmt;
+}
+
+static const char* parse_format_specifier_length(context_t *const context, const char *fmt)
+{
+    // length is one or 2 characters : hh, h, l, ll, j, z, t
+    // because doubles not supported "L" is not supported
+    switch (*fmt)
+    {
+        case 'h':
             ++fmt;
-            context->precision_present = true;
-            context->precision_as_arg  = true;
-        }
-        else
-        {
-            const char *const start = fmt;
-            while((*fmt != '\0') && (*fmt <= ASCCI_CODE_9) && (*fmt >= ASCCI_CODE_9))
+            if (*fmt == 'h')
             {
                 ++fmt;
-            }
-
-            if (fmt != start)
-            {
-                context->precision_present = true;
-                context->precision_as_arg  = false;
-                context->precision = string_to_uint(start, fmt);
+                LENGTH_SUB_SPECIFIER_SET(LENGTH_SUB_SPECIFIER_HH, context);
             }
             else
             {
-                context->error = PRINTF_ERROR_FORMAT_STRING_SYNTAX;
+                LENGTH_SUB_SPECIFIER_SET(LENGTH_SUB_SPECIFIER_H, context);
             }
-        }
+            break;
+
+        case 'l':
+            ++fmt;
+            if (*fmt == 'l')
+            {
+                ++fmt;
+                LENGTH_SUB_SPECIFIER_SET(LENGTH_SUB_SPECIFIER_LL, context);
+            }
+            else
+            {
+                LENGTH_SUB_SPECIFIER_SET(LENGTH_SUB_SPECIFIER_L, context);
+            }
+            break;
+
+        case 'j':
+            ++fmt;
+            LENGTH_SUB_SPECIFIER_SET(LENGTH_SUB_SPECIFIER_J, context);
+            break;
+
+        case 'z':
+            ++fmt;
+            LENGTH_SUB_SPECIFIER_SET(LENGTH_SUB_SPECIFIER_Z, context);
+            break;
+
+        case 't':
+            ++fmt;
+            LENGTH_SUB_SPECIFIER_SET(LENGTH_SUB_SPECIFIER_T, context);
+            break;
     }
-    else
+
+    return fmt;
+}
+
+static const char* parse_format_specifier_specifier(context_t *const context, const char *fmt)
+{
+    // because floats not supported only supported specifiers are d i u o x X c s p n %
+    switch (*fmt)
     {
-        context->precision_present = false;
+        case 'd':
+        case 'i': context->specifier = SPECIFIER_INT;                          break;
+        case 'u': context->specifier = SPECIFIER_UINT;                         break;
+        case 'o': context->specifier = SPECIFIER_OCTAL;                        break;
+        case 'x': context->specifier = SPECIFIER_HEX_LOWER;                    break;
+        case 'X': context->specifier = SPECIFIER_HEX_UPPER;                    break;
+        case 'c': context->specifier = SPECIFIER_CHAR;                         break;
+        case 's': context->specifier = SPECIFIER_STRING;                       break;
+        case 'p': context->specifier = SPECIFIER_POINTER;                      break;
+        case 'n': context->specifier = SPECIFIER_NOTHING;                      break;
+        case '%': context->specifier = SPECIFIER_PERCENT;                      break;
+        default:  PRINTF_ERROR_SET(PRINTF_ERROR_FORMAT_STRING_SYNTAX, context); break;
     }
+
+    if (!PRINTF_ERROR_IS_SET(PRINTF_ERROR_NONE, context))
+    {
+        ++fmt;
+    }
+
+    return fmt;
 }
 
-static const char* parse_format_specifier_length(context_t *const context, const char *fmt) {
-
-}
-
-static const char* parse_format_specifier_specifier(context_t *const context, const char *fmt) {
-
-}
-
-static const char* parse_format_specifier_wrapper(const char* (*func)(context_t *const context, const char *fmt), context_t *const context, const char *fmt, bool can_terminate)
+static const char* parse_format_specifier_wrapper(
+        const char* (*func)(context_t *const context, const char *fmt), context_t *const context,
+        const char *fmt, bool can_terminate)
 {
     /* Never allow NULL dereferences */
     if (fmt == NULL)
     {
-        context->error = PRINTF_ERROR_EINVAL;
+        PRINTF_ERROR_SET(PRINTF_ERROR_EINVAL, context);
         return fmt;
     }
     
-    /* Skip this parsing stage if there is already an error. */
-    if (context->error != PRINTF_ERROR_NONE)
+    /* At this point the string should not yet have terminated */
+    if (*fmt == '\0')
     {
+        PRINTF_ERROR_SET(PRINTF_ERROR_FORMAT_STRING_SYNTAX, context);
         return fmt;
     }
 
     /* Call the parser */
     fmt = func(context, fmt);
     
-    /* If this isn't the specifier then the format string should not yet have terminated (determined by the `can_terminate` argument. If
-        * it has terminated prematurely then error! */
+    /* If this isn't the specifier then the format string should not yet have terminated (determined
+     * by the `can_terminate` argument. If it has terminated prematurely then error! */
     if (!can_terminate && (*fmt == '\0'))
     {
-        context->error = PRINTF_ERROR_FORMAT_STRING_SYNTAX;
+        PRINTF_ERROR_SET(PRINTF_ERROR_FORMAT_STRING_SYNTAX, context);
     }
 
     return fmt;
 }
 
 // Expect character after %
-void parse_format_specifier(context_t *const context, const char *fmt)
+static void parse_format_specifier(context_t *const context, const char *fmt)
 {
-    fmt = parse_format_specifier_wrapper(parse_format_specifier_flags,     context, fmt, false);
-    fmt = parse_format_specifier_wrapper(parse_format_specifier_width,     context, fmt, false);
-    fmt = parse_format_specifier_wrapper(parse_format_specifier_precision, context, fmt, false);
-    fmt = parse_format_specifier_wrapper(parse_format_specifier_length,    context, fmt, false);
-    fmt = parse_format_specifier_wrapper(parse_format_specifier_specifier, context, fmt, true );
+    /* Parse the flags, if any */        
+    if (!PRINTF_ERROR_IS_SET(PRINTF_ERROR_NONE, context))
+    {
+        fmt = parse_format_specifier_wrapper(parse_format_specifier_flags, context, fmt, false);
+    }
+
+    /* Parse the width specifier, if any */
+    if (!PRINTF_ERROR_IS_SET(PRINTF_ERROR_NONE, context))
+    {
+        fmt = parse_format_specifier_wrapper(parse_format_specifier_width, context, fmt, false);
+    }
+    
+    /* Parse the precision specified, if any */
+    if (!PRINTF_ERROR_IS_SET(PRINTF_ERROR_NONE, context))
+    {
+        fmt = parse_format_specifier_wrapper(parse_format_specifier_precision, context, fmt, false);
+    }
+
+    /* Parse the length specifier, if any */
+    if (!PRINTF_ERROR_IS_SET(PRINTF_ERROR_NONE, context))
+    {
+        fmt = parse_format_specifier_wrapper(parse_format_specifier_length, context, fmt, false);
+    }
+    
+    /* Parse the type specifier */
+    if (!PRINTF_ERROR_IS_SET(PRINTF_ERROR_NONE, context))
+    {
+        fmt = parse_format_specifier_wrapper(parse_format_specifier_specifier, context, fmt, true);
+    }
+}
+
+#include <stdio.h>
+void iterate_over_format_string(const char *fmt)
+{
+    char c;
+    while ((c = *fmt) != '\0')
+    {
+        if (c == '%')
+        {
+            ++fmt;
+
+            context_t context = CONTEXT_INIT_ZERO;
+            parse_format_specifier(&context, fmt);
+            printf("context.err_args_flags_bitmask : 0x%X\n", context.err_args_flags_bitmask);
+            printf("   errors : 0x%X\n", context.err_args_flags_bitmask & PRINTF_ERROR_MASK);
+            printf("context.width                  : %u\n", context.width);
+            printf("context.precision              : %u\n", context.precision);
+            printf("context.specifier              : %u\n", context.specifier);
+            printf("context.string_len             : %u\n", context.string_len);
+        }
+        else
+        {
+            ++fmt;
+        }
+    }
+}
+
+int main(int argc, char *argv[])
+{
+    iterate_over_format_string(argv[1]);
 }

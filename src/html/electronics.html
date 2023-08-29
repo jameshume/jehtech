@@ -1563,6 +1563,40 @@ dnl ---- END M4 MACROS ----
 				<p>
 					<img src="##IMG_DIR##/electronics_npm_circuit_basic.png">
 				</p>
+				<blockquote>
+					<ul>
+						<li>The <b>base is responsible for initiating transistor action</b>. When a voltage
+							is applied at the base, it gets biased and draws <b>small current which is then
+								used to control large</b> current at the collector and emitter side.
+						</li>
+						<li>The base action is considered as an ON-OFF valve which generates current when a
+							proper bias voltage is applied at this terminal.
+						</li>
+						<li>The small change at the voltage applied at the base terminal shows a large impact
+							at the output terminals. Actually, base acts as an input and collector acts as an output
+							in NPN transistor.</li>
+						<li>In case of <b>silicon transistor emitter-base junction draws voltage around 0.7V</b>
+							when there is no voltage at the base terminal, in order to initiate the electron action
+							and put the transistor in running condition, the base voltage must be greater than 0.7
+							voltage in case of silicon transistor and 0.3 in case of germanium transistor.</li>
+					</ul>
+					<footer>-- REF(`REF_TRANS_CONFIGS', `Transistor Configurations: Circuit Configurations'), emphasis mine.</footer>
+				</blockquote>
+
+				<p>I like this explanation by "Papabravo" on ["All About Circuits"](https://forum.allaboutcircuits.com/threads/bjts-and-base-emitter-saturation-voltage-vbe-sat.6664/) (emphasis mine):</p>
+
+				<blockquote>
+					<p>
+						Like a conventional diode the Base-Emitter junction becomes saturated when the voltage difference
+						between the base and the emitter is greater than about 0.7V. <b>It is very difficult to further increase
+						the voltage across the junction because the current increases exponentially for small increases in Vbe</b>.
+						That's the how. The why is related to the behavior of a p-n junction according to the diode equation.
+						If you try to force more than Vbe(sat) across the junction then the device will conduct enough current
+						to destroy itself. That is the principal reason for the base resistor in switching circuits: to limit
+						the base current.
+					</p>
+				</blockquote>
+				<p></p>
 				<p>
 					<img src="##IMG_DIR##/electronics_npm_in_voltage_divider.png">
 				</p>
@@ -1584,7 +1618,10 @@ dnl ---- END M4 MACROS ----
 					devices. For large currents MOSFETs are used (later section).
 				</p>
 				<p><b>Saturation region</b> is where the maximum collector current flows and the transistor
-				is basically a closed switch from collector to emitter.
+				is basically a closed switch from collector to emitter. The collector-emitter voltage (VCE)
+				is relatively low, and the collector current (IC) becomes nearly constant regardless of 
+				further increases in base current (IB). Saturation is often desired in switching applications 
+				to ensure the transistor is operating in its fully conducting state.
 				</p>
 				<p><b>Active mode / region</b> is where there is an almost linear relationship between the
 					terminal currents at the base, collector and emitter. The transistor has some resistance,
@@ -1593,6 +1630,10 @@ dnl ---- END M4 MACROS ----
 				<p><b>Cut-off region</b> is where the transistor acts like an open switch.
 				</p>
 				<p>
+					<img src="##IMG_DIR##/electronics_npn_states.png">
+				</p>
+				<p>
+					<b>THE FOLLOWING SCRIBBLE IS WRONG!!! TODO</b>
 					The following is taken from the Semtech 2N2222 datasheet:
 				</p>
 				<p>
@@ -1652,40 +1693,7 @@ dnl ---- END M4 MACROS ----
 					</tbody>
 				</table>
 
-				<blockquote>
-					<ul>
-						<li>The <b>base is responsible for initiating transistor action</b>. When a voltage
-							is applied at the base, it gets biased and draws <b>small current which is then
-								used to control large</b> current at the collector and emitter side.
-						</li>
-						<li>The base action is considered as an ON-OFF valve which generates current when a
-							proper bias voltage is applied at this terminal.
-						</li>
-						<li>The small change at the voltage applied at the base terminal shows a large impact
-							at the output terminals. Actually, base acts as an input and collector acts as an output
-							in NPN transistor.</li>
-						<li>In case of <b>silicon transistor emitter-base junction draws voltage around 0.7V</b>
-							when there is no voltage at the base terminal, in order to initiate the electron action
-							and put the transistor in running condition, the base voltage must be greater than 0.7
-							voltage in case of silicon transistor and 0.3 in case of germanium transistor.</li>
-					</ul>
-					<footer>-- REF(`REF_TRANS_CONFIGS', `Transistor Configurations: Circuit Configurations'), emphasis mine.</footer>
-				</blockquote>
-
-				<p>I like this explanation by "Papabravo" on ["All About Circuits"](https://forum.allaboutcircuits.com/threads/bjts-and-base-emitter-saturation-voltage-vbe-sat.6664/) (emphasis mine):</p>
-
-				<blockquote>
-					<p>
-						Like a conventional diode the Base-Emitter junction becomes saturated when the voltage difference
-						between the base and the emitter is greater than about 0.7V. <b>It is very difficult to further increase
-						the voltage across the junction because the current increases exponentially for small increases in Vbe</b>.
-						That's the how. The why is related to the behavior of a p-n junction according to the diode equation.
-						If you try to force more than Vbe(sat) across the junction then the device will conduct enough current
-						to destroy itself. That is the principal reason for the base resistor in switching circuits: to limit
-						the base current.
-					</p>
-				</blockquote>
-				<p></p>
+				
 
 				<h4>Current Amplification Factor: $\alpha$ &amp; Base Current Amplification Factor: $\beta$</h4>
 				<div>
