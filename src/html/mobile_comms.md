@@ -342,6 +342,41 @@ is used (can be efficiently amplified using cheap amplifiers in the ME) and in t
 </blockquote>
 <p></p>
 
+Voice calls made over an LTE network will either be done using VoLTE (Voice over LTE) which is a
+packet switched technology, or if required, can fallback to a CS network and use traditional voice
+calling.
+
+Good old ChatGPT summarises it nicely (which I double checked to make sure it wasn't hallucinating lol)
+
+<blockquote>
+<p>
+LTE (Long-Term Evolution) is primarily designed for packet-switched (PS) services, which means it is optimized for data transmission. However, it does have the capability to support circuit-switched (CS) services, but this support is typically implemented using fallback mechanisms rather than native CS support. This is often referred to as "CS Fallback."
+</p>
+</p>
+CS Fallback allows a device connected to an LTE network to use CS services when necessary. CS services are traditional voice and SMS services that are circuit-switched, whereas PS services include data services like internet browsing.
+</p>
+<p>
+...
+</p>
+<p>
+When a mobile device is attached to a 4G network and makes a phone call, the call is not necessarily VoIP (Voice over Internet Protocol) in the traditional sense. 4G networks primarily use packet-switched technology for voice calls, which is a different approach from traditional circuit-switched voice calls used in 2G and 3G networks.
+</p>
+<p>
+Here's how it works:
+</p>
+<ol>
+<li>
+VoLTE (Voice over LTE): In many 4G networks, voice calls are carried using a technology called Voice over LTE or VoLTE. VoLTE allows voice data to be packetized and transmitted over the LTE network, similar to how data is transmitted for internet services. This means that the voice call is technically transmitted over an IP network, making it VoIP-like. However, VoLTE is specifically designed to prioritize voice traffic and maintain high-quality voice calls.
+</li>
+<li>
+CS Fallback: In some cases, if a device is not VoLTE-capable or if the network doesn't support VoLTE, a mobile device may fall back to a 2G or 3G network for voice calls. These older networks use traditional circuit-switched technology for voice calls.
+</li>
+<p>
+So, whether a phone call on a 4G network is VoIP or not depends on whether VoLTE is supported and used in the network and on the device. In most modern 4G networks and devices, VoLTE is the preferred method for handling voice calls, making them VoIP-like in nature, but with a focus on maintaining voice call quality.
+</p>
+</blockquote>
+
+
 Some verbage for the IoT world:
 
 * 4G LTE Cat-M1 is LTE-M, aka eMTC
@@ -682,7 +717,7 @@ OK
 | AT+COPS?    | Y    | Y    | Y    |      |      |      |      |      |      |       |      |      |      |
 | AT+CGREG=2  |      |      | Y    | Y    | Y    | Y    |      |      |      |       |      |      |      |
 | AT+CGED=4,1 | Y    | Y    | Y    | Y    | Y    |      |      |      | Y    | Y     | Y    | Y    | Y    |
-| AT+CSQ      |      |      |      |      |      |      | Y    | Y    |      |       |      |      |      |
+| AT+DCSQ     |      |      |      |      |      |      | Y    | Y    |      |       |      |      |      |
 <p></p>
 
 Where:
@@ -808,9 +843,29 @@ are what you're looking for!
         <td>Command</td><td>Description</td>
     </thead>
     <tbody>
+
+        <tr>
+            <td><p><code>AT+CSQ</code></p></td>
+            <td><p>Signal quality.</p>
+                <p>Returns the radio signal quality information.</p>
+            </td>
+        </tr>
+
+        <tr>
+            <td><p><code>AT+ECSQ</code></p></td>
+            <td><p>Signal quality.</p>
+                <p>Returns the *extended* radio signal quality information.</p>
+            </td>
+        </tr>
+
+        <tr>
+            <td><p><code>AT+CGATT</code></p></td>
+            <td><p>Attach or detach the device to packet domain service.</p></td>
+        </tr>
+
         <tr>
             <td><p><code>AT+CREG</code></p></td>
-            <td><p>GSM network registration status/report.</p>
+            <td><p>GSM network (cirtcuit switched) registration status/report.</p>
                 <p>The <i>set</i> command configures whether URCs are emitted by the modem. E.g., the set command <code>AT+CREG=2</code> enables network registration URCs, which will include network cell ID data. An example of such a URC could be <code>+CREG: 5,"090C","0696",3</code>, where <code>5</code> is the status (in this case registered, roaming), 
                    <code>"090C"</code> is the Local Area Code (LAC) and `"0696"` is the Cell ID. `3` is the `AcTSatus` (a Ublox specific thing maybe?) and indicates that the
                    RAT being used is GSM/GPRS.
@@ -822,14 +877,14 @@ are what you're looking for!
 
         <tr>
             <td><p><code>AT+CGREG</code></p></td>
-            <td><p>GPRS network registration status/report.</p>
-                <p>Very similar to `AT+CREG` but for GRPS networks
+            <td><p>GPRS network (packet switched) registration status/report.</p>
+                <p>Very similar to `AT+CREG` but for GRPS networks</p>
             </td>
         </tr>
 
         <tr>
             <td><p><code>AT+CEREG</code></p></td>
-            <td><p>LTE/EPS network registration status/report</p></td>
+            <td><p>LTE/EPS network (packet switched) registration status/report</p></td>
         </tr>
 
         <tr>
@@ -852,6 +907,7 @@ are what you're looking for!
         <tr>
             <td><p><code>AT+URAT</code></p></td>
             <td><p>UBlox specific Radio Access Technology selection. Can be used to set the allowable RATs to be used when connecting to networks.</p>
+                <p>If you get the CME Error &quot;operation not supported&quot; then you need to update the <code>  </code> and depending on the option, <code>+URAT</code> becomes available after the reset.</p>
             </td>
         </tr>
 
@@ -860,6 +916,29 @@ are what you're looking for!
 
 Easiest thing is to enable URCs for the registration to determine registration state. It is possible
 to poll using the query commands, but this is less efficient.
+
+##### Circuit Switched (CS) v.s. Packet Switched (PS)
+
+It is possible to be registered with any network and be both CS and PS attached or just either
+CS or PS attached.
+
+For example, when connected to a GSM network one can only be CS attached. On a GPRS network however,
+one cab be CS and PS attached, i.e. have phone/sms and internet, or, for example just PS attached,
+i.e., have only internet access. One could also be on a GPRS network and only be CS attached.
+
+Generally a modem will do "combined registration" when connecting to a network,
+which means that it simultaneously performes registration for CS and PS functions.
+
+In LTE (4G) and 5G networks everything is packet switched so phone calls will be VoIP. However,
+LTE also has a CS fallback mechanism so can be both CS and PS attached. 
+
+Whether there is a concept of CS being somehow "virtual" on pute 4/5G networks when only the 4/5G
+access technology and core networks are used I'm not sure about. Whether such a concept as CS
+attached makes sense in this scenario I don't know, i.e., LTE can make voice calls useing VoLTE,
+which is packet switched, but could the service still be somehow considered as a "virtual" CS service? Dunno!
+
+See the AT commands `AT+CGATT` and on Ublox devices `AT+USVCDOMAIN`.
+
 
 ##### An Example Network Registration Sequence
 Some worked example sequences:
@@ -1054,6 +1133,10 @@ From the R4 manual one can see that the MNO profile sets:
 * MTU size
 
 Thus, I didn't have to configure any of the above myself.
+
+One thing to note is that, if for example you want to modify the RATs being used (see `+URAT`) you
+must set the MNO profile first, then the RAT, otherwise the profile will overwrite any RAT setting
+made previously!
 
 #### Modem Power Settings
 <table class="jehtable">
@@ -1486,7 +1569,11 @@ OK
         </tr>
 -->
 
-       
+        <tr>
+            <td><code>AT+USVCDOMAIN</code></td>
+            <td>Configures the service domain (CS/PS) upon network attach. Use to set whether upon network attach just one of the CS or PS domains are attached to or whether both are simultaneously attached to.</td>
+        </tr>
+
         <tr>
             <td><code>AT+UPSV=x</code></td>
             <td>Power saving mode. x = 0 -> power saving disabled.</td>
@@ -1518,12 +1605,12 @@ OK
 </table>
 <p></p>
 
-#### uFOTO
+#### uFOTA (Firmware Over The Air) Update
 If you have occasional problems activing a PDP context because it is already active it means that another processes is using the context. It could be that the uFOTA applet is using this.
 
 > For 2G RAT, on the SARA-R412M the PDP context will be activated by the uFOTA client and released by the uFOTA client when the data call to the uFOTA server is complete. During this time the PDP context cannot be activated by the host via +CGACT nor can it deactivate the context that is established by the uFOTA client. The host needs to monitor the PDP context upon the boot and start the DUN call when the PDP context is not activated and available to be used.
 
-To disable uFOTO use `AT+UFOTACONF=2,-1`.
+To disable uFOTA use `AT+UFOTACONF=2,-1`.
 
 ### An Example Command Sequence
 
