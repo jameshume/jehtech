@@ -1736,6 +1736,55 @@ GHz band will cause harmful interference to radar altimeters on all types of civ
 uBlox modems support the `AT+UBANDMASK` command to configure bandmasks.
 
 
+### UBlox R4 v.s. U2
+There are some differences between the 2 in terms of the AT commands (& speed etc etc not considered here).
+
+#### `AT+UAUTHREQ`
+The acceptable syntax differs between the R4 and U2. It would be tempting to remove empty strings so
+that, for example `AT+UAUTHREQ=1,0,"",""` becomes `AT+UAUTHREQ=1,0`, but this will fail on the U2
+(but would work on the R4). And the reverse is true for the R4: It will accept `AT+UAUTHREQ=1,0` but
+fail on `AT+UAUTHREQ=1,0,"",""`... go figure?!
+
+
+#### Socket Creation
+The R4 supports the ETSI-specified standard `AT+CGDCONT` to define a context, `AT+CGACT` to
+activate it, and `AT+CGCONTRDP=<cid>` to get the IP address and other dynamic PDP context
+information.
+
+To define a context and activate it on the R4s:
+
+```
+# Define context
+AT+CGDCONT=1,"IP","my-apn","0.0.0.0"     # Set IP protocol, APN in one go
+AT+UAUTHREQ=1,method,pwd,uname           # Set auth credentials in on go
+
+# Activate it / verify / get IP address
+AT+CGACT=1,1                             # Activate context
+AT+CGCONTRDP=1                           # Get dynamic parameters like assigned IP address
+```
+
+
+The U2, however, for use with the internal IP stack, only supports the `AT+UPSD` commands for
+defining and activating a context (you'll find you can use the `CGDCONT/CGACT` family but socket
+creation will fail if the active context uses the internal IP stack).
+
+To define a context and activate it on the U2s:
+
+```
+# Define context
+AT+UPSD=0,0,0               # Set IP protocol
+AT+UPSD=0,1,"<apn>"         # Set APN name
+AT+UPSD=0,2,"<username>"    # Set username
+AT+UPSD=0,3,"<password>"    # Set password
+AT+UPSD=0,6,<auth_method>   # Set auth method  
+
+# Activate it / verify / get IP address
+AT+UPSDA=0,3                # Activate the context
+AT+UPSND=0,8                # Is context active?
+AT+UPSND=0,0                # What was the assigned IP address
+```
+
+
 ## SIM Cards
 
 * SIM Toolkit https://www.techopedia.com/definition/30501/sim-toolkit-stk#techopedia-explains-sim-toolkit-stk
