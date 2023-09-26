@@ -25,6 +25,7 @@ define(`REF_CE_TRANSITOR_CONFIG', `https://circuitglobe.com/common-emitter-conne
 define(`REF_KHAN_PASSIVE_SIGN', `https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/circuit-elements/v/ee-passive-sign-convention')
 define(`REF_LABEL_V_I_NODE', `https://ultimateelectronicsbook.com/labeling-voltages-currents-nodes/')
 define(`REF_HYPER_PHYS_ELECTMAG', `http://hyperphysics.phy-astr.gsu.edu/hbase/emcon.html')
+define(`REF_NPN_KHAN', `https://www.khanacademy.org/science/modern-physics-essentials/')
 dnl ---- END M4 MACROS ----
 <!DOCTYPE HTML>
 <html>
@@ -1596,7 +1597,21 @@ dnl ---- END M4 MACROS ----
 						the base current.
 					</p>
 				</blockquote>
-				<p></p>
+				<p>
+					The <b>input</b> characteristics</b>:
+				</p>
+				<p>
+					<img src="##IMG_DIR##/electronics_bjt_input_characteristics.png">
+				</p>
+				<p>
+					The <b>output</b> characteristics</b>:
+				</p>
+				<p>
+					<img src="##IMG_DIR##/electronics_bjt_output_characteristics.png">
+				</p>
+				<p>
+					Looking at output is terms of a voltage divider:
+				</p>
 				<p>
 					<img src="##IMG_DIR##/electronics_npm_in_voltage_divider.png">
 				</p>
@@ -1793,6 +1808,9 @@ dnl ---- END M4 MACROS ----
 					</li>
 					<li>
 						REF(`REF_CE_TRANSITOR_CONFIG', `TODO')
+					</li>
+					<li>
+						REF(`REF_NPN_KHAN`, `Khan Achademy: Active, staturation, &amp; cuttof state of NPN transistor')						
 					</li>
 				</ul>
 			</div>
