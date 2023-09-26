@@ -1,32 +1,3 @@
-dnl USEM4
-dnl ---- START M4 MACROS ----
-define(`OHM', `&#x2126;')
-define(`REF', `<a href="$1" target="_blank">$2</a>')dnl
-define(`REF_POW_VS_ENERGY', `https://cleantechnica.com/2015/02/02/power-vs-energy-explanation/')
-define(`REF_KHAN_ELEC_POT', `https://youtu.be/elJUghWSVh4')
-define(`REF_KIRCHOFF', `https://www.cpp.edu/~elab/projects/project_02/index.html')
-define(`REF_TEXTBOOK_KVL_STACK_QUESTION', `https://electronics.stackexchange.com/q/641627/325669')
-define(`REF_KHAN_CAP_PULSE', `https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/ee-natural-and-forced-response/a/ee-capacitor-equation-in-action')
-define(`REF_KHAN_CAP_EQUATIONS', `https://www.youtube.com/watch?v=gd7caHXKtp8')
-define(`REF_SO_CAP_EQUATIONS', `https://electronics.stackexchange.com/a/264282/26358')
-define(`REF_SO_I_SRC', `https://electronics.stackexchange.com/q/28546/26358')
-define(`REF_BATT_INT_RES', `http://www.learningaboutelectronics.com/Articles/Battery-internal-resistance')
-define(`REF_UTUBE_CIRC_ANAL', `https://youtu.be/sqxzQkAdJm0')
-define(`REF_NPN_CURVES', `http://www.physics.csbsju.edu/trace/NPN.CC.html')
-define(`REF_UDEMY_ROBOTS', `https://www.udemy.com/course/analog-electronics-robotics-learn-by-building/')
-define(`REF_NPN_INTRO', `https://www.theengineeringprojects.com/2018/05/introduction-to-npn-transistor.html')
-define(`REF_TRANS_CONFIGS', `https://www.electronics-notes.com/articles/analogue_circuits/transistor/transistor-circuit-configurations.php')
-define(`REF_2N2222', `https://www.electroschematics.com/wp-content/uploads/2009/04/2n2222-datasheet.pdf')
-define(`REF_NPN_ELECTRONICS_TUTS', `https://www.electronics-tutorials.ws/transistor/tran_2.html')
-define(`REF_CIRCUIT_LAB', `https://www.circuitlab.com/')
-define(`REF_CIRCUIT_LAB_BOOK', `https://ultimateelectronicsbook.com/')
-define(`REF_CALC_RESISTOR_FOR_TRANSITOR', `https://raspberrypi.stackexchange.com/questions/75520/calculating-resistor-value-for-transistor')
-define(`REF_CE_TRANSITOR_CONFIG', `https://circuitglobe.com/common-emitter-connection-or-ce-configuration.html')
-define(`REF_KHAN_PASSIVE_SIGN', `https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/circuit-elements/v/ee-passive-sign-convention')
-define(`REF_LABEL_V_I_NODE', `https://ultimateelectronicsbook.com/labeling-voltages-currents-nodes/')
-define(`REF_HYPER_PHYS_ELECTMAG', `http://hyperphysics.phy-astr.gsu.edu/hbase/emcon.html')
-define(`REF_NPN_KHAN', `https://www.khanacademy.org/science/modern-physics-essentials/')
-dnl ---- END M4 MACROS ----
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -253,7 +224,7 @@ dnl ---- END M4 MACROS ----
 									bwidth,
 									bheight,
 									tolerances[rowIdx],
-									"±",
+									"Â±",
 									"%",
 									{
 										lineColour: "black",
@@ -318,28 +289,28 @@ dnl ---- END M4 MACROS ----
 		<h2>References</h2>
 		<div>
 			<ul>
-				<li>REF(`REF_KHAN_CAP_PULSE', `Capacitor i-v equation in action'), Khan Academy.</li>
-				<li>REF(`REF_KHAN_CAP_EQUATIONS', `Derivation of Charging and Discharging Equations for RC Circuit'), JKTekker, YouTube.com.</li>
-				<li>REF(`REF_SO_CAP_EQUATIONS', `Deriving the formula from 'scratch' for charging a capacitor'), StackOverflow.</li>
-				<li>REF(`REF_SO_I_SRC', `What exactly is a current source?'), StockOverflow.</li>
-				<li>REF(`REF_BATT_INT_RES', `Battery Internal Resistance'), LeanAboutElectronics.com.</li>
-				<li>REF(`REF_UTUBE_CIRC_ANAL', `Essential & Practical Circuit Analysis: Part 1- DC Circuits'), Solid State Workshop, YouTube.com.</li>
-				<li>REF(`REF_NPN_CURVES', `NPN Curves (seems broken?)')</li>
-				<li>REF(`REF_UDEMY_ROBOTS', `Electricity & electronics - Robotics, learn by building'), Ian Juby, Udemy.com.</li>
-				<li>REF(`REF_NPN_INTRO', `Introduction to NPN Transistor'), The Engineering Projects.</li>
-				<li>REF(`REF_TRANS_CONFIGS', `Transistor Configurations: circuit configurations'), ElectonicsNotes.</li>
-				<li>REF(`REF_2N2222', `2N2222; 2N2222A Data Sheet'), Philips Semiconductors.</li>
-				<li>REF(`REF_NPN_ELECTRONICS_TUTS', `NPN Transistor'), ElectronicsTutorials.</li>
-				<li>REF(`REF_CIRCUIT_LAB', `Circuit Lab Website').</li>
-				<li>REF(`REF_CIRCUIT_LAB_BOOK', `Ultimate Electronics eBook').</li>
-				<li>REF(`REF_CALC_RESISTOR_FOR_TRANSITOR', `Calculating resistor value for transistor'), StackOverflow.</li>
-				<li>REF(`REF_CE_TRANSITOR_CONFIG', `Common Emitter Connection (or CE Configuration)'), Circuit Globe.</li>
-				<li>REF(`REF_KHAN_PASSIVE_SIGN', `Sign convention for passive components'), Khan Academy.</li>
-				<li>REF(`REF_LABEL_V_I_NODE', `Labeling Voltages, Currents, and Nodes'), Ultimate Electronics eBook.</li>
-				<li>REF(`REF_POW_VS_ENERGY', `The Great "Power Vs. Energy" Confusion'), Rob Lewis, CleanTechnica.</li>
-				<li>REF(`REF_KHAN_ELEC_POT', `Electric potential energy'), Khan Academy, YouTube.com.</li>
-				<li>REF(`REF_TEXTBOOK_KVL_STACK_QUESTION', `Textbook's way of determining KVL polarities'), StackOverflow.</li>
-				<li>REF(`REF_HYPER_PHYS_ELECTMAG', `Electricity And Magnetism'), HyperPhysics</li>
+				<li><a href="https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/ee-natural-and-forced-response/a/ee-capacitor-equation-in-action" target="_blank">Capacitor i-v equation in action</a>, Khan Academy.</li>
+				<li><a href="https://www.youtube.com/watch?v=gd7caHXKtp8" target="_blank">Derivation of Charging and Discharging Equations for RC Circuit</a>, JKTekker, YouTube.com.</li>
+				<li><a href="https://electronics.stackexchange.com/a/264282/26358" target="_blank">Deriving the formula from scratch' for charging a capacitor'</a>, StackOverflow.</li>
+				<li><a href="https://electronics.stackexchange.com/q/28546/26358" target="_blank">What exactly is a current source?</a>, StockOverflow.</li>
+				<li><a href="http://www.learningaboutelectronics.com/Articles/Battery-internal-resistance" target="_blank">Battery Internal Resistance</a>, LeanAboutElectronics.com.</li>
+				<li><a href="https://youtu.be/sqxzQkAdJm0" target="_blank">Essential & Practical Circuit Analysis: Part 1- DC Circuits</a>, Solid State Workshop, YouTube.com.</li>
+				<li><a href="http://www.physics.csbsju.edu/trace/NPN.CC.html" target="_blank">NPN Curves (seems broken?)</a></li>
+				<li><a href="https://www.udemy.com/course/analog-electronics-robotics-learn-by-building/" target="_blank">Electricity & electronics - Robotics, learn by building</a>, Ian Juby, Udemy.com.</li>
+				<li><a href="https://www.theengineeringprojects.com/2018/05/introduction-to-npn-transistor.html" target="_blank">Introduction to NPN Transistor</a>, The Engineering Projects.</li>
+				<li><a href="https://www.electronics-notes.com/articles/analogue_circuits/transistor/transistor-circuit-configurations.php" target="_blank">Transistor Configurations: circuit configurations</a>, ElectonicsNotes.</li>
+				<li><a href="https://www.electroschematics.com/wp-content/uploads/2009/04/2n2222-datasheet.pdf" target="_blank">2N2222; 2N2222A Data Sheet</a>, Philips Semiconductors.</li>
+				<li><a href="https://www.electronics-tutorials.ws/transistor/tran_2.html" target="_blank">NPN Transistor</a>, ElectronicsTutorials.</li>
+				<li><a href="https://www.circuitlab.com/" target="_blank">Circuit Lab Website</a>.</li>
+				<li><a href="https://ultimateelectronicsbook.com/" target="_blank">Ultimate Electronics eBook</a>.</li>
+				<li><a href="https://raspberrypi.stackexchange.com/questions/75520/calculating-resistor-value-for-transistor" target="_blank">Calculating resistor value for transistor</a>, StackOverflow.</li>
+				<li><a href="https://circuitglobe.com/common-emitter-connection-or-ce-configuration.html" target="_blank">Common Emitter Connection (or CE Configuration)</a>, Circuit Globe.</li>
+				<li><a href="https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/circuit-elements/v/ee-passive-sign-convention" target="_blank">Sign convention for passive components</a>, Khan Academy.</li>
+				<li><a href="https://ultimateelectronicsbook.com/labeling-voltages-currents-nodes/" target="_blank">Labeling Voltages, Currents, and Nodes</a>, Ultimate Electronics eBook.</li>
+				<li><a href="https://cleantechnica.com/2015/02/02/power-vs-energy-explanation/" target="_blank">The Great "Power Vs. Energy" Confusion</a>, Rob Lewis, CleanTechnica.</li>
+				<li><a href="https://youtu.be/elJUghWSVh4" target="_blank">Electric potential energy</a>, Khan Academy, YouTube.com.</li>
+				<li><a href="https://electronics.stackexchange.com/q/641627/325669" target="_blank">Textbooks way of determining KVL polarities'</a>, StackOverflow.</li>
+				<li><a href="http://hyperphysics.phy-astr.gsu.edu/hbase/emcon.html" target="_blank">Electricity And Magnetism</a>, HyperPhysics</li>
 			</ul>
 		</div>
 
@@ -350,10 +321,10 @@ dnl ---- END M4 MACROS ----
 			<h3>References</h3>
 			<div>
 				<ul>
-					<li>REF(`REF_POW_VS_ENERGY', `The Great "Power Vs. Energy" Confusion'), Rob Lewis, CleanTechnica.</li>
-					<li>REF(`REF_KHAN_ELEC_POT', `Electric potential energy'), Khan Academy, YouTube.com.</li>
-					<li>REF(`REF_UTUBE_CIRC_ANAL',`Essential &amp; Practical Circuit Analysis: Part 1- DC Circuits'), Solid State Workshop, YouTube.</li>
-					<li>REF(`REF_HYPER_PHYS_ELECTMAG', `Electricity And Magnetism'), HyperPhysics</li>
+					<li><a href="https://cleantechnica.com/2015/02/02/power-vs-energy-explanation/" target="_blank">The Great "Power Vs. Energy" Confusion</a>, Rob Lewis, CleanTechnica.</li>
+					<li><a href="https://youtu.be/elJUghWSVh4" target="_blank">Electric potential energy</a>, Khan Academy, YouTube.com.</li>
+					<li><a href="https://youtu.be/sqxzQkAdJm0" target="_blank">Essential &amp; Practical Circuit Analysis: Part 1- DC Circuits</a>, Solid State Workshop, YouTube.</li>
+					<li><a href="http://hyperphysics.phy-astr.gsu.edu/hbase/emcon.html" target="_blank">Electricity And Magnetism</a>, HyperPhysics</li>
 				</ul>
 			</div>
 
@@ -424,7 +395,7 @@ dnl ---- END M4 MACROS ----
 				<h4>Electric Fields</h4>
 				<p>
 					Electric fields are created by charges. The field itself produces an electric force per unit charge, the direction
-					of which is defined as being the force it would exert on a positive test charge [REF(`REF_HYPER_PHYS_ELECTMAG', `LINK')].
+					of which is defined as being the force it would exert on a positive test charge [<a href="http://hyperphysics.phy-astr.gsu.edu/hbase/emcon.html" target="_blank">LINK</a>].
 
 					$$
 					\vec{E} = \frac{\vec{F}}{q}
@@ -532,8 +503,8 @@ dnl ---- END M4 MACROS ----
 					<b>See the following references:</b>
 				</p>
 				<ol>
-					<li>REF(`REF_KHAN_PASSIVE_SIGN', `Sign convention for passive components'), Khan Academy.</li>
-					<li>REF(`REF_LABEL_V_I_NODE', `Labeling Voltages, Currents, and Nodes'), Ultimate Electronics eBook.</li>
+					<li><a href="https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/circuit-elements/v/ee-passive-sign-convention" target="_blank">Sign convention for passive components</a>, Khan Academy.</li>
+					<li><a href="https://ultimateelectronicsbook.com/labeling-voltages-currents-nodes/" target="_blank">Labeling Voltages, Currents, and Nodes</a>, Ultimate Electronics eBook.</li>
 				</ol>
 				<p>
 					&quot;Passive&quot; describes components that do not create power and do not amplify signals. For example, resistors, capacitors
@@ -580,7 +551,7 @@ dnl ---- END M4 MACROS ----
 						<li>First, V-I relationships like the definition of Ohm's Law don't need a minus sign.</li>
 						<li>Second, power consumption is defined correctly with $P = vi$, where $P>0$ for ordinary components which are consuming power like a resistor, and $P<0$ for components which are supplying power like a battery.</li>
 					</ol>
-					<footer>-- REF(`REF_LABEL_V_I_NODE', `Labeling Voltages, Currents, and Nodes'), Ultimate Electronics eBook.</footer>
+					<footer>-- <a href="https://ultimateelectronicsbook.com/labeling-voltages-currents-nodes/" target="_blank">Labeling Voltages, Currents, and Nodes</a>, Ultimate Electronics eBook.</footer>
 				</blockquote>
 				<p></p>
 				<p>
@@ -627,7 +598,7 @@ dnl ---- END M4 MACROS ----
 					$$
 				</p>
 				<p>
-					Lets look at the following example REF(`REF_UTUBE_CIRC_ANAL',`[Ref]'):
+					Lets look at the following example <a href="https://youtu.be/sqxzQkAdJm0" target="_blank">[Ref]</a>:
 				</p>
 				<p>
 
@@ -636,7 +607,7 @@ dnl ---- END M4 MACROS ----
 				<p>
 					Kirchoff's voltage law says that the <b>sum of voltages around a closed circuit must be zero</b>,
 					where the sign on each voltage is the polarity of the terminal encountered first as the loops is
-					traveled around. Another way of saying it is that one way to assign the +'s and -'s is REF(`REF_KIRCHOFF', `[Ref]'):
+					traveled around. Another way of saying it is that one way to assign the +'s and -'s is <a href="https://www.cpp.edu/~elab/projects/project_02/index.html" target="_blank">[Ref]</a>:
 				</p>
 				<ol>
 					<li>if the positive (+) side of the voltage is encountered first, assign a positive "+" sign to the voltage across the element.</li>
@@ -672,7 +643,7 @@ dnl ---- END M4 MACROS ----
 					a simple example from the book "Fundamentals of Electric Circuits", fourth edition. This demonstrates the way that passive
 					components can have their terminals labelled in an "arbitrary" fashion of our choosing (as long as we consistently apply
 					the passive sign convention to know whether current is + or - whilst considering each branch). It stumped me for a while,
-					so I asked, REF(`REF_TEXTBOOK_KVL_STACK_QUESTION', `and got some very helpful answers on good old StackOverflow').
+					so I asked, <a href="https://electronics.stackexchange.com/q/641627/325669" target="_blank">and got some very helpful answers on good old StackOverflow</a>.
 				</p>
 				<p>
 					<img src="##IMG_DIR##/electronics_kvl_book_ex_1.png">
@@ -977,7 +948,7 @@ dnl ---- END M4 MACROS ----
 				<p>
 					An <em>ideal</em> voltage source is one that supplies constant potential, no matter
 					what load is connected to it. I.e., it produces whatever current is necessary to
-					maintain the voltage across it REF(REF_SO_I_SRC, `[Ref]'):
+					maintain the voltage across it <a href="https://electronics.stackexchange.com/q/28546/26358" target="_blank">[Ref]</a>:
 				</p>
 				<p>
 					<img src="##IMG_DIR##/ideal_voltage_source.svg" alt="Image explaining an ideal voltage source"/>
@@ -985,9 +956,9 @@ dnl ---- END M4 MACROS ----
 				<p>
 					But, <a href="electronics-batteries.html">batteries</a>, even power supplies etc etc
 					are <em>not</em> ideal. In the real world
-					they have a small internal resistance, anywhere between approx 0.1 OHM() to
-					2.0 OHM() depending on the battery
-					REF(`REF_BATT_INT_RES', `[Ref]'), which means they are modelled more like this:
+					they have a small internal resistance, anywhere between approx 0.1 &#x2126; to
+					2.0 &#x2126; depending on the battery
+					<a href="http://www.learningaboutelectronics.com/Articles/Battery-internal-resistance" target="_blank">[Ref]</a>, which means they are modelled more like this:
 				</p>
 				<p>
 					<img src="##IMG_DIR##/nonideal_voltage_source.svg" alt="Image explaining a non-ideal, real world, voltage source"/>
@@ -1010,7 +981,7 @@ dnl ---- END M4 MACROS ----
 			<div>
 				<p>
 					An <em>ideal</em> current source is one that always produces the same current, no matter how
-					the voltage across it or the resistance of the load it is &quot;feeding&quot; varies, REF(REF_SO_I_SRC, `[Ref]').
+					the voltage across it or the resistance of the load it is &quot;feeding&quot; varies, <a href="https://electronics.stackexchange.com/q/28546/26358" target="_blank">[Ref]</a>.
 				</p>
 				<p>
 					This is why, incidently, in a circuit you cannot have two current sources in series!
@@ -1021,7 +992,7 @@ dnl ---- END M4 MACROS ----
 			<div>
 				<p>
 					It is possible to switch out a voltage source in a circuit for a current source and vice-versa
-					using source transformation using Thevenin and Norton equivalent ciruits REF(`REF_UTUBE_CIRC_ANAL',`[Ref]').
+					using source transformation using Thevenin and Norton equivalent ciruits <a href="https://youtu.be/sqxzQkAdJm0" target="_blank">[Ref]</a>.
 				</p>
 			</div>
 
@@ -1038,7 +1009,7 @@ dnl ---- END M4 MACROS ----
 					<li>Add the circuit values together - &quot;superimpose&quot; them onto one another.</li>
 				</ol>
 				<p>
-					Take the following example REF(`REF_UTUBE_CIRC_ANAL',`[Ref]'):
+					Take the following example <a href="https://youtu.be/sqxzQkAdJm0" target="_blank">[Ref]</a>:
 				</p>
 				<p>
 					<img src="##IMG_DIR##/superposition.svg" alt="Circuit analysis using superposition theorem"/>
@@ -1058,13 +1029,13 @@ dnl ---- END M4 MACROS ----
 			<div>
 				<ul>
 					<li>
-						REF(REF_SO_I_SRC, `What Exactly Is A Current Source?'), StackOverflow.com.
+						<a href="https://electronics.stackexchange.com/q/28546/26358" target="_blank">What Exactly Is A Current Source?</a>, StackOverflow.com.
 					</li>
 					<li>
-						REF(REF_BATT_INT_RES, `Battery Internal Resistance'), LearningAboutElectronics.com.
+						<a href="http://www.learningaboutelectronics.com/Articles/Battery-internal-resistance" target="_blank">Battery Internal Resistance</a>, LearningAboutElectronics.com.
 					</li>
 					<li>
-						REF(`REF_UTUBE_CIRC_ANAL',`Essential &amp; Practical Circuit Analysis: Part 1- DC Circuits'), Solid State Workshop, YouTube.
+						<a href="https://youtu.be/sqxzQkAdJm0" target="_blank">Essential &amp; Practical Circuit Analysis: Part 1- DC Circuits</a>, Solid State Workshop, YouTube.
 					</li>
 				</ul>
 			</div>
@@ -1224,7 +1195,7 @@ dnl ---- END M4 MACROS ----
 			</p>
 			<p>
 				Recall KVL: the sum of voltages around a closed circuit must be zero. The dotted arrow
-				in the diagram above shows a direction around a closed ciruit, which by KVL means that REF(`REF_SO_CAP_EQUATIONS', `[Ref]'):
+				in the diagram above shows a direction around a closed ciruit, which by KVL means that <a href="https://electronics.stackexchange.com/a/264282/26358" target="_blank">[Ref]</a>:
 
 				$$
 				\begin{array}{l l}
@@ -1380,7 +1351,7 @@ dnl ---- END M4 MACROS ----
 				<p>The performance of many circuits is impaired by the presence of HF noise on their supplies, so any HF noise which might
 					be present on an IC's supply must be shorted to ground. We cannot use a conductor for this as it will short circuit dc
 					and blow fuses, but a capacitor (usually in the 1-nF to 100-nF range) blocks dc while acting as a short circuit for HF.</p>
-				<p>1 cm of wire or PC track has ~8 nH inductance (5 Ω at 100 MHz), which is scarcely a short circuit. A capacitor acting as
+				<p>1 cm of wire or PC track has ~8 nH inductance (5 Î© at 100 MHz), which is scarcely a short circuit. A capacitor acting as
 					an HF short circuit must have low lead and PC track inductance, so each supply capacitor must be located very close to the
 					two terminals of the IC it is decoupling. It is also important to choose capacitors with low internal inductance -
 					usually ceramic ones.</p>
@@ -1392,13 +1363,13 @@ dnl ---- END M4 MACROS ----
 			<h3>References</h3>
 			<ul>
 				<li>
-					REF(`REF_KHAN_CAP_PULSE', `Capacitor i-v equation in action'), Willy McAllister, Khan Achademy,
+					<a href="https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/ee-natural-and-forced-response/a/ee-capacitor-equation-in-action" target="_blank">Capacitor i-v equation in action</a>, Willy McAllister, Khan Achademy,
 				</li>
 				<li>
-					REF(`REF_KHAN_CAP_EQUATIONS', `Derivation of Charging and Discharging Equations for RC Circuit'), Khan Achademy,
+					<a href="https://www.youtube.com/watch?v=gd7caHXKtp8" target="_blank">Derivation of Charging and Discharging Equations for RC Circuit</a>, Khan Achademy,
 				</li>
 				<li>
-					REF(`REF_SO_CAP_EQUATIONS', `Deriving the formula from scratch for charging a capacitor'), Adam Haun's answer on StackOverflow.com,
+					<a href="https://electronics.stackexchange.com/a/264282/26358" target="_blank">Deriving the formula from scratch for charging a capacitor</a>, Adam Haun's answer on StackOverflow.com,
 				</li>
 			</ul>
 
@@ -1550,7 +1521,7 @@ dnl ---- END M4 MACROS ----
 				</p>
 				<p>
 					<img src="##IMG_DIR##/npn_transistor.png"/>
-					REF(`REF_UDEMY_ROBOTS', `[Ref]')
+					<a href="https://www.udemy.com/course/analog-electronics-robotics-learn-by-building/" target="_blank">[Ref]</a>
 				</p>
 				<p>
 					By forward biasing the emitter to base junction with even a small current, the
@@ -1581,7 +1552,7 @@ dnl ---- END M4 MACROS ----
 							and put the transistor in running condition, the base voltage must be greater than 0.7
 							voltage in case of silicon transistor and 0.3 in case of germanium transistor.</li>
 					</ul>
-					<footer>-- REF(`REF_TRANS_CONFIGS', `Transistor Configurations: Circuit Configurations'), emphasis mine.</footer>
+					<footer>-- <a href="https://www.electronics-notes.com/articles/analogue_circuits/transistor/transistor-circuit-configurations.php" target="_blank">Transistor Configurations: Circuit Configurations</a>, emphasis mine.</footer>
 				</blockquote>
 
 				<p>I like this explanation by "Papabravo" on ["All About Circuits"](https://forum.allaboutcircuits.com/threads/bjts-and-base-emitter-saturation-voltage-vbe-sat.6664/) (emphasis mine):</p>
@@ -1598,13 +1569,13 @@ dnl ---- END M4 MACROS ----
 					</p>
 				</blockquote>
 				<p>
-					The <b>input</b> characteristics</b>:
+					The <b>input characteristics</b>:
 				</p>
 				<p>
 					<img src="##IMG_DIR##/electronics_bjt_input_characteristics.png">
 				</p>
 				<p>
-					The <b>output</b> characteristics</b>:
+					The <b>output characteristics</b>:
 				</p>
 				<p>
 					<img src="##IMG_DIR##/electronics_bjt_output_characteristics.png">
@@ -1631,7 +1602,7 @@ dnl ---- END M4 MACROS ----
 				</p>
 				<p>
 					The above configuration is called the <b>common emitter</b> configuration and is
-					probably the most widely used REF(`REF_TRANS_CONFIGS', `[Ref]').
+					probably the most widely used <a href="https://www.electronics-notes.com/articles/analogue_circuits/transistor/transistor-circuit-configurations.php" target="_blank">[Ref]</a>.
 				</p>
 				<blockquote>
 					The configuration in which the emitter is connected between the collector and base
@@ -1639,7 +1610,7 @@ dnl ---- END M4 MACROS ----
 					emitter and base, and the output circuit is taken from the collector and emitter.
 					Thus, the emitter is common to both the input and the output circuit, and hence the
 					name is the common emitter configuration.
-					<footer>-- REF(`REF_CE_TRANSITOR_CONFIG', `Common Emitter Connection (or CE Configuration)').</footer>
+					<footer>-- <a href="https://circuitglobe.com/common-emitter-connection-or-ce-configuration.html" target="_blank">Common Emitter Connection (or CE Configuration)</a>.</footer>
 				</blockquote>
 				<p></p>
 				<p>
@@ -1669,7 +1640,7 @@ dnl ---- END M4 MACROS ----
 					<img src="##IMG_DIR##/../electronics_2N222_Vce_vs_Ic.png">
 				</p>
 				<p>
-					A common NPN transistor is the 2N2222. Looking at the data sheet REF(`REF_2N2222', `[Ref]')
+					A common NPN transistor is the 2N2222. Looking at the data sheet <a href="https://www.electroschematics.com/wp-content/uploads/2009/04/2n2222-datasheet.pdf" target="_blank">[Ref]</a>
 					we can find the following properties:
 				</p>
 				<table class="jehtable">
@@ -1768,7 +1739,7 @@ dnl ---- END M4 MACROS ----
 					</p>
 
 					<p>
-						Some examples, taken verbatim, from REF(`REF_NPN_ELECTRONICS_TUTS', `electronics-tutorials.ws on the NPN Transitor')
+						Some examples, taken verbatim, from <a href="https://www.electronics-tutorials.ws/transistor/tran_2.html" target="_blank">electronics-tutorials.ws on the NPN Transitor</a>
 						will help understand why these are useful.
 					</p>
 					<p>
@@ -1785,7 +1756,7 @@ dnl ---- END M4 MACROS ----
 				<h4>Calculating Resistor Values</h4>
 				<div>
 					<p>
-						All based on an answer from StackOverflow REF(`REF_CALC_RESISTOR_FOR_TRANSITOR', `[Ref]').
+						All based on an answer from StackOverflow <a href="https://raspberrypi.stackexchange.com/questions/75520/calculating-resistor-value-for-transistor" target="_blank">[Ref]</a>.
 					</p>
 					<p>
 						<img src="##IMG_DIR##/electronics_determine_transistor_resistors.png">
@@ -1803,28 +1774,28 @@ dnl ---- END M4 MACROS ----
 			<div>
 				<ul>
 					<li>
-						REF(`REF_UDEMY_ROBOTS', `Electricity &amp; Electronics - Robotics, Learn By Building'), Ian Juby on Udemy.
+						<a href="https://www.udemy.com/course/analog-electronics-robotics-learn-by-building/" target="_blank">Electricity &amp; Electronics - Robotics, Learn By Building</a>, Ian Juby on Udemy.
 					</li>
 					<li>
-						REF(`REF_NPN_CURVES', `NPN Characteristic Curves').
+						<a href="http://www.physics.csbsju.edu/trace/NPN.CC.html" target="_blank">NPN Characteristic Curves</a>.
 					</li>
 					<li>
-						REF(`REF_NPN_INTRO', `Introduction To The NPN Transistor'), TheEngineeringProjects.com.
+						<a href="https://www.theengineeringprojects.com/2018/05/introduction-to-npn-transistor.html" target="_blank">Introduction To The NPN Transistor</a>, TheEngineeringProjects.com.
 					</li>
 					<li>
-						REF(`REF_TRANS_CONFIGS', `Transistor Configurations: Circuit Configurations'), Electronics-Notes.com.
+						<a href="https://www.electronics-notes.com/articles/analogue_circuits/transistor/transistor-circuit-configurations.php" target="_blank">Transistor Configurations: Circuit Configurations</a>, Electronics-Notes.com.
 					</li>
 					<li>
-						REF(`REF_2N2222', `NPN Transistor 2N2222 DataSheet').
+						<a href="https://www.electroschematics.com/wp-content/uploads/2009/04/2n2222-datasheet.pdf" target="_blank">NPN Transistor 2N2222 DataSheet</a>.
 					</li>
 					<li>
-						REF(`REF_CALC_RESISTOR_FOR_TRANSITOR', `TODO')
+						<a href="https://raspberrypi.stackexchange.com/questions/75520/calculating-resistor-value-for-transistor" target="_blank">TODO</a>
 					</li>
 					<li>
-						REF(`REF_CE_TRANSITOR_CONFIG', `TODO')
+						<a href="https://circuitglobe.com/common-emitter-connection-or-ce-configuration.html" target="_blank">TODO</a>
 					</li>
 					<li>
-						REF(`REF_NPN_KHAN', `Active, staturation, and cuttof state of NPN transistor'), Khan Achademy
+						<a href="https://www.khanacademy.org/science/modern-physics-essentials/" target="_blank">Active, staturation, and cuttof state of NPN transistor</a>, Khan Achademy
 					</li>
 				</ul>
 			</div>
@@ -2008,5 +1979,3 @@ dnl ---- END M4 MACROS ----
 	</div>
 </body>
 </html>
-
-
