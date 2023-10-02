@@ -1496,7 +1496,49 @@
 
 			<h3>Zener Diode</h3>
 			<div>
-				<p><img src="##IMG_DIR##/electronics_zener_diode.png"></p>
+				<p>
+					The circuit symbol is:
+				</p>
+				<p>
+					<img src="##IMG_DIR##/electronics_zener_diode.png">
+				</p>
+				<p>
+					Designed to work in reverse bias in order to maintain a certain voltage. Unlike a normal diode, which
+					will not conduct when reverse biased, the Zener diode does, at a <em>very specific breakdown voltage</em>
+					called the <em>Zener voltage</em>, $V_Z$:
+				</p>
+				<p>
+					<img src="##IMG_DIR##/electronics_zener_diode_characteristic_curve.png">
+				</p>	
+				<p>
+					A common use is as a voltage regulator:
+				</p>
+				<p>
+					<p><img src="##IMG_DIR##/electronics_zener_diode_voltage_clamp.png"></p>
+				</p>
+				<p>
+					As the load increases (i.e., the load resistance increases), more of $V_{cc}$ will be dropped
+					across it (voltage divider effect). This means that without the Zener, $T_p$ would rise as less
+					voltage would be dropped across the resister. But, the Zener will &quot;clamp&quot; $T_p$ to
+					$V_Z$ volts.
+				</p>
+				<p>
+					To do this, the zener must sink more current because $V_{load} = I_{load} \cdot R_{load}$ and
+					to counteract the increase in $R_{load}$ the only thing that can be done is to decrese $I_{load}$,
+					which can only be done by sinking more current through the Zener. As seen from the graph above,
+					between its minimum and maximum ratings it can do exactly that!
+				</p>
+				<p>
+					That that when used this way, if the input voltage is lower than $V_Z$ then the Zener remains off
+					and so works like an open circuit!!
+				</p>
+				<p>
+					Be careful with Zener power rating. You must pick a Zener diode to match the voltage/current it is 
+					coping with!
+				</p>
+				<p>
+					When forward biased the Zener just works like a normal diode, but is not really used like this.
+				</p>
 			</div>
 
 			<h3>Schottky Diode</h3>
