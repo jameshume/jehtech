@@ -387,11 +387,7 @@ RUN --mount=type=bind,target=&lt;target-dir-in-this-stage&gt;,source=&lt;source-
 <div>
     <h3>Stop TK install asking for timezone</h3>
     <div>
-      <pre>
-# Need to set timezone to stop install of TK asking questions which can't be answered during
-# a Docker build...
-RUN ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && echo $CONTAINER_TIMEZONE > /etc/timezone
-      </pre>
+      <pre>RUN DEBIAN_FRONTEND=noninteractive apt-get install -y -q package</pre>
       <p></p>
     </div>
 
