@@ -369,7 +369,18 @@ Cleanup / File System Size Easy Wins
   FROM &lt;base-image-b&gt;  
   COPY --from=&lt;build-stage-name&gt; &lt;src&gt; &lt;dest&gt;
 </pre>
-<p></p>
+<p>
+  To mount a filesystem from a previous build stage into the current build stage:
+</p>
+<pre>
+RUN -mount=type=bind,target=&lt;target-dir-in-this-stage&gt;,source=&lt;source-dir-in-previous-stage&gt;,from=&lt;build-stage-name&gt; \
+    ... access &lt;target-dir-in-this-stage&gt; as required ...
+    ...
+</pre>
+<p>
+  You don't have to mount directories either... you can mount specific files from the host, which saves you having to <code>COPY</code> them into the image!
+  Usefully there is also a <code>tmpfs</code> mount, which can be useful!
+</p>
 </div>
 
 
