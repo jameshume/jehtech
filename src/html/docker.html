@@ -396,6 +396,32 @@ RUN --mount=type=bind,target=&lt;target-dir-in-this-stage&gt;,source=&lt;source-
       <pre>SHELL ["/bin/bash", "-c"]</pre>
       <p></p>
     </div>
+
+    <h3>Use Host's XServer</h3>
+    <div>
+      <pre>
+  xhost +"local:docker@"                          # if DISPLAY does not exist in your environment `export DISPLAY=":0"`
+  docker container run \
+      --rm -it \
+      --env="DISPLAY" \
+      --volume="$HOME/.Xauthority:/root/.Xauthority:rw" \
+      --volume="/tmp/.X11-unix:/tmp/.X11-unix" \
+      &lt;image-name&gt;
+      </pre>
+      <p></p>
+    </div>
+
+    <h3>Pass USB devices to container</h3>
+    <div>
+      <pre>--device=/dev/usbtmc0</pre>
+      <p></p>
+    </div>
+
+    <h3>Run container with same UID/GUI as host user</h3>
+    <div>
+      <pre>--user $(id -u):$(id -g)</pre>
+      <p></p>
+    </div>
 </div>
 
 <H2>Docker CLI Command Cheat Sheet</H2>
