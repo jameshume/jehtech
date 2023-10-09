@@ -373,7 +373,7 @@ Cleanup / File System Size Easy Wins
   To mount a filesystem from a previous build stage into the current build stage:
 </p>
 <pre>
-RUN -mount=type=bind,target=&lt;target-dir-in-this-stage&gt;,source=&lt;source-dir-in-previous-stage&gt;,from=&lt;build-stage-name&gt; \
+RUN --mount=type=bind,target=&lt;target-dir-in-this-stage&gt;,source=&lt;source-dir-in-previous-stage&gt;,from=&lt;build-stage-name&gt; \
     ... access &lt;target-dir-in-this-stage&gt; as required ...
     ...
 </pre>
@@ -383,6 +383,24 @@ RUN -mount=type=bind,target=&lt;target-dir-in-this-stage&gt;,source=&lt;source-d
 </p>
 </div>
 
+<H2>Misc Bits</H2>
+<div>
+    <h3>Stop TK install asking for timezone</h3>
+    <div>
+      <pre>
+# Need to set timezone to stop install of TK asking questions which can't be answered during
+# a Docker build...
+RUN ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && echo $CONTAINER_TIMEZONE > /etc/timezone
+      </pre>
+      <p></p>
+    </div>
+
+    <h3>Use Bash, not Sh, as default shell</h3>
+    <div>
+      <pre>SHELL ["/bin/bash", "-c"]</pre>
+      <p></p>
+    </div>
+</div>
 
 <H2>Docker CLI Command Cheat Sheet</H2>
 <pre>
