@@ -420,7 +420,8 @@ RUN --mount=type=bind,target=&lt;target-dir-in-this-stage&gt;,source=&lt;source-
     <h3>Run container with same UID/GUI as host user</h3>
     <div>
       <pre>--user $(id -u):$(id -g)</pre>
-      <p></p>
+      <p>This tells the container to run with the current user id and group id so that any files
+        it creates will have the correct user and group set (otherwise you get root root).</p>
     </div>
 </div>
 
