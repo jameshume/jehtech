@@ -159,6 +159,7 @@ Together with:
 > The considerations that form the basis for this international identification plan for networks and subscriptions are as follows:
 > 
 > c. The MNC consists of 2 or 3 digits and the length of the MNC is a national matter.
+<p></p>
 
 #### 3GPP TS 23.003 / ETSI TS 123 003
 
@@ -188,6 +189,7 @@ together with:
 > If more than one PLMN exists in a country, the same Mobile Network Code should not be assigned to more than one PLMN.
 > 
 > The allocation of IMSIs should be such that not more than the digits MCC + MNC of the IMSI have to be analysed in a foreign PLMN for information transfer.
+<p></p>
 
 #### Summary
 From the above specifications and information we can conclude:
