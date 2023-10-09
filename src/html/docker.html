@@ -351,6 +351,27 @@ Cleanup / File System Size Easy Wins
 </pre>
 
 
+<h2>Multi-Stage Builds</h2>
+<div>
+<p>
+  The Docker docs have the following to say: <q>With multi-stage builds, you use 
+    multiple <code>FROM</code> statements in your Dockerfile. Each FROM instruction can use a
+     different base, and each of them begins a new stage of the build. You can selectively copy 
+     artifacts from one stage to another, leaving behind everything you don't want in the final image.
+     </q>
+</p>
+<pre>
+  FROM &lt;base-image-a&gt; as &lt;build-stage-name&gt;
+  ...
+  Do something that generates an artefact that you want to copy to the next build stage
+  ...
+
+  FROM &lt;base-image-b&gt;  
+  COPY --from=&lt;build-stage-name&gt; &lt;src&gt; &lt;dest&gt;
+</pre>
+<p></p>
+</div>
+
 
 <H2>Docker CLI Command Cheat Sheet</H2>
 <pre>
