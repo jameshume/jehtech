@@ -142,7 +142,61 @@ See [Difference Between IMEI, IMSI, ICCID And MSISDN Numbers](https://commsbrief
 
 The industry code differentiates a SIM from other types of chip cards, for example, a credit card. A SIM card will always start with the numbers 89, for example [[Ref]](https://www.zipitwireless.com/blog/what-are-iccid-imei-numbers-iot-sim-cards-explained#:~:text=An%20ICCID%20number%20follows%20this,making%20each%20SIM%20card%20unique.).
 
+### IMSI, MMC and MNC
+#### ITU-T E.212
 
+The International Telecommunication Union (ITU) Recommendation [ITU-T E.212 - The international identification plan for public networks and subscriptions](https://www.itu.int/rec/T-REC-E.212/en) defines:
+
+> 3.2 international mobile subscription identity (IMSI): The IMSI is a string of decimal digits, up to a maximum length of 15 digits, which identifies a unique subscription. The IMSI consists of three fields: the mobile country code (MCC), the mobile network code (MNC), and the mobile subscription identification number (MSIN).
+> 
+> 3.3 mobile country code (MCC): The MCC is the first field of the IMSI and is three digits in length and identifies a country. The Director of TSB may assign more than one MCC to a country. MCCs in the 90x range are non-geographic MCCs (country-agnostic) and are administered by the Director of TSB.
+> 
+> 3.4 mobile network code (MNC): The MNC is the second field of the IMSI, it is two or three digits in length and is administered by the respective national numbering plan administrator. MNCs under MCC ranges 90x are administered by the Director of TSB. The MNC, in combination with the MCC, provides sufficient information to identify the home network.
+
+Together with:
+
+> 5 Considerations
+> The considerations that form the basis for this international identification plan for networks and subscriptions are as follows:
+> 
+> c. The MNC consists of 2 or 3 digits and the length of the MNC is a national matter.
+<p></p>
+
+#### 3GPP TS 23.003 / ETSI TS 123 003
+
+3GPP TS 23.003 / ETSI TS 123 003 define:
+
+> 2.2 Composition of IMSI
+> IMSI is composed of three parts:
+> 
+> Mobile Country Code (MCC) consisting of three digits. The MCC identifies uniquely the country of domicile of the mobile subscriber;
+> 
+> Mobile Network Code (MNC) consisting of two or three digits for GSM/UMTS applications. The MNC identifies the home PLMN of the mobile subscriber. The length of the MNC (two or three digits) depends on the value of the MCC. A mixture of two and three digit MNC codes within a single MCC area is not recommended and is outside the scope of this specification.
+> 
+> Mobile Subscriber Identification Number (MSIN) identifying the mobile subscriber within a PLMN. The National Mobile Subscriber Identity (NMSI) consists of the Mobile Network Code and the Mobile Subscriber Identification Number.
+
+together with:
+
+> 2.3 Allocation principles
+> 
+> IMSI shall consist of decimal digits (0 through 9) only.
+> 
+> The number of digits in IMSI shall not exceed 15.
+> 
+> The allocation of Mobile Country Codes (MCCs) is administered by the ITU-T. The current allocation is given in the COMPLEMENT TO ITU-T RECOMMENDATION E.212.
+> 
+> The allocation of National Mobile Subscriber Identity (NMSI) is the responsibility of each administration.
+> 
+> If more than one PLMN exists in a country, the same Mobile Network Code should not be assigned to more than one PLMN.
+> 
+> The allocation of IMSIs should be such that not more than the digits MCC + MNC of the IMSI have to be analysed in a foreign PLMN for information transfer.
+<p></p>
+
+#### Summary
+From the above specifications and information we can conclude:
+
+1. The mobile country code (MCC) is a string of 3 decimal digits that identifies a country.
+1. The mobile network code (MNC) is a string of 2 or 3 decimal digits that identifies a network.
+1. Leading `0` digits in an MNC are significant: an MNC of `001` is distinct from an MNC of `01`.
 
 
 ## Signal Strength
@@ -502,7 +556,6 @@ P2P connection of "things", like cars, for example.
     > Bidding-down attacks reduce the security of a mobile network connection. Weaker encryption algorithms or even downgrades to prior 
     > network generations an adversary to exploit numerous attack vectors and harm the users of a network. 
     > [Never let Me Adown Again: Bidding-Down Attachs and Mitigations in 5G and 4G (preprint paper)](https://radix-security.com/files/2021_downgrade.pdf).
-
 
 ## Power Saving
 
@@ -890,6 +943,11 @@ are what you're looking for!
         <tr>
             <td><p><code>AT+COPS</code></p></td>
             <td><p>The `+COPS` command selects a Public Land Mobile Network (PLMN) automatically or manually, and reads and searches the current mobile network.</p></td>
+        </tr>
+
+        <tr>
+            <td><p><code>AT+UCGED</code></p></td>
+            <td><p>Periodic serving cell reports are enabled by an `AT+CGED=4,1`` command.</p></td>
         </tr>
 
         <tr>

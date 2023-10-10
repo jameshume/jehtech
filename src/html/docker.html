@@ -351,6 +351,79 @@ Cleanup / File System Size Easy Wins
 </pre>
 
 
+<h2>Multi-Stage Builds</h2>
+<div>
+<p>
+  The Docker docs have the following to say: <q>With multi-stage builds, you use 
+    multiple <code>FROM</code> statements in your Dockerfile. Each FROM instruction can use a
+     different base, and each of them begins a new stage of the build. You can selectively copy 
+     artifacts from one stage to another, leaving behind everything you don't want in the final image.
+     </q>
+</p>
+<pre>
+  FROM &lt;base-image-a&gt; as &lt;build-stage-name&gt;
+  ...
+  Do something that generates an artefact that you want to copy to the next build stage
+  ...
+
+  FROM &lt;base-image-b&gt;  
+  COPY --from=&lt;build-stage-name&gt; &lt;src&gt; &lt;dest&gt;
+</pre>
+<p>
+  To mount a filesystem from a previous build stage into the current build stage:
+</p>
+<pre>
+RUN --mount=type=bind,target=&lt;target-dir-in-this-stage&gt;,source=&lt;source-dir-in-previous-stage&gt;,from=&lt;build-stage-name&gt; \
+    ... access &lt;target-dir-in-this-stage&gt; as required ...
+    ...
+</pre>
+<p>
+  You don't have to mount directories either... you can mount specific files from the host, which saves you having to <code>COPY</code> them into the image!
+  Usefully there is also a <code>tmpfs</code> mount, which can be useful!
+</p>
+</div>
+
+<H2>Misc Bits</H2>
+<div>
+    <h3>Stop TK install asking for timezone</h3>
+    <div>
+      <pre>RUN DEBIAN_FRONTEND=noninteractive apt-get install -y -q package</pre>
+      <p></p>
+    </div>
+
+    <h3>Use Bash, not Sh, as default shell</h3>
+    <div>
+      <pre>SHELL ["/bin/bash", "-c"]</pre>
+      <p></p>
+    </div>
+
+    <h3>Use Host's XServer</h3>
+    <div>
+      <pre>
+  xhost +"local:docker@"                          # if DISPLAY does not exist in your environment `export DISPLAY=":0"`
+  docker container run \
+      --rm -it \
+      --env="DISPLAY" \
+      --volume="$HOME/.Xauthority:/root/.Xauthority:rw" \
+      --volume="/tmp/.X11-unix:/tmp/.X11-unix" \
+      &lt;image-name&gt;
+      </pre>
+      <p></p>
+    </div>
+
+    <h3>Pass USB devices to container</h3>
+    <div>
+      <pre>--device=/dev/usbtmc0</pre>
+      <p></p>
+    </div>
+
+    <h3>Run container with same UID/GUI as host user</h3>
+    <div>
+      <pre>--user $(id -u):$(id -g)</pre>
+      <p>This tells the container to run with the current user id and group id so that any files
+        it creates will have the correct user and group set (otherwise you get root root).</p>
+    </div>
+</div>
 
 <H2>Docker CLI Command Cheat Sheet</H2>
 <pre>
