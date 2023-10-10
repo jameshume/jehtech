@@ -1868,6 +1868,10 @@
 					</li>
 				</ul>
 			</div>
+
+			<h3>PNP Transistor</h3>
+			<div>
+			</div>
 		</div>
 
 		<!-- --------------------------------------------------------------------------------------- -->
@@ -1913,6 +1917,40 @@
 			</p>
 			<p>
 				<img src="##IMG_DIR##/electronics_mosfet_construction.png">
+			</p>
+			<p>
+				When a voltage is applied to the gate it acts as a cpacitor: <em>no current flows through the gate</em>.
+				But, the accumulation of positive charge at the gate attracks negative charges causes a channel or
+				&quot;wedge&quot; to be &quot;opened&quot; between the source and drain through which current can flow.
+				The current flow starts when the gate voltage exceeds the threshold voltage, ie when $V_{\text{gs}} > V_{\text{th}}$.
+			</p>
+			<p>
+				<img src="##IMG_DIR##/electronics_mosfet_depletion_regions.png">
+			</p>
+			<p>
+				The input/output characteristics are very similar to the BJTs discussed in the previous section:
+			</p>
+			<p>
+				<img src="##IMG_DIR##/electronics_mosfet_input_output_characteristics.png">
+			</p>
+			<p>
+				The FET has three modes of operation and annoyingly the terminilogy does not match that used for the BJTs
+				so it can be a little confusing:
+			</p>
+			<ol>
+				<li><b>Saturation</b>: In this mode the FET acts as an amplifier. Note this is <u>not the same meaning as saturation in a BJT</u>!!!
+				</li>
+				<li><b>Ohmic</b>: The FET acts like a (voltage controlled) resistor.
+				</li>
+				<li><b>Cut-off</b>: The FET acts like an open circuit.
+				</li>
+			</ol>
+			<p>
+				The simples model of a FET is:
+				$$$
+				I_\text{d} = k(V_\text{gs} - V_\text{th})^2
+				$$$
+				Where $k$ is a constant representing the particular MOSFETs characteristics, which should be found in the datasheet.
 			</p>
 		</div>
 
