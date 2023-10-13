@@ -1509,7 +1509,10 @@
 				</p>
 				<p>
 					<img src="##IMG_DIR##/electronics_zener_diode_characteristic_curve.png">
-				</p>	
+				</p>
+				<p>
+					Zener diodes must <b>always be used with a resistor in seriers to limit the current</b>.
+				</p>
 				<p>
 					A common use is as a voltage regulator:
 				</p>
@@ -1627,6 +1630,9 @@
 					</p>
 				</blockquote>
 				<p>
+					Thus the emitter voltage is effectively fixed by the base voltage as $V_e = V_b - ~0.7$.
+				</p>
+				<p>
 					The <b>input characteristics</b>:
 				</p>
 				<p>
@@ -1683,8 +1689,9 @@
 				</blockquote>
 				<p></p>
 				<p>
-					NPN transistors can <b>typically handle up to about 0.8 A</b>. Thus, they are <b>low current</b>
-					devices. For large currents MOSFETs are used (later section).
+					NPN transistors can <b>typically handle up to about 0.8 A</b>. They will also have a maximum power
+					rating - the average small transistor can only handle about 250mW of heat dissipation. Thus,
+					they are <b>low current</b>devices. For large currents MOSFETs are used (later section).
 				</p>
 				<p><b>Saturation region</b> is where the maximum collector current flows and the transistor
 				is basically a closed switch from collector to emitter. The collector-emitter voltage (VCE)
@@ -1805,6 +1812,9 @@
 						$$
 						I_c = \beta I_b
 						$$
+
+						The current gain can also be referred to as $h_{\text{FE}}$, where the $\text{FE}$ subscript
+						stands for &quot;forward-biased emitter&quot;.
 					</p>
 
 					<p>
@@ -1824,11 +1834,55 @@
 
 				<h4>Calculating Resistor Values</h4>
 				<div>
+					<h5>Example 1</h5>
 					<p>
 						All based on an answer from StackOverflow <a href="https://raspberrypi.stackexchange.com/questions/75520/calculating-resistor-value-for-transistor" target="_blank">[Ref]</a>.
 					</p>
 					<p>
 						<img src="##IMG_DIR##/electronics_determine_transistor_resistors.png">
+					</p>
+
+					<h5>Example 2</h5>
+					<p>
+						In the following example a transistor is being used to driver a load rated at 6V, 500mW.
+					</p>
+					<p>
+						<img src="##IMG_DIR##/electronics_calc_non_resistor_values_based_on_power.png">
+					</p>
+					<p>
+						If the load should dissipate 500mW at 6V, this means that the current through it, and 
+						thus the collector current, $I_c$ can be calculated using $P=VI$, rerranged to $I=\frac{P}{V}$:
+						
+						$$
+						I_c = \frac{P}{V} = \frac{0.5}{6} = 83\text{mA}
+						$$
+
+						If the transistor as a current gain of $\beta = 75$ then using the relationship $\beta = \frac{I_c}{I_b}$, the
+						base current can be calculated using a rearrangement to $I_b = \frac{I_c}{\beta}$:
+
+						$$
+						I_b = \frac{0.083}{75} = 1.1\text{mA}
+						$$
+
+						Thus, we know that the base current needs to be 1.1mA, so the resistor in series with the base
+						has to limit the current from the 5V supply to this amount.
+					</p>
+					<p>
+						Because the base must be 0.7V above the emitter (standard for a transistor but look at the datasheet),
+						we know the resistor must frop 4.3V. Thus we can calcuilate the resistance:
+
+						$$
+						R = \frac{V}{I} = \frac{4.3}{0.0011} = 3.9\textk\ohm
+						$$
+
+						The <em>power dissipation</em> through the transistor can be calculated using the collector-emitter
+						current, as the base-emitter current should be negligable. In this case it is:
+
+						$$
+						P = V_{ce}I_{c} = 8mW
+						$$
+
+						Which should be well within the range that a small transistor can handle.
 					</p>
 				</div>
 			</div>
