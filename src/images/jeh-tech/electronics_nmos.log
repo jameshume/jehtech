@@ -1,0 +1,23 @@
+Circuit: * C:\users\james\Documents\repos\jehtech\src\images\jeh-tech\electronics_nmos.asc
+
+WARNING: Less than two connections to node nc_01.  This node is used by r2.
+Direct Newton iteration for .op point succeeded.
+
+Date: Tue Oct 17 10:32:40 2023
+Total elapsed time: 0.122 seconds.
+
+tnom = 27
+temp = 27
+method = modified trap
+totiter = 2167
+traniter = 2162
+tranpoints = 1081
+accept = 1073
+rejected = 8
+matrix size = 13
+fillins = 0
+solver = Normal
+Avg thread counts: 1.6/2.2/2.2/1.6
+Matrix Compiler1:      28 opcodes  0.2/[0.2]/0.2
+Matrix Compiler2: 823 bytes object code size  0.2/0.2/[0.2]
+

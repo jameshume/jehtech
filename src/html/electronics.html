@@ -1676,8 +1676,8 @@
 				<p>
 					One might wonder, if the input characteristic shows an expenential increase in $I_B$ with $V_{BE}$,
 					how can amplification with a transistor be even remotely linear. The answer is that the amplification
-					is done in the pertion of the intput characteristic curve that is so expenential is can be approximated
-					as linear, and the corresponding reagion in the output charateristic curve is also approimately linear:
+					is done in the portion of the intput characteristic curve that is so expenential it can be approximated
+					as linear, and the corresponding region in the output charateristic curve is also approimately linear:
 				</p>
 				<p>
 					<img src="##IMG_DIR##/electronics_bjt_amplification.png">
@@ -1925,10 +1925,10 @@
 						<a href="https://www.electroschematics.com/wp-content/uploads/2009/04/2n2222-datasheet.pdf" target="_blank">NPN Transistor 2N2222 DataSheet</a>.
 					</li>
 					<li>
-						<a href="https://raspberrypi.stackexchange.com/questions/75520/calculating-resistor-value-for-transistor" target="_blank">TODO</a>
+						<a href="https://raspberrypi.stackexchange.com/questions/75520/calculating-resistor-value-for-transistor" target="_blank">Calculating resistor value for transistor</a>, StackExchange.
 					</li>
 					<li>
-						<a href="https://circuitglobe.com/common-emitter-connection-or-ce-configuration.html" target="_blank">TODO</a>
+						<a href="https://circuitglobe.com/common-emitter-connection-or-ce-configuration.html" target="_blank">Common Emitter Connection (or CE Configuration)</a>, Ciruit Globe.
 					</li>
 					<li>
 						<a href="https://www.khanacademy.org/science/modern-physics-essentials/" target="_blank">Active, staturation, and cuttof state of NPN transistor</a>, Khan Achademy
@@ -1938,6 +1938,9 @@
 
 			<h3>PNP Transistor</h3>
 			<div>
+				<p>
+					<img src="##IMG_DIR##/electronics_pnp_sinks_current_vs_npn_sources_current.png">
+				</p>
 			</div>
 		</div>
 
@@ -1946,9 +1949,14 @@
 		<h2 style="clear:both;">Some Examples Bringing Together What We've Seen So Far...</h2>
 		<div>
 			<p>
-				<img src="##IMG_DIR##/electronics_capacitor_drives_transistor_keeps_led_on.png">
+				<img src="##IMG_DIR##/electronics_pnp_1.png">
+			</p>
+			<p>
+				To turn on the PNP transistor, unlike the NPN, where real, i.e not conventional, current flows from the emitter to
+				the base, with the PNP the real current must flow from the base to the emitter.
 			</p>
 		</div>
+		
 
 		<!-- --------------------------------------------------------------------------------------- -->
 		<a name="mosfet"></a>
@@ -1958,7 +1966,7 @@
 				<img src="##IMG_DIR##/electronics_mosfet_symbols.png">
 			</p>
 			<p>
-				N-channel mosfets are also referred to as &quot;nMOS&quot; and P-channel mosefets as &quot;pMOS&quot;
+				N-channel mosfets are also referred to as &quot;nMOS&quot; and P-channel mosefets as &quot;pMOS&quot;.
 			</p>
 			<p>
 				Sometimes you may see a little diode connecting the source to the drain. The diode isn't
@@ -1981,6 +1989,28 @@
 				&quot;Enhancement;&quot; means that a voltage needs to be applied to the gate to &quot;turn it on&quot;, whereas
 				&quot;Depletion;&quot; means that a voltage needs to be applied to the gate to &quot;turn it off&quot;. N and P
 				type defer to the dopings of the source/drain and body.
+			</p>
+			<p>
+				The enhancement mode MOSFET symbols use dotted lines to indicate that the channel is &quot;broken&quot; before
+				gate voltage is applied. 
+			</p>
+			<ul>
+				<li>If it is an N-type enhancement mode MOSFET then gate voltage is required to turn it on.</li>
+				<li>If it is a P-type enhancement mode MOSFET then gate voltage is required to turn it off.</li>
+			</ul>
+			<p>
+				Depletion mode MOSFET symbols use solid lines to indicate that the channel exists before a voltage is applied
+				to the gate.
+			</p>
+			<ul>
+				<li>If it is an N-type depletion mode MOSFET then gate voltage is required to turn it off.</li>
+				<li>If it is a P-type depletion mode MOSFET then gate voltage is required to turn it on.</li>
+			</ul>
+			<p>
+				A summary of the various symbols:
+			</p>
+			<p>
+				<img src="##IMG_DIR##/electronics_mosfet_types.png">
 			</p>
 			<p>
 				An N-type enhacement mode FET's construction is represented in the diagram below:
@@ -2023,6 +2053,24 @@
 				$$
 				
 				Where $k$ is a constant representing the particular MOSFETs characteristics, which should be found in the datasheet.
+			</p>
+			<p>
+				MOSFETs require <b>pull up/pull down</b> resistors because the gate acts as a capacitor, and when the
+				MOSFET is turned off, the current needs somewhere to dissipate, otherwise the gate would just float!
+			</p>
+			<p>
+				Enhancement mode, N-type needs a pull down:
+			</p>
+			<p>
+				<img src="electronics_nfet_no_pull_down.png">
+				<br><sub>Generated from <a href="##IMG_DIR##/electronics_nmos.asc">electronics_nmos.asc</a></sub>
+			</p>
+			<p>
+				<img src="electronics_nfet_with_pull_down.png">
+				<br><sub>Generated from <a href="##IMG_DIR##/electronics_nmos.asc">electronics_nmos.asc</a></sub>
+			</p>			
+			<p>
+				Depletion types will need a pull up resistor:
 			</p>
 		</div>
 

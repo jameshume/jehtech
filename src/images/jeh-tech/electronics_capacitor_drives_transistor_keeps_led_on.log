@@ -1,0 +1,26 @@
+Circuit: * C:\users\james\Documents\repos\jehtech\src\images\jeh-tech\electronics_capacitor_drives_transistor_keeps_led_on.asc
+
+Warning: Multiple definitions of model "2scr375p" Type: BJT
+Warning: Multiple definitions of model "bc857b" Type: BJT
+Warning: Multiple definitions of model "bc847c" Type: BJT
+Warning: Multiple definitions of model "bc847b" Type: BJT
+Direct Newton iteration for .op point succeeded.
+
+Date: Tue Oct 17 09:49:27 2023
+Total elapsed time: 0.131 seconds.
+
+tnom = 27
+temp = 27
+method = modified trap
+totiter = 2329
+traniter = 2321
+tranpoints = 1137
+accept = 1114
+rejected = 23
+matrix size = 13
+fillins = 2
+solver = Normal
+Avg thread counts: 1.5/2.1/2.1/1.5
+Matrix Compiler1:      45 opcodes  0.2/[0.2]/0.4
+Matrix Compiler2: off  [0.2]/0.2/0.2
+

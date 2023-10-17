@@ -1,0 +1,15 @@
+* C:\users\james\Documents\repos\jehtech\src\images\jeh-tech\electronics_nmos.asc
+M1 N001 G 0 0 Si7336ADP
+S1 N003 G S 0 MYSW
+V1 N003 0 3v
+R1 N002 N001 100
+V2 N002 0 9v
+V3 S 0 PULSE(0 5 0 1m 1m 1 2 1)
+R2 0 NC_01 100k
+.model NMOS NMOS
+.model PMOS PMOS
+.lib C:\users\james\AppData\Local\LTspice\lib\cmp\standard.mos
+.tran 3
+.model MYSW SW(Ron = 1 Roff=1MEG Vt=1 Vh=0.5)
+.backanno
+.end
