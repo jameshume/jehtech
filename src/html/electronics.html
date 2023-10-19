@@ -2158,6 +2158,14 @@
 					Capactitor C2 is used to <em>suppress noise</em> on the control voltage pin. Resistor R2 is a
 					pullup resistor so that the trigger does <em>not</em> float.
 				</p>
+				<p>
+					The LTSpice 555 symbol makes for a slightly cumbersome circuit diagram. It is more commonly, and more cleanly,
+					layed out like this:
+				</p>
+				<p>
+					<img src="##IMG_DIR##/electronics_555_monostable_sketch.png">
+				</p>
+
 				<h4>Calculate Output Period</h4>
 				<div>
 					<p>
@@ -2189,19 +2197,18 @@
 			<div>
 				<p>
 					<img src="##IMG_DIR##/electronics_555_astable_circuit.png">
+					<br><sub>Generated from <a href="https://github.com/jameshume/jehtech/blob/master/src/images/jeh-tech/electronics_555_astable_circuit.asc" target="_blank">electronics_555_astable_circuit.asc</a></sub>
 				</p>
 				<p>
 					<img src="##IMG_DIR##/electronics_555_astable_graph.png">
+					<br><sub>Generated from <a href="https://github.com/jameshume/jehtech/blob/master/src/images/jeh-tech/electronics_555_astable_graph.plt" target="_blank">electronics_555_astable_graph.plt</a></sub>
 				</p>
-				<p>
-					<img src="##IMG_DIR##/555_timer.png" alt="555 timer in astable operation"/>
-				</p>
-
-
-
 
 
 <!--
+				<p>
+					<img src="##IMG_DIR##/555_timer.png" alt="555 timer in astable operation"/>
+				</p>
 				<p>
 					The total resistance R<sub>A</sub> + R<sub>B</sub> will determine the time it takes
 					for the capacitor to charge. However, when the capacitor
