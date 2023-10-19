@@ -208,7 +208,7 @@ dump:
 
 
 .PHONY: all
-all: dump images html css fonts | $(OUTPUT_DIR)
+all: dump images html | $(OUTPUT_DIR)
 	@python3 site_hasher.py create_hash_file "${DST_HTML_ROOT_DIR}" "${OUTPUT_DIR}/site_hashes.dat"
 
 
