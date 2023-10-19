@@ -2,7 +2,7 @@
 # modified since the last build. However, this cannot work when building online using a fresh
 # checkout. It just rebuilds everything!!
 
-#.DEFAULT_GOAL:=all
+.DEFAULT_GOAL:=all
 
 
 
@@ -201,11 +201,9 @@ dump:
 	@echo "SRC_HTML_ROOT_DIR = $(SRC_HTML_ROOT_DIR)"
 	@echo "SRC_IMAGE_DIR = $(SRC_IMAGE_DIR)"
 	@echo "SRC_IMAGE_FILES = $(SRC_IMAGE_FILES)"
-	@echo "SRC_IMAGE_FILES = $(SRC_IMAGE_FILES)"
 	@echo "SRC_JAVASCRIPT_DIR = $(SRC_JAVASCRIPT_DIR)"
 	@echo "SRC_JAVASCRIPT_FILES  = $(SRC_JAVASCRIPT_FILES )"
 	@echo "SRC_NO_WATERMARK_IMAGE_DIR = $(SRC_NO_WATERMARK_IMAGE_DIR)"
-	@echo "SRC_NO_WATERMARK_IMAGE_FILES = $(SRC_NO_WATERMARK_IMAGE_FILES)"
 	@echo "SRC_NO_WATERMARK_IMAGE_FILES = $(SRC_NO_WATERMARK_IMAGE_FILES)"
 
 

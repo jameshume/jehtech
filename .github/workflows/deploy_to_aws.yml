@@ -38,7 +38,12 @@ jobs:
       - run: >
           cd build_tools 
           && chmod +x generate_html.sh 
-          && make GITHUB__BUILD=1 -j$(lscpu | grep "^\s*CPU(s):" | sed 's/.*:\s*//g') dump
+          && if git log --oneline -1 | grep "##FORCE##"; then
+                 echo "FORCING BUILD";
+                 make -j$(lscpu | grep "^\s*CPU(s):" | sed 's/.*:\s*//g') all;
+             else
+                 make GITHUB__BUILD=1 -j$(lscpu | grep "^\s*CPU(s):" | sed 's/.*:\s*//g') all;
+             fi
         env:
           AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
