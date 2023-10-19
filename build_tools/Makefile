@@ -26,16 +26,22 @@ SRC_DELETED_FILES:=$(addprefix ../,$(filter src/%,$(shell git diff-tree --no-com
 SRC_HTML_FILES:=$(filter %.html,$(SRC_ALL_FILES))
 SRC_CSS_FILES :=$(filter %.css,$(SRC_ALL_FILES))
 # Image files is filtered below so can set to all files in the last commit
-SRC_IMAGE_FILES:=$(SRC_ALL_FILES)
+# CAUTION!!!! Here I am assuming that the no-watermark directory is a parent of the with-watermark directory... 
+#             This isn't great as ideally I should treat paths as independent. Fuck it!
+SRC_ALL_IMAGE_FILES:=$(sort $(filter $(SRC_IMAGE_DIR)/% $(SRC_NO_WATERMARK_IMAGE_DIR)/%,$(SRC_ALL_FILES)))
+SRC_IMAGE_FILES:=$(filter $(SRC_IMAGE_DIR)/%,$(SRC_ALL_IMAGE_FILES))
+SRC_NO_WATERMARK_IMAGE_FILES:=$(filter-out $(SRC_IMAGE_DIR)/%,$(SRC_ALL_FILES))
+
 else
+
 # Anything-but-github build - do all the files - Make will figure out what actually needs to be rebuilt
 SRC_HTML_FILES:=$(shell find "$(SRC_HTML_ROOT_DIR)" -type f -name "*.html")
 SRC_CSS_FILES := $(shell find "$(SRC_CSS_DIR)" -type f -name "*.css")
 # Image files is filtered below so can set to all files in the image dir
 SRC_IMAGE_FILES:=$(shell find "$(SRC_IMAGE_DIR)" -type f)
+SRC_NO_WATERMARK_IMAGE_FILES:=$(shell find "$(SRC_NO_WATERMARK_IMAGE_DIR)" -maxdepth 1 -type f)
 endif
 
-SRC_NO_WATERMARK_IMAGE_FILES:=$(shell find "$(SRC_NO_WATERMARK_IMAGE_DIR)" -maxdepth 1 -type f)
 SRC_NO_WATERMARK_IMAGE_FILES:=$(filter %.png %.gif %.mp4 %.svg %.jpg %.jpeg %.tif,$(SRC_NO_WATERMARK_IMAGE_FILES))
 SRC_IMAGE_FILES:=$(filter %.png %.gif %.mp4 %.svg %.jpg %.jpeg %.tif,$(SRC_IMAGE_FILES))
 SRC_JAVASCRIPT_FILES := $(addprefix $(SRC_JAVASCRIPT_DIR)/,$(shell cat "$(SRC_JAVASCRIPT_DIR)/contents.txt"))
@@ -204,7 +210,7 @@ dump:
 
 
 .PHONY: all
-all: images html javascript css fonts | $(OUTPUT_DIR)
+all: dump images html javascript css fonts | $(OUTPUT_DIR)
 	@python3 site_hasher.py create_hash_file "${DST_HTML_ROOT_DIR}" "${OUTPUT_DIR}/site_hashes.dat"
 
 
