@@ -40,9 +40,9 @@ jobs:
           && chmod +x generate_html.sh 
           && if git log --oneline -1 | grep "##FORCE##"; then
                  echo "FORCING BUILD";
-                 make -j$(lscpu | grep "^\s*CPU(s):" | sed 's/.*:\s*//g') all;
+                 make -j$(lscpu | grep "^\s*CPU(s):" | sed 's/.*:\s*//g') deploy;
              else
-                 make GITHUB__BUILD=1 -j$(lscpu | grep "^\s*CPU(s):" | sed 's/.*:\s*//g') all;
+                 make GITHUB__BUILD=1 -j$(lscpu | grep "^\s*CPU(s):" | sed 's/.*:\s*//g') deploy;
              fi
         env:
           AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
