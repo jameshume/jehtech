@@ -1,0 +1,14 @@
+* C:\users\james\Documents\repos\jehtech\src\images\jeh-tech\Draft2.asc
+XU1 0 Tr OUT N001 N003 cap cap N001 NE555
+V1 N001 0 9v
+R1 N001 cap 5.6k
+C1 cap 0 100µ
+C2 N003 0 10n
+S1 Tr 0 N004 N002 TRIG
+R2 N001 Tr 10k
+V2 N004 N002 PULSE(0 5 0.2 1m 1m 0.2 2 1)
+.tran 2
+.model TRIG SW(Ron=1 Roff=1MEG Vt=1 Vh=0.5)
+.lib NE555.sub
+.backanno
+.end
