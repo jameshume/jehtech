@@ -33,8 +33,13 @@ jobs:
         with:
           python-version: '3.8.12'
           cache: 'pip'
-      - run: pip3 install wheel
-      - run: pip3 install -r requirements.txt
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ hashFiles('requirements.txt') }}
+      - run: |
+          pip3 install wheel
+          pip3 install -r requirements.txt
       - run: >
           cd build_tools 
           && chmod +x generate_html.sh 
