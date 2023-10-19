@@ -173,6 +173,7 @@ endef
 .PHONY: dump
 dump:
 	git log --oneline --format="%H" -1
+	$(shell git diff-tree --no-commit-id $(LAST_COMMIT_ID) -r | awk '$$5!="D" {print $$6}')
 	@echo "DEP_DIR = $(DEP_DIR)"
 	@echo "DEP_FILES = $(DEP_FILES)"
 	@echo "DST_HTML_DIRS = $(DST_HTML_DIRS)"
