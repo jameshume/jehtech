@@ -186,7 +186,7 @@ dump:
 	@echo "OUTPUT_DIR = $(OUTPUT_DIR)"
 	@echo "SRC_ALL_FILES = $(SRC_ALL_FILES)"
 	@echo "SRC_CSS_DIR = $(SRC_CSS_DIR)"
-	@echo "SRC_CSS_FILES  = $(SRC_CSS_FILES )"
+	@echo "SRC_CSS_FILES  = $(SRC_CSS_FILES)"
 	@echo "SRC_DELETED_FILES = $(SRC_DELETED_FILES)"
 	@echo "SRC_DIR = $(SRC_DIR)"
 	@echo "SRC_HTML_DIRS = $(SRC_HTML_DIRS)"
