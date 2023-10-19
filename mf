@@ -1,0 +1,6 @@
+LAST_COMMIT_ID:=$(shell git log --oneline --format="%H" -1) 
+SRC_ALL_FILES:=$(shell git diff-tree --no-commit-id --name-only $(LAST_COMMIT_ID) -r)
+.PHONY: all
+all:
+	@echo $(SRC_ALL_FILES)
+

@@ -2001,12 +2001,9 @@
 			</ul>
 			<p>
 				Depletion mode MOSFET symbols use solid lines to indicate that the channel exists before a voltage is applied
-				to the gate.
+				to the gate. They are rare in use apparently? For example, LT-spice has no built in deletion mode MOSFET
+				models.
 			</p>
-			<ul>
-				<li>If it is an N-type depletion mode MOSFET then gate voltage is required to turn it off.</li>
-				<li>If it is a P-type depletion mode MOSFET then gate voltage is required to turn it on.</li>
-			</ul>
 			<p>
 				A summary of the various symbols:
 			</p>
@@ -2071,11 +2068,51 @@
 				<br><sub>Generated from <a href="##IMG_DIR##/electronics_nmos.asc">electronics_nmos.asc</a></sub>
 			</p>			
 			<p>
-				Depletion types will need a pull up resistor:
+				Depletion types will need a pull up resistor, not showing an example here.
+			</p>
+			<p>
+				Sometimes a <b>current limiting resistor for the gate</b> is required. Because the gate acts as a 
+				a capacitor the current at time $t=0$ can be quite large, so sometimes a current limiting resistor needs
+				to be fitted in front of the gate.
+			</p>
+			<p>
+				If whatever is driving the gate can supply currents large enough to damage the FET then a gate resistor
+				should be used. it should be positioned to the &quot;right&quot; of the pull up/down resistor so that
+				no voltage divider is created and the gate still receives (most of) the full voltage.
 			</p>
 		</div>
 
-
+		<!-- --------------------------------------------------------------------------------------- -->
+		<a name="mosfet_vs_bjt"></a>
+		<h2 style="clear:both;">MOSFETs vs BJTs</h2>
+		<div>
+			<table class="jehtable">
+				<thead>
+					<tr>
+						<td>Characteristic</td>
+						<td>BJT</td>
+						<td>MOSFET</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><b>Type of input signal needed to operate</b></td>
+						<td><b>Current</b>.<br>Whatever provides the input signal must be able to deliver enough current.</td>
+						<td><b>Voltage</b>.<br>The voltage neededd to turn on a MOSFET is about 2V, so the input signal needs to be able to provide a voltage greater than this. No current is drawn by the MOSFET - it is said to have a <b>high input impedance</b>.</td>
+					</tr>
+					<tr>
+						<td><b>Peculiarities</b></td>
+						<td>None.</td>
+						<td>Static sensitive and can behave irratically if the gate is left floating.</td>
+					</tr>
+					<tr>
+						<td><b>Efficiency</b></td>
+						<td><b>High</b>.<br>The BJT does not waste a lot of power (i.e. get hot).</td>
+						<td><b>Lower</b>. Although rarely a problem, the MOSFET can waste power if it gets hot.</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 
 
 		<!-- --------------------------------------------------------------------------------------- -->

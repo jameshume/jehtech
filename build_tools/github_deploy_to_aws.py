@@ -3,6 +3,7 @@ import json
 import mimetypes
 import os
 import sys
+import pickle
 from tempfile import NamedTemporaryFile
 import boto3
 import botocore.exceptions
@@ -54,45 +55,21 @@ with NamedTemporaryFile() as tmp_file:
 
 local_hash_dict = site_hasher.LoadHashDict('../output/site_hashes.dat')
 
-# Everything in the local dict but not in the s3 dict needs to be uploaded
-# Anything else that has a different hash needs to be uploaded
 local_hash_dict_keys = set(local_hash_dict.keys())
 s3_hash_dict_keys = set(s3_hash_dict.keys())
-local_files_not_in_remote = local_hash_dict_keys - s3_hash_dict_keys
-common_files_between_local_and_remote = local_hash_dict_keys.intersection(s3_hash_dict_keys)
-local_files_different_to_remote = set(f for f in common_files_between_local_and_remote if s3_hash_dict[f] != local_hash_dict[f])
-files_for_upload = local_files_not_in_remote
-files_for_upload.update(local_files_different_to_remote)
 
-# Everything in the s3 dict but not in the local dict needs to be deleted
-remote_files_not_in_local = s3_hash_dict_keys - local_hash_dict_keys
 
-# Delete everything no longer needed
-if remote_files_not_in_local:
-    for file_path in remote_files_not_in_local:
-        print(f'Deleting {file_path}')
-        s3.delete_object(
-            Bucket='jehtech.com',
-            Key=file_path
-        )
-    print("Creating CloudFront invalidations for deleted files...")
-    cf.create_invalidation(
-        DistributionId="E1CW0OHDVEVITS",
-        InvalidationBatch={
-            'Paths': {
-                'Quantity': len(remote_files_not_in_local),
-                'Items': list(f'/{x}' for x in remote_files_not_in_local)
-            },
-            'CallerReference': f'{TIMESTAMP_STR}-JEHTech-Upload-Script-Deleted-Files'
-        },
-    )
-else:
-    print("Nothing to delete on remote")
-
-# Upload the new & changed files
-if files_for_upload:
-    for file_path in files_for_upload:
+# All the files in local_hash_dict are either new or updated. Deleted files have been received on the command line.
+# Update the s3_hash_dict with hashes from local_hash_dict and delete any keys in s3_hash_dict who's file names are
+# in those received on the command line.
+files_for_upload = list()
+if local_hash_dict_keys:
+    for file_path in local_hash_dict_keys:
+        s3_hash_dict[file_path] = local_hash_dict[file_path]
+        files_for_upload.append(file_path)       
+        
         file_mime_type =  mimetypes.guess_type(file_path)[0]
+
         print(f'Uploading {file_path} as {file_mime_type}')
         s3.upload_file(
             f'../output/site/{file_path}',
@@ -102,6 +79,7 @@ if files_for_upload:
                 'ContentType': file_mime_type
             }
         )
+
     print("Creating CloudFront invalidations for uploaded files...")
     cf.create_invalidation(
         DistributionId="E1CW0OHDVEVITS",
@@ -115,7 +93,39 @@ if files_for_upload:
     )
 else:
     print("Nothing to upload to remote")
+    
+deleted_files = list()
+if len(sys.argv) > 1 and sys.argv[1].strip() != "":
+    deleted_files = sys.argv[1].split(" ")
 
-if files_for_upload or remote_files_not_in_local:
+if deleted_files:
+    for file_path in deleted_files:
+        if file_path in s3_hash_dict:        
+            del s3_hash_dict[hash]
+
+            print(f'Deleting {file_path}')
+            s3.delete_object(
+                Bucket='jehtech.com',
+                Key=file_path
+            )
+
+    print("Creating CloudFront invalidations for deleted files...")
+    cf.create_invalidation(
+        DistributionId="E1CW0OHDVEVITS",
+        InvalidationBatch={
+            'Paths': {
+                'Quantity': len(deleted_files),
+                'Items': list(f'/{x}' for x in deleted_files)
+            },
+            'CallerReference': f'{TIMESTAMP_STR}-JEHTech-Upload-Script-Deleted-Files'
+        },
+    )
+else:
+    print("Nothing to delete on remote")
+
+if files_for_upload or deleted_files:
+    print("Overwriting site_hashes.dat")
+    with open('../output/site_hashes.dat', 'wb') as handle:
+        pickle.dump(s3_hash_dict, handle, protocol=pickle.HIGHEST_PROTOCOL)
     print("Uploading site_hashes.dat")
-    s3.upload_file(f'../output/site_hashes.dat', 'jehtech.com', 'site_hashes.dat')
+    s3.upload_file('../output/site_hashes.dat', 'jehtech.com', 'site_hashes.dat')

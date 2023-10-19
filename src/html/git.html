@@ -255,7 +255,7 @@ git config --global merge.tool vimdiff</pre>
 <h2>Search (Grep) Your Repo</h2>
 <div>
 <p>
-Using <code>git grep</code> ignores git interal files and generated files, which can make your
+Using <code>git grep</code> ignores git internal files and generated files, which can make your
 grepping life a lot easier!
 </p>
 </div>
@@ -377,7 +377,7 @@ git add -A # does both of the above</pre>
     <p>Any tracked file that is not staged will be automatically staged.</p>
 
     <p>
-        To ammed the last commit, adding in all currently staged files use:
+        To ammend the last commit, adding in all currently staged files use:
     </p>
     <pre>git commit --amend</pre>
     <p>
@@ -408,10 +408,10 @@ git commit --amend</pre>
     <p>
         To get just the commit ID:
     </p>
-    <pre>git log -1 --pretty=format:"%H" HEAD</pre>
+    <pre>git log -1 --pretty=format="%H" HEAD</pre>
 
     <p>
-        To get a log between versions/tags/commits/nranches etc:
+        To get a log between versions/tags/commits/branches etc:
     </p>
     <pre>git log <b>chng..chng</b></pre>
     <p>
@@ -423,6 +423,13 @@ git commit --amend</pre>
 
     <p>To view the differences introduced in each commit:</p>
     <pre>git log -p</pre>
+
+    <p>To see only the files in the last commit (or replace <code>git log</code> with a specific revision!)</p>
+    <pre>git diff-tree --no-commit-id --name-only $(git log --oneline --format="%H" -1) -r</pre>
+    <p>
+        Note, however that this will not tell you what happened to each file - was it updated, deleted etc? To get state:
+    </p>
+    <pre>git diff-tree --no-commit-id $(git log --oneline --format="%H" -1) -r | awk '{print $5,$6}'</pre>
 
     <p>To view the logs for the last two weeks:</p>
     <pre>git log --since=2.weeks</pre>
@@ -1869,7 +1876,7 @@ git commit -m "updated the submodule reference"</pre>
 <p>
     If you have checked out a repo and want to recursively update the submodules:
 </p>
-<pre style="prettyprint linenums">git submodule update --init --recursive</pre>
+<pre class="prettyprint linenums">git submodule update --init --recursive</pre>
 <p></p>
 </div>
 
