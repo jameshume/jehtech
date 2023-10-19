@@ -17,7 +17,7 @@ SRC_IMAGE_DIR:=$(SRC_DIR)/images/jeh-tech
 SRC_JAVASCRIPT_DIR:=$(SRC_DIR)/javascript
 SRC_CSS_DIR:=$(SRC_DIR)/css
 
-ifdef $(GITHUB__BUILD)
+ifdef GITHUB__BUILD
 # This is a dirty little hack for github builds to avoid building the entire repo! Make cannot, on its own, figure
 # out what needs to be rebuilt as this will be a fresh checkout, never before built!
 LAST_COMMIT_ID:=$(shell git log --oneline --format="%H" -1)
@@ -172,6 +172,7 @@ endef
 
 .PHONY: dump
 dump:
+	git log --oneline --format="%H" -1
 	@echo "DEP_DIR = $(DEP_DIR)"
 	@echo "DEP_FILES = $(DEP_FILES)"
 	@echo "DST_HTML_DIRS = $(DST_HTML_DIRS)"
@@ -199,10 +200,6 @@ dump:
 	@echo "SRC_NO_WATERMARK_IMAGE_DIR = $(SRC_NO_WATERMARK_IMAGE_DIR)"
 	@echo "SRC_NO_WATERMARK_IMAGE_FILES = $(SRC_NO_WATERMARK_IMAGE_FILES)"
 	@echo "SRC_NO_WATERMARK_IMAGE_FILES = $(SRC_NO_WATERMARK_IMAGE_FILES)"
-	@echo $(GITHUB__BUILD)
-ifndef GITHUB__BUILD
-	@echo "JUMNK"
-endif
 
 
 .PHONY: all
@@ -212,7 +209,7 @@ all: images html javascript css fonts | $(OUTPUT_DIR)
 
 .PHONY: deploy
 deploy: all
-ifdef $(GITHUB__BUILD)
+ifdef GITHUB__BUILD
 	@python3 github_deploy_to_aws.py "$(SRC_DELETED_FILES)"
 else
 	@python3 deploy_to_aws.py
@@ -335,4 +332,8 @@ $(OUTPUT_DIR):
 #
 # Note dependency files must be marked as SECONDARY so that make does not think they are
 # normal intermediary files that should be cleaned up at the end of a build.
+ifndef GITHUB__BUILD
+.SECONDARY: $(DEP_FILES)
+-include $(DEP_FILES)
+endif
 
