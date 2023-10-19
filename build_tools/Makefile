@@ -2,7 +2,7 @@
 # modified since the last build. However, this cannot work when building online using a fresh
 # checkout. It just rebuilds everything!!
 
-.DEFAULT_GOAL:=all
+#.DEFAULT_GOAL:=all
 
 
 
@@ -199,6 +199,10 @@ dump:
 	@echo "SRC_NO_WATERMARK_IMAGE_DIR = $(SRC_NO_WATERMARK_IMAGE_DIR)"
 	@echo "SRC_NO_WATERMARK_IMAGE_FILES = $(SRC_NO_WATERMARK_IMAGE_FILES)"
 	@echo "SRC_NO_WATERMARK_IMAGE_FILES = $(SRC_NO_WATERMARK_IMAGE_FILES)"
+	@echo $(GITHUB__BUILD)
+ifndef GITHUB__BUILD
+	@echo "JUMNK"
+endif
 
 
 .PHONY: all
@@ -213,6 +217,7 @@ ifdef $(GITHUB__BUILD)
 else
 	@python3 deploy_to_aws.py
 endif
+
 
 .PHONY: images
 images: $(DST_IMAGE_FILES) $(DST_NO_WATERMARK_IMAGE_FILES)
@@ -330,5 +335,4 @@ $(OUTPUT_DIR):
 #
 # Note dependency files must be marked as SECONDARY so that make does not think they are
 # normal intermediary files that should be cleaned up at the end of a build.
-.SECONDARY: $(DEP_FILES)
--include $(DEP_FILES)
+
