@@ -170,6 +170,37 @@ endef
 # RULES
 ########################################################################################################################
 
+.PHONY: dump
+dump:
+	@echo "DEP_DIR = $(DEP_DIR)"
+	@echo "DEP_FILES = $(DEP_FILES)"
+	@echo "DST_HTML_DIRS = $(DST_HTML_DIRS)"
+	@echo "DST_HTML_FILES = $(DST_HTML_FILES)"
+	@echo "DST_HTML_ROOT_DIR = $(DST_HTML_ROOT_DIR)"
+	@echo "DST_IMAGE_DIR = $(DST_IMAGE_DIR)"
+	@echo "DST_IMAGE_FILES = $(DST_IMAGE_FILES)"
+	@echo "DST_NO_WATERMARK_IMAGE_DIR = $(DST_NO_WATERMARK_IMAGE_DIR)"
+	@echo "DST_NO_WATERMARK_IMAGE_FILES = $(DST_NO_WATERMARK_IMAGE_FILES)"
+	@echo "LAST_COMMIT_ID = $(LAST_COMMIT_ID)"
+	@echo "OUTPUT_DIR = $(OUTPUT_DIR)"
+	@echo "SRC_ALL_FILES = $(SRC_ALL_FILES)"
+	@echo "SRC_CSS_DIR = $(SRC_CSS_DIR)"
+	@echo "SRC_CSS_FILES  = $(SRC_CSS_FILES )"
+	@echo "SRC_DELETED_FILES = $(SRC_DELETED_FILES)"
+	@echo "SRC_DIR = $(SRC_DIR)"
+	@echo "SRC_HTML_DIRS = $(SRC_HTML_DIRS)"
+	@echo "SRC_HTML_FILES = $(SRC_HTML_FILES)"
+	@echo "SRC_HTML_ROOT_DIR = $(SRC_HTML_ROOT_DIR)"
+	@echo "SRC_IMAGE_DIR = $(SRC_IMAGE_DIR)"
+	@echo "SRC_IMAGE_FILES = $(SRC_IMAGE_FILES)"
+	@echo "SRC_IMAGE_FILES = $(SRC_IMAGE_FILES)"
+	@echo "SRC_JAVASCRIPT_DIR = $(SRC_JAVASCRIPT_DIR)"
+	@echo "SRC_JAVASCRIPT_FILES  = $(SRC_JAVASCRIPT_FILES )"
+	@echo "SRC_NO_WATERMARK_IMAGE_DIR = $(SRC_NO_WATERMARK_IMAGE_DIR)"
+	@echo "SRC_NO_WATERMARK_IMAGE_FILES = $(SRC_NO_WATERMARK_IMAGE_FILES)"
+	@echo "SRC_NO_WATERMARK_IMAGE_FILES = $(SRC_NO_WATERMARK_IMAGE_FILES)"
+
+
 .PHONY: all
 all: images html javascript css fonts | $(OUTPUT_DIR)
 	@python3 site_hasher.py create_hash_file "${DST_HTML_ROOT_DIR}" "${OUTPUT_DIR}/site_hashes.dat"
@@ -227,9 +258,6 @@ clean_css:
 clean:
 	@rm -fr $(OUTPUT_DIR)
 
-.PHONY: display
-display:
-	/mnt/c/Program\ Files/Google/Chrome/Application/chrome.exe "$(shell wslpath -w $(shell realpath "$(DST_HTML_ROOT_DIR)/index.html"))"
 
 # The JavaScript monolith is supposed to reduce the number of seperate requrest that the browser
 # has to make to get all the different JavaScript components required by the pages. It
