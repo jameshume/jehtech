@@ -21,8 +21,8 @@ ifdef GITHUB__BUILD
 # This is a dirty little hack for github builds to avoid building the entire repo! Make cannot, on its own, figure
 # out what needs to be rebuilt as this will be a fresh checkout, never before built!
 LAST_COMMIT_ID:=$(shell git log --oneline --format="%H" -1)
-SRC_ALL_FILES:=$(shell git diff-tree --no-commit-id $(LAST_COMMIT_ID) -r | awk '$$5!="D" {print $$6}')
-SRC_DELETED_FILES:=$(shell git diff-tree --no-commit-id $(LAST_COMMIT_ID) -r | awk '$$5=="D" {print $$6}')
+SRC_ALL_FILES:=$(addprefix ../,$(filter src/%,$(shell git diff-tree --no-commit-id $(LAST_COMMIT_ID) -r | awk '$$5!="D" {print $$6}')))
+SRC_DELETED_FILES:=$(addprefix ../,$(filter src/%$(shell git diff-tree --no-commit-id $(LAST_COMMIT_ID) -r | awk '$$5=="D" {print $$6}')))
 SRC_HTML_FILES:=$(filter %.html,$(SRC_ALL_FILES))
 SRC_CSS_FILES :=$(filter %.css,$(SRC_ALL_FILES))
 # Image files is filtered below so can set to all files in the last commit
