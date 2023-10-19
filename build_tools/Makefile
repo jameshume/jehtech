@@ -178,9 +178,9 @@ all: images html javascript css fonts | $(OUTPUT_DIR)
 .PHONY: deploy
 deploy: all
 ifdef $(GITHUB__BUILD)
-	@python3 deploy_to_aws.py
-else
 	@python3 github_deploy_to_aws.py "$(SRC_DELETED_FILES)"
+else
+	@python3 deploy_to_aws.py
 endif
 
 .PHONY: images

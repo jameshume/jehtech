@@ -38,7 +38,7 @@ jobs:
       - run: >
           cd build_tools 
           && chmod +x generate_html.sh 
-          && make -j$(lscpu | grep "^\s*CPU(s):" | sed 's/.*:\s*//g') deploy
+          && make -DGITHUB__BUILD=1 -j$(lscpu | grep "^\s*CPU(s):" | sed 's/.*:\s*//g') deploy
         env:
           AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
