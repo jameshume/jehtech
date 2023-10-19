@@ -208,7 +208,13 @@ dump:
 
 
 .PHONY: all
+ifdef GITHUB__BUILD
+# Ugly hackery! javascript, css, fonts targets are crappy - they always build something when on github builds because
+# its a build from scratch
 all: dump images html | $(OUTPUT_DIR)
+else
+all: dump images html javascript css fonts | $(OUTPUT_DIR)
+endif
 	@python3 site_hasher.py create_hash_file "${DST_HTML_ROOT_DIR}" "${OUTPUT_DIR}/site_hashes.dat"
 
 
