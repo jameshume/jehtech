@@ -2131,60 +2131,63 @@
 				</p>
 			</div>
 
-			<p>
-				<img src="##IMG_DIR##/555_timer.png" alt="555 timer in astable operation"/>
-			</p>
-			<p>
-				The total resistance R<sub>A</sub> + R<sub>B</sub> will determine the time it takes
-				for the capacitor to charge. However, when the capacitor
-				discharges, it only discharges through R<sub>B</sub>.
-			</p>
-			<p>
-				Recall charge time for a cap to charge to 63% of the voltage across is is
-				$\tau = RC$. So by varying either the resistors or the capacitor the period of the
-				pulse train output on pin 3 can be varied.
-			</p>
-			<p>
-				The diagrams above and below imagine that there is a switch inside the 555, which there is,
-				its just not a mechanical switch like these diagrams suggest (see later below for more details).
-				As the capacitor charges the voltage across it increases. When it hits 2/3 of the reference voltage,
-				the switch in side the 555 closes such that pin 7 is shorted to ground. The capacitor then immediately
-				starts to discharg through R<sub>B</sub> and when the voltage across the capacitor is less than
-				1/3 the reference voltage the switch opens again, starting the charge cycle and so on.
-			</p>
-			<p>
-				As the switch also controls the connection between the reference voltage and the output, this
-				produces a pulse train who's frequency is determined by the two resistors and the capacitor, and
-				with a duty cycle that is determined by the two resistors.
-			</p>
-			<p style="float: left;">
-				<img src="##IMG_DIR##/chargin_555_cap.png"/>
-			</p>
-			<p style="float: left;">
-				<img src="##IMG_DIR##/555_timer_discharge.png"/>
-			</p>
-			<p style="clear: both;">
-				The following is a silly little animation of the capacitor discharging through
-				R2. Imagine that the 3 red dots represent the flow of electrons from the negatively
-				charged plate to the positive plate of the capacitor as it discharges. I think normally it would
-				be shown using conventional current flow, but this animation uses actual electron flow. meh.
-			</p>
-			<video playsinline autoplay muted loop>
-				<source src="##IMG_DIR##/555_cap_discharge_anim2.mp4" type="video/mp4">
-			</video><br/>
-			<p>
-				Wikimedia has a really nice illustration of the components in the 555, which I've copied below and inserted the components outside the
-				chip that we used above to create an astable vibrator. Here, we can see that the switch shown above is really
-				an RS flip flop combined with a transitor.
-			</p>
-			<p>
-				<img src="##IMG_DIR##/555_timer_copy_of_wikimedia_plus_surrounding_circuit.png" alt="Picture of 555 astable vibrator with internals representation of 555 shown"/>
-			</p>
-			<p>
-				Each of the components, like the RS flip flop, comparitors and other gates can be further broken down into their transitor/resitor combinations, so
-				the above is just another, slightly more detailed abstraction. The real circuit is far, far more complex when broken down into its &quot;atomic&quot;
-				building blocks!
-			</p>
+			<h3>Astable</h3>
+			<div>
+				<p>
+					<img src="##IMG_DIR##/555_timer.png" alt="555 timer in astable operation"/>
+				</p>
+				<p>
+					The total resistance R<sub>A</sub> + R<sub>B</sub> will determine the time it takes
+					for the capacitor to charge. However, when the capacitor
+					discharges, it only discharges through R<sub>B</sub>.
+				</p>
+				<p>
+					Recall charge time for a cap to charge to 63% of the voltage across is is
+					$\tau = RC$. So by varying either the resistors or the capacitor the period of the
+					pulse train output on pin 3 can be varied.
+				</p>
+				<p>
+					The diagrams above and below imagine that there is a switch inside the 555, which there is,
+					its just not a mechanical switch like these diagrams suggest (see later below for more details).
+					As the capacitor charges the voltage across it increases. When it hits 2/3 of the reference voltage,
+					the switch in side the 555 closes such that pin 7 is shorted to ground. The capacitor then immediately
+					starts to discharg through R<sub>B</sub> and when the voltage across the capacitor is less than
+					1/3 the reference voltage the switch opens again, starting the charge cycle and so on.
+				</p>
+				<p>
+					As the switch also controls the connection between the reference voltage and the output, this
+					produces a pulse train who's frequency is determined by the two resistors and the capacitor, and
+					with a duty cycle that is determined by the two resistors.
+				</p>
+				<p style="float: left;">
+					<img src="##IMG_DIR##/chargin_555_cap.png"/>
+				</p>
+				<p style="float: left;">
+					<img src="##IMG_DIR##/555_timer_discharge.png"/>
+				</p>
+				<p style="clear: both;">
+					The following is a silly little animation of the capacitor discharging through
+					R2. Imagine that the 3 red dots represent the flow of electrons from the negatively
+					charged plate to the positive plate of the capacitor as it discharges. I think normally it would
+					be shown using conventional current flow, but this animation uses actual electron flow. meh.
+				</p>
+				<video playsinline autoplay muted loop>
+					<source src="##IMG_DIR##/555_cap_discharge_anim2.mp4" type="video/mp4">
+				</video><br/>
+				<p>
+					Wikimedia has a really nice illustration of the components in the 555, which I've copied below and inserted the components outside the
+					chip that we used above to create an astable vibrator. Here, we can see that the switch shown above is really
+					an RS flip flop combined with a transitor.
+				</p>
+				<p>
+					<img src="##IMG_DIR##/555_timer_copy_of_wikimedia_plus_surrounding_circuit.png" alt="Picture of 555 astable vibrator with internals representation of 555 shown"/>
+				</p>
+				<p>
+					Each of the components, like the RS flip flop, comparitors and other gates can be further broken down into their transitor/resitor combinations, so
+					the above is just another, slightly more detailed abstraction. The real circuit is far, far more complex when broken down into its &quot;atomic&quot;
+					building blocks!
+				</p>
+			</div>
 
 			<h3>555 References</h3>
 			<ul>
