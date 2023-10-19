@@ -2124,11 +2124,37 @@
 			<h3>Monostable</h3>
 			<div>
 				<p>
+					In the monostable mode, the 444 operates as a &quot;one shot&quot; pulse generator...
+				</p>
+				<p>
+					God bless LT-Spice... below is a sumulation of a 555 in monostable mode. Note, I could have
+					gotten rid of S1 and just used a pluse from V2... I was copying an example with a manual switch
+					and needlessly tried to keep a physical switch in there.
+				</p>
+				<p>
 					<img src="##IMG_DIR##/electronics_555_monostable_ltspice_circuit.png">
 				</p>
 				<p>
 					<img src="##IMG_DIR##/electronics_555_monostable_ltspice_graph.png">
 				</p>
+				<ul>
+					<li>The <em>trigger</em> starts the process: it is pulsed low (falling edge triggered) for a short
+						amount of time to kick things off and turn the output on.
+					</li>
+					<li>Capactitor C1 begins to charge.						
+					</li>
+					<li>When the voltage across C1 is 2/3 V<sub>cc</sub> the output is turned off and the capacitor
+						discharges through the discharge pin.
+					</li>
+				</ul>
+				<p>
+					Capactitor C2 is used to <em>suppress noise</em> on the control voltage pin. Resistor R2 is a
+					pullup resistor so that the trigger does <em>not</em> float.
+				</p>
+				<h4>Calculate Output Period</h4>
+				<div>
+					
+				</div>
 			</div>
 
 			<h3>Astable</h3>
