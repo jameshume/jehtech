@@ -1,0 +1,11 @@
+* C:\users\james\Documents\repos\jehtech\src\images\jeh-tech\electronics_555_astable_1.asc
+XU1 0 trig OUT N001 N002 trig disc N001 NE555
+V1 N001 0 9v
+R1 N001 disc 1Meg
+R2 disc trig 330k
+C1 trig 0 1µ
+C2 N002 0 10n
+.tran 4
+.lib NE555.sub
+.backanno
+.end

@@ -1173,6 +1173,7 @@
 			</p>
 
 
+			<a name="cap_charge_resistor"></a>
 			<h3>Charging Through A Resistor</h3>
 			<p>
 				When a capacitor, with a capacitance $C$, charges in series through a resistor of resistance $R$ ohms,
@@ -2150,20 +2151,57 @@
 					</li>
 				</ul>
 				<p>
+					By the way, the only reason the pulse from the 555 is delayed is because the switch closing, i,e the trigger, is
+					delayed by 0.2ms.
+				</p>
+				<p>
 					Capactitor C2 is used to <em>suppress noise</em> on the control voltage pin. Resistor R2 is a
 					pullup resistor so that the trigger does <em>not</em> float.
 				</p>
 				<h4>Calculate Output Period</h4>
 				<div>
+					<p>
+						Recall from the <a href="#cap_charge_resistor">capacitance section</a> that
+						When a capacitor, with a capacitance $C$, charges in series through a resistor of resistance $R$ ohms,
+						in $RC$ seconds it will charge to 63% of the supply voltage.
+					</p>
+					<p>
+						The 555 waits for the capacitor to charge to two thirds, or 66% of the supply voltage. So
+						$RC$ seconds isn't quite accurate. Add 10% to get us approximately from 63% to 66% means the
+						pulse period can be calculated as:
 
+						$$
+						T_\text{pulse} = 1.1 \cdot R \cdot C
+						$$
+
+						So given our resistor and capacitor values from the above example we get:
+
+						$$
+						T_\text{pulse} = 1.1 \cdot 5600 \cdot 0.0001 = 616 \text{milliseconds}
+						$$
+
+						From the LTSpice plot the period is 614 milliseconds, so we're pretty darn close! Phew.
+					</p>
 				</div>
 			</div>
 
 			<h3>Astable</h3>
 			<div>
 				<p>
+					<img src="##IMG_DIR##/electronics_555_astable_circuit.png">
+				</p>
+				<p>
+					<img src="##IMG_DIR##/electronics_555_astable_graph.png">
+				</p>
+				<p>
 					<img src="##IMG_DIR##/555_timer.png" alt="555 timer in astable operation"/>
 				</p>
+
+
+
+
+
+<!--
 				<p>
 					The total resistance R<sub>A</sub> + R<sub>B</sub> will determine the time it takes
 					for the capacitor to charge. However, when the capacitor
@@ -2217,7 +2255,7 @@
 					building blocks!
 				</p>
 			</div>
-
+-->
 			<h3>555 References</h3>
 			<ul>
 				<li>
