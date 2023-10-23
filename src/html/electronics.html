@@ -2121,7 +2121,76 @@
 		<!-- --------------------------------------------------------------------------------------- -->
 		<h2 style="clear:both;">555 Timer</h2>
 		<div>
-
+			<h3>Introduction</h3>
+			<div>
+				<p>
+					The 555 timer can generate single pulses (monostable) or a train of pulses (astable), acting as
+					an oscillator.
+				</p>
+				<p>
+					The <a href="https://www.ti.com/lit/ds/symlink/lm555.pdf" target="_blank">TI LM555 datasheet</a>
+					gives a a good summary of the internals:
+				</p>
+				<p>
+					<img src="##IMG_DIR##/../LM555_top_view.png">
+				</p>
+				<p>
+					With the following pin descriptions.
+				</p>
+				<table class="jehtable">
+					<thead>
+						<tr>
+							<td>Pin No</td>
+							<td>Pin Desc</td>
+							<td>I/O</td>
+							<td>Description</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>5</td> <td>Ctrl Voltage</td> <td>I</td>
+							<td>Controls the threshold and trigger levels. It determines the pulse width of the output 
+								waveform. An external voltage applied to this pin can also be used to modulate the output
+								waveform
+							</td>
+						</tr>
+						<tr>
+							<td>7</td> <td>Discharge</td> <td>I</td>
+							<td>Open collector output which discharges a capacitor between intervals (in phase with output).
+								It toggles the output from high to low when voltage reaches 2/3 of the supply voltage.</td>
+						</tr>
+						<tr>
+							<td>1</td> <td>GND</td> <td>O</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>3</td> <td>Output</td> <td>O</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>4</td> <td>Reset</td> <td>I</td>
+							<td>Negative pulse applied to this pin to disable or reset the timer. When not used for reset
+								purposes, it should be connected to VCC to avoid false triggering.
+							</td>
+						</tr>
+						<tr>
+							<td>6</td> <td>Threshold</td> <td>I</td>
+							<td>Compares the voltage applied to the terminal with a reference voltage of 2/3 V<sub>cc</sub>. The
+								amplitude of voltage applied to this terminal is responsible for the set state of the flip-flop.
+							</td>
+						</tr>
+						<tr>
+							<td>2</td> <td>Trigger</td> <td>I</td>
+							<td>Responsible for transition of the flip-flop from set to reset. The output of the timer depends
+								on the amplitude of the external trigger pulse applied to this pin.</td>
+						</tr>
+						<tr>
+							<td>8</td> <td>V<sub>cc</sub></td> <td>I</td>
+							<td></td>
+						</tr>
+					</tbody>
+					<p></p>
+			</div>
 			<h3>Monostable</h3>
 			<div>
 				<p>
@@ -2144,12 +2213,28 @@
 					<li>The <em>trigger</em> starts the process: it is pulsed low (falling edge triggered) for a short
 						amount of time to kick things off and turn the output on.
 					</li>
-					<li>Capactitor C1 begins to charge.						
+					<li>Capactitor C1 begins to charge.
 					</li>
-					<li>When the voltage across C1 is 2/3 V<sub>cc</sub> the output is turned off and the capacitor
-						discharges through the discharge pin.
+					<li>The threshold pin compares the voltage applied to the terminal with a reference voltage of 2/3 V<sub>cc</sub>.
+					</li>
+					<li>When the voltage across C1, i.e., the voltage at the threshold pin, is 2/3 V<sub>cc</sub> the output
+						is turned off and the capacitor discharges through the discharge pin.
 					</li>
 				</ul>
+				<p>
+					Going into slightly more detail, looking at the LM555 excerpt above, the trigger resets the flipflop,
+					which turns on the output stage.
+				</p>
+				<p>
+					At this point the discharge transistor will be an open circuit, so the capacitor connected between
+					ground and the joined threshold and discharge pins can charge through the resistor.
+				</p>
+				<p>
+					As the capacitor charges to above 2/3 V<sub>cc</sub>, the comparitor on the threshold pin signals
+					the flipflop, which turns the output off and turns the transitor at the discharge pin on. Pin 7
+					goes from high impedance to an open circuit so the capacitor is now connected to ground and
+					discarges immediately.
+				</p>
 				<p>
 					By the way, the only reason the pulse from the 555 is delayed is because the switch closing, i,e the trigger, is
 					delayed by 0.2ms.
@@ -2204,20 +2289,36 @@
 					<br><sub>Generated from <a href="https://github.com/jameshume/jehtech/blob/master/src/images/jeh-tech/electronics_555_astable_graph.plt" target="_blank">electronics_555_astable_graph.plt</a></sub>
 				</p>
 				<p>
+					Above one can see that the system oscillates &quot;by itself&quot;. The trigger is &quot;automatic&quot;.
+				</p>
+				<ul>
+					<li>The output stage is initially off because the trigger is high. The discharge transitor on the
+						discharge pin is a closed circuit.
+					</li>
+					<li>This means that capacitor C1 can discharge through the resistors R2 into the discharge pin, which
+						is providing a path to ground.
+					</li>
+					<li>The trigger and threshold pins &quot;sees&quot; the voltage across C1 and as it falls as the capacitor is discharged.
+						The threshold pin, at this point, won't do anything because it only sets the flipflop, which it already is.
+						It is the trigger pin that, upon hitting 1/3 V<sub>cc</sub>, will reset the flipflop. At this point the output
+						does high and the discharge pin becomes high impedance, like an open circuit.
+					</li>
+					<li>The capacitor C1 now begins to charge through resistors R1 and R2.
+					</li>
+					<li>As the capacitor charges, when it reaches 2/3 V<sub>cc</sub>, the threshold pin will set the
+						flipflop, which will turn the output off and open the discharge pin again.
+					</li>
+					<li>The process repeats ad infinitum...</li>
+				</ul>
+				<p>
 					The LTSpice 555 symbol makes for a slightly cumbersome circuit diagram. It is more commonly, and more cleanly,
 					layed out like this:
 				</p>
 				<p>
 					<img src="##IMG_DIR##/electronics_555_astable_sketch.png">
 				</p>
- 
-
-<!--
 				<p>
-					<img src="##IMG_DIR##/555_timer.png" alt="555 timer in astable operation"/>
-				</p>
-				<p>
-					The total resistance R<sub>A</sub> + R<sub>B</sub> will determine the time it takes
+					The total resistance R1 + R2</sub> will determine the time it takes
 					for the capacitor to charge. However, when the capacitor
 					discharges, it only discharges through R<sub>B</sub>.
 				</p>
@@ -2225,26 +2326,6 @@
 					Recall charge time for a cap to charge to 63% of the voltage across is is
 					$\tau = RC$. So by varying either the resistors or the capacitor the period of the
 					pulse train output on pin 3 can be varied.
-				</p>
-				<p>
-					The diagrams above and below imagine that there is a switch inside the 555, which there is,
-					its just not a mechanical switch like these diagrams suggest (see later below for more details).
-					As the capacitor charges the voltage across it increases. When it hits 2/3 of the reference voltage,
-					the switch in side the 555 closes such that pin 7 is shorted to ground. The capacitor then immediately
-					starts to discharg through R<sub>B</sub> and when the voltage across the capacitor is less than
-					1/3 the reference voltage the switch opens again, starting the charge cycle and so on.
-				</p>
-				<p>
-					As the switch also controls the connection between the reference voltage and the output, this
-					produces a pulse train who's frequency is determined by the two resistors and the capacitor, and
-					with a duty cycle that is determined by the two resistors.
-				</p>
-				<p style="float: left;">
-					<img src="##IMG_DIR##/chargin_555_cap.png"/>
-				</p>
-				<p style="float: left;">
-					<img src="##IMG_DIR##/555_timer_discharge.png"/>
-					
 				</p>
 				<p style="clear: both;">
 					The following is a silly little animation of the capacitor discharging through
@@ -2268,8 +2349,7 @@
 					the above is just another, slightly more detailed abstraction. The real circuit is far, far more complex when broken down into its &quot;atomic&quot;
 					building blocks!
 				</p>
-			</div>
--->
+
 			<h3>555 References</h3>
 			<ul>
 				<li>
