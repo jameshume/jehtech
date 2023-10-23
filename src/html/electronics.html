@@ -2072,15 +2072,20 @@
 				If whatever is driving the gate can supply currents large enough to damage the FET then a gate resistor
 				should be used. it should be positioned to the &quot;right&quot; of the pull up/down resistor so that
 				no voltage divider is created and the gate still receives (most of) the full voltage.
-			</p>			
+			</p>
+			
+			<h3>NMOS and PMOS Pairs In Logic Gates</h3>
 			<p>
-				I stubmled across the following whilst reading up on logic gates using MOSFETS:
+				I stubled across the following whilst reading up on logic gates using MOSFETS:
 			</p>
 			<p>
 				<q>A further distinction between NFETs and PFETs is that NFETs are good at discharging capacitive
 				loads to Gnd but not too good at charging capacitive loads to Vdd, whereas PFETs are good at
 				charging capacitive loads to Vdd but not too good at discharging capacitive loads to Gnd.</q>
 				<a href="https://pages.jh.edu/aandreo1/216/Archives/2014/Handouts/POP_Ch1-2.pdf" target="_blank">[REF]</a>.
+			</p>
+			<p>
+				Put another way, an NMOS gives a strong 0 but a weak 1 and a PMOS gives a strong 1 but a week 0.
 			</p>
 			<p>
 				Interesting! Thats why there are often complementary P and N types in logic gates that are implemented
