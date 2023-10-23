@@ -2058,7 +2058,7 @@
 				<br><sub>Generated from <a href="https://github.com/jameshume/jehtech/blob/master/src/images/jeh-tech/electronics_nmos.asc">electronics_nmos.asc</a></sub>
 			</p>			
 			<p>
-				Depletion types will need a pull up resistor, not showing an example here.
+				P types will need a pull up resistor, not showing an example here.
 			</p>
 			<p>
 				Sometimes a <b>current limiting resistor for the gate</b> is required. Because the gate acts as a 
@@ -2069,6 +2069,12 @@
 				If whatever is driving the gate can supply currents large enough to damage the FET then a gate resistor
 				should be used. it should be positioned to the &quot;right&quot; of the pull up/down resistor so that
 				no voltage divider is created and the gate still receives (most of) the full voltage.
+			</p>
+			<p>
+				<q>A further distinction between NFETs and PFETs is that NFETs are good at discharging capacitive
+				loads to Gnd but not too good at charging capacitive loads to Vdd, whereas PFETs are good at
+				charging capacitive loads to Vdd but not too good at discharging capacitive loads to Gnd.</q>
+				<a href="https://pages.jh.edu/aandreo1/216/Archives/2014/Handouts/POP_Ch1-2.pdf" target="_blank">[REF]</a>.
 			</p>
 		</div>
 
