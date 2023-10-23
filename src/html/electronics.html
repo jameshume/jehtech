@@ -2330,7 +2330,7 @@
 					<source src="##IMG_DIR##/555_cap_discharge_anim2.mp4" type="video/mp4">
 				</video><br/>
 				<p>
-					Wikimedia has a really nice illustration of the components in the 555, which I've copied below and inserted the components outside the
+					<a href="https://en.wikipedia.org/wiki/555_timer_IC" target="_blank">Wikipedia</a> has a really nice illustration of the components in the 555, which I've copied below and inserted the components outside the
 					chip that we used above to create an astable vibrator. Here, we can see that the switch shown above is really
 					an RS flip flop combined with a transitor.
 				</p>
@@ -2361,6 +2361,39 @@
 			</ul>
 		</div>
 
+
+		<!-- --------------------------------------------------------------------------------------- -->
+		<h2 style="clear:both;">Logic Gates</h2>
+		<div>
+			<h3>NAND</h3>
+			<div>
+				<h4>Using BJTs</h4>
+				<div>
+					<p>
+						<img src="##IMG_DIR##/electronics_bjt_nand_gate.png">
+						<br><sub>Generated from <a href="https://github.com/jameshume/jehtech/blob/master/src/images/jeh-tech/electronics_bjt_nand_gate.asc">electronics_bjt_nand_gate.asc</a></sub>
+					</p>
+					<p>
+						<img src="##IMG_DIR##/electronics_bjt_nand_gate_graph.png">
+						<br><sub>Generated from <a href="https://github.com/jameshume/jehtech/blob/master/src/images/jeh-tech/electronics_bjt_nand_gate.plt">electronics_bjt_nand_gate.plt</a></sub>
+					</p>
+					<p>
+						For the voltage at the output to be low there must be a path to ground such that all the voltage
+						gets dropped across R3. This can only happen when both transistors are on, which occurs when both
+						bases, inputs A and B, are high. Hence the NAND gate...
+					</p>
+				</div>
+
+				<h4>Using MOSFETs</h4>
+				<div>
+					<p>
+						A little more complicated in the MOSFET world!
+					</p>
+				</div>
+			</div>
+		</div>
+
+		
 		<!-- --------------------------------------------------------------------------------------- -->
 		<h2 style="clear:both;">SR Latch</h2>
 		<div>
