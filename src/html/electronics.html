@@ -2011,6 +2011,9 @@
 				But, the accumulation of positive charge at the gate attracks negative charges causes a channel or
 				&quot;wedge&quot; to be &quot;opened&quot; between the source and drain through which current can flow.
 				The current flow starts when the gate voltage exceeds the threshold voltage, ie when $V_{\text{gs}} > V_{\text{th}}$.
+				Note that this is the voltage <q></q>from the gate to the source, <em>not just the voltage at the gate</em> ... 
+				Therefore, the voltage at the transistor's source can't rise above $V_\text{dd} - V_\text{th}$</q>.
+				<a href="https://electronics.stackexchange.com/a/106837" target="_blank">[Ref]</a>.
 			</p>
 			<p>
 				<img src="##IMG_DIR##/electronics_mosfet_depletion_regions.png">
@@ -2069,12 +2072,20 @@
 				If whatever is driving the gate can supply currents large enough to damage the FET then a gate resistor
 				should be used. it should be positioned to the &quot;right&quot; of the pull up/down resistor so that
 				no voltage divider is created and the gate still receives (most of) the full voltage.
+			</p>			
+			<p>
+				I stubmled across the following whilst reading up on logic gates using MOSFETS:
 			</p>
 			<p>
 				<q>A further distinction between NFETs and PFETs is that NFETs are good at discharging capacitive
 				loads to Gnd but not too good at charging capacitive loads to Vdd, whereas PFETs are good at
 				charging capacitive loads to Vdd but not too good at discharging capacitive loads to Gnd.</q>
 				<a href="https://pages.jh.edu/aandreo1/216/Archives/2014/Handouts/POP_Ch1-2.pdf" target="_blank">[REF]</a>.
+			</p>
+			<p>
+				Interesting! Thats why there are often complementary P and N types in logic gates that are implemented
+				using MOSFETs. But why are NFETs good at discarghing capacitive loads and PFETs good at charging them?
+				The answer is <a href="https://www.quora.com/Why-is-PMOS-good-to-pass-logic-1-and-NMOS-is-good-to-pass-logic-0" target="_blank">here</a>.
 			</p>
 		</div>
 
