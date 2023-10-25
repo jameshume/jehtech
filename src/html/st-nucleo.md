@@ -11,7 +11,7 @@
 
 ### Busses
 Straight from the manual:
-![STM32401xE internal busses](##IMG_DIR##/../stm32f401re__figure3.pdf)
+![STM32401xE internal busses](##IMG_DIR##/../stm32f401re__figure3.png)
 
 ### Clock Tree
 Straight from the manual:
