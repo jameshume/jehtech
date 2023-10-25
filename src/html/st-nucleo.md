@@ -16,7 +16,7 @@ Straight from the manual:
 ### Clock Tree
 Straight from the manual:
 ![STM32401xE clock tree](##IMG_DIR##/../m0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics__figure12.png)
-
+ 
 ## Debugging
 * The STM32Cube IDE uses the STLink GDB server, but I cannot find this as an independent package to install, without installing all of the STM32Cube IDE.
     * Note the "ST-link server" and "ST-link DGB server" are *not* the same thing! [[Ref]](https://stackoverflow.com/a/71937416).

@@ -23,7 +23,8 @@ ifdef GITHUB__BUILD
 LAST_COMMIT_ID:=$(shell git log --oneline --format="%H" -1)
 SRC_ALL_FILES:=$(addprefix ../,$(filter src/%,$(shell git diff-tree --no-commit-id $(LAST_COMMIT_ID) -r | awk '$$5!="D" {print $$6}')))
 SRC_DELETED_FILES:=$(addprefix ../,$(filter src/%,$(shell git diff-tree --no-commit-id $(LAST_COMMIT_ID) -r | awk '$$5=="D" {print $$6}')))
-SRC_HTML_FILES:=$(filter %.html,$(SRC_ALL_FILES))
+SRC_MD_FILES:=$(filter %.md,$(SRC_ALL_FILES))
+SRC_HTML_FILES:=$(filter %.html,$(SRC_ALL_FILES)) $(patsubst %.md,%.html,$(SRC_MD_FILES))
 SRC_CSS_FILES :=$(filter %.css,$(SRC_ALL_FILES))
 # Image files is filtered below so can set to all files in the last commit
 # CAUTION!!!! Here I am assuming that the no-watermark directory is a parent of the with-watermark directory... 
