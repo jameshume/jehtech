@@ -11,10 +11,12 @@
 
 ### Busses
 Straight from the manual:
+
 ![STM32401xE internal busses](##IMG_DIR##/../stm32f401re__figure3.png)
 
 ### Clock Tree
 Straight from the manual:
+
 ![STM32401xE clock tree](##IMG_DIR##/../m0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics__figure12.png)
  
 ## Debugging
@@ -39,7 +41,7 @@ Straight from the manual:
 * https://lonesometraveler.github.io/2020/03/27/debug.html
 
 
-## Little bare Metal Examples
+## Little Bare Metal Examples
 ### Turn On The L2 LED
 
 To discover which GPIO pin the LED is connected to, consult the [STM32 Nucleo Board User Manual](file:///home/james/Downloads/um1724-stm32-nucleo64-boards-mb1136-stmicroelectronics.pdf). From the manual one can see that for the NUCLEO-F401RE board,
@@ -57,7 +59,7 @@ The default register value disables all the GPIO modules. It also disables the C
 
 Thus the GPIO A module must be enabled. Then the LED can be configured:
 
-```
+```c
 #include "stm32f401xe.h"
 
 ...
