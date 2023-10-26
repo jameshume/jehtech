@@ -1,5 +1,7 @@
 ## Useful
-* https://cpulator.01xz.net/?sys=arm-de1soc
+* [Cortex-M4 Devices Generic User Guide](https://developer.arm.com/documentation/dui0553/latest/)
+* [Cortex-M4 Technical Reference Manual](https://documentation-service.arm.com/static/5f19da2a20b7cf4bc524d99a)
+* [CPUlator](https://cpulator.01xz.net/?sys=arm-de1soc)
 
 ## Intro
 
