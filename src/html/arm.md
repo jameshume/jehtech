@@ -1,6 +1,9 @@
 ## Useful
+* [Proceedure Call Standard for the Arm(R) Architecture](https://github.com/ARM-software/abi-aa/blob/2982a9f3b512a5bfdc9e3fea5d3b298f9165c36b/aapcs32/aapcs32.rst#procedure-call-standard-for-the-arm-architecture)
 * [Cortex-M4 Devices Generic User Guide](https://developer.arm.com/documentation/dui0553/latest/)
 * [Cortex-M4 Technical Reference Manual](https://documentation-service.arm.com/static/5f19da2a20b7cf4bc524d99a)
+* [ARM Cortex-M RTOS Context Switching](https://interrupt.memfault.com/blog/cortex-m-rtos-context-switching)
+* [GitHub Project - minimal-c-cortex-m: A minimal Arm Cortex-M example, including semihosting...](https://github.com/noahp/minimal-c-cortex-m)
 * [CPUlator](https://cpulator.01xz.net/?sys=arm-de1soc)
 
 ## Intro
@@ -77,17 +80,23 @@
             > The CPSR register holds the processor mode (user or exception flag), interrupt mask bits, condition codes, and Thumb status bit. The Thumb status bit indicates the processor’s current state: 0 for ARM state (default) or 1 for Thumb. -- https://www.embedded.com/introduction-to-arm-thumb
         * Its of no use for Cortex-M processors as they only have Thumb-2, but, still need to jump with +1 on the address! Hey ho!
         * And then... M33 then the T-bit apparently has another meaning so gets more complicated?
-    * Specical purpose
+    * Special purpose
         * Processor status (xPSR) - Combined Program Status Register - contains, in one register, the following 3 "registers":
               * Indicate the state of the core right now.
-              * APSR - Application Program Status Register - Only APSR flags can be uysed for condition execution (`BCC`, `IT`). In original ARM instruction set almost all instructions could be issued conditionally based on contents of APSR, but in Thumb-2 conditional execution is only supported using 16-bit branch instructions `B<c> addr`.
+              
+              * APSR - Application Program Status Register - Only APSR flags can be used for condition execution (`BCC`, `IT`). In original ARM instruction set almost all instructions could be issued conditionally based on contents of APSR, but in Thumb-2 conditional execution is only supported using 16-bit branch instructions `B<c> addr`.
                 ```
-                31                                                                             5              0
+                             Not on M0
+                31           |                                                                 5              0
                 +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
                 |N |Z |C |V |Q |                                  Reserved                                      |
                 +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-                              |
-                              Not on M0
+                 |  |  |  |  |
+                 |  |  |  |  Cumulative saturation
+                 |  |  |  Overflow
+                 |  |  Carry
+                 |  Zero
+                 Negative                              
                 ```
               * FPSCR - Float flags (if FPU present).
                 ```
@@ -104,7 +113,7 @@
                                                                                           |   +-------------------- Reservered
                                                                                           +------------------------ IDC
                 ```
-              * IPSR - Contains interrupt/exception number.
+              * IPSR - Contains interrupt/exception number of the current ISR.
                 ```
                 31                                                                             5              0
                 +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
@@ -128,6 +137,10 @@
                                   |||||                            |||||||||||||||||
                                   ICI/IT                                ICT/IT
                   ```
+
+                The EPSR is not directly accessible. Two events can modify the EPSR:
+                   1. an interrupt occurring during an LDM or STM instruction
+                   2. execution of the If-Then instruction.
 
               * APSR/IPSR/EPSR accessed as one register via xPSR. For example
                 when an interrupt occurs, the xPSR is one of the resisters that is auto stored on the stack and looks like this:
@@ -232,6 +245,52 @@ A *micro-architecture* defines <q>the exact implementation details of the proces
         * Optional external wak-up detector allows core to be fully powered down.
         * Effecting with State-Retention Power Gating (SRPG) methodology.
 
+## ABI
+
+From []`aapcs32/aapcs32.rst``](https://github.com/ARM-software/abi-aa/blob/main/aapcs32/aapcs32.rst):
+
+### Core Registers
+
+<table class="jehtable">
+    <thread>
+        <tr>
+            <td>Register</td> <td>Special</td> <td>Role in the procedure call standard</td>
+        </tr>
+    </thread>
+    <tbody>
+        <tr>r15</td> <td></td>   <td>PC      </td> <td>The Program Counter.</td></tr>
+        <tr>r14</td> <td></td>   <td>LR      </td> <td>The Link Register.</td></tr>
+        <tr>r13</td> <td></td>   <td>SP      </td> <td>The Stack Pointer.</td></tr>
+        <tr>r12</td> <td></td>   <td>IP      </td> <td>The Intra-Procedure-call scratch register.</td></tr>
+        <tr>r11</td> <td>v8</td> <td>FP      </td> <td>Frame Pointer or Variable-register 8.</td></tr>
+        <tr>r10</td> <td>v7</td> <td>        </td> <td>Variable-register 7.</td></tr>
+        <tr>r9 </td> <td>v6</td> <td>SB<br>TR</td> <td> Platform register or Variable-register 6.<br>The meaning of this register is defined by the platform standard.</td></tr>
+        <td>r8 </td> <td>v5</td> <td>        </td> <td>Variable-register 5.</td></tr>
+        <td>r7 </td> <td>v4</td> <td>        </td> <td>Variable-register 4.</td></tr>
+        <td>r6 </td> <td>v3</td> <td>        </td> <td>Variable-register 3.</td></tr>
+        <td>r5 </td> <td>v2</td> <td>        </td> <td>Variable-register 2.</td></tr>
+        <td>r4 </td> <td>v1</td> <td>        </td> <td>Variable-register 1.</td></tr>
+        <td>r3 </td> <td>a4</td> <td>        </td> <td>Argument / scratch register 4.</td></tr>
+        <td>r2 </td> <td>a3</td> <td>        </td> <td>Argument / scratch register 3.</td></tr>
+        <td>r1 </td> <td>a2</td> <td>        </td> <td>Argument / result / scratch register 2.</td></tr>
+        <td>r0 </td> <td>a1</td> <td>        </td> <td>Argument / result / scratch register 1.</td></tr>
+    </tbody>
+</table>
+
+### Stack
+
+The ARM stack is <b>fully descending</b>. Descending means that it starts at a high address and each push <b>decrements</b> the stack pointer.
+
+In a Full stack, <b>the stack pointer points to the topmost item in the stack, i.e.,the last item pushed into it</b>.
+When pushing data into a Full stack, the stack pointer is first adjusted to reflect its new location and then
+the data is stored in the stack at the address in the stack pointer.
+
+The stack pointer must normally be 4-byte aligned, except at a "public interface", when it should be 8 byte, or double-word, aligned.
+A "public interface" consists of the externally accessible functions offered by a library or component.
+
+The stack frame is described in Figure B1-3 of the Armv7 Exception Model like so (when no FP registers saved):
+
+![ArmV7 Stack Frame](##IMG_DIR##/../armv7_stack_layour_no_fp_regs.png)
 
 
 ## Instruction Set
