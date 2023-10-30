@@ -381,6 +381,17 @@ RUN --mount=type=bind,target=&lt;target-dir-in-this-stage&gt;,source=&lt;source-
   You don't have to mount directories either... you can mount specific files from the host, which saves you having to <code>COPY</code> them into the image!
   Usefully there is also a <code>tmpfs</code> mount, which can be useful!
 </p>
+<p>
+  Example of mounting external file system and tmpfs in a Dockerfile:
+</p>
+<pre>
+RUN <b>--mount=type=tmpfs,target=/build_temp \
+    --mount=type=bind,source=.,target=/build \</b>
+       apt-get update --fix-missing \
+    && apt-get -y upgrade \
+    && apt-get install -y --no-install-recommends make \
+    && DEBIAN_FRONTEND=noninteractive make -C build -f Dockerfile.Makefile TEMP_DIR=/build_temp all 
+</pre>
 </div>
 
 <H2>Misc Bits</H2>

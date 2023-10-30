@@ -158,5 +158,5 @@ Add to `launch.json`
             "svdFile": "${workspaceRoot}/path/to/svd/file.svd",
         },
         ...
-    }
+    ]
 ```

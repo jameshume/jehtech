@@ -1,3 +1,15 @@
+From the website:
+
+> The Open On-Chip Debugger (OpenOCD) aims to provide debugging, in-system programming and boundary-scan testing for
+> embedded target devices.
+>
+> It does so with the assistance of a debug adapter, which is a small hardware module which helps provide the right kind
+> of electrical signaling to the target being debugged. 
+
+## References
+* [OpenOCD and STLink](https://pfeerick.github.io/InfiniTime/doc/openOCD.html)
+* [STM32 Debugging using OpenOCD, GDB...](https://elrobotista.com/en/posts/stm32-debug-linux/)
+
 ## Install
 Clone from Github and compile from source works out of the box. As part of the configuration enable STLink
 compatibility if using with any of the STM ARM Cortex chips.
@@ -7,14 +19,46 @@ TEMP_DIR=/tmp
 git clone https://git.code.sf.net/p/openocd/code "${TEMP_DIR}/openocd-code"
 cd "${TEMP_DIR}/openocd-code" && ./bootstrap && ./configure --enable-stlink && make -j 4 && make install
 ```
-## Run For Nucleo
 
-```bash
-openocd -f interface/stlink.cfg -f target/stm32f4x.cfg
+## Use
+Use one config file, named `openocd.cfg` to let your OCD server know about the adaptor being used and board etc.
+
+You should use configuration files provided by OEMs and the like found in `/usr/local/share/openocd/scripts`.
+
+* `/usr/local/share/openocd/scripts/interface/...` - contains a number of `.cfg` files, one for each debug adaptor.
+* `/usr/local/share/openocd/scripts/board/...` - contains a number of `.cfg` files, one for each board.
+* `/usr/local/share/openocd/scripts/target/...` - contains a number of `.cfg` files, one for each target.
+
+The board config files for boards with a single MCU will normally contain target config, so if one is available you
+shouldn't need the target config.
+
+For example, for the STM Nucleo ... the following is sufficient:
+
+```
+source [find interface/stlink.cfg]
+source [find board/st_nucleo_f0.cfg]
 ```
 
-The various interface and target files are found at these locations:
+When using with GDB one can specify extra options such as shown below [[GDB Configuration]](https://openocd.org/doc/html/Server-Configuration.html#gdbconfiguration):
 
-* `/usr/local/share/openocd/scripts/interface/stlink.cfg`
-* `usr/local/share/openocd/scripts/target/stm32f4x.cfg`
+```
+source [find interface/stlink.cfg]
+
+gdb_flash_program enable
+gdb_breakpoint_override hard
+
+source [find board/st_nucleo_f0.cfg]
+```
+
+Then if using GDB, launch your GDB and type:
+
+```
+target extended-remote:3333
+```
+
+You can also get GDB to start OpenOCD itself [[GDB and OpenOCD]](https://openocd.org/doc/html/GDB-and-OpenOCD.html#GDB-and-OpenOCD):
+
+```
+target extended-remote | openocd -c "gdb_port pipe; log_output openocd.log"
+```
 
