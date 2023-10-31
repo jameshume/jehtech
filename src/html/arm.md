@@ -380,52 +380,52 @@ The FreeRTOS `port.c` code for the Cortex-M0, which I'm reading up on because it
         <tr><td>Line of code</td>                               <td>Explanation</td></tr>
     </thread>
     <tbody>
-        <tr><td>`mrs r0, psp`</td>                              <td>Copy the PSP stack register into R0</td></tr>
-        <tr><td>``</td>                                         <td></td></tr>
-        <tr><td>`ldr r3, pxCurrentTCBConst`</td>                <td>Load pointer to pointer to TCB into R3. `pxCurrentTCBConst` is defined at the end of 
-                                                                    this function and is equivalent to `TCB_t **pxCurrentTCBConst = &pxCurrentTCB`</td></tr>
-        <tr><td>`ldr r2, [r3]`</td>                             <td>Dereferences pointer above to get pointer to TCB</td></tr>
-        <tr><td>``</td>                                         <td></td></tr>
-        <tr><td>`subs r0, r0, #32`</td>                         <td>Reserve 32 bytes (8 32-bit words) on the stack.</td></tr>
-        <tr><td>`str r0, [r2]`</td>                             <td>Do `*(uint32_t *)pxCurrentTCB = R0 = PSP - 32`. The pointer memory location 
-                                                                    `*(uint32_t *)pxCurrentTCB` is the first member of the `TCB_t` struct, which is a
+        <tr><td><code>mrs r0, psp</code></td>                   <td>Copy the PSP stack register into R0</td></tr>
+        <tr><td></td>                                           <td></td></tr>
+        <tr><td><code>ldr r3, pxCurrentTCBConst</code></td>     <td>Load pointer to pointer to TCB into R3. <code>pxCurrentTCBConst</code> is defined at the end of 
+                                                                    this function and is equivalent to <code>TCB_t **pxCurrentTCBConst = &pxCurrentTCB</code></td></tr>
+        <tr><td><code>ldr r2, [r3]</code></td>                  <td>Dereferences pointer above to get pointer to TCB</td></tr>
+        <tr><td></td>                                           <td></td></tr>
+        <tr><td><code>subs r0, r0, #32</code></td>              <td>Reserve 32 bytes (8 32-bit words) on the stack.</td></tr>
+        <tr><td><code>str r0, [r2]</code></td>                  <td>Do <code>*(uint32_t *)pxCurrentTCB = R0 = PSP - 32</code>. The pointer memory location 
+                                                                    <code>*(uint32_t *)pxCurrentTCB</code> is the first member of the <code>TCB_t</code> struct, which is a
                                                                     pointer to the location of the last item placed on the tasks stack. The member 
-                                                                    pointer is named `volatile StackType_t * pxTopOfStack` in `tasks.c`. Thus, this really 
-                                                                    does `pxCurrentTCB->pxTopOfStack = PSP - 32`.</td></tr>
-        <tr><td>`stmia r0!, {r4-r7}`</td>                       <td>Push registers 4 through 7 into `pxCurrentTCB->pxTopOfStack`, taking up the 4 
+                                                                    pointer is named <code>volatile StackType_t * pxTopOfStack</code> in <code>tasks.c</code>. Thus, this really 
+                                                                    does <code>pxCurrentTCB->pxTopOfStack = PSP - 32</code>.</td></tr>
+        <tr><td><code>stmia r0!, {r4-r7}</code></td>            <td>Push registers 4 through 7 into <code>pxCurrentTCB->pxTopOfStack</code>, taking up the 4 
                                                                     words reserved two lines above, updating R0 afterwards.</td></tr>
-        <tr><td>`mov r4, r8`</td>                               <td>Move the high-registers into the low registers just put on the stack so that the 
-                                                                    high-registers can then be put onto the stack - `stmia` can only use the low-registers. </td></tr>
-        <tr><td>`mov r5, r9`</td>                               <td></td></tr>
-        <tr><td>`mov r6, r10`</td>                              <td></td></tr>
-        <tr><td>`mov r7, r11`</td>                              <td></td></tr>
-        <tr><td>`stmia r0!, {r4-r7}`</td>                       <td>Same again, save registers 8 through 11 into the reserved area on the PSP.</td></tr>
-        <tr><td>``</td>                                         <td></td></tr>
-        <tr><td>`push {r3, r14}`</td>                           <td>Because this is interrupt service routine code, the selected stack is the MSP. So
-                                                                    this pushes registers r3 (`pxCurrentTCBConst`) and r14 (the LR) onto the MSP.</td></tr>
-        <tr><td>`cpsid i`</td>                                  <td>DISABLE INTERRUPTS</td></tr>
-        <tr><td>`bl vTaskSwitchContext`</td>                    <td>Do the task switching atomically</td></tr>
-        <tr><td>`cpsie i`</td>                                  <td>ENABLE INTERRUPTS</td></tr>
-        <tr><td>`pop {r2, r3}`</td>                             <td>R2 gets `pxCurrentTCBConst` saved 4 lines above, and R3 gets the LR</td></tr>
-        <tr><td>``</td>                                         <td></td></tr>
-        <tr><td>`ldr r1, [r2]`</td>                             <td>`R1 = *pxCurrentTCBConst`</td></tr>
-        <tr><td>`ldr r0, [r1]`</td>                             <td>`R0 = **pxCurrentTCBConst == pxCurrentTCB->pxTopOfStack`</td></tr>
-        <tr><td>`adds r0, r0, #16`</td>                         <td></td></tr>
-        <tr><td>`ldmia r0!, {r4-r7}`</td>                       <td></td></tr>
-        <tr><td>`mov r8, r4`</td>                               <td></td></tr>
-        <tr><td>`mov r9, r5`</td>                               <td></td></tr>
-        <tr><td>`mov r10, r6`</td>                              <td></td></tr>
-        <tr><td>`mov r11, r7`</td>                              <td></td></tr>
-        <tr><td>``</td>                                         <td></td></tr>
-        <tr><td>`msr psp, r0`</td>                              <td></td></tr>
-        <tr><td>``</td>                                         <td></td></tr>
-        <tr><td>`subs r0, r0, #32`</td>                         <td></td></tr>
-        <tr><td>`ldmia r0!, {r4-r7}`</td>                       <td></td></tr>
-        <tr><td>``</td>                                         <td></td></tr>
-        <tr><td>`bx r3`</td>                                    <td></td></tr>
-        <tr><td>``</td>                                         <td></td></tr>
-        <tr><td>`.align 4`</td>                                 <td></td></tr>
-        <tr><td>`pxCurrentTCBConst: .word pxCurrentTCB`</td>    <td>Equivalent to `TCB_t **pxCurrentTCBConst = &pxCurrentTCB`</td></tr>
+        <tr><td><code>mov r4, r8</code></td>                    <td>Move the high-registers into the low registers just put on the stack so that the 
+                                                                    high-registers can then be put onto the stack - <code>stmia</code> can only use the low-registers. </td></tr>
+        <tr><td><code>mov r5, r9</code></td>                    <td></td></tr>
+        <tr><td><code>mov r6, r10</code></td>                   <td></td></tr>
+        <tr><td><code>mov r7, r11</code></td>                   <td></td></tr>
+        <tr><td><code>stmia r0!, {r4-r7}</code></td>            <td>Same again, save registers 8 through 11 into the reserved area on the PSP.</td></tr>
+        <tr><td></td>                                           <td></td></tr>
+        <tr><td><code>push {r3, r14}</code></td>                <td>Because this is interrupt service routine code, the selected stack is the MSP. So
+                <code>                                              this pushes registers r3 (<code>pxCurrentTCBConst</code>) and r14 (the LR) onto the MSP.</td></tr>
+        <tr><td><code>cpsid i</code></td>                       <td>DISABLE INTERRUPTS</td></tr>
+        <tr><td><code>bl vTaskSwitchContext</code></td>         <td>Do the task switching atomically</td></tr>
+        <tr><td><code>cpsie i</code></td>                       <td>ENABLE INTERRUPTS</td></tr>
+        <tr><td><code>pop {r2, r3}</code></td>                  <td>R2 gets <code>pxCurrentTCBConst</code> saved 4 lines above, and R3 gets the LR</td></tr>
+        <tr><td></td>                                           <td></td></tr>
+        <tr><td><code>ldr r1, [r2]</code></td>                  <td><code>R1 = *pxCurrentTCBConst</code></td></tr>
+        <tr><td><code>ldr r0, [r1]</code></td>                  <td><code>R0 = **pxCurrentTCBConst == pxCurrentTCB->pxTopOfStack</code></td></tr>
+        <tr><td><code>adds r0, r0, #16</code></td>              <td><code>Take off 16 bytes (4 32-bit words) from </code>pxCurrentTCB->pxTopOfStack`</td></tr>
+        <tr><td><code>ldmia r0!, {r4-r7}</code></td>            <td></td></tr>
+        <tr><td><code>mov r8, r4</code></td>                    <td></td></tr>
+        <tr><td><code>mov r9, r5</code></td>                    <td></td></tr>
+        <tr><td><code>mov r10, r6</code></td>                   <td></td></tr>
+        <tr><td><code>mov r11, r7</code></td>                   <td></td></tr>
+        <tr><td></td>                                           <td></td></tr>
+        <tr><td><code>msr psp, r0</code></td>                   <td></td></tr>
+        <tr><td></td>                                           <td></td></tr>
+        <tr><td><code>subs r0, r0, #32</code></td>              <td></td></tr>
+        <tr><td><code>ldmia r0!, {r4-r7}</code></td>            <td></td></tr>
+        <tr><td></td>                                           <td></td></tr>
+        <tr><td><code>bx r3</code></td>                         <td></td></tr>
+        <tr><td></td>                                           <td></td></tr>
+        <tr><td><code>.align 4</code></td>                      <td></td></tr>
+        <tr><td><code>pxCurrentTCBConst: .word pxCurrentTCB</code></td> <td>Equivalent to <code>TCB_t **pxCurrentTCBConst = &pxCurrentTCB</code></td></tr>
     </tbody>
 </table>
 
