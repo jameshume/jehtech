@@ -261,28 +261,28 @@ From [`aapcs32/aapcs32.rst`](https://github.com/ARM-software/abi-aa/blob/main/aa
 ### Core Registers
 
 <table class="jehtable">
-    <thread>
+    <thead>
         <tr>
             <td>Register</td> <td>Alias</td> <td>Special</td> <td>Role in the procedure call standard</td>
         </tr>
-    </thread>
+    </thead>
     <tbody>
-        <tr>r15</td> <td></td>   <td>PC      </td> <td>The Program Counter.</td></tr>
-        <tr>r14</td> <td></td>   <td>LR      </td> <td>The Link Register.</td></tr>
-        <tr>r13</td> <td></td>   <td>SP      </td> <td>The Stack Pointer.</td></tr>
-        <tr>r12</td> <td></td>   <td>IP      </td> <td>The Intra-Procedure-call scratch register.</td></tr>
-        <tr>r11</td> <td>v8</td> <td>FP      </td> <td>Frame Pointer or Variable-register 8.</td></tr>
-        <tr>r10</td> <td>v7</td> <td>        </td> <td>Variable-register 7.</td></tr>
-        <tr>r9 </td> <td>v6</td> <td>SB<br>TR</td> <td> Platform register or Variable-register 6.<br>The meaning of this register is defined by the platform standard.</td></tr>
-        <td>r8 </td> <td>v5</td> <td>        </td> <td>Variable-register 5.</td></tr>
-        <td>r7 </td> <td>v4</td> <td>        </td> <td>Variable-register 4.</td></tr>
-        <td>r6 </td> <td>v3</td> <td>        </td> <td>Variable-register 3.</td></tr>
-        <td>r5 </td> <td>v2</td> <td>        </td> <td>Variable-register 2.</td></tr>
-        <td>r4 </td> <td>v1</td> <td>        </td> <td>Variable-register 1.</td></tr>
-        <td>r3 </td> <td>a4</td> <td>        </td> <td>Argument / scratch register 4.</td></tr>
-        <td>r2 </td> <td>a3</td> <td>        </td> <td>Argument / scratch register 3.</td></tr>
-        <td>r1 </td> <td>a2</td> <td>        </td> <td>Argument / result / scratch register 2.</td></tr>
-        <td>r0 </td> <td>a1</td> <td>        </td> <td>Argument / result / scratch register 1.</td></tr>
+        <tr><td>r15</td> <td></td>   <td>PC      </td> <td>The Program Counter.</td></tr>
+        <tr><td>r14</td> <td></td>   <td>LR      </td> <td>The Link Register.</td></tr>
+        <tr><td>r13</td> <td></td>   <td>SP      </td> <td>The Stack Pointer.</td></tr>
+        <tr><td>r12</td> <td></td>   <td>IP      </td> <td>The Intra-Procedure-call scratch register.</td></tr>
+        <tr><td>r11</td> <td>v8</td> <td>FP      </td> <td>Frame Pointer or Variable-register 8.</td></tr>
+        <tr><td>r10</td> <td>v7</td> <td>        </td> <td>Variable-register 7.</td></tr>
+        <tr><td>r9 </td> <td>v6</td> <td>SB<br>TR</td> <td> Platform register or Variable-register 6.<br>The meaning of this register is defined by the platform standard.</td></tr>
+        <td><td>r8 </td> <td>v5</td> <td>        </td> <td>Variable-register 5.</td></tr>
+        <td><td>r7 </td> <td>v4</td> <td>        </td> <td>Variable-register 4.</td></tr>
+        <td><td>r6 </td> <td>v3</td> <td>        </td> <td>Variable-register 3.</td></tr>
+        <td><td>r5 </td> <td>v2</td> <td>        </td> <td>Variable-register 2.</td></tr>
+        <td><td>r4 </td> <td>v1</td> <td>        </td> <td>Variable-register 1.</td></tr>
+        <td><td>r3 </td> <td>a4</td> <td>        </td> <td>Argument / scratch register 4.</td></tr>
+        <td><td>r2 </td> <td>a3</td> <td>        </td> <td>Argument / scratch register 3.</td></tr>
+        <td><td>r1 </td> <td>a2</td> <td>        </td> <td>Argument / result / scratch register 2.</td></tr>
+        <td><td>r0 </td> <td>a1</td> <td>        </td> <td>Argument / result / scratch register 1.</td></tr>
     </tbody>
 </table>
 <p></p>
@@ -315,30 +315,30 @@ Stacking is done by the Cortex-M for you and involves saving the current state o
 [[See ARM doc]](https://developer.arm.com/documentation/ddi0419/c/System-Level-Architecture/System-Level-Programmers--Model/ARMv6-M-exception-model/Exception-entry-behavior?lang=en):
 
 1. If the program being interrupted is *not* an interrupt and the PSP is being used:
-   1.1. Use the PSP
-   1.2. Else use the MSP
+    1.1. Use the PSP
+    1.2. Else use the MSP
    In other words, the PSP is only used when interrupting a thread-mode program (not-interrupt routine) and that program is already using the PSP.
 2. Push onto selected stack, in the following order:
-   2.1 R0-R3, 
-   2.2 R12, 
-   2.3 LR, 
-   2.4 return address, which will depending on the exception type: 
-       2.4.1. NMI - address of the next instruction to be executed.
-       2.4.2. HardFault (precise) - the address of the instruction causing fault  .
-       2.4.3. HardFault (imprecise) - address of the next instruction to be executed.
-       2.4.4. SVC - address of next instruction after SVC.
-       2.4.5. IRQ - address of next instruction after interrupt.
-   2.5 xPSR (see stack screenshot above). 
+    2.1 R0-R3, 
+    2.2 R12, 
+    2.3 LR, 
+    2.4 return address, which will depending on the exception type: 
+         2.4.1. NMI - address of the next instruction to be executed.
+         2.4.2. HardFault (precise) - the address of the instruction causing fault  .
+         2.4.3. HardFault (imprecise) - address of the next instruction to be executed.
+         2.4.4. SVC - address of next instruction after SVC.
+         2.4.5. IRQ - address of next instruction after interrupt.
+    2.5 xPSR (see stack screenshot above). 
 3. If the program being interrupted is an interrupt
-   3.1. LR = 0xFFFFFFF1 // Return to Handler Mode. Exception return gets state from the Main stack. On return execution uses the Main Stack.
-   3.2. Else if the MSP is being used by the thread mode program:
-        3.2.1. LR = 0xFFFFFFF9; // Return to Thread Mode. Exception return gets state from the Main stack. On return execution uses the Main Stack.
-        3.2.2. Else LR = 0xFFFFFFFFD; Return to Thread Mode. Exception return gets state from the Process stack. On return execution uses the Process Stack.
+    3.1. LR = 0xFFFFFFF1 // Return to Handler Mode. Exception return gets state from the Main stack. On return execution uses the Main Stack.
+    3.2. Else if the MSP is being used by the thread mode program:
+          3.2.1. LR = 0xFFFFFFF9; // Return to Thread Mode. Exception return gets state from the Main stack. On return execution uses the Main Stack.
+          3.2.2. Else LR = 0xFFFFFFFFD; Return to Thread Mode. Exception return gets state from the Process stack. On return execution uses the Process Stack.
 4. Prepare to jump to service handler
-   4.1 Change current mode to handler mode
-   4.2 Change stack to MSP
-   4.3 Get address of service handler based on exception number
-   4.4 Jump to exception handler.
+    4.1 Change current mode to handler mode
+    4.2 Change stack to MSP
+    4.3 Get address of service handler based on exception number
+    4.4 Jump to exception handler.
 
 ### Unstacking
 
