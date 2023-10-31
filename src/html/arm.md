@@ -314,10 +314,14 @@ Stacking is done by the Cortex-M for you and involves saving the current state o
 #### Cortex M0
 [[See ARM doc]](https://developer.arm.com/documentation/ddi0419/c/System-Level-Architecture/System-Level-Programmers--Model/ARMv6-M-exception-model/Exception-entry-behavior?lang=en):
 
-1. Select which stack to save the interrupted program's context to. The PSP is only used when interrupting a thread-mode program (not-interrupt routine) and that program is already using the PSP.<br>If the program being interrupted is *not* an interrupt and the PSP is being used:
+TODO/FIXME - formatting is broken!
 
-    1.1. Use the PSP
-    1.2. Else use the MSP
+1. If the program being interrupted is *not* an interrupt and the PSP is being used:
+
+   1.1. Use the PSP
+   1.2. Else use the MSP
+
+   In other words, the PSP is only used when interrupting a thread-mode program (not-interrupt routine) and that program is already using the PSP.
 
 2. Push onto selected stack, in the following order:
 
@@ -357,6 +361,73 @@ interrupted program and resumes it, or possibly instead puts the processor to sl
 #### Cortex-M0
 [[See ARM doc]](https://developer.arm.com/documentation/ddi0419/c/System-Level-Architecture/System-Level-Programmers--Model/ARMv6-M-exception-model/Exception-return-behavior?lang=en)
 
+## Context Switching
+### References
+* [PendSV+SVC on Cortex M](https://jeelabs.org/202x/jeeh/pendsvc/)
+* [ARM Cortex-M RTOS Context Switching](https://interrupt.memfault.com/blog/cortex-m-rtos-context-switching#context-switching)
+* [FreeRTOS `port.c` Source Code For Cortext-M0](https://github.com/FreeRTOS/FreeRTOS-Kernel/blob/main/portable/GCC/ARM_CM0/port.c)
+
+### PendSV
+PendSV is generally used for context switching because, unlike the SVC exception, which is synchronous (happens as soon as the SVC instruction is encountered), the PendSV exception is asynchronous and once pended will only execute when no other exceptions are pending. The main advantage is that it can be pended from an ISR.
+
+### How FreeRTOS Does It
+Very much based on the article [ARM Cortex-M RTOS Context Switching](https://interrupt.memfault.com/blog/cortex-m-rtos-context-switching#context-switching).
+
+The FreeRTOS `port.c` code for the Cortex-M0, which I'm reading up on because it is the simplest of the Cortex-M's, is as follows (rev `83083a8a1`):
+
+<table class="jehtable">
+    <thead>
+        <tr><td>Line of code</td>                               <td>Explanation</td></tr>
+    </thread>
+    <tbody>
+        <tr><td>`mrs r0, psp`</td>                              <td>Copy the PSP stack register into R0</td></tr>
+        <tr><td>``</td>                                         <td></td></tr>
+        <tr><td>`ldr r3, pxCurrentTCBConst`</td>                <td>Load pointer to pointer to TCB into R3. `pxCurrentTCBConst` is defined at the end of 
+                                                                    this function and is equivalent to `TCB_t **pxCurrentTCBConst = &pxCurrentTCB`</td></tr>
+        <tr><td>`ldr r2, [r3]`</td>                             <td>Dereferences pointer above to get pointer to TCB</td></tr>
+        <tr><td>``</td>                                         <td></td></tr>
+        <tr><td>`subs r0, r0, #32`</td>                         <td>Reserve 32 bytes (8 32-bit words) on the stack.</td></tr>
+        <tr><td>`str r0, [r2]`</td>                             <td>Do `*(uint32_t *)pxCurrentTCB = R0 = PSP - 32`. The pointer memory location 
+                                                                    `*(uint32_t *)pxCurrentTCB` is the first member of the `TCB_t` struct, which is a
+                                                                    pointer to the location of the last item placed on the tasks stack. The member 
+                                                                    pointer is named `volatile StackType_t * pxTopOfStack` in `tasks.c`. Thus, this really 
+                                                                    does `pxCurrentTCB->pxTopOfStack = PSP - 32`.</td></tr>
+        <tr><td>`stmia r0!, {r4-r7}`</td>                       <td>Push registers 4 through 7 into `pxCurrentTCB->pxTopOfStack`, taking up the 4 
+                                                                    words reserved two lines above, updating R0 afterwards.</td></tr>
+        <tr><td>`mov r4, r8`</td>                               <td>Move the high-registers into the low registers just put on the stack so that the 
+                                                                    high-registers can then be put onto the stack - `stmia` can only use the low-registers. </td></tr>
+        <tr><td>`mov r5, r9`</td>                               <td></td></tr>
+        <tr><td>`mov r6, r10`</td>                              <td></td></tr>
+        <tr><td>`mov r7, r11`</td>                              <td></td></tr>
+        <tr><td>`stmia r0!, {r4-r7}`</td>                       <td>Same again, save registers 8 through 11 into the reserved area on the PSP.</td></tr>
+        <tr><td>``</td>                                         <td></td></tr>
+        <tr><td>`push {r3, r14}`</td>                           <td>Because this is interrupt service routine code, the selected stack is the MSP. So
+                                                                    this pushes registers r3 (`pxCurrentTCBConst`) and r14 (the LR) onto the MSP.</td></tr>
+        <tr><td>`cpsid i`</td>                                  <td>DISABLE INTERRUPTS</td></tr>
+        <tr><td>`bl vTaskSwitchContext`</td>                    <td>Do the task switching atomically</td></tr>
+        <tr><td>`cpsie i`</td>                                  <td>ENABLE INTERRUPTS</td></tr>
+        <tr><td>`pop {r2, r3}`</td>                             <td>R2 gets `pxCurrentTCBConst` saved 4 lines above, and R3 gets the LR</td></tr>
+        <tr><td>``</td>                                         <td></td></tr>
+        <tr><td>`ldr r1, [r2]`</td>                             <td>`R1 = *pxCurrentTCBConst`</td></tr>
+        <tr><td>`ldr r0, [r1]`</td>                             <td>`R0 = **pxCurrentTCBConst == pxCurrentTCB->pxTopOfStack`</td></tr>
+        <tr><td>`adds r0, r0, #16`</td>                         <td></td></tr>
+        <tr><td>`ldmia r0!, {r4-r7}`</td>                       <td></td></tr>
+        <tr><td>`mov r8, r4`</td>                               <td></td></tr>
+        <tr><td>`mov r9, r5`</td>                               <td></td></tr>
+        <tr><td>`mov r10, r6`</td>                              <td></td></tr>
+        <tr><td>`mov r11, r7`</td>                              <td></td></tr>
+        <tr><td>``</td>                                         <td></td></tr>
+        <tr><td>`msr psp, r0`</td>                              <td></td></tr>
+        <tr><td>``</td>                                         <td></td></tr>
+        <tr><td>`subs r0, r0, #32`</td>                         <td></td></tr>
+        <tr><td>`ldmia r0!, {r4-r7}`</td>                       <td></td></tr>
+        <tr><td>``</td>                                         <td></td></tr>
+        <tr><td>`bx r3`</td>                                    <td></td></tr>
+        <tr><td>``</td>                                         <td></td></tr>
+        <tr><td>`.align 4`</td>                                 <td></td></tr>
+        <tr><td>`pxCurrentTCBConst: .word pxCurrentTCB`</td>    <td>Equivalent to `TCB_t **pxCurrentTCBConst = &pxCurrentTCB`</td></tr>
+    </tbody>
+</table>
 
 ## Setup GCC (Ubuntu)
 
