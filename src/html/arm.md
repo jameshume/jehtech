@@ -437,7 +437,7 @@ Each **NOTE x** in the explanation refers to the diagram below the function exce
         <tr><td><code>bx r3</code></td>                         <td></td></tr>
         <tr><td></td>                                           <td></td></tr>
         <tr><td><code>.align 4</code></td>                      <td></td></tr>
-        <tr><td><code>pxCurrentTCBConst: .word pxCurrentTCB</code></td> <td>Equivalent to <code>TCB_t **pxCurrentTCBConst = &pxCurrentTCB</code></td></tr>
+        <tr><td><code>pxCurrentTCBConst:<br>&nbsp;&nbsp;&nbsp;.word pxCurrentTCB</code></td> <td>Equivalent to <code>TCB_t **pxCurrentTCBConst = &pxCurrentTCB</code></td></tr>
     </tbody>
 </table>
 <p></p>
@@ -445,7 +445,7 @@ Each **NOTE x** in the explanation refers to the diagram below the function exce
 ![](##IMG_DIR##/freertos_context_switch_stacks.png)
 
 From the image of the stack above it is easier to see that the **context switch is performed between notes 5 and 6**. Hence, for steps 6 onwards, 
-a **different context is being restored**!
+a **different context is being restored**... hence the context switch!
 
 ## Setup GCC (Ubuntu)
 
