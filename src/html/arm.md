@@ -314,12 +314,10 @@ Stacking is done by the Cortex-M for you and involves saving the current state o
 #### Cortex M0
 [[See ARM doc]](https://developer.arm.com/documentation/ddi0419/c/System-Level-Architecture/System-Level-Programmers--Model/ARMv6-M-exception-model/Exception-entry-behavior?lang=en):
 
-1. If the program being interrupted is *not* an interrupt and the PSP is being used:
+1. Select which stack to save the interrupted program's context to. The PSP is only used when interrupting a thread-mode program (not-interrupt routine) and that program is already using the PSP.<br>If the program being interrupted is *not* an interrupt and the PSP is being used:
 
-   1.1. Use the PSP
-   1.2. Else use the MSP
-
-   In other words, the PSP is only used when interrupting a thread-mode program (not-interrupt routine) and that program is already using the PSP.
+    1.1. Use the PSP
+    1.2. Else use the MSP
 
 2. Push onto selected stack, in the following order:
 
