@@ -216,7 +216,7 @@ A *micro-architecture* defines <q>the exact implementation details of the proces
         * Auto save and restore of processor registers.
         * Implements all ARMv7-M low latency features - this is available on the M0(+) devices too.
             * Late arrival, tail-chaining, lazy FPU stacking, ICI bits for load/store multiple operations.
-        * Aggressive fliushing of multi-cycle operations in pipeline.
+        * Aggressive flushing of multi-cycle operations in pipeline.
             * To enable interrupt processing to start quickly.
             * Applies to all DEV/SO loads/stores that have bit vee started on the bus.
         * Avoids bursts on the bus for DEV/SO load/store multiples - may reduce bus performance.
@@ -245,16 +245,25 @@ A *micro-architecture* defines <q>the exact implementation details of the proces
         * Optional external wak-up detector allows core to be fully powered down.
         * Effecting with State-Retention Power Gating (SRPG) methodology.
 
+## Instruction Set
+* WARNING: `nop` not guaranteed to waste a cycle!!!! use `mv r0, r0` instead.
+TODO
+* Sync
+    * WARNING DMB only works for one bus - 2 load/stores on 2 different busses do not have order of execution segregated by DMB as it only focuses on one bus and does not work across busses.
+    * DSB is stricter than DMB - not just load/stores but intructions too - no futher instructions may complete execution or change interrupt masks until the Memory Barrier instruction completes. Including *implicit* operations - e.g. a cache controller refreshing its contents etc. Applies to *multiple* busses and *broadcasts to other cores in the cluster*.
+    * See https://developer.arm.com/documentation/dai0321/a/?lang=en
+
+
 ## ABI
 
-From []`aapcs32/aapcs32.rst``](https://github.com/ARM-software/abi-aa/blob/main/aapcs32/aapcs32.rst):
+From [`aapcs32/aapcs32.rst`](https://github.com/ARM-software/abi-aa/blob/main/aapcs32/aapcs32.rst):
 
 ### Core Registers
 
 <table class="jehtable">
     <thread>
         <tr>
-            <td>Register</td> <td>Special</td> <td>Role in the procedure call standard</td>
+            <td>Register</td> <td>Alias</td> <td>Special</td> <td>Role in the procedure call standard</td>
         </tr>
     </thread>
     <tbody>
@@ -276,6 +285,7 @@ From []`aapcs32/aapcs32.rst``](https://github.com/ARM-software/abi-aa/blob/main/
         <td>r0 </td> <td>a1</td> <td>        </td> <td>Argument / result / scratch register 1.</td></tr>
     </tbody>
 </table>
+<p></p>
 
 ### Stack
 
@@ -286,20 +296,54 @@ When pushing data into a Full stack, the stack pointer is first adjusted to refl
 the data is stored in the stack at the address in the stack pointer.
 
 The stack pointer must normally be 4-byte aligned, except at a "public interface", when it should be 8 byte, or double-word, aligned.
-A "public interface" consists of the externally accessible functions offered by a library or component.
+A "public interface" consists of any externally accessible functions offered by a library or component. I.e., when
+enterying _any_ function, the stack should always start off 8-byte aligned.
 
-The stack frame is described in Figure B1-3 of the Armv7 Exception Model like so (when no FP registers saved):
+The stack frame is described in Figure B1-3 of the ArmV7 Exception Model like so (when no FP registers saved):
 
 ![ArmV7 Stack Frame](##IMG_DIR##/../armv7_stack_layour_no_fp_regs.png)
 
 
-## Instruction Set
-* WARNING: `nop` not guaranteed to waste a cycle!!!! use `mv r0, r0` instead.
-TODO
-* Sync
-    * WARNING DMB only works for one bus - 2 load/stores on 2 different busses do not have order of execution segregated by DMB as it only focuses on one bus and does not work across busses.
-    * DSB is stricter than DMB - not just load/stores but intructions too - no futher instructions may complete execution or change interrupt masks until the Memory Barrier instruction completes. Including *implicit* operations - e.g. a cache controller refreshing its contents etc. Applies to *multiple* busses and *broadcasts to other cores in the cluster*.
-    * See https://developer.arm.com/documentation/dai0321/a/?lang=en
+## Exceptions
+### References
+* [PendSV+SVC on Cortex M](https://jeelabs.org/202x/jeeh/pendsvc/)
+
+### Stacking
+Stacking is done by the Cortex-M for you and involves saving the current state of the processor so that the interrupted program can be resumed after the interrupt is serviced. 
+
+#### Cortex M0
+[[See ARM doc]](https://developer.arm.com/documentation/ddi0419/c/System-Level-Architecture/System-Level-Programmers--Model/ARMv6-M-exception-model/Exception-entry-behavior?lang=en):
+
+1. If the program being interrupted is *not* an interrupt and the PSP is being used:
+   1.1. Use the PSP
+   1.2. Else use the MSP
+   In other words, the PSP is only used when interrupting a thread-mode program (not-interrupt routine) and that program is already using the PSP.
+2. Push onto selected stack, in the following order:
+   2.1 R0-R3, 
+   2.2 R12, 
+   2.3 LR, 
+   2.4 return address, which will depending on the exception type: 
+       2.4.1. NMI - address of the next instruction to be executed.
+       2.4.2. HardFault (precise) - the address of the instruction causing fault  .
+       2.4.3. HardFault (imprecise) - address of the next instruction to be executed.
+       2.4.4. SVC - address of next instruction after SVC.
+       2.4.5. IRQ - address of next instruction after interrupt.
+   2.5 xPSR (see stack screenshot above). 
+3. If the program being interrupted is an interrupt
+   3.1. LR = 0xFFFFFFF1 // Return to Handler Mode. Exception return gets state from the Main stack. On return execution uses the Main Stack.
+   3.2. Else if the MSP is being used by the thread mode program:
+        3.2.1. LR = 0xFFFFFFF9; // Return to Thread Mode. Exception return gets state from the Main stack. On return execution uses the Main Stack.
+        3.2.2. Else LR = 0xFFFFFFFFD; Return to Thread Mode. Exception return gets state from the Process stack. On return execution uses the Process Stack.
+4. Prepare to jump to service handler
+   4.1 Change current mode to handler mode
+   4.2 Change stack to MSP
+   4.3 Get address of service handler based on exception number
+   4.4 Jump to exception handler.
+
+### Unstacking
+
+#### Cortex-M0
+[[See ARM doc]](https://developer.arm.com/documentation/ddi0419/c/System-Level-Architecture/System-Level-Programmers--Model/ARMv6-M-exception-model/Exception-return-behavior?lang=en)
 
 
 ## Setup GCC (Ubuntu)

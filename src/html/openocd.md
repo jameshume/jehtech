@@ -59,6 +59,6 @@ target extended-remote:3333
 You can also get GDB to start OpenOCD itself [[GDB and OpenOCD]](https://openocd.org/doc/html/GDB-and-OpenOCD.html#GDB-and-OpenOCD):
 
 ```
-target extended-remote | openocd -c "gdb_port pipe; log_output openocd.log"
+target extended-remote | openocd -f openocd.cfg -c "gdb_port pipe; log_output openocd.log"
 ```
 
