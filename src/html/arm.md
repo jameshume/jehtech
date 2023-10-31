@@ -316,9 +316,9 @@ Stacking is done by the Cortex-M for you and involves saving the current state o
 
 1. If the program being interrupted is *not* an interrupt and the PSP is being used:
 
-    1.1. Use the PSP
-    1.2. Else use the MSP
-  
+   1.1. Use the PSP
+   1.2. Else use the MSP
+
    In other words, the PSP is only used when interrupting a thread-mode program (not-interrupt routine) and that program is already using the PSP.
 
 2. Push onto selected stack, in the following order:
@@ -353,6 +353,8 @@ Stacking is done by the Cortex-M for you and involves saving the current state o
     4.4 Jump to exception handler.
 
 ### Unstacking
+Unstacking is the opposite of stacking and occurs when the last interrupt service routine returns. It restores the state of the
+interrupted program and resumes it, or possibly instead puts the processor to sleep.
 
 #### Cortex-M0
 [[See ARM doc]](https://developer.arm.com/documentation/ddi0419/c/System-Level-Architecture/System-Level-Programmers--Model/ARMv6-M-exception-model/Exception-return-behavior?lang=en)
