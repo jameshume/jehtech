@@ -315,26 +315,37 @@ Stacking is done by the Cortex-M for you and involves saving the current state o
 [[See ARM doc]](https://developer.arm.com/documentation/ddi0419/c/System-Level-Architecture/System-Level-Programmers--Model/ARMv6-M-exception-model/Exception-entry-behavior?lang=en):
 
 1. If the program being interrupted is *not* an interrupt and the PSP is being used:
+
     1.1. Use the PSP
     1.2. Else use the MSP
+  
    In other words, the PSP is only used when interrupting a thread-mode program (not-interrupt routine) and that program is already using the PSP.
+
 2. Push onto selected stack, in the following order:
+
     2.1 R0-R3, 
     2.2 R12, 
     2.3 LR, 
     2.4 return address, which will depending on the exception type: 
+
          2.4.1. NMI - address of the next instruction to be executed.
          2.4.2. HardFault (precise) - the address of the instruction causing fault  .
          2.4.3. HardFault (imprecise) - address of the next instruction to be executed.
          2.4.4. SVC - address of next instruction after SVC.
          2.4.5. IRQ - address of next instruction after interrupt.
+
     2.5 xPSR (see stack screenshot above). 
+
 3. If the program being interrupted is an interrupt
+
     3.1. LR = 0xFFFFFFF1 // Return to Handler Mode. Exception return gets state from the Main stack. On return execution uses the Main Stack.
     3.2. Else if the MSP is being used by the thread mode program:
+
           3.2.1. LR = 0xFFFFFFF9; // Return to Thread Mode. Exception return gets state from the Main stack. On return execution uses the Main Stack.
           3.2.2. Else LR = 0xFFFFFFFFD; Return to Thread Mode. Exception return gets state from the Process stack. On return execution uses the Process Stack.
+
 4. Prepare to jump to service handler
+
     4.1 Change current mode to handler mode
     4.2 Change stack to MSP
     4.3 Get address of service handler based on exception number
