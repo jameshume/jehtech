@@ -377,7 +377,13 @@ The [FreeRTOS `xPortPendSVHandler()` function in the `port.c`](https://github.co
 
 Each **NOTE x** in the explanation refers to the diagram below the function excerpt. 
 
-<table class="jehtable">
+<style>
+    #context_switch_freertos tbody tr td:nth-child(1) {
+        white-space:nowrap
+    }
+</style>
+
+<table class="jehtable" id="context_switch_freertos">
     <thead>
         <tr><td>Line of code</td>                               <td>Explanation</td></tr>
     </thread>
