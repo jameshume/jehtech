@@ -373,33 +373,36 @@ PendSV is generally used for context switching because, unlike the SVC exception
 ### How FreeRTOS Does It
 Very much based on the article [ARM Cortex-M RTOS Context Switching](https://interrupt.memfault.com/blog/cortex-m-rtos-context-switching#context-switching).
 
-The FreeRTOS `port.c` code for the Cortex-M0, which I'm reading up on because it is the simplest of the Cortex-M's, is as follows (rev `83083a8a1`):
+The [FreeRTOS `xPortPendSVHandler()` function in the `port.c`](https://github.com/FreeRTOS/FreeRTOS-Kernel/blob/main/portable/GCC/ARM_CM0/port.c) code for the Cortex-M0, which I'm reading up on because it is the simplest of the Cortex-M's, is as follows (rev `83083a8a1`):
+
+Each **NOTE x** in the explanation refers to the diagram below the function excerpt. 
 
 <table class="jehtable">
     <thead>
         <tr><td>Line of code</td>                               <td>Explanation</td></tr>
     </thread>
     <tbody>
-        <tr><td><code>mrs r0, psp</code></td>                   <td>Copy the PSP stack register into R0</td></tr>
+        <tr><td><code>mrs r0, psp</code></td>                   <td>Copy the PSP stack register into R0. <b>NOTE 2</b></td></tr>
         <tr><td></td>                                           <td></td></tr>
         <tr><td><code>ldr r3, pxCurrentTCBConst</code></td>     <td>Load pointer to pointer to TCB into R3. <code>pxCurrentTCBConst</code> is defined at the end of 
                                                                     this function and is equivalent to <code>TCB_t **pxCurrentTCBConst = &pxCurrentTCB</code></td></tr>
-        <tr><td><code>ldr r2, [r3]</code></td>                  <td>Dereferences pointer above to get pointer to TCB</td></tr>
+        <tr><td><code>ldr r2, [r3]</code></td>                  <td>Dereferences pointer above to get pointer to TCB. <code>R2 = *pxCurrentTCBConst == pxCurrentTCB</code></td></tr>
         <tr><td></td>                                           <td></td></tr>
-        <tr><td><code>subs r0, r0, #32</code></td>              <td>Reserve 32 bytes (8 32-bit words) on the stack.</td></tr>
+        <tr><td><code>subs r0, r0, #32</code></td>              <td>Reserve 32 bytes (8 32-bit words) on the PSP stack. <b>NOTE 3</b></td></tr>
         <tr><td><code>str r0, [r2]</code></td>                  <td>Do <code>*(uint32_t *)pxCurrentTCB = R0 = PSP - 32</code>. The pointer memory location 
                                                                     <code>*(uint32_t *)pxCurrentTCB</code> is the first member of the <code>TCB_t</code> struct, which is a
                                                                     pointer to the location of the last item placed on the tasks stack. The member 
                                                                     pointer is named <code>volatile StackType_t * pxTopOfStack</code> in <code>tasks.c</code>. Thus, this really 
                                                                     does <code>pxCurrentTCB->pxTopOfStack = PSP - 32</code>.</td></tr>
         <tr><td><code>stmia r0!, {r4-r7}</code></td>            <td>Push registers 4 through 7 into <code>pxCurrentTCB->pxTopOfStack</code>, taking up the 4 
-                                                                    words reserved two lines above, updating R0 afterwards.</td></tr>
-        <tr><td><code>mov r4, r8</code></td>                    <td>Move the high-registers into the low registers just put on the stack so that the 
-                                                                    high-registers can then be put onto the stack - <code>stmia</code> can only use the low-registers. </td></tr>
+                                                                    words reserved two lines above, updating R0 afterwards. The Cortex micro code will have saved registers R0-R3, R12, the LR, return address and xPSR registers to the stack for us. Here the pendSV must be assumed to execute from thread mode, otherwise we would have to figure out which stack was selected before the interrupt. <b>NOTE 4</b></td></tr>
+        <tr><td><code>mov r4, r8</code></td>                    <td>Move the high-registers (not auto-saved by the Cortex on exception) into the low registers just
+                                                                    put on the stack so that the high-registers can then be put onto the stack - <code>stmia</code> 
+                                                                    can only use the low-registers. </td></tr>
         <tr><td><code>mov r5, r9</code></td>                    <td></td></tr>
         <tr><td><code>mov r6, r10</code></td>                   <td></td></tr>
         <tr><td><code>mov r7, r11</code></td>                   <td></td></tr>
-        <tr><td><code>stmia r0!, {r4-r7}</code></td>            <td>Same again, save registers 8 through 11 into the reserved area on the PSP.</td></tr>
+        <tr><td><code>stmia r0!, {r4-r7}</code></td>            <td>Same again, save registers 8 through 11 into the reserved area on the PSP. <b>NOTE 5</b></td></tr>
         <tr><td></td>                                           <td></td></tr>
         <tr><td><code>push {r3, r14}</code></td>                <td>Because this is interrupt service routine code, the selected stack is the MSP. So
                 <code>                                              this pushes registers r3 (<code>pxCurrentTCBConst</code>) and r14 (the LR) onto the MSP.</td></tr>
@@ -410,17 +413,20 @@ The FreeRTOS `port.c` code for the Cortex-M0, which I'm reading up on because it
         <tr><td></td>                                           <td></td></tr>
         <tr><td><code>ldr r1, [r2]</code></td>                  <td><code>R1 = *pxCurrentTCBConst</code></td></tr>
         <tr><td><code>ldr r0, [r1]</code></td>                  <td><code>R0 = **pxCurrentTCBConst == pxCurrentTCB->pxTopOfStack</code></td></tr>
-        <tr><td><code>adds r0, r0, #16</code></td>              <td><code>Take off 16 bytes (4 32-bit words) from </code>pxCurrentTCB->pxTopOfStack`</td></tr>
-        <tr><td><code>ldmia r0!, {r4-r7}</code></td>            <td></td></tr>
-        <tr><td><code>mov r8, r4</code></td>                    <td></td></tr>
+        <tr><td><code>adds r0, r0, #16</code></td>              <td><code>Add 16 bytes (4 32-bit words) to </code>pxCurrentTCB->pxTopOfStack` so that the saved high 
+                                                                    registers can be loaded into the actual registers again. <b>NOTE 6</b></td></tr>
+        <tr><td><code>ldmia r0!, {r4-r7}</code></td>            <td>Restore the high registers into the low registers as <code>stmia</code> 
+                                                                    can only use the low-registers. <b>NOTE 7</b></td></tr>
+        <tr><td><code>mov r8, r4</code></td>                    <td>Move the low registers into high registers, thus completing the restoration of the high registers</td></tr>
         <tr><td><code>mov r9, r5</code></td>                    <td></td></tr>
         <tr><td><code>mov r10, r6</code></td>                   <td></td></tr>
         <tr><td><code>mov r11, r7</code></td>                   <td></td></tr>
         <tr><td></td>                                           <td></td></tr>
-        <tr><td><code>msr psp, r0</code></td>                   <td></td></tr>
+        <tr><td><code>msr psp, r0</code></td>                   <td>Move R0 into PSP. This is the value of the SP as it was when the exception handler
+                                                                    routine was entered.</td></tr>
         <tr><td></td>                                           <td></td></tr>
-        <tr><td><code>subs r0, r0, #32</code></td>              <td></td></tr>
-        <tr><td><code>ldmia r0!, {r4-r7}</code></td>            <td></td></tr>
+        <tr><td><code>subs r0, r0, #32</code></td>              <td>Point back to the low registers that were saved previously. <b>NOTE 8</b></td></tr>
+        <tr><td><code>ldmia r0!, {r4-r7}</code></td>            <td>Restore them</td></tr>
         <tr><td></td>                                           <td></td></tr>
         <tr><td><code>bx r3</code></td>                         <td></td></tr>
         <tr><td></td>                                           <td></td></tr>
@@ -428,6 +434,9 @@ The FreeRTOS `port.c` code for the Cortex-M0, which I'm reading up on because it
         <tr><td><code>pxCurrentTCBConst: .word pxCurrentTCB</code></td> <td>Equivalent to <code>TCB_t **pxCurrentTCBConst = &pxCurrentTCB</code></td></tr>
     </tbody>
 </table>
+<p></p>
+
+![](##IMG_DIR##/freertos_context_switch_stacks.png)
 
 ## Setup GCC (Ubuntu)
 
