@@ -410,7 +410,7 @@ Each **NOTE x** in the explanation refers to the diagram below the function exce
         <tr><td><code>bl vTaskSwitchContext</code></td>         <td>Do the task switching atomically</td></tr>
         <tr><td><code>cpsie i</code></td>                       <td>ENABLE INTERRUPTS</td></tr>
         <tr><td><code>pop {r2, r3}</code></td>                  <td>R2 gets <code>pxCurrentTCBConst</code> saved 4 lines above, and R3 gets the LR</td></tr>
-        <tr><td></td>                                           <td></td></tr>
+        <tr><td></td>                                           <td><b>The <code>pxCurrentTBC</code> pointer most likely now points to a <b>different</b> thread stack so restores now restore the context for the next thread to be run!!!</td></tr>
         <tr><td><code>ldr r1, [r2]</code></td>                  <td><code>R1 = *pxCurrentTCBConst</code></td></tr>
         <tr><td><code>ldr r0, [r1]</code></td>                  <td><code>R0 = **pxCurrentTCBConst == pxCurrentTCB->pxTopOfStack</code></td></tr>
         <tr><td><code>adds r0, r0, #16</code></td>              <td><code>Add 16 bytes (4 32-bit words) to </code>pxCurrentTCB->pxTopOfStack` so that the saved high 
@@ -437,6 +437,9 @@ Each **NOTE x** in the explanation refers to the diagram below the function exce
 <p></p>
 
 ![](##IMG_DIR##/freertos_context_switch_stacks.png)
+
+From the image of the stack above it is easier to see that the **context switch is performed between notes 5 and 6**. Hence, for steps 6 onwards, 
+a **different context is being restored**!
 
 ## Setup GCC (Ubuntu)
 
