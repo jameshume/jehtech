@@ -389,11 +389,9 @@ Each **NOTE x** in the explanation refers to the diagram below the function exce
     </thread>
     <tbody>
         <tr><td><code>mrs r0, psp</code></td>                   <td>Copy the PSP stack register into R0. <b>NOTE 2</b></td></tr>
-        <tr><td></td>                                           <td></td></tr>
         <tr><td><code>ldr r3, pxCurrentTCBConst</code></td>     <td>Load pointer to pointer to TCB into R3. <code>pxCurrentTCBConst</code> is defined at the end of 
                                                                     this function and is equivalent to <code>TCB_t **pxCurrentTCBConst = &pxCurrentTCB</code></td></tr>
         <tr><td><code>ldr r2, [r3]</code></td>                  <td>Dereferences pointer above to get pointer to TCB. <code>R2 = *pxCurrentTCBConst == pxCurrentTCB</code></td></tr>
-        <tr><td></td>                                           <td></td></tr>
         <tr><td><code>subs r0, r0, #32</code></td>              <td>Reserve 32 bytes (8 32-bit words) on the PSP stack. <b>NOTE 3</b></td></tr>
         <tr><td><code>str r0, [r2]</code></td>                  <td>Do <code>*(uint32_t *)pxCurrentTCB = R0 = PSP - 32</code>. The pointer memory location 
                                                                     <code>*(uint32_t *)pxCurrentTCB</code> is the first member of the <code>TCB_t</code> struct, which is a
@@ -409,33 +407,29 @@ Each **NOTE x** in the explanation refers to the diagram below the function exce
         <tr><td><code>mov r6, r10</code></td>                   <td></td></tr>
         <tr><td><code>mov r7, r11</code></td>                   <td></td></tr>
         <tr><td><code>stmia r0!, {r4-r7}</code></td>            <td>Same again, save registers 8 through 11 into the reserved area on the PSP. <b>NOTE 5</b></td></tr>
-        <tr><td></td>                                           <td></td></tr>
         <tr><td><code>push {r3, r14}</code></td>                <td>Because this is interrupt service routine code, the selected stack is the MSP. So
-                <code>                                              this pushes registers r3 (<code>pxCurrentTCBConst</code>) and r14 (the LR) onto the MSP.</td></tr>
+                                                                    this pushes registers r3 (<code>pxCurrentTCBConst</code>) and r14 (the LR) onto the MSP.</td></tr>
         <tr><td><code>cpsid i</code></td>                       <td>DISABLE INTERRUPTS</td></tr>
         <tr><td><code>bl vTaskSwitchContext</code></td>         <td>Do the task switching atomically</td></tr>
         <tr><td><code>cpsie i</code></td>                       <td>ENABLE INTERRUPTS</td></tr>
         <tr><td><code>pop {r2, r3}</code></td>                  <td>R2 gets <code>pxCurrentTCBConst</code> saved 4 lines above, and R3 gets the LR</td></tr>
-        <tr><td></td>                                           <td><b>The <code>pxCurrentTBC</code> pointer most likely now points to a <b>different</b> thread stack so restores now restore the context for the next thread to be run!!!</td></tr>
+        <tr><td></td>                                           <td><i><b>The <code>pxCurrentTBC</code> pointer most likely now points to a <b>different</b> thread stack so restores now restore the context for the next thread to be run!!!</i></td></tr>
         <tr><td><code>ldr r1, [r2]</code></td>                  <td><code>R1 = *pxCurrentTCBConst</code></td></tr>
         <tr><td><code>ldr r0, [r1]</code></td>                  <td><code>R0 = **pxCurrentTCBConst == pxCurrentTCB->pxTopOfStack</code></td></tr>
         <tr><td><code>adds r0, r0, #16</code></td>              <td><code>Add 16 bytes (4 32-bit words) to </code>pxCurrentTCB->pxTopOfStack` so that the saved high 
                                                                     registers can be loaded into the actual registers again. <b>NOTE 6</b></td></tr>
         <tr><td><code>ldmia r0!, {r4-r7}</code></td>            <td>Restore the high registers into the low registers as <code>stmia</code> 
                                                                     can only use the low-registers. <b>NOTE 7</b></td></tr>
-        <tr><td><code>mov r8, r4</code></td>                    <td>Move the low registers into high registers, thus completing the restoration of the high registers</td></tr>
+        <tr><td><code>mov r8, r4</code></td>                    <td>Move the low registers into high registers, thus completing the restoration of the high 
+                                                                    registers</td></tr>
         <tr><td><code>mov r9, r5</code></td>                    <td></td></tr>
         <tr><td><code>mov r10, r6</code></td>                   <td></td></tr>
         <tr><td><code>mov r11, r7</code></td>                   <td></td></tr>
-        <tr><td></td>                                           <td></td></tr>
         <tr><td><code>msr psp, r0</code></td>                   <td>Move R0 into PSP. This is the value of the SP as it was when the exception handler
                                                                     routine was entered.</td></tr>
-        <tr><td></td>                                           <td></td></tr>
         <tr><td><code>subs r0, r0, #32</code></td>              <td>Point back to the low registers that were saved previously. <b>NOTE 8</b></td></tr>
         <tr><td><code>ldmia r0!, {r4-r7}</code></td>            <td>Restore them</td></tr>
-        <tr><td></td>                                           <td></td></tr>
         <tr><td><code>bx r3</code></td>                         <td></td></tr>
-        <tr><td></td>                                           <td></td></tr>
         <tr><td><code>.align 4</code></td>                      <td></td></tr>
         <tr><td><code>pxCurrentTCBConst:<br>&nbsp;&nbsp;&nbsp;.word pxCurrentTCB</code></td> <td>Equivalent to <code>TCB_t **pxCurrentTCBConst = &pxCurrentTCB</code></td></tr>
     </tbody>
@@ -443,6 +437,7 @@ Each **NOTE x** in the explanation refers to the diagram below the function exce
 <p></p>
 
 ![](##IMG_DIR##/freertos_context_switch_stacks.png)
+<br><sub>Generated from free_rtos_contexxt_switch_stacks.ufx</sub>
 
 From the image of the stack above it is easier to see that the **context switch is performed between notes 5 and 6**. Hence, for steps 6 onwards, 
 a **different context is being restored**... hence the context switch!

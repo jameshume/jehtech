@@ -302,6 +302,18 @@ git clone git://repo_addr [dirname]</pre>
     <pre>git checkout commit-hash | tag-name | branch-name</pre>
 
     <!-- ++++++++++++++++++++++++++++++++ -->
+    <h3>Convert Existing Directory Into A Git Repo And Push To Remote</h3>
+    <p></p>
+    <pre>cd &lt;localdir&gt;
+cd &lt;localdir&gt;
+git init
+git add .
+git commit -m 'message'
+git remote add origin &lt;url&gt;
+git push -u origin main</pre>
+    <p></p>
+
+    <!-- ++++++++++++++++++++++++++++++++ -->
     <h3>Git Branches</h3>
     <p>
         A branch is lightweight moveable pointer to a commit and the default branch name
