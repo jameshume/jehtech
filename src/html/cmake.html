@@ -52,11 +52,28 @@ https://pabloariasal.github.io/2018/02/19/its-time-to-do-cmake-right/
 </pre>
 </div> <!-- END References / useful Links -->
 
+<h2>Install From Source</h2>
+<div>
+	<p></p>
+	<pre>sudo apt install build-essential checkinstall zlib1g-dev libssl-dev
+wget https://github.com/Kitware/CMake/archive/refs/tags/v3.28.0-rc4.tar.gz
+tar -zxvf v3.28.0-rc4.tar.gz
+( cd CMake-3.28.0-rc4
+	./bootstrap && make && sudo make install
+)
+rm -fr CMake-3.28.0-rc4 </pre>
+	<p></p>
+</div>
 
 <h2>Misc</h2>
 <div>
+	<p>
+		See search path used: if you want to see which directories CMake is search in your case just call
+
+	</p>
+	<pre>cmake -D CMAKE_FIND_DEBUG_MODE=ON</pre>
 <p>
-    Dumpy out all variables and their values:
+    Dump out all variables and their values:
 </p>
 <pre>get_cmake_property(_variableNames VARIABLES)
 foreach (_variableName ${_variableNames})
