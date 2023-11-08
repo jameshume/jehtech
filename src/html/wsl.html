@@ -142,8 +142,8 @@ sudo update-alternatives --install /usr/local/bin/usbip usbip /usr/lib/linux-too
 				</li>
 				<li>To attach device <b>make sure WSL command line is open</b>.<br>From <em>PowerShell</em>:
 					<ol>
-						<li><code>[POWERSHELL] usbipd wsl list # List all of the USB devices connected to Windows</code></li>
-						<li><code>[POWERSHELL] usbipd wsl attach --busid &lt;busid&gt; # Select the bus ID of the device you’d like to attach to WSL</code></li>
+						<li><code>[POWERSHELL] usbipd wsl list # List all of the USB devices connected to Windows</code><br>Or <code> ((usbipd wsl list | findstr -i st-link) -Split " +")[0]</code></li>
+						<li><code>[POWERSHELL] usbipd wsl attach --busid &lt;busid&gt; # Select the bus ID of the device you’d like to attach to WSL</code><br>Better: <code>usbipd wsl attach --busid ((usbipd wsl list | findstr -i st-link) -Split " +")[0]</code></li>
 						<li><code>[WSL]        lsusb</code></li>
 						<li><code>[POWERSHELL] usbipd wsl dettach --busid &lt;busid&gt; # Once you are done using the device in WSL, you can either physically disconnect the USB device or run this command</code></li>
 					</ol>
