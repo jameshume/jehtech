@@ -153,6 +153,8 @@ Therefore, what we're saying is that the linker is free to garbage collect every
 
 The compiler flags that were added to the target ceedling YAML are what enable the garbage collection by instructing the compiler to put every function in its own section, which is what then allows the linker to garbage collect, as it can only garbage collect by section.
 
+**One word of caution: putting each function into its own section may actually increase the function size! [[Ref]](https://stackoverflow.com/a/29951897).**
+
 
 #### VMA and LMA
 
