@@ -1938,6 +1938,11 @@ git push                  # Push back to your remote</pre>
         Git LFS can store large files as &quot;pointers&quot; to separate binary storage in your repo. The repo can thus
         be smaller.
     </p>
+    <p>
+        To install on Ubuntu:
+    </p>
+    <pre>sudo apt-get update
+sudo apt-get -y install git-lfs</pre>
 	<p>
 		In your repository directory, to start using LFS type:
 	</p>
@@ -1951,6 +1956,10 @@ git push                  # Push back to your remote</pre>
 	</p>
 	<pre>git lfs help</pre>
     <p></p>
+    <p>To send a file to git lfs, it must be <em>tracked</em>. To track a file use:</p>
+    <pre>git lfs track "&lt;file of interest&gt;"</pre>
+    <p>Note that you <b>must commit and push the <code>.gitattribute</code> before pushing large files!</b>. Always verify with <code>git lfs ls-files</code>!
+    </p>
 
     <h3>Encountered X file(s) that should have been pointers, but weren't:</h3>
     <p>
