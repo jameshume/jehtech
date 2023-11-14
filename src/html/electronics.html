@@ -1265,19 +1265,33 @@
 				In-series resistor could be anywhere between a hundred ohms to a couple of kilohms.
 			</p>
 
+			<h3>Reactance</h3>
+			<div>
+				The reactance of a capacitor, $X_C$, depends on both its capacitance, $C$, and the frequency of
+				the signal applied to it, $f$:
+
+				$$
+				X_C = \frac{1}{2\pi fC}
+				$$				
+			</div>
+
 			<h3>Capacitors In Series</h3>
-			<p>
-				$$
-					\frac{1}{C_{eq}} = \frac{1}{C_1} + \frac{1}{C_2} + \cdots +  \frac{1}{C_n}
-				$$
-			</p>
+			<div>
+				<p>
+					$$
+						\frac{1}{C_{eq}} = \frac{1}{C_1} + \frac{1}{C_2} + \cdots +  \frac{1}{C_n}
+					$$
+				</p>
+			</div>
 
 			<h3>Capacitors In Parallel</h3>
-			<p>
-				$$
-					C_{eq} = C_1 + C_2 + \cdots + C_n
-				$$
-			</p>
+			<div>
+				<p>
+					$$
+						C_{eq} = C_1 + C_2 + \cdots + C_n
+					$$
+				</p>
+			</div>
 
 			<h3>Reactance</h3>
 			<p>
@@ -1301,20 +1315,27 @@
 				$$
 				R = \frac{V}{i}
 				$$
+			
 				Given the above reasoning we know that voltage across the capacitor must be a sine wave and
 				therefore current must be a cosine.
 				We also saw the equation for current in a section above:
+			
 				$$
 					i = C\frac{\mathrm{d}V}{\mathrm{d}t}
 				$$
+			
 				Therefore we can say that, if the input voltage is is $\sin(\omega t)$, then:
+			
 				$$
 					i = C \omega \cos(\omega t)
 				$$
+			
 				Therefore, using Ohm's law.
+			
 				$$
 				R = \frac{\sin(\omega t)}{C \omega \cos(\omega t)}
 				$$
+			
 				So, what's a sine divided a cosine? We can avoid some maths by recalling that multiplying
 				by $j$ rotates a complex number by 90 degrees anticlockwise and how the sine and cosine can
 				be seen as the values of a phasor on the imaginary and real axes respectively:
@@ -1397,6 +1418,16 @@
 			</p>
 			<p>
 				Whilst capacitors are low pass filters, inductors are <b>high pass filters</b>.
+			</p>
+			<p>
+				An indictor's reactance $X_L$ at frequency $f$ is given by the following formula:
+
+				$$
+				X_L = 2\pi fL
+				$$
+
+				Where $X_L$ is the ractance of the inductor in Ohms, f is the frequency of the 
+				signal in Hz and L is the inductance in Henrys.
 			</p>
 
 			<h3>Inductors In Series</h3>
