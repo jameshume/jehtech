@@ -32,21 +32,70 @@
 </p>
 
 <h2>Transaction Limits</h2>
-<img src="##IMG_DIR##/usb-fullspeed-iso-tx-rates.png" alt="snapshot of USB 2.0 standard, table 5-4" style="float:left; margin:10px"/>
-<p>
-	To the left is a screenshot of "Table 5-4. Full-speed Isochonous Transaction Limits" from the USB 2.0 standard <a href="http://sdphca.ucsd.edu/Lab_Equip_Manuals/usb_20.pdf" target="_blank">[Ref]</a>.
-</p>
-<p>
-	To see how the limits are arrived at lets consider transfering the maximum isochronous packet size of 1023 bytes. Given the 9 bytes header we have a total of 1032 byes. At 12 Mbps, which is 1.5MBps, 1032 bytes takes 688uS. Thus in the 1 millisecond frame time allocated we can only do one such transfer. 312uS are not used, which is equivalent to 468 bytes.
-</p>
-<p>
-	The standard has similar tables for high speed and low speed transfers too...
-</p>
-<p>
-	If you were to look at "Table 5-5.  High-speed Isochronous Transaction Limits", you might see something that puzzels you at first. Remember that high speed packets can be up to 1024 bytes. But, the table dows payloads of 2048 bytes and 3072 bytes as well. Why? The reason is that HS devices can specify 1, 2 or 3 transfers per microframe, hence the
-	higher effective payloads.
-</p>
+<div>
+	<img src="##IMG_DIR##/usb-fullspeed-iso-tx-rates.png" alt="snapshot of USB 2.0 standard, table 5-4" style="float:left; margin:10px"/>
+	<p>
+		To the left is a screenshot of "Table 5-4. Full-speed Isochonous Transaction Limits" from the USB 2.0 standard <a href="http://sdphca.ucsd.edu/Lab_Equip_Manuals/usb_20.pdf" target="_blank">[Ref]</a>.
+	</p>
+	<p>
+		To see how the limits are arrived at lets consider transfering the maximum isochronous packet size of 1023 bytes. Given the 9 bytes header we have a total of 1032 byes. At 12 Mbps, which is 1.5MBps, 1032 bytes takes 688uS. Thus in the 1 millisecond frame time allocated we can only do one such transfer. 312uS are not used, which is equivalent to 468 bytes.
+	</p>
+	<p>
+		The standard has similar tables for high speed and low speed transfers too...
+	</p>
+	<p>
+		If you were to look at "Table 5-5.  High-speed Isochronous Transaction Limits", you might see something that puzzels you at first. Remember that high speed packets can be up to 1024 bytes. But, the table dows payloads of 2048 bytes and 3072 bytes as well. Why? The reason is that HS devices can specify 1, 2 or 3 transfers per microframe, hence the
+		higher effective payloads.
+	</p>
+</div>
 
+<h2>Charging</h2>
+<div>
+	<h3>References</h3>
+	<div>
+		<ul>
+			<li><a href="https://www.analog.com/en/technical-articles/the-basics-of-usb-battery-charging.html" target="_blank">The Basics of USB Battery Charging</a>.</li>
+		</ul>
+	</div>
+
+	<h3>Notes</h3>
+	<div>
+		<ul>
+			<li>Original USB 1&2 (prior to BC1.1): Two power source types:
+				<ol>
+					<li>5V, 500mA (high power)</li>
+					<li>5V, 100mA (low power)</li>
+					<li>5V, 2.5mA (suspended)</li>
+				</ol>
+				On connection device can draw 100mA until power budget negotiated. Max possible draw is 500mA.
+			</li>
+			<li>Battery Charging Specification, Rev 1.1 (BC1.1). Defines additional power sources:
+				<ol>
+					<li><em>Standard downstream port (SDP)</em>:
+						<ul><li>Power same as Original USB 1&2.
+							</li>
+							<li>Identify by detecting that the USB data lines, D+ and D-, are separately grounded through 15 KOhms (still needs to enumerate).
+							</li>
+						</ul>
+					</li>
+					<li><em>Charging downstream port (CDP)</em>:
+						<ul>
+							<li>Can supply up to 1.5A (before enumeration)</li>
+							<li>Identify by means of a hardware handshake implemented by manipulating and monitoring the D+ and D- lines before turning the data lines over to the USB transceiver.
+						</ul>
+					</li>
+					<li><em>Dedicated charging port (DCP)</em>:
+						<ul>
+							<li>Power sources that no not enumerate, like wall warts.</li>
+							<li>Supply up to 1.5A.</li>
+							<li>Identified by a short between D+ to D-.</li>
+						</ul>
+					</li>
+				</ol>
+			</li>
+		</ul>
+	</div>
+</div>
 
 </div> <!-- END H1 padding div -->
 </div>
