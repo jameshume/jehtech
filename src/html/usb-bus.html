@@ -56,6 +56,8 @@
 		<ul>
 			<li><a href="https://www.analog.com/en/technical-articles/the-basics-of-usb-battery-charging.html" target="_blank">The Basics of USB Battery Charging</a>.</li>
 			<li><a href="https://en.wikipedia.org/wiki/USB_hardware" target="_blank">USB hardware</a>.</li>
+			<li><a href="https://www.analog.com/en/technical-articles/overview-of-usb-battery-charging-revision-12-and-the-important-role-of-charger-detectors.html" target="_blank">Overview of USB Battery Charging Revision 1.2 and the Important Role of Charger Detectors</a></li>
+			<li><a href="https://microchip.my.site.com/s/article/Whats-the-Difference-between-BC1-1-and-BC1-2">What is the difference between USB Battery Charging 1.1 (BC1.1) and 1.2 (BC1.2)?</a></li>
 		</ul>
 	</div>
 
@@ -94,6 +96,13 @@
 					</li>
 				</ol>
 			</li>
+			<li> BC1.2 -- Oct 2011
+				<ul>
+					<li>Allows DCPs to output more than 1.5A</li>
+					<li>Increase minimum CDP current to 1.5A. Without change, PDs had to draw less than 500mA.</li>
+					<li>And more but those 2 seemd to be the most relatable to abolsulte current draws.</li>
+				</ul>
+			</li>
 			<li>Accessory Chargin Adapters (ACA)
 				<ul>
 					<li>For USB On-The-Go devices.</li>
@@ -108,6 +117,32 @@
 
 			</li>
 		</ul>
+		<p>
+			The Analog.com article (see references) had the best charger detection process section:
+		</p>
+		<ol>
+			<li>
+				<em>V<sub>BUS</sub> detection</em>: Thee voltage and ground pin contact first. V<sub>BUS</sub> detect <em>before</em> charger detection can start.
+			</li>
+			<li>
+				<em>Data contact detection (DCD)</em>: Ensure data pins connect before detecton starts to avoid incorrect identification.
+			</li>
+			<li>
+				<em>Primary charger detection</em>: Differentiation between SDP port and CDP/DCP ports.
+			</li>
+			<li>
+				<em>Secondary charger detection</em>: Differentiate between CDP v.s. DCP.
+			</li>
+			<li>
+				<em>CDP charge current limit</em>: Determine whether high current charging is possible.
+			</li>
+		</ol>
+		<p>
+			From the Anlog.com website:
+		</p>
+		<p>
+			<img src="https://www.analog.com/-/media/analog/en/landing-pages/technical-articles/overview-of-usb-battery-charging-revision-12-and-the-important-role-of-charger-detectors/5936fig02.png?imgver=1"/>
+		</p>
 	</div>
 </div>
 
