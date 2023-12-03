@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>590</x>
+      <y>300</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>USB Device</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>590</x>
+      <y>400</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Config 0</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>450</x>
+      <y>500</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Interface 0</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>590</x>
+      <y>500</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Interface 1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>780</x>
+      <y>500</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Interface N</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>530</x>
+      <y>610</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Endpoint IN</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>650</x>
+      <y>610</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Endpoint OUT</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>780</x>
+      <y>610</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Endpoint IN</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>570</x>
+      <y>520</y>
+      <w>90</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>70.0;10.0;70.0;50.0;10.0;50.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>630</x>
+      <y>420</y>
+      <w>30</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>490</x>
+      <y>440</y>
+      <w>170</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>150.0;20.0;10.0;20.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>630</x>
+      <y>440</y>
+      <w>220</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;20.0;200.0;20.0;200.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>630</x>
+      <y>320</y>
+      <w>30</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>630</x>
+      <y>550</y>
+      <w>90</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;20.0;70.0;20.0;70.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>820</x>
+      <y>520</y>
+      <w>30</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>300</x>
+      <y>500</y>
+      <w>140</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>An interface is a collection of related device functionalities.
+bg=blue
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>700</x>
+      <y>350</y>
+      <w>140</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>Devices usually only have 1 config. Only 1 can be active at a time.
+bg=blue
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>890</x>
+      <y>610</y>
+      <w>290</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>An interface can have as many endpoints as it likes.
+
+IN/OUT is from the perspective of the host.
+
+EP is a location which USB Request Buffers (URBs) can be directed to.
+bg=blue
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
