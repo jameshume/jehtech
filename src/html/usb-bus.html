@@ -30,6 +30,40 @@
 
 <h2>Whirlwind Tour</h2>
 <div>
+	<ul>
+		<li>D+, D- differential pair for data signalling (2 pairs for USB).</li>
+		<li>Tiered star topology.</li>
+		<li>All comms (exceot sometimes USB 3) initiatied by host.</li>
+		<li>Devices are self-describing using descriptors.</li>
+		<li>
+			Transfer types:
+			<ul>
+				<li><em>Interrupt</em>. [1 per n frames]. 
+					<ul>
+						<li>USB can't really do interrupts as the host must poll devices.</li>
+						<li>Guaranteed brandwidth - reliable (CRC/handshake).</li>
+						<li>E.g. mouse.</li>
+					</ul>
+				</li>
+				<li><em>Isochronous</em>. [1 per frame].
+					<ul>
+						<li>Time sensitive, guaranteed brandwidth, not reliable.</li>
+					</ul>
+				</li>
+				<li><em>Control</em>. [n per m frames].
+					<ul>
+						<li>>Best effort bus access. Reliable.</li>
+						<li>E.g. turn this on/off etc.</li>
+					</ul>
+				</li>
+				<li><em>Bulk</em>. [n per m frames].
+					<ul>
+						<li>Good effort bus access - reliable (CRC/handshake).</li>
+					</ul>
+				</li>
+			</ul>
+		</li>
+	</ul>
 	<p>
 		<img src="##IMG_DIR##/usb_structure.png"/>
 	</p>
