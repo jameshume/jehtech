@@ -27,20 +27,50 @@
 <div id="page_contents">
 </div>
 
+<h2>References</h2>
+<div>
+	<ul>
+		<li><a href="https://www.usbmadesimple.co.uk/" target="_blank">USB Made Simple</a>.</li>
+		<li><a href="https://www.usb.org/document-library/usb-20-specification" target="_blank">USB 2.0 specification</a>.</li>
+	</ul>
+</div>
+
 
 <h2>Whirlwind Tour</h2>
 <div>
 	<ul>
 		<li>D+, D- differential pair for data signalling (2 pairs for USB).</li>
 		<li>Tiered star topology.</li>
-		<li>All comms (exceot sometimes USB 3) initiatied by host.</li>
+		<li>All comms (except sometimes USB 3) initiatied by host. The USB is a polled bus. The Host Controller 
+			initiates all data transfers.
+		    <p></p>
+			<blockquote>
+				<p>
+				Each transaction begins when the
+Host Controller, on a scheduled basis, sends a USB packet describing the type and direction of transaction,
+the USB device address, and endpoint number. This packet is referred to as the "token packet". The USB
+device that is addressed selects itself by decoding the appropriate address fields. In a given transaction, data
+is transferred either from the host to a device or from a device to the host. The direction of data transfer is
+specified in the token packet. The source of the transaction then sends a data packet or indicates it has no data to transfer. The destination, in general, responds with a handshake packet indicating whether the
+transfer was successful.
+				</p>
+				<p>
+					USB establishes a 1 millisecond time base called a frame on a full-/low-speed bus and a 125 µs time base
+					called a microframe on a high-speed bus. A (micro)frame can contain several transactions. Each transfer
+					type defines what transactions are allowed within a (micro)frame for an endpoint. Isochronous and interrupt
+					endpoints are given opportunities to the bus every N (micro)frames.					
+				</p>
+			</blockquote>
+			<p></p>
+		</li>
 		<li>Devices are self-describing using descriptors.</li>
-		<li>
-			Transfer types:
+		<li>USB data transfers occur through a series of events called transactions. Transactions are conducted within a host-controlled time
+			interval called a frame. The length and frequency of the transactions depend upon the transfer type being used for an endpoint.
+			<br>Transfer types:
 			<ul>
 				<li><em>Interrupt</em>. [1 per n frames]. 
 					<ul>
-						<li>USB can't really do interrupts as the host must poll devices.</li>
+						<li>USB can't really do interrupts as the host must poll >devices.</li>
 						<li>Guaranteed brandwidth - reliable (CRC/handshake).</li>
 						<li>E.g. mouse.</li>
 					</ul>
@@ -48,26 +78,50 @@
 				<li><em>Isochronous</em>. [1 per frame].
 					<ul>
 						<li>Time sensitive, guaranteed brandwidth, not reliable.</li>
+						<li>Periodic, continuous communication between host and device.</li>
+						<li>Guaranteed access to USB bandwidth with bounded latency.</li>
+						<li>Can only be used by full-speed and high-speed devices.</li>
 					</ul>
 				</li>
 				<li><em>Control</em>. [n per m frames].
 					<ul>
-						<li>>Best effort bus access. Reliable.</li>
-						<li>E.g. turn this on/off etc.</li>
+						<li>Best effort bus access. Reliable.</li>
+						<li>Used to configure a device at attach time and can be used for other device-specific
+							purposes, including control of other pipes on the device.</li>
+						<li>Intended to support configuration/command/status type communication flows.</li>
+						<li>Transactions involved:
+							<ol>
+								<li>Setup bus transaction - move requestion information from host.</li>
+								<li>&gt;=0 data transactions - direction has set in setup transaction.</li>
+								<li>Status transaction.</li>
+							</ol>
+						</li>
 					</ul>
 				</li>
 				<li><em>Bulk</em>. [n per m frames].
 					<ul>
 						<li>Good effort bus access - reliable (CRC/handshake).</li>
+						<li>Generally large and bursty.</li>
 					</ul>
 				</li>
 			</ul>
+			<p></p>
+			<blockquote>
+				An endpoint is a uniquely identifiable portion of a USB device that is the terminus of a communication flow
+				between the host and device. Each USB logical device is composed of a collection of independent
+				endpoints. Each logical device has a unique address assigned by the system at device attachment time.
+				Each endpoint on a device is given at design time a unique device-determined identifier called the endpoint
+				number. Each endpoint has a device-determined direction of data flow. The combination of the device
+				address, endpoint number, and direction allows each endpoint to be uniquely referenced. Each endpoint is a
+				simplex connection that supports data flow in one direction: either input (from device to host) or output
+				(from host to device).	
+			</blockquote>
+			<p></p>
 		</li>
 	</ul>
 	<p>
 		<img src="##IMG_DIR##/usb_structure.png"/>
 	</p>
-
 	<p>
 		<img src="##IMG_DIR##/USB.png" alt="Mind map of USB info"/>
 	</p>
