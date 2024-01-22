@@ -349,6 +349,76 @@ always @(posedge clk)
 This is because for non-blocking assignment, as we saw, on the rising edge the LHS of all of the `<=`
 expressions will be evaluated and the assigned in the next "phase" (but obs on the same rising edge).
 
+##### Blocking v.s. Non-Blocking Example
+Compare the following two code blocks, one using blocking and the other using non-blocking assignment to
+create different connections between two D-type flip flops. [[Ref]](https://www.udemy.com/course/digital-design-using-verilog-hdl-programming-with-practical/learn/lecture/30061368). It demonstrates the difference between blocking and non blocking assignment
+nicely...
+
+<table>
+    <tr>
+        <td><code>
+module block (
+    input D, 
+    input clk, 
+    output Q1, 
+    output Q1
+):
+    always @(posedge clk)
+    begin
+        Q1 = D;    // BLOCKING
+        Q2 = Q1;   // STEP-BY-STEP EXECUTION
+    end
+endmodule
+        </code></td>
+        <td><code>
+module block (
+    input D, 
+    input clk, 
+    output Q1, 
+    output Q1
+):
+    always @(posedge clk)
+    begin
+        Q1 = D;    // NON-BLOCKING
+        Q2 = Q1;   // PARALLEL EXECUTION
+    end
+endmodule
+        </code></td>
+    </tr>
+</table>
+
+This produces the following output:
+
+```
+                                    ____      ____      ____
+                           CLK ____|    |____|    |____|    |_
+                                   :         :         :
+                                 _______     :  _________
+                           D   _|  :    |______|       : |____
+                                   :         :         :
+                                   :         :         :
+BLOCKING ASSIGNMENT                :                                     
+                                   :         :         :                                _______
+                                   :_________           ______           } D ------+---|D     Q|----Q1
+                           Q1  ____|         |_________|                 }         |   |       |
+                                   :         :         :                 }         |   |       |
+                                    _________           ______           }         |   |__CLK__|
+                           Q1  ____|         |_________|                 } CLK-+---|-------^     
+                                   :         :         :                       |   |    _______
+                                   :         :         :                       |   +---|D     Q|----Q2
+                                   :         :         :                       |       |       |
+                                   :         :         :                       |       |       |
+                                   :         :         :                       |       |__CLK__|          
+NON BLOCKING ASSIGNMENT            :         :         :                       +-----------^     
+                                   :         :         :                             
+                                   :_________           ______           }        _______   Q1  _______      
+                           Q1  ____|         |_________|                 } D-----|D     Q|-----|D     Q|---- Q2
+                                   :         :         :                 }       |       |     |       |
+                                              _________                  }       |       |     |       |
+                           Q1  ______________|         |______           }       |__CLK__|     |__CLK__|
+                                                                           C---------^-------------^         
+```
+z
 ##### Blocking v.s. Non-Blocking Guidelines
 Taken verbatim from [[Ref]](http://www.sunburst-design.com/papers/CummingsSNUG2000SJ_NBA.pdf).
 
@@ -375,6 +445,7 @@ The value of LHS is updated when RHS changes.
 
 Continual assignment is done using the `assign` keyword and must be done *outside* a block. It is limited to basic boolean
 and ternary-if (`bool ? do-if-true : do-if-false`) operators.
+
 
 
 ### Vectors
@@ -501,8 +572,10 @@ One commenators has the following to say:
 > assign temp = a+b;
 > assign next_test=temp>5'hF ? 4'h0 : temp[3:0];
 
+<p></p>
+
 #### Scope
-The `always` block does not have scope like one might expect in an actual software (i.e., hot hardware) language like C.
+The `always` block does **not** have scope like one might expect in an actual software (i.e., hot hardware) language like C.
 And because all of the `always` blocks in a module (program?) execute CONCURRENTLY, the following should throw an error because
 `var` can't get two values concurrently!
 
