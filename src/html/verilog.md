@@ -23,6 +23,7 @@
     </p>
     <footer>--<a href="https://www.stepfpga.com/doc/_media/fpgasfordummiesebook.pdf">FPGAs for Dummies</a></footer>
 </blockquote>
+<p></p>
 
 ## Small Example Of Parallel Execution
 
