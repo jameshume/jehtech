@@ -244,7 +244,7 @@ endmodule
 
 ### Assignment
 #### Proceedural Assignment
-
+<p></p>
 > Procedural assignments update the value of variables under the control of the procedural flow
 > constructs that surround them.
 
@@ -284,6 +284,7 @@ In other words:
 > is said to "block" other assignments until the current assignment has completed [[Ref]](http://www.sunburst-design.com/papers/CummingsSNUG2000SJ_NBA.pdf)
 
 ##### Non-Blocking Proceedural Assignment
+<p></p>
 > The nonblocking procedural assignment allows assignment scheduling without blocking the procedural
 > flow. The nonblocking procedural assignment statements can be used whenever several variable assignments
 > within the same time step can be made without regard to order or dependence upon each other. [[Ref]](https://www.eg.bucknell.edu/~csci320/2016-fall/wp-content/uploads/2015/08/verilog-std-1364-2005.pdf)
@@ -347,6 +348,18 @@ always @(posedge clk)
 
 This is because for non-blocking assignment, as we saw, on the rising edge the LHS of all of the `<=`
 expressions will be evaluated and the assigned in the next "phase" (but obs on the same rising edge).
+
+##### Blocking v.s. Non-Blocking Guidelines
+Taken verbatim from [[Ref]](http://www.sunburst-design.com/papers/CummingsSNUG2000SJ_NBA.pdf).
+
+1. When modeling sequential logic, use nonblocking assignments.
+2. When modeling latches, use nonblocking assignments.
+3. When modeling combinational logic with an always block, use blocking assignments.
+4. When modeling both sequential and combinational logic within the same always block, use nonblocking assignments.
+5. Do not mix blocking and nonblocking assignments in the same always block.
+6. Do not make assignments to the same variable from more than one always block.
+7. Use $strobe to display values that have been assigned using nonblocking assignments.
+8. Do not make assignments using #0 delays. 
 
 
 #### Continual Assignment
