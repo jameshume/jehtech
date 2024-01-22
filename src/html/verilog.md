@@ -1,8 +1,38 @@
+## Resources
 * Try out https://edaplayground.com/
-* See [FPGAs For Dummies](https://www.stepfpga.com/doc/_media/fpgasfordummiesebook.pdf)
+* See 
+    * [FPGAs For Dummies](https://www.stepfpga.com/doc/_media/fpgasfordummiesebook.pdf)
+    * [Verilog Pro](https://www.verilogpro.com/)
+    * [Nand Land Verilog Tutorials](https://nandland.com/learn-verilog/)
+    * [FPGA Architectures: An Overview](https://cse.usf.edu/~haozheng/teach/cda4253/doc/fpga-arch-overview.pdf)
+    * [Advanced Verilog - ECS 270 v10/23/0](https://www.eecs.umich.edu/courses/eecs270/270lab/270_docs/Advanced_Verilog.pdf)
+    * [IEEE Standard for Verilog(R) Hardware Description Language](https://www.eg.bucknell.edu/~csci320/2016-fall/wp-content/uploads/2015/08/verilog-std-1364-2005.pdf)
 * Unlike "normal" software programming languages like "C", which is sequention, 
   HDL statements are executed in *parallel* and continually execute (*always*) for
   a specified number of times or times.
+
+## Quick Looks At FPGAs
+<p></p>
+<blockquote>
+    <p>
+        Field programmable Gate Arrays (FPGAs) are pre-fabricated silicon devices that can
+        be electrically programmed in the field to become almost any kind of digital circuit
+        or system. For low to medium volume productions, FPGAs provide cheaper solution
+        and faster time to market as compared to Application Specific Integrated Circuits
+        (ASIC) which normally require a lot of resources in terms of time and money to
+        obtain first device
+    </p>
+    <p>
+        Normally FPGAs comprise of:
+    </p>
+    <ul>
+        <li>Programmable logic blocks which implement logic functions.</li>
+        <li>Programmable routing that connects these logic functions.</li>
+        <li>I/O blocks that are connected to logic blocks through routing interconnect and that make off-chip connections.</li>
+    </p>
+    <footer>-- <a href="">https://cse.usf.edu/~haozheng/teach/cda4253/doc/fpga-arch-overview.pdf</a></footer>
+</blockquote>
+<p></p>
 
 <blockquote>
     <p>
@@ -24,6 +54,8 @@
     <footer>--<a href="https://www.stepfpga.com/doc/_media/fpgasfordummiesebook.pdf">FPGAs for Dummies</a></footer>
 </blockquote>
 <p></p>
+
+
 
 ## Small Example Of Parallel Execution
 
@@ -49,26 +81,48 @@ module smallExample (A,B,C,Q);
                             // where the @(*) syntax is a shorthand for specifying sensitivity
                             // to all signals in this block.
                             // "," means AND. To or replace "," with " or ".
-        begin
-            D <= A nor B;   // "<=" means PARALLEL EXECUTION
-            E <= B and C;
-            Q <= D or E;
-        end
+    begin
+        D <= A nor B;       // "<=" means PARALLEL EXECUTION
+        E <= B and C;
+        Q <= D or E;
+    end
 
 endmodule
 
 ```
 
-In the above the execution of the logic is done in *parallel*, as noted by the use of the `<=` operator.
-The `always @(*)`` construct is typically used in combinational logic, where the output is purely a
-*function of the inputs* and *doesn't depend on any internal state*. 
+The above is an example of combinatorial logic: logic that does not require a clock to operate.
 
-Where `=` to be used then the execution would be sequential. In sequential logic, where the output
-depends on the current state and inputs, you might use `always @(posedge clk or posedge rst)` to
+In the above, the execution of the logic is done in *parallel*, as noted by the use of the `<=` operator.
+
+Where `=` to be used, then the execution would be sequential. In sequential logic, where the output
+depends on the current state and inputs, you might use something like `always @(posedge clk or posedge rst)` to
 trigger the block on positive clock edges or resets.
 
 The `always` block is continuously executed, triggered on changes to any of the signals in the
 sensitivity list.
+
+Note that the following assignments in the `always` block shown are identical to continuous assignments
+outside of a block:
+
+```
+always @(A,B,C,D,E)
+begin
+    D <= A nor B;
+    E <= B and C;
+    Q <= D or E;
+end
+```
+
+Is identical to:
+
+```
+assign D = A nor B;
+assign E = B and C;
+assign Q = D or E;
+```
+
+Because there is no clock being used.
 
 At the start of the example we see ``timescale 1 ns/1 ps`, which is used to specify the time unit and
 precision for the simulation: ``timescale time_unit / time_precision`. 
@@ -141,21 +195,31 @@ endmodule
     * Logic values: `1`, `0`, `x`, `z`.
       `x` means "don't care" and `z` means "high impedance".
     * `wire` (nets): 
-        * Wires are used for connecting different elements. They can be treated
-          as physical wires.
-        * They can be read or assigned.
-        * No values get stored in them.
+        * Wires are used for connecting different elements. They can be treated as physical wires - they are a type of net.
+        * They can be read or assigned, but only by continuous assignment can they be assigned. I.e. use of `assign` statement
+          outside of an `always` block or driven directly from an output port.
+        * No values get stored in them: teh value is derived from what is being driven from its drivers.
         * They need to be driven by either continuous assign statement or from a port of a module. [[Ref]](https://stackoverflow.com/a/33462996).
         * By default they are 1-but wide, i.e, they are *scalar*. A vector is required to hold values other than 0 or 1 (see later).
     * `reg` (registers): 
         * Use when you want to represent a piece of storage.
-        * Drive from an `always` block.
+        * Can only be assigned using proceedural statements, I.e., drive from an `always`/`initial` block.
         * Contrary to their name, regs don't necessarily correspond to physical registers. They represent
             data storage elements in Verilog/SystemVerilog. They retain their value until the next value is assigned
             to them (not through an `assign` statement). They can be synthesized to FF, latch or combinatorial
             circuits. [[Ref]](https://stackoverflow.com/a/33462996).
         * Put another way, "a register remembers a piece of information until it is told to remember something else"
           [[Ref]](https://www.stepfpga.com/doc/_media/fpgasfordummiesebook.pdf).
+    * `reg` v.s. `wire`
+        * See also
+            * [Verilog reg, Verilog wire, SystemVerilog logic. What’s the difference? by Jason Yu](https://www.verilogpro.com/verilog-reg-verilog-wire-systemverilog-logic/)
+        * For `wire` vs `reg`, Jason Yu (see link above) has some good rule's of thumb:
+            1. Use Verilog `reg` when you want to represent a piece of storage, and use Verilog `wire`
+            when you want to represent a physical connection.
+            2. Drive a Verilog `wire` with `assign` statement or port output
+            3. Drive a Verilog `reg` from an `always` block. If you want to drive a physical connection with
+               combinatorial logic inside an `always@(*)` block, then you have to declare the physical
+               connection as Verilog `reg`.
     * integer
     * real
     * string
@@ -163,24 +227,142 @@ endmodule
     * parameter: same as `const` in C
     * vectors
     * arrays
+* Operators
+    * Conacatenation `{}` [[Ref]](https://nandland.com/concatenation-operator-2/).
+        * Can concatenate two more more types/signals (not necessarily the same).
+        * Examples:
+            * `wire [7:0] C = {A, B}`, where `A = 4'b0111` and `B=4'b1100`, results in `C=8'01111100` or `0x7C`.
+            * `wire [15:0] C = {A, B}`, where `A = 4'b0111` and `B=4'b1100`, results in
+              `C=8'0000000001111100` or `0x007C`. This demonstrates padding.
+            * `r_SHIFT_REG[7:0] <= {r_SHIFT_REG[6:0], r_SHIFT_REG[7]};` demonstrates a circular rotation of a buffer.
+    * Replication `{}`.
+        * `<repition count>{<thing-to-replicate>}`
+        * The repetition multiplier must be a constant.
+        * Example, if `reg [3:0] V = 4'b0111;`:
+            * `3{V}` results in `12b011101110111`.            
+
 
 ### Assignment
-A brief not on assignment operators [[Ref]](https://stackoverflow.com/a/27435773):
+#### Proceedural Assignment
 
-* `<=` is non-blocking and is performed on every positive edge of clock. These are evaluated in parallel so
+> Procedural assignments update the value of variables under the control of the procedural flow
+> constructs that surround them.
+
+> ...procedural assignments put values in variables. The assignment does not have duration; instead,
+> the variable holds the value of the assignment until the next procedural assignment to that
+> variable.
+>
+> Procedural assignments occur within procedures such as always, initial (see 9.9), task, and function (see
+> Clause 10) and can be thought of as "triggered" assignments...
+
+
+A brief note on assignment operators [[Ref]](https://stackoverflow.com/a/27435773):
+* `<=` is **non-blocking** and is performed on every positive edge of clock. These are evaluated in parallel so
    no guarantee of order. An example of this would be a register.
-* `assign` is continual assignment to wire outside an always statement. value of LHS is updated when RHS changes.
-* `=` is blocking assignment, inside always statements enforces sequential order.
+* `=` is **blocking** assignment, which should only be used inside `always` statements and enforces sequential order.
 
 Both `<=` and `=` *must be used within an `initial` or `always` block*.
 
-Delayed assignment can be done using the `#` oerator. E.g.
+Delayed assignment can be done using the `#` operator. E.g.
 
 ```
-always
+always @(*)
 begin
-    #(cycle/2)
+    #(cycle/2) ... this is done on every cycle/2-th period
+end
 ```
+Be warned: [Nonblocking Assignments in Verilog Synthesis, Coding Styles That Kill!](http://www.sunburst-design.com/papers/CummingsSNUG2000SJ_NBA.pdf).
+
+##### Blocking Proceedural Assignment
+> A blocking procedural assignment statement shall be executed before the execution of the statements that
+> follow it in a sequential block ... A blocking procedural assignment statement shall not prevent the
+> execution of statements that follow it in a parallel block ... [[Ref]](https://www.eg.bucknell.edu/~csci320/2016-fall/wp-content/uploads/2015/08/verilog-std-1364-2005.pdf)
+
+In other words:
+> A blocking assignment gets its name because a blocking assignment must evaluate the RHS arguments 
+> and complete the assignment without interruption from any other Verilog statement. The assignment
+> is said to "block" other assignments until the current assignment has completed [[Ref]](http://www.sunburst-design.com/papers/CummingsSNUG2000SJ_NBA.pdf)
+
+##### Non-Blocking Proceedural Assignment
+> The nonblocking procedural assignment allows assignment scheduling without blocking the procedural
+> flow. The nonblocking procedural assignment statements can be used whenever several variable assignments
+> within the same time step can be made without regard to order or dependence upon each other. [[Ref]](https://www.eg.bucknell.edu/~csci320/2016-fall/wp-content/uploads/2015/08/verilog-std-1364-2005.pdf)
+
+If there is no timing control in the block in which the `<=` is being used, then the order of
+evalulation of the expressions is not specified - i.e., no particular ordering is guaranteed.
+
+However, if timing control is specified, then evaluation occurs in two steps:
+
+1. At the trigger the RHS of the nonblocking assignments are evaluated, but the updates are
+   secheduled for "later" in a second phase, the "nonblocking assign update events".
+2. In the nonblock assign update event the RHS values that were evaluated and remembered in
+   step one are assigned to the LHS.
+
+The specification [[Ref]](https://www.eg.bucknell.edu/~csci320/2016-fall/wp-content/uploads/2015/08/verilog-std-1364-2005.pdf)
+gives this example:
+
+```
+init begin
+    a = 0;
+    b = 1;
+end
+
+always @(posedge c) begin
+    a <= b;
+    b <= a;
+end
+```
+
+As `<=` does not block, the only way these two statements could execute concurrently and not
+involve a race condition is by using the above strategy. That is why the output of the
+above is deterministic and after the first clock edge `a` will be `1` and `b` will be `0`.
+
+As another example, the following creates a race condition because the two `always` blocks execute simultaneously:
+
+```
+always @(posedge clk)
+    a = b;
+
+always @(posedge clk)
+    b = a;
+```
+
+This is a race condition because both equations are scheduled to execute in the same simulation time step,
+and when blocking assignments are scheduled to execute in the same time step, the order execution is
+unknown [[Ref]](http://www.sunburst-design.com/papers/CummingsSNUG2000SJ_NBA.pdf). 
+
+> A Verilog race condition occurs when two or more statements that are scheduled to execute in
+> the same simulation time-step, would give different results when the order of statement
+> execution is changed, as permitted by the IEEE Verilog Standard. [[Ref]](http://www.sunburst-design.com/papers/CummingsSNUG2000SJ_NBA.pdf)
+
+However, if non-blocking assignment is used the race condition is removed.
+
+```
+always @(posedge clk)
+    a <= b; // No race condition any more
+
+always @(posedge clk)
+    b <= a; // No race condition any more
+```
+
+This is because for non-blocking assignment, as we saw, on the rising edge the LHS of all of the `<=`
+expressions will be evaluated and the assigned in the next "phase" (but obs on the same rising edge).
+
+
+#### Continual Assignment
+The keyword `assign` is used for continual assignment to a `wire` outside an `always` statement.
+The value of LHS is updated when RHS changes.
+
+> Continuous assignments drive nets and are evaluated and updated whenever an input operand
+> changes value. 
+
+> Assignments on nets shall be continuous and automatic. In other words, whenever an operand in
+> the righthand expression changes value, the whole right-hand side shall be evaluated. If the
+> new value is different from the previous value, then the new value shall be assigned to the left-hand side. 
+
+Continual assignment is done using the `assign` keyword and must be done *outside* a block. It is limited to basic boolean
+and ternary-if (`bool ? do-if-true : do-if-false`) operators.
+
 
 ### Vectors
 Wires and registers are, by default, *scalar*. I.e., they are 1-bit wide and can hold the numbers 0 or 1. To hold
@@ -201,6 +383,130 @@ Arrays are similar to C arrays - they are a repetition of a type. So,
 ```
 reg my_reg1[0:11];      // is an array of 12 1-bit register variables
 reg [7:0]my_reg2[0:11]; // is an array of 12 8-bit register variables - an array of vectors, known as a MEMORY ARRAY.
+```
+
+Verilog arrays can only be reference one element at a time.
+
+### Always Blocks
+See [Tutorial – Sequential Code on your FPGA -- Using Process (in VHDL) or Always Block (in Verilog) with Clocks](https://nandland.com/tutorial-sequential-code-on-your-fpga/).
+
+Not usually used to combinatorial logic as the same effect can be achieved with `assign`, outside of a block.
+
+The NANDLAND author gives the following two, almost equivalent pieces of code:
+
+```
+always @ (*)
+  begin
+    and_gate <= input_1 & input_2;
+  end
+```
+
+... and ...
+
+```
+// Taken from https://nandland.com/tutorial-sequential-code-on-your-fpga/
+always @ (posedge i_clock)
+  begin
+    and_gate <= input_1 & input_2;
+  end
+```
+
+They look almost identical, except that the first uses *combinatorial* logic and the latter *sequential* logic. Why? In the
+first `and_gate` is *immediately updated* whenever any of its inputs change. In the latter, `and_gate` is *not immediately* updated
+whenever an input changes... it has to wait for the next rising clock edge!
+
+The author also gives the following example:
+
+```
+// Taken from https://nandland.com/tutorial-sequential-code-on-your-fpga/
+reg test1 = 1'b1;
+reg test2 = 1'b0;
+reg test3 = 1'b0;
+reg test4 = 1'b0;
+ 
+always @ (posedge i_clock)
+  begin
+    test2 <= test1;
+    test3 <= test2;
+    test4 <= test3;
+  end
+```
+
+On each rising clock edge *all* of the lines are executed in parallel -- at the same time.
+
+The main point of this example is that although `test4` may go high on the 3rd clock edge
+it is not valid until the fourth clock cycle due to *propogation time*. This is the case
+for all the clock cycles: `testX` will go high, but its not until the next clock cycle
+that it is valid and can be clocked by the next flip-flop as it propogates somewhere
+between the current and before the next clock edge.
+
+This chimes well with an interesting post I found on reddit: [When to use continuous vs procedural assignment?](https://www.reddit.com/r/FPGA/comments/av739x/when_to_use_continuous_vs_procedural_assignment/).
+
+When using continuous asignments one has to think about *propogation* delay because it
+can restrict the clock frequency.
+
+Its replicated here:
+
+The guys code was:
+
+```
+...
+assign next_test = ((a + b) > 4'hF) ? 4'h0 : (a + b);
+
+always @(posedge clk)
+begin
+    if(next_test == 4'hF) begin
+        test <= 4'h0;
+    end 
+    else begin
+        test <= next_test
+    end
+end
+...
+```
+
+The question is should `next_test` be assigned in the `always` block rather than continuously
+assigned.
+
+One commenators has the following to say:
+
+> You can stack any number of continuous assignments on top of each other. But it means that
+> the entire pipeline would have to fit the timing constraints. As it is coded, your software
+> will try to get from the values of 'a' and 'b' to the value of 'test' in one clock. Along the
+> way, it needs to calculate a+b, compare it with 0, do conditional assignment, etc., etc. That's
+> a long path with multiple chained operations, each of which incurs some propagation delay, which
+> brings down the maximum clock rate at which the design can run.
+> 
+> If you calculate 'next_test' procedurally, you need one clock to get from 'a' and 'b' to 'next_test'
+> and a second clock to get from 'next_test' to 'test'. You use more registers and you have higher latency,
+> but the maximum achievable clock rate is higher.
+>
+> Incidentally, your code seems wrong. If a, b, and next_test are all 4-bit, I think that the result
+> of ((a+b)>4'hF) is always false, because (a+b) is going to be 4-bit too. You'd need something like
+> 
+> wire [4:0] temp;
+> assign temp = a+b;
+> assign next_test=temp>5'hF ? 4'h0 : temp[3:0];
+
+#### Scope
+The `always` block does not have scope like one might expect in an actual software (i.e., hot hardware) language like C.
+And because all of the `always` blocks in a module (program?) execute CONCURRENTLY, the following should throw an error because
+`var` can't get two values concurrently!
+
+```
+always @(posedge clk)
+    ...
+    var1 = ....;
+    ...
+end
+
+...
+
+always @(posedge clk)
+    ...
+    var1 = ....;
+    ...
+end
 ```
 
 
