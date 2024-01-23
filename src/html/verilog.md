@@ -282,6 +282,48 @@ In other words:
 > and complete the assignment without interruption from any other Verilog statement. The assignment
 > is said to "block" other assignments until the current assignment has completed [[Ref]](http://www.sunburst-design.com/papers/CummingsSNUG2000SJ_NBA.pdf)
 
+My colleage has warned me off using blocking assignment in proceedural blocks:
+
+> = should not be used in always blocks, <= should only be used in always blocks.
+> ...
+> Because, for synthesizable logic, all the things that happen inside an always block must happen simultaneously. 
+> They can't happen in sequence, as would be the case with a blocking assignment.
+> ...
+> The thing with VHDL and Verilog is they were both originally designed for modelling digital systems and then 
+> kind of borrowed for doing FPGA development, so it's completely possible to write code that is perfectly valid, 
+> in terms of syntax and function but completely impossible to synthesize into something that'll run in an FPGA. 
+> So, it is valid to put blocking assignments in an always block, but most tools won't synthesize that because 
+> there is no implicit way for an FPGA to sequence the assignments.
+> ...
+> Synthesizability, for some tools, may also depend on whether blocking assignments, inside an always block, have interdependencies. For example:
+> 
+> ``` 
+> always @(posedge clk) begin
+>   x = b;
+>   y = c;
+> end
+> ```
+>  
+> may synthesize fine, because it's irrelevant whether assignment was blocking or non-blocking, in that case. But:
+>  
+> ```
+> always @(podwdge clk) begin
+>   x = b;
+>   y = x;
+> end
+> ```
+> 
+> may not, because y depends on x having been modified first.
+>
+> I guess, in short, what I'm saying is; blocking assignments, inside always blocks (at least, 
+> podedge/negedge always blocks) cause headaches, non-blocking assignments don't.
+>
+> FPGAs are designed to 'run' synchronous register transfer logic - That is what they're optimized for. 
+> They are based on the concept of clock domains where everything transitions on a clock edge and persists 
+> between clock edges. If you write your VHDL/Verilog with this principal in mind and describe, explicitly,
+> what __happens on a clock edge__, you maximize your chances of the code being synthesizable.
+<p></p>
+
 ##### Non-Blocking Proceedural Assignment
 <p></p>
 > The nonblocking procedural assignment allows assignment scheduling without blocking the procedural
@@ -471,10 +513,16 @@ reg [7:0]my_reg2[0:11]; // is an array of 12 8-bit register variables - an array
 
 Verilog arrays can only be reference one element at a time.
 
+### Vectors and Arrays Layout
+
+In Verilog, you don't usually have very much control over how things get laid out. The tools will usually infer whether, for example, an FPGA's block RAM will be used to implement something or logic units will be used instead. This a memory array (see above) may or may not get allocated to BRAM.
+
 ### Always Blocks
 See [Tutorial – Sequential Code on your FPGA -- Using Process (in VHDL) or Always Block (in Verilog) with Clocks](https://nandland.com/tutorial-sequential-code-on-your-fpga/).
 
-Not usually used to combinatorial logic as the same effect can be achieved with `assign`, outside of a block.
+NOTE **only registers (`reg`) can be used in `always` blocks** and registers are a precious resource.
+
+Not usually used for combinational logic as the same effect can be achieved with `assign`, outside of a block.
 
 The NANDLAND author gives the following two, almost equivalent pieces of code:
 
@@ -495,9 +543,14 @@ always @ (posedge i_clock)
   end
 ```
 
-They look almost identical, except that the first uses *combinatorial* logic and the latter *sequential* logic. Why? In the
+They look almost identical, except that the first uses *combintational* logic and the latter *sequential* logic. Why? In the
 first `and_gate` is *immediately updated* whenever any of its inputs change. In the latter, `and_gate` is *not immediately* updated
 whenever an input changes... it has to wait for the next rising clock edge!
+
+> In traditional Verilog, procedural always blocks are used to model combinational, latch, and sequential
+> logic. Synthesis and simulations tools have no way to know what type of logic an engineer intended to
+> represent. Instead, these tools can only interpret the code within the procedural block, and then "infer",
+> which just a nice way to say "guess", the engineer's intention. [[Ref]](https://sutherland-hdl.com/papers/2013-SNUG-SV_Synthesizable-SystemVerilog_paper.pdf)
 
 The author also gives the following example:
 
@@ -636,7 +689,12 @@ Keywords include `if`-`else`, `case`, which are synthesizable statements, and `w
 Assignment statements such as `=` and `<=` should only be written within a procedural block: `initial` or `always`. Writing
 assignment statements outside of a precedural block is an error.
 
-The *initial block* is only executed once and starts at time 0. Useful, for example, initialising variables. It is NOT synthesizable, so only used in simulator (see later section).
+The *initial block* is only executed once and starts at time 0. Useful, for example, initialising variables. It may be syntehsizeable.
+As my colleage said reply to my question:
+
+> > The initial block - is that simulation only?
+> Not necessarily (some synthesis tools may use initial conditions to set the state of the FPGA when it leaves it's
+> configuration phase - personally, I set that explicitly and only use initial statements for simulation).
 
 The *always block* is repeatedly executed in a never ending loop and starts after the intial block.
 
