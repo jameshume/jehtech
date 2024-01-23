@@ -378,8 +378,8 @@ module block (
 ):
     always @(posedge clk)
     begin
-        Q1 = D;    // NON-BLOCKING
-        Q2 = Q1;   // PARALLEL EXECUTION
+        Q1 <= D;    // NON-BLOCKING
+        Q2 <= Q1;   // PARALLEL EXECUTION
     end
 endmodule
         </pre></td>
