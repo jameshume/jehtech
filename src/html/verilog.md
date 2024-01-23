@@ -1,5 +1,6 @@
 ## Resources
 * Try out [EDA Playground](https://edaplayground.com/) for online verilog simulation.
+* OMG and try [DigitalJS Online](https://digitaljs.tilk.eu/) to VISUALISE THE SYNTHESIS RESULTS!!
 * See 
     * [FPGAs For Dummies](https://www.stepfpga.com/doc/_media/fpgasfordummiesebook.pdf)
     * [Verilog Pro](https://www.verilogpro.com/)
@@ -408,8 +409,8 @@ module block (
     input D, 
     input clk, 
     output Q1, 
-    output Q1
-):
+    output Q2
+);
     always @(posedge clk)
     begin
         Q1 = D;    // BLOCKING
@@ -422,8 +423,8 @@ module block (
     input D, 
     input clk, 
     output Q1, 
-    output Q1
-):
+    output Q2
+);
     always @(posedge clk)
     begin
         Q1 <= D;    // NON-BLOCKING
