@@ -1047,7 +1047,7 @@ $monitor("in_a=%b, in_b=%b\n", in_a, in_b);</pre>
          <tr>
             <td><p><code>`$dumpfile(filename)`</code><p></td>
             <td>
-                <p></p>
+                <p>This dumps all variable changes with timings to a file which can then be viewed by the likes of GTKWave.</p>
             </td>
         </tr>
          <tr>
