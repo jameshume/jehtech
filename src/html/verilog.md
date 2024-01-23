@@ -472,7 +472,7 @@ synthesiable - DigitalJS actually warns about this!
 
 Seen on DigiJS:
 
-<iframe src="https://digitaljs.tilk.eu/#d66ef7369bacecc94170f5381732b436cedc897b261e357cec5e5698eadb5ded" width="100%">
+<iframe src="https://digitaljs.tilk.eu/#d66ef7369bacecc94170f5381732b436cedc897b261e357cec5e5698eadb5ded" width="100%" height="400px">
 </iframe>
 
 ##### Blocking v.s. Non-Blocking Guidelines
