@@ -355,7 +355,7 @@ nicely...
 
 <table>
     <tr>
-        <td><code>
+        <td><pre>
 module block (
     input D, 
     input clk, 
@@ -368,8 +368,8 @@ module block (
         Q2 = Q1;   // STEP-BY-STEP EXECUTION
     end
 endmodule
-        </code></td>
-        <td><code>
+        </pre></td>
+        <td><pre>
 module block (
     input D, 
     input clk, 
@@ -382,7 +382,7 @@ module block (
         Q2 = Q1;   // PARALLEL EXECUTION
     end
 endmodule
-        </code></td>
+        </pre></td>
     </tr>
 </table>
 
@@ -627,6 +627,7 @@ All compiler directives begin with a `` ` `` and take the format `` ` ```<keywor
 * `` ` ```timescale <time_unit> / <time_precision>`:
 * `` ` ```ifdef <define_name>`:
 * `` ` ```else`:
+* `` ` ```error`: Used in simulation to cause an error to occur.
 
 
 ## Behavioural Modeling
