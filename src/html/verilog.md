@@ -284,17 +284,23 @@ In other words:
 
 My colleage has warned me off using blocking assignment in proceedural blocks:
 
-> = should not be used in always blocks, <= should only be used in always blocks.
+> ***= should not be used in always blocks, <= should only be used in always blocks.***
+>
 > ...
+>
 > Because, for synthesizable logic, all the things that happen inside an always block must happen simultaneously. 
 > They can't happen in sequence, as would be the case with a blocking assignment.
+>
 > ...
+>
 > The thing with VHDL and Verilog is they were both originally designed for modelling digital systems and then 
 > kind of borrowed for doing FPGA development, so it's completely possible to write code that is perfectly valid, 
 > in terms of syntax and function but completely impossible to synthesize into something that'll run in an FPGA. 
 > So, it is valid to put blocking assignments in an always block, but most tools won't synthesize that because 
 > there is no implicit way for an FPGA to sequence the assignments.
+>
 > ...
+>
 > Synthesizability, for some tools, may also depend on whether blocking assignments, inside an always block, have interdependencies. For example:
 > 
 > ``` 
@@ -307,7 +313,7 @@ My colleage has warned me off using blocking assignment in proceedural blocks:
 > may synthesize fine, because it's irrelevant whether assignment was blocking or non-blocking, in that case. But:
 >  
 > ```
-> always @(podwdge clk) begin
+> always @(posedge clk) begin
 >   x = b;
 >   y = x;
 > end
@@ -692,8 +698,9 @@ assignment statements outside of a precedural block is an error.
 The *initial block* is only executed once and starts at time 0. Useful, for example, initialising variables. It may be syntehsizeable.
 As my colleage said reply to my question:
 
-> > The initial block - is that simulation only?
-> Not necessarily (some synthesis tools may use initial conditions to set the state of the FPGA when it leaves it's
+> Q: The initial block - is that simulation only?
+>
+> A: Not necessarily (some synthesis tools may use initial conditions to set the state of the FPGA when it leaves it's
 > configuration phase - personally, I set that explicitly and only use initial statements for simulation).
 
 The *always block* is repeatedly executed in a never ending loop and starts after the intial block.
@@ -795,6 +802,7 @@ Note the following:
 
 > The most fundamental non-synthesizable piece of code is a delay statement. The FPGA has no concept of time, 
 > so it is impossible to tell the FPGA to wait for 10 nanoseconds. [[Ref]](https://nandland.com/lesson-6-synthesizable-vs-non-synthesizable-code/)
+<p></p>
 
 ### Forever Loops
 Is an infinite loop. useful for generating clock signals in test benches. The following generates a clock with a period of 2 nanoseconds:
