@@ -240,7 +240,12 @@ endmodule
         * `<repition count>{<thing-to-replicate>}`
         * The repetition multiplier must be a constant.
         * Example, if `reg [3:0] V = 4'b0111;`:
-            * `3{V}` results in `12b011101110111`.            
+            * `3{V}` results in `12b011101110111`.
+    * Reduction
+        * Reduces a vector of bits to a single boolean value.
+        * E.g. `&4'b1101` is `0` as bits are all AND'ed together. I.e. `&4'b1101 == 1 AND 1 AND 0 AND 1 == 0`.
+        * E.g. `|4'b1101` is `1` as bits are all OR'ed together.
+        * Can be used in assignments, e.g. `reg a = |4'b1101` is equivalent to `reg a = 1`.      
 
 
 ### Assignment
@@ -569,7 +574,24 @@ One commenators has the following to say:
 > assign next_test=temp>5'hF ? 4'h0 : temp[3:0];
 > ```
 
-<p></p>
+NANDLAND has an excellent [article on the effects of propogation delay](https://nandland.com/lesson-11-what-is-propagation-delay/),
+which is well worth a read! 
+
+> The longer the propagation delay, the slower your clock is able to run.
+>
+> The reason for this is that both Flip-Flops use the same clock. The first Flip-Flop drives its output at clock edge 1. 
+> The second Flip-Flop does not see the change on the output of the first Flip-Flop until clock edge 2, at which point
+> it drives its output. If the signal can safely travel from Flip-Flop 1 to Flip-Flop 2 in one clock period, your design
+> is good! If not, you will run into problems. [[Ref]](https://nandland.com/lesson-11-what-is-propagation-delay/)
+
+Also read about how [setup and hold time relate to propogation delay](https://nandland.com/lesson-12-setup-and-hold-time/):
+
+> Setup time is the amount of time required for the input to a Flip-Flop to be stable before a clock edge. 
+> Hold time is similar to setup time, but it deals with events after a clock edge occurs. Hold time is the 
+> minimum amount of time required for the input to a Flip-Flop to be stable after a clock edge. [[Ref]](https://nandland.com/lesson-12-setup-and-hold-time/)
+
+Another thing to be careful about is NOT CREATING LATCHES in `always` blocks due to incomplete assignment.
+See this [NANDLAND article on how to avoid creatign latches](https://nandland.com/how-to-avoid-creating-a-latch/).
 
 #### Scope
 The `always` block does **not** have scope like one might expect in an actual software (i.e., hot hardware) language like C.
@@ -710,6 +732,11 @@ a = 1'b1; // At 30ns
 a = 1'b0; // At 40ns
 ```
 
+Note the following:
+
+> The most fundamental non-synthesizable piece of code is a delay statement. The FPGA has no concept of time, 
+> so it is impossible to tell the FPGA to wait for 10 nanoseconds. [[Ref]](https://nandland.com/lesson-6-synthesizable-vs-non-synthesizable-code/)
+
 ### Forever Loops
 Is an infinite loop. useful for generating clock signals in test benches. The following generates a clock with a period of 2 nanoseconds:
 
@@ -768,6 +795,7 @@ $monitor("in_a=%b, in_b=%b\n", in_a, in_b);</pre>
         </tr>
     </tbody>
 </table>
+<p></p>
 
 
 ### Example
