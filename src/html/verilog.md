@@ -55,6 +55,9 @@
 </blockquote>
 <p></p>
 
+Major FPGA companies are people like Xilinx (now AMD) and Altera (now Intel). Also Cypress. They tend to produce higher end devices in terms of density, speed etc.
+
+Peope like Lattice produce devices that are more mid-range, and Efinix devices are at the lower end and priced accordingly.
 
 ## Small Example Of Parallel Execution
 * Unlike "normal" software programming languages like "C", which is sequention, 
@@ -694,7 +697,6 @@ All compiler directives begin with a `` ` `` and take the format `` ` ```<keywor
 * `` ` ```timescale <time_unit> / <time_precision>`:
 * `` ` ```ifdef <define_name>`:
 * `` ` ```else`:
-* `` ` ```error`: Used in simulation to cause an error to occur.
 
 
 ## Behavioural Modeling
@@ -752,6 +754,14 @@ my_module #( .WIDTH(8) ) instance_name (
 ```
 
 ## Testbench
+
+See ...
+
+* [ECE 128 – Verilog Tutorial: Practical Coding Style for Writing Testbenches](https://s2.smu.edu/~manikas/CAD_Tools/Verilog/lab3_testbench_tutorial.pdf)
+* [Assert statement in Verilog, SO](https://stackoverflow.com/a/31302223).
+* [Using Verilog for Testbenches, S Capkun et al](https://syssec.ethz.ch/content/dam/ethz/special-interest/infk/inst-infsec/system-security-group-dam/education/Digitaltechnik_14/14_Verilog_Testbenches.pdf).
+* [Writing Efficient Testbenches, M Hamid](https://cseweb.ucsd.edu/classes/wi11/cse141L/Media/xapp199.pdf)
+
 
 These are used to check Verilog designs are working as expected and consist on non-synthesizable verilog code
 which generates inputs to the design and checks that the outputs are correct [[Ref]](https://fpgatutorial.com/how-to-write-a-basic-verilog-testbench/).
@@ -830,8 +840,27 @@ Note the following:
 > so it is impossible to tell the FPGA to wait for 10 nanoseconds. [[Ref]](https://nandland.com/lesson-6-synthesizable-vs-non-synthesizable-code/)
 <p></p>
 
+#### Generating Clocks
+
+<p></p>
+```
+// Declare a clock period constant.
+Parameter ClockPeriod = 10;
+
+// Clock Generation method 1:
+initial begin
+    forever Clock = #(ClockPeriod / 2) ~ Clock;
+end
+
+// Clock Generation method 2:
+initial begin
+    always #(ClockPeriod / 2) Clock = ~Clock;
+end
+```
+<p></p>
+
 ### Forever Loops
-Is an infinite loop. useful for generating clock signals in test benches. The following generates a clock with a period of 2 nanoseconds:
+Is an infinite loop. Useful for generating clock signals in test benches. The following generates a clock with a period of 2 nanoseconds:
 
 ```
 // See https://fpgatutorial.com/how-to-write-a-basic-verilog-testbench/
@@ -845,6 +874,93 @@ end
 ```
 
 Loops must be written inside proceedural or generate blocks.
+
+### Repeating Yourself
+
+To repeat something a number of times use `repeat(<n>) statement;` as a one liner, or `repeat(<n>) begin .... end` over multiple lines.
+
+The code below toggles the clock 4 times, with a delay of 10 time units between each toggle, before lowering `rst`
+and generating a clock that runs forever.
+
+```
+// Taken from https://alchitry.com/writing-test-benches-verilog
+initial begin
+  clk = 1'b0;
+  rst = 1'b1;
+  repeat(4) #10 clk = ~clk;
+  rst = 1'b0;
+  forever #10 clk = ~clk; // generate a clock
+end
+```
+
+### Wait For A Clock Edge
+
+The testbench can wait for an edge of a signal using `@(negedge signal-name)` or `@(posedge signal-name)`. This can
+be combined with `repeat(<n>)` to wait for `n` clock edges, for example `repeat(10) @(posedge clk)` waits for 10 rising clock edges
+before continuing.
+
+
+### Reading In Test Vector Files
+Great for automation of test benches. Use `$readmemb()` (binary), `$readmemh()` (hexadecimal) etc.
+
+The idea is that rather than use a bag of simulation variables, a vector is used instead and you can compare
+conditions to those vectors step by step... or just use them as plain old vectors... either way if you need
+a list of them, they can be read in from a file.
+
+Lets say we have a test vector file, `test.tv` with the following contents, and we are testing a simple
+AND gate:
+
+```
+00_0
+01_0
+10_0
+11_1
+```
+
+This can be read in an an `initial` block like so:
+
+```
+reg [3:0] testvectors[3:0];
+
+initial
+    begin
+        $readmemb("example.tv", testvectors);
+        ...
+    end
+```
+
+The we could change the inputs to the gate under test **just after** every clock edge and
+check the results on the falling clock edge.
+
+```
+always @(posedge clk)
+    begin
+        // Apply inputs with some delay (1ns) AFTER clock
+        // WARNING: This is important as inputs should not change at the same time with clock
+        #1; {a, b, c, yexpected} = testvectors[vectornum];
+
+always @(negedge clk)
+    begin
+    if (y !== yexpected)
+    begin
+        $display("Error: inputs = %b", {a, b, c});
+        $display(" outputs = %b (%b exp)",y,yexpected);
+        errors = errors + 1;
+    end
+    ...
+
+    vectornum = vectornum + 1;
+    if (testvectors[vectornum] === 4'bx)
+    begin
+        $display("%d tests completed with %d errors", vectornum, errors);
+        $finish;
+    end
+end
+```
+
+This is pretty good, but not brute force testing for components when the number of possible input
+and output combinations is large will not be possible - will take too much time. At that point
+it's down to selective testing, formal verification etc.
 
 ### Verilog System Tasks/Functions
 Always begin with a `$` and are built-in, ready to be used. Again, not synthesizable, only for testbench use.
@@ -886,67 +1002,121 @@ $monitor("in_a=%b, in_b=%b\n", in_a, in_b);</pre>
                 <pre>$display("Current simulation time = %t", $time);</pre>
             </td>
         </tr>
+         <tr>
+            <td><p><code>`$stop`</code><p></td>
+            <td>
+                <p>Pauses the simulation.</p>
+            </td>
+        </tr>
+         <tr>
+            <td><p><code>`$finish`</code><p></td>
+            <td>
+                <p>Stops the simulation permantently.</p>
+            </td>
+        </tr>
+         <tr>
+            <td><p><code>`$fopen(filename)`</code><p></td>
+            <td>
+                <p>Opens a file and returns a file handle.</p>
+            </td>
+        </tr>
+         <tr>
+            <td><p><code>`$fclose(file-handle)`</code><p></td>
+            <td>
+                <p>Closes the file and associated handle.</p>
+            </td>
+        </tr>
+         <tr>
+            <td><p><code>`$fdisplay(file-handle, fmt-string, variables, ...)`</code><p></td>
+            <td>
+                <p>Like `printf` but to a file.</p>
+            </td>
+        </tr>
+         <tr>
+            <td><p><code>`$random()`</code><p></td>
+            <td>
+                <p>Generates random numbers. But not good for a repeatable test!</p>
+            </td>
+        </tr>
+         <tr>
+            <td><p><code>`$readmem[hb](filename, destination-variable)`</code><p></td>
+            <td>
+                <p></p>
+            </td>
+        </tr>
+         <tr>
+            <td><p><code>`$dumpfile(filename)`</code><p></td>
+            <td>
+                <p></p>
+            </td>
+        </tr>
+         <tr>
+            <td><p><code>`$dumpvars(level, list-or-variables-or-modules)`</code><p></td>
+            <td>
+                <p></p>
+            </td>
+        </tr>
     </tbody>
 </table>
 <p></p>
 
 
-### Example
-Create a verilog module with no inputs or outputs, which will be used to instantiate the DUT so that signals can be connected
-to it to provide stimuli to test it with.
+### Structure
+
 
 ```
-// Taken verbatim from https://fpgatutorial.com/how-to-write-a-basic-verilog-testbench/
-`timescale 1ns / 1ps
+module my_testbench(); // Create a verilog module with no inputs or outputs, which will
+                       // be used to instantiate the DUT so that signals can be
+                       // connected to it to provide stimuli to test it with.
 
-module example_tb ();
-  // Clock and reset signals
-  reg clk;
-  reg reset;
- 
-  // Design Inputs and outputs
-  reg in_a;
-  reg in_b;
-  wire out_q;
- 
-  // DUT instantiation
-  example_design dut (
-    .clock (clk),
-    .reset (reset),
-    .a     (in_a),
-    .b     (in_b),
-    .q     (out_q)
-  );
- 
-  // generate the clock
-  initial begin
-    clk = 1'b0;
-    forever #1 clk = ~clk;
-  end
- 
-  // Generate the reset
-  initial begin
-   reset = 1'b1;
-    #10
-   reset = 1'b0;
-  end
- 
-  // Test stimulus
-  initial begin
-    // Use the monitor task to display the FPGA IO
-    $monitor("time=%3d, in_a=%b, in_b=%b, q=%2b \n", $time, in_a, in_b, q);
- 
-    // Generate each input with a 20 ns delay between them
-    in_a = 1'b0;
-    in_b = 1'b0;
-    #20
-    in_a = 1'b1;
-    #20
-    in_a = 1'b0;
-    in_b = 1'b1;
-    #20
-    in_a = 1'b1;
-  end
- 
-endmodule : example_tb
+    // Declare wires and registers
+    wire a;
+    wire b; // etc etc...
+
+    // Instantiate the device under test (DUT)
+    my_device dut (....);
+
+    // First initial block should start setting the initial conditions for your test
+    // bench, setup $monitors etc
+    initial begin
+       $monitor ("TIME = %d, test_var1= %b, test_var2= %b", $time, test_var1, test_var2);
+        a = 1'b0;
+        b = 1'b1; // etc etc...
+    end
+
+    // Second initial block can be used to do limit the run time of the simulation
+    initial begin
+        #finishtime // everything below will printout after "finishtime" expires
+        $display ("Finishing simulation due to simulation constraint.");
+        $display ("Time is - %d",$time);
+        $finish;
+    end
+
+    // Third initial block can do your testing
+    initial begin
+        ...
+    end
+
+    // Last initial block can open files to save results to a Value Change Dump (VCD) File
+    initial begin
+        $dumpfile("path/to/dumpfile.vcd");
+        $dumpvars;
+    end
+```
+
+To make an assert-style statement something like the following can be used [[Ref]](https://stackoverflow.com/a/31302223):
+
+```
+`define assert(signal, value) \
+        if (signal !== value) begin \
+            $display("ASSERTION FAILED in %m: signal != value"); \
+            $finish; \
+        end
+
+...
+...
+
+initial begin // assertions
+    #32 `assert(q, 16'hF0CB)
+end
 ```
