@@ -1120,3 +1120,5 @@ initial begin // assertions
     #32 `assert(q, 16'hF0CB)
 end
 ```
+
+NOTE, in Icarus the define must be done on one line, without using `\`, otherwise line numbers will be incorrect!
