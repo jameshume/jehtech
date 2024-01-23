@@ -563,9 +563,11 @@ One commenators has the following to say:
 > Incidentally, your code seems wrong. If a, b, and next_test are all 4-bit, I think that the result
 > of ((a+b)>4'hF) is always false, because (a+b) is going to be 4-bit too. You'd need something like
 > 
+> ```
 > wire [4:0] temp;
 > assign temp = a+b;
 > assign next_test=temp>5'hF ? 4'h0 : temp[3:0];
+> ```
 
 <p></p>
 
