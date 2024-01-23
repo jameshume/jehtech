@@ -1,5 +1,5 @@
 ## Resources
-* Try out https://edaplayground.com/
+* Try out [EDA Playground](https://edaplayground.com/) for online verilog simulation.
 * See 
     * [FPGAs For Dummies](https://www.stepfpga.com/doc/_media/fpgasfordummiesebook.pdf)
     * [Verilog Pro](https://www.verilogpro.com/)
@@ -7,9 +7,8 @@
     * [FPGA Architectures: An Overview](https://cse.usf.edu/~haozheng/teach/cda4253/doc/fpga-arch-overview.pdf)
     * [Advanced Verilog - ECS 270 v10/23/0](https://www.eecs.umich.edu/courses/eecs270/270lab/270_docs/Advanced_Verilog.pdf)
     * [IEEE Standard for Verilog(R) Hardware Description Language](https://www.eg.bucknell.edu/~csci320/2016-fall/wp-content/uploads/2015/08/verilog-std-1364-2005.pdf)
-* Unlike "normal" software programming languages like "C", which is sequention, 
-  HDL statements are executed in *parallel* and continually execute (*always*) for
-  a specified number of times or times.
+    * [Learn FPGA](https://github.com/BrunoLevy/learn-fpga)
+    * [FPGATutorial.com](https://fpgatutorial.com/)
 
 ## Quick Looks At FPGAs
 <p></p>
@@ -56,8 +55,10 @@
 <p></p>
 
 
-
 ## Small Example Of Parallel Execution
+* Unlike "normal" software programming languages like "C", which is sequention, 
+  HDL statements are executed in *parallel* and continually execute (*always*) for
+  a specified number of times or times.
 
 ```
 //        +-----+
@@ -263,14 +264,6 @@ A brief note on assignment operators [[Ref]](https://stackoverflow.com/a/2743577
 
 Both `<=` and `=` *must be used within an `initial` or `always` block*.
 
-Delayed assignment can be done using the `#` operator. E.g.
-
-```
-always @(*)
-begin
-    #(cycle/2) ... this is done on every cycle/2-th period
-end
-```
 Be warned: [Nonblocking Assignments in Verilog Synthesis, Coding Styles That Kill!](http://www.sunburst-design.com/papers/CummingsSNUG2000SJ_NBA.pdf).
 
 ##### Blocking Proceedural Assignment
@@ -418,7 +411,8 @@ NON BLOCKING ASSIGNMENT            :         :         :                       +
                            Q1  ______________|         |______           }       |__CLK__|     |__CLK__|
                                                                            C---------^-------------^         
 ```
-z
+
+
 ##### Blocking v.s. Non-Blocking Guidelines
 Taken verbatim from [[Ref]](http://www.sunburst-design.com/papers/CummingsSNUG2000SJ_NBA.pdf).
 
@@ -616,7 +610,7 @@ Keywords include `if`-`else`, `case`, which are synthesizable statements, and `w
 Assignment statements such as `=` and `<=` should only be written within a procedural block: `initial` or `always`. Writing
 assignment statements outside of a precedural block is an error.
 
-The *initial block* is only executed once and starts at time 0. Useful, for example, initialising variables.
+The *initial block* is only executed once and starts at time 0. Useful, for example, initialising variables. It is NOT synthesizable, so only used in simulator (see later section).
 
 The *always block* is repeatedly executed in a never ending loop and starts after the intial block.
 
@@ -656,4 +650,179 @@ my_module #( .WIDTH(8) ) instance_name (
     .input(...),
     .output(...)
 );
+```
+
+## Testbench
+
+These are used to check Verilog designs are working as expected and consist on non-synthesizable verilog code
+which generates inputs to the design and checks that the outputs are correct [[Ref]](https://fpgatutorial.com/how-to-write-a-basic-verilog-testbench/).
+
+Simulation tools show the output waveforms. Open source alternatives exist like
+[Icarus Verilog](https://steveicarus.github.io/iverilog) with [GTKWave](https://gtkwave.sourceforge.net/).
+
+To install on Ubuntu:
+
+```
+sudo apt update
+sudo apt install iverilog
+sudo apt install gtkwave
+```
+
+### Time
+Testbench code is not synthesized: so need "special" constructs to create delays: the pound character followed by a number
+of time units to model delays. The unit of time is set by the ``timescale` directive which we have seen before: ``timescale <unit> / <resolution>`:
+
+```
+`timescale 1 ns/1 ps
+module smallTest ();
+    ...    
+    #10.5 a = 1'b1; //< `a` is set to 1 after 10.5 units of time...
+                    //< ...so in this case, after 10.5 nanoseconds 
+```
+
+The `resolution` determines the smallest step we can make in a delay. The delay is also relative to the moment the line is
+encountered... it is not an absolute time. Therefore:
+
+```
+`timescale 1 ns/1 ps
+...
+#10 a = 1'b1; // At 10ns
+#10 a = 1'b0; // At 20ns
+#10 a = 1'b1; // At 30ns
+#10 a = 1'b0; // At 40ns
+```
+
+This is also equivalent to:
+
+```
+`timescale 1 ns/1 ps
+...
+#10
+a = 1'b1; // At 10ns
+#10
+a = 1'b0; // At 20ns
+#10
+a = 1'b1; // At 30ns
+#10
+a = 1'b0; // At 40ns
+```
+
+### Forever Loops
+Is an infinite loop. useful for generating clock signals in test benches. The following generates a clock with a period of 2 nanoseconds:
+
+```
+// See https://fpgatutorial.com/how-to-write-a-basic-verilog-testbench/
+`timescale 1 ns/1 ps
+initial begin
+   clk = 1'b0;
+   forever begin
+     #1 clk = ~clk;
+   end
+end
+```
+
+Loops must be written inside proceedural or generate blocks.
+
+### Verilog System Tasks/Functions
+Always begin with a `$` and are built-in, ready to be used. Again, not synthesizable, only for testbench use.
+
+<table>
+    <thead>
+        <tr>
+            <td>Function name</td>
+            <td>Description</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><p><code>`$display`</code></p></td>
+            <td>
+                <p>Similar to `printf` in C.</p>
+                <pre>// General syntax
+$display(<string_to_display>, <variables_to_display);
+ 
+// Example - display value of x as a binary, hex and decimal number
+$display(&quot;x (bin) = %b, x (hex) = %h, x (decimal) = %d&quot;, x, x, x);</pre>
+            </td>
+        </tr>
+        <tr>
+            <td><p><code>`$monitor`</code></p></td>
+            <td>
+                <p>Like `$display` but more intelligent as it can display only when a signal changes.</p>
+                <pre>// General syntax
+$monitor(<message_to_display>, <variables_to_display>);
+ 
+// Example - monitor the values of the in_a and in_b signals
+$monitor("in_a=%b, in_b=%b\n", in_a, in_b);</pre>
+            </td>
+        </tr>
+        <tr>
+            <td><p><code>`$time`</code><p></td>
+            <td>
+                <p>Gets the current simulation time.</p>
+                <pre>$display("Current simulation time = %t", $time);</pre>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+### Example
+Create a verilog module with no inputs or outputs, which will be used to instantiate the DUT so that signals can be connected
+to it to provide stimuli to test it with.
+
+```
+// Taken verbatim from https://fpgatutorial.com/how-to-write-a-basic-verilog-testbench/
+`timescale 1ns / 1ps
+
+module example_tb ();
+  // Clock and reset signals
+  reg clk;
+  reg reset;
+ 
+  // Design Inputs and outputs
+  reg in_a;
+  reg in_b;
+  wire out_q;
+ 
+  // DUT instantiation
+  example_design dut (
+    .clock (clk),
+    .reset (reset),
+    .a     (in_a),
+    .b     (in_b),
+    .q     (out_q)
+  );
+ 
+  // generate the clock
+  initial begin
+    clk = 1'b0;
+    forever #1 clk = ~clk;
+  end
+ 
+  // Generate the reset
+  initial begin
+   reset = 1'b1;
+    #10
+   reset = 1'b0;
+  end
+ 
+  // Test stimulus
+  initial begin
+    // Use the monitor task to display the FPGA IO
+    $monitor("time=%3d, in_a=%b, in_b=%b, q=%2b \n", $time, in_a, in_b, q);
+ 
+    // Generate each input with a 20 ns delay between them
+    in_a = 1'b0;
+    in_b = 1'b0;
+    #20
+    in_a = 1'b1;
+    #20
+    in_a = 1'b0;
+    in_b = 1'b1;
+    #20
+    in_a = 1'b1;
+  end
+ 
+endmodule : example_tb
 ```
