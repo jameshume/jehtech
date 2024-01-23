@@ -759,13 +759,31 @@ which generates inputs to the design and checks that the outputs are correct [[R
 Simulation tools show the output waveforms. Open source alternatives exist like
 [Icarus Verilog](https://steveicarus.github.io/iverilog) with [GTKWave](https://gtkwave.sourceforge.net/).
 
-To install on Ubuntu:
+To install on Ubuntu (not latest version):
 
 ```
 sudo apt update
 sudo apt install iverilog
 sudo apt install gtkwave
 ```
+
+To get latest release, [download from GitHub](https://github.com/steveicarus/iverilog/releases) and untar source.
+
+Then
+
+```
+sudo apt update
+sudo apt install -y autoconf gperf make gcc g++ bison flex
+tar xzvf iverilog-12_0.tar.gz
+cd iverilog-12_0/
+sh autoconf.sh
+./configure
+make
+make check
+sudo make install  ##< Installs to /usr/local
+```
+
+<p></p>
 
 ### Time
 Testbench code is not synthesized: so need "special" constructs to create delays: the pound character followed by a number
