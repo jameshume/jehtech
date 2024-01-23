@@ -467,6 +467,10 @@ NON BLOCKING ASSIGNMENT            :         :         :                       +
                                                                            C---------^-------------^         
 ```
 
+Seen on DigiJS:
+
+<iframe src="https://digitaljs.tilk.eu/#d66ef7369bacecc94170f5381732b436cedc897b261e357cec5e5698eadb5ded">
+</iframe>
 
 ##### Blocking v.s. Non-Blocking Guidelines
 Taken verbatim from [[Ref]](http://www.sunburst-design.com/papers/CummingsSNUG2000SJ_NBA.pdf).
