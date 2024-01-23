@@ -258,6 +258,7 @@ endmodule
 
 
 A brief note on assignment operators [[Ref]](https://stackoverflow.com/a/27435773):
+
 * `<=` is **non-blocking** and is performed on every positive edge of clock. These are evaluated in parallel so
    no guarantee of order. An example of this would be a register.
 * `=` is **blocking** assignment, which should only be used inside `always` statements and enforces sequential order.
