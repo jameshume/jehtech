@@ -11,9 +11,15 @@ import subprocess
 from spicelib import AscEditor 
 import matplotlib.pyplot as pl
 import matplotlib.animation as animation
+from matplotlib.gridspec import GridSpec
+import matplotlib.image as image
 
+fig    = pl.figure(layout="constrained")
+gs     = GridSpec(2, 2, figure=fig)
+ax     = fig.add_subplot(gs[0, 0])
+ax_i   = fig.add_subplot(gs[1, 0])
+ax_pic = fig.add_subplot(gs[0:, 1])
 
-fig, (ax,ax_i) = pl.subplots(nrows=2)
 line_V_source  = None
 line_V_cap     = None
 line_current   = None
@@ -24,6 +30,12 @@ ax.grid()
 ax_i.set_xlabel("Time (Seconds)")
 ax_i.set_ylabel("Current (Amps)")
 ax_i.grid()
+
+
+im = image.imread("../electronics_pulse_into_cap.png")
+ax_pic.imshow(im)
+ax_pic.set_axis_off()
+
 
 NUM_FRAMES=250
 
