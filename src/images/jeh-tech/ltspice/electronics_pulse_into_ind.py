@@ -33,15 +33,14 @@ ax_i.set_xlabel("Time (Seconds)")
 ax_i.set_ylabel("Current (Amps)")
 ax_i.grid()
 
+im = image.imread("../electronics_pulse_into_indictor.png")
+ax_pic.imshow(im)
+ax_pic.set_axis_off()
 
-NUM_FRAMES=100
+NUM_FRAMES=10
 
 with tempfile.TemporaryDirectory() as tmpdirname:
     shutil.copy("../electronics_pulse_into_indictor.asc", tmpdirname)
-    im = image.imread("../electronics_pulse_into_indictor.png")
-    ax_pic.imshow(im)
-    ax_pic.get_xaxis().set_visible(False)
-    ax_pic.get_xaxis().set_visible(False)
     print(os.listdir(tmpdirname))
 
 
