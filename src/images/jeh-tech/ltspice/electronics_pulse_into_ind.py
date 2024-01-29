@@ -37,7 +37,7 @@ im = image.imread("../electronics_pulse_into_indictor.png")
 ax_pic.imshow(im)
 ax_pic.set_axis_off()
 
-NUM_FRAMES=10
+NUM_FRAMES=150
 
 with tempfile.TemporaryDirectory() as tmpdirname:
     shutil.copy("../electronics_pulse_into_indictor.asc", tmpdirname)
