@@ -20,10 +20,12 @@ line_current   = None
 
 ax.set_ylabel("Voltage (Volts)")
 ax.grid()
+ax.set_ylim(-5.5, 5.5)
 
 ax_i.set_xlabel("Time (Seconds)")
 ax_i.set_ylabel("Current (Amps)")
 ax_i.grid()
+
 
 NUM_FRAMES=100
 
