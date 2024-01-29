@@ -11,9 +11,16 @@ import subprocess
 from spicelib import AscEditor 
 import matplotlib.pyplot as pl
 import matplotlib.animation as animation
+import matplotlib.image as image
+from matplotlib.gridspec import GridSpec
+
+fig    = pl.figure(layout="constrained")
+gs     = GridSpec(2, 2, figure=fig)
+ax     = fig.add_subplot(gs[0, 0])
+ax_i   = fig.add_subplot(gs[1, 0])
+ax_pic = fig.add_subplot(gs[0:, 1])
 
 
-fig, (ax,ax_i) = pl.subplots(nrows=2)
 line_V_source  = None
 line_V_ind     = None
 line_current   = None
@@ -31,7 +38,12 @@ NUM_FRAMES=100
 
 with tempfile.TemporaryDirectory() as tmpdirname:
     shutil.copy("../electronics_pulse_into_indictor.asc", tmpdirname)
+    im = image.imread("../electronics_pulse_into_indictor.png")
+    ax_pic.imshow(im)
+    ax_pic.get_xaxis().set_visible(False)
+    ax_pic.get_xaxis().set_visible(False)
     print(os.listdir(tmpdirname))
+
 
     asc = AscEditor(f"{tmpdirname}/electronics_pulse_into_indictor.asc") 
 
