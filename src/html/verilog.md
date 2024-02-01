@@ -400,6 +400,9 @@ always @(posedge clk)
 This is because for non-blocking assignment, as we saw, on the rising edge the LHS of all of the `<=`
 expressions will be evaluated and the assigned in the next "phase" (but obs on the same rising edge).
 
+A slightly more involved example showing the "why" in terms of how the hardware works:
+![A slightly more involved example showing the "why" in terms of how the hardware works](##IMG_DIR##/verilog_non_blocking_proceedural_assignment_with_timing_control.png)
+
 ##### Blocking v.s. Non-Blocking Example
 Compare the following two code blocks, one using blocking and the other using non-blocking assignment to
 create different connections between two D-type flip flops. [[Ref]](https://www.udemy.com/course/digital-design-using-verilog-hdl-programming-with-practical/learn/lecture/30061368). It demonstrates the difference between blocking and non blocking assignment
