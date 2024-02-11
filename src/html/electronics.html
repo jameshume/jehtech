@@ -1533,6 +1533,74 @@
 			</div>
 		</div>
 
+		
+		<!-- --------------------------------------------------------------------------------------- -->
+		<h2 style="clear:both;">Reistance, Reactance and Impedance</h2>
+		<div>
+			<p>Ref:  
+				<a href="https://www.motioncontroltips.com/whats-the-difference-between-resistance-reactance-and-impedance/" target="_blank">
+					What's the difference between resistance, reactance, and impedance? -- Danielle Collins
+				</a>.
+			</p>
+
+			<h3>Reactance</h3>
+			<div>
+				<p>
+					<em>Reactance</em>: Property of opposing current <em>change</em> and is therefore specific to AC power and depends on
+					rate of change, i.e., frequency, of current. Creates 90 degree phase shift between voltage and current. This is unlike
+					resistance that constantly opposes current flow, regardless of change - i.e., is not frequency dependent.
+				</p>
+				<p>
+					Two types:
+				</p>
+				<ol>
+					<li>
+						<p>Inductive reactance:
+							
+							$$
+							X_L = 2 \pi f L
+							$$
+
+							Where $X_L$ is the inductive reactance in ohms, $f$ is frequency in hertz abd $L$ is inductance in Henrys.
+						</p>
+						<p>
+							So the reactance, or opposition to change in current, increases with signal frequency and/or inductance-value for an inductor.
+						</p>
+					</li>
+					<li>
+						<p>Capacitative reactance:
+							
+							$$
+							X_C = frac{1}{2 \pi f C}
+							$$
+							
+							Where $X_C$ is the capacitive reactance in ohms, $f$ is frequency in hertz abd $C$ is capactiance in Farads.
+						</p>
+						<p>
+							So the reactance, or opposition to change in current, decreases with signal frequency and/or capacitance-value for a capacitor.
+						</p>
+					</li>
+				</ol>
+			</div>
+
+			<h3>Impedance</h3>
+			<div>
+				<p>Impedance is resistance plus reactance (both inductive and capacitative). Imaginary number, where real part is resistance and imaginary part is reactance:
+
+					$$
+					Z = \sqrt{R^2 + X^2_T} = \sqrt{R^2 + (X_L - X_C)^2} 
+					$$
+
+					Where $Z$ is the magnitude of impeadance (ohms) in a <em>series</em> circuit, $R$ is resistance, 
+					$X_C$ is capacitative reactance and $X_L$ inductive capacitance, $R_T$ being the sum of both of these.
+
+					$$
+					\theta = \text{arctan}\(\frac{X_T}{R}\)
+					$$
+				</p>
+			</div>
+		</div>
+
 		<!-- --------------------------------------------------------------------------------------- -->
 		<h2 style="clear:both;">Diodes</h2>
 		<div>
@@ -2008,9 +2076,48 @@
 
 				<h4>Common Emitter Amplifer</h4>
 				<p>
+					The common emitter amplifier provides <em>voltage gain</em> and <em>moderate current gain</em> <a href="https://www.electronics-notes.com/articles/analogue_circuits/transistor/transistor-common-emitter-configuration.php" target="_blank">[Ref]</a>.
+					It <em>inverts the signal at the input</em>, i.e., it has 180 degree phase change from input to output.
+				</p>
+				<p>
 					<img src="##IMG_DIR##/electronics_ce_amplifier.png" alt="Common Emitter Amplifer Circuit Diagram">
 				</p>
-			</div>			
+				<p>
+					In the above, C1, known as an AC coupling capacitor, removes any DC component from the input signal, so that the voltage divider at Q can set a DC offset to the signal. This is so that
+					the transistor can be biased to the Q-point, which is a point in the middle of its linear region. 
+				</p>
+				<p>
+					C2, known as an AC coupling capacitor, removes the DC component on the output.
+				</p>
+				<p>
+					C1 and C2 must be configured to provide negligable reactance (AC resistance) at the frequencies of operation.
+				</p>
+				<p>
+					C3 is a bypass capacitor that helps enable greater levels of AC gain to be achieved because R4 reduces the current gain.
+				</p>
+				<p>
+					R4 is rather special. This <a href="https://electronics.stackexchange.com/a/556905" target="_blank">SO post explains it</a>:
+				</p>
+				<blockquote>
+					<p>
+						If you didn't have an emitter resistor ... then you'll find that temperature effects will be surprisingly high and the desired 6 volts 
+						at the collector may drift with temperature a few volts this way and that way.
+					</p>
+				</blockquote>
+				<p>
+					This is why the originally referenced article describes R4 as providing <q>... a measure of DC feedback to ensure that the DC conditions within the circuit are maintained ...</q>
+				</p>
+
+				<p>Characteristics:</p>
+				<ul>
+					<li>Voltage gain == Medium</li>
+					<li>Current gain == Medium</li>
+					<li>Power gain == High</li>
+					<li>Input / output phase relationship == 180 degrees</li>
+					<li>Input resistance == Medium</li>
+					<li>Output resistance == Medium</li>
+				</ul>
+			</div>
 
 			<h3>References</h3>
 			<div>
@@ -2208,6 +2315,23 @@
 				using MOSFETs. But why are NFETs good at discarghing capacitive loads and PFETs good at charging them?
 				The answer is <a href="https://www.quora.com/Why-is-PMOS-good-to-pass-logic-1-and-NMOS-is-good-to-pass-logic-0" target="_blank">here</a>.
 			</p>
+
+			<h3>MOSFET Drivers</h3>
+			<div>
+				<p></p>
+				<blockquote>
+					<p>A MOSFET driver IC (like the ICL7667 you mentioned) translates TTL or CMOS logical signals to a higher voltage and higher current, with the goal of rapidly and completely switching the gate of a MOSFET.</p>
+					<p>An output pin of a microcontroller is usually adequate to drive a small-signal logic level MOSFET, like a 2N7000. However, three issues occur when driving larger MOSFETs:</p>
+					<ol>
+						<li>Higher gate capacitance - Digital signals are meant to drive small loads (on the order of 10–100 pF). This is much less than the gate capacitance of many MOSFETs, which can be in the thousands of pF.</li>
+						<li>Higher gate voltage - A 3.3 V or 5 V signal is often not enough. Usually 8–12 V is required to fully turn on the MOSFET.</li>
+						<li>A switching MOSFET can cause a back-current from the gate back to the driving cicruit. MOSFET drivers are designed to handle this back current. (Ref: [Laszlo Balogh Design And Application Guide For High Speed MOSFET Gate Drive Circuits](https://kidbots.com/WEBADD/HYDROGEN_FUEL/slup169.pdf).)</li>
+					</ol>
+					<p>Finally, many MOSFET drivers are designed explicitly for the purpose of controlling a motor with an H-bridge.</p>
+					<footer>-- [Stack Overflow Answer](https://electronics.stackexchange.com/a/3354)</footer>
+				</blockquote>
+				<p></p>
+			</div>
 		</div>
 
 		
