@@ -1,0 +1,17 @@
+* C:\Users\JamesHume\Documents\wsl\jehtech\src\images\jeh-tech\electronics_common_emitter_amplifier.asc
+V1 Input 0 SINE(4 1 100)
+C1 N002 Input 1000m
+R1 N002 0 2633.7
+R2 N001 N002 22k
+Q1 Output_Pre_Cap N002 N003 0 BC547C
+R3 N001 Output_Pre_Cap 2.2k
+R4 N003 0 220
+C2 N003 0 10n
+C3 Output Output_Pre_Cap 10n
+V2 N001 0 12V
+.model NPN NPN
+.model PNP PNP
+.lib C:\Users\JamesHume\AppData\Local\LTspice\lib\cmp\standard.bjt
+.tran 0.5
+.backanno
+.end
