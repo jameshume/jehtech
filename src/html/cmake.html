@@ -65,6 +65,162 @@ rm -fr CMake-3.28.0-rc4 </pre>
     <p></p>
 </div>
 
+<h2>Embedded C Project Template</h2>
+<div>
+    <pre>
+# Project Configuration
+cmake_minimum_required(VERSION 3.16)
+
+# Note, project type set to 'NONE' deliberately so that CMake does not search for C compiler before the toolchain
+# is configured.
+project(my-project-name NONE)
+
+set(CMAKE_VERBOSE_MAKEFILE ON)
+
+# Toolchain
+set(CMAKE_SYSTEM_NAME      "Generic")
+set(CMAKE_SYSTEM_PROCESSOR "arm")
+set(CMAKE_CROSSCOMPILING   true)
+
+# Skip link step during toolchain validation.
+set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
+
+set(TOOLCHAIN_TUPLE "arm-none-eabi")
+find_program(CMAKE_C_COMPILER   "${TOOLCHAIN_TUPLE}-gcc")
+find_program(CMAKE_ASM_COMPILER "${CMAKE_C_COMPILER}")
+find_program(CMAKE_OBJCOPY      "${TOOLCHAIN_TUPLE}-objcopy")
+find_program(CMAKE_OBJDUMP      "${TOOLCHAIN_TUPLE}-objdump")
+find_program(CMAKE_SIZE         "${TOOLCHAIN_TUPLE}-size")
+
+# Search only under *target* paths.
+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+
+# Programming Languages - C and Assembly
+enable_language(C ASM)
+
+# Target Parameters
+set(TARGET_MCU       "STM32F042G6")
+set(TARGET_FAMILY    "STM32F0xx")
+
+# Target Compiler/Linker Flags
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "Debug")
+    message(STATUS "Build type not specified, defaulting to 'Debug'")
+endif()
+
+# Compiler Warning Flags
+set(TARGET_WARNING_FLAGS  "-Werror"
+                            "-Wall"
+                            "-Wextra"
+                            "-Wshadow"
+                            "-Wcast-align"
+                            "-Wpointer-arith"
+                            "-Wmisleading-indentation"
+                            "-Wuninitialized"
+                            "-pedantic"
+                            "-Wconversion"
+                            "-Wsign-conversion"
+)
+if ("${DEBUG_OUTPUT_METHOD}" STREQUAL "RTT")
+    # The RTT libraries generate the following warning: supress it when using RTT.
+    list(APPEND TARGET_WARNING_FLAGS -Wno-cast-align)
+endif()
+STRING(REPLACE ";" " " TARGET_WARNING_FLAGS "${TARGET_WARNING_FLAGS}")
+
+# Common flags and defines - things like "-mcpu=xxx", "-mlittle-endian", "-mthumb" etc
+set(TARGET_COMMON_FLAGS   ...flags appropriate to your target...
+)
+STRING(REPLACE ";" " " TARGET_COMMON_FLAGS "${TARGET_COMMON_FLAGS}")
+
+set(TARGET_DEFINITIONS    "-DCORE_CM0"
+                            "-D${TARGET_FAMILY}"
+                            "-DEVAL_BOARD"
+)
+STRING(REPLACE ";" " " TARGET_DEFINITIONS "${TARGET_DEFINITIONS}")
+
+# Segger RTT
+# Add `-DDEBUG_OUTPUT_METHOD=RTT` to CMake options in CMake profile to use.
+if ("${DEBUG_OUTPUT_METHOD}" STREQUAL "RTT")
+    message(STATUS "Using SEGGER RTT protocol for debug output")
+    include_directories("${CMAKE_SOURCE_DIR}/path-to-segger-rtt-source-files")
+endif ()
+
+set(TARGET_COMPILER_FLAGS "-ffunction-sections -fdata-sections")
+set(TARGET_C_FLAGS "-std=c11")
+set(TARGET_LD_FLAGS "-Wl,--gc-sections")
+
+set(CMAKE_C_FLAGS "${TARGET_WARNING_FLAGS} ${TARGET_COMMON_FLAGS} ${TARGET_DEFINITIONS} ${TARGET_COMPILER_FLAGS} ${TARGET_C_FLAGS}")
+set(CMAKE_EXE_LINKER_FLAGS "${TARGET_COMMON_FLAGS} ${TARGET_LD_FLAGS}")
+
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS} -DTARGET_DEBUG  -DAPP_DEBUG -Og -ggdb")
+set(CMAKE_EXE_LINKER_FLAGS_DEBUG "${TARGET_COMMON_FLAGS} ${TARGET_LD_FLAGS}")
+
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS} -Os -DNDEBUG")
+set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${TARGET_COMMON_FLAGS} ${TARGET_LD_FLAGS}")
+
+# Project Layout
+set(CMAKE_INCLUDE_CURRENT_DIR true)
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+
+include_directories("${CMAKE_SOURCE_DIR}/...your include dirs ...")
+
+set (CMAKE_EXECUTABLE_SUFFIX ".elf")
+
+SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR})
+
+add_executable(application
+    // List c files
+)
+
+if ("${DEBUG_OUTPUT_METHOD}" STREQUAL "RTT")
+    target_sources(application
+            PUBLIC "${CMAKE_SOURCE_DIR}/path-to-segger/SEGGER_RTT.c"
+    )
+endif ()
+
+set_target_properties(application PROPERTIES LINK_FLAGS "-T'${CMAKE_CURRENT_SOURCE_DIR}/path-to-linker-file.ld'")
+    </pre>
+    <p></p>
+
+    <h3><code>TARGET_COMMON_FLAGS</code> For Cortex M0</h3>
+    <div>
+        <pre>
+# The target is an ARM Cortex-M0, which implies the thumb instruction set. It is little endian and has no
+# hardware FP support.
+set(TARGET_COMMON_FLAGS   "-mlittle-endian"
+                            "-mcpu=cortex-m0"
+                            "-mthumb"
+                            "-mfloat-abi=soft"
+)
+STRING(REPLACE ";" " " TARGET_COMMON_FLAGS "${TARGET_COMMON_FLAGS}")    
+        </pre>
+        <p></p>
+    </div>
+
+    <h3><code>-nostdlib</code> and <code>-ffreestanding</code></h3>
+    <div>
+        <p>
+            For really space constrained firmware you might not want to link against the standard library and will want
+            to stop GCC from assuming it can optimise certain functions based on the behaviour of the standard C library.
+            For this you need the <code>-nostdlib</code> and <code>-ffreestanding</code>
+            directives <a href="https://cs107e.github.io/guides/gcc/" target="_blank">[Ref]</a>.
+        </p>
+        <pre>
+# In addition this project will not link against the standard C library (-nostdlib and -ffreestanding)
+#		-nostdlib      controls which libraries to link against
+# 		-ffreestanding controls if you are compiling freestanding C (which is part of the C standard).
+# 		 			   CAUTION: Even though freestanding is used it seems GCC still requires the freestanding
+#                               environment provide memcpy, memmove, memset and memcmp
+#                               [https://gcc.gnu.org/onlinedocs/gcc/Standards.html]
+set(TARGET_COMMON_FLAGS ...)
+list(APPEND TARGET_COMMON_FLAGS "-nostdlib" "-ffreestanding")
+STRING(REPLACE ";" " " TARGET_COMMON_FLAGS "${TARGET_COMMON_FLAGS}")
+        </pre>
+    </div>
+</div>
+
 <h2>Include CPPCheck In Your Projects</h2>
 <div>
     <pre>
@@ -73,7 +229,6 @@ if (${USE_CPPCHECK})
     if (CMAKE_CXX_CPPCHECK)
         MESSAGE(STATUS "Found CPPCheck: `${CMAKE_CXX_CPPCHECK}`")
 
-        # Only interested in NI source, which is all in the bsp or app directories.
         set (CPP_SOURCES ${MY_SOURCES})
 
         # Filter the source set if you need too.
@@ -112,7 +267,7 @@ endif()
 </pre>
 </div>
 
-<h2>Include DocyGen In Your Projects</h2>
+<h2>Include DoxyGen In Your Projects</h2>
 <div>
     <pre>
 if (${USE_DOXYGEN})
