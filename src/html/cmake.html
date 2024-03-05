@@ -245,7 +245,6 @@ if (${USE_CPPCHECK})
         # COMMAND_EXPAND_LISTS options to obtain robust argument splitting and quoting.
         add_custom_target(
                 ${PROJECT_NAME}_cppcheck
-                ALL
                 COMMAND ${CMAKE_CXX_CPPCHECK}
                 ${CPPCHECK_SOURCES}
                 "-I;$&lt;JOIN:${CPPCHECK_INCS},;-I;&gt;" #&lt; Must be quoted so it is recognised as a generator expression
@@ -279,10 +278,10 @@ if (${USE_DOXYGEN})
         set(DOXYGEN_IMAGE_PATH "${PROJECT_SOURCE_DIR}/...insert paths here...")
         set(DOXYGEN_RECURSIVE "YES")
         set(DOXY_INPUT "${PROJECT_SOURCE_DIR}/...list dirs here...")
+        set(DOXYGEN_FILE_PATTERNS "*.c" "*.h" ...)
         set(DOXYGEN_EXCLUDE_PATTERNS ...anything you'd like to ignore...)
         doxygen_add_docs(
                 ${PROJECT_NAME}_doxygen
-                ALL
                 ${DOXY_INPUT}
                 COMMENT "Generate Doxygen content"
         )
