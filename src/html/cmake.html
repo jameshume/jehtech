@@ -100,9 +100,12 @@ set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 # Programming Languages - C and Assembly
 enable_language(C ASM)
 
+# Set the suffix for executables on this platform.
+set (CMAKE_EXECUTABLE_SUFFIX ".elf")
+
 # Target Parameters
-set(TARGET_MCU       "STM32F042G6")
-set(TARGET_FAMILY    "STM32F0xx")
+set(TARGET_MCU       "STM32...")
+set(TARGET_FAMILY    "STM32...")
 
 # Target Compiler/Linker Flags
 if(NOT CMAKE_BUILD_TYPE)
@@ -110,18 +113,25 @@ if(NOT CMAKE_BUILD_TYPE)
     message(STATUS "Build type not specified, defaulting to 'Debug'")
 endif()
 
-# Compiler Warning Flags
-set(TARGET_WARNING_FLAGS  "-Werror"
-                            "-Wall"
-                            "-Wextra"
-                            "-Wshadow"
-                            "-Wcast-align"
-                            "-Wpointer-arith"
-                            "-Wmisleading-indentation"
-                            "-Wuninitialized"
-                            "-pedantic"
-                            "-Wconversion"
-                            "-Wsign-conversion"
+# See https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
+set(TARGET_WARNING_FLAGS
+        "-Werror"                   # Make all warnings into errors.
+        "-Wall"                     # Enable all the warnings about constructions that some users consider questionable, and that are easy to avoid etc. (See GCC docs for list).
+        "-Wextra"                   # Enable some extra warning flags not enabled by -Wall. (See GCC docs for list).
+        "-Wshadow"                  # Warn whenever a local variable or type declaration shadows another variable, parameter, type etc.
+        "-Wcast-align=strict"       # Warn whenever a pointer is cast such that the required alignment of the target is increased regardless of the target machine.
+        "-Wpointer-arith"           # Warn about anything that depends on the “size of” a function type or of void.
+        "-pedantic"                 # Issue all the warnings demanded by strict ISO C.
+        "-Wconversion"              # Warn for implicit conversions that may alter a value.
+        "-Wsign-conversion"         # Warn for implicit conversions that may change the sign of an integer value.
+        "-Wfloat-conversion"        # Warn for implicit conversions that reduce the precision of a real value.
+        "-Wfloat-equal"             # Warn when floating-point values are used in equality expressions.
+        "-Wcast-qual"               # Warn whenever a pointer is cast so as to remove a type qualifier from the target type.
+        "-Wduplicated-branches"     # Warn when an if-else has identical branches.
+        "-Wduplicated-cond"         # Warn about duplicated conditions in an if-else-if chain.
+        "-Wswitch-default"          # Warn whenever a switch statement does not have a default case.
+        "-Wwrite-strings"           # When compiling C, give string constants the type const char[length] so that copying the address of one into a non-const char * pointer produces a warning.
+        "-Wunused-macros"           # Warn about macros defined in the main file that are unused.
 )
 if ("${DEBUG_OUTPUT_METHOD}" STREQUAL "RTT")
     # The RTT libraries generate the following warning: supress it when using RTT.
@@ -134,9 +144,10 @@ set(TARGET_COMMON_FLAGS   ...flags appropriate to your target...
 )
 STRING(REPLACE ";" " " TARGET_COMMON_FLAGS "${TARGET_COMMON_FLAGS}")
 
-set(TARGET_DEFINITIONS    "-DCORE_CM0"
-                            "-D${TARGET_FAMILY}"
-                            "-DEVAL_BOARD"
+set(TARGET_DEFINITIONS
+    "-DCORE_CM..."
+    "-D${TARGET_FAMILY}"
+    "-DEVAL_BOARD"
 )
 STRING(REPLACE ";" " " TARGET_DEFINITIONS "${TARGET_DEFINITIONS}")
 
@@ -151,12 +162,17 @@ set(TARGET_COMPILER_FLAGS "-ffunction-sections -fdata-sections")
 set(TARGET_C_FLAGS "-std=c11")
 set(TARGET_LD_FLAGS "-Wl,--gc-sections")
 
+# Set language-wide flags for C language, used when building for all configurations.
 set(CMAKE_C_FLAGS "${TARGET_WARNING_FLAGS} ${TARGET_COMMON_FLAGS} ${TARGET_DEFINITIONS} ${TARGET_COMPILER_FLAGS} ${TARGET_C_FLAGS}")
+
+# Set linker flags to be used to create executables. These flags will be used by the linker when creating an executable.
 set(CMAKE_EXE_LINKER_FLAGS "${TARGET_COMMON_FLAGS} ${TARGET_LD_FLAGS}")
 
+# Flags for Debug build type or configuration.
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS} -DTARGET_DEBUG  -DAPP_DEBUG -Og -ggdb")
 set(CMAKE_EXE_LINKER_FLAGS_DEBUG "${TARGET_COMMON_FLAGS} ${TARGET_LD_FLAGS}")
 
+# Flags for Release build type or configuration.
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS} -Os -DNDEBUG")
 set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${TARGET_COMMON_FLAGS} ${TARGET_LD_FLAGS}")
 
@@ -166,21 +182,43 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 include_directories("${CMAKE_SOURCE_DIR}/...your include dirs ...")
 
-set (CMAKE_EXECUTABLE_SUFFIX ".elf")
+# Set output directory into which runtime target files should be built.
+SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
 
-SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR})
-
+# Add sources to executable target...
+# CMake recommends not using globbing and listing explicitly. With globbing it warns that you can compile files that
+# you don't mean to and that the addition/removal of a file is not present in your build system diff, so tracking down
+# "what did you change?" in debugging reported problems can be harder since there's no evidence of accidentally
+# added/removed files in a normal Git diff output.
 add_executable(application
     // List c files
 )
 
 if ("${DEBUG_OUTPUT_METHOD}" STREQUAL "RTT")
+    # Only add SEGGER RTT sources if compiling with RTT enabled
     target_sources(application
             PUBLIC "${CMAKE_SOURCE_DIR}/path-to-segger/SEGGER_RTT.c"
     )
 endif ()
 
-set_target_properties(application PROPERTIES LINK_FLAGS "-T'${CMAKE_CURRENT_SOURCE_DIR}/path-to-linker-file.ld'")
+# Set linker flags.
+set(NI_LINK_FLAGS
+        -T'${CMAKE_CURRENT_SOURCE_DIR}/path-to-LD-file'
+        -mcpu=cortex-...
+        -mthumb
+        -Wl,-gc-sections,--print-memory-usage,-Map=${PROJECT_BINARY_DIR}/${PROJECT_NAME}.map
+)
+STRING(REPLACE ";" " " NI_LINK_FLAGS "${NI_LINK_FLAGS}")
+set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "${NI_LINK_FLAGS}")
+
+# Build HEX and BIN files from the ELF target
+set(HEX_FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.hex)
+set(BIN_FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.bin)
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_OBJCOPY} -Oihex $lt;TARGET_FILE:${PROJECT_NAME}&gt; ${HEX_FILE}
+        COMMAND ${CMAKE_OBJCOPY} -Obinary $$lt;TARGET_FILE:${PROJECT_NAME}&gt; ${BIN_FILE}
+        COMMENT "Building ${HEX_FILE}
+Building ${BIN_FILE}")
     </pre>
     <p></p>
 
