@@ -245,6 +245,7 @@ if (${USE_CPPCHECK})
         # COMMAND_EXPAND_LISTS options to obtain robust argument splitting and quoting.
         add_custom_target(
                 ${PROJECT_NAME}_cppcheck
+                ALL #&lt; Adds to default target, remove to require distinct target to be made
                 COMMAND ${CMAKE_CXX_CPPCHECK}
                 ${CPPCHECK_SOURCES}
                 "-I;$&lt;JOIN:${CPPCHECK_INCS},;-I;&gt;" #&lt; Must be quoted so it is recognised as a generator expression
@@ -282,6 +283,7 @@ if (${USE_DOXYGEN})
         set(DOXYGEN_EXCLUDE_PATTERNS ...anything you'd like to ignore...)
         doxygen_add_docs(
                 ${PROJECT_NAME}_doxygen
+                ALL #&lt; Adds to default target, remove to require distinct target to be made
                 ${DOXY_INPUT}
                 COMMENT "Generate Doxygen content"
         )
