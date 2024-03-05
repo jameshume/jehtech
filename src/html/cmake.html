@@ -229,7 +229,7 @@ if (${USE_CPPCHECK})
     if (CMAKE_CXX_CPPCHECK)
         MESSAGE(STATUS "Found CPPCheck: `${CMAKE_CXX_CPPCHECK}`")
 
-        set (CPP_SOURCES ${MY_SOURCES})
+        get_target_property(CPPCHECK_SOURCES ${PROJECT_NAME}${CMAKE_EXECUTABLE_SUFFIX} SOURCES)
 
         # Filter the source set if you need too.
         list(FILTER CPP_SOURCES INCLUDE REGEX ...)
@@ -247,7 +247,7 @@ if (${USE_CPPCHECK})
                 ${PROJECT_NAME}_cppcheck
                 ALL
                 COMMAND ${CMAKE_CXX_CPPCHECK}
-                ${CPP_SOURCES}
+                ${CPPCHECK_SOURCES}
                 "-I;$&lt;JOIN:${CPPCHECK_INCS},;-I;&gt;" #&lt; Must be quoted so it is recognised as a generator expression
                 "-D$&lt;JOIN:${CPPCHECK_DEFS},;-D&gt;"   #&lt; Must be quoted so it is recognised as a generator expression
                 --force
