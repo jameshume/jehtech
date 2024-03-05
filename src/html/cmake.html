@@ -253,8 +253,8 @@ if (${USE_CPPCHECK})
                 --force
                 --enable=all
                 --suppress=missingIncludeSystem
-                COMMAND_EXPAND_LISTS
-                VERBATIM
+                COMMAND_EXPAND_LISTS                     #&lt; Lists in COMMAND arguments will be expanded, including those created with generator expressions
+                VERBATIM                                 #&lt; All arguments to the commands will be escaped properly for the build tool 
                 USES_TERMINAL
             )
         
