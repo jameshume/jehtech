@@ -243,7 +243,13 @@ STRING(REPLACE ";" " " TARGET_COMMON_FLAGS "${TARGET_COMMON_FLAGS}")
             For really space constrained firmware you might not want to link against the standard library and will want
             to stop GCC from assuming it can optimise certain functions based on the behaviour of the standard C library.
             For this you need the <code>-nostdlib</code> and <code>-ffreestanding</code>
-            directives <a href="https://cs107e.github.io/guides/gcc/" target="_blank">[Ref]</a>.
+            directives  -- <a href="https://cs107e.github.io/guides/gcc/" target="_blank">[Ref]</a>.
+        </p>
+        <p>
+            <q>
+                In freestanding mode, the only available standard header files are: &lt;float.h&gt;, &lt;iso646.h&gt;, &lt;limits.h&gt;, &lt;stdarg.h&gt;, 
+                &lt;stdbool.h&gt;, &lt;stddef.h&gt;, and &lt;stdint.h&gt; (C99 standard 4.6)
+            </q> -- <a href="https://cs107e.github.io/guides/gcc/" target="_blank">[Ref]</a>.
         </p>
         <pre>
 # In addition this project will not link against the standard C library (-nostdlib and -ffreestanding)
