@@ -96,6 +96,12 @@ expect > {send "rtt server stop 19021\n"}
 expect > {send "rtt server start 19021 0  \"Welcome\"\n"}
 expect "Listening on port 19021 for rtt connections"
 
+trap {
+  send_user "\n\nCTRL-C pressed. Stopping RTT server and exiting\n"
+  send "rtt server stop 19021\n"
+  exit
+} SIGINT
+
 # Exit
 expect > {send "exit\n"}
 
