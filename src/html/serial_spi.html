@@ -28,6 +28,24 @@
 </div>
 
 
+<h2>Modes</h2>
+<div>
+	<p></p>
+	<pre>CPOL | CPHA | CLK in idle state | Clock Phase Used to Sample and/or Shift the Data
+-----|------|-------------------|-------------------------------------------------------------------------
+0    | 0    | Logic low         | Data sampled on the rising  edge - and - shifted out on the falling edge
+0    | 1    | Logic low         | Data sampled on the falling edge - and - shifted out on the rising  edge
+1    | 0    | Logic high        | Data sampled on the falling edge - and - shifted out on the rising  edge
+1    | 1    | Logic high        | Data sampled on the rising  edge - and - shifted out on the falling edge
+
+I.e., CPHA is the edge that sampling is done: 0 is the first edge and 1 is the second edge. Whether the first
+edge is rising or falling is determined by CPOL.
+
+From the above one can see that data is sampled on the falling edge when CPOL ^ CPHA == 1. The decision on
+whether to sample, can therefore be reduced to ¬((CPOL ^ CPHA) ^ CLK_FALLING)</pre>
+	<p></p>
+</div>
+
 </div> <!-- END H1 padding div -->
 </div>
 </body>
