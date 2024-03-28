@@ -119,3 +119,42 @@ telnet 127.0.0.1 19021 | ts '[%Y-%m-%d %H:%M:%S]'
 ```
 
 Then execute the first script and you have an RTT debug feed. Hooray.
+
+## OpenOCD And Multiple STLink Devices
+Follow the method found [here](https://stackoverflow.com/a/48215590):
+
+```
+lsusb -vvv
+```
+
+The output will give something like:
+
+```
+Bus 001 Device 003: ID 0483:374e STMicroelectronics STLINK-V3
+Device Descriptor:     
+  bLength                18 
+  bDescriptorType         1 
+  bcdUSB               2.00 
+  bDeviceClass          239 Miscellaneous Device
+  bDeviceSubClass         2
+  bDeviceProtocol         1 Interface Association
+  bMaxPacketSize0        64 
+  idVendor           0x0483 STMicroelectronics
+  idProduct          0x374e STLINK-V3
+  bcdDevice            1.00 
+  iManufacturer           1 STMicroelectronics
+  iProduct                2 STLINK-V3
+  iSerial                 3 123456789012345678901234
+  bNumConfigurations      1
+  Configuration Descriptor:
+    ...
+    ...
+```
+
+Just take the `iSerial` string and add it to your config as:
+
+```
+hla_serial 123456789012345678901234
+```
+
+
