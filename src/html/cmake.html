@@ -65,6 +65,63 @@ rm -fr CMake-3.28.0-rc4 </pre>
     <p></p>
 </div>
 
+<h2>Intro</h2>
+<div>
+    <p>
+        Some commonly used commands:
+    </p>
+    <ul>
+        <li><code>message</code>: prints given message.</li>
+        <li><code>cmake_minimum_required</code>: sets minimum version of cmake to be used.</li>
+        <li><code>add_executable</code>: adds executable target with given name.</li>
+        <li><code>add_library</code>: adds a library target to be build from listed source files.</li>
+        <li><code>add_subdirectory</code>: adds a subdirectory to build. CMake will enter this directory, find the <code>CMakeLists.txt</code> and build using that.</li>
+    </ul>
+
+    <p></p>
+
+    <h3>Build And Use A Library</h3>
+    <div>
+        <p>
+            In your main <code>CMakeLists.txt</code> add:
+        </p>
+        <pre>add_subdirectory(...)
+...            
+target_link_libraries(project-name library-name)</pre>
+        <p>
+            In your library subdirectory add another <code>CMakeLists.txt</code>: 
+        </p>
+        <pre>cmake_minimum_required(VERSION ...)
+set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
+add_library(library-name SHARED|STATIC ...sources...)</pre>
+        <p></p>
+    </div>
+
+    <h3>Functions And Macros</h3>
+    <div>
+        <p>
+            Functions introduce new scope, macros do not - they're a little like a C preprocessor macro. Neither can return in the sense 
+            that a normally programming language returns a value. Returning is done via an output parameter.
+        </p>
+        <p>
+            Generically:
+        </p>
+        <pre>function(function-name arg1 arg2 ...)
+    set(function-name-output-parameter ... PARENT_SCOPE)
+endfunction()
+
+macro(macro-name arg1 arg2)
+    set(macro-name-output-parameter ...)    
+endmacro()</pre>
+        <p>
+            Function arguments that are specified in the definition are required, but the function can accept any number
+            of parameters using automatically and scoped vairables <code>ARGV</code>, <code>ARGC</code>, <code>ARGn</code>,
+            where <code>n</code> is the index of the argument. See also <code>cmake_parse_arguments()</code>.
+        </p>
+    </div>
+
+</div>
+
 <h2>Embedded C Project Template</h2>
 <div>
     <pre>
