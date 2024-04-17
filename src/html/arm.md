@@ -454,6 +454,10 @@ a **different context is being restored**... hence the context switch!
     source /etc/profile
     ```
 * Add the `bin` folder under your installation directory to the `PATH` environment variable.
+
+### Pre Ubuntu 23
+NOTE the following steps do not work in Ubuntu 23.
+
 * If you see the following when running GDB, install ncurses using `sudo apt install -y libncursesw5`.
     ```
     opt/gcc-arm-none-eabi/bin/arm-none-eabi-gdb: error while loading shared libraries: libncursesw.so.5: cannot open shared object file: No such file or directory
@@ -464,3 +468,32 @@ a **different context is being restored**... hence the context switch!
     sudo apt install -y python3.8
     ```
 
+### Ubuntu 23 and later
+Ubuntu 23 has removed the `libncurses5` and `libncursesw5` packages because they were removed in
+upstream Debian [[Ref]](https://answers.launchpad.net/ubuntu/+question/707838).
+
+To install the the packages you can use the _insecure_ package repository `lunar-security` by
+adding the following to your `/etc/apt/sources.list` file [[Ref]](https://community.localwp.com/t/i-can-not-install-localwp-into-ubuntu-23-10-because-comes-back-with-error-dependency-is-not-satisfiable-libncurses5/38920/3)[[Ref]](https://packages.ubuntu.com/lunar/amd64/libncurses5/download):
+
+```
+deb http://security.ubuntu.com/ubuntu lunar-security main universe
+```
+
+Then do 
+
+```
+sudo apt update
+sudo apt install -y sudo apt-get install libncurses5 libncursesw5
+sudo apt --fix-broken install
+```
+
+Then use Python 3.8.18 as required by the ARM GDB, it is easiest to use PyEnv, the
+following taken verbatim from [[Ref]](https://stackoverflow.com/a/77456816/1517244)
+
+```
+pyenv install 3.8.18
+sudo mkdir -p /usr/local/bld-tools
+sudo ln -s $PYENV_ROOT/versions/3.8.18 /usr/local/bld-tools/bld-tools-virtual-env
+```
+
+GDB should now work!
