@@ -1400,10 +1400,40 @@
 					an HF short circuit must have low lead and PC track inductance, so each supply capacitor must be located very close to the
 					two terminals of the IC it is decoupling. It is also important to choose capacitors with low internal inductance -
 					usually ceramic ones.</p>
-				<footer>--<a href="https://www.analog.com/en/analog-dialogue/raqs/raq-issue-76.html#:~:text=There%20are%20two%20important%20reasons,the%20performance%20of%20other%20circuits." target="_blank">In and Out - or - Why Have a Capacitor?</a>, James Byrant, AnalgueDialogue.com</footer>
+					<footer>--<a href="https://www.analog.com/en/analog-dialogue/raqs/raq-issue-76.html" target="_blank">In and Out - or - Why Have a Capacitor?</a>, James Byrant, AnalgueDialogue.com</footer>
 			</blockquote>
 			<p>
+				And then this rather more friendly version by some chap on SO:
 			</p>
+			<blockquote>
+				<p>
+					Most electronics do not draw constant current from the supply. Some draw current in quick bursts, like a logic chip/cpu which will draw a current spike on each clock cycle, others like an amplifier will draw current depending on signal and what the load requires.
+				</p><p>
+					Now, these circuits usually need their power supply voltage to be within certain limits to work properly. If the voltage sags too much, then the cpu could crash, for example. Or, if the supply voltage has too much noise on it, your low-noise amplifier will no longer be low-noise.
+				</p><p>	
+					The relation of this to decoupling capacitors is simple:
+				</p><p>	
+					You have a voltage regulator. Some are faster than others, but all have a non-zero response time. When load current varies, it won't react instantly. If the load current varies quickly, then you need a capacitor on the output of your regulator to keep the output voltage stable. Some regulators also require specific capacitors for proper operation.
+				</p><p>	
+					This capacitor is usually called "bulk cap". Depending on the application, it will be something like 10-100µF (sometimes more) and its purpose is to store enough energy to power the circuit until the regulator reacts to a quick change in current demand.
+				</p><p>	
+					Next is supply inductance. I hope you know that the voltage across an inductance is $-L\frac{di}{dt}$. This means fast variations of current across the inductance of long traces will result in non-negligible voltage drop when current changes quickly.
+				</p><p>	
+					A local decoupling cap with a low inductance (ie, ceramic surface mount) placed close to the chip addresses this problem. Its value is small, so it stores very little energy, but that is not its purpose. It is there only to provide a low inductance help to the bulk cap.
+				</p>
+				<footer>--<a href="https://electronics.stackexchange.com/a/289709">De-coupling capacitor and Bulk capacitor SO question</a></footer>
+			</blockquote>
+			<p></p>
+
+			<h3>Bypass Capacictors</h3>
+			<p>
+				TODO
+			</p>
+
+			<h3>TO READ</h3>
+			<ol>
+				<li>What they don't teach you about capactors - https://resources.altium.com/p/what-they-do-not-teach-you-about-capacitors</li>
+			</ol>
 
 			<h3>References</h3>
 			<ul>
