@@ -165,30 +165,61 @@ class Component:
 
 import numpy as np
 import matplotlib.path as mpath
+import math
 
 def draw_ltspice_arc(ax,  a, b, c, d, e, f, g, h):
 
-    # (a,b) and (c,d) are the points between which the arc should extend. (a,b) looks like the start and (c,d) is the end
+    # (arc4,arc5) and (arc6,arc7) are the points between which the arc should extend. (a,b) looks like the start and (c,d) is the end
     # Define the arc using a Bézier curvea
-    circle1 = pl.Circle((e, f), 1.2, color='r')
+    # arc0,1 is the boarding box corner and so is arc 2,3
+    arc1x = e
+    arc1y = f
+    arc2x = g
+    arc2y = h
+
+    bbox_x1 = a
+    bbox_y1 = b
+    bbox_x2 = c
+    bbox_y2 = d
+    bbox_w = bbox_x2 - bbox_x1
+    bbox_h = bbox_y2 - bbox_y1
+    bbox_xc = bbox_x1 + bbox_w / 2
+    bbox_yc = bbox_y1 + bbox_h / 2
+
+    circle1 = pl.Circle((arc1x, arc1y), 1, color='r')
     ax.add_patch(circle1)
-    circle1 = pl.Circle((g, h), 1.2, color='g')
+    circle1 = pl.Circle((arc2x, arc2y), 1, color='g')
+    ax.add_patch(circle1)
+    circle1 = pl.Circle((bbox_xc, bbox_yc), 1, color='purple')
     ax.add_patch(circle1)
 
-    circle1 = pl.Circle((a, b), 1.2, color='purple')
-    ax.add_patch(circle1)
+    # so have to figure out what theta1 and 2 are :/ Thanksyou SO https://math.stackexchange.com/a/613762
+    # must convert atan radians to degs.
+    # 2pi rad = 360d, 1 rad = 360/2pi
+    #
+    # Also arc in MPL is drawn counter clockwise. 
+    # So when point1 (arcy1,arc1y)
 
-    circle1 = pl.Circle((c, d), 1.2, color='b')
-    ax.add_patch(circle1)
+    t1 = math.atan2((bbox_xc - arc1x), (bbox_yc - arc1y)) * 180 / math.pi
+    t2 = math.atan2((bbox_xc - arc2x), (bbox_yc - arc2y)) * 180 / math.pi
 
-    #path = mpatches.PathPatch(
-    #    mpath.Path([(start_x, start_y), (cp2_x, cp2_y), (end_x, end_y), (cp1_x, cp1_y)], 
-    #    [mpatches.Path.MOVETO, mpatches.Path.CURVE3, mpatches.Path.CURVE3, mpatches.Path.STOP]),fc="none")
-    
-    # Add the arc to the plot
-    #ax.add_patch(path)
+    print("1", bbox_xc - arc1x, bbox_yc - arc1y)
+    print("2", bbox_xc - arc2x, bbox_yc - arc2y)
+    print(t1, t2)
+
+    arc1 = mpatches.Ellipse((bbox_xc, bbox_yc), bbox_w, bbox_h, color='yellow', fill=False)
+    ax.add_patch(arc1)
+
+    arc1 = mpatches.Arc((bbox_xc, bbox_yc), bbox_w, bbox_h, angle=0, theta1=t1, theta2=t2, color='b')
+    ax.add_patch(arc1)
+
+
 
 def matplotlib_plot_component(component, ax):
+    ax.spines[['left', 'bottom', 'right', 'top']].set_visible(False)
+    ax.set_xticks([]) 
+    ax.set_yticks([]) 
+
     for line in component.lines:
         ax.plot([line.p1.x, line.p2.x], [line.p1.y, line.p2.y], c='b')
     for rect in component.rectangles:
@@ -200,12 +231,9 @@ def matplotlib_plot_component(component, ax):
         if pin.name is not None:
             ax.text(pin.p.x, pin.p.y, pin.name)
     for arc in component.arcs:
-        # -20 -124     4 -100     -20 -112 -8 -100
-        #xy, width, height
-        #arc1 = mpatches.Arc((arc[0], arc[1]), arc[2]-arc[0], arc[3]-arc[1], theta1=arc[5], theta2=arc[6])
         draw_ltspice_arc(ax, arc[0], arc[1], arc[2], arc[3], arc[4], arc[5], arc[6], arc[7])
         break
-        #ax.add_patch(arc1)
+        
 
 if False:
     fn = "/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/cap.asy"
