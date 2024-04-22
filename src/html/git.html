@@ -1890,6 +1890,12 @@ git commit -m "updated the submodule reference"</pre>
 </p>
 <pre class="prettyprint linenums">git submodule update --init --recursive</pre>
 <p></p>
+
+    <h3>When Git Modules Go Out Of Sync</h3>
+    <p>
+        For whatever reason the submodule config is duplicated between <code>.git/config</code> and <code>.gitmodules</code>. If you are having
+        problems initialising a submodule and the link looks wrong etc., try <code>git submodule sync</code>!.
+    </p>
 </div>
 
 <h2>Super Error Recovery</h2>
