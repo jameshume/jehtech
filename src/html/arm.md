@@ -304,9 +304,13 @@ The stack frame is described in Figure B1-3 of the ArmV7 Exception Model like so
 ![ArmV7 Stack Frame](##IMG_DIR##/../armv7_stack_layour_no_fp_regs.png)
 
 
-## Exceptions
+## Exceptions / Interrupts
 ### References
 * [PendSV+SVC on Cortex M](https://jeelabs.org/202x/jeeh/pendsvc/)
+
+### NVIC Enabled Interrupt
+The interrupts are grouped in groups of 32, where `NVIC_ISER[0]` is for vectors numbered 0 through 31, `NVIC_ISER[1]` 32 through 63, and so on. In the the vendor's CMSIS package,
+there is likely the type `IRQn_Type`. The vectors 0 and above, map directly to the `NVIC_ISRx` register.
 
 ### Stacking
 Stacking is done by the Cortex-M for you and involves saving the current state of the processor so that the interrupted program can be resumed after the interrupt is serviced. 

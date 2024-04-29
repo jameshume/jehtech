@@ -186,29 +186,20 @@ def draw_ltspice_arc(ax,  a, b, c, d, e, f, g, h):
     bbox_xc = bbox_x1 + bbox_w / 2
     bbox_yc = bbox_y1 + bbox_h / 2
 
-    circle1 = pl.Circle((arc1x, arc1y), 1, color='r')
-    ax.add_patch(circle1)
-    circle1 = pl.Circle((arc2x, arc2y), 1, color='g')
-    ax.add_patch(circle1)
-    circle1 = pl.Circle((bbox_xc, bbox_yc), 1, color='purple')
-    ax.add_patch(circle1)
+    # Need to shift the center to 0 and the coordinates relative to the center at 0.
+    # So...
+    arc1x_2 = arc1x - bbox_xc
+    arc1y_2 = arc1y - bbox_yc
+    arc2x_2 = arc2x - bbox_xc
+    arc2y_2 = arc2y - bbox_yc
 
-    # so have to figure out what theta1 and 2 are :/ Thanksyou SO https://math.stackexchange.com/a/613762
-    # must convert atan radians to degs.
-    # 2pi rad = 360d, 1 rad = 360/2pi
-    #
-    # Also arc in MPL is drawn counter clockwise. 
-    # So when point1 (arcy1,arc1y)
+    t1 = math.atan2(arc1y_2, arc1x_2) * 180 / math.pi #< degrees
+    t2 = math.atan2(arc2y_2, arc2x_2) * 180 / math.pi #< degrees
 
-    t1 = math.atan2((bbox_xc - arc1x), (bbox_yc - arc1y)) * 180 / math.pi
-    t2 = math.atan2((bbox_xc - arc2x), (bbox_yc - arc2y)) * 180 / math.pi
-
-    print("1", bbox_xc - arc1x, bbox_yc - arc1y)
-    print("2", bbox_xc - arc2x, bbox_yc - arc2y)
-    print(t1, t2)
-
-    arc1 = mpatches.Ellipse((bbox_xc, bbox_yc), bbox_w, bbox_h, color='yellow', fill=False)
-    ax.add_patch(arc1)
+    if t1 > t2:
+        t = t1
+        t1 = t2
+        t2 = t
 
     arc1 = mpatches.Arc((bbox_xc, bbox_yc), bbox_w, bbox_h, angle=0, theta1=t1, theta2=t2, color='b')
     ax.add_patch(arc1)
@@ -230,9 +221,8 @@ def matplotlib_plot_component(component, ax):
         ax.add_patch(circle1)
         if pin.name is not None:
             ax.text(pin.p.x, pin.p.y, pin.name)
-    for arc in component.arcs:
+    for arc in component.arcs[0:]:
         draw_ltspice_arc(ax, arc[0], arc[1], arc[2], arc[3], arc[4], arc[5], arc[6], arc[7])
-        break
         
 
 if False:
@@ -259,10 +249,28 @@ if False:
     pl.show()
     pl.close(fig)
 
+if False:
+    fn = "/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/Misc/NE555.asy"
+    fig, ax = pl.subplots()
+    matplotlib_plot_component(Component(fn), ax)
+    fig.show()
+    pl.show()
+    pl.close(fig)
 
-fn = "/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/Misc/NE555.asy"
-fig, ax = pl.subplots()
-matplotlib_plot_component(Component(fn), ax)
-fig.show()
-pl.show()
-pl.close(fig)
+import os
+import fnmatch
+def YieldFiles(dirToScan, mask):
+    for rootDir, subDirs, files in os.walk(dirToScan):
+        for fname in files:
+            if fnmatch.fnmatch(fname, mask):
+                yield (rootDir, fname)
+
+for dir, file in YieldFiles("/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym", "*.asy"):
+    fn = os.path.join(dir, file)
+    with open(fn, "r") as fh:
+        print(fh.readlines())
+    fig, ax = pl.subplots()
+    matplotlib_plot_component(Component(fn), ax)
+    fig.show()
+    pl.show()
+    pl.close(fig)
