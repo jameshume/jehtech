@@ -270,37 +270,6 @@ def matplotlib_plot_component(component, ax):
         draw_ltspice_arc(ax, arc[0], arc[1], arc[2], arc[3], arc[4], arc[5], arc[6], arc[7])
         
 
-if False:
-    fn = "/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/cap.asy"
-    fig, ax = pl.subplots()
-    matplotlib_plot_component(Component(fn), ax)
-    fig.show()
-    pl.show()
-    pl.close(fig)
-
-if False:
-    fn = "/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/nmos.asy"
-    fig, ax = pl.subplots()
-    matplotlib_plot_component(Component(fn), ax)
-    fig.show()
-    pl.show()
-    pl.close(fig)
-
-if False:
-    fn = "/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/npn.asy"
-    fig, ax = pl.subplots()
-    matplotlib_plot_component(Component(fn), ax)
-    fig.show()
-    pl.show()
-    pl.close(fig)
-
-if False:
-    fn = "/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/Misc/NE555.asy"
-    fig, ax = pl.subplots()
-    matplotlib_plot_component(Component(fn), ax)
-    fig.show()
-    pl.show()
-    pl.close(fig)
 
 import os
 import fnmatch
