@@ -67,6 +67,29 @@ class Rectangle:
     @property 
     def w(self):
         return self._w
+    
+class Ellipse:
+    def __init__(self, cx, cy, w, h):
+        self._cx = cx
+        self._cy = cy
+        self._h = h
+        self._w = w
+    
+    @property 
+    def cx(self):
+        return self._cx
+    
+    @property 
+    def cy(self):
+        return self._cy
+    
+    @property 
+    def h(self):
+        return self._h
+
+    @property 
+    def w(self):
+        return self._w
 
 
 class Component:
@@ -75,6 +98,7 @@ class Component:
         self._pins  = []
         self._rectangles = []
         self._arcs = []
+        self._ellipses = []
 
         state = "idle"
         curret_pin = None
@@ -133,6 +157,20 @@ class Component:
                             h = float(line[7])
                             self._arcs.append((a,b,c,d,e,f,g,h))
 
+                        elif line[0:len("CIRCLE ")] == "CIRCLE ":
+                            line = line.split()[1:]
+                            if not represents_int(line[0]):
+                                line = line[1:]
+                            x1 = float(line[0])
+                            y1 = float(line[1])
+                            x2 = float(line[2])
+                            y2 = float(line[3])
+                            cx = min(x1, x2) + abs(x1 - x2)/2
+                            cy = min(y1, y2) + abs(y1 - y2)/2
+                            w = abs(x1 - x2)
+                            h = abs(y1 - y2)
+                            self._ellipses.append(Ellipse(cx, cy, w, h))
+
                     elif state == "pin":
                         if line[0:len("PINATTR ")] == "PINATTR ":
                             line = line.split()[1:]
@@ -161,6 +199,10 @@ class Component:
     @property
     def arcs(self):
         return self._arcs
+    
+    @property
+    def ellipses(self):
+        return self._ellipses
 
 
 import numpy as np
@@ -214,8 +256,11 @@ def matplotlib_plot_component(component, ax):
     for line in component.lines:
         ax.plot([line.p1.x, line.p2.x], [line.p1.y, line.p2.y], c='b')
     for rect in component.rectangles:
-        rect1 = pl.Rectangle((rect.p.x, rect.p.y), rect.w, rect.h, fill=False)
+        rect1 = pl.Rectangle((rect.p.x, rect.p.y), rect.w, rect.h, fill=False, color='b')
         ax.add_patch(rect1)
+    for ellipse in component.ellipses:
+        el1 = mpatches.Ellipse((ellipse.cx, ellipse.cy), ellipse.w, ellipse.h, fill=False, color='b')
+        ax.add_patch(el1)
     for pin in component.pins:
         circle1 = pl.Circle((pin.p.x, pin.p.y), 1, color='r')
         ax.add_patch(circle1)
@@ -267,8 +312,9 @@ def YieldFiles(dirToScan, mask):
 
 for dir, file in YieldFiles("/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym", "*.asy"):
     fn = os.path.join(dir, file)
+    print(fn)
     with open(fn, "r") as fh:
-        print(fh.readlines())
+        print("\n".join(fh.readlines()))
     fig, ax = pl.subplots()
     matplotlib_plot_component(Component(fn), ax)
     fig.show()
