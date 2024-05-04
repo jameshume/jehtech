@@ -210,10 +210,9 @@ import matplotlib.path as mpath
 import math
 
 def draw_ltspice_arc(ax,  a, b, c, d, e, f, g, h):
-
-    # (arc4,arc5) and (arc6,arc7) are the points between which the arc should extend. (a,b) looks like the start and (c,d) is the end
-    # Define the arc using a Bézier curvea
-    # arc0,1 is the boarding box corner and so is arc 2,3
+    """
+    This is an ugly mess - plots the arcs correctly but I need to go over it again to properly figure it out, especially to get the bounding box correctly calculated
+    """
     arc1x = e
     arc1y = f
     arc2x = g
@@ -225,8 +224,24 @@ def draw_ltspice_arc(ax,  a, b, c, d, e, f, g, h):
     bbox_y2 = d
     bbox_w = bbox_x2 - bbox_x1
     bbox_h = bbox_y2 - bbox_y1
+
+    if bbox_w < 0:
+        bbox_w = -bbox_w
+        t = bbox_x1 
+        bbox_x1 = bbox_x2
+        bbox_x2 = t
+
+
+    if bbox_h < 0:
+        bbox_h = -bbox_h
+        t = bbox_y1 
+        bbox_y1 = bbox_y2
+        bbox_y2 = t
+
+   
     bbox_xc = bbox_x1 + bbox_w / 2
     bbox_yc = bbox_y1 + bbox_h / 2
+
 
     # Need to shift the center to 0 and the coordinates relative to the center at 0.
     # So...
@@ -235,41 +250,91 @@ def draw_ltspice_arc(ax,  a, b, c, d, e, f, g, h):
     arc2x_2 = arc2x - bbox_xc
     arc2y_2 = arc2y - bbox_yc
 
+    ret = (min(arc1x_2, arc2x_2), min(arc1y_2, arc2y_2), max(arc1x_2, arc2x_2), max(arc1y_2, arc2y_2))
+
     t1 = math.atan2(arc1y_2, arc1x_2) * 180 / math.pi #< degrees
     t2 = math.atan2(arc2y_2, arc2x_2) * 180 / math.pi #< degrees
 
-    if t1 > t2:
-        t = t1
-        t1 = t2
-        t2 = t
+    if (t1 >= 0 and t2 < 0) or (t2 >= 0 and t1 < 0) or (t1 > t2):
+            t = t1
+            t1 = t2
+            t2 = t
 
     arc1 = mpatches.Arc((bbox_xc, bbox_yc), bbox_w, bbox_h, angle=0, theta1=t1, theta2=t2, color='b')
     ax.add_patch(arc1)
 
+    return ret
 
+
+
+
+def update_minx(x1,x2):
+    global minx
+    thismin = min(x1,x2)
+    if thismin < minx:
+        minx = thismin
+
+def update_maxx(x1,x2):
+    global maxx
+    thismax = max(x1,x2)
+    if thismax > maxx:
+        maxx = thismax
+
+
+def update_miny(y1,y2):
+    global miny
+    thismin = min(y1,y2)
+    if thismin < miny:
+        miny = thismin
+
+def update_maxy(y1,y2):
+    global maxy
+    thismax = max(y1,y2)
+    if thismax > maxy:
+        maxy = thismax
+
+def update_minmax(x1, y1, x2, y2):
+    print(f"Update mm using ({x1}, {y1}), ({x2},{y2})")
+    update_minx(x1, x2)
+    update_maxx(x1, x2)
+    update_miny(y1, y2)
+    update_maxy(y1, y2)
+
+    global minx, miny, maxx, maxy
+    print(f"    Now ({minx}, {miny}), ({maxx},{maxy})")
 
 def matplotlib_plot_component(component, ax):
-    ax.spines[['left', 'bottom', 'right', 'top']].set_visible(False)
-    ax.set_xticks([]) 
-    ax.set_yticks([]) 
+
+
+    global minx, miny, maxx, maxy
+    minx = 1000000
+    miny = 1000000
+    maxx = -1000000
+    maxy = -1000000
 
     for line in component.lines:
         ax.plot([line.p1.x, line.p2.x], [line.p1.y, line.p2.y], c='b')
+        update_minmax(line.p1.x, line.p1.y, line.p2.x, line.p2.y)
+
     for rect in component.rectangles:
-        rect1 = pl.Rectangle((rect.p.x, rect.p.y), rect.w, rect.h, fill=False, color='b')
+        rect1 = mpatches.Rectangle((rect.p.x, rect.p.y), rect.w, rect.h, fill=False, color='b')
         ax.add_patch(rect1)
+        update_minmax(rect.p.x, rect.p.y, rect.p.x + rect.w, rect.p.y + rect.h)
+
     for ellipse in component.ellipses:
         el1 = mpatches.Ellipse((ellipse.cx, ellipse.cy), ellipse.w, ellipse.h, fill=False, color='b')
         ax.add_patch(el1)
+        update_minmax(ellipse.cx - ellipse.w/2, ellipse.cy - ellipse.h/2, ellipse.cx + ellipse.w/2, ellipse.cy + ellipse.h/2)
+
     for pin in component.pins:
-        circle1 = pl.Circle((pin.p.x, pin.p.y), 1, color='r')
+        circle1 = mpatches.Circle((pin.p.x, pin.p.y), 1, color='r')
         ax.add_patch(circle1)
         if pin.name is not None:
             ax.text(pin.p.x, pin.p.y, pin.name)
-    for arc in component.arcs[0:]:
-        draw_ltspice_arc(ax, arc[0], arc[1], arc[2], arc[3], arc[4], arc[5], arc[6], arc[7])
-        
 
+    for arc in component.arcs[0:]:
+        r = draw_ltspice_arc(ax, arc[0], arc[1], arc[2], arc[3], arc[4], arc[5], arc[6], arc[7])
+        update_minmax(r[0], r[1], r[2], r[3])
 
 import os
 import fnmatch
@@ -281,11 +346,19 @@ def YieldFiles(dirToScan, mask):
 
 for dir, file in YieldFiles("/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym", "*.asy"):
     fn = os.path.join(dir, file)
+#for fn in ["/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/SOAtherm-NMOS.asy", "/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/ind.asy", "/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/ISO16750-2.asy", "/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/Misc/NE555.asy"]:
     print(fn)
     with open(fn, "r") as fh:
         print("\n".join(fh.readlines()))
     fig, ax = pl.subplots()
+    ax.spines[['left', 'bottom', 'right', 'top']].set_visible(False)
+    ax.set_xticks([]) 
+    ax.set_yticks([]) 
     matplotlib_plot_component(Component(fn), ax)
+    MARGIN = 5
+    ax.set_xlim(minx - MARGIN, maxx + MARGIN)
+    ax.set_ylim(miny - MARGIN, maxy + MARGIN)
+    fig.tight_layout()
     fig.show()
     pl.show()
     pl.close(fig)

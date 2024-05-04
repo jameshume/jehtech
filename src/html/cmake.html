@@ -291,6 +291,30 @@ set(TARGET_COMMON_FLAGS   "-mlittle-endian"
 )
 STRING(REPLACE ";" " " TARGET_COMMON_FLAGS "${TARGET_COMMON_FLAGS}")    
         </pre>
+        <p>
+            One thing I did want to do was to check my GCC compiler version. CMake should support
+            macros to do this (<code>CMAKE_CXX_COMPILER_ID</code> and <code>CMAKE_CXX_COMPILER_VERSION</code>) but they didn't work for me so I ended up writing the following:
+        </p>
+        <pre>if (CMAKE_C_COMPILER STREQUAL "CMAKE_C_COMPILER-NOTFOUND")
+            message(FATAL_ERROR "Compiler not found")
+        else()
+            execute_process(
+                    COMMAND "${CMAKE_C_COMPILER}" "--version"
+                    COMMAND "grep" "-Eo" "[0-9]+\\.[0-9]+\\.[0-9]+"
+                    RESULT_VARIABLE COMPILER_VERSION_ERROR
+                    OUTPUT_VARIABLE COMPILER_VERSION_OUTPUT
+                    ERROR_VARIABLE COMPILER_VERSION_OUTPUT_ERROR
+                    OUTPUT_STRIP_TRAILING_WHITESPACE
+                    ERROR_STRIP_TRAILING_WHITESPACE)
+        
+            if (NOT ${COMPILER_VERSION_ERROR} EQUAL 0)
+                message(FATAL_ERROR "Failed to query compiler version.\n\t\tError code or reason: ${COMPILER_VERSION_ERROR}.\n\t\tSTDERR: ${COMPILER_VERSION_OUTPUT_ERROR}")
+            endif()
+        
+            if(${COMPILER_VERSION_OUTPUT} VERSION_LESS "13.2")
+                message(FATAL_ERROR "Required GCC version 13.2 or later. Found ${COMPILER_VERSION_OUTPUT}.")
+            endif()
+        endif()</pre>
         <p></p>
     </div>
 
