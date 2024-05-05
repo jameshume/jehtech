@@ -99,7 +99,8 @@ class Component:
         self._rectangles = []
         self._arcs = []
         self._ellipses = []
-
+        self._windows = []
+        arc_index = 0
         state = "idle"
         curret_pin = None
 
@@ -155,7 +156,8 @@ class Component:
                             f = float(line[5])
                             g = float(line[6])
                             h = float(line[7])
-                            self._arcs.append((a,b,c,d,e,f,g,h))
+                            arc_index += 1
+                            self._arcs.append((a,b,c,d,e,f,g,h,arc_index))
 
                         elif line[0:len("CIRCLE ")] == "CIRCLE ":
                             line = line.split()[1:]
@@ -170,6 +172,16 @@ class Component:
                             w = abs(x1 - x2)
                             h = abs(y1 - y2)
                             self._ellipses.append(Ellipse(cx, cy, w, h))
+                        
+                        elif line[0:len("WINDOW ")] == "WINDOW ":
+                            line = line.split()[1:]
+                            a = float(line[0])
+                            b = float(line[1])
+                            c = float(line[2])
+                            d = line[3]
+                            e = float(line[4])
+                            self._windows.append((a,b,c,d,e))
+                            
 
                     elif state == "pin":
                         if line[0:len("PINATTR ")] == "PINATTR ":
@@ -209,7 +221,7 @@ import numpy as np
 import matplotlib.path as mpath
 import math
 
-def draw_ltspice_arc(ax,  a, b, c, d, e, f, g, h):
+def draw_ltspice_arc(ax,  a, b, c, d, e, f, g, h, idx):
     """
     This is an ugly mess - plots the arcs correctly but I need to go over it again to properly figure it out, especially to get the bounding box correctly calculated
     """
@@ -238,9 +250,17 @@ def draw_ltspice_arc(ax,  a, b, c, d, e, f, g, h):
         bbox_y1 = bbox_y2
         bbox_y2 = t
 
-   
+
+
     bbox_xc = bbox_x1 + bbox_w / 2
     bbox_yc = bbox_y1 + bbox_h / 2
+
+    ax.text(bbox_xc, bbox_yc, f"{idx}", color="r")
+
+
+    ax.add_patch(mpatches.Circle((arc1x, arc1y), 1, color='r'))
+    ax.add_patch(mpatches.Circle((arc2x, arc2y), 1, color='g'))
+    ax.add_patch(mpatches.Circle((bbox_xc, bbox_yc), 1, color='purple'))
 
 
     # Need to shift the center to 0 and the coordinates relative to the center at 0.
@@ -250,12 +270,18 @@ def draw_ltspice_arc(ax,  a, b, c, d, e, f, g, h):
     arc2x_2 = arc2x - bbox_xc
     arc2y_2 = arc2y - bbox_yc
 
-    ret = (min(arc1x_2, arc2x_2), min(arc1y_2, arc2y_2), max(arc1x_2, arc2x_2), max(arc1y_2, arc2y_2))
+    ret = (min(arc1x, arc2x), min(arc1y, arc2y), max(arc1x, arc2x), max(arc1y, arc2y))
+    print(ret)
 
     t1 = math.atan2(arc1y_2, arc1x_2) * 180 / math.pi #< degrees
     t2 = math.atan2(arc2y_2, arc2x_2) * 180 / math.pi #< degrees
 
-    if (t1 >= 0 and t2 < 0) or (t2 >= 0 and t1 < 0) or (t1 > t2):
+    print(f"{idx}) p1 = ({arc1x},{arc1y}), p2 = ({arc2x},{arc2y}), c = ({bbox_xc},{bbox_yc})")
+    print(f"{idx}) t1 = {t1}, t2 = {t2}")
+
+    #if (t1 >= 0 and t2 < 0) or (t2 >= 0 and t1 < 0) or (t1 > t2):
+    if (t1 > t2) or (t2 >= 0 and t1 < 0):
+            ret = (min(bbox_x1, bbox_x2), min(bbox_y1, bbox_y2), max(bbox_x1, bbox_x2), max(bbox_y1, bbox_y2))
             t = t1
             t1 = t2
             t2 = t
@@ -287,25 +313,22 @@ def update_miny(y1,y2):
     if thismin < miny:
         miny = thismin
 
+
 def update_maxy(y1,y2):
     global maxy
     thismax = max(y1,y2)
     if thismax > maxy:
         maxy = thismax
 
+
 def update_minmax(x1, y1, x2, y2):
-    print(f"Update mm using ({x1}, {y1}), ({x2},{y2})")
     update_minx(x1, x2)
     update_maxx(x1, x2)
     update_miny(y1, y2)
     update_maxy(y1, y2)
 
-    global minx, miny, maxx, maxy
-    print(f"    Now ({minx}, {miny}), ({maxx},{maxy})")
 
 def matplotlib_plot_component(component, ax):
-
-
     global minx, miny, maxx, maxy
     minx = 1000000
     miny = 1000000
@@ -333,8 +356,14 @@ def matplotlib_plot_component(component, ax):
             ax.text(pin.p.x, pin.p.y, pin.name)
 
     for arc in component.arcs[0:]:
-        r = draw_ltspice_arc(ax, arc[0], arc[1], arc[2], arc[3], arc[4], arc[5], arc[6], arc[7])
+        r = draw_ltspice_arc(ax, arc[0], arc[1], arc[2], arc[3], arc[4], arc[5], arc[6], arc[7], arc[8])
         update_minmax(r[0], r[1], r[2], r[3])
+
+    #note figured that out yet
+    #for window in component._windows:
+    #    rect1 = mpatches.Rectangle((window[0], window[1]), window[2], window[2], fill=False, color='r')
+    #    ax.add_patch(rect1)
+
 
 import os
 import fnmatch
@@ -345,20 +374,25 @@ def YieldFiles(dirToScan, mask):
                 yield (rootDir, fname)
 
 for dir, file in YieldFiles("/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym", "*.asy"):
-    fn = os.path.join(dir, file)
-#for fn in ["/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/SOAtherm-NMOS.asy", "/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/ind.asy", "/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/ISO16750-2.asy", "/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/Misc/NE555.asy"]:
-    print(fn)
-    with open(fn, "r") as fh:
-        print("\n".join(fh.readlines()))
-    fig, ax = pl.subplots()
-    ax.spines[['left', 'bottom', 'right', 'top']].set_visible(False)
-    ax.set_xticks([]) 
-    ax.set_yticks([]) 
-    matplotlib_plot_component(Component(fn), ax)
-    MARGIN = 5
-    ax.set_xlim(minx - MARGIN, maxx + MARGIN)
-    ax.set_ylim(miny - MARGIN, maxy + MARGIN)
-    fig.tight_layout()
-    fig.show()
-    pl.show()
-    pl.close(fig)
+    try:
+        fn = os.path.join(dir, file)
+    #for fn in ["/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/ind.asy"]: #"/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/SOAtherm-NMOS.asy"]:#, "/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/ind.asy", "/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/ISO16750-2.asy", "/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/Misc/NE555.asy"]:
+        print(fn)
+        with open(fn, "r") as fh:
+            print("\n".join(fh.readlines()))
+        fig, ax = pl.subplots()
+        ax.spines[['left', 'bottom', 'right', 'top']].set_visible(False)
+        ax.set_xticks([]) 
+        ax.set_yticks([]) 
+        matplotlib_plot_component(Component(fn), ax)
+        MARGIN = 5
+        ax.set_xlim(minx - MARGIN, maxx + MARGIN)
+        ax.set_ylim(miny - MARGIN, maxy + MARGIN)
+        print(f"ax.set_xlim({minx - MARGIN}, {maxx + MARGIN})")
+        print(f"ax.set_ylim({miny - MARGIN}, {maxy + MARGIN})")
+        fig.tight_layout()
+        fig.show()
+        pl.show()
+        pl.close(fig)
+    except Exception as e:
+        print(e)
