@@ -255,12 +255,10 @@ def draw_ltspice_arc(ax,  a, b, c, d, e, f, g, h, idx):
     bbox_xc = bbox_x1 + bbox_w / 2
     bbox_yc = bbox_y1 + bbox_h / 2
 
-    ax.text(bbox_xc, bbox_yc, f"{idx}", color="r")
-
-
-    ax.add_patch(mpatches.Circle((arc1x, arc1y), 1, color='r'))
-    ax.add_patch(mpatches.Circle((arc2x, arc2y), 1, color='g'))
-    ax.add_patch(mpatches.Circle((bbox_xc, bbox_yc), 1, color='purple'))
+    #ax.text(bbox_xc, bbox_yc, f"{idx}", color="r")
+    #ax.add_patch(mpatches.Circle((arc1x, arc1y), 1, color='r'))
+    #ax.add_patch(mpatches.Circle((arc2x, arc2y), 1, color='g'))
+    #ax.add_patch(mpatches.Circle((bbox_xc, bbox_yc), 1, color='purple'))
 
 
     # Need to shift the center to 0 and the coordinates relative to the center at 0.
@@ -271,20 +269,21 @@ def draw_ltspice_arc(ax,  a, b, c, d, e, f, g, h, idx):
     arc2y_2 = arc2y - bbox_yc
 
     ret = (min(arc1x, arc2x), min(arc1y, arc2y), max(arc1x, arc2x), max(arc1y, arc2y))
-    print(ret)
+    #print(ret)
 
     t1 = math.atan2(arc1y_2, arc1x_2) * 180 / math.pi #< degrees
     t2 = math.atan2(arc2y_2, arc2x_2) * 180 / math.pi #< degrees
 
-    print(f"{idx}) p1 = ({arc1x},{arc1y}), p2 = ({arc2x},{arc2y}), c = ({bbox_xc},{bbox_yc})")
-    print(f"{idx}) t1 = {t1}, t2 = {t2}")
+    #print(f"{idx}) p1 = ({arc1x},{arc1y}), p2 = ({arc2x},{arc2y}), c = ({bbox_xc},{bbox_yc})")
+    #print(f"{idx}) t1 = {t1}, t2 = {t2}")
 
-    #if (t1 >= 0 and t2 < 0) or (t2 >= 0 and t1 < 0) or (t1 > t2):
-    if (t1 > t2) or (t2 >= 0 and t1 < 0):
-            ret = (min(bbox_x1, bbox_x2), min(bbox_y1, bbox_y2), max(bbox_x1, bbox_x2), max(bbox_y1, bbox_y2))
-            t = t1
-            t1 = t2
-            t2 = t
+    if (t1 >= 0 and t2 < 0) or (t2 >= 0 and t1 < 0) or (t1 > t2):
+        # MPL wants to draw anti-clockwise from t1 to t2. In these cases it would draw the wrong part of the arc
+        # because it would need to go CW from t1 to t2. So, by swapping t1 and t2 it will draw it correctly.
+        ret = (min(bbox_x1, bbox_x2), min(bbox_y1, bbox_y2), max(bbox_x1, bbox_x2), max(bbox_y1, bbox_y2))
+        t = t1
+        t1 = t2
+        t2 = t
 
     arc1 = mpatches.Arc((bbox_xc, bbox_yc), bbox_w, bbox_h, angle=0, theta1=t1, theta2=t2, color='b')
     ax.add_patch(arc1)
@@ -376,7 +375,6 @@ def YieldFiles(dirToScan, mask):
 for dir, file in YieldFiles("/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym", "*.asy"):
     try:
         fn = os.path.join(dir, file)
-    #for fn in ["/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/ind.asy"]: #"/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/SOAtherm-NMOS.asy"]:#, "/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/ind.asy", "/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/ISO16750-2.asy", "/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/Misc/NE555.asy"]:
         print(fn)
         with open(fn, "r") as fh:
             print("\n".join(fh.readlines()))
