@@ -364,33 +364,35 @@ def matplotlib_plot_component(component, ax):
     #    ax.add_patch(rect1)
 
 
-import os
-import fnmatch
-def YieldFiles(dirToScan, mask):
-    for rootDir, subDirs, files in os.walk(dirToScan):
-        for fname in files:
-            if fnmatch.fnmatch(fname, mask):
-                yield (rootDir, fname)
 
-for dir, file in YieldFiles("/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym", "*.asy"):
-    try:
-        fn = os.path.join(dir, file)
-        print(fn)
-        with open(fn, "r") as fh:
-            print("\n".join(fh.readlines()))
-        fig, ax = pl.subplots()
-        ax.spines[['left', 'bottom', 'right', 'top']].set_visible(False)
-        ax.set_xticks([]) 
-        ax.set_yticks([]) 
-        matplotlib_plot_component(Component(fn), ax)
-        MARGIN = 5
-        ax.set_xlim(minx - MARGIN, maxx + MARGIN)
-        ax.set_ylim(miny - MARGIN, maxy + MARGIN)
-        print(f"ax.set_xlim({minx - MARGIN}, {maxx + MARGIN})")
-        print(f"ax.set_ylim({miny - MARGIN}, {maxy + MARGIN})")
-        fig.tight_layout()
-        fig.show()
-        pl.show()
-        pl.close(fig)
-    except Exception as e:
-        print(e)
+if __name__ == "__main__":
+    import os
+    import fnmatch
+    def YieldFiles(dirToScan, mask):
+        for rootDir, subDirs, files in os.walk(dirToScan):
+            for fname in files:
+                if fnmatch.fnmatch(fname, mask):
+                    yield (rootDir, fname)
+
+    for dir, file in YieldFiles("/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym", "*.asy"):
+        try:
+            fn = os.path.join(dir, file)
+            print(fn)
+            with open(fn, "r") as fh:
+                print("\n".join(fh.readlines()))
+            fig, ax = pl.subplots()
+            ax.spines[['left', 'bottom', 'right', 'top']].set_visible(False)
+            ax.set_xticks([]) 
+            ax.set_yticks([]) 
+            matplotlib_plot_component(Component(fn), ax)
+            MARGIN = 5
+            ax.set_xlim(minx - MARGIN, maxx + MARGIN)
+            ax.set_ylim(miny - MARGIN, maxy + MARGIN)
+            print(f"ax.set_xlim({minx - MARGIN}, {maxx + MARGIN})")
+            print(f"ax.set_ylim({miny - MARGIN}, {maxy + MARGIN})")
+            fig.tight_layout()
+            fig.show()
+            pl.show()
+            pl.close(fig)
+        except Exception as e:
+            print(e)
