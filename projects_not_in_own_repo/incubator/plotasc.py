@@ -104,7 +104,7 @@ class Component:
         state = "idle"
         curret_pin = None
 
-        with open(fn, "r") as fh:
+        with open(filename, "r") as fh:
             filecontents = fh.readlines()
             for line in filecontents:
                 line =  line.strip()
@@ -327,7 +327,7 @@ def update_minmax(x1, y1, x2, y2):
     update_maxy(y1, y2)
 
 
-def matplotlib_plot_component(component, ax):
+def matplotlib_plot_component(component, ax, xoff = 0, yoff = 0):
     global minx, miny, maxx, maxy
     minx = 1000000
     miny = 1000000
@@ -335,28 +335,29 @@ def matplotlib_plot_component(component, ax):
     maxy = -1000000
 
     for line in component.lines:
-        ax.plot([line.p1.x, line.p2.x], [line.p1.y, line.p2.y], c='b')
+        ax.plot([line.p1.x + xoff, line.p2.x + xoff], [line.p1.y + yoff, line.p2.y + yoff], c='b')
         update_minmax(line.p1.x, line.p1.y, line.p2.x, line.p2.y)
 
     for rect in component.rectangles:
-        rect1 = mpatches.Rectangle((rect.p.x, rect.p.y), rect.w, rect.h, fill=False, color='b')
+        rect1 = mpatches.Rectangle((rect.p.x + xoff, rect.p.y + yoff), rect.w, rect.h, fill=False, color='b')
         ax.add_patch(rect1)
         update_minmax(rect.p.x, rect.p.y, rect.p.x + rect.w, rect.p.y + rect.h)
 
     for ellipse in component.ellipses:
-        el1 = mpatches.Ellipse((ellipse.cx, ellipse.cy), ellipse.w, ellipse.h, fill=False, color='b')
+        el1 = mpatches.Ellipse((ellipse.cx + xoff, ellipse.cy + yoff), ellipse.w, ellipse.h, fill=False, color='b')
         ax.add_patch(el1)
         update_minmax(ellipse.cx - ellipse.w/2, ellipse.cy - ellipse.h/2, ellipse.cx + ellipse.w/2, ellipse.cy + ellipse.h/2)
 
     for pin in component.pins:
-        circle1 = mpatches.Circle((pin.p.x, pin.p.y), 1, color='r')
+        circle1 = mpatches.Circle((pin.p.x + xoff, pin.p.y + yoff), 1, color='r')
         ax.add_patch(circle1)
         if pin.name is not None:
             ax.text(pin.p.x, pin.p.y, pin.name)
 
     for arc in component.arcs[0:]:
-        r = draw_ltspice_arc(ax, arc[0], arc[1], arc[2], arc[3], arc[4], arc[5], arc[6], arc[7], arc[8])
+        r = draw_ltspice_arc(ax, arc[0] + xoff, arc[1] + yoff, arc[2] + xoff, arc[3] + yoff, arc[4] + xoff, arc[5] + yoff, arc[6] + xoff, arc[7] + yoff, arc[8])
         update_minmax(r[0], r[1], r[2], r[3])
+
 
     #note figured that out yet
     #for window in component._windows:
