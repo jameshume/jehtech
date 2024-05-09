@@ -164,3 +164,73 @@ hla_serial 123456789012345678901234
 ddd --debugger "/opt/gcc-arm-none-eabi/bin/arm-none-eabi-gdb" --gdb --eval-command="target extended-remote localhost:3333" <path to ELF file>
 ```
 
+## Example Memory Test Script
+
+```
+# Connect to the target
+source [find interface/.. your interface here ...]
+source [find target/.. your target here..]
+
+# Start OpenOCD server
+init
+
+# Halt the CPU
+reset halt
+
+# Set SRAM boundaries etc
+set start_address  .. your SRAM start address here ..
+set end_address    .. your SRAM end address here ..
+set mismatch_count 0
+set patterns { 0x00 0xFF 0xAA 0x55 }
+
+for {set pattern_idx 0} {$pattern_idx < [llength $patterns]} {incr pattern_idx} {
+    set curr_pattern [lindex $patterns $pattern_idx]
+
+    # Zero out RAM in a loop
+    puts "Writing pattern $curr_pattern to SRAM..."
+    for {set address $start_address} {$address < $end_address} {incr address} {
+        write_memory $address 8 $curr_pattern
+    }
+    puts "DONE"
+
+    puts "Checking SRAM..."
+    # Check if it is all zero
+    for {set address $start_address} {$address < $end_address} {incr address} {
+        # Read memory contents
+        set memory_content [read_memory $address 8 1]
+        # Check if content is not zero
+        if {$memory_content != $curr_pattern} {
+            incr mismatch_count
+            puts "Mismatch at address $address, value: $memory_content, expected $curr_pattern"
+        }
+    }
+    puts "DONE"
+}
+
+# Resume CPU execution
+resume
+
+# Exit OpenOCD
+shutdown
+```
+
+
+## Command Cheat Sheet
+
+* Target control:
+    * `reset halt` - Perform as hard a reset as possible and immediately halt the target
+    * `reset init` - Perform as hard a reset as possible, immediately halt the target, and execute the reset-init 
+script
+* Memory R/W
+    * `read_memory <address> <width> <count>`, e.g. `read_memory 0x20000000 32 2`
+    * `write_memory <address> <width> <data>`, e.g. `write_memory 0x20000000 32 {0xdeadbeef 0x00230500}`
+* Registers    
+    * `get_reg {pc sp}`
+* Flash
+    * `program filename.elf verify reset exit`
+    * `program filename.bin verify reset exit 0x08000000`
+    * `flash erase <bank num> <first> <last>`, e.g., `flash erase_sector 0 0 last` - erase all of flash
+    * `flash md[whb] <addr> [<count>]`
+    * `flash fill[dwhb] <addr> <value> <length>`
+    * `flash info <bank num>`
+
