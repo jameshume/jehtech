@@ -327,7 +327,7 @@ def update_minmax(x1, y1, x2, y2):
     update_maxy(y1, y2)
 
 
-def matplotlib_plot_component(component, ax, xoff = 0, yoff = 0):
+def matplotlib_plot_component(component, ax, xoff = 0, yoff = 0, rotation = 0):
     global minx, miny, maxx, maxy
     minx = 1000000
     miny = 1000000

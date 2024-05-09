@@ -158,3 +158,9 @@ hla_serial 123456789012345678901234
 ```
 
 
+## Connect DDD to OpenOCD Debug Server, Debug ARM Target From x86 Linux Host
+
+```
+ddd --debugger "/opt/gcc-arm-none-eabi/bin/arm-none-eabi-gdb" --gdb --eval-command="target extended-remote localhost:3333" <path to ELF file>
+```
+

@@ -20,10 +20,10 @@ for line in open("../../src/images/jeh-tech/electronics_lc_tank.asc"):
          name = tokens[0]
          x = float(tokens[1])
          y = float(tokens[2])
-         what = tokens[3]
+         rotation = float(tokens[3][1:])
 
          totalname = f"/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/{name}.asy"
-         matplotlib_plot_component(Component(totalname), ax, x, y)
+         matplotlib_plot_component(Component(totalname), ax, x, y, rotation)
 
 
         
