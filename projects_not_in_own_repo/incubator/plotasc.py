@@ -22,6 +22,26 @@ class Point:
     @property
     def y(self):
         return self._y
+    
+    def clone(self):
+        return Point(self._x, self._y)
+    
+    def rotate(self, degrees, translate): # 360 = 2pi. 1 = pi/180
+        rads = (math.pi/180.0) * degrees
+        print("ROT", self, translate, rads, degrees, math.cos(rads), math.sin(rads))
+        x = self._x - translate._x
+        y = self._y - translate._y
+        print(self)
+        self._x = x * math.cos(rads) - y * math.sin(rads)
+        self._y = y * math.cos(rads) + x * math.sin(rads)
+        print(self)  
+        self._x += translate._x
+        self._y += translate._y
+        print(self)
+
+    def __str__(self):
+        return f"<{self._x}, {self._y}>"
+
 
 class Line:
     def __init__(self, p1, p2):
@@ -35,6 +55,12 @@ class Line:
     @property
     def p2(self):
         return self._p2
+    
+    def rotate(self, degrees, translate):
+        
+        self._p1.rotate(degrees, translate)
+        self._p2.rotate(degrees, translate)
+
 
 
 class Pin:
@@ -113,6 +139,7 @@ class Component:
                     if state == "idle":
                         if line[0:len("LINE ")] == "LINE ":
                             line = line.split()[1:]
+                            print("LINE", line)
                             if not represents_int(line[0]):
                                 line = line[1:]
                             x1 = float(line[0])
@@ -329,40 +356,55 @@ def update_minmax(x1, y1, x2, y2):
 
 def matplotlib_plot_component(component, ax, xoff = 0, yoff = 0, rotation = 0):
     global minx, miny, maxx, maxy
-    minx = 1000000
-    miny = 1000000
-    maxx = -1000000
-    maxy = -1000000
+    minx = 1000000.0
+    miny = 1000000.0
+    maxx = -1000000.0
+    maxy = -1000000.0
+    
+    print("PLOTTING")
 
     for line in component.lines:
-        ax.plot([line.p1.x + xoff, line.p2.x + xoff], [line.p1.y + yoff, line.p2.y + yoff], c='b')
+        print("LINE MINMAX")
         update_minmax(line.p1.x, line.p1.y, line.p2.x, line.p2.y)
+
+    for rect in component.rectangles:
+        update_minmax(rect.p.x, rect.p.y, rect.p.x + rect.w, rect.p.y + rect.h)
+
+    for ellipse in component.ellipses:
+        update_minmax(ellipse.cx - ellipse.w/2, ellipse.cy - ellipse.h/2, ellipse.cx + ellipse.w/2, ellipse.cy + ellipse.h/2)
+
+    for arc in component.arcs[0:]:
+        update_minmax(r[0], r[1], r[2], r[3])
+
+
+    mwidth = maxx-minx
+    mheight = maxy-miny
+
+    print(minx, miny)
+    print(maxx, maxy)
+    print(mwidth, mheight)
+
+    for line in component.lines:
+        line.rotate(rotation, Point(minx, miny))
+        ax.plot([line.p1.x + xoff, line.p2.x + xoff], [line.p1.y + yoff, line.p2.y + yoff], color='b')
 
     for rect in component.rectangles:
         rect1 = mpatches.Rectangle((rect.p.x + xoff, rect.p.y + yoff), rect.w, rect.h, fill=False, color='b')
         ax.add_patch(rect1)
-        update_minmax(rect.p.x, rect.p.y, rect.p.x + rect.w, rect.p.y + rect.h)
 
     for ellipse in component.ellipses:
         el1 = mpatches.Ellipse((ellipse.cx + xoff, ellipse.cy + yoff), ellipse.w, ellipse.h, fill=False, color='b')
         ax.add_patch(el1)
-        update_minmax(ellipse.cx - ellipse.w/2, ellipse.cy - ellipse.h/2, ellipse.cx + ellipse.w/2, ellipse.cy + ellipse.h/2)
 
-    for pin in component.pins:
-        circle1 = mpatches.Circle((pin.p.x + xoff, pin.p.y + yoff), 1, color='r')
-        ax.add_patch(circle1)
-        if pin.name is not None:
-            ax.text(pin.p.x, pin.p.y, pin.name)
+    #for pin in component.pins:
+    #    circle1 = mpatches.Circle((pin.p.x + xoff, pin.p.y + yoff), 1, color='r')
+    #    ax.add_patch(circle1)
+    #    if pin.name is not None:
+    #        ax.text(pin.p.x, pin.p.y, pin.name)
 
     for arc in component.arcs[0:]:
         r = draw_ltspice_arc(ax, arc[0] + xoff, arc[1] + yoff, arc[2] + xoff, arc[3] + yoff, arc[4] + xoff, arc[5] + yoff, arc[6] + xoff, arc[7] + yoff, arc[8])
-        update_minmax(r[0], r[1], r[2], r[3])
 
-
-    #note figured that out yet
-    #for window in component._windows:
-    #    rect1 = mpatches.Rectangle((window[0], window[1]), window[2], window[2], fill=False, color='r')
-    #    ax.add_patch(rect1)
 
 
 
