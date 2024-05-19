@@ -1,6 +1,9 @@
 import matplotlib.pyplot as pl
 import matplotlib.patches as mpatches
 
+
+
+#######################################################################################################################
 def represents_int(s):
     try: 
         int(s)
@@ -10,10 +13,31 @@ def represents_int(s):
         return True
 
 
+
+#######################################################################################################################
 class Point:
     def __init__(self, x, y):
         self._x = x
         self._y = y
+
+    def __add__(self, point):
+        return Point(self._x + point._x, self._y + point._y)
+
+    def __sub__(self, point):
+        return Point(self._x - point._x, self._y - point._y)
+
+    def __str__(self):
+        return f"<{self._x}, {self._y}>"
+
+    def clone(self):
+        return Point(self._x, self._y)
+
+    def rotate(self, degrees):
+        rads = (math.pi / 180.0) * degrees
+        return Point(
+            (self._x * math.cos(rads)) - (self._y * math.sin(rads)),
+            (self._y * math.cos(rads)) + (self._x * math.sin(rads))
+        )
 
     @property
     def x(self):
@@ -23,26 +47,35 @@ class Point:
     def y(self):
         return self._y
     
-    def clone(self):
-        return Point(self._x, self._y)
-    
-    def rotate(self, degrees, translate): # 360 = 2pi. 1 = pi/180
-        rads = (math.pi/180.0) * degrees
-        print("ROT", self, translate, rads, degrees, math.cos(rads), math.sin(rads))
-        x = self._x - translate._x
-        y = self._y - translate._y
-        print(self)
-        self._x = x * math.cos(rads) - y * math.sin(rads)
-        self._y = y * math.cos(rads) + x * math.sin(rads)
-        print(self)  
-        self._x += translate._x
-        self._y += translate._y
-        print(self)
-
-    def __str__(self):
-        return f"<{self._x}, {self._y}>"
 
 
+#######################################################################################################################
+class Arc:
+    def __init__(self, bbox1 : Point, bbox2 : Point, arc1 : Point, arc2 : Point):
+        self._bbox1 = bbox1
+        self._bbox2 = bbox2
+        self._arc1  = arc1
+        self._arc2  = arc2
+
+    @property
+    def bbox1(self):
+        return self._bbox1
+
+    @property
+    def bbox2x(self):
+        return self._bbox2
+
+    @property
+    def arc1(self):
+        return self._arc1
+
+    @property
+    def arc2(self):
+        return self._arc2
+
+
+
+#######################################################################################################################
 class Line:
     def __init__(self, p1, p2):
         self._p1 = p1
@@ -56,13 +89,15 @@ class Line:
     def p2(self):
         return self._p2
     
-    def rotate(self, degrees, translate):
-        
-        self._p1.rotate(degrees, translate)
-        self._p2.rotate(degrees, translate)
+    def translate(self, translate : Point):
+        return Line(self._p1 + translate, self._p2 + translate)
+    
+    def rotate(self, degrees):
+        return Line(self._p1.rotate(degrees), self._p2.rotate(degrees))
 
 
 
+#######################################################################################################################
 class Pin:
     def __init__(self, p, name):
         self._p = p
@@ -76,6 +111,9 @@ class Pin:
     def p(self):
         return self._p
 
+
+
+#######################################################################################################################
 class Rectangle:
     def __init__(self, p, w, h):
         self._p = p
@@ -93,7 +131,10 @@ class Rectangle:
     @property 
     def w(self):
         return self._w
-    
+
+
+
+#######################################################################################################################
 class Ellipse:
     def __init__(self, cx, cy, w, h):
         self._cx = cx
@@ -118,6 +159,8 @@ class Ellipse:
         return self._w
 
 
+
+#######################################################################################################################
 class Component:
     def __init__(self, filename):
         self._lines = []
@@ -168,23 +211,31 @@ class Component:
                             y1 = float(line[1])
                             x2 = float(line[2])
                             y2 = float(line[3])
-                            self._rectangles.append(Rectangle(Point(x1, y1),x2-x1, y2-y1))
+                            self._rectangles.append(Rectangle(Point(x1, y1), x2 - x1, y2 - y1))
 
                         elif line[0:len("ARC ")] == "ARC ":
                             line = line.split()[1:]
                             if not represents_int(line[0]):
                                 line = line[1:]
-                            # -20 -124 4 -100 -20 -112 -8 -100
-                            a = float(line[0])
-                            b = float(line[1])
-                            c = float(line[2])
-                            d = float(line[3])
-                            e = float(line[4])
-                            f = float(line[5])
-                            g = float(line[6])
-                            h = float(line[7])
+
+                            bbox_x1 = float(line[0])
+                            bbox_y1 = float(line[1])
+                            bbox_x2 = float(line[2])
+                            bbox_y2 = float(line[3])
+                            arc1x   = float(line[4])
+                            arc1y   = float(line[5])
+                            arc2x   = float(line[6])
+                            arc2y   = float(line[7])
                             arc_index += 1
-                            self._arcs.append((a,b,c,d,e,f,g,h,arc_index))
+
+                            self._arcs.append((
+                                    Arc(
+                                        Point(bbox_x1, bbox_y1),
+                                        Point(bbox_x2, bbox_y2),
+                                        Point(arc1x, arc1y),
+                                        Point(arc2x, arc2y)
+                                    ),
+                                    arc_index))
 
                         elif line[0:len("CIRCLE ")] == "CIRCLE ":
                             line = line.split()[1:]
@@ -248,7 +299,8 @@ import numpy as np
 import matplotlib.path as mpath
 import math
 
-def draw_ltspice_arc(ax,  a, b, c, d, e, f, g, h, idx):
+# bbox_x1, bbox_y1, bbox_x2, bbox_y2, arc1x, arc1y, arc2x, arc2y
+def draw_ltspice_arc(ax, arc, idx):
     """
     This is an ugly mess - plots the arcs correctly but I need to go over it again to properly figure it out, especially to get the bounding box correctly calculated
     """
@@ -296,13 +348,9 @@ def draw_ltspice_arc(ax,  a, b, c, d, e, f, g, h, idx):
     arc2y_2 = arc2y - bbox_yc
 
     ret = (min(arc1x, arc2x), min(arc1y, arc2y), max(arc1x, arc2x), max(arc1y, arc2y))
-    #print(ret)
 
     t1 = math.atan2(arc1y_2, arc1x_2) * 180 / math.pi #< degrees
     t2 = math.atan2(arc2y_2, arc2x_2) * 180 / math.pi #< degrees
-
-    #print(f"{idx}) p1 = ({arc1x},{arc1y}), p2 = ({arc2x},{arc2y}), c = ({bbox_xc},{bbox_yc})")
-    #print(f"{idx}) t1 = {t1}, t2 = {t2}")
 
     if (t1 >= 0 and t2 < 0) or (t2 >= 0 and t1 < 0) or (t1 > t2):
         # MPL wants to draw anti-clockwise from t1 to t2. In these cases it would draw the wrong part of the arc
@@ -385,7 +433,7 @@ def matplotlib_plot_component(component, ax, xoff = 0, yoff = 0, rotation = 0):
     print(mwidth, mheight)
 
     for line in component.lines:
-        line.rotate(rotation, Point(minx, miny))
+        line = line.translate(Point(-minx, -miny)).rotate(rotation).translate(Point(minx, miny))
         ax.plot([line.p1.x + xoff, line.p2.x + xoff], [line.p1.y + yoff, line.p2.y + yoff], color='b')
 
     for rect in component.rectangles:
@@ -403,7 +451,17 @@ def matplotlib_plot_component(component, ax, xoff = 0, yoff = 0, rotation = 0):
     #        ax.text(pin.p.x, pin.p.y, pin.name)
 
     for arc in component.arcs[0:]:
-        r = draw_ltspice_arc(ax, arc[0] + xoff, arc[1] + yoff, arc[2] + xoff, arc[3] + yoff, arc[4] + xoff, arc[5] + yoff, arc[6] + xoff, arc[7] + yoff, arc[8])
+        r = draw_ltspice_arc(
+            ax, 
+            arc[0] + xoff, 
+            arc[1] + yoff, 
+            arc[2] + xoff, 
+            arc[3] + yoff, 
+            arc[4] + xoff, 
+            arc[5] + yoff, 
+            arc[6] + xoff, 
+            arc[7] + yoff, 
+            arc[8])
 
 
 
