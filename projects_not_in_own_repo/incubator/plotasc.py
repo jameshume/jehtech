@@ -1,5 +1,6 @@
 import matplotlib.pyplot as pl
 import matplotlib.patches as mpatches
+import math
 
 
 
@@ -62,7 +63,7 @@ class Arc:
         return self._bbox1
 
     @property
-    def bbox2x(self):
+    def bbox2(self):
         return self._bbox2
 
     @property
@@ -72,6 +73,12 @@ class Arc:
     @property
     def arc2(self):
         return self._arc2
+    
+    def translate(self, translate : Point):
+        return Arc(self._bbox1 + translate, self._bbox2 + translate, self._arc1 + translate, self._arc2 + translate)
+    
+    def rotate(self, degrees):
+        return Arc(self._bbox1.rotate(degrees), self._bbox2.rotate(degrees), self._arc1.rotate(degrees), self._arc2.rotate(degrees))
 
 
 
@@ -131,7 +138,20 @@ class Rectangle:
     @property 
     def w(self):
         return self._w
-
+    
+    def translate(self, translate : Point):
+        return Rectangle(self._p + translate, self._w, self._h)
+    
+    def rotate(self, degrees):
+        # TODO - This won't work for rotations other than 90 degrees. Fortunately LTSpice only does 90, 180, etc
+        if degrees == 0:
+            return self
+        elif degrees == 90 or degrees == 270:
+            return Rectangle(self._p.rotate(degrees), self._h, self._w)
+        elif degrees == 180:
+            return Rectangle(self._p.rotate(degrees), self._w, self._h)
+        else:
+            raise Exception(f"Rotation of {degrees} is not supported for Rectangle")
 
 
 #######################################################################################################################
@@ -295,34 +315,33 @@ class Component:
         return self._ellipses
 
 
-import numpy as np
-import matplotlib.path as mpath
-import math
 
 # bbox_x1, bbox_y1, bbox_x2, bbox_y2, arc1x, arc1y, arc2x, arc2y
 def draw_ltspice_arc(ax, arc, idx):
     """
     This is an ugly mess - plots the arcs correctly but I need to go over it again to properly figure it out, especially to get the bounding box correctly calculated
     """
-    arc1x = e
-    arc1y = f
-    arc2x = g
-    arc2y = h
+    arc1x = arc.arc1.x
+    arc1y = arc.arc1.y
+    arc2x = arc.arc2.x
+    arc2y = arc.arc2.y
 
-    bbox_x1 = a
-    bbox_y1 = b
-    bbox_x2 = c
-    bbox_y2 = d
+    bbox_x1 = arc.bbox1.x
+    bbox_y1 = arc.bbox1.y
+    bbox_x2 = arc.bbox2.x
+    bbox_y2 = arc.bbox2.y
     bbox_w = bbox_x2 - bbox_x1
     bbox_h = bbox_y2 - bbox_y1
 
+
+    # Make the top left of the arc's bounding box the minumum coordinates so that the width and heigh are positive.
     if bbox_w < 0:
         bbox_w = -bbox_w
         t = bbox_x1 
         bbox_x1 = bbox_x2
         bbox_x2 = t
-
-
+    
+    
     if bbox_h < 0:
         bbox_h = -bbox_h
         t = bbox_y1 
@@ -330,15 +349,15 @@ def draw_ltspice_arc(ax, arc, idx):
         bbox_y2 = t
 
 
-
+    # Get the center of the arc's bounding box
     bbox_xc = bbox_x1 + bbox_w / 2
     bbox_yc = bbox_y1 + bbox_h / 2
 
-    #ax.text(bbox_xc, bbox_yc, f"{idx}", color="r")
-    #ax.add_patch(mpatches.Circle((arc1x, arc1y), 1, color='r'))
-    #ax.add_patch(mpatches.Circle((arc2x, arc2y), 1, color='g'))
-    #ax.add_patch(mpatches.Circle((bbox_xc, bbox_yc), 1, color='purple'))
-
+    ax.text(bbox_xc, bbox_yc, f"{idx}", color="r")
+    ax.add_patch(mpatches.Circle((arc1x, arc1y), 1, color='r'))
+    ax.add_patch(mpatches.Circle((arc2x, arc2y), 1, color='g'))
+    ax.add_patch(mpatches.Circle((bbox_xc, bbox_yc), 1, color='purple'))
+    ax.add_patch(mpatches.Rectangle((bbox_x1, bbox_y1), bbox_w, bbox_h, color='green', fill=False))
 
     # Need to shift the center to 0 and the coordinates relative to the center at 0.
     # So...
@@ -351,14 +370,19 @@ def draw_ltspice_arc(ax, arc, idx):
 
     t1 = math.atan2(arc1y_2, arc1x_2) * 180 / math.pi #< degrees
     t2 = math.atan2(arc2y_2, arc2x_2) * 180 / math.pi #< degrees
+    
 
     if (t1 >= 0 and t2 < 0) or (t2 >= 0 and t1 < 0) or (t1 > t2):
-        # MPL wants to draw anti-clockwise from t1 to t2. In these cases it would draw the wrong part of the arc
-        # because it would need to go CW from t1 to t2. So, by swapping t1 and t2 it will draw it correctly.
+        # MPL wants to draw anti-clockwise from t1 to t2, where as it would seem LTSpice draws clockwise.
+        # In these cases it would draw the wrong part of the arc because it would need to go CW from t1 to t2.
+        # So, by swapping t1 and t2 it will draw it correctly.
         ret = (min(bbox_x1, bbox_x2), min(bbox_y1, bbox_y2), max(bbox_x1, bbox_x2), max(bbox_y1, bbox_y2))
         t = t1
         t1 = t2
         t2 = t
+        print(f"ARC {idx} p1=({arc1x_2}, {arc1y_2}), p2=({arc2x_2}, {arc2y_2}), t1={t1}, t2={t2} (swapped)")
+    else:
+        print(f"ARC {idx} p1=({arc1x_2}, {arc1y_2}), p2=({arc2x_2}, {arc2y_2}), t1={t1}, t2={t2}")
 
     arc1 = mpatches.Arc((bbox_xc, bbox_yc), bbox_w, bbox_h, angle=0, theta1=t1, theta2=t2, color='b')
     ax.add_patch(arc1)
@@ -421,8 +445,8 @@ def matplotlib_plot_component(component, ax, xoff = 0, yoff = 0, rotation = 0):
     for ellipse in component.ellipses:
         update_minmax(ellipse.cx - ellipse.w/2, ellipse.cy - ellipse.h/2, ellipse.cx + ellipse.w/2, ellipse.cy + ellipse.h/2)
 
-    for arc in component.arcs[0:]:
-        update_minmax(r[0], r[1], r[2], r[3])
+    for arc, arc_index in component.arcs:
+        update_minmax(arc.bbox1.x, arc.bbox1.y, arc.bbox2.x, arc.bbox2.y)
 
 
     mwidth = maxx-minx
@@ -437,6 +461,7 @@ def matplotlib_plot_component(component, ax, xoff = 0, yoff = 0, rotation = 0):
         ax.plot([line.p1.x + xoff, line.p2.x + xoff], [line.p1.y + yoff, line.p2.y + yoff], color='b')
 
     for rect in component.rectangles:
+        rect = rect.translate(Point(-minx, -miny)).rotate(rotation).translate(Point(minx, miny))
         rect1 = mpatches.Rectangle((rect.p.x + xoff, rect.p.y + yoff), rect.w, rect.h, fill=False, color='b')
         ax.add_patch(rect1)
 
@@ -450,30 +475,29 @@ def matplotlib_plot_component(component, ax, xoff = 0, yoff = 0, rotation = 0):
     #    if pin.name is not None:
     #        ax.text(pin.p.x, pin.p.y, pin.name)
 
-    for arc in component.arcs[0:]:
-        r = draw_ltspice_arc(
-            ax, 
-            arc[0] + xoff, 
-            arc[1] + yoff, 
-            arc[2] + xoff, 
-            arc[3] + yoff, 
-            arc[4] + xoff, 
-            arc[5] + yoff, 
-            arc[6] + xoff, 
-            arc[7] + yoff, 
-            arc[8])
+    for arc, arc_index in component.arcs[0:]:
+        arc = arc.translate(Point(-minx, -miny)).rotate(rotation).translate(Point(minx, miny))
+        r = draw_ltspice_arc(ax, arc.translate(Point(xoff, yoff)), arc_index)
 
 
 
 
 if __name__ == "__main__":
+    import tempfile
     import os
     import fnmatch
+
     def YieldFiles(dirToScan, mask):
         for rootDir, subDirs, files in os.walk(dirToScan):
             for fname in files:
                 if fnmatch.fnmatch(fname, mask):
                     yield (rootDir, fname)
+
+    def make_arc_test_file():
+        temp = tempfile.TemporaryFile()
+        temp.write("ARC Normal 0 40 32 72 4 68 4 44") # bbox_x1, bbox_y1, bbox_x2, bbox_y2, p1x, p1y, p2x, p2y
+        temp.seek(0)
+        return temp
 
     for dir, file in YieldFiles("/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym", "*.asy"):
         try:

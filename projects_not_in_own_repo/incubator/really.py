@@ -6,7 +6,7 @@ from plotasc import Component, matplotlib_plot_component
 fig, ax = pl.subplots()
 ax.invert_yaxis()
 
-for line in open("/home/james/Draft4.asc"): #../../src/images/jeh-tech/electronics_lc_tank.asc"):
+for line in open("/home/james/Draft6.asc"): #../../src/images/jeh-tech/electronics_lc_tank.asc"):
     print(line.strip())
     if line.startswith("WIRE "):
         x1, y1, x2, y2 = [float(x) for x in line.strip().split(" ")[1:]]
@@ -20,13 +20,18 @@ for line in open("/home/james/Draft4.asc"): #../../src/images/jeh-tech/electroni
          y = float(tokens[2])
          rotation = float(tokens[3][1:])
 
+         name = name.replace("\\", "/")
+
          totalname = f"/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/{name}.asy"
-         print(totalname)
+         print(totalname, rotation)
          matplotlib_plot_component(Component(totalname), ax, x, y, rotation)
-         #matplotlib_plot_component(Component(totalname), ax, x, y, 0)
 
 
-#ax.set_xlim(-500, 500)
-#ax.set_ylim(-500, 500)
+ax.set_xlim(-500, 500)
+ax.set_ylim(-500, 500)
+#ax.spines[['left', 'bottom', 'right', 'top']].set_visible(False)
+#ax.set_xticks([]) 
+#ax.set_yticks([]) 
+ax.invert_yaxis()
 fig.show()
 pl.show()
