@@ -26,6 +26,9 @@ class Point:
 
     def __sub__(self, point):
         return Point(self._x - point._x, self._y - point._y)
+    
+    def __truediv__(self, scale):
+        return  Point(self._x / scale, self._y / scale)
 
     def __str__(self):
         return f"<{self._x}, {self._y}>"
@@ -33,12 +36,18 @@ class Point:
     def clone(self):
         return Point(self._x, self._y)
 
+    def abs(self):
+        return Point(math.fabs(self._x), math.fabs(self._y))
+
     def rotate(self, degrees):
         rads = (math.pi / 180.0) * degrees
         return Point(
             (self._x * math.cos(rads)) - (self._y * math.sin(rads)),
             (self._y * math.cos(rads)) + (self._x * math.sin(rads))
         )
+    
+    def as_tuple(self):
+        return (self._x, self._y)
 
     @property
     def x(self):
@@ -79,6 +88,9 @@ class Arc:
     
     def rotate(self, degrees):
         return Arc(self._bbox1.rotate(degrees), self._bbox2.rotate(degrees), self._arc1.rotate(degrees), self._arc2.rotate(degrees))
+    
+    def __str__(self):
+        return f"Arc(bb1={self._bbox1}, bb2={self._bbox2}, a1={self._arc1}, a2={self._arc2})"
 
 
 
@@ -314,10 +326,31 @@ class Component:
     def ellipses(self):
         return self._ellipses
 
+def draw_ltspice_arc(ax, arc, idx, debug=True):
+    bbox_wh = arc.bbox1 - arc.bbox2                      #< Calculate the width of the bounding box
+    bbox_c  = arc.bbox1 - (bbox_wh / 2)                  #< Calculate the center of the bounding box
+    arc1    = arc.arc1 - bbox_c
+    arc2    = arc.arc2 - bbox_c
+    t1      = math.atan2(arc1.y, arc1.x) * 180 / math.pi #< degrees
+    t2      = math.atan2(arc2.y, arc2.x) * 180 / math.pi #< degrees
+    
+    if debug:
+        print(f"{idx}) arc={arc}, wh={bbox_wh}, p1={arc1}, p2={arc2}, t1={t1}, t2={t2}")
+        ax.text(bbox_c.x, bbox_c.y, f"{idx}", color="r")
+        ax.add_patch(mpatches.Circle(arc.bbox1.as_tuple(), 1, color='orange'))
+        ax.add_patch(mpatches.Circle(arc.bbox2.as_tuple(), 1, color='blue'))
+        ax.add_patch(mpatches.Circle(arc.arc1.as_tuple(),  1, color='r'))
+        ax.add_patch(mpatches.Circle(arc.arc2.as_tuple(),  1, color='g'))
+        ax.add_patch(mpatches.Circle(bbox_c.as_tuple(),    1, color='purple'))
+        ax.add_patch(mpatches.Rectangle(arc.bbox2.as_tuple(), bbox_wh.x, bbox_wh.y, color='green', fill=False))
+
+    ax.add_patch(
+        mpatches.Arc(
+            bbox_c.as_tuple(), bbox_wh.x, bbox_wh.y, angle=0, theta1=t1, theta2=t2, color='b'))
 
 
 # bbox_x1, bbox_y1, bbox_x2, bbox_y2, arc1x, arc1y, arc2x, arc2y
-def draw_ltspice_arc(ax, arc, idx):
+def draw_ltspice_arc2(ax, arc, idx):
     """
     This is an ugly mess - plots the arcs correctly but I need to go over it again to properly figure it out, especially to get the bounding box correctly calculated
     """
