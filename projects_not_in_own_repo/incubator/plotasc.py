@@ -493,13 +493,8 @@ if __name__ == "__main__":
                 if fnmatch.fnmatch(fname, mask):
                     yield (rootDir, fname)
 
-    def make_arc_test_file():
-        temp = tempfile.TemporaryFile()
-        temp.write("ARC Normal 0 40 32 72 4 68 4 44") # bbox_x1, bbox_y1, bbox_x2, bbox_y2, p1x, p1y, p2x, p2y
-        temp.seek(0)
-        return temp
-
-    for dir, file in YieldFiles("/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym", "*.asy"):
+    #for dir, file in YieldFiles("/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym", "*.asy"):
+    for dir, file in YieldFiles("/home/james/Repos/jehtech/projects_not_in_own_repo/incubator", "*.asy"):
         try:
             fn = os.path.join(dir, file)
             print(fn)
@@ -513,6 +508,7 @@ if __name__ == "__main__":
             MARGIN = 5
             ax.set_xlim(minx - MARGIN, maxx + MARGIN)
             ax.set_ylim(miny - MARGIN, maxy + MARGIN)
+            ax.invert_yaxis()
             print(f"ax.set_xlim({minx - MARGIN}, {maxx + MARGIN})")
             print(f"ax.set_ylim({miny - MARGIN}, {maxy + MARGIN})")
             fig.tight_layout()
