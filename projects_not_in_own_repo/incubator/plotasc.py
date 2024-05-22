@@ -1,7 +1,7 @@
 import matplotlib.pyplot as pl
 import matplotlib.patches as mpatches
 import math
-
+from shapes import LTPoint, LTRectangle, LTArc
 
 
 #######################################################################################################################
@@ -261,11 +261,11 @@ class Component:
                             arc_index += 1
 
                             self._arcs.append((
-                                    Arc(
-                                        Point(bbox_x1, bbox_y1),
-                                        Point(bbox_x2, bbox_y2),
-                                        Point(arc1x, arc1y),
-                                        Point(arc2x, arc2y)
+                                    LTArc(
+                                        LTPoint(bbox_x1, bbox_y1),
+                                        LTPoint(bbox_x2, bbox_y2),
+                                        LTPoint(arc1x, arc1y),
+                                        LTPoint(arc2x, arc2y)
                                     ),
                                     arc_index))
 
@@ -325,28 +325,41 @@ class Component:
     @property
     def ellipses(self):
         return self._ellipses
+    
+def radians_to_degrees(radians):
+    return radians * 180 / math.pi
 
-def draw_ltspice_arc(ax, arc, idx, debug=True):
-    bbox_wh = arc.bbox1 - arc.bbox2                      #< Calculate the width of the bounding box
-    bbox_c  = arc.bbox1 - (bbox_wh / 2)                  #< Calculate the center of the bounding box
-    arc1    = arc.arc1 - bbox_c
-    arc2    = arc.arc2 - bbox_c
-    t1      = math.atan2(arc1.y, arc1.x) * 180 / math.pi #< degrees
-    t2      = math.atan2(arc2.y, arc2.x) * 180 / math.pi #< degrees
+def draw_ltspice_arc(ax, arc : LTArc, idx, debug=True):
+    arc_centered_at_origin = arc.translate(-arc.bbox.center)
+    # LTSpice coordinates are like a screen, but atan2 expects them to be like a graph. This means when looking at
+    # an LTSpice arc, what I think of as the 1st quadrant is really the 4th, what I think of as the 2nd is the
+    # 3rd, what I think of as the 3rd is the 2nd and what I think of a the 4th is the 1st. Which is just the mirror
+    # in the y-axis because LTSpice coordinates are screen coordinates and atan is graph coordinates.
+    #
+    # If I give atan the screen coordinates they are the wrong way around because everything is flipped about the
+    # yaxis so swap em! 
+    t2      = radians_to_degrees(math.atan2(arc_centered_at_origin.p1.y, arc_centered_at_origin.p1.x))
+    t1      = radians_to_degrees(math.atan2(arc_centered_at_origin.p2.y, arc_centered_at_origin.p2.x))
     
     if debug:
-        print(f"{idx}) arc={arc}, wh={bbox_wh}, p1={arc1}, p2={arc2}, t1={t1}, t2={t2}")
-        ax.text(bbox_c.x, bbox_c.y, f"{idx}", color="r")
-        ax.add_patch(mpatches.Circle(arc.bbox1.as_tuple(), 1, color='orange'))
-        ax.add_patch(mpatches.Circle(arc.bbox2.as_tuple(), 1, color='blue'))
-        ax.add_patch(mpatches.Circle(arc.arc1.as_tuple(),  1, color='r'))
-        ax.add_patch(mpatches.Circle(arc.arc2.as_tuple(),  1, color='g'))
-        ax.add_patch(mpatches.Circle(bbox_c.as_tuple(),    1, color='purple'))
-        ax.add_patch(mpatches.Rectangle(arc.bbox2.as_tuple(), bbox_wh.x, bbox_wh.y, color='green', fill=False))
+        print(f"{idx})\n\tarc    = {arc},\n\tarc_00 = {arc_centered_at_origin},\n\tt1     = {t1},\n\tt2     = {t2}")
+        ax.text(*arc.bbox.center.as_tuple(), f"{idx}", color="r")
+        ax.add_patch(mpatches.Circle(arc.bbox._topleft.as_tuple(), 1, color='orange'))
+        ax.add_patch(mpatches.Circle(arc.bbox._bottomright.as_tuple(), 1, color='blue'))
+
+        # Another interesting facet is that the points p1, p2 need not be at the exact point of the
+        # arc start or finish, but can be anywhere on the line from the center to the point. This is
+        # just interesting, doesn't effect any calculations...
+        ax.add_patch(mpatches.Circle(arc.p1.as_tuple(), 0.5, color='r'))
+        ax.text(*arc.p1.as_tuple(), f"p1", color="r")
+        ax.add_patch(mpatches.Circle(arc.p2.as_tuple(), 0.5, color='g'))
+        ax.text(*arc.p2.as_tuple(), f"p2", color="r")
+        ax.add_patch(mpatches.Circle(arc.bbox.center.as_tuple(),    1, color='purple'))
+        ax.add_patch(mpatches.Rectangle(arc.bbox._topleft.as_tuple(), *arc.bbox.dimensions.as_tuple(), color='green', fill=False))
 
     ax.add_patch(
         mpatches.Arc(
-            bbox_c.as_tuple(), bbox_wh.x, bbox_wh.y, angle=0, theta1=t1, theta2=t2, color='b'))
+            arc.bbox.center.as_tuple(), *arc.bbox.dimensions.as_tuple(), angle=0, theta1=t1, theta2=t2, color='b'))
 
 
 # bbox_x1, bbox_y1, bbox_x2, bbox_y2, arc1x, arc1y, arc2x, arc2y
@@ -478,8 +491,8 @@ def matplotlib_plot_component(component, ax, xoff = 0, yoff = 0, rotation = 0):
     for ellipse in component.ellipses:
         update_minmax(ellipse.cx - ellipse.w/2, ellipse.cy - ellipse.h/2, ellipse.cx + ellipse.w/2, ellipse.cy + ellipse.h/2)
 
-    for arc, arc_index in component.arcs:
-        update_minmax(arc.bbox1.x, arc.bbox1.y, arc.bbox2.x, arc.bbox2.y)
+    #for arc, arc_index in component.arcs:
+    #    update_minmax(arc.bbox.x, arc.bbox.y, arc.bbox2.x, arc.bbox2.y)
 
 
     mwidth = maxx-minx
@@ -509,8 +522,7 @@ def matplotlib_plot_component(component, ax, xoff = 0, yoff = 0, rotation = 0):
     #        ax.text(pin.p.x, pin.p.y, pin.name)
 
     for arc, arc_index in component.arcs[0:]:
-        arc = arc.translate(Point(-minx, -miny)).rotate(rotation).translate(Point(minx, miny))
-        r = draw_ltspice_arc(ax, arc.translate(Point(xoff, yoff)), arc_index)
+        r = draw_ltspice_arc(ax, arc.translate(LTPoint(xoff, yoff)), arc_index)
 
 
 
@@ -527,6 +539,7 @@ if __name__ == "__main__":
                     yield (rootDir, fname)
 
     #for dir, file in YieldFiles("/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym", "*.asy"):
+    #for dir, file in YieldFiles("/home/james/Repos/jehtech/projects_not_in_own_repo/incubator", "arc_quad1_type1bbox_t1_gt_t2.asy"):
     for dir, file in YieldFiles("/home/james/Repos/jehtech/projects_not_in_own_repo/incubator", "*.asy"):
         try:
             fn = os.path.join(dir, file)
@@ -534,19 +547,20 @@ if __name__ == "__main__":
             with open(fn, "r") as fh:
                 print("\n".join(fh.readlines()))
             fig, ax = pl.subplots()
-            ax.spines[['left', 'bottom', 'right', 'top']].set_visible(False)
-            ax.set_xticks([]) 
-            ax.set_yticks([]) 
+            #ax.spines[['left', 'bottom', 'right', 'top']].set_visible(False)
+            #ax.set_xticks([]) 
+            #ax.set_yticks([]) 
             matplotlib_plot_component(Component(fn), ax)
             MARGIN = 5
-            ax.set_xlim(minx - MARGIN, maxx + MARGIN)
-            ax.set_ylim(miny - MARGIN, maxy + MARGIN)
+            #ax.set_xlim(minx - MARGIN, maxx + MARGIN)
+            #ax.set_ylim(miny - MARGIN, maxy + MARGIN)
+            ax.set_xlim(-50,50)
+            ax.set_ylim(-50,50)
             ax.invert_yaxis()
-            print(f"ax.set_xlim({minx - MARGIN}, {maxx + MARGIN})")
-            print(f"ax.set_ylim({miny - MARGIN}, {maxy + MARGIN})")
             fig.tight_layout()
             fig.show()
             pl.show()
             pl.close(fig)
         except Exception as e:
             print(e)
+            raise
