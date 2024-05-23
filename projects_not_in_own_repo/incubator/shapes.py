@@ -81,6 +81,32 @@ class LTPoint:
 
 
 #######################################################################################################################
+class LTLine:
+    def __init__(self, p1 : LTPoint, p2: LTPoint):
+        self._p1 = p1
+        self._p2 = p2
+
+    def __str__(self):
+        return f"LTLine({self._p1}, {self._p2})"
+
+    def translate(self, xy):
+        return LTLine(self._p1.translate(xy), self._p2.translate(xy))
+
+    def rotate(self, degrees):
+        rads = (math.pi / 180.0) * float(degrees)
+        return LTLine(self._p1.rotate(degrees), self._p2.rotate(degrees))
+
+    @property
+    def p1(self):
+        return self._p1
+
+    @property
+    def p2(self):
+        return self._p2
+
+
+
+#######################################################################################################################
 class LTRectangle:
     """
     ┌───► x
@@ -134,14 +160,11 @@ class LTRectangle:
     def __str__(self):
         return f"LTRectangle({self._topleft}, {self._bottomright}) [w={self.dimensions._x}, h={self.dimensions._y}]"
     
-
     def rotate(self, degrees):
         return LTRectangle(self._topleft.rotate(degrees), self._bottomright.rotate(degrees))
 
-
     def translate(self, xy):
         return LTRectangle(self._topleft.translate(xy), self._bottomright.translate(xy))
-
 
     @property
     def topleft(self):
@@ -221,6 +244,10 @@ class LTArc:
         translated_bbox = self._bbox.translate(xy)
         return LTArc(translated_bbox._topleft, translated_bbox._bottomright, self._arc1.translate(xy), self._arc2.translate(xy))
     
+    def rotate(self, degrees):
+        rot_bbox = self._bbox.rotate(degrees)
+        return LTArc(rot_bbox.topleft, rot_bbox.bottomright, self._arc1.rotate(degrees), self._arc2.rotate(degrees))
+    
     def clone(self):
         return LTArc(self.bbox.topleft.clone(), self.bbox.bottomright.clone(), self._arc1.clone(), self._arc2.clone())
 
@@ -236,3 +263,49 @@ class LTArc:
     def bbox(self):
         return self._bbox
 
+
+
+#######################################################################################################################
+class LTEllipse:
+    def __init__(self, cx, cy, w, h):
+        self._cx = cx
+        self._cy = cy
+        self._h = h
+        self._w = w
+    
+    @property 
+    def cx(self):
+        return self._cx
+    
+    @property 
+    def cy(self):
+        return self._cy
+    
+    @property 
+    def h(self):
+        return self._h
+
+    @property 
+    def w(self):
+        return self._w
+    
+
+#######################################################################################################################
+class LTPin:
+    def __init__(self, p : LTPoint, name : str):
+        self._p = p
+        self._name = name
+
+    def rotate(self, degrees):
+        return LTPin(self.p.rotate(degrees), self._name)
+
+    def translate(self, xy):
+        return LTPin(self.p.translate(xy), self._name)
+
+    @property 
+    def name(self):
+        return self._name
+
+    @property
+    def p(self):
+        return self._p
