@@ -337,7 +337,7 @@ def update_minmax(x1, y1, x2, y2):
     update_maxy(y1, y2)
 
 
-def matplotlib_plot_component(component, ax, xoff = 0, yoff = 0, rotation = 0):
+def matplotlib_plot_component(component, ax, xoff = 0, yoff = 0, rotation = 0, debug=True):
     global minx, miny, maxx, maxy
     minx = 1000000.0
     miny = 1000000.0
@@ -347,20 +347,23 @@ def matplotlib_plot_component(component, ax, xoff = 0, yoff = 0, rotation = 0):
     print("PLOTTING")
 
     for line in component.lines:
+        #line = line.rotate(rotation)
         update_minmax(line.p1.x, line.p1.y, line.p2.x, line.p2.y)
 
     for rect in component.rectangles:
+        #rect = rect.rotate(rotation)
         update_minmax(*rect.topleft.as_tuple(), *rect.bottomright.as_tuple())
 
     for ellipse in component.ellipses:
+        #ellipse = ellipse.rotate(rotation)
         update_minmax(ellipse.cx - ellipse.w/2, ellipse.cy - ellipse.h/2, ellipse.cx + ellipse.w/2, ellipse.cy + ellipse.h/2)
 
     for arc, arc_index in component.arcs[0:]:
+        #arc = arc.rotate(rotation)
         tight_bbox = draw_ltspice_arc(ax, arc, arc_index, draw=False, debug=False)
         update_minmax(tight_bbox.topleft.x, tight_bbox.topleft.y, tight_bbox.bottomright.x, tight_bbox.bottomright.y)
 
-    print(minx, miny)
-    print(maxx, maxy)
+
 
     for line in component.lines:
         line = line.translate(LTPoint(-minx, -miny)).rotate(rotation).translate(LTPoint(minx, miny))
@@ -386,10 +389,17 @@ def matplotlib_plot_component(component, ax, xoff = 0, yoff = 0, rotation = 0):
         if pin.name is not None:
             ax.text(pin.p.x, pin.p.y, pin.name)
 
-    for arc, arc_index in component.arcs[0:]:
-        arc = arc.translate(LTPoint(-minx, -miny)).rotate(rotation).translate(LTPoint(minx, miny))
-        draw_ltspice_arc(ax, arc.translate(LTPoint(xoff, yoff)), arc_index, draw=True, debug=False)
+    for arc, arc_index in component.arcs:
+        # For some reason, with the arcs I dont need to translate it to the origin before rotating.
+        #arc = arc.translate(LTPoint(-minx, -miny)).rotate(rotation).translate(LTPoint(minx, miny))
+        arc = arc.rotate(rotation)
+        arc = arc.translate(LTPoint(xoff, yoff))
+        draw_ltspice_arc(ax, arc, arc_index, draw=True, debug=False)
 
+    if debug:
+        rect_minmax = LTRectangle(LTPoint(minx, miny), LTPoint(maxx, maxy)).rotate(rotation).translate(LTPoint(xoff, yoff))
+        rect_patch = mpatches.Rectangle(rect_minmax.topleft.as_tuple(), *rect_minmax.dimensions.as_tuple(), fill=False, color='orange')
+        ax.add_patch(rect_patch)
 
 
 

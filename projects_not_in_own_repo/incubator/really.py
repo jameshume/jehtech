@@ -6,7 +6,10 @@ from plotasc import Component, matplotlib_plot_component
 fig, ax = pl.subplots()
 ax.invert_yaxis()
 
-for line in open("/home/james/Draft4.asc"): #../../src/images/jeh-tech/electronics_lc_tank.asc"):
+#for line in open("/home/james/Draft4.asc"): #../../src/images/jeh-tech/electronics_lc_tank.asc"):
+#for line in open("/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/inductors.asc"):
+#for line in open("/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/one_rotated_inductor.asc"):
+for line in open("/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/ne555s.asc"):
     print(line.strip())
     if line.startswith("WIRE "):
         x1, y1, x2, y2 = [float(x) for x in line.strip().split(" ")[1:]]
