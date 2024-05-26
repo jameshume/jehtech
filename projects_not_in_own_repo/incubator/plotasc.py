@@ -108,7 +108,7 @@ class Component:
                             cy = min(y1, y2) + abs(y1 - y2)/2
                             w = abs(x1 - x2)
                             h = abs(y1 - y2)
-                            self._ellipses.append(LTEllipse(cx, cy, w, h))
+                            self._ellipses.append(LTEllipse(LTPoint(cx, cy), w, h))
                         
                         elif line[0:len("WINDOW ")] == "WINDOW ":
                             line = line.split()[1:]
@@ -192,7 +192,9 @@ def maybe(quad):
     return 1
     
 def draw_ltspice_arc(ax, arc : LTArc, idx, draw=True, debug=True):
-    print("\n\n\n\n\nPlotting ARC IDX", idx)
+    if debug:
+        print("\n\n\n\n\nPlotting ARC IDX", idx)
+    
     arc_centered_at_origin = arc.translate(-arc.bbox.center)
 
     # LTSpice coordinates are like a screen, but atan2 expects them to be like a graph. This means when looking at
@@ -221,47 +223,47 @@ def draw_ltspice_arc(ax, arc : LTArc, idx, draw=True, debug=True):
 
     t2_quad = maybe(get_quadrant_1_to_4(t1_degs))
     t1_quad = maybe(get_quadrant_1_to_4(t2_degs))
-    print("QUAD1", t1_quad, "from", t1_degs)
-    print("QUAD2", t2_quad, "from", t2_degs)
+    if debug:
+        print("QUAD1", t1_quad, "from", t1_degs)
+        print("QUAD2", t2_quad, "from", t2_degs)
 
     if t1_degs < t2_degs:
         # The arc is going AC and is the short arc between the two points
-        print("The arc is going AC and is the short arc between the two points")
+        if debug:
+            print("The arc is going AC and is the short arc between the two points")
         quads = sorted(list(range(t1_quad, t2_quad + 1)))
 
     else:
         # The arc is going AC and is the long arc between the two points
-        print("The arc is going AC and is the long arc between the two points")
+        if debug: 
+            print("The arc is going AC and is the long arc between the two points")
         tmp = list(range(t1_quad, 5))
         tmp.extend(list(range(1, t2_quad + 1)))
         quads = sorted(tmp)
 
-    print("QUADS", quads)
+    if debug:
+        print("QUADS", quads)
 
     tight_bbox = arc.bbox.clone()
   
     if 1 in quads and 2 in quads:
         tight_bbox.topleft.y = arc.bbox.topleft.y
     else:
-        print("MINY")
         tight_bbox.topleft.y = min(arc_real_p1.y, arc_real_p2.y)
     
     if 2 in quads and 3 in quads:
         tight_bbox.topleft.x = arc.bbox.topleft.x
     else:
-        print("MINX")
         tight_bbox.topleft.x = min(arc_real_p1.x, arc_real_p2.x)
     
     if 3 in quads and 4 in quads:
         tight_bbox.bottomright.y = arc.bbox.bottomright.y
     else:
-        print(f"MAXY = max({arc.p1.y}, {arc.p2.y})")
         tight_bbox.bottomright.y = max(arc_real_p1.y, arc_real_p2.y)
     
     if 4 in quads and 1 in quads:        
         tight_bbox.bottomright.x = arc.bbox.bottomright.x
     else:
-        print(f"MAXX = max({arc.p1.x}, {arc.p2.x}) ")
         tight_bbox.bottomright.x = max(arc_real_p1.x, arc_real_p2.x)
 
     if len(quads) == 4 and t1_quad != t2_quad:
@@ -277,7 +279,8 @@ def draw_ltspice_arc(ax, arc : LTArc, idx, draw=True, debug=True):
             tight_bbox.bottomright.x = max(arc_real_p1.x, arc_real_p2.x)
 
 
-    print(f"tight_bbox={tight_bbox}")
+    if debug:
+        print(f"tight_bbox={tight_bbox}")
     
     if draw:
         if debug:
@@ -344,44 +347,41 @@ def matplotlib_plot_component(component, ax, xoff = 0, yoff = 0, rotation = 0, d
     maxx = -1000000.0
     maxy = -1000000.0
     
-    print("PLOTTING")
-
     for line in component.lines:
-        #line = line.rotate(rotation)
         update_minmax(line.p1.x, line.p1.y, line.p2.x, line.p2.y)
 
     for rect in component.rectangles:
-        #rect = rect.rotate(rotation)
         update_minmax(*rect.topleft.as_tuple(), *rect.bottomright.as_tuple())
 
     for ellipse in component.ellipses:
-        #ellipse = ellipse.rotate(rotation)
-        update_minmax(ellipse.cx - ellipse.w/2, ellipse.cy - ellipse.h/2, ellipse.cx + ellipse.w/2, ellipse.cy + ellipse.h/2)
+        update_minmax(ellipse.xy.x - ellipse.w/2, 
+                      ellipse.xy.y - ellipse.h/2, 
+                      ellipse.xy.x + ellipse.w/2, 
+                      ellipse.xy.y + ellipse.h/2)
 
     for arc, arc_index in component.arcs[0:]:
-        #arc = arc.rotate(rotation)
         tight_bbox = draw_ltspice_arc(ax, arc, arc_index, draw=False, debug=False)
         update_minmax(tight_bbox.topleft.x, tight_bbox.topleft.y, tight_bbox.bottomright.x, tight_bbox.bottomright.y)
 
-
-
     for line in component.lines:
-        line = line.translate(LTPoint(-minx, -miny)).rotate(rotation).translate(LTPoint(minx, miny))
+        line = line.rotate(rotation)
         line = line.translate(LTPoint(xoff, yoff))
         ax.plot([line.p1.x, line.p2.x], [line.p1.y, line.p2.y], color='b')
 
     for rect in component.rectangles:
-        rect = rect.translate(LTPoint(-minx, -miny)).rotate(rotation).translate(LTPoint(minx, miny))
+        rect = rect.rotate(rotation)
         rect = rect.translate(LTPoint(xoff, yoff))
         rect1 = mpatches.Rectangle(rect.topleft.as_tuple(), *rect.dimensions.as_tuple(), fill=False, color='b')
         ax.add_patch(rect1)
 
     for ellipse in component.ellipses:
-        el1 = mpatches.Ellipse((ellipse.cx + xoff, ellipse.cy + yoff), ellipse.w, ellipse.h, fill=False, color='b')
+        ellipse = ellipse.rotate(rotation)
+        ellipse = ellipse.translate(LTPoint(xoff, yoff))
+        el1 = mpatches.Ellipse(ellipse.xy.as_tuple(), ellipse.w, ellipse.h, fill=False, color='b')
         ax.add_patch(el1)
 
     for pin in component.pins:
-        pin = pin.translate(LTPoint(-minx, -miny)).rotate(rotation).translate(LTPoint(minx, miny))
+        pin = pin.rotate(rotation)
         pin = pin.translate(LTPoint(xoff, yoff))
 
         circle1 = mpatches.Circle(pin.p.as_tuple(), 1, color='r')
@@ -390,8 +390,6 @@ def matplotlib_plot_component(component, ax, xoff = 0, yoff = 0, rotation = 0, d
             ax.text(pin.p.x, pin.p.y, pin.name)
 
     for arc, arc_index in component.arcs:
-        # For some reason, with the arcs I dont need to translate it to the origin before rotating.
-        #arc = arc.translate(LTPoint(-minx, -miny)).rotate(rotation).translate(LTPoint(minx, miny))
         arc = arc.rotate(rotation)
         arc = arc.translate(LTPoint(xoff, yoff))
         draw_ltspice_arc(ax, arc, arc_index, draw=True, debug=False)

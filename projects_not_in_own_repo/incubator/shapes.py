@@ -136,19 +136,15 @@ class LTRectangle:
     """
     def __init__(self : "LTRectangle", p1 : LTPoint, p2 : LTPoint):
         if p2.x >= p1.x and p2.y >= p1.y:
-            print("TYPE 1")
             self._topleft     = p1
             self._bottomright = p2
         elif p1.x >= p2.x and p2.y >= p1.y:
-            print("TYPE 2")
             self._topleft     = LTPoint(p2.x, p1.y)
             self._bottomright = LTPoint(p1.x, p2.y)
         elif p1.x >= p2.x and p1.y >= p2.y:
-            print("TYPE 3")
             self._topleft     = p2
             self._bottomright = p1
         elif p2.x >= p1.x and p1.y >= p2.y:
-            print("TYPE 4")
             self._topleft     = LTPoint(p1.x, p2.y)
             self._bottomright = LTPoint(p2.x, p1.y)
         else:
@@ -267,19 +263,32 @@ class LTArc:
 
 #######################################################################################################################
 class LTEllipse:
-    def __init__(self, cx, cy, w, h):
-        self._cx = cx
-        self._cy = cy
+    def __init__(self, xy_center : LTPoint, w, h):
+        self._xy_center = xy_center
         self._h = h
         self._w = w
     
-    @property 
-    def cx(self):
-        return self._cx
+    def translate(self, xy):
+        return LTEllipse(self._xy_center.translate(xy), self._w, self._h)
     
+    def rotate(self, degrees):
+        # Aaar this doesn't work for anything other than 90,180 turns, which luckily is all LTSpice does....
+        if degrees in [0, 180, 360]:
+            w = self._w
+            h = self._h
+        elif degrees in [90, 270]:
+            w = self._h
+            h = self._w
+        else:
+            print("*" * 80)
+            print(degrees)
+            assert(False)
+
+        return LTEllipse(self._xy_center.rotate(degrees), w, h)
+
     @property 
-    def cy(self):
-        return self._cy
+    def xy(self):
+        return self._xy_center
     
     @property 
     def h(self):
@@ -297,7 +306,7 @@ class LTPin:
         self._name = name
 
     def rotate(self, degrees):
-        return LTPin(self.p.rotate(degrees), self._name)
+        return LTPin(self._p.rotate(degrees), self._name)
 
     def translate(self, xy):
         return LTPin(self.p.translate(xy), self._name)
