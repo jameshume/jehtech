@@ -15,10 +15,6 @@ def represents_int(s):
 
 
 
-
-
-
-
 #######################################################################################################################
 class Component:
     def __init__(self, filename):
@@ -31,13 +27,15 @@ class Component:
         arc_index = 0
         state = "idle"
         curret_pin = None
+        print ("MAKING COMPONENT")
 
         with open(filename, "r", encoding="utf-8", errors="ignore") as fh:
             filecontents = fh.readlines()
             for line in filecontents:
-                line =  line.strip()
+                line = line.strip()
 
                 while True:
+                    print(">>>>", line)
                     if state == "idle":
                         if line[0:len("LINE ")] == "LINE ":
                             line = line.split()[1:]
@@ -61,7 +59,7 @@ class Component:
                             y1 = float(line[1])
                             curret_pin = LTPin(x1, y1)
                             state = "pin"
-
+#
                         elif line[0:len("RECTANGLE ")] == "RECTANGLE ":
                             line = line.split()[1:]
                             if not represents_int(line[0]):
@@ -153,6 +151,11 @@ class Component:
     def ellipses(self):
         return self._ellipses
     
+    @property
+    def flags(self):
+        return self._flags
+
+
 def radians_to_degrees(radians):
     return radians * 180 / math.pi
 
@@ -340,7 +343,7 @@ def update_minmax(x1, y1, x2, y2):
     update_maxy(y1, y2)
 
 
-def matplotlib_plot_component(component, ax, xoff = 0, yoff = 0, rotation = 0, debug=True):
+def matplotlib_plot_component(component, ax, xoff = 0, yoff = 0, rotation = 0, debug=False):
     global minx, miny, maxx, maxy
     minx = 1000000.0
     miny = 1000000.0
