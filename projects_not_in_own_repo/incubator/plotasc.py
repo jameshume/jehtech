@@ -343,7 +343,7 @@ def update_minmax(x1, y1, x2, y2):
     update_maxy(y1, y2)
 
 
-def matplotlib_plot_component(component, ax, xoff = 0, yoff = 0, rotation = 0, debug=False):
+def matplotlib_plot_component(component, ax, xoff = 0, yoff = 0, rotation = 0, show_labels=False, debug=False):
     global minx, miny, maxx, maxy
     minx = 1000000.0
     miny = 1000000.0
@@ -389,7 +389,7 @@ def matplotlib_plot_component(component, ax, xoff = 0, yoff = 0, rotation = 0, d
 
         circle1 = mpatches.Circle(pin.p.as_tuple(), 1, color='r')
         ax.add_patch(circle1)
-        if pin.name is not None:
+        if show_labels and pin.name is not None:
             ax.text(pin.p.x, pin.p.y, pin.name)
 
     for arc, arc_index in component.arcs:

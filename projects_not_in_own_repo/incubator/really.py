@@ -12,20 +12,24 @@ flag_x, flag_y, flag_type = None, None, None
 
 prev_line_cache = None
 
-def parse_flag_line(line):
+def parse_flag_line(line, draw=True):
     print(f"DRAW FLAG {line}")
     flag_x, flag_y, flag_type = line.strip().split(" ")[1:]
     flag_x, flag_y = (float(flag_x), float(flag_y))
+    
     if flag_type == "0":
-        circle1 = mpatches.Circle((flag_x, flag_y), 1, color='r')
-        ax.add_patch(circle1)
-        hw = 20
-        h = 20
-        ax.plot([flag_x - hw, flag_x + hw], [flag_y, flag_y], c='b')
-        ax.plot([flag_x - hw, flag_x], [flag_y, flag_y + h], c='b')
-        ax.plot([flag_x, flag_x + hw], [flag_y + h, flag_y], c='b')
+        if draw:
+            circle1 = mpatches.Circle((flag_x, flag_y), 1, color='r')
+            ax.add_patch(circle1)
+            hw = 20
+            h = 20
+            ax.plot([flag_x - hw, flag_x + hw], [flag_y, flag_y], c='b')
+            ax.plot([flag_x - hw, flag_x], [flag_y, flag_y + h], c='b')
+            ax.plot([flag_x, flag_x + hw], [flag_y + h, flag_y], c='b')
     else:
         print(f"##### Flag type {flag_type} not supported")
+
+    return flag_x, flag_y, flag_type
 
 first_line = True
 
@@ -48,14 +52,17 @@ for line in open("../../src/images/jeh-tech/electronics_common_emitter_amplifier
             h = 20
             warrow = 20
             wbody = 20
-            if inout == "In":
+            if inout == "Out":
                 ax.plot([x, x - warrow], [y, y - h], c='b')
                 ax.plot([x, x - warrow], [y, y + h], c='b')
-            elif inout == "Out":
+            elif inout == "In":
                 ax.plot([x, x + warrow], [y, y - h], c='b')
                 ax.plot([x, x + warrow], [y, y + h], c='b')
             else:
                 print(f"##### IO pin type {inout} not supported")
+
+            flag_x, flag_y, flag_text = parse_flag_line(prev_line_cache, draw=False)
+            ax.annotate(flag_text, xy=(x,y))
         else:
             parse_flag_line(prev_line_cache)
         
@@ -69,12 +76,15 @@ for line in open("../../src/images/jeh-tech/electronics_common_emitter_amplifier
         print(x1, y1, x2, y2)
         ax.plot([x1, x2], [y1, y2], color='blue')
 
+        # The next thing to do is to figure out where lines are joined and plot some little squares
+        # or circles to indicate this.
+
     # Seems like an IOPIN is always
-    #   FLAG
+    #   FLAG x y some-string
     #   IOPIN
     #
     # But ground is just
-    #   FLAG
+    #   FLAG x y 0
     # Followed by anything other than IOPIN
     elif line.startswith("FLAG "):
         prev_line_cache = line
