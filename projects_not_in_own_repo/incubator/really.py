@@ -2,6 +2,7 @@ import matplotlib.pyplot as pl
 import matplotlib.patches as mpatches
 
 from plotasc import Component, matplotlib_plot_component
+from shapes import LTPoint, LTLine
 
 fig, ax = pl.subplots()
 ax.invert_yaxis()
@@ -33,6 +34,7 @@ def parse_flag_line(line, draw=True):
 
 first_line = True
 
+wires = []
 
 #for line in open("/home/james/Draft4.asc"): #../../src/images/jeh-tech/electronics_lc_tank.asc"):
 #for line in open("/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/inductors.asc"):
@@ -73,6 +75,7 @@ for line in open("../../src/images/jeh-tech/electronics_common_emitter_amplifier
     
     if line.startswith("WIRE "):
         x1, y1, x2, y2 = [float(x) for x in line.strip().split(" ")[1:]]
+        wires.append(LTLine(LTPoint(x1, y1), LTPoint(x2, y2)))
         print(x1, y1, x2, y2)
         ax.plot([x1, x2], [y1, y2], color='blue')
 
@@ -104,6 +107,8 @@ if prev_line_cache is not None:
     prev_line_cache = None
     parse_flag_line(line)
 
+print("LJLKJLKJLKJLKJLKJLKJLKJLKJLKJLKJ")
+print(wires)
 
 
 ax.set_xlim(-500, 500)

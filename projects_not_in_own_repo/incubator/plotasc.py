@@ -37,7 +37,7 @@ class Component:
                 while True:
                     print(">>>>", line)
                     if state == "idle":
-                        if line[0:len("LINE ")] == "LINE ":
+                        if line.startswith("LINE "):
                             line = line.split()[1:]
                             print("LINE", line)
                             if not represents_int(line[0]):
@@ -53,14 +53,14 @@ class Component:
                                 )
                             )
 
-                        elif line[0:len("PIN ")] == "PIN ":
+                        elif line.startswith("PIN "):
                             line = line.split()[1:]
                             x1 = float(line[0])
                             y1 = float(line[1])
                             curret_pin = LTPin(x1, y1)
                             state = "pin"
 #
-                        elif line[0:len("RECTANGLE ")] == "RECTANGLE ":
+                        elif line.startswith("RECTANGLE "):
                             line = line.split()[1:]
                             if not represents_int(line[0]):
                                 line = line[1:]
@@ -70,7 +70,7 @@ class Component:
                             y2 = float(line[3])
                             self._rectangles.append(LTRectangle(LTPoint(x1, y1), LTPoint(x2, y2)))
 
-                        elif line[0:len("ARC ")] == "ARC ":
+                        elif line.startswith("ARC "):
                             line = line.split()[1:]
                             if not represents_int(line[0]):
                                 line = line[1:]
@@ -94,7 +94,7 @@ class Component:
                                     ),
                                     arc_index))
 
-                        elif line[0:len("CIRCLE ")] == "CIRCLE ":
+                        elif line.startswith("CIRCLE "):
                             line = line.split()[1:]
                             if not represents_int(line[0]):
                                 line = line[1:]
@@ -108,7 +108,7 @@ class Component:
                             h = abs(y1 - y2)
                             self._ellipses.append(LTEllipse(LTPoint(cx, cy), w, h))
                         
-                        elif line[0:len("WINDOW ")] == "WINDOW ":
+                        elif line.startswith("WINDOW "):
                             line = line.split()[1:]
                             a = float(line[0])
                             b = float(line[1])
@@ -119,7 +119,7 @@ class Component:
                             
 
                     elif state == "pin":
-                        if line[0:len("PINATTR ")] == "PINATTR ":
+                        if line.startswith("PINATTR "):
                             line = line.split()[1:]
                             if line[0] == "PinName":
                                 self._pins.append(LTPin(LTPoint(x1, y1), line[1]))
