@@ -66,9 +66,28 @@ while lines[line_index] == "":
 assert lines[line_index] == '"Net Connections Table"'
 line_index += 1
 
+class NetConnection:
+    def __init__(self, net_name_table_index, part_id_table_index, pin_number, next_connection):
+        self.net_name_table_index = net_name_table_index
+        self.part_id_table_index  = part_id_table_index
+        self.pin_number           = pin_number
+        self.next_connection      = next_connection
+
+
 net_connections_table = []
 while lines[line_index] != "":
-    tbl_net_name_index, tbl_part_id_index, tbl_pin_num, tbl_next_connection = (int(x) for x in re.match(r'(\d+)\s+(\d+)\s+(\d+)\s+(\d+)', lines[line_index]).groups())
-    print(netnames_table[tbl_net_name_index - 1], "-", part_id_table[tbl_part_id_index - 1], "-", tbl_pin_num, "-", tbl_next_connection)
+    tbl_net_name_index, tbl_part_id_index, tbl_pin_num, tbl_next_connection = (
+        int(x) for x in re.match(r'(\d+)\s+(\d+)\s+(\d+)\s+(\d+)', lines[line_index]).groups())
+    net_connections_table.append((tbl_net_name_index, tbl_part_id_index, tbl_pin_num, tbl_next_connection - 1))
     line_index += 1
-                                                                               
+
+def process_net_connection(idx):
+    global net_connections_table
+    row = net_connections_table[idx]
+
+    node = NetConnection(row[0], row[1], row[2], None)
+
+for idx, entry in enumerate(net_connectionsentry[3]_table):
+    if entry[3] != -1 and entry[3] is not None:
+        process_net_connection(idx)
+
