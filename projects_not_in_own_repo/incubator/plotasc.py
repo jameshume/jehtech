@@ -26,8 +26,6 @@ class Component:
         self._windows = []
         arc_index = 0
         state = "idle"
-        curret_pin = None
-        print ("MAKING COMPONENT")
 
         with open(filename, "r", encoding="utf-8", errors="ignore") as fh:
             filecontents = fh.readlines()
@@ -35,11 +33,9 @@ class Component:
                 line = line.strip()
 
                 while True:
-                    print(">>>>", line)
                     if state == "idle":
                         if line.startswith("LINE "):
                             line = line.split()[1:]
-                            print("LINE", line)
                             if not represents_int(line[0]):
                                 line = line[1:]
                             x1 = float(line[0])
@@ -57,7 +53,6 @@ class Component:
                             line = line.split()[1:]
                             x1 = float(line[0])
                             y1 = float(line[1])
-                            curret_pin = LTPin(x1, y1)
                             state = "pin"
 #
                         elif line.startswith("RECTANGLE "):
@@ -420,9 +415,6 @@ if __name__ == "__main__":
     #for dir, file in YieldFiles("/home/james/Repos/jehtech/projects_not_in_own_repo/incubator", "*.asy"):
         try:
             fn = os.path.join(dir, file)
-            print(fn)
-            with open(fn, "r", encoding="utf-8", errors="ignore") as fh:
-                print("\n".join(fh.readlines()))
             fig, ax = pl.subplots()
             ax.spines[['left', 'bottom', 'right', 'top']].set_visible(False)
             ax.set_xticks([]) 

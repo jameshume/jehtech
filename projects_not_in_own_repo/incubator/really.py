@@ -14,7 +14,6 @@ flag_x, flag_y, flag_type = None, None, None
 prev_line_cache = None
 
 def parse_flag_line(line, draw=True):
-    print(f"DRAW FLAG {line}")
     flag_x, flag_y, flag_type = line.strip().split(" ")[1:]
     flag_x, flag_y = (float(flag_x), float(flag_y))
     
@@ -40,15 +39,13 @@ wires = []
 #for line in open("/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/inductors.asc"):
 #for line in open("/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/one_rotated_inductor.asc"):
 #for line in open("/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/ne555s.asc"):
-#for line in open("../../src/images/jeh-tech/electronics_nmos_depletion.asc"):
-for line in open("../../src/images/jeh-tech/electronics_common_emitter_amplifier.asc"):
+for line in open("../../src/images/jeh-tech/electronics_nmos_depletion.asc"):
+#for line in open("../../src/images/jeh-tech/electronics_common_emitter_amplifier.asc"):
 #for line in open("/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/ground.asc"):
 #for line in open("/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/iopin.asc"):
-    print(line.strip())
-    
+#for line in open("../../src/images/jeh-tech/wires.asc"):
     if (prev_line_cache is not None):
         if line.startswith("IOPIN "):
-            print("DRAW IOPIN")
             x, y, inout = line.strip().split(" ")[1:]
             x, y = float(x), float(y)
             h = 20
@@ -76,11 +73,8 @@ for line in open("../../src/images/jeh-tech/electronics_common_emitter_amplifier
     if line.startswith("WIRE "):
         x1, y1, x2, y2 = [float(x) for x in line.strip().split(" ")[1:]]
         wires.append(LTLine(LTPoint(x1, y1), LTPoint(x2, y2)))
-        print(x1, y1, x2, y2)
         ax.plot([x1, x2], [y1, y2], color='blue')
 
-        # The next thing to do is to figure out where lines are joined and plot some little squares
-        # or circles to indicate this.
 
     # Seems like an IOPIN is always
     #   FLAG x y some-string
@@ -100,15 +94,37 @@ for line in open("../../src/images/jeh-tech/electronics_common_emitter_amplifier
         rotation = float(tokens[3][1:])
         name = name.replace("\\", "/")
         totalname = f"/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/{name}.asy"
-        print(totalname, rotation)
         matplotlib_plot_component(Component(totalname), ax, x, y, rotation)
 
 if prev_line_cache is not None:
     prev_line_cache = None
     parse_flag_line(line)
 
-print("LJLKJLKJLKJLKJLKJLKJLKJLKJLKJLKJ")
-print(wires)
+# When a line has a connection to it, if the connection is in the middle of the line,
+# it is broken into two. This means that lines that intersect do so at the start
+# or finish of the line, never in the "middle" of a line. Thus, connections
+# occur when a line starts/ends where another line starts/ends
+#
+# A really simple approach, if inefficient, is to say, for each line, find all lines
+# that start/finish at either the start or finish of this line. If that line exists
+# puts a "join" blob.
+for i, wirei in enumerate(wires):
+    for j, wirej in enumerate(wires):
+        if i == j:
+            continue
+
+        if wirei.p1 == wirej.p1:
+            ax.add_patch(mpatches.Circle(wirei.p1.as_tuple(), 3, color='darkblue'))
+
+        if wirei.p1 == wirej.p2:
+            ax.add_patch(mpatches.Circle(wirei.p1.as_tuple(), 3, color='darkblue'))
+
+        if wirei.p2 == wirej.p1:
+            ax.add_patch(mpatches.Circle(wirei.p2.as_tuple(), 3, color='darkblue'))
+
+        if wirei.p2 == wirej.p2:
+            ax.add_patch(mpatches.Circle(wirei.p2.as_tuple(), 3, color='darkblue'))
+        
 
 
 ax.set_xlim(-500, 500)
