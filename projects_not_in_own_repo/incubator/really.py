@@ -108,21 +108,50 @@ if prev_line_cache is not None:
 # A really simple approach, if inefficient, is to say, for each line, find all lines
 # that start/finish at either the start or finish of this line. If that line exists
 # puts a "join" blob.
+wire_nets = []
+points_to_nets = {}
+points = []
 for i, wirei in enumerate(wires):
     for j, wirej in enumerate(wires):
         if i == j:
             continue
 
-        if wirei.p1 == wirej.p1:
+        if wirei.p1 == wirej.p1 and wirei.p1 not in points_to_nets:
             ax.add_patch(mpatches.Circle(wirei.p1.as_tuple(), 3, color='darkblue'))
+            # Add this join p1 --- p1. Want to store the join point.
+            # ((wirei, wirej), (p1, p1))
+            # ((wirei, wirej), (p1, p2))
+            # ((wirei, wirej), (p2, p1))
+            # ((wirei, wirej), (p2, p2))
+            #
+            # We'd have to search for p1 in the sets of all other joins. If found add it there.
+            # So, dictionary of points to nets? Then lookup and add to net.
+            # 
+            # But we would need to check to see if this wire is any other joins....
+            # If it is we have to add it there 
+            if wirei.p1 in points_to_nets:
+                p2n = ((wirei, wirej), (p1, p1))
+                points.append(p2n)
+                points_to_nets[wirei.p1].append(p2n)
+            else:
+                p2n = ((wirei, wirej), (p1, p1))
+                points.append(p2n)
+                points_to_nets[wirei.p1] = [p2n]
+            
 
-        if wirei.p1 == wirej.p2:
+        if wirei.p1 == wirej.p2 and wirei.p1 not in points_to_nets:
             ax.add_patch(mpatches.Circle(wirei.p1.as_tuple(), 3, color='darkblue'))
+            if wirei.p1 in points_to_nets:
+                points_to_nets[wirei.p1].append(((wirei, wirej), (p1, p2)))
+                points_to_nets[wirei.p2].append(((wirei, wirej), (p1, p2)))
+            else:
+                points_to_nets[wirei.p1] = [((wirei, wirej), (p1, p2))]
+                points_to_nets[wirei.p2] = [((wirei, wirej), (p1, p2))]
 
-        if wirei.p2 == wirej.p1:
+        if wirei.p2 == wirej.p1 and wirei.p2 not in points_to_nets:
             ax.add_patch(mpatches.Circle(wirei.p2.as_tuple(), 3, color='darkblue'))
 
-        if wirei.p2 == wirej.p2:
+        if wirei.p2 == wirej.p2 and wirei.p2 not in points_to_nets:
             ax.add_patch(mpatches.Circle(wirei.p2.as_tuple(), 3, color='darkblue'))
         
 

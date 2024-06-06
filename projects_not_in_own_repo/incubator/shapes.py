@@ -17,14 +17,11 @@ class LTPoint:
         self._x = float(x)
         self._y = float(y)
 
-
     def __add__(self, point):
         return LTPoint(self._x + point._x, self._y + point._y)
 
-
     def __sub__(self, point):
         return LTPoint(self._x - point._x, self._y - point._y)
-
 
     def __truediv__(self, scale):
         return  LTPoint(self._x / float(scale), self._y / float(scale))
@@ -39,16 +36,22 @@ class LTPoint:
         return f"LTPoint({self._x}, {self._y})"
     
     def __eq__(self, other):
+        if not isinstance(other, type(self)):
+            return False
         return self._x == other._x and self._y == other._y
-
+    
+    def __hash__(self):
+        # If hash(a) == hash(b), then a might equal b
+        # If a == b then hash(a) == hash(b)
+        # If hash(a) != hash(b), then a != b
+        # Urg this is a bit poo!
+        return hash(self._x  + self._y)
 
     def clone(self):
         return LTPoint(self._x, self._y)
 
-
     def abs(self):
         return LTPoint(math.fabs(self._x), math.fabs(self._y))
-
 
     def translate(self, xy):
         return self + xy
@@ -60,10 +63,8 @@ class LTPoint:
             (self._y * math.cos(rads)) + (self._x * math.sin(rads))
         )
 
-
     def as_tuple(self):
         return (self._x, self._y)
-
 
     @property
     def x(self):

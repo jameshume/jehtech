@@ -1,4 +1,7 @@
+from __future__ import annotations
 import re
+from dataclasses import dataclass
+
 
 with open("../../src/images/jeh-tech/electronics_common_emitter_amplifier.net") as fh:
     lines = [x.strip() for x in fh.readlines()]
@@ -21,12 +24,21 @@ while lines[line_index] == "":
 assert lines[line_index] == '"Part IDs Table"'
 line_index += 1
 
-part_id_table = []
+@dataclass(frozen=True)
+class Part:
+    part_id   : int
+    part_name : str
+
+    def __hash__(self):
+        return hash(self.part_id)
+
+
+part_table = []
 while lines[line_index] != "":
     part_id, part_name, _ = re.match(r'"(.*)"\s*"(.*)"\s*"(.*)"', lines[line_index]).groups()
-    part_id_table.append((part_id, part_name))
+    part_table.append(Part(part_id, part_name))
     line_index += 1
-    
+
 # Skip any blank lines
 while lines[line_index] == "":
     line_index += 1
@@ -40,10 +52,10 @@ while lines[line_index] == "":
 assert lines[line_index] == '"Net Names Table"'
 line_index += 1
 
-netnames_table = []
+netnames_table_raw = []
 while lines[line_index] != "":
     net_name, net_connections_index = re.match(r'"(.*)"\s*(\d+)', lines[line_index]).groups()
-    netnames_table.append((net_name, int(net_connections_index) - 1)) # File is 1-indexed but Python is 0-indexed, hence -1
+    netnames_table_raw.append((net_name, int(net_connections_index) - 1)) # File is 1-indexed but Python is 0-indexed, hence -1
     line_index += 1
 
 # Skip any blank lines
@@ -66,28 +78,25 @@ while lines[line_index] == "":
 assert lines[line_index] == '"Net Connections Table"'
 line_index += 1
 
-class NetConnection:
-    def __init__(self, net_name_table_index, part_id_table_index, pin_number, next_connection):
-        self.net_name_table_index = net_name_table_index
-        self.part_id_table_index  = part_id_table_index
-        self.pin_number           = pin_number
-        self.next_connection      = next_connection
-
-
-net_connections_table = []
+net_connections_table_raw = []
 while lines[line_index] != "":
     tbl_net_name_index, tbl_part_id_index, tbl_pin_num, tbl_next_connection = (
         int(x) for x in re.match(r'(\d+)\s+(\d+)\s+(\d+)\s+(\d+)', lines[line_index]).groups())
-    net_connections_table.append((tbl_net_name_index, tbl_part_id_index, tbl_pin_num, tbl_next_connection - 1))
+    net_connections_table_raw.append((tbl_net_name_index, tbl_part_id_index, tbl_pin_num, tbl_next_connection - 1))
     line_index += 1
 
-def process_net_connection(idx):
-    global net_connections_table
-    row = net_connections_table[idx]
 
-    node = NetConnection(row[0], row[1], row[2], None)
+@dataclass(frozen=True)
+class Net:
+    net_name : str
+    part : Part
+    pin : int
+    next : Net
 
-for idx, entry in enumerate(net_connectionsentry[3]_table):
-    if entry[3] != -1 and entry[3] is not None:
-        process_net_connection(idx)
+
+nets = []
+for net_name, net_connection_idx in netnames_table_raw:
+    tbl_net_name_index, tbl_part_id_index, tbl_pin_num, tbl_next_connection = net_connections_table_raw[net_connection_idx]
+    
+
 
