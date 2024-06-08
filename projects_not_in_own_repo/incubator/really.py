@@ -1,8 +1,26 @@
+"""
+Copyright 2024 James E Hume
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+documentation files (the “Software”), to deal in the Software without restriction, including without limitation the
+rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit
+persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
+Software.
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+"""
+
 import matplotlib.pyplot as pl
 import matplotlib.patches as mpatches
 
-from plotasc import Component, matplotlib_plot_component
-from shapes import LTPoint, LTLine
+from plotasc import matplotlib_plot_component
+from lt_shapes import LTPoint, LTLine
+from lt_component import LTComponent
 
 fig, ax = pl.subplots()
 ax.invert_yaxis()
@@ -94,7 +112,7 @@ for line in open("../../src/images/jeh-tech/electronics_nmos_depletion.asc"):
         rotation = float(tokens[3][1:])
         name = name.replace("\\", "/")
         totalname = f"/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/{name}.asy"
-        matplotlib_plot_component(Component(totalname), ax, x, y, rotation)
+        matplotlib_plot_component(LTComponent(totalname), ax, x, y, rotation)
 
 if prev_line_cache is not None:
     prev_line_cache = None

@@ -1,159 +1,52 @@
+"""
+Copyright 2024 James E Hume
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+documentation files (the “Software”), to deal in the Software without restriction, including without limitation the
+rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit
+persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
+Software.
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+"""
 import matplotlib.pyplot as pl
 import matplotlib.patches as mpatches
 import math
-from shapes import LTPoint, LTRectangle, LTArc, LTLine, LTEllipse, LTPin
-
-
-#######################################################################################################################
-def represents_int(s):
-    try: 
-        int(s)
-    except ValueError:
-        return False
-    else:
-        return True
+from lt_shapes import LTPoint, LTRectangle, LTArc, LTLine, LTEllipse, LTPin
+from lt_component import LTComponent
 
 
 
 #######################################################################################################################
-class Component:
-    def __init__(self, filename):
-        self._lines = []
-        self._pins  = []
-        self._rectangles = []
-        self._arcs = []
-        self._ellipses = []
-        self._windows = []
-        arc_index = 0
-        state = "idle"
+class MinMax:
+    def __init__(self):
+        self.min : Optional[LTPoint] = None
+        self.max : Optional[LTPoint] = None
 
-        with open(filename, "r", encoding="utf-8", errors="ignore") as fh:
-            filecontents = fh.readlines()
-            for line in filecontents:
-                line = line.strip()
-
-                while True:
-                    if state == "idle":
-                        if line.startswith("LINE "):
-                            line = line.split()[1:]
-                            if not represents_int(line[0]):
-                                line = line[1:]
-                            x1 = float(line[0])
-                            y1 = float(line[1])
-                            x2 = float(line[2])
-                            y2 = float(line[3])
-                            self._lines.append(
-                                LTLine(
-                                    LTPoint(x1, y1),
-                                    LTPoint(x2, y2)
-                                )
-                            )
-
-                        elif line.startswith("PIN "):
-                            line = line.split()[1:]
-                            x1 = float(line[0])
-                            y1 = float(line[1])
-                            state = "pin"
-#
-                        elif line.startswith("RECTANGLE "):
-                            line = line.split()[1:]
-                            if not represents_int(line[0]):
-                                line = line[1:]
-                            x1 = float(line[0])
-                            y1 = float(line[1])
-                            x2 = float(line[2])
-                            y2 = float(line[3])
-                            self._rectangles.append(LTRectangle(LTPoint(x1, y1), LTPoint(x2, y2)))
-
-                        elif line.startswith("ARC "):
-                            line = line.split()[1:]
-                            if not represents_int(line[0]):
-                                line = line[1:]
-
-                            bbox_x1 = float(line[0])
-                            bbox_y1 = float(line[1])
-                            bbox_x2 = float(line[2])
-                            bbox_y2 = float(line[3])
-                            arc1x   = float(line[4])
-                            arc1y   = float(line[5])
-                            arc2x   = float(line[6])
-                            arc2y   = float(line[7])
-                            arc_index += 1
-
-                            self._arcs.append((
-                                    LTArc(
-                                        LTPoint(bbox_x1, bbox_y1),
-                                        LTPoint(bbox_x2, bbox_y2),
-                                        LTPoint(arc1x, arc1y),
-                                        LTPoint(arc2x, arc2y)
-                                    ),
-                                    arc_index))
-
-                        elif line.startswith("CIRCLE "):
-                            line = line.split()[1:]
-                            if not represents_int(line[0]):
-                                line = line[1:]
-                            x1 = float(line[0])
-                            y1 = float(line[1])
-                            x2 = float(line[2])
-                            y2 = float(line[3])
-                            cx = min(x1, x2) + abs(x1 - x2)/2
-                            cy = min(y1, y2) + abs(y1 - y2)/2
-                            w = abs(x1 - x2)
-                            h = abs(y1 - y2)
-                            self._ellipses.append(LTEllipse(LTPoint(cx, cy), w, h))
-                        
-                        elif line.startswith("WINDOW "):
-                            line = line.split()[1:]
-                            a = float(line[0])
-                            b = float(line[1])
-                            c = float(line[2])
-                            d = line[3]
-                            e = float(line[4])
-                            self._windows.append((a,b,c,d,e))
-                            
-
-                    elif state == "pin":
-                        if line.startswith("PINATTR "):
-                            line = line.split()[1:]
-                            if line[0] == "PinName":
-                                self._pins.append(LTPin(LTPoint(x1, y1), line[1]))
-                                state = "idle"
-                        else:
-                            state = "idle"
-                            continue
-
-
-                    break # Always break by default.
-
-    @property
-    def lines(self):
-          return self._lines
-
-    @property 
-    def rectangles(self):
-        return self._rectangles    
-
-    @property
-    def pins(self):
-        return self._pins
-
-    @property
-    def arcs(self):
-        return self._arcs
+    def __str__(self):
+        return f"MinMax(min={self.min}, max={self.max})"
     
-    @property
-    def ellipses(self):
-        return self._ellipses
-    
-    @property
-    def flags(self):
-        return self._flags
+    def add(self, point : LTPoint):
+        if self.min is None:      self.min = point.clone()
+        if self.max is None:      self.max = point.clone()
+        if self.min.x > point.x:  self.min.x = point.x
+        if self.min.y > point.y:  self.min.y = point.y
+        if self.max.x < point.x:  self.max.x = point.x
+        if self.max.y < point.y:  self.max.y = point.y
 
 
+
+#######################################################################################################################
 def radians_to_degrees(radians):
     return radians * 180 / math.pi
 
+
+#######################################################################################################################
 def get_quadrant_1_to_4(degrees):
     if degrees >= 0:
         if degrees <= 90:
@@ -176,7 +69,9 @@ def get_quadrant_1_to_4(degrees):
         
     raise RuntimeError(f"get_quadrant_1_to_4({degrees}) not supported")
 
-def maybe(quad):
+
+#######################################################################################################################
+def rotate_quadrants(quad):
     # LTSpice coordinates are like a screen, but atan2 expects them to be like a graph. This means when looking at
     # an LTSpice arc, what I think of as the 1st quadrant is really the 4th, what I think of as the 2nd is the
     # 3rd, what I think of as the 3rd is the 2nd and what I think of a the 4th is the 1st. 
@@ -189,6 +84,8 @@ def maybe(quad):
     
     return 1
     
+
+#######################################################################################################################
 def draw_ltspice_arc(ax, arc : LTArc, idx, draw=True, debug=True):
     if debug:
         print("\n\n\n\n\nPlotting ARC IDX", idx)
@@ -219,8 +116,8 @@ def draw_ltspice_arc(ax, arc : LTArc, idx, draw=True, debug=True):
     arc_real_p2 = LTPoint(arc_radii.x * math.cos(t1_rads), arc_radii.y * math.sin(t1_rads)).translate(arc.bbox.center)
     arc_real_p1 = LTPoint(arc_radii.x * math.cos(t2_rads), arc_radii.y * math.sin(t2_rads)).translate(arc.bbox.center)
 
-    t2_quad = maybe(get_quadrant_1_to_4(t1_degs))
-    t1_quad = maybe(get_quadrant_1_to_4(t2_degs))
+    t2_quad = rotate_quadrants(get_quadrant_1_to_4(t1_degs))
+    t1_quad = rotate_quadrants(get_quadrant_1_to_4(t2_degs))
     if debug:
         print("QUAD1", t1_quad, "from", t1_degs)
         print("QUAD2", t2_quad, "from", t2_degs)
@@ -276,7 +173,6 @@ def draw_ltspice_arc(ax, arc : LTArc, idx, draw=True, debug=True):
         if 4 in quads and 1 in quads:
             tight_bbox.bottomright.x = max(arc_real_p1.x, arc_real_p2.x)
 
-
     if debug:
         print(f"tight_bbox={tight_bbox}")
     
@@ -304,63 +200,38 @@ def draw_ltspice_arc(ax, arc : LTArc, idx, draw=True, debug=True):
 
 
 
-def update_minx(x1,x2):
-    global minx
-    thismin = min(x1,x2)
-    if thismin < minx:
-        minx = thismin
+#######################################################################################################################
+def matplotlib_plot_component(
+        component   : LTComponent,
+        ax          : pl.Axes,
+        xoff        : int  = 0,
+        yoff        : int  = 0,
+        rotation    : int  = 0,
+        show_labels : bool = False,
+        debug       : bool = False):
 
-def update_maxx(x1,x2):
-    global maxx
-    thismax = max(x1,x2)
-    if thismax > maxx:
-        maxx = thismax
-
-
-def update_miny(y1,y2):
-    global miny
-    thismin = min(y1,y2)
-    if thismin < miny:
-        miny = thismin
-
-
-def update_maxy(y1,y2):
-    global maxy
-    thismax = max(y1,y2)
-    if thismax > maxy:
-        maxy = thismax
-
-
-def update_minmax(x1, y1, x2, y2):
-    update_minx(x1, x2)
-    update_maxx(x1, x2)
-    update_miny(y1, y2)
-    update_maxy(y1, y2)
-
-
-def matplotlib_plot_component(component, ax, xoff = 0, yoff = 0, rotation = 0, show_labels=False, debug=False):
-    global minx, miny, maxx, maxy
-    minx = 1000000.0
-    miny = 1000000.0
-    maxx = -1000000.0
-    maxy = -1000000.0
+    minmax = MinMax()
     
+    # Calculate the bounding box for the componenent. I.e., get the min and max coordinates
+    # of the tightest box that will encompass all the shapes that make up the component.
     for line in component.lines:
-        update_minmax(line.p1.x, line.p1.y, line.p2.x, line.p2.y)
+        minmax.add(line.p1)
+        minmax.add(line.p2)
 
     for rect in component.rectangles:
-        update_minmax(*rect.topleft.as_tuple(), *rect.bottomright.as_tuple())
+        minmax.add(rect.topleft)
+        minmax.add(rect.bottomright)
 
     for ellipse in component.ellipses:
-        update_minmax(ellipse.xy.x - ellipse.w/2, 
-                      ellipse.xy.y - ellipse.h/2, 
-                      ellipse.xy.x + ellipse.w/2, 
-                      ellipse.xy.y + ellipse.h/2)
+        minmax.add(LTPoint(ellipse.xy.x - ellipse.w/2, ellipse.xy.y - ellipse.h/2))
+        minmax.add(LTPoint(ellipse.xy.x + ellipse.w/2, ellipse.xy.y + ellipse.h/2))
 
     for arc, arc_index in component.arcs[0:]:
         tight_bbox = draw_ltspice_arc(ax, arc, arc_index, draw=False, debug=False)
-        update_minmax(tight_bbox.topleft.x, tight_bbox.topleft.y, tight_bbox.bottomright.x, tight_bbox.bottomright.y)
+        minmax.add(tight_bbox.topleft)
+        minmax.add(tight_bbox.bottomright)
 
+    # Now draw the component
     for line in component.lines:
         line = line.rotate(rotation)
         line = line.translate(LTPoint(xoff, yoff))
@@ -369,21 +240,19 @@ def matplotlib_plot_component(component, ax, xoff = 0, yoff = 0, rotation = 0, s
     for rect in component.rectangles:
         rect = rect.rotate(rotation)
         rect = rect.translate(LTPoint(xoff, yoff))
-        rect1 = mpatches.Rectangle(rect.topleft.as_tuple(), *rect.dimensions.as_tuple(), fill=False, color='b')
-        ax.add_patch(rect1)
+        ax.add_patch(
+            mpatches.Rectangle(rect.topleft.as_tuple(), *rect.dimensions.as_tuple(), fill=False, color='b'))
 
     for ellipse in component.ellipses:
         ellipse = ellipse.rotate(rotation)
         ellipse = ellipse.translate(LTPoint(xoff, yoff))
-        el1 = mpatches.Ellipse(ellipse.xy.as_tuple(), ellipse.w, ellipse.h, fill=False, color='b')
-        ax.add_patch(el1)
+        ax.add_patch(
+            mpatches.Ellipse(ellipse.xy.as_tuple(), ellipse.w, ellipse.h, fill=False, color='b'))
 
     for pin in component.pins:
         pin = pin.rotate(rotation)
         pin = pin.translate(LTPoint(xoff, yoff))
-
-        circle1 = mpatches.Circle(pin.p.as_tuple(), 1, color='r')
-        ax.add_patch(circle1)
+        ax.add_patch(mpatches.Circle(pin.p.as_tuple(), 1, color='r'))
         if show_labels and pin.name is not None:
             ax.text(pin.p.x, pin.p.y, pin.name)
 
@@ -393,9 +262,15 @@ def matplotlib_plot_component(component, ax, xoff = 0, yoff = 0, rotation = 0, s
         draw_ltspice_arc(ax, arc, arc_index, draw=True, debug=False)
 
     if debug:
-        rect_minmax = LTRectangle(LTPoint(minx, miny), LTPoint(maxx, maxy)).rotate(rotation).translate(LTPoint(xoff, yoff))
-        rect_patch = mpatches.Rectangle(rect_minmax.topleft.as_tuple(), *rect_minmax.dimensions.as_tuple(), fill=False, color='orange')
-        ax.add_patch(rect_patch)
+        rect_minmax = LTRectangle(minmax.min, minmax.max).rotate(rotation).translate(LTPoint(xoff, yoff))
+        ax.add_patch(
+            mpatches.Rectangle(
+                rect_minmax.topleft.as_tuple(),
+                *rect_minmax.dimensions.as_tuple(),
+                fill=False,
+                color='orange'))
+
+    return minmax
 
 
 
@@ -403,6 +278,7 @@ if __name__ == "__main__":
     import tempfile
     import os
     import fnmatch
+    from itertools import chain
 
     def YieldFiles(dirToScan, mask):
         for rootDir, subDirs, files in os.walk(dirToScan):
@@ -410,19 +286,22 @@ if __name__ == "__main__":
                 if fnmatch.fnmatch(fname, mask):
                     yield (rootDir, fname)
 
-    for dir, file in YieldFiles("/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym", "*.asy"):
-    #for dir, file in YieldFiles("/home/james/Repos/jehtech/projects_not_in_own_repo/incubator", "arc_quad1_type2bbox_assorted.asy"):
-    #for dir, file in YieldFiles("/home/james/Repos/jehtech/projects_not_in_own_repo/incubator", "*.asy"):
+    asy_file_iter = chain.from_iterable([
+        YieldFiles("/home/james/Repos/jehtech/projects_not_in_own_repo/incubator", "*.asy"),
+        YieldFiles("/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym", "*.asy"),
+    ])
+
+    for dir, file in asy_file_iter:
         try:
             fn = os.path.join(dir, file)
             fig, ax = pl.subplots()
             ax.spines[['left', 'bottom', 'right', 'top']].set_visible(False)
             ax.set_xticks([]) 
             ax.set_yticks([]) 
-            matplotlib_plot_component(Component(fn), ax)
+            minmax = matplotlib_plot_component(LTComponent(fn), ax)
             MARGIN = 5
-            ax.set_xlim(minx - MARGIN, maxx + MARGIN)
-            ax.set_ylim(miny - MARGIN, maxy + MARGIN)
+            ax.set_xlim(minmax.min.x - MARGIN, minmax.max.x + MARGIN)
+            ax.set_ylim(minmax.min.y - MARGIN, minmax.max.y + MARGIN)
             ax.invert_yaxis()
             ax.set_title(os.path.join(dir, file))
             fig.tight_layout()
