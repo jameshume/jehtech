@@ -1,7 +1,7 @@
 from lt_shapes import LTPoint, LTRectangle, LTArc, LTLine, LTEllipse, LTPin
 
 class LTComponent:
-    def __init__(self, filename):
+    def __init__(self, filename : str):
         self._lines = []
         self._pins  = []
         self._rectangles = []
@@ -100,7 +100,7 @@ class LTComponent:
                         if line.startswith("PINATTR "):
                             line = line.split()[1:]
                             if line[0] == "PinName":
-                                self._pins.append(LTPin(LTPoint(x1, y1), line[1]))
+                                self._pins.append(LTPin(LTPoint(x1, y1), line[1], self))
                                 state = "idle"
                         else:
                             state = "idle"

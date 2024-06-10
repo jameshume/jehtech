@@ -325,15 +325,16 @@ class LTEllipse:
 
 #######################################################################################################################
 class LTPin:
-    def __init__(self, p : LTPoint, name : str):
+    def __init__(self, p : LTPoint, name : str, component: "LTComponent"):
         self._p = p
         self._name = name
+        self._component = component
 
     def rotate(self, degrees):
-        return LTPin(self._p.rotate(degrees), self._name)
+        return LTPin(self._p.rotate(degrees), self._name, self._component)
 
     def translate(self, xy):
-        return LTPin(self.p.translate(xy), self._name)
+        return LTPin(self.p.translate(xy), self._name, self._component)
 
     @property 
     def name(self):
@@ -342,3 +343,7 @@ class LTPin:
     @property
     def p(self):
         return self._p
+
+    @property
+    def component(self):
+        return self._component

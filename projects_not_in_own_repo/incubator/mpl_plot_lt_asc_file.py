@@ -1,0 +1,208 @@
+"""
+Copyright 2024 James E Hume
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+documentation files (the “Software”), to deal in the Software without restriction, including without limitation the
+rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit
+persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
+Software.
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+"""
+
+import matplotlib.pyplot as pl
+import matplotlib.patches as mpatches
+
+from mpl_plot_lt_component import matplotlib_plot_component, MinMax
+from lt_shapes import LTPoint, LTLine, LTPin
+from lt_component import LTComponent
+from typing import Union, List
+from dataclasses import dataclass
+
+
+def parse_flag_line(line, minmax, draw=True):
+    flag_x, flag_y, flag_type = line.strip().split(" ")[1:]
+    flag_x, flag_y = (float(flag_x), float(flag_y))
+    
+    if flag_type == "0":
+        if draw:
+            circle1 = mpatches.Circle((flag_x, flag_y), 1, color='r')
+            ax.add_patch(circle1)
+            minmax.add(LTPoint(flag_x, flag_y))
+            hw = 20
+            h = 20
+            ax.plot([flag_x - hw, flag_x + hw], [flag_y, flag_y], c='b')
+            ax.plot([flag_x - hw, flag_x], [flag_y, flag_y + h], c='b')
+            ax.plot([flag_x, flag_x + hw], [flag_y + h, flag_y], c='b')
+            minmax.add(LTPoint(flag_x - hw, flag_y))
+            minmax.add(LTPoint(flag_x - hw, flag_y))
+            minmax.add(LTPoint(flag_x, flag_y + h))
+            minmax.add(LTPoint(flag_x + hw, flag_y))
+            minmax.add(LTPoint(flag_x, flag_y + h))
+            minmax.add(LTPoint(flag_x + hw, flag_y))
+    else:
+        print(f"##### Flag type {flag_type} not supported")
+
+    return flag_x, flag_y, flag_type
+
+
+for filename in [
+        "/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/ground_up.asc",
+        "/home/james/Draft4.asc",
+        "/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/inductors.asc",
+        "/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/one_rotated_inductor.asc",
+        "/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/ne555s.asc",
+        "../../src/images/jeh-tech/electronics_nmos_depletion.asc",
+        "../../src/images/jeh-tech/electronics_common_emitter_amplifier.asc",
+        "/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/ground.asc",
+        "/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/iopin.asc"]:
+    fig, ax = pl.subplots()
+    ax.invert_yaxis()
+
+    state                     = "normal"
+    flag_x, flag_y, flag_type = None, None, None
+    prev_line_cache           = None
+    first_line                = True
+    wires                     = []
+    minmax                    = MinMax()
+
+    components = []
+    print(filename)
+
+    for line in open(filename, "r"):
+        if (prev_line_cache is not None):
+            if line.startswith("IOPIN "):
+                x, y, inout = line.strip().split(" ")[1:]
+                x, y = float(x), float(y)
+                h = 20
+                warrow = 20
+                minmax.add(LTPoint(x, y))
+                if inout == "Out":
+                    minmax.add(LTPoint(x - warrow, y - h))
+                    minmax.add(LTPoint(x - warrow, y + h))
+                    ax.plot([x, x - warrow], [y, y - h], c='b')
+                    ax.plot([x, x - warrow], [y, y + h], c='b')
+                elif inout == "In":
+                    minmax.add(LTPoint(x + warrow, y - h))
+                    minmax.add(LTPoint(x + warrow, y + h))
+                    ax.plot([x, x + warrow], [y, y - h], c='b')
+                    ax.plot([x, x + warrow], [y, y + h], c='b')
+                else:
+                    print(f"##### IO pin type {inout} not supported")
+
+                flag_x, flag_y, flag_text = parse_flag_line(prev_line_cache, minmax, draw=False)
+                minmax.add(LTPoint(flag_x, flag_y))
+                ax.annotate(flag_text, xy=(flag_x, flag_y))
+            else:
+                parse_flag_line(prev_line_cache, minmax)
+            
+            prev_line_cache = None
+
+        first_line = False
+
+        
+        if line.startswith("WIRE "):
+            x1, y1, x2, y2 = [float(x) for x in line.strip().split(" ")[1:]]
+            wires.append(LTLine(LTPoint(x1, y1), LTPoint(x2, y2)))
+            ax.plot([x1, x2], [y1, y2], color='blue')
+            minmax.add(LTPoint(x1, y1))
+            minmax.add(LTPoint(x2, y2))
+
+        # Seems like an IOPIN is always
+        #   FLAG x y some-string
+        #   IOPIN
+        #
+        # But ground is just
+        #   FLAG x y 0
+        # Followed by anything other than IOPIN
+        elif line.startswith("FLAG "):
+            prev_line_cache = line
+
+        elif line.startswith("SYMBOL "):
+            tokens = line.strip().split(" ")[1:]
+            name = tokens[0]
+            x = float(tokens[1])
+            y = float(tokens[2])
+            rotation = float(tokens[3][1:])
+            name = name.replace("\\", "/")
+            totalname = f"/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/{name}.asy"
+            component = LTComponent(totalname)
+            components.append(component)
+            component_minmax = matplotlib_plot_component(component, ax, x, y, rotation, show_labels=True)
+            minmax.merge(component_minmax)
+
+        elif line.startswith("SYMATTR InstName "):
+            # Add a new proprty to component with its name
+            name = line[len("SYMATTR InstName "):].strip()
+            components[-1].name = name
+
+
+    if prev_line_cache is not None:
+        prev_line_cache = None
+        parse_flag_line(line, minmax)
+
+
+
+    from collections import defaultdict
+
+    # Put all wires and component points in a dictionary
+    points_to_wires = defaultdict(list)
+    for wire in wires:
+        points_to_wires[wire.p1].append(wire)
+        points_to_wires[wire.p2].append(wire)
+
+    points_to_pins = defaultdict(list)
+    name_to_component = {}
+    for component in components:
+        name_to_component[component.name] = component
+        for pin in component.pins:
+            points_to_pins[pin.p].append(pin)
+ 
+    
+    # Nets
+    @dataclass
+    class NetItem:
+        item : Union[LTPin, LTLine]
+        next : List["NetItem"]
+
+    @dataclass
+    class Net:
+        head : NetItem
+
+    #for component in components:
+    #    for pin in component.pins:
+    #        new_net = Net(head=NetItem(item=pin, next=[]))
+    #        for wires in points_to_wires[pin.p]: 
+    #            for wire in wires:
+    #                new_net.head.next.append(NetItem(item=wire, next=[]))
+    #        for other_pin in 
+
+
+
+    # When a line has a connection to it, if the connection is in the middle of the line,
+    # it is broken into two. This means that lines that intersect do so at the start
+    # or finish of the line, never in the "middle" of a line. Thus, connections
+    # occur when a line starts/ends where another line starts/ends
+    #
+    # A really simple approach, if inefficient, is to say, for each line, find all lines
+    # that start/finish at either the start or finish of this line. If that line exists
+    # puts a "join" blob.
+    for point, pointlist in points_to_wires.items():
+        if len(pointlist) > 1:
+            ax.add_patch(mpatches.Circle(point.as_tuple(), 3, color='darkblue'))
+
+    # Now for each pin for each component start to build up the nets
+    
+
+    MARGIN = 5
+    ax.set_xlim(minmax.min.x - MARGIN, minmax.max.x + MARGIN)
+    ax.set_ylim(minmax.min.y - MARGIN, minmax.max.y + MARGIN)
+    ax.invert_yaxis()
+    fig.show()
+    pl.show()
+    pl.close(fig)
