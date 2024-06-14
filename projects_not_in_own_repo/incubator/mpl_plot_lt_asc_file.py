@@ -23,6 +23,7 @@ from lt_shapes import LTPoint, LTLine, LTPin
 from lt_component import LTComponent
 from typing import Union, List
 from dataclasses import dataclass
+from collections import defaultdict
 
 
 def parse_flag_line(line, minmax, draw=True):
@@ -50,20 +51,24 @@ def parse_flag_line(line, minmax, draw=True):
 
     return flag_x, flag_y, flag_type
 
-
-for filename in [
+test_file_names = [
+        "../../src/images/jeh-tech/electronics_common_emitter_amplifier.asc",
         "/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/ground_up.asc",
         "/home/james/Draft4.asc",
         "/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/inductors.asc",
         "/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/one_rotated_inductor.asc",
         "/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/ne555s.asc",
         "../../src/images/jeh-tech/electronics_nmos_depletion.asc",
-        "../../src/images/jeh-tech/electronics_common_emitter_amplifier.asc",
         "/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/ground.asc",
-        "/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/iopin.asc"]:
-    fig, ax = pl.subplots()
-    ax.invert_yaxis()
+        "/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/iopin.asc"]
+import sys
+if len(sys.argv) > 1:
+    test_file_names = [sys.argv[1]]
 
+
+
+
+def lt_plot_asc(fig, ax, filename):
     state                     = "normal"
     flag_x, flag_y, flag_type = None, None, None
     prev_line_cache           = None
@@ -72,7 +77,7 @@ for filename in [
     minmax                    = MinMax()
 
     components = []
-    print(filename)
+    mpl_flag_texts = []
 
     for line in open(filename, "r"):
         if (prev_line_cache is not None):
@@ -97,14 +102,14 @@ for filename in [
 
                 flag_x, flag_y, flag_text = parse_flag_line(prev_line_cache, minmax, draw=False)
                 minmax.add(LTPoint(flag_x, flag_y))
-                ax.annotate(flag_text, xy=(flag_x, flag_y))
+                mpl_flag_text = ax.text(flag_x, flag_y, flag_text, fontsize=10)
+                mpl_flag_texts.append(mpl_flag_text)                                
             else:
                 parse_flag_line(prev_line_cache, minmax)
             
             prev_line_cache = None
 
         first_line = False
-
         
         if line.startswith("WIRE "):
             x1, y1, x2, y2 = [float(x) for x in line.strip().split(" ")[1:]]
@@ -146,10 +151,6 @@ for filename in [
         prev_line_cache = None
         parse_flag_line(line, minmax)
 
-
-
-    from collections import defaultdict
-
     # Put all wires and component points in a dictionary
     points_to_wires = defaultdict(list)
     for wire in wires:
@@ -162,28 +163,7 @@ for filename in [
         name_to_component[component.name] = component
         for pin in component.pins:
             points_to_pins[pin.p].append(pin)
- 
-    
-    # Nets
-    @dataclass
-    class NetItem:
-        item : Union[LTPin, LTLine]
-        next : List["NetItem"]
-
-    @dataclass
-    class Net:
-        head : NetItem
-
-    #for component in components:
-    #    for pin in component.pins:
-    #        new_net = Net(head=NetItem(item=pin, next=[]))
-    #        for wires in points_to_wires[pin.p]: 
-    #            for wire in wires:
-    #                new_net.head.next.append(NetItem(item=wire, next=[]))
-    #        for other_pin in 
-
-
-
+   
     # When a line has a connection to it, if the connection is in the middle of the line,
     # it is broken into two. This means that lines that intersect do so at the start
     # or finish of the line, never in the "middle" of a line. Thus, connections
@@ -196,13 +176,38 @@ for filename in [
         if len(pointlist) > 1:
             ax.add_patch(mpatches.Circle(point.as_tuple(), 3, color='darkblue'))
 
-    # Now for each pin for each component start to build up the nets
-    
+    # Now everything is drawn, get text extends to update the min/max - somehow this still isn't quite right -- some text still goes
+    # off the end of the axis :/
+    # Note quite right but can't be arsed to figure this out right now...
+    fig.canvas.draw() # Draw the plot to ensure text is rendered
+    for mpl_flag_text in mpl_flag_texts:
+        # Get the data-coordinate extent of the text
+        bbox = mpl_flag_text.get_window_extent(renderer=fig.canvas.get_renderer()) # In display coordinates. Need to convert to data coordinates
+        display_to_data = ax.transData.inverted() # Transformation matrix display -> data coords
+        # Convert the width from display to data coordinates
+        data_coords_1 = display_to_data.transform((bbox.x0, bbox.y0))
+        data_coords_2 = display_to_data.transform((bbox.x1, bbox.y1))
+        data_width    = data_coords_2[0] - data_coords_1[0]
+        data_height   = data_coords_2[1] - data_coords_1[1]
+        minmax.add(LTPoint(flag_x, flag_y) + LTPoint(data_width, data_height))
 
     MARGIN = 5
     ax.set_xlim(minmax.min.x - MARGIN, minmax.max.x + MARGIN)
-    ax.set_ylim(minmax.min.y - MARGIN, minmax.max.y + MARGIN)
+    ax.set_ylim(minmax.min.y - MARGIN, minmax.max.y + MARGIN)    
     ax.invert_yaxis()
+
+    return {
+        'components'        : components,
+        'wires'             : wires,
+        'points_to_wires'   : points_to_wires,
+        'points_to_pins'    : points_to_pins,
+        'name_to_component' : name_to_component,
+    }
+    
+for filename in test_file_names:
+    fig, ax = pl.subplots()
+    lt_plot_asc(fig, ax, filename)
+    
     fig.show()
     pl.show()
     pl.close(fig)

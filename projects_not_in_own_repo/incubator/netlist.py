@@ -140,7 +140,8 @@ def parse_netlist(filename) -> dict[str, Net]:
 
 
 if __name__ == "__main__":
-    nets = parse_netlist("../../src/images/jeh-tech/electronics_common_emitter_amplifier.net")
+    import sys
+    nets = parse_netlist(sys.argv[1])#"../../src/images/jeh-tech/electronics_common_emitter_amplifier.net")
 
     import pprint
     pprint.pp(nets)
