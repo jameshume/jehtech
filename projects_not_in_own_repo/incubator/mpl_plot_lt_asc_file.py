@@ -206,7 +206,8 @@ def lt_plot_asc(fig, ax, filename):
     
 for filename in test_file_names:
     fig, ax = pl.subplots()
-    lt_plot_asc(fig, ax, filename)
+    d = lt_plot_asc(fig, ax, filename)
+    print(d['name_to_component'])
     
     fig.show()
     pl.show()
