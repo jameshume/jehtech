@@ -203,12 +203,13 @@ def lt_plot_asc(fig, ax, filename):
         'points_to_pins'    : points_to_pins,
         'name_to_component' : name_to_component,
     }
-    
-for filename in test_file_names:
-    fig, ax = pl.subplots()
-    d = lt_plot_asc(fig, ax, filename)
-    print(d['name_to_component'])
-    
-    fig.show()
-    pl.show()
-    pl.close(fig)
+
+if __name__ == "__main__":
+    for filename in test_file_names:
+        fig, ax = pl.subplots()
+        d = lt_plot_asc(fig, ax, filename)
+        print(d['name_to_component'])
+        
+        fig.show()
+        pl.show()
+        pl.close(fig)
