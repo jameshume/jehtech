@@ -8,6 +8,7 @@ class LTComponent:
         self._arcs = []
         self._ellipses = []
         self._windows = []
+        self._pins_by_spice_order = {}
         arc_index = 0
         state = "idle"
 
@@ -100,14 +101,25 @@ class LTComponent:
                         if line.startswith("PINATTR "):
                             line = line.split()[1:]
                             if line[0] == "PinName":
-                                self._pins.append(LTPin(LTPoint(x1, y1), line[1], self))
+                                pin_name = line[1]
+                            elif line[0] == "SpiceOrder":
+                                self._pins.append(LTPin(LTPoint(x1, y1), pin_name, int(line[1]), self))
                                 state = "idle"
                         else:
-                            state = "idle"
+                            # This line is not to do with a pin, so go round the loop again to reparse it
+                            # from the idle state
+                            state = "idle" 
                             continue
 
 
                     break # Always break by default.
+        
+        for pin in self._pins:
+            self._pins_by_spice_order[pin.spice_order] = pin
+
+
+    def get_pin_by_spice_order(self, order):
+        return self._pins_by_spice_order[order]
 
     @staticmethod
     def _represents_int(s):

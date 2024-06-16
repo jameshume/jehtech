@@ -52,6 +52,9 @@ class LTPoint:
     def __str__(self):
         return f"LTPoint({self._x}, {self._y})"
     
+    def __repr__(self):
+        return self.__str__()
+    
     def __eq__(self, other):
         if not isinstance(other, type(self)):
             return False
@@ -325,16 +328,23 @@ class LTEllipse:
 
 #######################################################################################################################
 class LTPin:
-    def __init__(self, p : LTPoint, name : str, component: "LTComponent"):
+    def __init__(self, p : LTPoint, name : str, spice_order : int, component: "LTComponent"):
         self._p = p
         self._name = name
+        self._spice_order = spice_order
         self._component = component
 
+    def __str__(self):
+        return f"LTPin({self._p}, {self._name}, {self._spice_order}, {hex(id(self._component))})"
+    
+    def __repr(self):
+        return self.__str__()
+
     def rotate(self, degrees):
-        return LTPin(self._p.rotate(degrees), self._name, self._component)
+        return LTPin(self._p.rotate(degrees), self._name, self._spice_order, self._component)
 
     def translate(self, xy):
-        return LTPin(self.p.translate(xy), self._name, self._component)
+        return LTPin(self.p.translate(xy), self._name, self._spice_order, self._component)
 
     @property 
     def name(self):
@@ -343,6 +353,10 @@ class LTPin:
     @property
     def p(self):
         return self._p
+
+    @property
+    def spice_order(self):
+        return self._spice_order
 
     @property
     def component(self):
