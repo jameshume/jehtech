@@ -258,10 +258,8 @@ class LTArc:
         self._arc1  = arc1
         self._arc2  = arc2
 
-
     def __str__(self):
         return f"LTArc(bb={self._bbox}, p1={self._arc1}, p2={self._arc2})"
-
 
     def translate(self, xy):
         translated_bbox = self._bbox.translate(xy)

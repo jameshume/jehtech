@@ -19,30 +19,7 @@ import matplotlib.patches as mpatches
 import math
 from lt_shapes import LTPoint, LTRectangle, LTArc, LTLine, LTEllipse, LTPin
 from lt_component import LTComponent
-
-
-
-#######################################################################################################################
-class MinMax:
-    def __init__(self):
-        self.min : Optional[LTPoint] = None
-        self.max : Optional[LTPoint] = None
-
-    def __str__(self):
-        return f"MinMax(min={self.min}, max={self.max})"
-    
-    def add(self, point : LTPoint):
-        if self.min is None:      self.min = point.clone()
-        if self.max is None:      self.max = point.clone()
-        if self.min.x > point.x:  self.min.x = point.x
-        if self.min.y > point.y:  self.min.y = point.y
-        if self.max.x < point.x:  self.max.x = point.x
-        if self.max.y < point.y:  self.max.y = point.y
-
-    def merge(self, other_minmax):
-        self.add(other_minmax.min)
-        self.add(other_minmax.max)
-
+from minmax import MinMax
 
 
 #######################################################################################################################
@@ -214,70 +191,30 @@ def matplotlib_plot_component(
         show_labels : bool = False,
         debug       : bool = False):
 
-    minmax = MinMax()
-    
-    # Calculate the bounding box for the componenent. I.e., get the min and max coordinates
-    # of the tightest box that will encompass all the shapes that make up the component.
-    for line in component.lines:
-        minmax.add(line.p1)
-        minmax.add(line.p2)
-
-    for rect in component.rectangles:
-        minmax.add(rect.topleft)
-        minmax.add(rect.bottomright)
-
-    for ellipse in component.ellipses:
-        minmax.add(LTPoint(ellipse.xy.x - ellipse.w/2, ellipse.xy.y - ellipse.h/2))
-        minmax.add(LTPoint(ellipse.xy.x + ellipse.w/2, ellipse.xy.y + ellipse.h/2))
-
-    for arc, arc_index in component.arcs[0:]:
-        tight_bbox = draw_ltspice_arc(ax, arc, arc_index, draw=False, debug=False)
-        minmax.add(tight_bbox.topleft)
-        minmax.add(tight_bbox.bottomright)
+    component.rotate(rotation)
+    component.translate(LTPoint(xoff, yoff))
 
     # Now draw the component
     for line in component.lines:
-        line = line.rotate(rotation)
-        line = line.translate(LTPoint(xoff, yoff))
         ax.plot([line.p1.x, line.p2.x], [line.p1.y, line.p2.y], color='b')
 
     for rect in component.rectangles:
-        rect = rect.rotate(rotation)
-        rect = rect.translate(LTPoint(xoff, yoff))
         ax.add_patch(
             mpatches.Rectangle(rect.topleft.as_tuple(), *rect.dimensions.as_tuple(), fill=False, color='b'))
 
     for ellipse in component.ellipses:
-        ellipse = ellipse.rotate(rotation)
-        ellipse = ellipse.translate(LTPoint(xoff, yoff))
         ax.add_patch(
             mpatches.Ellipse(ellipse.xy.as_tuple(), ellipse.w, ellipse.h, fill=False, color='b'))
 
     for pin in component.pins:
-        pin = pin.rotate(rotation)
-        pin = pin.translate(LTPoint(xoff, yoff))
         ax.add_patch(mpatches.Circle(pin.p.as_tuple(), 1, color='r'))
         if show_labels and pin.name is not None:
             ax.text(pin.p.x, pin.p.y, pin.name)
 
     for arc, arc_index in component.arcs:
-        arc = arc.rotate(rotation)
-        arc = arc.translate(LTPoint(xoff, yoff))
         draw_ltspice_arc(ax, arc, arc_index, draw=True, debug=False)
 
-    rect_minmax = LTRectangle(minmax.min, minmax.max).rotate(rotation).translate(LTPoint(xoff, yoff))
-    if debug:
-        ax.add_patch(
-            mpatches.Rectangle(
-                rect_minmax.topleft.as_tuple(),
-                *rect_minmax.dimensions.as_tuple(),
-                fill=False,
-                color='orange'))
-
-    minmax = MinMax()
-    minmax.add(rect_minmax.topleft)
-    minmax.add(rect_minmax.bottomright)
-    return minmax
+    return component.minmax
 
 
 if __name__ == "__main__":
