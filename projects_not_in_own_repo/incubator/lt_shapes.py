@@ -253,10 +253,17 @@ class LTArc:
     (not the bounding box of the ellipse that defined the arc, just the visible part of the
     ellipse that is the arc).
     """
-    def __init__(self, bbox1 : LTPoint, bbox2 : LTPoint, arc1 : LTPoint, arc2 : LTPoint):
+    def __init__(self, bbox1 : LTPoint, bbox2 : LTPoint, arc1 : LTPoint, arc2 : LTPoint, _calculate_tight_bbox=True):
         self._bbox = LTRectangle(bbox1, bbox2)
         self._arc1  = arc1
         self._arc2  = arc2
+        # This is necessary to allow us to avoid infinite recursion in the calculate tight bbox method!
+        if _calculate_tight_bbox:
+            self._calculate_tight_arc_bounding_box()
+        else:
+            self._t1_degs = None
+            self._t2_degs = None
+            self._tight_bbox = None
 
     def __str__(self):
         return f"LTArc(bb={self._bbox}, p1={self._arc1}, p2={self._arc2})"
@@ -272,6 +279,143 @@ class LTArc:
     def clone(self):
         return LTArc(self.bbox.topleft.clone(), self.bbox.bottomright.clone(), self._arc1.clone(), self._arc2.clone())
 
+    @staticmethod
+    def _radians_to_degrees(radians):
+        return radians * 180 / math.pi
+
+    @staticmethod
+    def _get_quadrant_1_to_4(degrees):
+        if degrees >= 0:
+            if degrees <= 90:
+                return 1
+            elif degrees <= 180:
+                return 2
+            elif degrees <= 270:
+                return 3
+            elif degrees <= 360:
+                return 4
+        else:
+            if degrees <= -270:
+                return 1
+            elif degrees <= -180:
+                return 2
+            elif degrees <= -90:
+                return 3
+            else:
+                return 4
+            
+        raise RuntimeError(f"get_quadrant_1_to_4({degrees}) not supported")
+
+    @staticmethod
+    def _rotate_quadrants(quad):
+        # LTSpice coordinates are like a screen, but atan2 expects them to be like a graph. This means when looking at
+        # an LTSpice arc, what I think of as the 1st quadrant is really the 4th, what I think of as the 2nd is the
+        # 3rd, what I think of as the 3rd is the 2nd and what I think of a the 4th is the 1st. 
+        if quad == 1:
+            return 4
+        if quad == 2:
+            return 3
+        if quad == 3:
+            return 2
+        
+        return 1
+        
+
+    def _calculate_tight_arc_bounding_box(self, debug=False):
+        # Cannot call translate() direcly as will result in infinite recursion - hence use of _calculate_tight_bbox param
+        arc_centered_at_origin = LTArc(self.bbox.topleft.clone(), self.bbox.bottomright.clone(), self._arc1.clone(), self._arc2.clone(), _calculate_tight_bbox=False) 
+        arc_centered_at_origin._bbox = arc_centered_at_origin._bbox.translate(-self._bbox.center)
+        arc_centered_at_origin._arc1 = self._arc1.translate(-self._bbox.center)
+        arc_centered_at_origin._arc2 = self._arc2.translate(-self._bbox.center)
+
+        # LTSpice coordinates are like a screen, but atan2 expects them to be like a graph. This means when looking at
+        # an LTSpice arc, what I think of as the 1st quadrant is really the 4th, what I think of as the 2nd is the
+        # 3rd, what I think of as the 3rd is the 2nd and what I think of a the 4th is the 1st. Which is just the mirror
+        # in the y-axis because LTSpice coordinates are screen coordinates and atan is graph coordinates.
+        #
+        # If I give atan the screen coordinates they are the wrong way around because everything is flipped about the
+        # yaxis so swap em! 
+        t1_rads = math.atan2(arc_centered_at_origin.p2.y, arc_centered_at_origin.p2.x)
+        t2_rads = math.atan2(arc_centered_at_origin.p1.y, arc_centered_at_origin.p1.x)
+
+        t1_degs = self._radians_to_degrees(t1_rads)
+        t2_degs = self._radians_to_degrees(t2_rads)
+
+        if t1_degs < 0 : t1_degs += 360.0
+        if t2_degs < 0 : t2_degs += 360.0
+
+        arc_radii = self._bbox.dimensions / 2
+        
+        # Another interesting facet is that the points p1, p2 need not be at the exact point of the arc start or finish,
+        # but can be anywhere on the line from the center to the point. Thus, calculate the "real" points...
+        # Because t1 and t2 are swapped above, swap them back for get the right point index
+        arc_real_p2 = LTPoint(arc_radii.x * math.cos(t1_rads), arc_radii.y * math.sin(t1_rads)).translate(self._bbox.center)
+        arc_real_p1 = LTPoint(arc_radii.x * math.cos(t2_rads), arc_radii.y * math.sin(t2_rads)).translate(self._bbox.center)
+
+        t2_quad = self._rotate_quadrants(self._get_quadrant_1_to_4(t1_degs))
+        t1_quad = self._rotate_quadrants(self._get_quadrant_1_to_4(t2_degs))
+        if debug:
+            print("QUAD1", t1_quad, "from", t1_degs)
+            print("QUAD2", t2_quad, "from", t2_degs)
+
+        if t1_degs < t2_degs:
+            # The arc is going AC and is the short arc between the two points
+            if debug:
+                print("The arc is going AC and is the short arc between the two points")
+            quads = sorted(list(range(t1_quad, t2_quad + 1)))
+
+        else:
+            # The arc is going AC and is the long arc between the two points
+            if debug: 
+                print("The arc is going AC and is the long arc between the two points")
+            tmp = list(range(t1_quad, 5))
+            tmp.extend(list(range(1, t2_quad + 1)))
+            quads = sorted(tmp)
+
+        if debug:
+            print("QUADS", quads)
+
+        tight_bbox = self._bbox.clone()
+    
+        if 1 in quads and 2 in quads:
+            tight_bbox.topleft.y = self._bbox.topleft.y
+        else:
+            tight_bbox.topleft.y = min(arc_real_p1.y, arc_real_p2.y)
+        
+        if 2 in quads and 3 in quads:
+            tight_bbox.topleft.x = self._bbox.topleft.x
+        else:
+            tight_bbox.topleft.x = min(arc_real_p1.x, arc_real_p2.x)
+        
+        if 3 in quads and 4 in quads:
+            tight_bbox.bottomright.y = self._bbox.bottomright.y
+        else:
+            tight_bbox.bottomright.y = max(arc_real_p1.y, arc_real_p2.y)
+        
+        if 4 in quads and 1 in quads:        
+            tight_bbox.bottomright.x = self._bbox.bottomright.x
+        else:
+            tight_bbox.bottomright.x = max(arc_real_p1.x, arc_real_p2.x)
+
+        if len(quads) == 4 and t1_quad != t2_quad:
+            # The edge between the two points might be shrinkable
+            quads = [t1_quad, t2_quad]
+            if 1 in quads and 2 in quads:
+                tight_bbox.topleft.y = min(arc_real_p1.y, arc_real_p2.y)
+            if 2 in quads and 3 in quads:
+                tight_bbox.topleft.x = min(arc_real_p1.x, arc_real_p2.x)
+            if 3 in quads and 4 in quads:
+                tight_bbox.bottomright.y = max(arc_real_p1.y, arc_real_p2.y)
+            if 4 in quads and 1 in quads:
+                tight_bbox.bottomright.x = max(arc_real_p1.x, arc_real_p2.x)
+
+        if debug:
+            print(f"tight_bbox={tight_bbox}")
+        
+        self._t1_degs = t1_degs
+        self._t2_degs = t2_degs
+        self._tight_bbox = tight_bbox
+
     @property
     def p1(self):
         return self._arc1
@@ -283,6 +427,18 @@ class LTArc:
     @property
     def bbox(self):
         return self._bbox
+
+    @property
+    def tight_bbox(self):
+        return self._tight_bbox 
+
+    @property
+    def t1_degs(self):
+        self._t1_degs
+
+    @property
+    def t2_degs(self):
+        self._t2_degs
 
 
 

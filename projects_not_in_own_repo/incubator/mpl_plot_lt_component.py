@@ -67,117 +67,26 @@ def rotate_quadrants(quad):
     
 
 #######################################################################################################################
-def draw_ltspice_arc(ax, arc : LTArc, idx, draw=True, debug=True):
+def draw_ltspice_arc(ax, arc : LTArc, idx, debug=True):
     if debug:
-        print("\n\n\n\n\nPlotting ARC IDX", idx)
-    
-    arc_centered_at_origin = arc.translate(-arc.bbox.center)
+        print(f"{idx})\n\tarc    = {arc},\n\tarc_00 = {arc_centered_at_origin},\n\tt1     = {t1_degs},\n\tt2     = {t2_degs}")
+        ax.text(*arc.bbox.center.as_tuple(), f"{idx}", color="r")
+        ax.add_patch(mpatches.Circle(arc.bbox._topleft.as_tuple(), 1, color='orange'))
+        ax.add_patch(mpatches.Circle(arc.bbox._bottomright.as_tuple(), 1, color='blue'))
+        ax.add_patch(mpatches.Rectangle(tight_bbox._topleft.as_tuple(), *tight_bbox.dimensions.as_tuple(), color='yellow', fill=False))       
+        ax.add_patch(mpatches.Circle(arc_real_p1.as_tuple(), 0.5, color='r'))
+        ax.add_patch(mpatches.Circle(arc_real_p2.as_tuple(), 0.5, color='g'))
+        ax.text(*arc_real_p1.as_tuple(), f"p1", color="r")
+        ax.text(*arc_real_p2.as_tuple(), f"p2", color="g")
 
-    # LTSpice coordinates are like a screen, but atan2 expects them to be like a graph. This means when looking at
-    # an LTSpice arc, what I think of as the 1st quadrant is really the 4th, what I think of as the 2nd is the
-    # 3rd, what I think of as the 3rd is the 2nd and what I think of a the 4th is the 1st. Which is just the mirror
-    # in the y-axis because LTSpice coordinates are screen coordinates and atan is graph coordinates.
-    #
-    # If I give atan the screen coordinates they are the wrong way around because everything is flipped about the
-    # yaxis so swap em! 
-    t1_rads = math.atan2(arc_centered_at_origin.p2.y, arc_centered_at_origin.p2.x)
-    t2_rads = math.atan2(arc_centered_at_origin.p1.y, arc_centered_at_origin.p1.x)
+        
+        ax.add_patch(mpatches.Circle(arc.bbox.center.as_tuple(),    1, color='purple'))
+        ax.add_patch(mpatches.Rectangle(arc.bbox._topleft.as_tuple(), *arc.bbox.dimensions.as_tuple(), color='green', fill=False))
 
-    t1_degs = radians_to_degrees(t1_rads)
-    t2_degs = radians_to_degrees(t2_rads)
+    ax.add_patch(
+        mpatches.Arc(
+            arc.bbox.center.as_tuple(), *arc.bbox.dimensions.as_tuple(), angle=0, theta1=arc.t1_degs, theta2=arc.t2_degs, color='b'))
 
-    if t1_degs < 0 : t1_degs += 360.0
-    if t2_degs < 0 : t2_degs += 360.0
-
-    arc_radii = arc.bbox.dimensions / 2
-    
-    # Another interesting facet is that the points p1, p2 need not be at the exact point of the arc start or finish,
-    # but can be anywhere on the line from the center to the point. Thus, calculate the "real" points...
-    # Because t1 and t2 are swapped above, swap them back for get the right point index
-    arc_real_p2 = LTPoint(arc_radii.x * math.cos(t1_rads), arc_radii.y * math.sin(t1_rads)).translate(arc.bbox.center)
-    arc_real_p1 = LTPoint(arc_radii.x * math.cos(t2_rads), arc_radii.y * math.sin(t2_rads)).translate(arc.bbox.center)
-
-    t2_quad = rotate_quadrants(get_quadrant_1_to_4(t1_degs))
-    t1_quad = rotate_quadrants(get_quadrant_1_to_4(t2_degs))
-    if debug:
-        print("QUAD1", t1_quad, "from", t1_degs)
-        print("QUAD2", t2_quad, "from", t2_degs)
-
-    if t1_degs < t2_degs:
-        # The arc is going AC and is the short arc between the two points
-        if debug:
-            print("The arc is going AC and is the short arc between the two points")
-        quads = sorted(list(range(t1_quad, t2_quad + 1)))
-
-    else:
-        # The arc is going AC and is the long arc between the two points
-        if debug: 
-            print("The arc is going AC and is the long arc between the two points")
-        tmp = list(range(t1_quad, 5))
-        tmp.extend(list(range(1, t2_quad + 1)))
-        quads = sorted(tmp)
-
-    if debug:
-        print("QUADS", quads)
-
-    tight_bbox = arc.bbox.clone()
-  
-    if 1 in quads and 2 in quads:
-        tight_bbox.topleft.y = arc.bbox.topleft.y
-    else:
-        tight_bbox.topleft.y = min(arc_real_p1.y, arc_real_p2.y)
-    
-    if 2 in quads and 3 in quads:
-        tight_bbox.topleft.x = arc.bbox.topleft.x
-    else:
-        tight_bbox.topleft.x = min(arc_real_p1.x, arc_real_p2.x)
-    
-    if 3 in quads and 4 in quads:
-        tight_bbox.bottomright.y = arc.bbox.bottomright.y
-    else:
-        tight_bbox.bottomright.y = max(arc_real_p1.y, arc_real_p2.y)
-    
-    if 4 in quads and 1 in quads:        
-        tight_bbox.bottomright.x = arc.bbox.bottomright.x
-    else:
-        tight_bbox.bottomright.x = max(arc_real_p1.x, arc_real_p2.x)
-
-    if len(quads) == 4 and t1_quad != t2_quad:
-        # The edge between the two points might be shrinkable
-        quads = [t1_quad, t2_quad]
-        if 1 in quads and 2 in quads:
-            tight_bbox.topleft.y = min(arc_real_p1.y, arc_real_p2.y)
-        if 2 in quads and 3 in quads:
-            tight_bbox.topleft.x = min(arc_real_p1.x, arc_real_p2.x)
-        if 3 in quads and 4 in quads:
-            tight_bbox.bottomright.y = max(arc_real_p1.y, arc_real_p2.y)
-        if 4 in quads and 1 in quads:
-            tight_bbox.bottomright.x = max(arc_real_p1.x, arc_real_p2.x)
-
-    if debug:
-        print(f"tight_bbox={tight_bbox}")
-    
-    if draw:
-        if debug:
-            print(f"{idx})\n\tarc    = {arc},\n\tarc_00 = {arc_centered_at_origin},\n\tt1     = {t1_degs},\n\tt2     = {t2_degs}")
-            ax.text(*arc.bbox.center.as_tuple(), f"{idx}", color="r")
-            ax.add_patch(mpatches.Circle(arc.bbox._topleft.as_tuple(), 1, color='orange'))
-            ax.add_patch(mpatches.Circle(arc.bbox._bottomright.as_tuple(), 1, color='blue'))
-            ax.add_patch(mpatches.Rectangle(tight_bbox._topleft.as_tuple(), *tight_bbox.dimensions.as_tuple(), color='yellow', fill=False))       
-            ax.add_patch(mpatches.Circle(arc_real_p1.as_tuple(), 0.5, color='r'))
-            ax.add_patch(mpatches.Circle(arc_real_p2.as_tuple(), 0.5, color='g'))
-            ax.text(*arc_real_p1.as_tuple(), f"p1", color="r")
-            ax.text(*arc_real_p2.as_tuple(), f"p2", color="g")
-
-            
-            ax.add_patch(mpatches.Circle(arc.bbox.center.as_tuple(),    1, color='purple'))
-            ax.add_patch(mpatches.Rectangle(arc.bbox._topleft.as_tuple(), *arc.bbox.dimensions.as_tuple(), color='green', fill=False))
-
-        ax.add_patch(
-            mpatches.Arc(
-                arc.bbox.center.as_tuple(), *arc.bbox.dimensions.as_tuple(), angle=0, theta1=t1_degs, theta2=t2_degs, color='b'))
-
-    return tight_bbox
 
 
 
@@ -212,7 +121,7 @@ def matplotlib_plot_component(
             ax.text(pin.p.x, pin.p.y, pin.name)
 
     for arc, arc_index in component.arcs:
-        draw_ltspice_arc(ax, arc, arc_index, draw=True, debug=False)
+        draw_ltspice_arc(ax, arc, arc_index, debug=False)
 
     return component.minmax
 
