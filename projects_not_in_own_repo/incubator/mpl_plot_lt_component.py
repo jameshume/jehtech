@@ -68,21 +68,7 @@ def rotate_quadrants(quad):
 
 #######################################################################################################################
 def draw_ltspice_arc(ax, arc : LTArc, idx, debug=True):
-    if debug:
-        print(f"{idx})\n\tarc    = {arc},\n\tarc_00 = {arc_centered_at_origin},\n\tt1     = {t1_degs},\n\tt2     = {t2_degs}")
-        ax.text(*arc.bbox.center.as_tuple(), f"{idx}", color="r")
-        ax.add_patch(mpatches.Circle(arc.bbox._topleft.as_tuple(), 1, color='orange'))
-        ax.add_patch(mpatches.Circle(arc.bbox._bottomright.as_tuple(), 1, color='blue'))
-        ax.add_patch(mpatches.Rectangle(tight_bbox._topleft.as_tuple(), *tight_bbox.dimensions.as_tuple(), color='yellow', fill=False))       
-        ax.add_patch(mpatches.Circle(arc_real_p1.as_tuple(), 0.5, color='r'))
-        ax.add_patch(mpatches.Circle(arc_real_p2.as_tuple(), 0.5, color='g'))
-        ax.text(*arc_real_p1.as_tuple(), f"p1", color="r")
-        ax.text(*arc_real_p2.as_tuple(), f"p2", color="g")
-
-        
-        ax.add_patch(mpatches.Circle(arc.bbox.center.as_tuple(),    1, color='purple'))
-        ax.add_patch(mpatches.Rectangle(arc.bbox._topleft.as_tuple(), *arc.bbox.dimensions.as_tuple(), color='green', fill=False))
-
+    print(f"DRAW ARC {arc}")
     ax.add_patch(
         mpatches.Arc(
             arc.bbox.center.as_tuple(), *arc.bbox.dimensions.as_tuple(), angle=0, theta1=arc.t1_degs, theta2=arc.t2_degs, color='b'))
@@ -94,14 +80,10 @@ def draw_ltspice_arc(ax, arc : LTArc, idx, debug=True):
 def matplotlib_plot_component(
         component   : LTComponent,
         ax          : pl.Axes,
-        xoff        : int  = 0,
-        yoff        : int  = 0,
-        rotation    : int  = 0,
         show_labels : bool = False,
         debug       : bool = False):
 
-    component.rotate(rotation)
-    component.translate(LTPoint(xoff, yoff))
+
 
     # Now draw the component
     for line in component.lines:

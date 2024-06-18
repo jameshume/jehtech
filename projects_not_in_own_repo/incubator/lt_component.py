@@ -153,6 +153,8 @@ class LTComponent:
             self._minmax.add(tight_bbox.topleft)
             self._minmax.add(tight_bbox.bottomright)
 
+    ## TODO: THIS MODIFIES THE OBJECT BUT ALL OTHER LT SHAPE METHODS LIKE THIS CREATE A NEW OBJECT. THIS SHOULD
+    ##       REALLY DO THAT TOO
     def rotate(self, rotation_degrees : float):
         for idx, line in enumerate(self._lines):
             self._lines[idx] = line.rotate(rotation_degrees)
@@ -168,12 +170,18 @@ class LTComponent:
         
         for idx, (arc, arc_index) in enumerate(self._arcs):
             self._arcs[idx] = (arc.rotate(rotation_degrees), arc_index)
+
+        # Update the map as it will be holding the old non-rotated pins
+        for pin in self._pins:
+            self._pins_by_spice_order[pin.spice_order] = pin
         
         rect_minmax = LTRectangle(self._minmax.min, self._minmax.max).rotate(rotation_degrees)
         self._minmax = MinMax()
         self._minmax.add(rect_minmax.topleft)
         self._minmax.add(rect_minmax.bottomright)
     
+    ## TODO: THIS MODIFIES THE OBJECT BUT ALL OTHER LT SHAPE METHODS LIKE THIS CREATE A NEW OBJECT. THIS SHOULD
+    ##       REALLY DO THAT TOO
     def translate(self, point : LTPoint):
         for idx, line in enumerate(self._lines):
             self._lines[idx] = line.translate(point)
@@ -189,6 +197,10 @@ class LTComponent:
 
         for idx, (arc, arc_index) in enumerate(self._arcs):
             self._arcs[idx] = (arc.translate(point), arc_index)
+
+        # Update the map as it will be holding the old non-translated pins
+        for pin in self._pins:
+            self._pins_by_spice_order[pin.spice_order] = pin
 
         rect_minmax = LTRectangle(self._minmax.min, self._minmax.max).translate(point)
         self._minmax = MinMax()

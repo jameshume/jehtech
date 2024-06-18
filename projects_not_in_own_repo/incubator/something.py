@@ -56,18 +56,32 @@ for net_name in nets:
     #       NetComponent(part=Part(part_id='R2', part_name='R'), pin=2, next=None)
     #    ]
     for c1, c2 in pairs:
-        # c1, c2 are the connected component's, and the associated pin, that are connected in the net
-        lt_component = drawing["name_to_component"][c1.part.part_id]
+        # c1, c2 are the connected component's, and the associated pin, that are connected in the net.
+        # Get the LTComponent objects that represent the net-list components c1 and c2.
+        lt_component_1 = drawing["name_to_component"][c1.part.part_id]
+        lt_component_2 = drawing["name_to_component"][c2.part.part_id]
 
         # lt_cx_pin are the LTPin objects associated with the component from the netlist, tying together
         # the netlist and the asc file
-        lt_c1_pin = lt_component.get_pin_by_spice_order(c1.pin)
-        lt_c2_pin = lt_component.get_pin_by_spice_order(c2.pin)
+        lt_c1_pin = lt_component_1.get_pin_by_spice_order(c1.pin)
+        lt_c2_pin = lt_component_2.get_pin_by_spice_order(c2.pin)
 
         # now find out the sequenc of wires that connect c1 to c2 by doing a depth first search of the
         # tree, which I'm assuming is acyclic at the moment.
-        print(drawing['points_to_wires'])
-        print([lt_c1_pin.p])
+        current_point = lt_c1_pin.p
+        wire = drawing['points_to_wires'][current_point]
+        while wire:
+            print(current_point, wire)
+            next_point = None
+            if wire[0].p1 == current_point:
+                next_point = wire[0].p2
+            else:
+                next_point = wire[0].p1
+            wire = drawing['points_to_wires'][next_point] # This will contain the last wire, which we just visited and DONT want to do!
+            current_point = next_point
+            print(current_point, wire)
+
+            break
         break
 
 pl.close(fig)

@@ -51,21 +51,6 @@ def parse_flag_line(line, minmax, draw=True):
 
     return flag_x, flag_y, flag_type
 
-test_file_names = [
-        "../../src/images/jeh-tech/electronics_common_emitter_amplifier.asc",
-        "/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/ground_up.asc",
-        "/home/james/Draft4.asc",
-        "/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/inductors.asc",
-        "/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/one_rotated_inductor.asc",
-        "/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/ne555s.asc",
-        "../../src/images/jeh-tech/electronics_nmos_depletion.asc",
-        "/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/ground.asc",
-        "/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/iopin.asc"]
-import sys
-if len(sys.argv) > 1:
-    test_file_names = [sys.argv[1]]
-
-
 
 
 def lt_plot_asc(fig, ax, filename):
@@ -130,15 +115,14 @@ def lt_plot_asc(fig, ax, filename):
 
         elif line.startswith("SYMBOL "):
             tokens = line.strip().split(" ")[1:]
-            name = tokens[0]
-            x = float(tokens[1])
-            y = float(tokens[2])
-            rotation = float(tokens[3][1:])
-            name = name.replace("\\", "/")
+            name = tokens[0].replace("\\", "/")
             totalname = f"/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/{name}.asy"
+            x, y, rotation = float(tokens[1]), float(tokens[2]), float(tokens[3][1:])
             component = LTComponent(totalname)
+            component.rotate(rotation)
+            component.translate(LTPoint(x, y))
+            component_minmax = matplotlib_plot_component(component, ax, show_labels=True)
             components.append(component)
-            component_minmax = matplotlib_plot_component(component, ax, x, y, rotation, show_labels=True)
             minmax.merge(component_minmax)
 
         elif line.startswith("SYMATTR InstName "):
@@ -204,10 +188,31 @@ def lt_plot_asc(fig, ax, filename):
         'name_to_component' : name_to_component,
     }
 
+
 if __name__ == "__main__":
+    import sys
+
+    test_file_names = [
+        "/home/james/Draft4.asc",
+        "../../src/images/jeh-tech/electronics_common_emitter_amplifier.asc",
+        "/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/ground_up.asc",
+        "/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/inductors.asc",
+        "/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/one_rotated_inductor.asc",
+        "/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/ne555s.asc",
+        "../../src/images/jeh-tech/electronics_nmos_depletion.asc",
+        "/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/ground.asc",
+        "/home/james/Repos/jehtech/projects_not_in_own_repo/incubator/iopin.asc"]
+
+    if len(sys.argv) > 1:
+        test_file_names = [sys.argv[1]]
+
     for filename in test_file_names:
         fig, ax = pl.subplots()
-        d = lt_plot_asc(fig, ax, filename)
+        try:
+            d = lt_plot_asc(fig, ax, filename)
+        except:
+            print(f"FAILED TO DRAW {filename}")
+            raise
         print(d['name_to_component'])
         
         fig.show()

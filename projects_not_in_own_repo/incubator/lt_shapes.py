@@ -259,14 +259,16 @@ class LTArc:
         self._arc2  = arc2
         # This is necessary to allow us to avoid infinite recursion in the calculate tight bbox method!
         if _calculate_tight_bbox:
+            print("Calculating tight arc bbox")
             self._calculate_tight_arc_bounding_box()
         else:
+            print("Not calculating tight arc bbox")
             self._t1_degs = None
             self._t2_degs = None
             self._tight_bbox = None
 
     def __str__(self):
-        return f"LTArc(bb={self._bbox}, p1={self._arc1}, p2={self._arc2})"
+        return f"LTArc(bb={self._bbox}, p1={self._arc1}, p2={self._arc2}, t1={self._t1_degs}, t2={self._t2_degs})"
 
     def translate(self, xy):
         translated_bbox = self._bbox.translate(xy)
@@ -322,6 +324,7 @@ class LTArc:
         
 
     def _calculate_tight_arc_bounding_box(self, debug=False):
+        print("In calc")
         # Cannot call translate() direcly as will result in infinite recursion - hence use of _calculate_tight_bbox param
         arc_centered_at_origin = LTArc(self.bbox.topleft.clone(), self.bbox.bottomright.clone(), self._arc1.clone(), self._arc2.clone(), _calculate_tight_bbox=False) 
         arc_centered_at_origin._bbox = arc_centered_at_origin._bbox.translate(-self._bbox.center)
@@ -415,6 +418,7 @@ class LTArc:
         self._t1_degs = t1_degs
         self._t2_degs = t2_degs
         self._tight_bbox = tight_bbox
+        print(f"out with {self._t1_degs}, {self._t2_degs}")
 
     @property
     def p1(self):
@@ -434,11 +438,11 @@ class LTArc:
 
     @property
     def t1_degs(self):
-        self._t1_degs
+        return self._t1_degs
 
     @property
     def t2_degs(self):
-        self._t2_degs
+        return self._t2_degs
 
 
 
@@ -489,9 +493,9 @@ class LTPin:
         self._component = component
 
     def __str__(self):
-        return f"LTPin({self._p}, {self._name}, {self._spice_order}, {hex(id(self._component))})"
+        return f"LTPin({self._p}, '{self._name}', {self._spice_order}, {hex(id(self._component))})"
     
-    def __repr(self):
+    def __repr__(self):
         return self.__str__()
 
     def rotate(self, degrees):
