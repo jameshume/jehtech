@@ -51,7 +51,18 @@ def parse_flag_line(line, minmax, draw=True):
 
     return flag_x, flag_y, flag_type
 
+class PlottedLTLine(LTLine):
+    pass
 
+class MPL_LTLine(PlottedLTLine):
+    def __init__(self, fig, ax, mpl_line, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._mpl_line = mpl_line
+        self._fig = fig
+        self._ax = ax
+
+    def set_colour(self, colour):
+        self._mpl_line.set_color(colour)
 
 def lt_plot_asc(fig, ax, filename):
     state                     = "normal"
@@ -98,8 +109,8 @@ def lt_plot_asc(fig, ax, filename):
         
         if line.startswith("WIRE "):
             x1, y1, x2, y2 = [float(x) for x in line.strip().split(" ")[1:]]
-            wires.append(LTLine(LTPoint(x1, y1), LTPoint(x2, y2)))
-            ax.plot([x1, x2], [y1, y2], color='blue')
+            mpl_line, = ax.plot([x1, x2], [y1, y2], color='blue')
+            wires.append(MPL_LTLine(fig, ax, mpl_line, LTPoint(x1, y1), LTPoint(x2, y2)))
             minmax.add(LTPoint(x1, y1))
             minmax.add(LTPoint(x2, y2))
 
