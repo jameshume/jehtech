@@ -25,10 +25,6 @@ if len(sys.argv) == 1:
     net_filename = "simple_circult_netlist.net"
     asc_filename = "simple_circult_netlist.asc"
 else:
-    import subprocess
-    subprocess.run(
-        ["wine", "/home/james/.wine/drive_c/Program\ Files/LTC/LTspiceXVII/XVIIx64.exe", "-netlist", sys.argv[1]], 
-        ) 
     asc_filename = sys.argv[1]
     net_filename = sys.argv[1][:-3] + "net"
 
