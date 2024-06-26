@@ -26,7 +26,7 @@ from dataclasses import dataclass
 from collections import defaultdict
 
 
-def parse_flag_line(line, minmax, draw=True):
+def parse_flag_line(line, minmax, ax, draw=True):
     flag_x, flag_y, flag_type = line.strip().split(" ")[1:]
     flag_x, flag_y = (float(flag_x), float(flag_y))
     
@@ -96,12 +96,12 @@ def lt_plot_asc(fig, ax, filename):
                 else:
                     print(f"##### IO pin type {inout} not supported")
 
-                flag_x, flag_y, flag_text = parse_flag_line(prev_line_cache, minmax, draw=False)
+                flag_x, flag_y, flag_text = parse_flag_line(prev_line_cache, minmax, ax, draw=False)
                 minmax.add(LTPoint(flag_x, flag_y))
                 mpl_flag_text = ax.text(flag_x, flag_y, flag_text, fontsize=10)
                 mpl_flag_texts.append(mpl_flag_text)                                
             else:
-                parse_flag_line(prev_line_cache, minmax)
+                parse_flag_line(prev_line_cache, minmax, ax)
             
             prev_line_cache = None
 
@@ -144,7 +144,7 @@ def lt_plot_asc(fig, ax, filename):
 
     if prev_line_cache is not None:
         prev_line_cache = None
-        parse_flag_line(line, minmax)
+        parse_flag_line(line, minmax, ax)
 
     # Put all wires and component points in a dictionary
     points_to_wires = defaultdict(list)

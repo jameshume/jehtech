@@ -14,6 +14,12 @@ WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEM
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
+
+## To install XKCD fonts on Linux use this:
+##  $ mkdir -p ~/.local/share/fonts
+##  $ curl -sL https://github.com/ipython/xkcd-font/raw/master/xkcd-script/font/xkcd-script.ttf -o ~/.local/share/fonts/xkcd-script.ttf
+##  $ fc-cache -f -v
+##  $ rm ~/.cache/matplotlib/*
 import sys
 import pprint
 import matplotlib.pyplot as pl
@@ -32,10 +38,7 @@ else:
 nets = parse_netlist(net_filename)
 pprint.pp(nets)
 
-fig, ax = pl.subplots()
-# What I want is for the LTShape objects to be extended to have setColour, setBlahBlahBlah methods that
-# will allow the figure and axis artists to update their drawings.
-drawing = lt_plot_asc(fig, ax, asc_filename)
+
 
 import enum
 class dfs_result_t (enum.Enum):
@@ -111,44 +114,56 @@ def next_colour(colour_idx):
         next_idx = 0
     return next_idx
 
-colour_idx = 0
-for net_name in nets:
-    colour_idx += 1
-    # Want to build up a list of wires that join each component in the net
-    print("-" * 40)
-    print(f"{net_name}\n")
+with pl.xkcd():
+    fig, ax = pl.subplots()
+    
+    # What I want is for the LTShape objects to be extended to have setColour, setBlahBlahBlah methods that
+    # will allow the figure and axis artists to update their drawings.
+    drawing = lt_plot_asc(fig, ax, asc_filename)
 
-    # I want pairs (c1, c2), (c2, c3), ... 
-    nc : NetComponent = nets[net_name].head
-    pairs = []
-    while nc is not None:
-        pair = [None, None]
-        while (nc is not None) and (pair[1] is None):
-            if pair[0] is None:
-                pair[0] = nc
-                nc = nc.next
-            else:
-                pair[1] = nc
-                pairs.append(pair)
+    colour_idx = 0
+    for net_name in nets:
+        colour_idx += 1
+        # Want to build up a list of wires that join each component in the net
+        print("-" * 40)
+        print(f"{net_name}\n")
 
-    # For each pair, find the wires that go between each pin
-    # Example pair
-    #    [
-    #       NetComponent(part=Part(part_id='R1', part_name='R'),
-    #                     pin=2,
-    #                     next=...,
-    #       NetComponent(part=Part(part_id='R2', part_name='R'), pin=2, next=None)
-    #    ]
-    for c1, c2 in pairs:
-        result, wires = build_net(c1, c2)
-        print(c1, c2)
-        print(result)
-        print(wires)
-        for wire in wires:
-            wire.set_colour(colours[colour_idx])
+        # I want pairs (c1, c2), (c2, c3), ... 
+        nc : NetComponent = nets[net_name].head
+        pairs = []
+        while nc is not None:
+            pair = [None, None]
+            while (nc is not None) and (pair[1] is None):
+                if pair[0] is None:
+                    pair[0] = nc
+                    nc = nc.next
+                else:
+                    pair[1] = nc
+                    pairs.append(pair)
 
-    colour_idx = next_colour(colour_idx)
+        # For each pair, find the wires that go between each pin
+        # Example pair
+        #    [
+        #       NetComponent(part=Part(part_id='R1', part_name='R'),
+        #                     pin=2,
+        #                     next=...,
+        #       NetComponent(part=Part(part_id='R2', part_name='R'), pin=2, next=None)
+        #    ]
+        for c1, c2 in pairs:
+            result, wires = build_net(c1, c2)
+            print(c1, c2)
+            print(result)
+            print(wires)
+            for wire in wires:
+                wire.set_colour('b')#colours[colour_idx])
 
-fig.show()
-pl.show()
-pl.close(fig)
+        colour_idx = next_colour(colour_idx)
+
+    ax.get_xaxis().set_visible(False)
+    ax.get_yaxis().set_visible(False)
+    for spine in ax.spines:
+        ax.spines[spine].set_visible(False)
+
+    fig.show()
+    pl.show()
+    pl.close(fig)
