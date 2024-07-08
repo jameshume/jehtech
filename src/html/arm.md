@@ -501,3 +501,23 @@ sudo ln -s $PYENV_ROOT/versions/3.8.18 /usr/local/bld-tools/bld-tools-virtual-en
 ```
 
 GDB should now work!
+
+
+## Misc Snippets
+
+### Am I In An ISR?
+```
+bool in_isr(void) {
+    return (SCB->ICSR & SCB_ICSR_VECTACTIVE_Msk) != 0;
+}
+```
+
+
+### Is Debug Probe Attached?
+```
+bool is_debugger_attached(void) {
+    /* When a debugger attaches it should set one of these bits (note assumes a debugger that 
+     * supports this is used, check your probe does this!) */
+    return (DBGMCU->CR & (DBGMCU_CR_DBG_STOP | DBGMCU_CR_DBG_STANDBY)) != 0;
+}
+```
