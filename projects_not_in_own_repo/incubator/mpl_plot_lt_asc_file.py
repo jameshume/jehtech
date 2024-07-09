@@ -129,17 +129,16 @@ def lt_plot_asc(fig, ax, filename):
             name = tokens[0].replace("\\", "/")
             totalname = f"/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/{name}.asy"
             x, y, rotation = float(tokens[1]), float(tokens[2]), float(tokens[3][1:])
-            component = LTComponent(totalname)
+            
+        elif line.startswith("SYMATTR InstName "):
+            # Add a new proprty to component with its name
+            name = line[len("SYMATTR InstName "):].strip()
+            component = LTComponent(totalname, name)
             component.rotate(rotation)
             component.translate(LTPoint(x, y))
             component_minmax = matplotlib_plot_component(component, ax, show_labels=True)
             components.append(component)
             minmax.merge(component_minmax)
-
-        elif line.startswith("SYMATTR InstName "):
-            # Add a new proprty to component with its name
-            name = line[len("SYMATTR InstName "):].strip()
-            components[-1].name = name
 
 
     if prev_line_cache is not None:

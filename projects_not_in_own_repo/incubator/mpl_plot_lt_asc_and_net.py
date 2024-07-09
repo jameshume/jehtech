@@ -20,9 +20,18 @@ OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 ##  $ curl -sL https://github.com/ipython/xkcd-font/raw/master/xkcd-script/font/xkcd-script.ttf -o ~/.local/share/fonts/xkcd-script.ttf
 ##  $ fc-cache -f -v
 ##  $ rm ~/.cache/matplotlib/*
+#
+# Also, dunno what the difference between xkcd-script and just xkcd is in terms of fonts but needed to cop xkcd-script as xkcd and
+# update ~/.cache/matplotlib/fontlist-v330.json  so its was called just "xkcd" to get rid of sily font warnings.
+##
+##  $ apt install fonts-humor-sans
+##  $ rm -r ~/.cache/matplotlib
+
 import sys
 import pprint
 import matplotlib.pyplot as pl
+import ltspice
+import subprocess
 from netlist              import parse_netlist, NetComponent
 from mpl_plot_lt_asc_file import lt_plot_asc
 from lt_shapes            import LTPin, LTPoint, LTLine
@@ -30,9 +39,12 @@ from lt_shapes            import LTPin, LTPoint, LTLine
 if len(sys.argv) == 1:
     net_filename = "simple_circult_netlist.net"
     asc_filename = "simple_circult_netlist.asc"
+    raw_filename = "simple_circult_netlist.raw"
 else:
     asc_filename = sys.argv[1]
     net_filename = sys.argv[1][:-3] + "net"
+    raw_filename = sys.argv[1][:-3] + "raw"
+
 
 
 nets = parse_netlist(net_filename)
@@ -117,6 +129,11 @@ def next_colour(colour_idx):
 with pl.xkcd():
     fig, ax = pl.subplots()
     
+    # Parse the .raw file
+    l = ltspice.Ltspice(raw_filename) 
+    l.parse() 
+
+
     # What I want is for the LTShape objects to be extended to have setColour, setBlahBlahBlah methods that
     # will allow the figure and axis artists to update their drawings.
     drawing = lt_plot_asc(fig, ax, asc_filename)
@@ -150,14 +167,20 @@ with pl.xkcd():
         #       NetComponent(part=Part(part_id='R2', part_name='R'), pin=2, next=None)
         #    ]
         for c1, c2 in pairs:
+            cap_time = l.get_time()
+            cap_V_source = l.get_data(f'V({c1.part.part_id})')
+            cap_I_source = l.get_data(f'I({c1.part.part_id})')
+            cap_I_source2 = l.get_data(f'I({c2.part.part_id})')
+            print(">>>>>> CURRENT", c1.part.part_id, cap_I_source)
+            print(">>>>>> CURRENT", c2.part.part_id, cap_I_source2)
             result, wires = build_net(c1, c2)
             print(c1, c2)
             print(result)
             print(wires)
             for wire in wires:
-                wire.set_colour('b')#colours[colour_idx])
+                wire.set_colour(colours[colour_idx])
+                colour_idx = next_colour(colour_idx)
 
-        colour_idx = next_colour(colour_idx)
 
     ax.get_xaxis().set_visible(False)
     ax.get_yaxis().set_visible(False)

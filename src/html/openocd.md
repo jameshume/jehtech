@@ -234,3 +234,27 @@ script
     * `flash fill[dwhb] <addr> <value> <length>`
     * `flash info <bank num>`
 
+## Flash Programming Notes
+To program flash on STM devices, generally OpenOCD writes a program to flash (which is why `WORKAREASIZE` is important - this is the amount of RAM that can be used for this program). This program is then used to write to flash. If this fails, it is possible to fall back to a host-controlled halfword by halfword access. For F1's, for example, see `stm32x_write_block` in `src/flash/nor/stm32f1x.c` of OpenOCD source.
+
+To find the algorithm used for target controlled flashing of the device see `stm32x_write_block_async`. It loads the algorithm into
+a buffer called `stm32x_flash_write_code` in that function:
+
+```
+static const uint8_t stm32x_flash_write_code[] = {
+    #include "../../../contrib/loaders/flash/stm32/stm32f1x.inc"
+};
+```
+
+So thats for F1's. The algorithm is, of course, different, for different STM targets, although its not 1 to 1, i.e. one algorithm could cover more than one STM device family.
+
+Currently I'm interested in the STMF401x family. What algorithm does that use? To get a clue one can look in the config file for that
+family, `stm32f4x.cfg`. In it the following lines can be seen:
+
+```
+set _FLASHNAME $_CHIPNAME.flash
+flash bank $_FLASHNAME stm32f2x 0 0 0 0 $_TARGETNAME
+flash bank $_CHIPNAME.otp stm32f2x 0x1fff7800 0 0 0 $_TARGETNAME
+```
+
+The `flash bank` command is `flash bank name driver base size chip_width bus_width target [driver_options]`. Thus we can see that the driver is the STM32F2x device driver so we can get the algorithm for that from `contrib/loaders/flash/stm32/stm32f2x.inc`.

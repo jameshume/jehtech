@@ -7,13 +7,13 @@
 ""
 ""
 "Part IDs Table"
-"V1" "V" ""
-"R1" "R" ""
-"R2" "R" ""
+"V1" "1" ""
+"R1" "1" ""
+"R2" "2" ""
 
 "Net Names Table"
 "N001" 1
-"N002" 4
+"0" 4
 
 "Net Connections Table"
 1 1 1 2

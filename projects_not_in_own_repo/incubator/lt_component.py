@@ -19,7 +19,7 @@ from minmax import MinMax
 
 
 class LTComponent:
-    def __init__(self, filename : str):
+    def __init__(self, filename : str, component_name=None):
         self._lines = []
         self._pins  = []
         self._rectangles = []
@@ -29,6 +29,7 @@ class LTComponent:
         self._pins_by_spice_order = {}
         self._minmax = MinMax()
         arc_index = 0
+        self._component_name = component_name
         state = "idle"
 
         with open(filename, "r", encoding="utf-8", errors="ignore") as fh:
@@ -218,6 +219,10 @@ class LTComponent:
             return False
         else:
             return True
+
+    @property 
+    def name(self):
+        return self._component_name
 
     @property
     def lines(self):

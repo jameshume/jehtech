@@ -80,10 +80,7 @@ def draw_ltspice_arc(ax, arc : LTArc, idx, debug=True):
 def matplotlib_plot_component(
         component   : LTComponent,
         ax          : pl.Axes,
-        show_labels : bool = False,
-        debug       : bool = False):
-
-
+        show_labels : bool = False):
 
     # Now draw the component
     for line in component.lines:
@@ -104,6 +101,11 @@ def matplotlib_plot_component(
 
     for arc, arc_index in component.arcs:
         draw_ltspice_arc(ax, arc, arc_index, debug=False)
+
+    ax.text( 
+        component.minmax.max.x + (component.minmax.max.x - component.minmax.min.x) *.05, 
+        component.minmax.min.y + (component.minmax.max.y - component.minmax.min.y) / 2, 
+        component.name)
 
     return component.minmax
 
