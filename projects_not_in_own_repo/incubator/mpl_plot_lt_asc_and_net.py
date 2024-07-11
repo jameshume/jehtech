@@ -138,6 +138,7 @@ with pl.xkcd():
     # will allow the figure and axis artists to update their drawings.
     drawing = lt_plot_asc(fig, ax, asc_filename)
 
+    something = []
     colour_idx = 0
     for net_name in nets:
         colour_idx += 1
@@ -158,6 +159,7 @@ with pl.xkcd():
                     pair[1] = nc
                     pairs.append(pair)
 
+        #
         # For each pair, find the wires that go between each pin
         # Example pair
         #    [
@@ -166,14 +168,40 @@ with pl.xkcd():
         #                     next=...,
         #       NetComponent(part=Part(part_id='R2', part_name='R'), pin=2, next=None)
         #    ]
+        #
+        # Need to create a tree. The root is a component and so are all the leaves. Each tree node 
+        # is a set of continuous wire segments that create one complete non-splitting path. Under
+        # that node would be all the wires
+        #
+        #                    1      2      3
+        # I.e. if we had C1------+------+------ C2
+        #                               |  4
+        #                               +------ C3
+        # This will create the tree
+        #                 C1
+        #                 |
+        #                [1,2]
+        #                 /\
+        #                /  \
+        #               /    \
+        #             [3]    [4]
+        #              |      |
+        #              C2     C3
+        #
+        # To show the currents, we then know the current propogates up from the leaves. At each node 
+        # going upwards the current adds.
+        #
+        # Currently I get the one path. Need to merge them.
+        #
         for c1, c2 in pairs:
             cap_time = l.get_time()
             cap_V_source = l.get_data(f'V({c1.part.part_id})')
             cap_I_source = l.get_data(f'I({c1.part.part_id})')
             cap_I_source2 = l.get_data(f'I({c2.part.part_id})')
-            print(">>>>>> CURRENT", c1.part.part_id, cap_I_source)
-            print(">>>>>> CURRENT", c2.part.part_id, cap_I_source2)
+
             result, wires = build_net(c1, c2)
+            something.append((c1, wires, c2))
+
             print(c1, c2)
             print(result)
             print(wires)
@@ -181,6 +209,8 @@ with pl.xkcd():
                 wire.set_colour(colours[colour_idx])
                 colour_idx = next_colour(colour_idx)
 
+    print("*"*100)
+    pprint.pp(something)
 
     ax.get_xaxis().set_visible(False)
     ax.get_yaxis().set_visible(False)

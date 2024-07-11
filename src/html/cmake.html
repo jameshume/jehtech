@@ -259,14 +259,14 @@ if ("${DEBUG_OUTPUT_METHOD}" STREQUAL "RTT")
 endif ()
 
 # Set linker flags.
-set(NI_LINK_FLAGS
+set(MY_LINK_FLAGS
         -T'${CMAKE_CURRENT_SOURCE_DIR}/path-to-LD-file'
         -mcpu=cortex-...
         -mthumb
         -Wl,-gc-sections,--print-memory-usage,-Map=${PROJECT_BINARY_DIR}/${PROJECT_NAME}.map
 )
-STRING(REPLACE ";" " " NI_LINK_FLAGS "${NI_LINK_FLAGS}")
-set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "${NI_LINK_FLAGS}")
+STRING(REPLACE ";" " " MY_LINK_FLAGS "${MY_LINK_FLAGS}")
+set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "${MY_LINK_FLAGS}")
 
 # Build HEX and BIN files from the ELF target
 set(HEX_FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.hex)
