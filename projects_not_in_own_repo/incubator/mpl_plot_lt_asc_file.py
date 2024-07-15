@@ -32,7 +32,7 @@ def parse_flag_line(line, minmax, ax, draw=True):
     
     if flag_type == "0":
         if draw:
-            circle1 = mpatches.Circle((flag_x, flag_y), 1, color='r')
+            circle1 = mpatches.Circle((flag_x, flag_y), 1, color='r', linewidth=pl.rcParams['lines.linewidth'])
             ax.add_patch(circle1)
             minmax.add(LTPoint(flag_x, flag_y))
             hw = 20
@@ -136,7 +136,7 @@ def lt_plot_asc(fig, ax, filename):
             component = LTComponent(totalname, name)
             component.rotate(rotation)
             component.translate(LTPoint(x, y))
-            component_minmax = matplotlib_plot_component(component, ax, show_labels=True)
+            component_minmax = matplotlib_plot_component(component, ax, show_labels=False)
             components.append(component)
             minmax.merge(component_minmax)
 
@@ -168,7 +168,7 @@ def lt_plot_asc(fig, ax, filename):
     # puts a "join" blob.
     for point, pointlist in points_to_wires.items():
         if len(pointlist) > 1:
-            ax.add_patch(mpatches.Circle(point.as_tuple(), 3, color='darkblue'))
+            ax.add_patch(mpatches.Circle(point.as_tuple(), 3, color='darkblue', linewidth=pl.rcParams['lines.linewidth']))
 
     # Now everything is drawn, get text extends to update the min/max - somehow this still isn't quite right -- some text still goes
     # off the end of the axis :/

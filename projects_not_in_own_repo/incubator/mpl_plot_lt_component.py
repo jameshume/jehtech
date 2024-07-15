@@ -71,7 +71,7 @@ def draw_ltspice_arc(ax, arc : LTArc, idx, debug=True):
     print(f"DRAW ARC {arc}")
     ax.add_patch(
         mpatches.Arc(
-            arc.bbox.center.as_tuple(), *arc.bbox.dimensions.as_tuple(), angle=0, theta1=arc.t1_degs, theta2=arc.t2_degs, color='b'))
+            arc.bbox.center.as_tuple(), *arc.bbox.dimensions.as_tuple(), angle=0, theta1=arc.t1_degs, theta2=arc.t2_degs, color='b', linewidth=pl.rcParams['lines.linewidth']))
 
 
 
@@ -88,14 +88,14 @@ def matplotlib_plot_component(
 
     for rect in component.rectangles:
         ax.add_patch(
-            mpatches.Rectangle(rect.topleft.as_tuple(), *rect.dimensions.as_tuple(), fill=False, color='b'))
+            mpatches.Rectangle(rect.topleft.as_tuple(), *rect.dimensions.as_tuple(), fill=False, color='b', linewidth=pl.rcParams['lines.linewidth']))
 
     for ellipse in component.ellipses:
         ax.add_patch(
-            mpatches.Ellipse(ellipse.xy.as_tuple(), ellipse.w, ellipse.h, fill=False, color='b'))
+            mpatches.Ellipse(ellipse.xy.as_tuple(), ellipse.w, ellipse.h, fill=False, color='b', linewidth=pl.rcParams['lines.linewidth']))
 
     for pin in component.pins:
-        ax.add_patch(mpatches.Circle(pin.p.as_tuple(), 1, color='r'))
+        ax.add_patch(mpatches.Circle(pin.p.as_tuple(), 1, color='r', linewidth=pl.rcParams['lines.linewidth']))
         if show_labels and pin.name is not None:
             ax.text(pin.p.x, pin.p.y, pin.name)
 

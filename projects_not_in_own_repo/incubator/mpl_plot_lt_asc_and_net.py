@@ -31,7 +31,6 @@ import sys
 import pprint
 import matplotlib.pyplot as pl
 import ltspice
-import subprocess
 from netlist              import parse_netlist, NetComponent
 from mpl_plot_lt_asc_file import lt_plot_asc
 from lt_shapes            import LTPin, LTPoint, LTLine
@@ -49,6 +48,8 @@ else:
 
 nets = parse_netlist(net_filename)
 pprint.pp(nets)
+
+#sys.exit(0)
 
 
 
@@ -141,7 +142,7 @@ with pl.xkcd():
     something = []
     colour_idx = 0
     for net_name in nets:
-        colour_idx += 1
+        
         # Want to build up a list of wires that join each component in the net
         print("-" * 40)
         print(f"{net_name}\n")
@@ -207,7 +208,8 @@ with pl.xkcd():
             print(wires)
             for wire in wires:
                 wire.set_colour(colours[colour_idx])
-                colour_idx = next_colour(colour_idx)
+            
+        colour_idx = next_colour(colour_idx)
 
     print("*"*100)
     pprint.pp(something)
