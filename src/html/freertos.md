@@ -7,7 +7,8 @@
 </style>
 
 ## Book
-The book [Mastering the FreeRTOS™ Real Time Kerne](https://www.freertos.org/Documentation/Mastering-the-FreeRTOS-Real-Time-Kernel.v1.0.pdf) is freely available.
+* The book [Mastering the FreeRTOS™ Real Time Kerne](https://www.freertos.org/Documentation/Mastering-the-FreeRTOS-Real-Time-Kernel.v1.0.pdf) is freely available.
+* [MPU Support Chapter](https://www.freertos.org/MPU_Chapter.pdf)
 
 ## Naming Conventions
 
