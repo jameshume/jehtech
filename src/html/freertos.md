@@ -124,8 +124,24 @@ Many of the following functions can be included or excluded from the API definit
        max number of queues that this set can hold.
     * `BaseType_t xQueueAddToSet(QueueSetMemberHandler_t xQueueOrSempahore, QueueSetHandler_t xQueueSet)`.
         * Note `xQueueOrSempahore` is so named because semaphores can also be added to queue sets.
-    * ```
-    Example
-    some thigns
-    here
+
+```C
+static QueueHandle_t q1, q2;
+static QueueSetHandle_t qset;
+...
+   // Some init function
+   q1 = xQueueCreate(1, sizeof(uint32_t));
+   q2 = xQueueCreate(1, sizeof(uint32_t));
+
+   xQueueAddToSet(q1, qset);
+   xQueueAddToSet(q2, qset);
+
+...
+   // Some recever function
+   while(true) {
+      QueueHandle_t queue_with_data = (QueueHandle_t)xQueueSelectFromSet(qset, portMAX_DELAY); 
+      xQueueReceive(queue_with_data, ...);
+      // Do something with data ...
+   }
 ```
+
