@@ -245,3 +245,6 @@ static QueueSetHandle_t qset;
 * Timer callbacks must NOT enter blocked state!
 * All callback execute in context of timer service task, aka "RTOS daemon task".
 * APIs: `xTimerCreate`, `xTimerStart`, `xTimerChangePeriod` ...
+
+
+## Memory Protection Unit (MPU)
