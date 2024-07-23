@@ -1,0 +1,229 @@
+# My Motivation
+I wanted to be able to construct a static string that was going to be placed into an ELF "section containing
+zero-terminated strings" to be "used by things other than the program" (see [GNU Assembler manual describtions of `.section`](https://sourceware.org/binutils/docs/as/Section.html)).
+
+Standard C would be:
+
+```C
+#define IN_STR_SECTION __attribute__ ((used, section (".myStringsSection,\"S\",@note #")))
+static const char dummy_name[] IN_STR_SECTION = "Some string";
+```
+
+But, I also wanted to inject things into this string, like an integer identify that would map to the
+string. Something of the form `1: "Some string"`, so that I could use the integer in the code,
+instread of the string.
+
+But, the problem is that there is no way to create a unique value for this identifier that is
+global across all translaction units. GCC has `__COUNTER__`, but this is only unique within the
+one translaction unit, so won't accomplish what I want.
+
+I did not want to have to run a script that would modify the source code and then pass the
+modified code to the compiler if possible.
+
+As it happened, I was trying to leverage some C++, so my attention turned to how I could
+
+1. Generate a unique ID for a string at compile time. Suggestion from a collegue was to hash
+   the string.
+2. Concatentate the unique ID with the rest of the string and store it as a `static const char[]`.
+
+
+## Problem 1: Returning A Character Array?!
+The initialiser for the `static const char[]` has to be a `constexpr`, otherwise the compiler
+cannot initilise this at compile time. So, how can a `constexpr` function return an array?
+The answer is it can't and the initialiser type is going to have to change. Read on...
+
+A function can _not_ do the following:
+
+```C++
+constexpr auto num_digits(const unsigned int value) {
+    ...
+}
+
+constexpr auto doesnt_work(const unsigned int value) {
+    char string_value[num_digits(value)];
+    ...
+    return string_value;
+}
+```
+
+This would never work because functions don't return arrays: the array decays into
+a pointer, and a pointer is returned. Thus, a pointer to a local variable is returned
+which is UB and couldn't be assigned to a `char[]` anyway!
+
+The function also couldn't be modified to copy a string into a `char[]` argument because
+thats not initialising the argument - its already been created!
+
+So, after some digging around I found, first that `std::string` is not constexpr
+capable/safe, and second that I would need to return a structure, who's first and only
+member is a `char[]`.  
+
+The key to returning a structure who's first and only member is a character array is that
+it is the structure's data that is being stored in the strings section, and it just so
+happens that the only data is a character array. This is important, because whatever
+`constexpr` is used to construct a string that is a concatenation of strings and 
+numbers will return a structure, so:
+
+```C
+#define IN_STR_SECTION __attribute__ ((used, section (".myStringsSection,\"S\",@note #")))
+static const char dummy_name[] IN_STR_SECTION = "Some string";
+```
+
+Has to become:
+
+```C
+#define IN_STR_SECTION __attribute__ ((used, section (".myStringsSection,\"S\",@note #")))
+static const struct XXX<N> __attribute__ IN_STR_SECTION = "..." + 1 + "..."; //< Do this somehow!
+```
+
+And we have to be comfortable that although instead of a `char[]` we are storing a `struct XXX<N>` to
+our special section, we are still, in fact, just storing a null terminated character string!
+
+Briefly, the "string" will look like this:
+
+```C++
+#include <cstddef>
+
+template<size_t N>
+struct constexpr_string {
+    char value[N];
+
+    // To be initialisabe a constructor is needed
+    // `inital_value` is a pointer to a char array of size N, not a char pointer.
+    constexpr_string(char (*initial_value)[N]) {
+        for (size_t i = 0; i < N; ++i) { value[i] = initial_value[i]; } // Could use std::copy_n
+    }
+};
+```
+
+Having figured out a neaky way to return a character array from our `constexpr` function, the next
+problem is how it should be constructed _at compile time_.
+
+# Problem 2: Constructing Strings At Compile Time
+
+
+
+As this all has to happen at compile time, so the size of the array holding the string has to be known 
+at compile time. How can this be done? The answer is 
+[non-type template parameters](https://www.learncpp.com/cpp-tutorial/non-type-template-parameters/).
+
+
+Lets tackle converting an integer to a character array at compile time first.
+
+We can represent the strings like so:
+
+```C++
+#include <cstddef>
+
+template<size_t N>
+struct constexpr_string {
+    char value[N];
+
+    constexpr_string() {
+        for (size_t i = 0; i < N; ++i) { value[i] = '\0'; } // Could use std::...
+    }
+
+    constexpr_string(char (*initial_value)[N]) {
+        for (size_t i = 0; i < N; ++i) { value[i] = initial_value[i]; } // Could use std::copy_n
+    }
+};
+
+constexpr auto constexpr_unsigned_to_string(unsigned value) {
+    constexpr size_t size = 0;
+    const unsigned original_value = value;
+    while(value) {
+        size++;
+        value /= 10;
+    }
+
+    constexpr_string<size> number;
+
+    // ...
+}
+```
+
+No we can't:
+
+```
+test.cpp: In function 'constexpr auto constexpr_unsigned_to_string(unsigned int)':
+test.cpp:20:9: error: increment of read-only variable ‘size’
+   20 |         size++;
+      |         ^~~~
+```
+
+Facepalm! `constexpr` means `const`, but `const` does not mean `constexpr`, but they are both constant,
+so `size` cannot be `constexpr`. But, if it is not, then it cannot be used as the template argument
+when defining `number`. Thus, the number of bytes to hold the string plus NULL terminator has to be
+calculated in a seperate `constexpr` function:
+
+```C++
+#include <cstddef>
+
+template<size_t N>
+struct constexpr_string {
+    char value[N];
+
+    constexpr_string() {
+        for (size_t i = 0; i < N; ++i) { value[i] = '\0'; } // Could use std::...
+    }
+
+    constexpr_string(char (*initial_value)[N]) {
+        for (size_t i = 0; i < N; ++i) { value[i] = initial_value[i]; } // Could use std::copy_n
+    }
+};
+
+constexpr size_t constexpr_unsigned_bytes(unsigned value) {
+    size_t size = 0;    
+    while(value) {
+        size++;
+        value /= 10;
+    }
+    return size + 1; // +1 for NULL termination byte
+}
+
+constexpr auto constexpr_unsigned_to_string(unsigned value) {
+    constexpr auto bytes = constexpr_unsigned_bytes(value);
+    auto number_as_string = constexpr_string<bytes>();
+
+    // ...
+}
+
+int main() {
+    return 0;
+}
+```
+
+No, no, no... this won't work either! The following error occurs:
+
+```
+test.cpp: In function 'constexpr auto constexpr_unsigned_to_string(unsigned int)':
+test.cpp:26:58: error: 'value' is not a constant expression
+   26 |     constexpr auto bytes = constexpr_unsigned_bytes(value);
+      |   
+```
+
+What surprised me was that `value` was not considered a constant expression. After all,
+`constexpr_unsigned_bytes` was a `constexpr` function and I can do this:
+
+```C++
+#include <cstddef>
+
+constexpr size_t constexpr_unsigned_bytes(unsigned value) {
+    size_t size = 0;    
+    while(value) {
+        size++;
+        value /= 10;
+    }
+    return size + 1; // +1 for NULL termination byte
+}
+
+int main() {
+    char test[constexpr_unsigned_bytes(12)];
+    static_assert(sizeof(test) == 3);
+    return 0;
+}
+```
+
+So clearly `constexpr_unsigned_bytes` can calculate the number of bytes required to hold the 
+integer as a null terminated string at compile time. So what gives?
+
+

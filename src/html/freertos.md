@@ -248,3 +248,8 @@ static QueueSetHandle_t qset;
 
 
 ## Memory Protection Unit (MPU)
+* Supports static allocation config as well as synamic allocation config.
+* Must define `portUSING_MPU_WRAPPERS` to be `1`.
+* `portNUM_CONFIGURABLE_REGIONS`. Default is `1`. Examples seem to set this to `3` because as docs says it uses 8 MPU regions, 4 reserved by kernel, 3 for task regions and 1 for task stack. Presumably on devices where MPU can do 16 regions this can just be
+set higher.
+* `xTaskCreateRestricted()` and `xTaskCreateRestrictedStatic()`.
