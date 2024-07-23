@@ -181,8 +181,8 @@ constexpr size_t constexpr_unsigned_bytes(unsigned value) {
 }
 
 constexpr auto constexpr_unsigned_to_string(unsigned value) {
-    constexpr auto bytes = constexpr_unsigned_bytes(value);
-    auto number_as_string = constexpr_string<bytes>();
+    constexpr auto bytes = constexpr_unsigned_bytes(value); // ERROR! This will fail
+    auto number_as_string = constexpr_string<bytes>();      // (See below...)
 
     // ...
 }
@@ -225,5 +225,122 @@ int main() {
 
 So clearly `constexpr_unsigned_bytes` can calculate the number of bytes required to hold the 
 integer as a null terminated string at compile time. So what gives?
+
+This can be boiled down to an even easier example. The following works:
+
+```C++
+constexpr auto dummy(unsigned a) {
+    return  a * 2 + 1;
+}
+
+int main() {
+    char c[dummy(3)];
+    return 0;
+}
+```
+
+But the following does not
+
+```C++
+constexpr auto dummy(unsigned a) {
+    constexpr auto intermediate = a * 2;
+    return  intermediate + 1;
+}
+
+int main() {
+    char c[dummy(3)];
+    return 0;
+}
+```
+
+It fails with the same error message.
+
+```
+test.cpp: In function ‘constexpr auto dummy(unsigned int)’:
+test.cpp:2:39: error: ‘a’ is not a constant expression
+    2 |     constexpr auto intermediate = a * 2;
+      |    
+```
+
+Why? The reason is this:
+
+<p></p><blockquote>
+    <p>
+        One challenge with constant expressions is that function call to a normal function 
+        are not allowed in constant expressions. This means we cannot use such function calls
+        anywhere a constant expression is required ... A <code>constexpr</code> function is
+        a function that is allowed to be called in a constant expression.
+    </p><p>
+        ...
+    </p><p>
+        Allowing functions with a <code>constexpr</code> return type to be evaluated at
+        either compile-time or runtime was allowed so that a single function can serve both cases.
+    </p><p>
+        Otherwise, you'd need to have separate functions (a function with a constexpr return type,
+        and a function with a non-<code>constexpr</code> return type). This would not only require 
+        duplicate code, the two functions would also need to have different names!
+    </p><p>
+        ...
+    </p><p>
+        Compile-time evaluation of <code>constexpr</code> functions is only guaranteed when a
+        constant expression is required.
+    </p><p>
+        ...
+    </p><p>
+        The parameters of a <code>constexpr</code> function are not implicitly 
+        <code>constexpr</code>, nor may they be declared as <code>constexpr</code> 
+        ... A <code>constexpr</code> function parameter would imply the function
+        could only be called with a <code>constexpr</code> argument. But this is 
+        not the case -- <code>constexpr</code> functions can be called with 
+        non-<code>constexpr</code> arguments when the function is evaluated at 
+        runtime ... Because such <b>parameters are not <code>constexpr</code>, 
+        they cannot be used in constant expressions within the function</b>.
+    </p>
+    <footer> --<a href="https://www.learncpp.com/cpp-tutorial/constexpr-and-consteval-functions/" target="_blank">5.8 - Constexpr and consteval function, Learn C++</a>, emphasis mine.
+    </footer>
+</blockquote><p></p>
+
+Basically, because `constexpr` functions must be evaluable at run time, their
+parameters cannot themselves be `constexpr`.
+
+But it still feels like the `constexpr`-ness could be inferred in the broken
+version of `dummy()`. The trouble is, the function must be callable at 
+runtime with values that are not known until runtime, so the value of the
+parameter might not be known at compile time, which is a requirement of
+`constexpr`. Hence, function parameters, even `constexpr` and `consteval`
+function parameters, cannot be `constexpr`.
+
+<p></p><blockquote>
+    <ul>
+        <li>    
+            <code>const<code> means that the value of an object cannot be changed
+            after initialization. The value of the initializer may be known at
+            compile-time or runtime. The <code>const<code> object can be evaluated at runtime.
+        </li>
+        <li>
+            <code>constexpr<code> means that the object can be used in a constant expression.
+            The value of the initializer must be known at compile-time. The <code>constexpr<code>
+            object can be evaluated at runtime or compile-time.
+        </li>
+    </ul>
+    <p>
+        Normal function calls are evaluated at runtime, with the supplied arguments being used
+        to initialize the function's parameters. Because the initialization of function
+        parameters happens at runtime, this leads to two consequences:
+    </p>
+    <ol>
+        <li>
+            const function parameters are treated as runtime constants (even when the supplied 
+            argument is a compile-time constant).
+        </li>
+        <li>   
+            Function parameters cannot be declared as constexpr, since their initialization 
+            value isn’t determined until runtime.
+        </li>
+    </ol>
+    <footer> --<a href="https://www.learncpp.com/cpp-tutorial/constexpr-and-consteval-functions/" target="_blank">5.8 - Constexpr and consteval function, Learn C++</a>, emphasis mine.
+    </footer>
+</blockquote><p></p>
+
 
 
