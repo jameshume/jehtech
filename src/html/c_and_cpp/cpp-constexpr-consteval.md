@@ -1,4 +1,3 @@
-# My Motivation
 I wanted to be able to construct a static string that was going to be placed into an ELF "section containing
 zero-terminated strings" to be "used by things other than the program" (see [GNU Assembler manual describtions of `.section`](https://sourceware.org/binutils/docs/as/Section.html)).
 
