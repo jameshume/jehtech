@@ -145,7 +145,7 @@ No we can't:
 
 ```
 test.cpp: In function 'constexpr auto constexpr_unsigned_to_string(unsigned int)':
-test.cpp:20:9: error: increment of read-only variable ‘size’
+test.cpp:20:9: error: increment of read-only variable 'size'
    20 |         size++;
       |         ^~~~
 ```
@@ -256,8 +256,8 @@ int main() {
 It fails with the same error message.
 
 ```
-test.cpp: In function ‘constexpr auto dummy(unsigned int)’:
-test.cpp:2:39: error: ‘a’ is not a constant expression
+test.cpp: In function 'constexpr auto dummy(unsigned int)':
+test.cpp:2:39: error: 'a' is not a constant expression
     2 |     constexpr auto intermediate = a * 2;
       |    
 ```
@@ -342,5 +342,238 @@ function parameters, cannot be `constexpr`.
     </footer>
 </blockquote><p></p>
 
+Going back to the definition of `constexpr_unsigned_to_string`
+
+```C++
+constexpr auto constexpr_unsigned_to_string(unsigned value) {
+    constexpr auto bytes = constexpr_unsigned_bytes(value); // ERROR! This will fail
+    auto number_as_string = constexpr_string<bytes>();      // (See below...)
+
+    // ...
+}
+```
+
+Hopefully we can now see why this throws an error. One may think based on the
+two `dummy()` functions that it might be possible to make it such that its
+all done in one expressions such as 
+`auto number_as_string = constexpr_string<constexpr_unsigned_bytes(value)>();`,
+but it'd be wrong because we are trying to pass a non-`constexpr` value to
+a `constexpr` function. One can pass a `constexpr` to a non-`constexpr`
+function parameter, sure. Just not the other way around.
+
+So, something else is needed. The only other compile time evaluation
+mechanism available is template meta programming, and out of that the thing
+we can use is [non-type template parameters](https://www.learncpp.com/cpp-tutorial/non-type-template-parameters/).
+
+Lets have a stab at a function to convert an unsigned value to a string
+at compile time...
+
+The first problem I had was that `constexpr_string<constexpr_unsigned_bytes(value)>();` won't
+work, as discussed. The max value of an `unsigned int` is 4,294,967,295. Thats 10 characters
+and 1 NULL termination byte: 11 characters. So I know that maximum length the string can be
+so let's start there. The first thing I could try and do is this:
 
 
+```C++
+#include <cstddef>
+#include <cstdint>
+
+#define MAX_CHARS_PLUS_NULL 11
+
+template<size_t N>
+struct constexpr_string {
+    char value[N];
+
+    constexpr_string() {
+        for (size_t i = 0; i < N; ++i) { value[i] = '\0'; } // Could use std::...
+    }
+
+    constexpr_string(char (&initial_value)[N]) {
+        for (size_t i = 0; i < N; ++i) { value[i] = initial_value[i]; } // Could use std::copy_n
+    }
+};
+
+constexpr size_t constexpr_unsigned_bytes(unsigned value) {
+    size_t size = 0;    
+    while(value) {
+        size++;
+        value /= 10;
+    }
+    return size + 1; // +1 for NULL termination byte
+}
+
+constexpr auto constexpr_unsigned_to_string(unsigned value) {
+    char number_as_string[MAX_CHARS_PLUS_NULL] = {0}; // NOTE: cannot use constexpr_string as this would be non-Literal type!
+    
+    int i = constexpr_unsigned_bytes(value) - 1;                    
+    number_as_string[i] = '\0';
+    for(i = i - 1; i >= 0; --i) {
+        number_as_string[i] = '0' + (value % 10);
+        value /= 10;
+    }
+
+    // ERROR: error: invalid return type 'constexpr_string<11>' of 'constexpr'
+    return constexpr_string<MAX_CHARS_PLUS_NULL>(number_as_string);
+}
+
+int main() {
+    return 0;
+}
+```
+
+Bugger! We get the error
+
+```
+testscratch.cpp: In function 'constexpr auto constexpr_unsigned_to_string(unsigned int)':
+testscratch.cpp:28:16: error: invalid return type 'constexpr_string<11>' of 'constexpr' function 'constexpr auto constexpr_unsigned_to_string(unsigned int)'
+   28 | constexpr auto constexpr_unsigned_to_string(unsigned value) {
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+testscratch.cpp:7:8: note: 'constexpr_string<11>' is not literal because:
+    7 | struct constexpr_string {
+      |        ^~~~~~~~~~~~~~~~
+testscratch.cpp:7:8: note:   'constexpr_string<11>' is not an aggregate, does not have a trivial default constructor, and has no 'constexpr' constructor that is not a copy or move constructor
+```
+
+So, throwing hands in the air, let's follow the compiler's advice and make the constructor for `constexpr_string`
+a `constexpr` constructor to make it quality as a literal type. Once it becomes a literal type we can write:
+
+
+```C++
+#include <cstddef>
+#include <cstdint>
+
+#define MAX_CHARS_PLUS_NULL 11
+
+template<size_t N>
+struct constexpr_string {
+    char value[N];
+
+    // NOTE is now constexpr
+    constexpr constexpr_string() { 
+        for (size_t i = 0; i < N; ++i) { value[i] = '\0'; } // Could use std::...
+    }
+
+    // NOTE is now constexpr
+    constexpr constexpr_string(char (&initial_value)[N]) {
+        for (size_t i = 0; i < N; ++i) { value[i] = initial_value[i]; } // Could use std::copy_n
+    }
+};
+
+constexpr size_t constexpr_unsigned_bytes(unsigned value) {
+    size_t size = 0;    
+    while(value) {
+        size++;
+        value /= 10;
+    }
+    return size + 1; // +1 for NULL termination byte
+}
+
+constexpr auto constexpr_unsigned_to_string(unsigned value) {
+    char number_as_string[MAX_CHARS_PLUS_NULL] = {0}; // NOTE: cannot use constexpr_string as this would be non-Literal type!
+    
+    int i = constexpr_unsigned_bytes(value) - 1;                    
+    number_as_string[i] = '\0';
+    for(i = i - 1; i >= 0; --i) {
+        number_as_string[i] = '0' + (value % 10);
+        value /= 10;
+    }
+
+    return constexpr_string<MAX_CHARS_PLUS_NULL>(number_as_string);
+}
+
+int main() {
+    return 0;
+}
+```
+
+But, because `constexpr_string` is now a Literal type, `constexpr_unsigned_to_string` can be further
+re-written as:
+
+```C++
+constexpr auto constexpr_unsigned_to_string(unsigned value) {
+    constexpr_string<MAX_CHARS_PLUS_NULL> number_as_string; 
+
+    int i = constexpr_unsigned_bytes(value) - 1;    
+    number_as_string.value[i] = '\0';
+    for(i = i - 1; i >= 0; --i) {
+        number_as_string.value[i] = '0' + (value % 10);
+        value /= 10;
+    }
+
+    return number_as_string;
+}
+```
+
+Its looking better, but I still have to use `MAX_CHARS_PLUS_NULL`. If the `main()` functions was this:
+
+```C++
+int main() {
+    #define IN_STR_SECTION __attribute__ ((used, section (".myStringsSection,\"S\",@note #")))
+    static auto dummy_name1 IN_STR_SECTION = constexpr_unsigned_to_string(1);
+    static auto dummy_name2 IN_STR_SECTION = constexpr_unsigned_to_string(123456);
+    static auto dummy_name3 IN_STR_SECTION = constexpr_unsigned_to_string(1);
+    
+    return 0;
+}
+```
+
+Then `readelf -p` outputs:
+
+```
+$ readelf -p .myStringsSection a.out
+
+String dump of section '.myStringsSection':
+  [     0]  1
+  [    10]  123456
+  [    20]  1
+```
+
+Because `constexpr_unsigned_to_string()` constructs a structure with a data member with a fixed 10 character
+width, all of the strings in the section are 10 characters long! You can see because the index counter
+increments by 10 for each string in the list.
+
+To re-iterate, this is because `constexpr_string<constexpr_unsigned_bytes(value)>();` cannot work. The only
+other option is to represent the number, not as a parameter to the function, which can never be 
+`constexpr`, but as a [non-type template parameter](https://www.learncpp.com/cpp-tutorial/non-type-template-parameters/).
+
+The function and the way it is called then becomes this:
+
+```C++
+template<unsigned N>
+consteval auto constexpr_unsigned_to_string() {
+    constexpr unsigned bytes = constexpr_unsigned_bytes(N);
+    constexpr_string<bytes> number_as_string; 
+
+    unsigned value = N;
+    int i = bytes -1 ;
+    number_as_string.value[i] = '\0';
+    for(i = i - 1; i >= 0; --i) {
+        number_as_string.value[i] = '0' + (value % 10);
+        value /= 10;
+    }
+
+    return number_as_string;
+}
+
+int main() {
+    #define IN_STR_SECTION __attribute__ ((used, section (".myStringsSection,\"S\",@note #")))
+    static auto dummy_name1 IN_STR_SECTION = constexpr_unsigned_to_string<1>();
+    static auto dummy_name2 IN_STR_SECTION = constexpr_unsigned_to_string<123456>();
+    static auto dummy_name3 IN_STR_SECTION = constexpr_unsigned_to_string<1>();
+    
+    return 0;
+}
+```
+
+And now...
+
+```
+$ readelf -p .myStringsSection a.out
+
+String dump of section '.myStringsSection':
+  [     0]  1
+  [     2]  123456
+  [     9]  1
+```
+
+The strings are of the correct length... phew.
