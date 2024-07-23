@@ -333,7 +333,7 @@ function parameters, cannot be `constexpr`.
             argument is a compile-time constant).
         </li>
         <li>   
-            <b>Function parameters cannot be declared as <code>constexpr</b>, since their initialization 
+            <b>Function parameters cannot be declared as <code>constexpr</code>, since their initialization 
             value isn't determined until runtime.</b>
         </li>
     </ol>
@@ -341,7 +341,7 @@ function parameters, cannot be `constexpr`.
     </footer>
 </blockquote><p></p>
 
-Going back to the definition of `constexpr_unsigned_to_string`
+Going back to the definition of `constexpr_unsigned_to_string`:
 
 ```C++
 constexpr auto constexpr_unsigned_to_string(unsigned value) {
