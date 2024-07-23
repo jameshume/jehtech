@@ -334,8 +334,8 @@ function parameters, cannot be `constexpr`.
             argument is a compile-time constant).
         </li>
         <li>   
-            Function parameters cannot be declared as constexpr, since their initialization 
-            value isn’t determined until runtime.
+            <b>Function parameters cannot be declared as <code>constexpr</b>, since their initialization 
+            value isn't determined until runtime.</b>
         </li>
     </ol>
     <footer> --<a href="https://www.learncpp.com/cpp-tutorial/constexpr-and-consteval-functions/" target="_blank">5.8 - Constexpr and consteval function, Learn C++</a>, emphasis mine.
