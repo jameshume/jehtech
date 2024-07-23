@@ -266,15 +266,15 @@ Why? The reason is this:
 
 <p></p><blockquote>
     <p>
-        One challenge with constant expressions is that function call to a normal function 
-        are not allowed in constant expressions. This means we cannot use such function calls
+        One challenge with constant expressions is that <b>function calls to a normal function 
+        are not allowed in constant expressions</b>. This means we cannot use such function calls
         anywhere a constant expression is required ... A <code>constexpr</code> function is
         a function that is allowed to be called in a constant expression.
     </p><p>
         ...
     </p><p>
-        Allowing functions with a <code>constexpr</code> return type to be evaluated at
-        either compile-time or runtime was allowed so that a single function can serve both cases.
+        Allowing functions with a <code>constexpr</code> return type to be <b>evaluated at
+        either compile-time or runtime</b> was allowed so that a single function can serve both cases.
     </p><p>
         Otherwise, you'd need to have separate functions (a function with a constexpr return type,
         and a function with a non-<code>constexpr</code> return type). This would not only require 
@@ -282,13 +282,13 @@ Why? The reason is this:
     </p><p>
         ...
     </p><p>
-        Compile-time evaluation of <code>constexpr</code> functions is only guaranteed when a
-        constant expression is required.
+        Compile-time evaluation of <code>constexpr</code> functions is <b>only guaranteed when a
+        constant expression is required</b>.
     </p><p>
         ...
     </p><p>
-        The parameters of a <code>constexpr</code> function are not implicitly 
-        <code>constexpr</code>, nor may they be declared as <code>constexpr</code> 
+        <b>The parameters of a <code>constexpr</code> function are not implicitly 
+        <code>constexpr</code>, nor may they be declared as <code>constexpr</code></b>
         ... A <code>constexpr</code> function parameter would imply the function
         could only be called with a <code>constexpr</code> argument. But this is 
         not the case -- <code>constexpr</code> functions can be called with 
@@ -305,7 +305,7 @@ parameters cannot themselves be `constexpr`.
 
 But it still feels like the `constexpr`-ness could be inferred in the broken
 version of `dummy()`. The trouble is, the function must be callable at 
-runtime with values that are not known until runtime, so the value of the
+runtime - with values that are not known until runtime - so the value of the
 parameter might not be known at compile time, which is a requirement of
 `constexpr`. Hence, function parameters, even `constexpr` and `consteval`
 function parameters, cannot be `constexpr`.
@@ -313,13 +313,13 @@ function parameters, cannot be `constexpr`.
 <p></p><blockquote>
     <ul>
         <li>    
-            <code>const<code> means that the value of an object cannot be changed
+            <code>const</code> means that the value of an object cannot be changed
             after initialization. The value of the initializer may be known at
-            compile-time or runtime. The <code>const<code> object can be evaluated at runtime.
+            compile-time or runtime. The <code>const</code> object can be evaluated at runtime.
         </li>
         <li>
-            <code>constexpr<code> means that the object can be used in a constant expression.
-            The value of the initializer must be known at compile-time. The <code>constexpr<code>
+            <code>constexpr</code> means that the object can be used in a constant expression.
+            The value of the initializer must be known at compile-time. The <code>constexpr</code>
             object can be evaluated at runtime or compile-time.
         </li>
     </ul>
