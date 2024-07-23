@@ -98,9 +98,8 @@ struct constexpr_string {
 Having figured out a neaky way to return a character array from our `constexpr` function, the next
 problem is how it should be constructed _at compile time_.
 
-# Problem 2: Constructing Strings At Compile Time
 
-
+## Problem 2: Constructing Strings At Compile Time
 
 As this all has to happen at compile time, so the size of the array holding the string has to be known 
 at compile time. How can this be done? The answer is 
@@ -577,3 +576,156 @@ String dump of section '.myStringsSection':
 ```
 
 The strings are of the correct length... phew.
+
+
+## Problem 3: Concatenating strings
+
+A string of length N, including NULL terminator, conact a string of length M, including NULL terminator is N + M - 1, where
+the -1 is because only one of the two NULL terminators will be needed.
+
+The "string" struct just becomes:
+
+```C++
+template<size_t N>
+struct constexpr_string {
+    char value[N];
+
+    // NOTE is now constexpr
+    constexpr constexpr_string() { 
+        for (size_t i = 0; i < N; ++i) { value[i] = '\0'; } // Could use std::...
+    }
+
+    // NOTE is now constexpr
+    constexpr constexpr_string(const char (&initial_value)[N]) {
+        for (size_t i = 0; i < N; ++i) { value[i] = initial_value[i]; } // Could use std::copy_n
+    }
+
+    template<std::size_t M>
+    constexpr auto operator+(const constexpr_string<M>& other) const {
+        char combined[N + M - 1] {}; // - 1 to avoid double NULL terminator
+        for (size_t i = 0; i < N - 1; ++i) { combined[i] = value[i]; } // -1 to avoid copying NULL terminator
+        for (size_t i = 0; i < M; ++i) { combined[N + i - 1] = other.value[i]; } // copies NULL terminator
+        return constexpr_string<N + M - 1>(combined);
+    }
+};
+```
+
+Then `main()` can become:
+
+```C++
+int main() {
+    #define IN_STR_SECTION __attribute__ ((used, section (".myStringsSection,\"S\",@note #")))
+    static auto dummy_name1 IN_STR_SECTION = constexpr_unsigned_to_string<123456>() + constexpr_string<sizeof(" is the number")>(" is the number");
+    
+    return 0;
+}
+```
+
+And we get:
+
+```
+$ readelf -p .myStringsSection a.out 
+
+String dump of section '.myStringsSection':
+  [     0]  123456 is the number
+```
+
+Hooray!
+
+Creating a `constexpr_string` froma string literal is still a little clucky however. We
+can use non-type template parameter inference to save us again, the same way we
+have used in the `constexpr_string` class.
+
+```C++
+template<size_t N>
+constexpr constexpr_string<N> create_constexpr_string(const char (&initial_value)[N]) {
+    return constexpr_string<N>(initial_value);
+}
+```
+
+And `main()` now looks nicer:
+
+```C++
+int main() {
+    #define IN_STR_SECTION __attribute__ ((used, section (".myStringsSection,\"S\",@note #")))
+    static auto dummy_name1 IN_STR_SECTION = constexpr_unsigned_to_string<123456>() + create_constexpr_string(" is the number");
+    
+    return 0;
+}
+```
+
+The whole thing has become:
+
+```C++
+#include <cstddef>
+#include <cstdint>
+
+#define MAX_CHARS_PLUS_NULL 11
+
+
+template<size_t N>
+struct constexpr_string {
+    char value[N];
+
+    // NOTE is now constexpr
+    constexpr constexpr_string() { 
+        for (size_t i = 0; i < N; ++i) { value[i] = '\0'; } // Could use std::...
+    }
+
+    // NOTE is now constexpr
+    constexpr constexpr_string(const char (&initial_value)[N]) {
+        for (size_t i = 0; i < N; ++i) { value[i] = initial_value[i]; } // Could use std::copy_n
+    }
+
+    template<std::size_t M>
+    constexpr auto operator+(const constexpr_string<M>& other) const {
+        char combined[N + M - 1] {}; // - 1 to avoid double NULL terminator
+        for (size_t i = 0; i < N - 1; ++i) { combined[i] = value[i]; } // -1 to avoid copying NULL terminator
+        for (size_t i = 0; i < M; ++i) { combined[N + i - 1] = other.value[i]; } // copies NULL terminator
+        return constexpr_string<N + M - 1>(combined);
+    }
+};
+
+
+template<size_t N>
+constexpr constexpr_string<N> create_constexpr_string(const char (&initial_value)[N]) {
+    return constexpr_string<N>(initial_value);
+}
+
+
+constexpr size_t constexpr_unsigned_bytes(unsigned value) {
+    size_t size = 0;    
+    while(value) {
+        size++;
+        value /= 10;
+    }
+    return size + 1; // +1 for NULL termination byte
+}
+
+
+template<unsigned N>
+consteval auto constexpr_unsigned_to_string() {
+    constexpr unsigned bytes = constexpr_unsigned_bytes(N);
+    constexpr_string<bytes> number_as_string; 
+
+    unsigned value = N;
+    int i = bytes -1 ;
+    number_as_string.value[i] = '\0';
+    for(i = i - 1; i >= 0; --i) {
+        number_as_string.value[i] = '0' + (value % 10);
+        value /= 10;
+    }
+
+    return number_as_string;
+}
+
+
+int main() {
+    #define IN_STR_SECTION __attribute__ ((used, section (".myStringsSection,\"S\",@note #")))
+    static auto dummy_name1 IN_STR_SECTION = constexpr_unsigned_to_string<123456>() + create_constexpr_string(" is the number");
+    
+    return 0;
+}
+```
+
+And thats a wrap...
