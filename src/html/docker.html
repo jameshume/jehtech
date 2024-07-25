@@ -396,6 +396,16 @@ RUN <b>--mount=type=tmpfs,target=/build_temp \
 
 <H2>Misc Bits</H2>
 <div>
+    <h3>Access Host Server From Within WSL</h3>
+    <div>
+      <p>
+        Use <code>host.docker.internal</code> on Windows. 
+      </p>
+      <p>
+        Or, you can use the host IP address, which is usually `172.17.0.1` and can be determined using `ip addr show docker0`.
+      </p>
+    </div>
+
     <h3>Stop TK install asking for timezone</h3>
     <div>
       <pre>RUN DEBIAN_FRONTEND=noninteractive apt-get install -y -q package</pre>
