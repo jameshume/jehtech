@@ -21,7 +21,7 @@
 	</div>
 
 	<div id="content">
-		<h1 class="title">Model View Controller/Presenter (MVC/P) Notes</h1>
+		<h1 class="title">Model View Controller/Presenter (MVC/P) &amp; Humble Dialog Notes</h1>
 		<h2>The Origins Of MVC (Classic MVC)</h2>
 
 		<h3>References</h3>
@@ -111,7 +111,27 @@
 			<p><img style="width: 90%;" src="##IMG_DIR##/MVC_whiteboard_2.png"></p>
 
 		</div>
-		
+
+		<h2>Humble Dialog</h2>
+		<p>
+			The idea of the Humble Dialog is to have a passive view where operations on the view are reduced, as far as possible, to simple
+			get and set operations. This has two benefits:
+		</p>
+		<ol>
+			<li>Business logic remains encapsulated and is not mixed in with the view code. This itself has a couple of benefits:
+				<ol>
+					<li>The business logic is more easily identifiable and understandable as the read does not have to bother with the intricacies of a GUI,</li>
+					<li>The business logic is more maintainable and testable as a result,</li>
+				</ol>
+			</li>
+			<li>Because the view code is separated, the view can be updated independently of the model and different views can be created
+				and used in different circumstances without duplicating business logic. The logic of the view is more easily testable because
+				the passive view can be stubbed, and because the view was passive it was wafer thin anyway, reducing the amount of hard-to-test code.
+			</li>
+		</ol>
+		<p>
+			See the <a href="https://raw.githubusercontent.com/peerreynders/rendezvous/main/media/TheHumbleDialogBox.pdf" target="_blank">original article by Michael Feathers</a>.
+		</p>
 	</div>
 </body>
 </html>
