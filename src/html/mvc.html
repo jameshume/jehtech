@@ -104,6 +104,19 @@
 			https://martinfowler.com/eaaDev/uiArchs.html
 
 		</pre>
+		<p>
+			See also <a href="https://martinfowler.com/eaaDev/SeparatedPresentation.html" target="_blank">Martin Fowler's Seperated Presentation</a>:		
+		</p>
+		<blockquote>
+			<p>
+				This pattern is a form of layering, where we keep presentation code and domain code in separate
+				layers with the domain code unaware of presentation code ... The presentation is able to call 
+				the domain but not vice-versa ... Although the domain cannot call the presentation it's often
+				necessary for the domain to notify the presentation if any changes occur. Observer is the
+				usual solution to this problem ...
+			</p>
+		</blockquote>
+		<p></p>
 		
 		<h2>MVC As Described By The &quot;Gang Of Four&quot;</h2>
 		<div>
