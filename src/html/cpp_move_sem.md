@@ -1,186 +1,124 @@
-## A Silly Example
+## Return Value Optimisation
+RVO is a compiler strategy that helps avoid copying objects returned by value. It comes in two flavours, unnamed RVO (RVO) and named RVO (NRVO). The former concerns the return of temporary objects, i.e., objects that have no name and you can't take the address of. The latter concers the return of named objects who's lifespan ends with the function return.
 
-```cpp
+For example, `return MyObj();`, returns a temporary object (RVO) and `MyObj a; return a` returns a named object (NRVO).
+
+It iss the only form of optimization that bypasses the as-if rule - copy elision can be applied even if copying/moving the object has side-effects.
+
+Take the following example:
+
+```
 // Use `g++ demo_no_move_sem.cpp -O0 -fno-elide-constructors && ./a.out`
 // `-fno-elide-constructors` disable return value optimization.
 #include <cstring>
 #include <iostream>
 #include <iterator>
 
-class MyIntArray {
-public:
-    MyIntArray(unsigned int size) : m_name(nullptr) {
-        std::cout << "\tNew empty array\n";
-        m_array = new int[size];
-        m_size = size;
-        std::memset(m_array, 0, sizeof(int) * m_size);
-    }
-    
-    ~MyIntArray() {
-        if (m_name) {
-            std::cout << "\tDead " << m_name << "\n";
-        }
-        else {
-            std::cout << "\tDead annon\n";
-        }
-        delete[] m_array;
+struct MyObj {
+    MyObj() {
+        std::cout << "Constuctor\n";
     }
 
-    MyIntArray(int *array, unsigned int size) : m_name(nullptr) {
-        std::cout << "\tNew initialised array\n";
-        m_array = new int[size];
-        m_size = size;
-        std::memcpy(m_array, array, sizeof(int) * m_size);
+    ~MyObj() {
+        std::cout << "Destructor\n";
     }
 
-    MyIntArray(const MyIntArray &other) : m_name(nullptr) {
-        std::cout << "\tNew copied array\n";
-        m_array = new int[other.m_size];
-        m_size = other.m_size;
-        std::memcpy(m_array, other.m_array, sizeof(int) * m_size);
+    MyObj(const MyObj& other) {
+        std::cout << "Copy constructor\n";
     }
-
-    MyIntArray combine(const MyIntArray other) {     
-        std::cout << "\tCombine\n";
-        MyIntArray newArray(m_size + other.m_size);
-        newArray.set_name("newArray");
-        std::memcpy(newArray.m_array, m_array, sizeof(int) * m_size);
-        std::memcpy(&newArray.m_array[m_size], other.m_array, sizeof(int) * other.m_size);
-        std::cout << "\tNew array setup\n";
-        return newArray;
-    }
-
-    int& operator[](int index) const {
-        if (index < 0 || index >= m_size) {
-            std::cout << "Index out of bounds\n";
-            exit(1);
-        }
-        return m_array[index];
-    }
-
-    void set_name(const char *name) {
-        m_name = name;
-    }
-
-    unsigned int get_size() const {
-        return m_size;
-    }
-
-private:
-    int *m_array;
-    unsigned int m_size;
-    const char *m_name;
 };
 
+MyObj CreateObj_URVO() {
+    return MyObj();
+}
 
-std::ostream& operator<<(std::ostream& os, MyIntArray obj) {
-    os << "[";
-    for(unsigned int i = 0; i < obj.get_size(); ++i) {
-        os << obj[i] << ", ";
-    }
-    os << "]\n";
-    
-    return os;
+MyObj CreateObj_NRVO() {
+    MyObj a;
+    return a;
 }
 
 int main(void) {
-    constexpr unsigned int ARRAYSIZE = 10;
-    int data[10];
-    for(unsigned int i = 0; i < ARRAYSIZE; ++i) {
-        data[i] = (int) i;
-    }
+    std::cout << "URVO\n";
+    MyObj r1 = CreateObj_URVO();
 
-    std::cout << "a1\n";
-    MyIntArray a1(data, ARRAYSIZE);
-    a1.set_name("a1");
+    std::cout << "\n\nNRVO\n";
+    MyObj r2 = CreateObj_NRVO();
 
-    std::cout << "a2\n";
-    MyIntArray a2(data, ARRAYSIZE);
-    a2.set_name("a2");
-
-    std::cout << "Print combined array\n";
-    std::cout << a1.combine(a2) << "\n";
-
-    std::cout << "END\n";
-
-    return 0;
+    std::cout << "\n\nEND\n";
 }
 ```
 
-When compiled using `-O0 -fno-elide-constructors` to disable optimisations *and* return value optimisation, the following is output:
+If you run it with and without the `-fno-elide-constructors` it gives a clue as to what RVO and copy elision is...
 
-```
-a1
-        New initialised array
-a2
-        New initialised array
-Print combined array
-        New copied array    //< [1] `a2` copied into `combine()` parameter `other` as anonymous array
-        Combine
-        New empty array     //< [2] Temp new array constructed to hold combination result
-        New array setup
-        New copied array    //< [3] Temp array copied into `std::cout` param as anonymous array
-        Dead newArray       //< [4] As function exists temp new array destroyed
-[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ]
+<table>
+    <tr>
+        <th>no-elide-constructors</th>
+        <th>elide-constructors</th>
+    </tr>
+    <tr>
+        <td><pre>URVO
+Constuctor
 
-        Dead annon          //< [5] The `combine()` anonymous array param destroyed
-        Dead annon          //< [6] The `std::cout` param destroyed 
+
+NRVO
+Constuctor
+Copy constructor
+Destructor
+
+
 END
-        Dead a2
-        Dead a1
-```
+Destructor
+Destructor</pre>
+        </td>
 
-If return value optimisations are allowed then the output is:
+        <td><pre>URVO
+Constuctor
 
-```
-a1
-        New initialised array
-a2
-        New initialised array
-Print combined array
-        New copied array    //< [1] `a2` copied into `combine()` parameter `other` as anonymous array
-        Combine
-        New empty array     //< [2] Temp new array constructed to hold combination result
-        New array setup
-[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ]
-                            //< [3] NOTE: No copy now
-        Dead newArray       //< [4] As function exists temp new array destroyed
-                            //< [5] NOTE: No extra anonmyous destoryed due to [3]
-        Dead annon          //< [6] The `std::cout` param destroyed 
+
+NRVO
+Constuctor
+
+
 END
-        Dead a2
-        Dead a1
-```
+Destructor
+Destructor</pre>
+        </td>
+    </table>
 
-Next use const expression to extend the lifetime of temporary objects.
 
-The `combine` function becomes:
-
-```
- MyIntArray combine(const MyIntArray &other) { 
-```
-
-And the print function becomes:
+When constructor elision is disabled using the `-fno-elide-constructors` GCC option NRVO is disabled:
 
 ```
-std::ostream& operator<<(std::ostream& os, const MyIntArray &obj) {
+NRVO
+Constuctor        -- 1. `MyObj a;` in `CreateObj_NRVO() on stack`.
+Copy constructor  -- 2. `CreateObj_NRVO()` returns. `MyObj a` copied into `r1`.
+Destructor        -- 3. `MyObj a;` destroyed as function exit complete.
 ```
 
-Output is now:
+When constructor elision is permitted the following is seen:
 
 ```
-a1
-        New initialised array
-a2
-        New initialised array
-Print combined array
-        Combine
-        New empty array
-        New array setup
-[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ]
+NRVO
+Constructor        -- 1. `MyObj a;` in `CreateObj_NRVO()` but uses the memory allocated to `r1`.
+                         Therefore on return, `r1` is already valid so no copy-out-of-function
+                         is required! Saves a copy and destruction!
+```
 
-        Dead newArray
-END
-        Dead a2
-        Dead a1
+Interestingly the URVO is not affected... it is always used. The reason is explained here:
+
+<blockquote>
+    <p>Return-value optimization is part of a category of optimizations enabled by "copy elision" (meaning "omitting copying"). C++17 requires copy elision when a function returns a temporary object (unnamed object), but does not require it when a function returns a named object.
+    </p>
+    <footer>-- <a href="https://sigcpp.github.io/2020/06/08/return-value-optimization#:~:text=Return%2Dvalue%20optimization%20is%20part,function%20returns%20a%20named%20object." target="_blank">Return value optimization (RVO), SigCPP</a>.</footer>
+</blockquote>
+<p></p>
+
+One important thing to note is that, as explained in the article referenced above,
+<q>the compiler generates code such that object copying is avoided if the return value is used as the initializer for a receiving variable</q>.
+
+Thus, doing something like this, stops either type of RVO:
+
+```
+MyObj r1;              // Default constructor used
+r1 = CreateObj_URVO(); // No RVO possible.
 ```
