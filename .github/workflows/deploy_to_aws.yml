@@ -31,7 +31,7 @@ jobs:
       - run: npm ci
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.8.12'
+          python-version: '3.13.0'
           cache: 'pip'
       - uses: actions/cache@v3
         with:
