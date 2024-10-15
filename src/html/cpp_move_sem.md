@@ -122,3 +122,4 @@ Thus, doing something like this, stops either type of RVO:
 MyObj r1;              // Default constructor used
 r1 = CreateObj_URVO(); // No RVO possible.
 ```
+
