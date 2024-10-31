@@ -64,6 +64,28 @@
 				</ol>
 			</div>
 
+			<h2>Install</h2>
+			<div>
+				<pre>sudo apt install -y python3 python3-pip python3-dev build-essential libgtk-3-dev libwebkit2gtk-4.0-dev
+
+sudo apt install -y libjpeg-dev libtiff-dev libsdl2-dev libgstreamer-plugins-base1.0-dev \
+   libnotify-dev freeglut3-dev libsm-dev libgtk2.0-dev \
+   libgtk-3-dev libwebkit2gtk-4.0-dev libgl1-mesa-dev libglu1-mesa-dev \
+   libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev 
+
+
+pip3 install pyext
+pip3 install wxPython
+
+# Test 
+python3 -c "import wx; app = wx.App(); frame = wx.Frame(None, title='Hello World'); frame.Show(); app.MainLoop()"
+
+# Or if that doesn't work coz its a PITA use...
+pip install -U wxPython --find-links https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-22.04
+</pre>
+
+			</div>
+
 			<h2>The Basic wxPython App</h2>
 			<div>
 				<h3>The Start</h3>

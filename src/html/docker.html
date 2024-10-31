@@ -450,6 +450,9 @@ RUN <b>--mount=type=tmpfs,target=/build_temp \
 
     <h3>Use Host's XServer</h3>
     <div>
+      <p>
+        With modern WSL 2 this isnt necessary anymore.
+      </p>
       <pre>
   xhost +"local:docker@"                          # if DISPLAY does not exist in your environment `export DISPLAY=":0"`
   docker container run \
@@ -474,6 +477,100 @@ RUN <b>--mount=type=tmpfs,target=/build_temp \
       <p>This tells the container to run with the current user id and group id so that any files
         it creates will have the correct user and group set (otherwise you get root root).</p>
     </div>
+
+</div>
+
+<h2>Docker Events - See What's Going On</h2>
+<div>
+  <p>
+    To see Docker daemon events (containers getting fired up, killed etc), run:
+  </p>
+  <pre>
+docker events
+  </pre>
+  <p>
+    The docker events command itself does not display the specific commands that containers are asked to run. Combine with <code>docker inspect</code>,
+    wrapped in a script to see these:
+  </p>
+  <pre>#!/bin/bash
+
+# Path to store Docker events log
+EVENT_LOG="my_docker_event_log.txt"
+
+# Start capturing Docker events
+docker events > "$EVENT_LOG" &
+
+# Function to get the command run by the container
+get_container_command() {
+    CONTAINER_ID=$1
+    docker inspect --format '{{.Config.Cmd}}' "$CONTAINER_ID"
+    # Or for a ton of info use --format 'json'
+}
+
+# Monitor the event log for new start events
+tail -f "$EVENT_LOG" | while read -r line; do
+    # Check if the event is a start event
+    if echo "$line" | grep -q ' container start '; then
+        # Extract the container ID
+        CONTAINER_ID=$(echo "$line" | awk '{print $4}')
+        
+        # Get the command run by the container
+        COMMAND=$(get_container_command "$CONTAINER_ID")
+        
+        # Print the container ID and command
+        echo "Container ID: $CONTAINER_ID"
+        echo "Command: $COMMAND"
+    fi
+done
+</pre>
+  </pre>
+  <p>
+    To see system events:
+  </p>
+  <pre>
+sudo journalctl -u docker.service
+  </pre>
+
+</div>
+
+<h2>Debug/Monitor Docker Events</h2>
+<div>
+  <p>
+    Observe Docker Desktop container actions/lifespans using the docker <code>events</code> command. 
+  </p>
+  <p>
+    Unfortunately, what docker events does not tell us is, when a container is started, what command is being run. To find this out a little script has to be used (courtesy ChatGPT btw):
+  </p>
+  <pre>#!/bin/bash
+
+    # Path to store Docker events log
+    EVENT_LOG="/path/to/event_log.txt"
+    
+    # Start capturing Docker events
+    docker events --filter 'event=start' --filter 'event=stop' > "$EVENT_LOG" &
+    
+    # Function to get the command run by the container
+    get_container_command() {
+        CONTAINER_ID=$1
+        docker inspect --format '{{.Config.Cmd}}' "$CONTAINER_ID"
+    }
+    
+    # Monitor the event log for new start events
+    tail -f "$EVENT_LOG" | while read -r line; do
+        # Check if the event is a start event
+        if echo "$line" | grep -q ' container start '; then
+            # Extract the container ID
+            CONTAINER_ID=$(echo "$line" | awk '{print $4}')
+            
+            # Get the command run by the container
+            COMMAND=$(get_container_command "$CONTAINER_ID")
+            
+            # Print the container ID and command
+            echo "Container ID: $CONTAINER_ID"
+            echo "Command: $COMMAND"
+        fi
+    done</pre>
+  <p></p>
 </div>
 
 <H2>Docker CLI Command Cheat Sheet</H2>
