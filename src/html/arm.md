@@ -366,8 +366,24 @@ interrupted program and resumes it, or possibly instead puts the processor to sl
 #### Cortex-M0
 [[See ARM doc]](https://developer.arm.com/documentation/ddi0419/c/System-Level-Architecture/System-Level-Programmers--Model/ARMv6-M-exception-model/Exception-return-behavior?lang=en)
 
-## Interrupts
+## Interrupts / Exceptions
 https://community.arm.com/arm-community-blogs/b/embedded-blog/posts/cutting-through-the-confusion-with-arm-cortex-m-interrupt-priorities
+https://interrupt.memfault.com/blog/arm-cortex-m-exceptions-and-nvic
+https://developer.arm.com/documentation/ddi0403/d/System-Level-Architecture/System-Level-Programmers--Model/ARMv7-M-exception-model/Stack-alignment-on-exception-entry
+
+### Stacking On Exception Entry
+* Uses the *fore ground* stack, which can be either the MSP or PSP, to save the pre-interrupt state of the CPU (unless the exception is a tail-chained or a late arriving exception).
+    * Uses a micro-coded entry/exit mechanism whereby the the hardware itself will do things like save the processor context etc. Thus, when
+      your ISR code executes, the state of the task executing just before the exception has already been saved to the active stack. Makes
+      interrupt handling simpler.
+* Reads ISR address from vector table.
+* Link register modified for interrupt return.
+* First instruction of ISR executed. (approx. 11 - 12 cycles delay for this to happen).
+    * It is executed in *handler* mode using the *main* stack pointer.
+
+    
+
+
 
 ## Context Switching
 ### References
