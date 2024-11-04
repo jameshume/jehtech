@@ -5,6 +5,7 @@
 * [ARM Cortex-M RTOS Context Switching](https://interrupt.memfault.com/blog/cortex-m-rtos-context-switching)
 * [GitHub Project - minimal-c-cortex-m: A minimal Arm Cortex-M example, including semihosting...](https://github.com/noahp/minimal-c-cortex-m)
 * [CPUlator](https://cpulator.01xz.net/?sys=arm-de1soc)
+* Great collection of SVD files at [platform-ststm32.git](https://github.com/platformio/platform-ststm32.git) in `misc` folder.
 
 ## Intro
 
@@ -364,6 +365,9 @@ interrupted program and resumes it, or possibly instead puts the processor to sl
 
 #### Cortex-M0
 [[See ARM doc]](https://developer.arm.com/documentation/ddi0419/c/System-Level-Architecture/System-Level-Programmers--Model/ARMv6-M-exception-model/Exception-return-behavior?lang=en)
+
+## Interrupts
+https://community.arm.com/arm-community-blogs/b/embedded-blog/posts/cutting-through-the-confusion-with-arm-cortex-m-interrupt-priorities
 
 ## Context Switching
 ### References
