@@ -16,7 +16,7 @@ def WatermarkImage(ipFilename, fontFilename, opFilename):
 		textwidth, textheight = d.textsize(text, fnt)
 	except AttributeError:
 		#  (Pillow >= 8.3.0)
-		bbox = draw.textbbox((0, 0), text, font=font)
+		bbox = d.textbbox((0, 0), text, font=font)
 		textwidth, textheight = bbox[2] - bbox[0], bbox[3] - bbox[1]
 
 	width, height = base.size

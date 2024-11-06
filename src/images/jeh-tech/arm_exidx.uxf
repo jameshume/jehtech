@@ -159,7 +159,7 @@ So offset is *location this offset is applied
 to the address  of this word:
 
 *offset = sign_extend(*word_address)
-ADDR = (word_address + offset) &amp; 0x7FFFFFFFF </panel_attributes>
+ADDR = (word_address + offset) &amp; 0x7FFFFFFFF  </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
