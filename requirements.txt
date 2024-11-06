@@ -9,7 +9,6 @@ lxml
 Markdown
 Pillow
 pyasn1
-pyhash
 pymdown-extensions
 python-dateutil
 PyYAML
