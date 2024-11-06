@@ -86,7 +86,7 @@
       <w>250</w>
       <h>30</h>
     </coordinates>
-    <panel_attributes>EHT data</panel_attributes>
+    <panel_attributes>EHT data </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -149,7 +149,7 @@ drawLine(width-25,height,width-10,height/2) // lower diag</panel_attributes>
     <id>Text</id>
     <coordinates>
       <x>120</x>
-      <y>210</y>
+      <y>200</y>
       <w>330</w>
       <h>190</h>
     </coordinates>
@@ -159,7 +159,7 @@ So offset is *location this offset is applied
 to the address  of this word:
 
 *offset = sign_extend(*word_address)
-ADDR = (word_address + offset) &amp; 0x7FFFFFFFF  </panel_attributes>
+ADDR = (word_address + offset) &amp; 0x7FFFFFFFF   </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
