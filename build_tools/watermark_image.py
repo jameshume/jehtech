@@ -11,7 +11,14 @@ def WatermarkImage(ipFilename, fontFilename, opFilename):
 	d = ImageDraw.Draw(txt)
 
 	text = "www.JEHTech.com"
-	textwidth, textheight = d.textsize(text, fnt)
+	try:
+		# (Pillow <= 8.2.0)
+		textwidth, textheight = d.textsize(text, fnt)
+	except AttributeError:
+		#  (Pillow >= 8.3.0)
+		bbox = draw.textbbox((0, 0), text, font=font)
+		textwidth, textheight = bbox[2] - bbox[0], bbox[3] - bbox[1]
+
 	width, height = base.size
 	margin = 5.0
 	x = int(round(float(width)/2.0 - (float(textwidth) + 2.0*margin) / 2.0))
