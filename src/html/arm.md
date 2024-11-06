@@ -316,41 +316,42 @@ there is likely the type `IRQn_Type`. The vectors 0 and above, map directly to t
 ### Stacking
 Stacking is done by the Cortex-M for you and involves saving the current state of the processor so that the interrupted program can be resumed after the interrupt is serviced. 
 
+* Uses the *fore ground* stack, which can be either the MSP or PSP, to save the pre-interrupt state of the CPU (unless the exception is a tail-chained or a late arriving exception).
+    * Uses a micro-coded entry/exit mechanism whereby the the hardware itself will do things like save the processor context etc. Thus, when
+      your ISR code executes, the state of the task executing just before the exception has already been saved to the active stack. Makes
+      interrupt handling simpler.
+* Reads ISR address from vector table.
+* Link register modified for interrupt return.
+* First instruction of ISR executed. (approx. 11 - 12 cycles delay for this to happen).
+    * It is executed in *handler* mode using the *main* stack pointer.
+
 #### Cortex M0
 [[See ARM doc]](https://developer.arm.com/documentation/ddi0419/c/System-Level-Architecture/System-Level-Programmers--Model/ARMv6-M-exception-model/Exception-entry-behavior?lang=en):
 
+https://community.arm.com/arm-community-blogs/b/embedded-blog/posts/cutting-through-the-confusion-with-arm-cortex-m-interrupt-priorities
+https://interrupt.memfault.com/blog/arm-cortex-m-exceptions-and-nvic
+https://developer.arm.com/documentation/ddi0403/d/System-Level-Architecture/System-Level-Programmers--Model/ARMv7-M-exception-model/Stack-alignment-on-exception-entry
+
 TODO/FIXME - formatting is broken!
 
-1. If the program being interrupted is *not* an interrupt and the PSP is being used:
+1. If the program being interrupted is *not* an interrupt and the PSP is being used, use the PSP, otherwise use the MSP.
+   In other words, the *PSP is only used when interrupting a thread-mode program already using the PSP*.
 
-   1.1. Use the PSP
-   1.2. Else use the MSP
-
-   In other words, the PSP is only used when interrupting a thread-mode program (not-interrupt routine) and that program is already using the PSP.
-
-2. Push onto selected stack, in the following order:
-
-    2.1 R0-R3, 
-    2.2 R12, 
-    2.3 LR, 
-    2.4 return address, which will depending on the exception type: 
-
-         * NMI - address of the next instruction to be executed.
-         * HardFault (precise) - the address of the instruction causing fault.
-         * HardFault (imprecise) - address of the next instruction to be executed.
-         * SVC - address of next instruction after SVC.
-         * IRQ - address of next instruction after interrupt.
-
-    2.5 xPSR (see stack screenshot above). 
+2. Push onto selected stack, in the following order: `R0`-`R3`, `R12`, `LR`, return-address, `xPSR`. The return address depends on the exception type: 
+    * NMI - address of the next instruction to be executed.
+    * HardFault (precise) - the address of the instruction causing fault.
+    * HardFault (imprecise) - address of the next instruction to be executed.
+    * SVC - address of next instruction after SVC.
+    * IRQ - address of next instruction after interrupt.
 
 3. Set the LR to special magic value that is intercepted on exception exit. 
 
-    3.1. If the program being interrupted is an interrupt: `LR = 0xFFFFFFF1`: Return to Handler Mode. Exception return gets state from the Main stack. On return execution uses the Main Stack.
+    * If the program being interrupted is an interrupt: `LR = 0xFFFFFFF1`: Return to Handler Mode. Exception return gets state from the Main stack. On return execution uses the Main Stack.
     
-    3.2. Else if the MSP is being used by the thread mode program:
+    * Else if the MSP is being used by the thread mode program:
 
-          3.2.1. `LR = 0xFFFFFFF9`: Return to Thread Mode. Exception return gets state from the Main stack. On return execution uses the Main Stack.
-          3.2.2. Else `LR = 0xFFFFFFFFD`: Return to Thread Mode. Exception return gets state from the Process stack. On return execution uses the Process Stack.
+        * `LR = 0xFFFFFFF9`: Return to Thread Mode. Exception return gets state from the Main stack. On return execution uses the Main Stack.
+        * Else `LR = 0xFFFFFFFFD`: Return to Thread Mode. Exception return gets state from the Process stack. On return execution uses the Process Stack.
 
 4. Prepare to jump to service handler
 
@@ -365,24 +366,6 @@ interrupted program and resumes it, or possibly instead puts the processor to sl
 
 #### Cortex-M0
 [[See ARM doc]](https://developer.arm.com/documentation/ddi0419/c/System-Level-Architecture/System-Level-Programmers--Model/ARMv6-M-exception-model/Exception-return-behavior?lang=en)
-
-## Interrupts / Exceptions
-https://community.arm.com/arm-community-blogs/b/embedded-blog/posts/cutting-through-the-confusion-with-arm-cortex-m-interrupt-priorities
-https://interrupt.memfault.com/blog/arm-cortex-m-exceptions-and-nvic
-https://developer.arm.com/documentation/ddi0403/d/System-Level-Architecture/System-Level-Programmers--Model/ARMv7-M-exception-model/Stack-alignment-on-exception-entry
-
-### Stacking On Exception Entry
-* Uses the *fore ground* stack, which can be either the MSP or PSP, to save the pre-interrupt state of the CPU (unless the exception is a tail-chained or a late arriving exception).
-    * Uses a micro-coded entry/exit mechanism whereby the the hardware itself will do things like save the processor context etc. Thus, when
-      your ISR code executes, the state of the task executing just before the exception has already been saved to the active stack. Makes
-      interrupt handling simpler.
-* Reads ISR address from vector table.
-* Link register modified for interrupt return.
-* First instruction of ISR executed. (approx. 11 - 12 cycles delay for this to happen).
-    * It is executed in *handler* mode using the *main* stack pointer.
-
-    
-
 
 
 ## Context Switching
