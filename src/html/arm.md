@@ -366,6 +366,29 @@ interrupted program and resumes it, or possibly instead puts the processor to sl
 #### Cortex-M0
 [[See ARM doc]](https://developer.arm.com/documentation/ddi0419/c/System-Level-Architecture/System-Level-Programmers--Model/ARMv6-M-exception-model/Exception-return-behavior?lang=en)
 
+## Stack Unwinding
+### PREL31
+* TLDR; It's just a 31-bit signed offset relative to a location.
+* `PREL31` stands for "Positive RELative 31-bit," which describes a specific way of encoding relative offsets. It is used in ARM architecture to represent a 31-bit signed relative offset to a target address
+    * Can be used to allow Position Independent Code (PIC): the program code to run from any memory address, as it uses offsets   relative to the program counter rather than absolute addresses.
+    * Also used for static linking: <q>Relocation information is used by linkers in order to bind symbols and addresses that could not be determined when the initial object was generated.</q>
+        * When a linker encounters an R_ARM_PREL31 relocation, it needs to modify the instruction to include a relative offset to the target symbol. This offset is calculated based on the address of the instruction itself and the address of the target symbol.
+        * Uses:
+            * Could be for function calls to functions located a fixed offset relative to the current instruction.
+            * Could be for data that is located at a fixed offset relative to the current instruction.
+
+* From [aaelf32](https://github.com/ARM-software/abi-aa/blob/main/aaelf32/aaelf32.rst#561relocation-codes), the definition of
+  the encoding is `PREL31 = (((S + A) | T) - P) & 0x7FFFFFFF`, where
+     * `S` = Address of symbol
+     * `A` = Addend for relocation
+     * `P` = Address of place being relocated to
+     * `T` = `1` if `S` is a function and the Thumb instruction set is being used, `0` otherwise.
+     * For example, when modifying an instruction with a PREL31 offset, `P` is the instructions address and `S` is the symbol being referenced, and I guess `A` is `0`. From the PREL31 value, the offset is calculated and the instruction's immediate value is set to hold this offset.
+        * Lets say the instruction is at `0x1500` and the function is at `0x2000`. From the above we calculate `((0x2000 + 0x0) - 0x1500) & 0x7FFFFFFF` to get `0xB00`.
+        * Lets say the instruction is at `0x2000` and the function is at `0x1500`. From the above we calculate `((0x1500 + 0x0) - 0x2000) & 0x7FFFFFFF` to get `0x7FFFF000`, which because this is a signed 31-bit number, is `-2816`, or -`0xB00`.
+
+### Exception Index Table
+![](##IMG_DIR##/arm_exidx.png)
 
 ## Context Switching
 ### References
