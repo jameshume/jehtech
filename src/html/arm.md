@@ -354,11 +354,10 @@ TODO/FIXME - formatting is broken!
         * Else `LR = 0xFFFFFFFFD`: Return to Thread Mode. Exception return gets state from the Process stack. On return execution uses the Process Stack.
 
 4. Prepare to jump to service handler
-
-    4.1 Change current mode to handler mode
-    4.2 Change stack to MSP
-    4.3 Get address of service handler based on exception number
-    4.4 Jump to exception handler.
+    * Change current mode to handler mode
+    * Change stack to MSP
+    * Get address of service handler based on exception number
+    * Jump to exception handler.
 
 ### Unstacking
 Unstacking is the opposite of stacking and occurs when the last interrupt service routine returns. It restores the state of the
