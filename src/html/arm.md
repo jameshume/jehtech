@@ -370,6 +370,8 @@ interrupted program and resumes it, or possibly instead puts the processor to sl
 ### Why Are Frame Pointers "Deprecated"
 In a word inefficiency - waste a register and have to push/pop that register on every function call, when a function call doesn't need it... it knows what it did to the stack so can undo it on a return. Only needed the FP for stack unwinding, which is relatively rare. Hence the move to exception handling tables. [[Ref]](https://blogs.oracle.com/linux/post/unwinding-stack-frame-pointers-and-orc).
 
+<q>According to an analysis by Mel Gorman, using frame pointers added overhead of up to 5-10% in some memory management related benchmarks.</q> [[Ref]](https://blogs.oracle.com/linux/post/unwinding-stack-frame-pointers-and-orc).
+
 ### PREL31
 * TLDR; It's just a 31-bit signed offset relative to a location.
 * `PREL31` stands for "Positive RELative 31-bit," which describes a specific way of encoding relative offsets. It is used in ARM architecture to represent a 31-bit signed relative offset to a target address
