@@ -393,6 +393,18 @@ interrupted program and resumes it, or possibly instead puts the processor to sl
 
 ![](##IMG_DIR##/arm_exidx.png)
 
+### Exception Handling Table (EHT)
+
+<q>The exception-handling table (EHT) contains one entry for each non-leaf function that may need to be unwound ... A table entry has a variable size. It encodes ... the actions required to propagate an exception through the function ... How to unwind a stack frame associated with the function ... In some usefully common cases, a handling table entry contains so little information that it’s content can be packed directly into the index table entry</q>  -- [EHABI32](https://github.com/ARM-software/abi-aa/blob/main/ehabi32/ehabi32.rst#the-exception-handling-table).
+
+The format of the entries is shown in the image above, in the index table section.
+
+Unwinding the stack is done in two phases:
+1. The stack is virtually unwound looking for a propagation barrier.
+2. The stack is really unwound and cleanups are run
+
+A **virtual register set** is a buffer area used to hold copied of the real machine registers and other relevant machine state so that, for example, the first phase can search for a propogation barrier without actually modifying the real machine state. It is used in stack unwinding as an abstraction of the processor's register state during an exception and plays a critical role in decoding, simulating, and restoring the state of the processor during stack unwinding.
+
 ## Context Switching
 ### References
 * [PendSV+SVC on Cortex M](https://jeelabs.org/202x/jeeh/pendsvc/)
