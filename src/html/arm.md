@@ -388,6 +388,9 @@ interrupted program and resumes it, or possibly instead puts the processor to sl
         * Lets say the instruction is at `0x2000` and the function is at `0x1500`. From the above we calculate `((0x1500 + 0x0) - 0x2000) & 0x7FFFFFFF` to get `0x7FFFF000`, which because this is a signed 31-bit number, is `-2816`, or -`0xB00`.
 
 ### Exception Index Table
+
+<q>Exception-handling table entries have a variable size. A handling table entry is found by searching a table of index entries. To support binary search, the index table must consist of contiguous fixed-size entries, each of which identifies a function start address, with the entries ordered by increasing function start address</q> -- [EHABI32](https://github.com/ARM-software/abi-aa/blob/main/ehabi32/ehabi32.rst#the-exception-handling-table).
+
 ![](##IMG_DIR##/arm_exidx.png)
 
 ## Context Switching
