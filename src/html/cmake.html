@@ -82,7 +82,7 @@ rm -fr CMake-3.28.0-rc4 </pre>
 
     <h3>Intro</h3>
     <p>
-        CMake orchastrates the build process but requires actualy build tools like <code>make</code> or <code>ninja</code>, 
+        CMake orchastrates the build process but requires actual build tools like <code>make</code> or <code>ninja</code>, 
         for example, to do the actual building.
     </p>
     <p></p>
@@ -101,7 +101,7 @@ cmake --build &lt;build-tree&gt;</pre>
     <h4>Configuration Stage</h4>
     <ol>
         <li>
-            Read project details from a source tree and prepare the output directory, a.k.a. the build tree.]
+            Read project details from a source tree and prepare the output directory, a.k.a. the build tree
             for the generation stage.
         </li>
         <li>
@@ -109,7 +109,7 @@ cmake --build &lt;build-tree&gt;</pre>
             environment is sane.
         </li>
         <li>
-            Parse and execute <code>CMakeLists.txt</code>. Store collected informatio in the build tree as 
+            Parse and execute <code>CMakeLists.txt</code>. Store collected information in the build tree as 
             <code>CMakeCache.txt</code>.
         </li>
         <li>
@@ -147,6 +147,34 @@ cmake --build &lt;build-tree&gt;</pre>
             Runs the build tool. The build tools create <i>targets</i>
         </li>
     </ol>
+
+    <h3>Language</h3>
+    <p>Everything is a comment or a command invocation.</p>
+    <h4>Comments</h4>
+    <p></p>
+    <pre># This is a comment
+#[=[
+    This is a multiline
+    comment
+#]=]
+    </pre>
+    <p></p>
+    <h4>Commands</h4>
+    <p>
+        Arguments to commands cannot be other commands. Arguments are just strings - everything is a string.
+    </p>
+    <p>The types of arguments are bracketed, quoted and unquoted string arguments:</p>
+    <pre>message([=[
+This message can have
+multiple lines and include sequences like [[me]]
+because [=[ was used.
+]=])
+
+message("This is a quotes string argument: expands escape sequences and interpolates variables")
+message("Quoted arguments
+can also span multiple lines")
+</pre>
+    <p></p>
 
     <h3>Build And Use A Library</h3>
     <div>
