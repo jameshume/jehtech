@@ -80,6 +80,74 @@ rm -fr CMake-3.28.0-rc4 </pre>
 
     <p></p>
 
+    <h3>Intro</h3>
+    <p>
+        CMake orchastrates the build process but requires actualy build tools like <code>make</code> or <code>ninja</code>, 
+        for example, to do the actual building.
+    </p>
+    <p></p>
+    <pre>cmake -B &lt;build-tree&gt; -S &lt;source-tree&gt;
+cmake --build &lt;build-tree&gt;</pre>
+    <p></p>
+    <p>
+        CMake works in three stages:
+    </p>
+    <ol>
+        <li>Configuration</li>
+        <li>Generation</li>
+        <li>Build</li>
+    </ol>
+
+    <h4>Configuration Stage</h4>
+    <ol>
+        <li>
+            Read project details from a source tree and prepare the output directory, a.k.a. the build tree.]
+            for the generation stage.
+        </li>
+        <li>
+            Collects environment data: architecture, available compilers, linkers etc and checks compilation
+            environment is sane.
+        </li>
+        <li>
+            Parse and execute <code>CMakeLists.txt</code>. Store collected informatio in the build tree as 
+            <code>CMakeCache.txt</code>.
+        </li>
+        <li>
+            <code>CMakeCache.txt</code> can be prepopulated using <code>cmake -C &lt;initial-cache-script&gt; ...</code>.
+        </li>
+        <li>
+            Can be important to set <code>CMAKE_BUILD_TYPE</code> to, for example "Debug" or "Release":
+            <code>cmake ... -DCMAKE_BUILD_TYPE=Debug ...</code>
+        </li>
+    </ol>
+
+    <h4>Generation Stage</h4>
+    <ol>
+        <li>
+            Generate a build system: configuration files for other <i>build tools</i> like
+            <code>make</code> or <code>ninja</code>. A generator decides what build tool 
+            is used.
+        </li>
+        <li>
+            Use <code>cmake -G &lt;generator-name&gt; ...</code> or the enironment variable
+            <code>CMAKE_GENERATOR</code> to set a specific generator.
+        </li>
+        <li>
+            Can still modify build configuration using <i>generator expressions</i>.
+        </li>
+        <li>
+            Note: Configuration and generation stages are automatically executed one 
+            after the other unless specified otherwise.
+        </li>
+    </ol>
+
+    <h4>Build Stage</h4>
+    <ol>
+        <li>
+            Runs the build tool. The build tools create <i>targets</i>
+        </li>
+    </ol>
+
     <h3>Build And Use A Library</h3>
     <div>
         <p>
