@@ -233,6 +233,8 @@ script
 * Memory R/W
     * `read_memory <address> <width> <count>`, e.g. `read_memory 0x20000000 32 2`
     * `write_memory <address> <width> <data>`, e.g. `write_memory 0x20000000 32 {0xdeadbeef 0x00230500}`
+    * Dump Memory To File
+        * `dump_image <filename> <address> <length>`
 * Registers    
     * `get_reg {pc sp}`
 * Flash
