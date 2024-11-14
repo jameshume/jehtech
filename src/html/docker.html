@@ -206,6 +206,14 @@ Looks like Docker Desktop support for WSL 2 backend got a lot better :)
 <p>
 </p>
 
+<h3>Slow Internet in Docker Container Running on WSL2</h3>
+<p> Run this from a `cmd` prompt:
+</p>
+<pre>netsh winsock reset</pre>
+<p>
+</p>
+
+
 <h2>Docker's Architecture</h2>
 <pre>
 Docker daemon, provides REST API, and the docker CLI client, which uses the REST API.
