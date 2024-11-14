@@ -214,6 +214,15 @@ resume
 shutdown
 ```
 
+## Scriptlets
+
+### Erase a flash sector
+
+```
+openocd -f interface/stlink.cfg -f target/stm32f3x.cfg -c "init" -c "reset halt"  -c "flash erase_sector 0 0 last" -c "shutdown"
+```
+
+
 
 ## Command Cheat Sheet
 
