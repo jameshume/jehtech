@@ -776,6 +776,17 @@ Enable using  DOCKER_BUILDKIT=1 docker build .
 </pre>
 
 
+<h2>Docker Tid Bits</h2>
+<h3>Bash Command Line Completion</h3>
+<p>Bash completion doesn't appear to be there by default on some base images. To enabled this, in the docker file...</p>
+<pre>RUN apt-install -y bash-completion</pre>
+<p></p>
+
+<h3>Git Command Line Completion</h3>
+<p>Also not always "just there". Enable bash-completion (see above) and then use...</p>
+<pre></pre>
+<p>RUN curl -o /etc/bash_completion.d/git-completion.bash https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash</p>
+
 <h2>Docker Compose</h2>
 <p>
   See also the <a href="https://github.com/docker/awesome-compose" target="_blank">Awesome Compose Project</a>, which provides a curated list of Docker Compose samples. These samples provide a starting point for how to integrate different services using a Compose file and to manage their deployment with Docker Compose. 

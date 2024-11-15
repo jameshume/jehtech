@@ -177,14 +177,13 @@ can also span multiple lines")
 message(unquoted\ single\ argument)
 message(four separate unquoted arguments)
 message(four;separate;unquoted;arguments)
-message(${SOME_LIST}) # unquoted arguments with lists AUTOMATICALLY UNPACK LISTS
-</pre>
+message(${SOME_LIST}) # unquoted arguments with lists AUTOMATICALLY UNPACK LISTS</pre>
     <p></p>
+
     <h4>Variables</h4>
     <p></p>
     <pre>set(MYVARIABLE "Some value")
-unset(MYVARIABLE)
-    </pre>
+unset(MYVARIABLE)</pre>
     <p>
         Variable are evaluated using <code>${MYVARIABLE}</code>: the scope stack is traversed for find the first matching
         variable name, or an empty string if not found. I.e. check current scope, then the cache.
@@ -221,6 +220,27 @@ unset(MYVARIABLE)
         doesn't also change the local scope!
     </p>
 
+    <h4>Variables</h4>
+    <p>
+        <b>NOTE:</b> CMake will evalulated <i>unquoted arguments</i> as it they are <i>variable references</i>:
+    </p>
+    <pre>set(V1 FALSE)
+if(V1) # Is evaluated as if(FALSE), where FALSE is an unquoted string
+
+# .. and ..
+
+set(V2 "V1")
+if(${V2}) # Is evaluated as if(V1), which is evaluated as if(FALSE)!!!</pre>
+        <p>Strings a TRUE only if they equal one of "ON", "Y", "YES" or "TRUE" (case insensitive), or a non-zero number.</p>
+        <p>
+            BUT NOTE for unquoted strings, <code>if()</code> will only evaluate a string to FALSE if it is one of "OFF", "NO",
+            "N", "FALSE", "IGNORE", "NOTFOUND", "", "0", or ends with "-NOTFOUND" or is undefined.
+        </p>
+        <p>
+            Check if a variables is defined using <code>if(DEFINED &lt;name:gt;)</code>.
+        </p>
+
+
     <h3>Build And Use A Library</h3>
     <div>
         <p>
@@ -237,6 +257,7 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 add_library(library-name SHARED|STATIC ...sources...)</pre>
         <p></p>
     </div>
+
 
     <h3>Functions And Macros</h3>
     <div>
