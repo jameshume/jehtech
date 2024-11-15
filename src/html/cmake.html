@@ -177,9 +177,49 @@ can also span multiple lines")
 message(unquoted\ single\ argument)
 message(four separate unquoted arguments)
 message(four;separate;unquoted;arguments)
+message(${SOME_LIST}) # unquoted arguments with lists AUTOMATICALLY UNPACK LISTS
 </pre>
     <p></p>
     <h4>Variables</h4>
+    <p></p>
+    <pre>set(MYVARIABLE "Some value")
+unset(MYVARIABLE)
+    </pre>
+    <p>
+        Variable are evaluated using <code>${MYVARIABLE}</code>: the scope stack is traversed for find the first matching
+        variable name, or an empty string if not found. I.e. check current scope, then the cache.
+    </p>
+    <p>
+        The variable expansion of <code>${outer_${inner}}</code>, expands <code>${inner}</code> first and then expands the resulting <code>${outer_xxx}.</code>
+    </p>
+    <p>
+        Use <code>${}</code> to reference normal or cache, <code>$ENV{}</code> for environment variables, <code>$CACHE{}</code> for cached variables.
+    </p>
+    <p>
+        <code>ENV</code> variables will be interpolated during <i>generation</i> and are therefore cemented into the build tree. Change the environment after this
+        will not change the build unless it is regenerated.
+    </p>
+    <p>
+        <code>CACHE</code> variables are persistent and stored in <code>CMakeCache.txt</code> in the build tree.
+    </p>
+    <p>
+        CMake has 2 scopes: function scope and directory scope.
+    </p>
+    <p>
+        <b>Function scope</b>: When custom functions defined with <code>function()</code> are run, variables defined in funciton have scope local to function.
+    </p>
+    <p>
+        <b>Directory scope</b>: When a <code>CMakeLists.txt</code> file is in a subdirectory and run using <code>add_subdirectory()</code>.
+    </p>
+    <p>
+        When either scope is created as a nested scope, the current scope values are copied into it. When nested scope exited its copies are destroyed. Therefore,
+        if a nested scope shadows a variable in the outer scope, it will not effect the outerscope variable as one would expect. Also, unsetting a variable in the
+        nested scope, won't unset it in the parent scope and so on.
+    </p>
+    <p>
+        To change variables in the parent scope need to use <code>set(VarName "Value" PARENT_SCOPE)</code>, but note whilst this effects the parent scope it
+        doesn't also change the local scope!
+    </p>
 
     <h3>Build And Use A Library</h3>
     <div>
