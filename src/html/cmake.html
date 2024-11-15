@@ -237,7 +237,7 @@ if(${V2}) # Is evaluated as if(V1), which is evaluated as if(FALSE)!!!</pre>
             "N", "FALSE", "IGNORE", "NOTFOUND", "", "0", or ends with "-NOTFOUND" or is undefined.
         </p>
         <p>
-            Check if a variables is defined using <code>if(DEFINED &lt;name:gt;)</code>.
+            Check if a variables is defined using <code>if(DEFINED &lt;name&gt;)</code>.
         </p>
 
 
@@ -249,13 +249,16 @@ if(${V2}) # Is evaluated as if(V1), which is evaluated as if(FALSE)!!!</pre>
         <pre>add_subdirectory(...)
 ...            
 target_link_libraries(project-name library-name)</pre>
+    <p>
+        The command <code>target_link_libraries</code> links artifacts from the subdirectory to the main project.
+    </p>
         <p>
             In your library subdirectory add another <code>CMakeLists.txt</code>: 
         </p>
-        <pre>cmake_minimum_required(VERSION ...)
-set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
-add_library(library-name SHARED|STATIC ...sources...)</pre>
-        <p></p>
+        <pre>add_library(library-name SHARED|STATIC ...sources...)
+target_include_directories(library-name PUBLIC .)
+        </pre>
+        <p><code>add_library</code> produces a globally visible target, <code>library-name</code>. <code>target_include_directories</code> adds the library's directory to its public include path, which is what will <i>allow the parent project C files to see the library (public) includes without providing a relative path</i>.</p>
     </div>
 
 
