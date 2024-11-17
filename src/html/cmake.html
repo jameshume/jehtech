@@ -220,7 +220,7 @@ unset(MYVARIABLE)</pre>
         doesn't also change the local scope!
     </p>
 
-    <h4>Variables</h4>
+    <h4>Conditionals</h4>
     <p>
         <b>NOTE:</b> CMake will evalulated <i>unquoted arguments</i> as it they are <i>variable references</i>:
     </p>
@@ -326,7 +326,7 @@ target_include_directories(library-name PUBLIC .)
         <p>
             This is because PUBLIC and INTERFACE includes populate properties for <i>using</i> a target [Scope](https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html#target-command-scope).
             The <i>[usage requirements](https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html#target-usage-requirements)</i>
-            of a target are <b>settings that propagate to consumers</i>, which link to the target via target_link_libraries(), in order to correctly compile and link with it.
+            of a target are <b>settings that propagate to consumers</b>, which link to the target via target_link_libraries(), in order to correctly compile and link with it.
         </p>
 
     </div>
