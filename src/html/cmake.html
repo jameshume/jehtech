@@ -299,6 +299,19 @@ if(${V2}) # Is evaluated as if(V1), which is evaluated as if(FALSE)!!!</pre>
     </blockquote>
     <p></p>
 
+    <h3>Get Operating System (OS) Information</h3>
+    <p>
+        Check the <code>CMAKE_SYSTEM_NAME</code> variable to discover the OS:
+    </p>
+    <pre>if(CMAKE_SYSTEM_NAME STREQAL "Linux")
+    ....
+endif()</pre>
+    <p>See also <code>cmake_host_system_information(RESULT &lt;VARIABLE&gt; QUERY &lt;KEY&gt;)</code>. The key can be things like HOSTNAME, FQDN, TOTAL_PHYSICAL_MEMORY, OS_NAME, OS_RELEASE, OS_PLATFORM and more.</p>
+    <p>To test whether host is 32-bit or 64-bit one can use:</p>
+    <pre>if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    message(STATUS "Target is 64-bits")
+endif()
+    </pre>
 
     <h3>Build And Use A Library</h3>
     <div>
