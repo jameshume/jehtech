@@ -240,7 +240,43 @@ if(${V2}) # Is evaluated as if(V1), which is evaluated as if(FALSE)!!!</pre>
             Check if a variables is defined using <code>if(DEFINED &lt;name&gt;)</code>.
         </p>
 
-
+    <h3>Targets And Properties</h3>
+    <p>
+        CMake organises the world into <b>targets</b> and each of those targets has a set of <b>properties</b> that are
+        either used to <b>build</b> the target, or describe what a consumer of the target needs to <b>use</b> the target.
+    </p>
+    <p>
+        <q>Targets build according to their own build specification in combination with usage requirements propagated
+            from their link dependencies.</q> [[Ref]](https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html#build-specification-and-usage-requirements)
+    </p>
+    <p>
+        Some of the more useful target commands include the following.
+    </p>
+    <ol>
+        <li><code>target_compile_definitions()</code>: passed to the compiler with -D flags, in an unspecified order.</li>
+        <li><code>target_compile_options()</code>: options for compiling sources, passed to 
+            compiler as flags, in the order of appearance. Automatically escaped for the shell.</li>
+        <li><code>target_compile_features()</code>: use to specify features compiler must support, e.g. <code>cxx_constexpr</code>.</li>
+        <li><code>target_include_directories()</code>: include directories for compiling, passed to compiler with <code>-I</code> flag.</li>
+        <li><code>target_sources()</code></li>
+        <li><code>target_link_libraries()</code></li>
+        <li><code>target_link_directories()</code></li>
+        <li><code>target_link_options()</code>: List of link options, passed to linker as flags, in the order of appearance.
+             Automatically escaped for the shell.</li>
+    </ol>
+    <p>
+        Each command can specify a scope:
+    </p>
+    <p>
+        <b>PUBLIC</b>: 
+        Populates both properties for building and properties for using a target.
+    </p><p>
+        <b>PRIVATE</b>: 
+        Populates only properties for building a target.
+    </p><p>
+        <b>INTERFACE</b>: 
+        Populates only properties for using a target.
+    </p>
     <h3>Build And Use A Library</h3>
     <div>
         <p>
@@ -258,7 +294,18 @@ target_link_libraries(project-name library-name)</pre>
         <pre>add_library(library-name SHARED|STATIC ...sources...)
 target_include_directories(library-name PUBLIC .)
         </pre>
-        <p><code>add_library</code> produces a globally visible target, <code>library-name</code>. <code>target_include_directories</code> adds the library's directory to its public include path, which is what will <i>allow the parent project C files to see the library (public) includes without providing a relative path</i>.</p>
+        <p>
+            <code>add_library</code> produces a globally visible target, <code>library-name</code>.<br/>
+            <code>target_include_directories</code> adds the library's directory to its public include path, which 
+            is what will <i>allow the parent project C files to see the library (public) includes without providing 
+            a relative path</i>.
+        </p>
+        <p>
+            This is because PUBLIC and INTERFACE includes populate properties for <i>using</i> a target [Scope](https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html#target-command-scope).
+            The <i>[usage requirements](https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html#target-usage-requirements)</i>
+            of a target are <b>settings that propagate to consumers</i>, which link to the target via target_link_libraries(), in order to correctly compile and link with it.
+        </p>
+
     </div>
 
 
