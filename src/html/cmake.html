@@ -277,6 +277,29 @@ if(${V2}) # Is evaluated as if(V1), which is evaluated as if(FALSE)!!!</pre>
         <b>INTERFACE</b>: 
         Populates only properties for using a target.
     </p>
+    <blockquote>
+        <p>
+            <b>Build Requirements vs Usage Requirements Permalink</b>
+        </p><p>
+            Target properties are defined in one of two scopes: <b>INTERFACE</b> and <b>PRIVATE</b>. Private properties are used 
+            <i>internally</i> to build the target, while interface properties are used <i>externally</i> by users of the target. 
+            In other words, <i>interface properties model usage requirements</i>, whereas <i>private properties model build 
+            requirements</i> of targets.
+        </p><p>
+            Interface properties have the prefix, wait for it, <i>INTERFACE_</i> prepended to them.
+        </p><p>
+            For example, the property <b>COMPILE_OPTIONS</b> encodes a list of options to be passed to the compiler when building the target. If a target must be built with all warnings enabled, for instance, this list should contain the option -Wall. This is a private property used only when building the target and won’t affect its users in any way.
+        </p><p>
+            On the other hand, the property <b>INTERFACE_COMPILE_FEATURES</b> stores which features must be supported by the compiler when building users of the target. For instance, if the public header of a library contains a variadic function template, this property should contain the feature cxx_variadic_templates. This instructs CMake that applications including this header will have to be built by a compiler that understands variadic templates.
+        </p><p>
+            Properties can also be specified as <b>PUBLIC</b>. Public properties are defined in both <b>PRIVATE</b> and <b>INTERFACE</b>
+            scopes.
+        </p>
+        <footer>--[It's Time To Do CMake Right](https://pabloariasal.github.io/2018/02/19/its-time-to-do-cmake-right/)</footer>
+    </blockquote>
+    <p></p>
+
+
     <h3>Build And Use A Library</h3>
     <div>
         <p>
