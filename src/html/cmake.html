@@ -299,7 +299,13 @@ if(${V2}) # Is evaluated as if(V1), which is evaluated as if(FALSE)!!!</pre>
         </p>
         <footer>--[It's Time To Do CMake Right](https://pabloariasal.github.io/2018/02/19/its-time-to-do-cmake-right/)</footer>
     </blockquote>
-    <p></p>
+    <p>This is otherwise known as Transative Usage requirements.</p>
+    <ul>
+    <li><p>Usage: one target depends on another because it uses that target.</p></li>
+    <li><p>Requirements: The <i>used</i> target's requirements that must be met by the <i>using</i> target. Everywhere else we call these requirements properties or dependencies.</p></li>
+    <li><p>Transitive: CMake appends some properties/requirements of used targets to properties of targets using them.</p></li>
+    <li><p>This has been discussed previously, but this is the formal name for it.</p></li>
+    </ul>
     <p>
         Executable targets are defined/created using:
     </p>
@@ -338,9 +344,6 @@ set_target_property(&lt;target1&gt; ... PROPERTIES &lt;prop-name1&gt; &lt;prop-v
     <p>Properties not limited to targets: directory, global, source, etc supported as well.</p>
     <p><i>Best to use as many high-level commands as possible rather than fettling with property variables directly.</i> E.g., use <code>add_dependencies(...)</code> 
     rather than felling with the target property <code>MANUALLY_ADDED_DEPENDENCIES</code>.</p>
-
-    <h4>Transitive Usage Requirements</h4>
-    <p>TODO</p>
 
     <h3>Get Operating System (OS) Information</h3>
     <p>
