@@ -245,6 +245,8 @@ if(${V2}) # Is evaluated as if(V1), which is evaluated as if(FALSE)!!!</pre>
         CMake organises the world into <b>targets</b> and each of those targets has a set of <b>properties</b> that are
         either used to <b>build</b> the target, or describe what a consumer of the target needs to <b>use</b> the target.
     </p>
+
+    <h4>Targets</h4>
     <p>
         <q>Targets build according to their own build specification in combination with usage requirements propagated
             from their link dependencies.</q> [[Ref]](https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html#build-specification-and-usage-requirements)
@@ -298,6 +300,47 @@ if(${V2}) # Is evaluated as if(V1), which is evaluated as if(FALSE)!!!</pre>
         <footer>--[It's Time To Do CMake Right](https://pabloariasal.github.io/2018/02/19/its-time-to-do-cmake-right/)</footer>
     </blockquote>
     <p></p>
+    <p>
+        Executable targets are defined/created using:
+    </p>
+    <pre>
+        add_executable(&lt;name&gt; file1.cpp ...)
+    </pre>
+    <p>
+        CMake knows how to compile to object files... don't need a rule for this, just chuck source files at CMake and let it do its thing.
+    </p>
+    <p>
+        Library targets are created using:
+    </p>
+    <pre>
+        add_library(&lt;name&gt; file1.cpp ...)
+    </pre>
+    <p>
+        Custom targets are created using:
+    </p>
+    <pre>add_custom_target(&lt;name&gt; [All] 
+        [command1 [args1...]]
+        [command2 [args2...] ...]
+        [DEPENDS ... ]
+        [BYPRODUCTS ...]
+        ... see docs lol ...
+    )</pre>
+    <p>
+        Custom targets specify user-defined command line executions which <b>don't check whether the produced output is up to date</b>.
+    </p>
+
+    <h4>Properties</h4>
+    <p>
+        Query and set target properties:
+    </p>
+    <pre>get_target_property(&lt;var&gt; &lt;target&gt; &lt;prop-name&gt;
+set_target_property(&lt;target1&gt; ... PROPERTIES &lt;prop-name1&gt; &lt;prop-value1&gt; ... )</pre>
+    <p>Properties not limited to targets: directory, global, source, etc supported as well.</p>
+    <p><i>Best to use as many high-level commands as possible rather than fettling with property variables directly.</i> E.g., use <code>add_dependencies(...)</code> 
+    rather than felling with the target property <code>MANUALLY_ADDED_DEPENDENCIES</code>.</p>
+
+    <h4>Transitive Usage Requirements</h4>
+    <p>TODO</p>
 
     <h3>Get Operating System (OS) Information</h3>
     <p>
@@ -313,6 +356,37 @@ endif()</pre>
 endif()
     </pre>
 
+    <h3>Tool Chain Config</h3>
+    <div>
+        <h4>Set C++ Standard</h4>
+        <pre># To set the standard
+set_property(TARGET &lt;target&gt; PROPERTY CXX_STANDARD (98|11|14|17|20|23))
+
+# But to abort if compiler doesn't support that standard need to...
+set(CXMAKE_CXX_STANDARD_REQUIRED ON)
+
+# And to stop the default gnu extensions, e.g., -std=gnu++14 instead of -std=c++14
+set(CMAKE_CXX_EXTENSIONS OFF)</pre>
+        <p></p>
+
+        <h4>Inter proceedural Optimization</h4>
+        <pre>include(CheckIPOSupported)
+# Must check its supported first!
+check_ipo_supported(RESULT ipo_supported)
+if(ipo_supported)
+    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION True)
+endif()</pre>
+        <p></p>
+
+        <h4>Compiler Features Check</h4>
+        <pre>list(FIND CMAKE_CXX_COMPILE_FEATURES cxx_variable_templates result)
+if(resultg EQUAL -1)
+    message(FATAL_ERROR "Variable template support required!")
+endif()</pre>
+        <p>Testing for each feature needed is likely to be onerous so just check for high level stuff like <code>cxx_std_23</code> and so on.</p>
+
+    </div>
+
     <h3>Build And Use A Library</h3>
     <div>
         <p>
@@ -322,7 +396,7 @@ endif()
 ...            
 target_link_libraries(project-name library-name)</pre>
     <p>
-        The command <code>target_link_libraries</code> links artifacts from the subdirectory to the main project.
+        The command <code>target_link_libraries</code> links artifacts from the subdirectory to the main project. It <b>connects libraries with executables</b>.
     </p>
         <p>
             In your library subdirectory add another <code>CMakeLists.txt</code>: 
@@ -341,7 +415,16 @@ target_include_directories(library-name PUBLIC .)
             The <i>[usage requirements](https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html#target-usage-requirements)</i>
             of a target are <b>settings that propagate to consumers</b>, which link to the target via target_link_libraries(), in order to correctly compile and link with it.
         </p>
-
+        <h4>Dependency Graph</h4>
+        <div>
+            <p>
+                To visualise dependencies use:
+            </p>
+            <pre>cmake --graphviz=&lt;output filename.dot&gt; .</pre>
+            <p>
+                Note: Won't show custom targets. Can be done, needs further trickery not written down here.
+            </p>
+        </div>
     </div>
 
 
