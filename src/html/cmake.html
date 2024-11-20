@@ -299,13 +299,16 @@ if(${V2}) # Is evaluated as if(V1), which is evaluated as if(FALSE)!!!</pre>
         </p>
         <footer>--[It's Time To Do CMake Right](https://pabloariasal.github.io/2018/02/19/its-time-to-do-cmake-right/)</footer>
     </blockquote>
-    <p>This is otherwise known as Transative Usage requirements.</p>
+    <p>This is otherwise known as <b><i>Transative Usage requirements</i></b>.</p>
     <ul>
     <li><p>Usage: one target depends on another because it uses that target.</p></li>
     <li><p>Requirements: The <i>used</i> target's requirements that must be met by the <i>using</i> target. Everywhere else we call these requirements properties or dependencies.</p></li>
-    <li><p>Transitive: CMake appends some properties/requirements of used targets to properties of targets using them.</p></li>
+    <li><p>Transitive: CMake appends some properties/requirements of used targets to properties of targets using them. This can happen all the way down the dependency chain (see diagram below)</p></li>
     <li><p>This has been discussed previously, but this is the formal name for it.</p></li>
     </ul>
+    <p>
+        <img src="##IMG_DIR##/cmake_transitive_usage_requirement.png"/>
+    </p>
     <p>
         Executable targets are defined/created using:
     </p>
