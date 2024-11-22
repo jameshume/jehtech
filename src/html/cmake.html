@@ -41,6 +41,7 @@
     <li>http://floooh.github.io/2016/01/12/cmake-dependency-juggling.html</li>
     <li>http://crascit.com/2016/01/31/enhanced-source-file-handling-with-target_sources/</li>
     <li>https://cmake.org/pipermail/cmake/2016-May/063400.html</li>
+    <li>https://github.com/bilke/cmake-modules</li>
 </ul>
 <pre>
 http://derekmolloy.ie/hello-world-introductions-to-cmake/
@@ -369,6 +370,7 @@ if(${V2}) # Is evaluated as if(V1), which is evaluated as if(FALSE)!!!</pre>
             [COMMAND_EXPAND_LISTS]
             [DEPENDS_EXPLICIT_ONLY])</pre>
         <p>If <code>DEPENDS</code> is not specified, the command will run whenever the <code>OUTPUT</code> is missing; if the command does not actually create the <code>OUTPUT</code>, the rule will always run.</p>
+        
         <h6>As A Generator</h6>            
         <p>A custom command can be used as, for example, a generator. For example, it could compile Protobuf definitions into code:</p>
         <pre>add_custom_command(OUTPUT myProtoBuf.pb.h myProtoBuf.pb.c
@@ -381,6 +383,25 @@ if(${V2}) # Is evaluated as if(V1), which is evaluated as if(FALSE)!!!</pre>
         <p>This has told CMake how to create the files <code>myProtoBuf.pb.[ch]</code> and what they depend on. It has also made <code>MyExecutable</code> depend on those files.</p>
         <p>So, if <code>myProtoBuf.proto</code> changes, CMake knows it needs to run the command that outputs <code>myProtoBuf.pb.[ch]</code> and therefore also rebuild the targer <code>MyExecutable</code>.</p>
 
+        <h6>As A Target Hook</h6>
+        <p>Execute commands pre or post build of a target.</p>
+        <pre>add_custom_command(TARGET <target>
+            PRE_BUILD | PRE_LINK | POST_BUILD
+            COMMAND command1 [ARGS] [args1...]
+            [COMMAND command2 [ARGS] [args2...] ...]
+            [BYPRODUCTS [files...]]
+            [WORKING_DIRECTORY dir]
+            [COMMENT comment]
+            [VERBATIM]
+            [COMMAND_EXPAND_LISTS]
+            [USES_TERMINAL])</pre>
+        <p>Don't use <code>PRE_BUILD</code> unless you're using a VSCode generator.</p>
+            <p><b>PRE_LINK</b>:
+                Run after sources have been compiled but before linking the binary or running the librarian or archiver tool of a static library. This is not defined for targets created by the add_custom_target() command.
+            </p><p>
+                <b>POST_BUILD</b>:
+                Run after all other rules within the target have been executed.
+            </p>
 
     <h4>Properties</h4>
     <p>
