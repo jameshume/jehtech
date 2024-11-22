@@ -219,6 +219,14 @@ unset(MYVARIABLE)</pre>
         To change variables in the parent scope need to use <code>set(VarName "Value" PARENT_SCOPE)</code>, but note whilst this effects the parent scope it
         doesn't also change the local scope!
     </p>
+    <p>
+        A variable defined in one scope (e.g., a directory or a function) is <i>not</i> automatically inherited by targets created within that scope. It must
+        be explicitly passed or set to meke it releveant to a target, e.g., using <code>target_compile_definitions</code> and so on.
+    </p>
+    <p>
+        As such, although, when including subdirectories using <code>add_subdirectory</code>, variables defined in the parent directory are available to the subdirectory,
+        but targets defined in the subdirectory do not automatically inherit properties or variables from the parent.
+    </p>
 
     <h4>Conditionals</h4>
     <p>
@@ -324,6 +332,8 @@ if(${V2}) # Is evaluated as if(V1), which is evaluated as if(FALSE)!!!</pre>
     <pre>
         add_library(&lt;name&gt; file1.cpp ...)
     </pre>
+
+    <h5>Custom Targets</h5>
     <p>
         Custom targets are created using:
     </p>
@@ -337,6 +347,40 @@ if(${V2}) # Is evaluated as if(V1), which is evaluated as if(FALSE)!!!</pre>
     <p>
         Custom targets specify user-defined command line executions which <b>don't check whether the produced output is up to date</b>.
     </p>
+
+    <h5>Custom Commands</h5>
+        <p>Custom targets always build, every time. To have something only build when necessary use <code>add_custom_command</code>. It creates dependencies between
+        the customer command and its dependencies so that it is only run if something it depends on is newer than it.</p>
+        <pre>add_custom_command(OUTPUT output1 [output2 ...]
+            COMMAND command1 [ARGS] [args1...]
+            [COMMAND command2 [ARGS] [args2...] ...]
+            [MAIN_DEPENDENCY depend]
+            [DEPENDS [depends...]]
+            [BYPRODUCTS [files...]]
+            [IMPLICIT_DEPENDS &lt;lang1&gt; depend1
+                            [&lt;lang2&gt; depend2] ...]
+            [WORKING_DIRECTORY dir]
+            [COMMENT comment]
+            [DEPFILE depfile]
+            [JOB_POOL job_pool]
+            [JOB_SERVER_AWARE <bool>]
+            [VERBATIM] [APPEND] [USES_TERMINAL]
+            [CODEGEN]
+            [COMMAND_EXPAND_LISTS]
+            [DEPENDS_EXPLICIT_ONLY])</pre>
+        <p>If <code>DEPENDS</code> is not specified, the command will run whenever the <code>OUTPUT</code> is missing; if the command does not actually create the <code>OUTPUT<code>, the rule will always run.</p>
+        <h6>As A Generator</h6>            
+        <p>A custom command can be used as, for example, a generator. For example, it could compile Protobuf definitions into code:</p>
+        <pre>add_custom_command(OUTPUT myProtoBuf.pb.h myProtoBuf.pb.c
+    COMMAND protoc ARGS myProtoBuf.proto
+    DEPENDS myProtoBuf.proto)
+...
+...
+    add_executable(MyExecutable file1.c ... myProtoBuf.pb.c)
+</pre>
+        <p>This has told CMake how to create the files <code>myProtoBuf.pb.[ch]</code> and what they depend on. It has also made <code>MyExecutable</code> depend on those files.</p>
+        <p>So, if <code>myProtoBuf.proto</code> changes, CMake knows it needs to run the command that outputs <code>myProtoBuf.pb.[ch]</code> and therefore also rebuild the targer <code>MyExecutable</code>.</p>
+
 
     <h4>Properties</h4>
     <p>
