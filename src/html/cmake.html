@@ -383,7 +383,7 @@ if(${V2}) # Is evaluated as if(V1), which is evaluated as if(FALSE)!!!</pre>
         <p>This has told CMake how to create the files <code>myProtoBuf.pb.[ch]</code> and what they depend on. It has also made <code>MyExecutable</code> depend on those files.</p>
         <p>So, if <code>myProtoBuf.proto</code> changes, CMake knows it needs to run the command that outputs <code>myProtoBuf.pb.[ch]</code> and therefore also rebuild the targer <code>MyExecutable</code>.</p>
 
-        <h6>As A Target Hook</h6>
+        <h6>As A Target Hook</h6> 
         <p>Execute commands pre or post build of a target.</p>
         <pre>add_custom_command(TARGET <target>
             PRE_BUILD | PRE_LINK | POST_BUILD
