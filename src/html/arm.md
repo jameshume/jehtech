@@ -405,6 +405,7 @@ In a word inefficiency - waste a register and have to push/pop that register on 
 The format of the entries is shown in the image above, in the index table section.
 
 Unwinding the stack is done in two phases:
+
 1. The stack is virtually unwound looking for a propagation barrier.
 2. The stack is really unwound and cleanups are run
 
