@@ -414,18 +414,20 @@ would subtract X bytes to use the PC as it was the the instruction to which the 
 <p></p>
 In the unwind code, even in GCCs own code, **the `addend` for PREL31 encoding appears to be assumed to be zero**.
 
-### Exception Index Table
+### Exception Index Table & Handling Table
 
+#### Exception Index Table
 <q>Exception-handling table entries have a variable size. A handling table entry is found by searching a table of index entries. To support binary search, the index table must consist of contiguous fixed-size entries, each of which identifies a function start address, with the entries ordered by increasing function start address</q> -- [EHABI32](https://github.com/ARM-software/abi-aa/blob/main/ehabi32/ehabi32.rst#the-exception-handling-table).
 
-![](##IMG_DIR##/arm_exidx.png)
-
-### Exception Handling Table (EHT)
+#### Exception Handling Table (EHT)
 
 <q>The exception-handling table (EHT) contains one entry for each non-leaf function that may need to be unwound ... A table entry has a variable size. It encodes ... the actions required to propagate an exception through the function ... How to unwind a stack frame associated with the function ... In some usefully common cases, a handling table entry contains so little information that it’s content can be packed directly into the index table entry</q>  -- [EHABI32](https://github.com/ARM-software/abi-aa/blob/main/ehabi32/ehabi32.rst#the-exception-handling-table).
 
-The format of the entries is shown in the image above, in the index table section.
+The format of the entries is shown in the image below.
 
+![Arm exception index table and exception handling table overview](##IMG_DIR##/arm_exidx.png)
+
+#### Unwinding The Stack
 Unwinding the stack is done in two phases:
 
 1. The stack is virtually unwound looking for a propagation barrier.
