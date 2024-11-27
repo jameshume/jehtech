@@ -412,6 +412,7 @@ would subtract X bytes to use the PC as it was the the instruction to which the 
     <footer>-- [ELF for the Arm(R) Architecture](https://github.com/ARM-software/abi-aa/blob/main/aaelf32/aaelf32.rst#addends-and-pc-bias-compensation)</footer>
 </blockquote>
 <p></p>
+In the unwind code, even in GCCs own code, **the `addend` for PREL31 encoding appears to be assumed to be zero**.
 
 ### Exception Index Table
 
