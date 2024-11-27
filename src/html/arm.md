@@ -392,6 +392,27 @@ In a word inefficiency - waste a register and have to push/pop that register on 
         * Lets say the instruction is at `0x1500` and the function is at `0x2000`. From the above we calculate `((0x2000 + 0x0) - 0x1500) & 0x7FFFFFFF` to get `0xB00`.
         * Lets say the instruction is at `0x2000` and the function is at `0x1500`. From the above we calculate `((0x1500 + 0x0) - 0x2000) & 0x7FFFFFFF` to get `0x7FFFF000`, which because this is a signed 31-bit number, is `-2816`, or -`0xB00`.
 
+To understand this better, especially the `addend`, which confused me a little, one has to look at relocations.
+
+The article [Relocations: Fantastic Symbols But Where To Find Them](https://gotplt.org/posts/relocations-fantastic-symbols-but-where-to-find-them.html) is
+a really great (bloody amazing) read with many good references available within.
+
+So why an "addend"? For example, an addend might be required to compensate for PC bias. If a jump or symbol address is PC relative, an addend must be used because the PC
+will be ahead of the currently executing instruction, but the offset is relative to the currently executing instruction. Therefore the addend
+would subtract X bytes to use the PC as it was the the instruction to which the offset refers:
+
+<blockquote>
+    <p>
+        Relocation information is used by linkers in order to bind symbols and addresses that could not be determined when the initial object was generated ...
+    </p><p>
+        A binary file may use REL or RELA relocations or a mixture of the two ... If the relocation is pc-relative then 
+        <b>compensation for the PC bias</b> (the PC value is 8 bytes ahead of the executing instruction in Arm state and 
+        4 bytes in Thumb state) must be encoded in the relocation by the object producer.
+    </p>
+    <footer>-- [ELF for the Arm(R) Architecture](https://github.com/ARM-software/abi-aa/blob/main/aaelf32/aaelf32.rst#addends-and-pc-bias-compensation)</footer>
+</blockquote>
+<p></p>
+
 ### Exception Index Table
 
 <q>Exception-handling table entries have a variable size. A handling table entry is found by searching a table of index entries. To support binary search, the index table must consist of contiguous fixed-size entries, each of which identifies a function start address, with the entries ordered by increasing function start address</q> -- [EHABI32](https://github.com/ARM-software/abi-aa/blob/main/ehabi32/ehabi32.rst#the-exception-handling-table).
