@@ -409,7 +409,7 @@ would subtract X bytes to use the PC as it was the the instruction to which the 
         <b>compensation for the PC bias</b> (the PC value is 8 bytes ahead of the executing instruction in Arm state and 
         4 bytes in Thumb state) must be encoded in the relocation by the object producer.
     </p>
-    <footer>-- [ELF for the Arm(R) Architecture](https://github.com/ARM-software/abi-aa/blob/main/aaelf32/aaelf32.rst#addends-and-pc-bias-compensation)</footer>
+    <footer>-- <a href="https://github.com/ARM-software/abi-aa/blob/main/aaelf32/aaelf32.rst#addends-and-pc-bias-compensation" target="_blank">ELF for the Arm(R) Architecture</a>.</footer>
 </blockquote>
 <p></p>
 In the unwind code, even in GCCs own code, **the `addend` for PREL31 encoding appears to be assumed to be zero**.
