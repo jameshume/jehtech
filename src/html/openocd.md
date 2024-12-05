@@ -269,3 +269,17 @@ flash bank $_CHIPNAME.otp stm32f2x 0x1fff7800 0 0 0 $_TARGETNAME
 ```
 
 The `flash bank` command is `flash bank name driver base size chip_width bus_width target [driver_options]`. Thus we can see that the driver is the STM32F2x device driver so we can get the algorithm for that from `contrib/loaders/flash/stm32/stm32f2x.inc`.
+
+## Debug GDB To OpenOCD
+In `.gdbinit` file:
+
+```
+echo \n\n-------------------------------------------------------------------------------\n\n
+echo Enabling GDB logging for GDB client and server. See `gdb.txt` and `gdb-remote-debug.txt`.
+set remotelogfile gdb-remote-debug.txt
+set logging debugredirect on
+set logging overwrite on
+set logging enabled on
+set debug xml on
+echo \n-------------------------------------------------------------------------------\n\n
+```
