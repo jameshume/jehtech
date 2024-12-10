@@ -160,3 +160,43 @@ Add to `launch.json`
         ...
     ]
 ```
+
+## Misc Save For CppDbg Attempt With ARM
+This is really just here to document a failure (use cortex-debug instead). Just wanted this
+to see if it could do it...
+
+```
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            // setupcommands only appends to the standard set of commands executed during startup. If you want to 
+            // completely replace them, use customSetupCommands. However, I must warn you that this can completely 
+            // break the debugger if events and/or requests are not sent as expected by the debugger.
+            "name": "Debug",
+            "type":"cppdbg",
+            "request": "launch",
+            "program": "${command:cmake.launchTargetPath}",
+            "cwd": "${workspaceFolder}",
+            "miDebuggerPath": "/opt/gcc-arm-none-eabi/bin/arm-none-eabi-gdb",
+            "miDebuggerServerAddress": "localhost:3333",
+            "stopAtEntry": false,
+            "preLaunchTask": "Wait For OpenOCD",
+            "logging": {
+                "engineLogging" : false, // Log the MICommands sent to the debugger and the responses returned. 
+                "trace"         : false, 
+                "traceResponse" : true
+            },
+            "setupCommands": [
+                { "text": "set verbose on",                                            "ignoreFailures": false },
+                { "text": "set debug remote 1",                                        "ignoreFailures": false },
+                { "text": "set remotelogfile ${workspaceFolder}/gdb-server-debug.txt", "ignoreFailures": false },
+                { "text": "set logging file ${workspaceFolder}/gdb-client-debug.log",  "ignoreFailures": false },
+                { "text": "set logging debugredirect on",                              "ignoreFailures": false },
+                { "text": "set logging overwrite on",                                  "ignoreFailures": false },
+                { "text": "set logging enabled on",                                    "ignoreFailures": false },
+            ],
+        }
+    ]
+}
+```

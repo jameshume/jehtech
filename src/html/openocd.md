@@ -283,3 +283,11 @@ set logging enabled on
 set debug xml on
 echo \n-------------------------------------------------------------------------------\n\n
 ```
+
+To let GDB load this file, you must add its directory to the safe loads list, which can
+be done by adding a `.gitinit` file to you home directory:
+
+
+```
+add-auto-load-safe-path /path/to/script
+```
