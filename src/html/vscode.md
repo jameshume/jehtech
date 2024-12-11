@@ -161,18 +161,20 @@ Add to `launch.json`
     ]
 ```
 
+## Enable (Free)RTOS Aware Debugging
+```
+openocd ... -c "[target current] configure -rtos FreeRTOS"
+```
+
 ## Misc Save For CppDbg Attempt With ARM
-This is really just here to document a failure (use cortex-debug instead). Just wanted this
-to see if it could do it...
+Looks like the Microsoft cppdbg can also be used to debug an ARM target. The OpenOCD
+server needs to be started before the debug launch, but it seems to work okay.
 
 ```
 {
     "version": "0.2.0",
     "configurations": [
         {
-            // setupcommands only appends to the standard set of commands executed during startup. If you want to 
-            // completely replace them, use customSetupCommands. However, I must warn you that this can completely 
-            // break the debugger if events and/or requests are not sent as expected by the debugger.
             "name": "Debug",
             "type":"cppdbg",
             "request": "launch",
@@ -187,7 +189,7 @@ to see if it could do it...
                 "trace"         : false, 
                 "traceResponse" : true
             },
-            "setupCommands": [
+            "customLaunchSetupCommands": [
                 { "text": "set verbose on",                                            "ignoreFailures": false },
                 { "text": "set debug remote 1",                                        "ignoreFailures": false },
                 { "text": "set remotelogfile ${workspaceFolder}/gdb-server-debug.txt", "ignoreFailures": false },
@@ -195,7 +197,14 @@ to see if it could do it...
                 { "text": "set logging debugredirect on",                              "ignoreFailures": false },
                 { "text": "set logging overwrite on",                                  "ignoreFailures": false },
                 { "text": "set logging enabled on",                                    "ignoreFailures": false },
+                { "text": "set architecture armv7e-m",                                 "ignoreFailures": false },
+                { "text": "file ${command:cmake.launchTargetPath}",                    "ignoreFailures": false },
+                { "text": "target extended-remote :3333",                              "ignoreFailures": false },
+                { "text": "monitor reset init ",                                       "ignoreFailures": false },
+                { "text": "load ${command:cmake.launchTargetPath}",                    "ignoreFailures": false },
+                { "text": "monitor reset halt ",                                       "ignoreFailures": false },
             ],
+            "launchCompleteCommand": "exec-run",
         }
     ]
 }
