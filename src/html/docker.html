@@ -787,6 +787,11 @@ Enable using  DOCKER_BUILDKIT=1 docker build .
 <pre></pre>
 <p>RUN curl -o /etc/bash_completion.d/git-completion.bash https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash</p>
 
+<h3>Connect To Server On Host From Within Container</h3>
+<p>Use the `--add-host host.docker.internal:host-gateway` option on Linux (Docker for Linux v20.10+). Dont need to use any option on Windows Docker 18+.
+  Then connect using, for example, `telnet host.docker.internal &lt;port&gt;`.
+</p>
+
 <h2>Docker Compose</h2>
 <p>
   See also the <a href="https://github.com/docker/awesome-compose" target="_blank">Awesome Compose Project</a>, which provides a curated list of Docker Compose samples. These samples provide a starting point for how to integrate different services using a Compose file and to manage their deployment with Docker Compose. 
