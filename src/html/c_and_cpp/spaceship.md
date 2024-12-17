@@ -4,7 +4,7 @@
     * Although mostly all just based on `==` or `>`, a hassle!
 * In C++20
     * `==` implies `!=`, so now only have to define `==`. `a != b` now tries `a != b`, `!(a == b)` and `!(b == a)`
-    * No equivalent for the other operators, but now have `<=>`, which is the *only operator you now need to define*! Don't even need to define `==`!
+    * No equivalent for the other operators, but now have `<=>`, which is the *only operator, other than  `==`, that you now need to define*! Don't even need to define `==`!
         * `x <=> y == 0` when `x` and `y` are equal.
         * `x <=> y < 0` when `x < y`.
         * `x <=> y > 0` when `x > y`.
@@ -24,4 +24,4 @@
     * May find it useful, in your implementation to use `if constexpr (requires { some-func-or-property <=> other.some-func-or-property(); }) {` when trying
       to determine, at compile time, whether the types contained in your class/container themselves support the spaceship operator.
 
-      
+
