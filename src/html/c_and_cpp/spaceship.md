@@ -21,4 +21,7 @@
         std::partial_ordering operator<=>(Type x, OtherType y) {...}
         ```
     * The return value is `std::ORDERING_TYPE::less`, `std::ORDERING_TYPE::equal`, or `std::ORDERING_TYPE::greater`.
+    * May find it useful, in your implementation to use `if constexpr (requires { some-func-or-property <=> other.some-func-or-property(); }) {` when trying
+      to determine, at compile time, whether the types contained in your class/container themselves support the spaceship operator.
 
+      
