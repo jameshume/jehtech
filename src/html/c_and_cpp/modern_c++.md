@@ -88,3 +88,29 @@ TODO show CPP insights tool use
 
 ## Value type?
 `T::template value_type varname(..._)`???
+
+## Movable stuff
+[Clever chap answered my questions here](https://stackoverflow.com/a/79297267/1517244). Notes as I went along are:
+
+Note: Deleting the move operators is not the same as as not defining them when a copy constructor/assignment is
+defined. 
+
+In the latter scenario the move functions are not implicitly defined by the compiler and because
+they dont exist, will not be considered in overload resolution. However, the object is still considered
+moveable by is_move_constructible_v et al because the copy constructor accepting a `const` reference can
+accept an R-value.
+   
+However, in the former scenario, when the move functions are explicitly deleted, the move functions *can* 
+be considered in the overload resolution because deleted members are still declared. Deleted members 
+participate in overload resolution. Members not present don't. 
+Reason is this: Deleting of normal member function or nonmember functions prevents problematic type 
+promotions from causing an unintended function to be called. This works because deleted 
+functions still participate in overload resolution and provide a better match than the 
+function that could be called after the types are promoted.
+See: https://learn.microsoft.com/en-us/cpp/cpp/explicitly-defaulted-and-deleted-functions
+
+This leave me with the question, why was is_move_constructible defined this way? Why not make it only
+be true when there is a default or explicitly defiend move constructor? The answer is that 
+`is_move_constructible` is just defined as the object can be constructed from an rvalue: how it's
+constructed doesn't matter. It's constructed by a copy constructor, or a move constructor, and how the
+constructor is implemented, like if it's actually doing a "move", doesn't matter
