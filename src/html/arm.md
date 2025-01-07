@@ -359,7 +359,7 @@ TODO/FIXME - formatting is broken!
     * Get address of service handler based on exception number
     * Jump to exception handler.
 
-![Example of interrupt handler pushing values to PSP and switching to MSP](##IMG_DIR##/arm_example_interrupt_psp_to_msp_switch.png)
+![Example of interrupt handler pushing values to PSP and switching to MSP](##IMG_DIR##/arm_example_interrupt_psp_to_msp_switch2.png)
 
 ### Unstacking
 Unstacking is the opposite of stacking and occurs when the last interrupt service routine returns. It restores the state of the
