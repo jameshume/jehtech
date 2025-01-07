@@ -123,3 +123,17 @@ MyObj r1;              // Default constructor used
 r1 = CreateObj_URVO(); // No RVO possible.
 ```
 
+## Links / Quotes Not Yet Organised
+
+From https://stackoverflow.com/a/14303116/1517244:
+
+> Short answer: If a type is copyable, it should also be moveable. However, the reverse is not true: some types like std::unique_ptr are moveable yet it doesn't make sense to copy them; these are naturally move-only types.
+> ...
+> In C++11, generally you should think of move as an optimization of copy, and so all copyable types should naturally be moveable... moving is just an efficient way of doing a copy in the often-common case that you don't need the original object any more and are just going to destroy it anyway.
+
+
+
+
+From https://stackoverflow.com/a/79336090/1517244
+> "Move" just means you don't care what happens to the old object, right? So "it stays the same", which is what happens for a copy, is also perfectly valid for a move. Move isn't required to change it. So the immutable object can still very well have a move constructor (synthesized from copy). 
+
