@@ -66,6 +66,9 @@ Logging handlers provide the following methods to work with threads:
 * `aquire()`
 * `release()`
 
+Note, though, that the logging API is THREAD SAFE, so you don't have to use these
+functions in most situations.
+
 Can also use
 
 * `flush()`
@@ -125,3 +128,64 @@ output strings, consumed by the Handlers.
   thread, up to the logging call.
 
 ## Filters
+More sophisticated filtering than can be obtained using log levels.
+
+Create a filter:
+
+```
+class FancyNewFilter(logging.Filter): # Note you do not have to inherit from logging.Filter!
+    def filter(self, record : LogRecord):
+        # You have access to the log record so can base your filter
+        # on anyting in that record...
+        return True # To say, "yes" emit the log
+
+        # Or...
+        return False # To say, "no" silence the log
+
+        # You could even add new attributes to the record if you liked to create
+        # custom attributes that you could then reference in the fmt string
+```
+
+From Python 3.12 don't even need a class... any callable that accepts a `LogRecord` will do.
+
+To apply the filter to a logger or a handler use the `.addFilter()` method.
+
+
+## Decorators
+Tip: Use a decorator to make logging exceptions in functions easier.
+
+
+## Concurrency
+### Async
+The logging API is blocking. Solve using `QueueHandler` and `QueueListener`.
+
+```
+from queue import SimpleQueue
+import logging.handlers
+
+async def setup_logging():
+    log_q = SimpleQueue()
+
+    root = logging.getLogger()
+
+    # Create a NON-blocking handler: The root logger will emit LogRecords to the 
+    # queue, which will not (unless full) block, decoupling the logger from the
+    # blocking FileHandler defined below...
+    queue_handler = logging.handlers.QueueHandler(log_q)
+    root.addHandler(queue_handler)
+
+    # Create blocking FileHandler
+    file_handler = logging.FileHandler(...)
+
+    # Create a listener on the other end of the queue that will live in its
+    # own thread and dequeue items off the queue to handler them. Thus,
+    # the file_handler appears, from the roots point of view, to be non
+    # blocking because it is "hidden" behind a queue.
+    listener = logging.handlers.QueueListener(log_q, file_handler)
+
+    try:
+        listener.start()
+        ... log and work ... 
+    finally:
+        listener.stop()
+```

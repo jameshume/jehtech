@@ -49,6 +49,7 @@ jobs:
                  echo "FORCING BUILD";
                  make -j$(lscpu | grep "^\s*CPU(s):" | sed 's/.*:\s*//g') deploy;
              else
+                 make GITHUB__BUILD=1 -p
                  make GITHUB__BUILD=1 -j$(lscpu | grep "^\s*CPU(s):" | sed 's/.*:\s*//g') deploy;
              fi
         env:
