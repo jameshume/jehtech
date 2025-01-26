@@ -209,3 +209,30 @@ server needs to be started before the debug launch, but it seems to work okay.
     ]
 }
 ```
+
+
+## Extensions
+Install Yeoman globally:
+```
+npm install --global yo generator-code
+```
+
+Install the Visual Studio Code Extensions CLI:
+```
+npm install --global @vscode/vsce
+```
+
+Create an extension:
+```
+yo code
+```
+
+`src/extension.ts` the main file
+`F5` from this file to debug
+
+Extension was not being compiled! Run `tsc --watch` from the root directory.
+Or always run `npm run compile` from the root dir (tsc eaiser!)
+
+Run `vsce package` to package and create the `.vsix` file.
+Install using `code --install-extension my-extension-0.0.1.vsix` [[Ref]](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#packaging-extensions)
+
