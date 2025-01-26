@@ -1,5 +1,7 @@
 ## Logging
 
+Take a look at the [Python Logging Cookbook](https://docs.python.org/3/howto/logging-cookbook.html#logging-cookbook).
+
 ### Exceptions
 ```
 import logging
