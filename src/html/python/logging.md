@@ -124,3 +124,4 @@ output strings, consumed by the Handlers.
 * sinfo (str | None) – A text string representing stack information from the base of the stack in the current 
   thread, up to the logging call.
 
+## Filters
