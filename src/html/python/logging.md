@@ -72,3 +72,55 @@ Can also use
 * `close()`
 
 ### Formatters
+Responsible for converting a LogRecord to an output string to be interpreted by a human or external system.
+
+```
+logging.Formatter(
+    fmt=None,      # Fornat string using the fiven style param for the logged output 
+    datefmt=None,  # How to format dates 
+    style='%',     # Determines how format string is interpolated
+    validate=True, # If true incorrect fmt and style causes ValueError
+    *, 
+    defaults=None  # dict[str, Any] of default values for custom fields
+)
+```
+
+```
+import logging
+
+logger = logging.getLogger(name=...)
+
+file_handler = logging.FileHandler(...)
+logger.add_handler(file_handler)
+
+formatter = logging.Formatter(
+    "%(asctime)s - %(names)s - %(levelname)s - %(message)s"
+)
+file_handler.setFormatter(formatter)
+
+logger.debug(...)
+```
+
+The special formatters like `asctime` are part of the `LogRecord` object that the
+logger creates, that get passed to the formatters, which convert `LogRecords` to
+output strings, consumed by the Handlers.
+
+`LogRecords` have the following properties (taken from the docs):
+
+* name (str) – The name of the logger used to log the event represented by this LogRecord. Note that the 
+  logger name in the LogRecord will always have this value, even though it may be emitted by a handler 
+  attached to a different (ancestor) logger.
+* level (int) – The numeric level of the logging event (such as 10 for DEBUG, 20 for INFO, etc). Note that 
+  this is converted to two attributes of the LogRecord: levelno for the numeric value and levelname for the 
+  corresponding level name.
+* pathname (str) – The full string path of the source file where the logging call was made.
+* lineno (int) – The line number in the source file where the logging call was made.
+* msg (Any) – The event description message, which can be a %-format string with placeholders for variable 
+  data, or an arbitrary object (see Using arbitrary objects as messages).
+* args (tuple | dict[str, Any]) – Variable data to merge into the msg argument to obtain the event description.
+* exc_info (tuple[type[BaseException], BaseException, types.TracebackType] | None) – An exception tuple 
+  with the current exception information, as returned by sys.exc_info(), or None if no exception information is available.
+* func (str | None) – The name of the function or method from which the logging call was invoked.
+* sinfo (str | None) – A text string representing stack information from the base of the stack in the current 
+  thread, up to the logging call.
+
