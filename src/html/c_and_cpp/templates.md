@@ -1,9 +1,9 @@
 ## Type Traits
-Type traits are small class templates that contain a constant value where the value represents the mswer to a question we ask about a type.
+Type traits are small class templates that contain a constant value where the value represents the answer to a question we ask about a type.
 
 For example:
 
-```
+```c++
 #include <iostream>
 
 class MyClass {
