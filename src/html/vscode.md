@@ -236,3 +236,6 @@ Or always run `npm run compile` from the root dir (tsc eaiser!)
 Run `vsce package` to package and create the `.vsix` file.
 Install using `code --install-extension my-extension-0.0.1.vsix` [[Ref]](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#packaging-extensions)
 
+Test using `npm run test`
+
+`npm install --save-dev mocha chai`
