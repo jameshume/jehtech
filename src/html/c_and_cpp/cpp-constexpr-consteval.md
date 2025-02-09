@@ -33,7 +33,7 @@ The answer is it can't and the initialiser type is going to have to change. Read
 
 A function can _not_ do the following:
 
-```C++
+```cpp
 constexpr auto num_digits(const unsigned int value) {
     ...
 }
@@ -79,7 +79,7 @@ our special section, we are still, in fact, just storing a null terminated chara
 
 Briefly, the "string" will look like this:
 
-```C++
+```cpp
 #include <cstddef>
 
 template<size_t N>
@@ -109,7 +109,7 @@ Lets tackle converting an integer to a character array at compile time first.
 
 We can represent the strings like so:
 
-```C++
+```cpp
 #include <cstddef>
 
 template<size_t N>
@@ -153,7 +153,7 @@ so `size` cannot be `constexpr`. But, if it is not, then it cannot be used as th
 when defining `number`. Thus, the number of bytes to hold the string plus NULL terminator has to be
 calculated in a seperate `constexpr` function:
 
-```C++
+```cpp
 #include <cstddef>
 
 template<size_t N>
@@ -202,7 +202,7 @@ test.cpp:26:58: error: 'value' is not a constant expression
 What surprised me was that `value` was not considered a constant expression. After all,
 `constexpr_unsigned_bytes` was a `constexpr` function and I can do this:
 
-```C++
+```cpp
 #include <cstddef>
 
 constexpr size_t constexpr_unsigned_bytes(unsigned value) {
@@ -226,7 +226,7 @@ integer as a null terminated string at compile time. So what gives?
 
 This can be boiled down to an even easier example. The following works:
 
-```C++
+```cpp
 constexpr auto dummy(unsigned a) {
     return  a * 2 + 1;
 }
@@ -239,7 +239,7 @@ int main() {
 
 But the following does not
 
-```C++
+```cpp
 constexpr auto dummy(unsigned a) {
     constexpr auto intermediate = a * 2;
     return  intermediate + 1;
@@ -342,7 +342,7 @@ function parameters, cannot be `constexpr`.
 
 Going back to the definition of `constexpr_unsigned_to_string`:
 
-```C++
+```cpp
 constexpr auto constexpr_unsigned_to_string(unsigned value) {
     constexpr auto bytes = constexpr_unsigned_bytes(value); // ERROR! This will fail
     auto number_as_string = constexpr_string<bytes>();      // (See below...)
@@ -372,7 +372,7 @@ and 1 NULL termination byte: 11 characters. So I know that maximum length the st
 so let's start there. The first thing I could try and do is this:
 
 
-```C++
+```cpp
 #include <cstddef>
 #include <cstdint>
 
@@ -436,7 +436,7 @@ So, throwing hands in the air, let's follow the compiler's advice and make the c
 a `constexpr` constructor to make it quality as a literal type. Once it becomes a literal type we can write:
 
 
-```C++
+```cpp
 #include <cstddef>
 #include <cstdint>
 
@@ -487,7 +487,7 @@ int main() {
 But, because `constexpr_string` is now a Literal type, `constexpr_unsigned_to_string` can be further
 re-written as:
 
-```C++
+```cpp
 constexpr auto constexpr_unsigned_to_string(unsigned value) {
     constexpr_string<MAX_CHARS_PLUS_NULL> number_as_string; 
 
@@ -504,7 +504,7 @@ constexpr auto constexpr_unsigned_to_string(unsigned value) {
 
 Its looking better, but I still have to use `MAX_CHARS_PLUS_NULL`. If the `main()` functions was this:
 
-```C++
+```cpp
 int main() {
     #define IN_STR_SECTION __attribute__ ((used, section (".myStringsSection,\"S\",@note #")))
     static auto dummy_name1 IN_STR_SECTION = constexpr_unsigned_to_string(1);
@@ -536,7 +536,7 @@ other option is to represent the number, not as a parameter to the function, whi
 
 The function and the way it is called then becomes this:
 
-```C++
+```cpp
 template<unsigned N>
 consteval auto constexpr_unsigned_to_string() {
     constexpr unsigned bytes = constexpr_unsigned_bytes(N);
@@ -584,7 +584,7 @@ the -1 is because only one of the two NULL terminators will be needed.
 
 The "string" struct just becomes:
 
-```C++
+```cpp
 template<size_t N>
 struct constexpr_string {
     char value[N];
@@ -611,7 +611,7 @@ struct constexpr_string {
 
 Then `main()` can become:
 
-```C++
+```cpp
 int main() {
     #define IN_STR_SECTION __attribute__ ((used, section (".myStringsSection,\"S\",@note #")))
     static auto dummy_name1 IN_STR_SECTION = constexpr_unsigned_to_string<123456>() + constexpr_string<sizeof(" is the number")>(" is the number");
@@ -635,7 +635,7 @@ Creating a `constexpr_string` froma string literal is still a little clucky howe
 can use non-type template parameter inference to save us again, the same way we
 have used in the `constexpr_string` class.
 
-```C++
+```cpp
 template<size_t N>
 constexpr constexpr_string<N> create_constexpr_string(const char (&initial_value)[N]) {
     return constexpr_string<N>(initial_value);
@@ -644,7 +644,7 @@ constexpr constexpr_string<N> create_constexpr_string(const char (&initial_value
 
 And `main()` now looks nicer:
 
-```C++
+```cpp
 int main() {
     #define IN_STR_SECTION __attribute__ ((used, section (".myStringsSection,\"S\",@note #")))
     static auto dummy_name1 IN_STR_SECTION = constexpr_unsigned_to_string<123456>() + create_constexpr_string(" is the number");
@@ -655,7 +655,7 @@ int main() {
 
 The whole thing has become:
 
-```C++
+```cpp
 #include <cstddef>
 #include <cstdint>
 

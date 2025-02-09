@@ -68,7 +68,7 @@ T* begin(T (&arr)[N]) { return arr; }
 
 If we do the following:
 
-```c++
+```cpp
 int myArray[] {1,2,3,4};
 int *iter = begin(myArray);
 ```
