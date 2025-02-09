@@ -118,7 +118,7 @@ pre code .vm { color: #19177C } /* Name.Variable.Magic */
 pre code .il { color: #666666 } /* Literal.Number.Integer.Long */"""
 htmlFileContents = prog_css.sub(
 		'<link rel="stylesheet" href="{}{}jeh-monolith.css" type="text/css" /><style>{}</style>'.format(
-			link_to_root, "" if link_to_root == "" else '/'), hack_css,
+			link_to_root, "" if link_to_root == "" else '/', hack_css),
 		htmlFileContents)
 
 newFileName = DST_FILE
