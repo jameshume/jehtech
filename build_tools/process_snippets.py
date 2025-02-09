@@ -14,6 +14,7 @@ import re
 import sys
 from pathlib import Path
 import markdown
+from markdown.extensions.codehilite import CodeHiliteExtension
 
 from snippet_regular_expressions import (
     PRE_TAG_IMG_SPLIT_REGEX, RAW_FILE_INSERT_REGEX, ESCAPED_FILE_INSERT_REGEX, MARKDOWN_FILE_REGEX
@@ -49,7 +50,7 @@ def inject_markdown_snippet(match_object_for_snippet_placeholder):
     md_filname = SNIPPET_DIRNAME / match_object_for_snippet_placeholder.group(1)
     print(f"   Inserting MD snippet {md_filname}")
     with codecs.open(md_filname, 'r', 'utf-8') as md_file:
-        return markdown.markdown(md_file.read(), extensions=['tables', 'toc', 'pymdownx.superfences'])
+        return markdown.markdown(md_file.read(), extensions=['tables', 'toc', 'pymdownx.superfences', CodeHiliteExtension(linenums=True)])
 
 
 def inject_processed_snippet(match_object_for_snippet_placeholder):
