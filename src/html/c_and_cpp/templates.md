@@ -27,7 +27,7 @@ struct is_my_class<MyClass>
 template <typename T>
 inline constexpr bool is_my_class_v = is_my_class<T>::value;
 
-int main() {
+int main() { 
     std::cout << "Int is MyClass? " << is_my_class_v<int> << "\n";
     //                                 ^^ Shorthand for `is_my_class<int>::value`
 
