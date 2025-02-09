@@ -212,7 +212,7 @@ dump:
 ifdef GITHUB__BUILD
 # Ugly hackery! javascript, css, fonts targets are crappy - they always build something when on github builds because
 # its a build from scratch
-all: dump images html css | $(OUTPUT_DIR)
+all: dump images html | $(OUTPUT_DIR)
 else
 all: dump images html javascript css fonts | $(OUTPUT_DIR)
 endif
