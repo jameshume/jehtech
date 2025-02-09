@@ -5,7 +5,7 @@ Two kinds:
 
 For example:
 
-```c++
+```cpp
 #include <iostream>
 
 class MyClass {
@@ -56,7 +56,7 @@ SFINAE means that when the compiler substitures arguments into a template (insta
 
 E.g.
 
-```c++
+```cpp
 #include <iostream>
 
 template <typename T>
@@ -76,7 +76,7 @@ int *iter = begin(myArray);
 The compile first tries to subsitute `int [4]` into the fist template. This fails. But there is no error because of SFINAE. It is just treated as a deduction failure and the compiler moves on to trying to
 instantiate `int[4]` into the second template, which works, so it is chosen and create the following instantiation:
 
-```c++
+```cpp
 template<>
 int* begin<int, 4>(int (&arr)[4])
 {
@@ -87,7 +87,7 @@ int* begin<int, 4>(int (&arr)[4])
 ## Use SFINAE To Eliminate Function Collision
 Contrived, but ayway... There is bank A and bank B, both of which support SWIFT transfers. We cannot modify their API.
 
-```c++
+```cpp
 class BankA_Account {
 public:
     // ...
@@ -113,7 +113,7 @@ As neither Bank A nor bank B inherit from a common ancestor runtime polymorphism
 
 So, continuing, the solution might be templates. Lets try:
 
-```c++
+```cpp
 template <typename T>
 bool transfer(T& account, double amount, SWIFT &destination) {
     return account.transfer(amount, destination) != -1;
@@ -140,7 +140,7 @@ bool transfer(T& account, double amount, SWIFT &destination) {
 So what can be done?! Template trickery to make sure the compiler only "sees" on of the definitions of `transfer` is the answer :o
 
 First of all a type trait:
-```c++
+```cpp
 template <typename T>
 struct bank_account_uses_transfer_method {
     static constexpr bool value = false;
@@ -157,7 +157,7 @@ Now we can determine at compile time wheter a bak account has the transfer funct
 Next we need to stop one of the `transfer` defintions from being considered at all. Do this
 by adding a boolean switch as a non-type template parameter:
 
-```c++
+```cpp
 template <typename T, bool uses_transfer>
 bool transfer(T& account, double amount, SWIFT &destination) {
     return account.sendMoney(amount, destination) != -1;
