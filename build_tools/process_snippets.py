@@ -50,7 +50,13 @@ def inject_markdown_snippet(match_object_for_snippet_placeholder):
     md_filname = SNIPPET_DIRNAME / match_object_for_snippet_placeholder.group(1)
     print(f"   Inserting MD snippet {md_filname}")
     with codecs.open(md_filname, 'r', 'utf-8') as md_file:
-        return markdown.markdown(md_file.read(), extensions=['tables', 'toc', 'pymdownx.superfences', CodeHiliteExtension(linenums=True)])
+        return markdown.markdown(
+            md_file.read(),
+              extensions=[
+                  'tables', 
+                  'toc', 
+                  'pymdownx.superfences', 
+                  CodeHiliteExtension(linenums=True)])
 
 
 def inject_processed_snippet(match_object_for_snippet_placeholder):
