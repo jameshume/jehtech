@@ -157,7 +157,7 @@ Now we can determine at compile time wheter a bak account has the transfer funct
 Next we need to stop one of the `transfer` defintions from being considered at all. Do this
 by adding a boolean switch as a non-type template parameter:
 
-```cpp 
+```cpp
 template <typename T, bool uses_transfer>
 bool transfer(T& account, double amount, SWIFT &destination) {
     return account.sendMoney(amount, destination) != -1;
