@@ -117,10 +117,20 @@ pre code .vi { color: #19177C } /* Name.Variable.Instance */
 pre code .vm { color: #19177C } /* Name.Variable.Magic */
 pre code .il { color: #666666 } /* Literal.Number.Integer.Long */
 """
+print(f"Hack CSS is '{hack_css}'")
+print('<link rel="stylesheet" href="{}{}jeh-monolith.css" type="text/css" /><style>{}</style>'.format(
+		link_to_root, 
+		"" if link_to_root == "" else '/', 
+		hack_css
+	))
 htmlFileContents = prog_css.sub(
-		'<link rel="stylesheet" href="{}{}jeh-monolith.css" type="text/css" /><style>{}</style>'.format(
-			link_to_root, "" if link_to_root == "" else '/', hack_css),
-		htmlFileContents)
+	'<link rel="stylesheet" href="{}{}jeh-monolith.css" type="text/css" /><style>{}</style>'.format(
+		link_to_root, 
+		"" if link_to_root == "" else '/', 
+		hack_css
+	),
+	htmlFileContents
+)
 
 newFileName = DST_FILE
 targetDir = os.path.split(newFileName)[0]
