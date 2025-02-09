@@ -14,20 +14,26 @@ class MyClass {
 template <typename T>
 struct is_my_class
 {
-    static const bool value = false;
+    static constexpr bool value = false;
 };
 
 
 template <>
 struct is_my_class<MyClass>
 {
-    static const bool value = true;
+    static constexpr bool value = true;
 };
 
+template <typename T>
+inline constexpr bool is_my_class_v = is_my_class<T>::value;
 
 int main() {
-    std::cout << "Int is MyClass? " << is_my_class<int>::value << "\n";
-    std::cout << "MyClass is MyClass? " << is_my_class<MyClass>::value << "\n";
+    std::cout << "Int is MyClass? " << is_my_class_v<int> << "\n";
+    //                                 ^^ Shorthand for `is_my_class<int>::value`
+
+    std::cout << "MyClass is MyClass? " << is_my_class_v<MyClass> << "\n";
+    //                                     ^^ shorthad for `is_my_class<MyClass>::value`
+    
     return 1;
 }
 
@@ -81,7 +87,7 @@ int* begin<int, 4>(int (&arr)[4])
 ## Use SFINAE To Eliminate Function Collision
 Contrived, but ayway... There is bank A and bank B, both of which support SWIFT transfers. We cannot modify their API.
 
-```
+```c++
 class BankA_Account {
 public:
     // ...
@@ -103,10 +109,11 @@ public:
 
 I want to be able to have a generic function `bool transfer(??? BankAccount, double amount, SWIFT &destination)` that can accept a bank A or bank B account.
 
-As neither Bank A nor bank B inherit from a common ancestor runtime polymorphism is not possible. So the
-solution might be templates. Lets try:
+As neither Bank A nor bank B inherit from a common ancestor runtime polymorphism is not possible. We could write wrapper classes that derive from a common base, and this might be a good way of doing it. Some downsides might be incurring the cost of the VTable lookups, having to write a wrapper for every bank API provider, etc. But, not considering that here... its just a contrived example to show some SFINAE... not saying this is how the problem should be solved.
 
-```
+So, continuing, the solution might be templates. Lets try:
+
+```c++
 template <typename T>
 bool transfer(T& account, double amount, SWIFT &destination) {
     return account.transfer(amount, destination) != -1;
@@ -118,7 +125,7 @@ bool transfer(T& account, double amount, SWIFT &destination) {
 }
 ```
 
-Nope. The compiler gives us the following warning:
+Nope. The compiler, unsuprisingly, gives us the following warning:
 
 ```
 main.cpp:31:6: error: redefinition of 'transfer'
@@ -130,3 +137,34 @@ bool transfer(T& account, double amount, SWIFT &destination) {
 
 [[See full example here]](https://cpp.sh/?source=%23include%20%3Ciostream%3E%0A%0Aclass%20SWIFT%20%7B%0A%7D%3B%0A%0Aclass%20BankA_Account%20%7B%0Apublic%3A%0A%20%20%20%20%2F%2F%20...%0A%20%20%20%20int%20transfer%28double%20amount%2C%20SWIFT%20%26destination%29%20%7B%0A%20%20%20%20%20%20%20%20%2F%2F%20...%0A%20%20%20%20%20%20%20%20return%200%3B%0A%20%20%20%20%7D%0A%7D%3B%0A%0Aclass%20BankB_Account%20%7B%0Apublic%3A%0A%20%20%20%20%2F%2F%20...%0A%20%20%20%20bool%20sendMoney%28double%20amount%2C%20SWIFT%20%26destination%29%20%7B%0A%20%20%20%20%20%20%20%20%2F%2F%20...%0A%20%20%20%20%20%20%20%20return%20true%3B%0A%20%20%20%20%7D%0A%7D%3B%0A%0A%0Atemplate%20%3Ctypename%20T%3E%0Abool%20transfer%28T%26%20account%2C%20double%20amount%2C%20SWIFT%20%26destination%29%20%7B%0A%20%20%20%20return%20account.transfer%28amount%2C%20destination%29%20%21%3D%20-1%3B%0A%7D%0A%0Atemplate%20%3Ctypename%20T%3E%0Abool%20transfer%28T%26%20account%2C%20double%20amount%2C%20SWIFT%20%26destination%29%20%7B%0A%20%20%20%20return%20account.sendMoney%28amount%2C%20destination%29%3B%0A%7D%0A%0Aint%20main%28%29%20%7B%0A%20%20%20%20return%200%3B%0A%7D)
 
+So what can be done?! Template trickery to make sure the compiler only "sees" on of the definitions of `transfer` is the answer :o
+
+First of all a type trait:
+```c++
+template <typename T>
+struct bank_account_uses_transfer_method {
+    static constexpr bool value = false;
+};
+
+template <>
+struct bank_account_uses_transfer_method<BankA_Account> {
+    static constexpr bool value = true;
+}
+```
+
+Now we can determine at compile time wheter a bak account has the transfer function.
+
+Next we need to stop one of the `transfer` defintions from being considered at all. Do this
+by adding a boolean switch as a non-type template parameter:
+
+```c++
+template <typename T, bool uses_transfer>
+bool transfer(T& account, double amount, SWIFT &destination) {
+    return account.sendMoney(amount, destination) != -1;
+}
+
+template <typename T, true>
+bool transfer(T& account, double amount, SWIFT &destination) {
+    return account.transfer(amount, destination);
+}
+```
