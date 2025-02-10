@@ -26,6 +26,17 @@ DEBUG_TMP=$(mktemp)
 SRC=$1
 DST=$2
 DEBUG_OUT_FILE="${DST}.debug.txt"
+
+function err_handler() {
+    echo -e "\\n-----------------------------------------"
+    echo "An error occurred with status $1" >> "${DEBUG_OUT_FILE}"
+    echo "Stack trace is:" >> "${DEBUG_OUT_FILE}"
+    i=0; while caller $i >> "${DEBUG_OUT_FILE}"; do (( i=i+1 )); done
+}
+trap "err_handler $?" ERR
+set -o pipefail
+set -o errtrace
+
 ROOT_IMAGES_RELATIVE_TO=$3
 RELATIVE_PREFIX="$(get_relative_dir_path_prefix "${DST}" "${ROOT_IMAGES_RELATIVE_TO}")"
 IMG_DIR="${RELATIVE_PREFIX}images/jeh-tech"
@@ -36,6 +47,7 @@ echo "==========================================================================
 echo "SRC >>>>>>>>" >> "${DEBUG_OUT_FILE}"
 cat "${SRC}" >> "${DEBUG_OUT_FILE}"
 echo "<<<<<<<< SRC" >> "${DEBUG_OUT_FILE}"
+
 # All files that use M4 preprocessor must include the line "dnl USEM4".
 if grep --ignore-case "dnl USEM4" "${SRC}" > /dev/null
 then
