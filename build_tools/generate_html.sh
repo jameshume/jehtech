@@ -33,9 +33,9 @@ echo "Generating $(realpath ${DST}) from $(realpath ${SRC})"
 
 echo "=============================================================================================" >> "${DEBUG_OUT_FILE}"
 echo "=============================================================================================" >> "${DEBUG_OUT_FILE}"
-echo "SRC:" >> "${DEBUG_OUT_FILE}"
+echo "SRC >>>>>>>>" >> "${DEBUG_OUT_FILE}"
 cat "${SRC}" >> "${DEBUG_OUT_FILE}"
-
+echo "<<<<<<<< SRC" >> "${DEBUG_OUT_FILE}"
 # All files that use M4 preprocessor must include the line "dnl USEM4".
 if grep --ignore-case "dnl USEM4" "${SRC}" > /dev/null
 then
