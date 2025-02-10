@@ -28,7 +28,7 @@ DST=$2
 DEBUG_OUT_FILE="${DST}.debug.txt"
 
 function err_handler() {
-    echo -e "\\n-----------------------------------------"
+    echo -e "\\n-----------------------------------------" >> "${DEBUG_OUT_FILE}"
     echo "An error occurred with status $1" >> "${DEBUG_OUT_FILE}"
     echo "Stack trace is:" >> "${DEBUG_OUT_FILE}"
     i=0; while caller $i >> "${DEBUG_OUT_FILE}"; do (( i=i+1 )); done
