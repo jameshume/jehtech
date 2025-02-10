@@ -171,7 +171,7 @@ pre code .vm { color: #19177C } /* Name.Variable.Magic */
 pre code .il { color: #666666 } /* Literal.Number.Integer.Long */
 "
 sed --in-place  -e \
-    "s#<!--\s*CSS_INSERT\s*-->#<link rel=\"stylesheet\" href=\"${RELATIVE_PREFIX}jeh-monolith.css\" type=\"text/css\" />#" \
+    "s#<!--\s*CSS_INSERT\s*-->#<link rel=\"stylesheet\" href=\"${RELATIVE_PREFIX}jeh-monolith.css\" type=\"text/css\" /><style>${hackcss//$'\n'/\\n}</style>#" \
     "${DST}"
 echo "=============================================================================================" >> "${DEBUG_OUT_FILE}"
 echo "=============================================================================================" >> "${DEBUG_OUT_FILE}"
@@ -181,7 +181,7 @@ echo "POST CSS:" >> "${DEBUG_OUT_FILE}"
 # Each file contains a marker for the JavaScript import that must use a *relative* import
 # directory from this page to the JavaScript file. 
 sed --in-place  -e \
-    "s#<!--\s*JAVASCRIPT_INSERT\s*-->#<script src=\"${RELATIVE_PREFIX}jeh-monolith.js\"></script><style>${hack_css}</style>#" \
+    "s#<!--\s*JAVASCRIPT_INSERT\s*-->#<script src=\"${RELATIVE_PREFIX}jeh-monolith.js\"></script>#" \
     "${DST}"
 echo "=============================================================================================" >> "${DEBUG_OUT_FILE}"
 echo "=============================================================================================" >> "${DEBUG_OUT_FILE}"
