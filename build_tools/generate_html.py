@@ -10,7 +10,7 @@ SRC_FILE = sys.argv[1]
 DST_FILE = sys.argv[2]
 ROOT_DIR = sys.argv[3]
 
-print("Generating {} from {}".format(DST_FILE, SRC_FILE))
+print("generate_html.py: Generating {} from {}".format(DST_FILE, SRC_FILE))
 
 def get_links_insert(currentDirName):
 	return ""
