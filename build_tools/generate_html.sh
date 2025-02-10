@@ -26,6 +26,7 @@ DEBUG_TMP=$(mktemp)
 SRC=$1
 DST=$2
 DEBUG_OUT_FILE="${DST}.debug.txt"
+date > ${DEBUG_OUT_FILE}
 
 function err_handler() {
     echo -e "\\n-----------------------------------------" >> "${DEBUG_OUT_FILE}"
