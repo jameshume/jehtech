@@ -205,7 +205,7 @@ echo "HACK CSS is:" >> "${DEBUG_OUT_FILE}"
 echo "${hack_css}" >> "${DEBUG_OUT_FILE}"
 echo -e "\n\n" >> "${DEBUG_OUT_FILE}"
 
-printf "%s\n" "<style>$hack_css</style>" | sed -i -e "/<!--\s*CSS_INSERT\s*-->/r /dev/stdin"
+printf "%s\n" "<style>$hack_css</style>" | sed -i -e "/<!--\s*CSS_INSERT\s*-->/r /dev/stdin" "${DST}"
 sed --in-place  -e \
     "s#<!--\s*CSS_INSERT\s*-->#<link rel=\"stylesheet\" href=\"${RELATIVE_PREFIX}jeh-monolith.css\" type=\"text/css\" />#" \
     "${DST}"
