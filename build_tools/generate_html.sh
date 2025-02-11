@@ -38,6 +38,20 @@ trap "err_handler $?" ERR
 set -o pipefail
 set -o errtrace
 
+function exit_handler() {
+    echo -e "\\n-----------------------------------------" >> "${DEBUG_OUT_FILE}"
+    echo "SCRIPT ENDING" >> "${DEBUG_OUT_FILE}"
+}
+trap "exit_handler" EXIT
+
+function signal_handler() {
+    echo -e "\\n-----------------------------------------" >> "${DEBUG_OUT_FILE}"
+    echo "SIGNAL RECEIVED, EXITING" >> "${DEBUG_OUT_FILE}"
+    exit 1
+}
+trap "signal_handler" SIGINT SIGTERM
+
+
 ROOT_IMAGES_RELATIVE_TO=$3
 RELATIVE_PREFIX="$(get_relative_dir_path_prefix "${DST}" "${ROOT_IMAGES_RELATIVE_TO}")"
 IMG_DIR="${RELATIVE_PREFIX}images/jeh-tech"
