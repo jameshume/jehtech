@@ -10,6 +10,7 @@ function err_handler() {
     echo "An error occurred with status $1" >> "${DEBUG_OUT_FILE}"
     echo "Stack trace is:" >> "${DEBUG_OUT_FILE}"
     i=0; while caller $i >> "${DEBUG_OUT_FILE}"; do (( i=i+1 )); done
+    exit 1
 }
 trap "err_handler $?" ERR
 set -o pipefail
@@ -203,8 +204,10 @@ echo -e "\n\n===================================================================
 echo "HACK CSS is:" >> "${DEBUG_OUT_FILE}"
 echo "${hack_css}" >> "${DEBUG_OUT_FILE}"
 echo -e "\n\n" >> "${DEBUG_OUT_FILE}"
+
+printf "%s\n" "<style>$hack_css</style>" | sed -i -e "/<!--\s*CSS_INSERT\s*-->/r /dev/stdin"
 sed --in-place  -e \
-    "s#<!--\s*CSS_INSERT\s*-->#<link rel=\"stylesheet\" href=\"${RELATIVE_PREFIX}jeh-monolith.css\" type=\"text/css\" /><style>${hack_css//$'\n'/\\n}</style>#" \
+    "s#<!--\s*CSS_INSERT\s*-->#<link rel=\"stylesheet\" href=\"${RELATIVE_PREFIX}jeh-monolith.css\" type=\"text/css\" />#" \
     "${DST}"
 echo "=============================================================================================" >> "${DEBUG_OUT_FILE}"
 echo "=============================================================================================" >> "${DEBUG_OUT_FILE}"
