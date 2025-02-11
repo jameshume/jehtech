@@ -155,7 +155,7 @@ struct bank_account_uses_transfer_method<BankA_Account> {
 Now we can determine at compile time wheter a bak account has the transfer function.
 
 Next we need to stop one of the `transfer` defintions from being considered at all. Do this
-by adding a boolean switch as a non-type template parameter:     
+by adding a boolean switch as a non-type template parameter:
 
 ```cpp
 template <typename T, bool uses_transfer>

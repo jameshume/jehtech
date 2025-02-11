@@ -1,4 +1,35 @@
 #!/bin/bash
+SRC=$1
+DST=$2
+
+DEBUG_OUT_FILE="${DST}.debug.txt"
+date > ${DEBUG_OUT_FILE}
+
+function err_handler() {
+    echo -e "\\n-----------------------------------------" >> "${DEBUG_OUT_FILE}"
+    echo "An error occurred with status $1" >> "${DEBUG_OUT_FILE}"
+    echo "Stack trace is:" >> "${DEBUG_OUT_FILE}"
+    i=0; while caller $i >> "${DEBUG_OUT_FILE}"; do (( i=i+1 )); done
+}
+trap "err_handler $?" ERR
+set -o pipefail
+set -o errtrace
+
+
+function exit_handler() {
+    echo -e "\\n-----------------------------------------" >> "${DEBUG_OUT_FILE}"
+    echo "SCRIPT ENDING" >> "${DEBUG_OUT_FILE}"
+}
+trap "exit_handler" EXIT
+
+
+function signal_handler() {
+    echo -e "\\n-----------------------------------------" >> "${DEBUG_OUT_FILE}"
+    echo "SIGNAL RECEIVED, EXITING" >> "${DEBUG_OUT_FILE}"
+    exit 1
+}
+trap "signal_handler" SIGINT SIGTERM
+
 
 function get_relative_dir_path_prefix() {
     # Function assumes that the image directory is an immediate subdirectory
@@ -22,35 +53,6 @@ function get_relative_dir_path_prefix() {
 }
 
 DEBUG_TMP=$(mktemp)
-
-SRC=$1
-DST=$2
-DEBUG_OUT_FILE="${DST}.debug.txt"
-date > ${DEBUG_OUT_FILE}
-
-function err_handler() {
-    echo -e "\\n-----------------------------------------" >> "${DEBUG_OUT_FILE}"
-    echo "An error occurred with status $1" >> "${DEBUG_OUT_FILE}"
-    echo "Stack trace is:" >> "${DEBUG_OUT_FILE}"
-    i=0; while caller $i >> "${DEBUG_OUT_FILE}"; do (( i=i+1 )); done
-}
-trap "err_handler $?" ERR
-set -o pipefail
-set -o errtrace
-
-function exit_handler() {
-    echo -e "\\n-----------------------------------------" >> "${DEBUG_OUT_FILE}"
-    echo "SCRIPT ENDING" >> "${DEBUG_OUT_FILE}"
-}
-trap "exit_handler" EXIT
-
-function signal_handler() {
-    echo -e "\\n-----------------------------------------" >> "${DEBUG_OUT_FILE}"
-    echo "SIGNAL RECEIVED, EXITING" >> "${DEBUG_OUT_FILE}"
-    exit 1
-}
-trap "signal_handler" SIGINT SIGTERM
-
 
 ROOT_IMAGES_RELATIVE_TO=$3
 RELATIVE_PREFIX="$(get_relative_dir_path_prefix "${DST}" "${ROOT_IMAGES_RELATIVE_TO}")"
@@ -197,8 +199,12 @@ pre code .vi { color: #19177C } /* Name.Variable.Instance */
 pre code .vm { color: #19177C } /* Name.Variable.Magic */
 pre code .il { color: #666666 } /* Literal.Number.Integer.Long */
 "
+echo -e "\n\n=============================================================================================" >> "${DEBUG_OUT_FILE}"
+echo "HACK CSS is:" >> "${DEBUG_OUT_FILE}"
+echo "${hack_css}" >> "${DEBUG_OUT_FILE}"
+echo -e "\n\n" >> "${DEBUG_OUT_FILE}"
 sed --in-place  -e \
-    "s#<!--\s*CSS_INSERT\s*-->#<link rel=\"stylesheet\" href=\"${RELATIVE_PREFIX}jeh-monolith.css\" type=\"text/css\" /><style>${hackcss//$'\n'/\\n}</style>#" \
+    "s#<!--\s*CSS_INSERT\s*-->#<link rel=\"stylesheet\" href=\"${RELATIVE_PREFIX}jeh-monolith.css\" type=\"text/css\" /><style>${hack_css//$'\n'/\\n}</style>#" \
     "${DST}"
 echo "=============================================================================================" >> "${DEBUG_OUT_FILE}"
 echo "=============================================================================================" >> "${DEBUG_OUT_FILE}"
