@@ -199,6 +199,7 @@ pre code .vg { color: #19177C } /* Name.Variable.Global */
 pre code .vi { color: #19177C } /* Name.Variable.Instance */
 pre code .vm { color: #19177C } /* Name.Variable.Magic */
 pre code .il { color: #666666 } /* Literal.Number.Integer.Long */
+pre code { border: 0px } /* JEHTECH: Otherwise lots of thin blue lines around code blocks - override jeh-monolith in this hack */
 "
 echo -e "\n\n=============================================================================================" >> "${DEBUG_OUT_FILE}"
 echo "HACK CSS is:" >> "${DEBUG_OUT_FILE}"
