@@ -35,7 +35,7 @@
 For example, to make a dictionary/object type stricter by defining the members and
 their types you can:
 
-```
+```typescript
 inteface my_interface {
     property1: type1,
     ....

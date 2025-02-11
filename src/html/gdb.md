@@ -3,7 +3,7 @@
 ### Log Buffer In Memory
 For really simple logging, a small, wrapping, buffer in memory with a size will do the job. The buffer is just a set of NULL terminated strings.
 
-```
+```cpp
 #define MYLOG_SIZE 512
 char mylog[MYLOG_SIZE];
 size_t mylog_next_free;

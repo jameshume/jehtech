@@ -1,7 +1,7 @@
 * [Building QEMU for specific targets](https://stackoverflow.com/a/26672463)
     * E.g., `./configure --target-list=arm-softmmu`. I only want to support ARM emulation.
     * On my Ubuntu 18 VM I did:
-      ``` 
+      ```bash
       sudo apt-get install -y ninja-build libglib2.0-dev libpixman-1-dev
       git clone git://git.qemu-project.org/qemu.git
       cd qemu

@@ -7,7 +7,7 @@ It iss the only form of optimization that bypasses the as-if rule - copy elision
 
 Take the following example:
 
-```
+```cpp
 // Use `g++ demo_no_move_sem.cpp -O0 -fno-elide-constructors && ./a.out`
 // `-fno-elide-constructors` disable return value optimization.
 #include <cstring>
@@ -118,7 +118,7 @@ One important thing to note is that, as explained in the article referenced abov
 
 Thus, doing something like this, stops either type of RVO:
 
-```
+```cpp
 MyObj r1;              // Default constructor used
 r1 = CreateObj_URVO(); // No RVO possible.
 ```

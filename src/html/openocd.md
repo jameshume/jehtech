@@ -114,7 +114,7 @@ expect "some string that wont occur so we wait forever" {send "exit\n"}
 And a little helper that will timestamp telnet output and is spawnable from `expect`,
 called `openocd_telnet_rtt.sh`:
 
-```
+```bash
 telnet 127.0.0.1 19021 | ts '[%Y-%m-%d %H:%M:%S]'
 ```
 
@@ -123,7 +123,7 @@ Then execute the first script and you have an RTT debug feed. Hooray.
 ## OpenOCD And Multiple STLink Devices
 Follow the method found [here](https://stackoverflow.com/a/48215590):
 
-```
+```bash
 lsusb -vvv
 ```
 
@@ -160,7 +160,7 @@ hla_serial 123456789012345678901234
 
 ## Connect DDD to OpenOCD Debug Server, Debug ARM Target From x86 Linux Host
 
-```
+```bash
 ddd --debugger "/opt/gcc-arm-none-eabi/bin/arm-none-eabi-gdb" --gdb --eval-command="target extended-remote localhost:3333" <path to ELF file>
 ```
 
@@ -218,7 +218,7 @@ shutdown
 
 ### Erase a flash sector
 
-```
+```bash
 openocd -f interface/stlink.cfg -f target/stm32f3x.cfg -c "init" -c "reset halt"  -c "flash erase_sector 0 0 last" -c "shutdown"
 ```
 
@@ -251,7 +251,7 @@ To program flash on STM devices, generally OpenOCD writes a program to flash (wh
 To find the algorithm used for target controlled flashing of the device see `stm32x_write_block_async`. It loads the algorithm into
 a buffer called `stm32x_flash_write_code` in that function:
 
-```
+```cpp
 static const uint8_t stm32x_flash_write_code[] = {
     #include "../../../contrib/loaders/flash/stm32/stm32f1x.inc"
 };
@@ -273,7 +273,7 @@ The `flash bank` command is `flash bank name driver base size chip_width bus_wid
 ## Debug GDB To OpenOCD
 In `.gdbinit` file:
 
-```
+```bash
 echo \n\n-------------------------------------------------------------------------------\n\n
 echo Enabling GDB logging for GDB client and server. See `gdb.txt` and `gdb-remote-debug.txt`.
 set remotelogfile gdb-remote-debug.txt
