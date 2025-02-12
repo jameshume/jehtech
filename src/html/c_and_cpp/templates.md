@@ -1,3 +1,6 @@
+## Good Vids Etc
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Am2is2QCvxY?si=0xlCsJCRZGFdwD7B" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 ## Type Traits
 Two kinds:
 
@@ -323,5 +326,19 @@ int main() {
 // Bank A transfer 11
 // Bank B transfer 321
 ```
+[[See full example here]](https://cpp.sh/?source=%23include+%3Ciostream%3E%0D%0A%0D%0Aclass+SWIFT+%7B%0D%0A%7D%3B%0D%0A%0D%0Aclass+BankA_Account+%7B%0D%0Apublic%3A%0D%0A++++%2F%2F+...%0D%0A++++int+transfer(double+amount%2C+SWIFT+%26destination)+%7B%0D%0A++++++++%2F%2F+...%0D%0A++++++++std%3A%3Acout%3C%3C+%22Bank+A+transfer+%22+%3C%3C+amount+%3C%3C+%22%5Cn%22%3B%0D%0A++++++++return+0%3B%0D%0A++++%7D%0D%0A%7D%3B%0D%0A%0D%0Aclass+BankB_Account+%7B%0D%0Apublic%3A%0D%0A++++%2F%2F+...%0D%0A++++bool+sendMoney(double+amount%2C+SWIFT+%26destination)+%7B%0D%0A++++++++%2F%2F+...%0D%0A++++++++std%3A%3Acout%3C%3C+%22Bank+B+transfer+%22+%3C%3C+amount+%3C%3C+%22%5Cn%22%3B%0D%0A++++++++return+true%3B%0D%0A++++%7D%0D%0A%7D%3B%0D%0A%0D%0Atemplate+%3Ctypename+T%3E%0D%0Astruct+bank_account_uses_transfer_method+%7B%0D%0A++++static+constexpr+bool+value+%3D+false%3B%0D%0A%7D%3B%0D%0A%0D%0Atemplate+%3C%3E%0D%0Astruct+bank_account_uses_transfer_method%3CBankA_Account%3E+%7B%0D%0A++++static+constexpr+bool+value+%3D+true%3B%0D%0A%7D%3B%0D%0A%0D%0Atemplate+%3Ctypename+T%3E%0D%0Ainline+constexpr+bool+bank_account_uses_transfer_method_v+%3D+bank_account_uses_transfer_method%3CT%3E%3A%3Avalue%3B%0D%0A%0D%0Atemplate+%3Cbool%3E+%2F%2F+Anonymous+non-type+parameter+-+not+used+in+impl%0D%0Astruct+transfer_wrapper+%7B%0D%0A++++template+%3Ctypename+T%3E%0D%0A++++static+bool+transfer(T%26+account%2C+double+amount%2C+SWIFT+%26destination)+%7B%0D%0A++++++++return+account.sendMoney(amount%2C+destination)+!%3D+-1%3B%0D%0A++++%7D%0D%0A%7D%3B%0D%0A%0D%0Atemplate%3C%3E%0D%0Astruct+transfer_wrapper%3Ctrue%3E+%7B%0D%0A++++template+%3Ctypename+T%3E%0D%0A++++static+bool+transfer(T%26+account%2C+double+amount%2C+SWIFT+%26destination)+%7B%0D%0A++++++++return+account.transfer(amount%2C+destination)%3B%0D%0A++++%7D%0D%0A%7D%3B%0D%0A%0D%0Atemplate+%3Ctypename+T%3E%0D%0Astatic+bool+transfer(T%26+account%2C+double+amount%2C+SWIFT+%26destination)+%7B%0D%0A++++return+transfer_wrapper%3Cbank_account_uses_transfer_method_v%3CT%3E%3E%3A%3Atransfer(account%2C+amount%2C+destination)%3B%0D%0A%7D%0D%0A%0D%0Aint+main()+%7B%0D%0A++++SWIFT+s%3B%0D%0A++++BankA_Account+a%3B%0D%0A++++BankB_Account+b%3B%0D%0A++++%0D%0A++++transfer(a%2C+11%2C+s)%3B%0D%0A++++transfer(b%2C+321%2C+s)%3B%0D%0A++++%0D%0A++++return+0%3B%0D%0A%7D)
 
 And breath....
+
+### Using `enable_if`
+The type trait `enable_if` is a metafunction. It will help do what we did above: Enable SFINAE and remove candatates from a function's overload set.
+
+A [possible implementation](https://en.cppreference.com/w/cpp/types/enable_if) is this:
+
+```cpp
+template<bool B, class T = void>
+struct enable_if {};
+ 
+template<class T>
+struct enable_if<true, T> { typedef T type; };
+```
