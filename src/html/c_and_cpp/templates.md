@@ -84,8 +84,8 @@ int* begin<int, 4>(int (&arr)[4])
 }
 ```
 
-## Use SFINAE To Eliminate Function Collision
-Contrived, but ayway... There is bank A and bank B, both of which support SWIFT transfers. We cannot modify their API.
+### Use SFINAE To Eliminate Function Collision
+Contrived, but anyway... There is bank A and bank B, both of which support SWIFT transfers. We cannot modify their API.
 
 ```cpp
 class BankA_Account {
@@ -150,11 +150,14 @@ template <>
 struct bank_account_uses_transfer_method<BankA_Account> {
     static constexpr bool value = true;
 }
+
+template <typename T>
+inline constexpr bool bank_account_uses_transfer_method_v = bank_account_uses_transfer_method<T>::value;
 ```
 
-Now we can determine at compile time wheter a bak account has the transfer function.
+Now we can determine at compile time whether a bank account has the transfer function.
 
-Next we need to stop one of the `transfer` defintions from being considered at all. Do this
+Next we need to stop one of the `transfer` definitions from being considered at all. Do this
 by adding a boolean switch as a non-type template parameter: 
 
 ```cpp
@@ -168,3 +171,157 @@ bool transfer(T& account, double amount, SWIFT &destination) {
     return account.transfer(amount, destination);
 }
 ```
+
+Nope, we get this error:
+
+```
+error: function template partial specialization is not allowed
+bool transfer<true>(T& account, double amount, SWIFT &destination) {
+     ^       ~~~~~~
+1 error generated.
+```
+
+In C++ **function template partial specialisation is not allowed**. The way round this is to wrap the functions in a class.
+
+```cpp
+template <bool> // Anonymous non-type parameter - not used in impl
+struct transfer_wrapper {
+    template <typename T>
+    static bool transfer(T& account, double amount, SWIFT &destination) {
+        return account.sendMoney(amount, destination) != -1;
+    }
+};
+
+template<>
+struct transfer_wrapper<true> {
+    template <typename T>
+    static bool transfer(T& account, double amount, SWIFT &destination) {
+        return account.transfer(amount, destination);
+    }
+};
+```
+
+Now, is we have an object of either bank type we can do:
+
+```cpp
+transfer_wrapper<bank_account_uses_transfer_method_v<MY_BANK_OBJ>>::template transfer<MY_BANK_OBJ>(account, amount, destination);
+```
+
+This is where SFINAE comes in. Assuming `MY_BANK_OBJ` is from bank B, which uses `transfer()`, whilst the compile is doing template argument deduction it will try 
+
+```cpp
+struct transfer_wrapper {
+    template <typename T> //[Uses T = BankA_Account]
+    static bool transfer(T& account, double amount, SWIFT &destination) {
+        // Deduction failure: BankA_Account::sendMoney does NOT exist!!
+        return account.sendMoney(amount, destination) != -1;  // DEDUCTION FAIL
+    }
+};
+```
+
+Rather than causing a hard error, this candidate is removed from consideration. This is a key part of the SFINAE (Substitution Failure Is Not An Error) rule:
+
+1. The compiler considers all viable template candidates.
+2. It attempts to substitute the provided arguments into each template.
+3. If substitution fails for a candidate, that candidate is removed from consideration (instead of causing a hard error).
+4. The most specific remaining candidate is selected. If there is ambiguity or no valid candidate, compilation fails.
+
+As a side note, why did we need to use the `template` keyword in `...template transfer<MY_BANK_OBJ>(...` above? Without template, the compiler assumes transfer could be a normal static member (not a template) and the keyword disamiguates this.
+
+We can tidy this up using another template function...
+
+```cpp
+template <typename T>
+static bool transfer(T& account, double amount, SWIFT &destination) {
+    return transfer_wrapper<bank_account_uses_transfer_method_v<T>>::template transfer<T>(account, amount, destination);
+}
+```
+
+Which, in turn, can be further tidied because `transfer()`'s `T` can be inferred:
+
+```cpp
+template <typename T>
+static bool transfer(T& account, double amount, SWIFT &destination) {
+    return transfer_wrapper<bank_account_uses_transfer_method_v<T>>::template(account, amount, destination);
+}
+```
+
+The whole thing becomes:
+
+```cpp
+#include <iostream>
+
+class SWIFT {
+};
+
+class BankA_Account {
+public:
+    // ...
+    int transfer(double amount, SWIFT &destination) {
+        // ...
+        std::cout<< "Bank A transfer " << amount << "\n";
+        return 0;
+    }
+};
+
+class BankB_Account {
+public:
+    // ...
+    bool sendMoney(double amount, SWIFT &destination) {
+        // ...
+        std::cout<< "Bank B transfer " << amount << "\n";
+        return true;
+    }
+};
+
+template <typename T>
+struct bank_account_uses_transfer_method {
+    static constexpr bool value = false;
+};
+
+template <>
+struct bank_account_uses_transfer_method<BankA_Account> {
+    static constexpr bool value = true;
+};
+
+template <typename T>
+inline constexpr bool bank_account_uses_transfer_method_v = bank_account_uses_transfer_method<T>::value;
+
+template <bool> // Anonymous non-type parameter - not used in impl
+struct transfer_wrapper {
+    template <typename T>
+    static bool transfer(T& account, double amount, SWIFT &destination) {
+        return account.sendMoney(amount, destination) != -1;
+    }
+};
+
+template<>
+struct transfer_wrapper<true> {
+    template <typename T>
+    static bool transfer(T& account, double amount, SWIFT &destination) {
+        return account.transfer(amount, destination);
+    }
+};
+
+template <typename T>
+static bool transfer(T& account, double amount, SWIFT &destination) {
+    return transfer_wrapper<bank_account_uses_transfer_method_v<T>>::transfer(account, amount, destination);
+}
+
+int main() {
+    SWIFT s;
+    BankA_Account a;
+    BankB_Account b;
+    
+    transfer(a, 11, s);
+    transfer(b, 321, s);
+    
+    return 0;
+}
+
+// Outputs:
+// Bank A transfer 11
+// Bank B transfer 321
+```
+
+And breath....
