@@ -1,5 +1,21 @@
 ## Good Vids Etc
-<iframe width="560" height="315" src="https://www.youtube.com/embed/Am2is2QCvxY?si=0xlCsJCRZGFdwD7B" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<p></p>
+<iframe 
+    width="560"
+    height="315"
+    src="https://www.youtube.com/embed/Am2is2QCvxY?si=0xlCsJCRZGFdwD7B"
+    title="YouTube video player"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen>
+</iframe>
+<p></p>
+
+## Credits
+The follow section is very heavily based on ["Template Metaprogramming with C++" by Marious Bancila](https://www.packtpub.com/en-ph/product/template-metaprogramming-with-c-9781803243450).
+I just changed some of the examples to encuorage my brain to mull it over more thoroughly and have tried to explain 
+things to myself in more detaill (read bigger pictures smaller words).
 
 ## Type Traits
 Two kinds:
@@ -50,6 +66,8 @@ int main() {
 2. The second kind enables type transformation at compile time. E.g. adding or removing `const` qualifier,
 or pointer/reference from a type. These are **metafunctions**.
 
+
+
 ## Substitution Failure Is Not An Error (SFINAE)
 Used to restrict template types. For example creating a function template that only works with certain types.
 
@@ -87,7 +105,16 @@ int* begin<int, 4>(int (&arr)[4])
 }
 ```
 
-### Use SFINAE To Eliminate Function Collision
+So, to recap, rather than causing a hard error, this first candidate was removed from consideration. This is a key part of the SFINAE (Substitution Failure Is Not An Error) rule:
+
+1. The compiler considers all viable template candidates.
+2. It attempts to substitute the provided arguments into each template.
+3. If substitution fails for a candidate, that candidate is removed from consideration (instead of causing a hard error).
+4. The most specific remaining candidate is selected. If there is ambiguity or no valid candidate, compilation fails.
+
+
+
+### Not SFINAE But Sets The Ground Work For How Its Useful
 Contrived, but anyway... There is bank A and bank B, both of which support SWIFT transfers. We cannot modify their API.
 
 ```cpp
@@ -112,7 +139,9 @@ public:
 
 I want to be able to have a generic function `bool transfer(??? BankAccount, double amount, SWIFT &destination)` that can accept a bank A or bank B account.
 
-As neither Bank A nor bank B inherit from a common ancestor runtime polymorphism is not possible. We could write wrapper classes that derive from a common base, and this might be a good way of doing it. Some downsides might be incurring the cost of the VTable lookups, having to write a wrapper for every bank API provider, etc. But, not considering that here... its just a contrived example to show some SFINAE... not saying this is how the problem should be solved.
+As neither Bank A nor bank B inherit from a common ancestor runtime polymorphism is not possible. We could write wrapper classes that derive from a common base, 
+and this might be a good way of doing it. Some downsides might be incurring the cost of the VTable lookups, having to write a wrapper for every bank API provider,
+etc. But, not considering that here... its just a contrived example to show some SFINAE... not saying this is how the problem should be solved.
 
 So, continuing, the solution might be templates. Lets try:
 
@@ -209,25 +238,6 @@ Now, is we have an object of either bank type we can do:
 ```cpp
 transfer_wrapper<bank_account_uses_transfer_method_v<MY_BANK_OBJ>>::template transfer<MY_BANK_OBJ>(account, amount, destination);
 ```
-
-This is where SFINAE comes in. Assuming `MY_BANK_OBJ` is from bank B, which uses `transfer()`, whilst the compile is doing template argument deduction it will try 
-
-```cpp
-struct transfer_wrapper {
-    template <typename T> //[Uses T = BankA_Account]
-    static bool transfer(T& account, double amount, SWIFT &destination) {
-        // Deduction failure: BankA_Account::sendMoney does NOT exist!!
-        return account.sendMoney(amount, destination) != -1;  // DEDUCTION FAIL
-    }
-};
-```
-
-Rather than causing a hard error, this candidate is removed from consideration. This is a key part of the SFINAE (Substitution Failure Is Not An Error) rule:
-
-1. The compiler considers all viable template candidates.
-2. It attempts to substitute the provided arguments into each template.
-3. If substitution fails for a candidate, that candidate is removed from consideration (instead of causing a hard error).
-4. The most specific remaining candidate is selected. If there is ambiguity or no valid candidate, compilation fails.
 
 As a side note, why did we need to use the `template` keyword in `...template transfer<MY_BANK_OBJ>(...` above? Without template, the compiler assumes transfer could be a normal static member (not a template) and the keyword disamiguates this.
 
@@ -328,9 +338,27 @@ int main() {
 ```
 [[See full example here]](https://cpp.sh/?source=%23include+%3Ciostream%3E%0D%0A%0D%0Aclass+SWIFT+%7B%0D%0A%7D%3B%0D%0A%0D%0Aclass+BankA_Account+%7B%0D%0Apublic%3A%0D%0A++++%2F%2F+...%0D%0A++++int+transfer(double+amount%2C+SWIFT+%26destination)+%7B%0D%0A++++++++%2F%2F+...%0D%0A++++++++std%3A%3Acout%3C%3C+%22Bank+A+transfer+%22+%3C%3C+amount+%3C%3C+%22%5Cn%22%3B%0D%0A++++++++return+0%3B%0D%0A++++%7D%0D%0A%7D%3B%0D%0A%0D%0Aclass+BankB_Account+%7B%0D%0Apublic%3A%0D%0A++++%2F%2F+...%0D%0A++++bool+sendMoney(double+amount%2C+SWIFT+%26destination)+%7B%0D%0A++++++++%2F%2F+...%0D%0A++++++++std%3A%3Acout%3C%3C+%22Bank+B+transfer+%22+%3C%3C+amount+%3C%3C+%22%5Cn%22%3B%0D%0A++++++++return+true%3B%0D%0A++++%7D%0D%0A%7D%3B%0D%0A%0D%0Atemplate+%3Ctypename+T%3E%0D%0Astruct+bank_account_uses_transfer_method+%7B%0D%0A++++static+constexpr+bool+value+%3D+false%3B%0D%0A%7D%3B%0D%0A%0D%0Atemplate+%3C%3E%0D%0Astruct+bank_account_uses_transfer_method%3CBankA_Account%3E+%7B%0D%0A++++static+constexpr+bool+value+%3D+true%3B%0D%0A%7D%3B%0D%0A%0D%0Atemplate+%3Ctypename+T%3E%0D%0Ainline+constexpr+bool+bank_account_uses_transfer_method_v+%3D+bank_account_uses_transfer_method%3CT%3E%3A%3Avalue%3B%0D%0A%0D%0Atemplate+%3Cbool%3E+%2F%2F+Anonymous+non-type+parameter+-+not+used+in+impl%0D%0Astruct+transfer_wrapper+%7B%0D%0A++++template+%3Ctypename+T%3E%0D%0A++++static+bool+transfer(T%26+account%2C+double+amount%2C+SWIFT+%26destination)+%7B%0D%0A++++++++return+account.sendMoney(amount%2C+destination)+!%3D+-1%3B%0D%0A++++%7D%0D%0A%7D%3B%0D%0A%0D%0Atemplate%3C%3E%0D%0Astruct+transfer_wrapper%3Ctrue%3E+%7B%0D%0A++++template+%3Ctypename+T%3E%0D%0A++++static+bool+transfer(T%26+account%2C+double+amount%2C+SWIFT+%26destination)+%7B%0D%0A++++++++return+account.transfer(amount%2C+destination)%3B%0D%0A++++%7D%0D%0A%7D%3B%0D%0A%0D%0Atemplate+%3Ctypename+T%3E%0D%0Astatic+bool+transfer(T%26+account%2C+double+amount%2C+SWIFT+%26destination)+%7B%0D%0A++++return+transfer_wrapper%3Cbank_account_uses_transfer_method_v%3CT%3E%3E%3A%3Atransfer(account%2C+amount%2C+destination)%3B%0D%0A%7D%0D%0A%0D%0Aint+main()+%7B%0D%0A++++SWIFT+s%3B%0D%0A++++BankA_Account+a%3B%0D%0A++++BankB_Account+b%3B%0D%0A++++%0D%0A++++transfer(a%2C+11%2C+s)%3B%0D%0A++++transfer(b%2C+321%2C+s)%3B%0D%0A++++%0D%0A++++return+0%3B%0D%0A%7D)
 
-And breath....
+Note, that SFINAE has not yet been used. In the above example there were no substitution failures. The following is an example of the type deduction suceeding:
 
-### Using `enable_if`
+```cpp
+template <bool> 
+struct transfer_wrapper {
+    template <typename T> // [T == BankA_Account]
+    static bool transfer(T /*[BankA_Account]*/ & account, double amount, SWIFT &destination) {
+        return account.sendMoney(amount, destination) != -1; //< This does **NOT** cause a deduction failure because SFINAE only applies
+                                                             //  to template params, function return type and params.
+    }
+};
+```
+
+Had the above deduction been *chosen*, it would have resulted in a compile time error: the compiler would have complained that the type `BankA_Account`
+does not have a member function `sendMoney()`! The reason the compile time error did not arise is that this candidate would not be chosen (and therefore
+realised), because the more specialised template would have been chosen. Thus, SFINAE is not in use here. Just the normal template deduction and
+selection process.
+
+And breath... There is a lot of complexity here and its quite hard to read. Next we see how enabling SFINAE help reduce this complexity and makes things easier to read.
+
+### Making The Previous Example Neater Using SFINAE (Using `enable_if`)
 The type trait `enable_if` is a metafunction. It will help do what we did above: Enable SFINAE and remove candatates from a function's overload set.
 
 A [possible implementation](https://en.cppreference.com/w/cpp/types/enable_if) is this:
@@ -341,4 +369,115 @@ struct enable_if {};
  
 template<class T>
 struct enable_if<true, T> { typedef T type; };
+```
+
+Remember earlier, when we wanted to write the following, but couldn't because functions templates cannot be partially specialised?
+
+```cpp
+template <typename T, bool uses_transfer>
+bool transfer(T& account, double amount, SWIFT &destination) {
+    return account.sendMoney(amount, destination) != -1;
+}
+
+template <typename T, true>
+bool transfer(T& account, double amount, SWIFT &destination) {
+    return account.transfer(amount, destination);
+}
+```
+
+Well, now, with a little fiddle, we can!
+
+```cpp
+template <typename T, 
+          typename std::enable_if<!bank_account_uses_transfer_method_v<T>>::type* = nullptr
+>
+bool transfer(T& account, double amount, SWIFT &destination) {
+    return account.sendMoney(amount, destination) != -1;
+}
+
+template <typename T,
+          typename std::enable_if<bank_account_uses_transfer_method_v<T>>::type* = nullptr
+>
+bool transfer(T& account, double amount, SWIFT &destination) {
+    return account.transfer(amount, destination) != -1;
+}
+```
+
+And this is all we need. We don't need the wrapping structures or the generic function that hides the use of the structs etc.
+And it reads more easily. Each function is only enabled if the condition bank_account_uses_transfer_method_v is met or not.
+
+How does it work? In the example before, we saw that the body of the function wasn't used during the deduction process, so
+previously, when the compiler tried to substitute `BankA_Account` into the template that used `T.sendMoney`, this would
+not influence the deduction, hence the trick with the wrapper class. However, using `enable_if` we have now forced that
+substitution to happen in the template parameter list, and hence it will take part in the deduction!
+
+Lets be the compiler and choose `T` as `BankA_Account`. The first of the template functions above becomes:
+
+
+AARGGG TODO, this bit is WRONG... dont have time to addres right now, COMING BACK TO THIS LATER.
+
+
+```cpp
+template <BankA_Account, 
+          typename std::enable_if<!bank_account_uses_transfer_method_v<BankA_Account>>::type* = nullptr
+>
+bool transfer(BankA_Account& account, double amount, SWIFT &destination) { return account.sendMoney(amount, destination) != -1; }
+```
+
+Because `bank_account_uses_transfer_method_v<BankA_Account>` is `false` we get:
+
+```cpp
+template <BankA_Account, 
+          typename std::enable_if<!false>::type* = nullptr
+>
+bool transfer(BankA_Account& account, double amount, SWIFT &destination) { return account.sendMoney(amount, destination) != -1; }
+```
+
+Which is,
+
+```cpp
+template <BankA_Account, 
+          typename std::enable_if<true>::type* = nullptr
+>
+bool transfer(BankA_Account& account, double amount, SWIFT &destination) { return account.sendMoney(amount, destination) != -1; }
+```
+
+Now, `std::enable_if<true>` becomes `struct enable_if<true, void> { typedef void type; };`. Why?
+Because the [default argument defined in the non-specialised variant applies to the specialised variant](https://stackoverflow.com/a/18701381/1517244).
+
+This means we now have:
+
+```cpp
+typedef struct enable_if<true, void> { typedef void type; } DEDUCED_T;
+
+template <BankA_Account, 
+          typename DEDUCED_T::type* = nullptr
+>
+bool transfer(BankA_Account& account, double amount, SWIFT &destination) { ... }
+```
+
+The deduction succeeds because `DEDUCED_T` does, indeed, have a member `type`.
+
+But, and here's the clever bit, the other possibility has a substiution failure so is removed from the set
+of possible realisations being considered:
+
+```cpp
+template <typename BankA_Account,
+          typename std::enable_if<bank_account_uses_transfer_method_v<BankA_Account>>::type* = nullptr
+>
+bool transfer(T& account, double amount, SWIFT &destination) {
+    return account.transfer(amount, destination) != -1;
+}
+```
+
+Becomes:
+
+
+```cpp
+template <typename BankA_Account,
+          typename std::enable_if<bank_account_uses_transfer_method_v<BankA_Account>>::type* = nullptr
+>
+bool transfer(T& account, double amount, SWIFT &destination) {
+    return account.transfer(amount, destination) != -1;
+}
 ```
