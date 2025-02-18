@@ -288,6 +288,14 @@ From [`aapcs32/aapcs32.rst`](https://github.com/ARM-software/abi-aa/blob/main/aa
 </table>
 <p></p>
 
+From the [AAPCS, 5.1.1](http://infocenter.arm.com/help/topic/com.arm.doc.ihi0042f/IHI0042F_aapcs.pdf):
+
+* r0-r3 are the argument and scratch registers; r0-r1 are also the result registers - clobbered across a function call
+* r4-r8 are callee-save registers - preserved across a function call
+* r9 might be a callee-save register or not (on some variants of AAPCS it is a special register)
+* r10-r11 are callee-save registers
+* r12-r15 are special registers
+
 ### Stack
 
 The ARM stack is <b>fully descending</b>. Descending means that it starts at a high address and each push <b>decrements</b> the stack pointer.

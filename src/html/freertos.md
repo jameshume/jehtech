@@ -10,6 +10,9 @@
 * The book [Mastering the FreeRTOS™ Real Time Kerne](https://www.freertos.org/Documentation/Mastering-the-FreeRTOS-Real-Time-Kernel.v1.0.pdf) is freely available.
 * [MPU Support Chapter](https://www.freertos.org/MPU_Chapter.pdf) & [Webpage](https://www.freertos.org/FreeRTOS-MPU-memory-protection-unit.html)
 
+## Installing Manually
+
+
 ## Naming Conventions
 
 * `TickType_t` - Either a U16 or U32 based on FreeRTOS configuration settings.
