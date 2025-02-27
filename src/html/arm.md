@@ -655,59 +655,6 @@ echo 'export PATH=$PATH:/opt/openocd/bin' | sudo tee -a /etc/profile.d/gcc-arm-n
 <p></p>
 
 
-
-
-
-
-Install CMake
-mkdir -p /tmp/build
-git clone https://github.com/Kitware/CMake.git /tmp/build/cmake \
-
-Pushd  /tmp/build/cmake
- git checkout v3.30.5
-mkdir build && cd build
-../bootstrap --prefix=/usr --parallel=$(nproc --all) 
-make -j$(nproc --all)
-sudo make install
-popd
-rm -rf /tmp/build
-
-Install Compiler
-mkdir -p /tmp/build
-wget -q -O "/tmp/build/arm-gnu-toolchain.tar.xz" https://developer.arm.com/-/media/Files/downloads/gnu/12.3.rel1/binrel/arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi.tar.xz
-sudo mkdir -p /opt/gcc-arm-none-eabi 
-sudo tar -xf /tmp/build/arm-gnu-toolchain.tar.xz --strip-components=1 -C /opt/gcc-arm-none-eabi 
-rm -rf /tmp/build
-echo 'export PATH=$PATH:/opt/gcc-arm-none-eabi/bin' | sudo tee -a /etc/profile.d/gcc-arm-none-eabi.sh
-
-Close terminal and re-open wsl 
-Install OpenOCD
-mkdir -p /tmp/build 
-git clone https://github.com/openocd-org/openocd.git /tmp/build/openocd
-pushd  /tmp/build/openocd
-git checkout v0.12.0
-./bootstrap
-mkdir build && cd build 
-../configure --prefix=/opt/openocd --enable-stlink --enable-internal-libjaylink --enable-jlink --enable-cmsis_dap --enable-remote-bitbang 
-make -j$(nproc --all) 
-sudo make install 
-popd
- rm -rf /tmp/build
-
-echo 'export PATH=$PATH:/opt/openocd/bin' | sudo tee -a /etc/profile.d/gcc-arm-none-eabi.sh
-
-
-Build Firmware
-Close terminal and re-open wsl 
-
-Mkdir build
-Cd build
-Cmake ..
-Make all
-Make program
-
-
-
 ## Misc Snippets
 
 ### Am I In An ISR?
