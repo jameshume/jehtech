@@ -584,6 +584,129 @@ sudo ln -s $PYENV_ROOT/versions/3.8.18 /usr/local/bld-tools/bld-tools-virtual-en
 
 GDB should now work!
 
+## Setup A Minimal (WSL) Development Environment
+### Install WSL
+* Enable WSL (if not already enabled). Open PowerShell as Administrator and run `wsl –install`.
+* Install a fresh Ubuntu distribution and give it a name: `wsl --install -d Ubuntu --name Ubuntu_MyNewDistro`
+* Start new distro: `wsl -d Ubuntu_MyNewDistro` and follow the following instructions...
+
+### Setup Basic System Prerequisits
+<p></p>
+```bash
+sudo apt update
+sudo apt-get install -y build-essential \
+                        make \
+                        libssl-dev \
+                        libtool \
+                        libusb-1.0-0-dev \
+                        m4 \
+                        pkg-config \
+                        autoconf \
+                        automake \
+                        texinfo \
+                        libhidapi-dev
+```
+<p></p>
+
+### Setup CMake
+<p></p>
+```bash
+mkdir -p /tmp/build
+git clone https://github.com/Kitware/CMake.git /tmp/build/cmake
+pushd  /tmp/build/cmake
+git checkout v3.30.5
+mkdir build && cd build
+../bootstrap --prefix=/usr --parallel=$(nproc --all) 
+make -j$(nproc --all)
+sudo make install
+popd
+rm -rf /tmp/build
+```
+<p></p>
+
+### Setup GCC Cross Compiler
+<p></p>
+```bash
+mkdir -p /tmp/build
+wget -q -O "/tmp/build/arm-gnu-toolchain.tar.xz" "https://developer.arm.com/-/media/Files/downloads/gnu/12.3.rel1/binrel/arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi.tar.xz"
+sudo mkdir -p /opt/gcc-arm-none-eabi 
+sudo tar -xf /tmp/build/arm-gnu-toolchain.tar.xz --strip-components=1 -C /opt/gcc-arm-none-eabi 
+rm -rf /tmp/build
+echo 'export PATH=$PATH:/opt/gcc-arm-none-eabi/bin' | sudo tee -a /etc/profile.d/gcc-arm-none-eabi.sh
+```
+<p></p>
+
+### Setup OpenOCD
+<p></p>
+```bash
+mkdir -p /tmp/build 
+git clone https://github.com/openocd-org/openocd.git /tmp/build/openocd
+pushd  /tmp/build/openocd
+git checkout v0.12.0
+./bootstrap
+mkdir build && cd build 
+../configure --prefix=/opt/openocd --enable-stlink --enable-internal-libjaylink --enable-jlink --enable-cmsis_dap --enable-remote-bitbang 
+make -j$(nproc --all) 
+sudo make install 
+popd
+rm -rf /tmp/build
+echo 'export PATH=$PATH:/opt/openocd/bin' | sudo tee -a /etc/profile.d/gcc-arm-none-eabi.sh
+```
+<p></p>
+
+
+
+
+
+
+Install CMake
+mkdir -p /tmp/build
+git clone https://github.com/Kitware/CMake.git /tmp/build/cmake \
+
+Pushd  /tmp/build/cmake
+ git checkout v3.30.5
+mkdir build && cd build
+../bootstrap --prefix=/usr --parallel=$(nproc --all) 
+make -j$(nproc --all)
+sudo make install
+popd
+rm -rf /tmp/build
+
+Install Compiler
+mkdir -p /tmp/build
+wget -q -O "/tmp/build/arm-gnu-toolchain.tar.xz" https://developer.arm.com/-/media/Files/downloads/gnu/12.3.rel1/binrel/arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi.tar.xz
+sudo mkdir -p /opt/gcc-arm-none-eabi 
+sudo tar -xf /tmp/build/arm-gnu-toolchain.tar.xz --strip-components=1 -C /opt/gcc-arm-none-eabi 
+rm -rf /tmp/build
+echo 'export PATH=$PATH:/opt/gcc-arm-none-eabi/bin' | sudo tee -a /etc/profile.d/gcc-arm-none-eabi.sh
+
+Close terminal and re-open wsl 
+Install OpenOCD
+mkdir -p /tmp/build 
+git clone https://github.com/openocd-org/openocd.git /tmp/build/openocd
+pushd  /tmp/build/openocd
+git checkout v0.12.0
+./bootstrap
+mkdir build && cd build 
+../configure --prefix=/opt/openocd --enable-stlink --enable-internal-libjaylink --enable-jlink --enable-cmsis_dap --enable-remote-bitbang 
+make -j$(nproc --all) 
+sudo make install 
+popd
+ rm -rf /tmp/build
+
+echo 'export PATH=$PATH:/opt/openocd/bin' | sudo tee -a /etc/profile.d/gcc-arm-none-eabi.sh
+
+
+Build Firmware
+Close terminal and re-open wsl 
+
+Mkdir build
+Cd build
+Cmake ..
+Make all
+Make program
+
+
 
 ## Misc Snippets
 
