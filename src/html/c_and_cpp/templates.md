@@ -359,7 +359,7 @@ selection process.
 And breath... There is a lot of complexity here and its quite hard to read. Next we see how enabling SFINAE help reduce this complexity and makes things easier to read.
 
 ### Making The Previous Example Neater Using SFINAE (Using `enable_if`)
-The type trait `enable_if` is a metafunction. It will help do what we did above: Enable SFINAE and remove candatates from a function's overload set.
+The type trait `enable_if` is a metafunction. It will help do what we did above but this time by enabling SFINAE to remove candatates from a function's overload set.
 
 A [possible implementation](https://en.cppreference.com/w/cpp/types/enable_if) is this:
 
@@ -403,8 +403,7 @@ bool transfer(T& account, double amount, SWIFT &destination) {
 }
 ```
 
-And this is all we need. We don't need the wrapping structures or the generic function that hides the use of the structs etc.
-And it reads more easily. Each function is only enabled if the condition bank_account_uses_transfer_method_v is met or not.
+And this is all we need. We don't need the wrapping structures or the generic function that hides the use of the structs etc. It also reads more easily. Each function is only enabled if the condition bank_account_uses_transfer_method_v is met or not.
 
 How does it work? In the example before, we saw that the body of the function wasn't used during the deduction process, so
 previously, when the compiler tried to substitute `BankA_Account` into the template that used `T.sendMoney`, this would
@@ -413,71 +412,70 @@ substitution to happen in the template parameter list, and hence it will take pa
 
 Lets be the compiler and choose `T` as `BankA_Account`. The first of the template functions above becomes:
 
-
-AARGGG TODO, this bit is WRONG... dont have time to addres right now, COMING BACK TO THIS LATER.
-
-
 ```cpp
 template <BankA_Account, 
           typename std::enable_if<!bank_account_uses_transfer_method_v<BankA_Account>>::type* = nullptr
 >
-bool transfer(BankA_Account& account, double amount, SWIFT &destination) { return account.sendMoney(amount, destination) != -1; }
+bool transfer(BankA_Account& account, double amount, SWIFT &destination) { ...account.sendMoney... }
 ```
 
-Because `bank_account_uses_transfer_method_v<BankA_Account>` is `false` we get:
+Because `bank_account_uses_transfer_method_v<BankA_Account>` is `true` we get:
 
 ```cpp
 template <BankA_Account, 
-          typename std::enable_if<!false>::type* = nullptr
+          typename std::enable_if<false>::type* = nullptr
 >
-bool transfer(BankA_Account& account, double amount, SWIFT &destination) { return account.sendMoney(amount, destination) != -1; }
+bool transfer(BankA_Account& account, double amount, SWIFT &destination) { ...account.sendMoney... }
 ```
 
-Which is,
+Expanding further:
 
 ```cpp
 template <BankA_Account, 
+          typename struct {}::type* = nullptr
+>
+bool transfer(BankA_Account& account, double amount, SWIFT &destination) { ...account.sendMoney... }
+```
+
+Oops substitution failure! `struct {}` has no static member `type`. Substitution fails, removing this function overload
+from the set of viable candidates.
+
+What happens with the other function, when `T` is `BankA_Account`?
+
+```cpp
+template <BankA_Account,
+          typename std::enable_if<bank_account_uses_transfer_method_v<BankA_Account>>::type* = nullptr
+>
+bool transfer(T& account, double amount, SWIFT &destination) { ...account.transfer... }
+```
+
+This becomes:
+
+```cpp
+template <BankA_Account,
           typename std::enable_if<true>::type* = nullptr
 >
-bool transfer(BankA_Account& account, double amount, SWIFT &destination) { return account.sendMoney(amount, destination) != -1; }
+bool transfer(T& account, double amount, SWIFT &destination) { ...account.transfer... }
 ```
 
-Now, `std::enable_if<true>` becomes `struct enable_if<true, void> { typedef void type; };`. Why?
-Because the [default argument defined in the non-specialised variant applies to the specialised variant](https://stackoverflow.com/a/18701381/1517244).
-
-This means we now have:
+And then:
 
 ```cpp
-typedef struct enable_if<true, void> { typedef void type; } DEDUCED_T;
-
-template <BankA_Account, 
-          typename DEDUCED_T::type* = nullptr
+template <BankA_Account,
+          struct { typedef BankA_Account type; }::type* = nullptr
 >
-bool transfer(BankA_Account& account, double amount, SWIFT &destination) { ... }
+bool transfer(T& account, double amount, SWIFT &destination) { ...account.transfer... }
 ```
 
-The deduction succeeds because `DEDUCED_T` does, indeed, have a member `type`.
-
-But, and here's the clever bit, the other possibility has a substiution failure so is removed from the set
-of possible realisations being considered:
+Which is:
 
 ```cpp
-template <typename BankA_Account,
-          typename std::enable_if<bank_account_uses_transfer_method_v<BankA_Account>>::type* = nullptr
+template <BankA_Account,
+          BankA_Account* = nullptr
 >
-bool transfer(T& account, double amount, SWIFT &destination) {
-    return account.transfer(amount, destination) != -1;
-}
+bool transfer(T& account, double amount, SWIFT &destination) { ...account.transfer... }
 ```
 
-Becomes:
+Which works! The type is successfully deduces as `BankA_Account`. 
 
-
-```cpp
-template <typename BankA_Account,
-          typename std::enable_if<bank_account_uses_transfer_method_v<BankA_Account>>::type* = nullptr
->
-bool transfer(T& account, double amount, SWIFT &destination) {
-    return account.transfer(amount, destination) != -1;
-}
-```
+This `enable_if` has allowed us to select a function instatiation at compile time!
