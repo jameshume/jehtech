@@ -27,11 +27,6 @@ The expansion example applies to any function. We could write `MyFunc(args)...`,
 which would expand the pack and apply `MyFunc` to each item.
 
 
-### Passing Expansion Pack To Functions
-Largest expression or initialiser list to the *left* of the ellipsis is the pattern that is expanded:
-
-TODO
-
 ### Fold Expressions
 Folds are parameter packs elements over a binary operator:
 
