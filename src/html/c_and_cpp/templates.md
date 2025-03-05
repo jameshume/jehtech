@@ -1,3 +1,7 @@
+## Variadic Template
+
+![](##IMG_DIR##/variadic-template-ellipsis-meanings.png)
+
 ## Good Vids Etc
 <p></p>
 <iframe 
