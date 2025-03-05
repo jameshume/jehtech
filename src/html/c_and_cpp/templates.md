@@ -27,41 +27,6 @@ The expansion example applies to any function. We could write `MyFunc(args)...`,
 which would expand the pack and apply `MyFunc` to each item.
 
 
-### Fold Expressions
-Folds are parameter packs elements over a binary operator:
-
-```cpp
-template<typename T>
-T sum(T a) {
-    return a;
-}
-
-template <typename T, typename... Args>
-T sum(T a, Args... args) {
-    return a + sum(args...);
-}
-```
-
-Becomes just this:
-
-```cpp
-template <typename... T>
-int sum(T... args) {
-    return (... + args);
-}
-```
-
-In general you can have these:
-
-* `(args op ... [op init])`:
-    * E.g. `(args + ...)` expands to `(args[0] + (args[1] + (... + (args[N-1] + args[N]))))`
-    * E.g. `(args + ... + 99)` expands to `(args[0] + (args[1] + (... +  (args[N-1] + (args[N] + 99)))))`
-* `([op init] ... op args)`
-    * E.g. `(... + args)` expands to `((((args[0] + args[1]) + args[2]) + ...) + args[N])`
-    * E.g. `(99 + ... + args)` expands to `(((((99 + args[0]) + args[1]) + args[2]) + ...) + args[N])`
-
-The parameter pack can also be part of an expression. E.g.: `(somefunc(args), ...)`.
-
 ### Variadic Function Templates
 Use function overloading to define a base case and the recuring case:
 
@@ -128,8 +93,47 @@ main:
 As we can see, the are no function calls to `myFunction`, just the result!
 
 
+### Fold Expressions
+A fold expression allows you to apply an operator to a parameter pack in a concise way and is
+a nice way of simplifying recursive template logic...
+
+```cpp
+template<typename T>
+T sum(T a) {
+    return a;
+}
+
+template <typename T, typename... Args>
+T sum(T a, Args... args) {
+    return a + sum(args...);
+}
+```
+
+Becomes just this:
+
+```cpp
+template <typename... T>
+int sum(T... args) {
+    return (... + args);
+}
+```
+
+In general you can have these:
+
+* `(args op ... [op init])`:
+    * E.g. `(args + ...)` expands to `(args[0] + (args[1] + (... + (args[N-1] + args[N]))))`
+    * E.g. `(args + ... + 99)` expands to `(args[0] + (args[1] + (... +  (args[N-1] + (args[N] + 99)))))`
+* `([op init] ... op args)`
+    * E.g. `(... + args)` expands to `((((args[0] + args[1]) + args[2]) + ...) + args[N])`
+    * E.g. `(99 + ... + args)` expands to `(((((99 + args[0]) + args[1]) + args[2]) + ...) + args[N])`
+
+The parameter pack can also be part of an expression. E.g.: `(somefunc(args), ...)`.
+
+
 ### Variadic Class Templates
 TODO
+
+
 
 ## Good Vids Etc
 <p></p>
