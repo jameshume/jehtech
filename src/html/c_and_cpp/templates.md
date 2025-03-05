@@ -1,6 +1,12 @@
-## Variadic Template
+## Variadic Templates
 
 ![](##IMG_DIR##/variadic-template-ellipsis-meanings.png)
+
+The **template parameter pack (`T...`)** allows a template to accept a variable number of **type** parameters.
+
+The **function parameter pack `(Args...)`**: allows functions to accept a variable number of arguments of any type.
+
+The **parameter pack expansion `(args...)`**: unpacks a parameter pack into separate arguments.
 
 ## Good Vids Etc
 <p></p>
