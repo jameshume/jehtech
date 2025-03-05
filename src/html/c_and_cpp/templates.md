@@ -8,6 +8,134 @@ The **function parameter pack `(Args...)`**: allows functions to accept a variab
 
 The **parameter pack expansion `(args...)`**: unpacks a parameter pack into separate arguments.
 
+### Get The Number Of Arguments In A Parameter Pack
+To get the number of arguments in a parameter pack use the `sizeof...` operator like, which is evaluated at *compile time*, as follows:
+
+```cpp
+template <typename T, typename... Args>
+void someFunction(T, a, Args... args) {
+    std::cout << "There are " << sizeof...(Args) << " arguments\n";
+    std::cout << "There are " << sizeof...(args) << " arguments\n"; // Will return same as for Args
+}
+```
+
+### Parameter Pack vs Expansion
+* `sizeof...(args)` returns the size of the pack
+* `sizeof(args)...` *expands* the parameter pack and applies `sizeof()` to each expanded item.
+
+The expansion example applies to any function. We could write `MyFunc(args)...`, for example,
+which would expand the pack and apply `MyFunc` to each item.
+
+
+### Passing Expansion Pack To Functions
+Largest expression or initialiser list to the *left* of the ellipsis is the pattern that is expanded:
+
+TODO
+
+### Fold Expressions
+Folds are parameter packs elements over a binary operator:
+
+```cpp
+template<typename T>
+T sum(T a) {
+    return a;
+}
+
+template <typename T, typename... Args>
+T sum(T a, Args... args) {
+    return a + sum(args...);
+}
+```
+
+Becomes just this:
+
+```cpp
+template <typename... T>
+int sum(T... args) {
+    return (... + args);
+}
+```
+
+In general you can have these:
+
+* `(args op ... [op init])`:
+    * E.g. `(args + ...)` expands to `(args[0] + (args[1] + (... + (args[N-1] + args[N]))))`
+    * E.g. `(args + ... + 99)` expands to `(args[0] + (args[1] + (... +  (args[N-1] + (args[N] + 99)))))`
+* `([op init] ... op args)`
+    * E.g. `(... + args)` expands to `((((args[0] + args[1]) + args[2]) + ...) + args[N])`
+    * E.g. `(99 + ... + args)` expands to `(((((99 + args[0]) + args[1]) + args[2]) + ...) + args[N])`
+
+The parameter pack can also be part of an expression. E.g.: `(somefunc(args), ...)`.
+
+### Variadic Function Templates
+Use function overloading to define a base case and the recuring case:
+
+```cpp
+// This is the base case
+template <typename T>
+T myFunction(T lhs, T rhs) {
+    return lhs * rhs; // ... Any operation that does something with p1 and p2
+}
+
+// This is the recursive case
+template <typename T, typename... Args>
+T myFunction(T lhs, Args... rhs) {
+    return myFunction(lhs, myFunction(rhs...));
+}
+
+int main() {
+	printf("%u\n", myFunction(1U, 2U, 3U, 4U));
+	return 0;
+}
+```
+
+We can use CPPInsights.io to see that this generates the following template instantiations:
+
+```cpp
+unsigned int myFunction<unsigned int, unsigned int, unsigned int, unsigned int>(
+        unsigned int lhs, unsigned int __rhs1, unsigned int __rhs2, unsigned int __rhs3)
+{
+  return myFunction(lhs, myFunction(__rhs1, __rhs2, __rhs3));
+}
+
+template<>
+unsigned int myFunction<unsigned int, unsigned int, unsigned int>(
+        unsigned int lhs, unsigned int __rhs1, unsigned int __rhs2)
+{
+  return myFunction(lhs, myFunction(__rhs1, __rhs2));
+}
+
+template<>
+unsigned int myFunction<unsigned int>(
+    unsigned int lhs, unsigned int rhs)
+{
+  return lhs * rhs;
+}
+```
+
+Which would then get inlined by the compiler, and further more for such a simple example, even on 
+`O1` optimisation level, the result is computed at compile time. We can observe this using the 
+GodBolt compiler explorer, which outputs the following ARM asm:
+
+```
+.LC0:
+        .ascii  "%u\012\000"
+main:
+        push    {r3, lr}
+        movs    r1, #24
+        movw    r0, #:lower16:.LC0
+        movt    r0, #:upper16:.LC0
+        bl      printf
+        movs    r0, #0
+        pop     {r3, pc}
+```
+
+As we can see, the are no function calls to `myFunction`, just the result!
+
+
+### Variadic Class Templates
+TODO
+
 ## Good Vids Etc
 <p></p>
 <iframe 
