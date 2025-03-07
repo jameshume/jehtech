@@ -641,3 +641,84 @@ bool transfer(T& account, double amount, SWIFT &destination) { ...account.transf
 Which works! The type is successfully deduces as `BankA_Account`. 
 
 This `enable_if` has allowed us to select a function instatiation at compile time!
+
+
+
+## Compile Time If: `if constexpr`
+
+
+The following is taken from [n3329](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3329.pdf), where `static if` was proposed, and eventually became `if constexpr`. I've changed it to use `if constexpr`, removed a check on the iterators for simplicity and changed `has_trivial_copy_constructor` to `is_trivially_constructible`.
+
+```cpp
+template <class It, class T>
+void uninitialized_fill(It b, It e, const T& x) {
+    if constexpr (std::is_trivially_constructible<T>::value) {
+        // Doesn't matter that the values were uninitialized
+        std::fill(b, e, x);
+    } else {
+        // Conservative implementation
+        for (; b != e; ++b) {
+            new(&*b) T(x);
+        }
+    }
+}
+```
+
+How would this be implemented if the compile time conditional didn't exist?
+
+```cpp
+#include <iostream>
+#include <type_traits>
+
+template <class It, class T>
+void uninitialized_fill(
+            It b,
+            It e,
+            const T &x,
+            const typename std::enable_if<
+                std::is_trivially_constructible<T>::value,
+                T>::type* p = nullptr
+) {
+    // Doesn't matter that the values were uninitialized
+    std::fill(b, e, x);
+}
+
+template <class It, class T>
+void uninitialized_fill(
+        It b,
+        It e,
+        const T& x,
+        const typename std::enable_if<
+            !std::is_trivially_constructible<T>::value,
+            T>::type* p = nullptr
+) {
+    // Conservative implementation
+    for (; b != e; ++b) {
+        new(&*b) T(x);
+    }
+}
+```
+
+So, already its harder to grok! Using `constexpr if` has reduce the amount of code and the cognitive burden required to understand the code. Happy days.
+
+By the way, the following is not compilable, as one might expect (I did and learnt otherwise lol):
+
+```cpp
+template <class It, class T>
+void uninitialized_fill(
+            It b,
+            It e,
+            const typename std::enable_if<
+                std::is_trivially_constructible<T>::value,
+                T>::type& x
+) {
+    // Doesn't matter that the values were uninitialized
+    std::fill(b, e, x);
+}
+```
+
+The reason is that **deduction only works for directly used template parameters**: when a template parameter appears inside another 
+template (like `std::enable_if<>`), it is not considered for deduction. Stack overflow to the rescue with a [detailed explaination](https://stackoverflow.com/a/25245676/1517244).
+
+
+
