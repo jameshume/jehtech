@@ -57,3 +57,4 @@ asyncio.run(myFunc())
 
 In the example above, notice that at point `## 1 ##`, the task is created and scheduled to run, but the coroutine that created it simply continues on its merry way. The `myTask` task doesn't get a chance to run until `myFunc` finishes. This happens because the event loop runs on a single thread and relies on cooperative scheduling. Since `myFunc` doesn't contain any `await` statements, it never yields control back to the event loop, preventing `myTask` from running until `myFunc` is done.
 
+Another difference is that `await`ing on co-routines directly inside other coroutines, does not scheduling the called routine as a background task: instead, it will sequentially waiting for it to complete, whilst offering other tasks the chance to run.
