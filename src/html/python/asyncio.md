@@ -53,6 +53,7 @@ asyncio.run(myFunc())
 ##    9
 ##    myTask starts
 ```
+[[Run on Programiz]](https://www.programiz.com/online-compiler/78tFZeyQdDvla)
 
 In the example above, notice that at point `## 1 ##`, the task is created and scheduled to run, but the coroutine that created it simply continues on its merry way. The `myTask` task doesn't get a chance to run until `myFunc` finishes. This happens because the event loop runs on a single thread and relies on cooperative scheduling. Since `myFunc` doesn't contain any `await` statements, it never yields control back to the event loop, preventing `myTask` from running until `myFunc` is done.
 
