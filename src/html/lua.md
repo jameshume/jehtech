@@ -211,3 +211,38 @@ Function called as an expression - only the first result returned kept
 Function is last or only expression in list of expressions - All results kept
 
 
+# C API
+## Object Orientism Through Prototypical Inheritance
+If a variable or function does not exist in the type then lookup the thing in the metatable. 
+
+The general pattern is this:
+
+```c
+// In this example the thing being created is a blob of user data, which is pushed onto the stack.
+my_user_data = lua_newuserdatauv(L, my_user_data_size, num_user_data_slots); 
+// Stack = [UD]
+
+// Next the metatable associated with the type of thing is pushed onto the top of the stack.
+luaL_getmetatable(L, "type-of-thing");
+// Stack = [UD, MT]
+
+// Duplicate the top of the stack and push it onto the stack - in this case duplicates MT.
+lua_pushvalue(L, -1);
+// Stack = [UD, MT, MT]
+
+// Set MT.__index = MT. This tells Lua that if it can't find a field in the thing, look for it in the thing's metatable.
+// The setfield function sets "__index" to whatever is on the top of the stack, in this case the MT. It then pops the 
+// value off stack.
+lua_setfield(L, -1, "__index");        
+// Stack = [UD, MT]
+
+// Associate the metatable with the thing. Set UD.__metatable = MT. Pop value off stack. 
+lua_setmetatable(L, -2);                        
+// Stack [UD]
+```
+
+The way lookup works is that if the member being looked up in the thing is not found, Lua looks for an associated
+meta table. If it finds that it then looks it up in the meta table.
+
+Thus by putting values and functions in the meta table, and associating it with that type, the type "inherits"
+those things from the meta table.

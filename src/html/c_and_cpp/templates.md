@@ -540,12 +540,12 @@ Remember earlier, when we wanted to write the following, but couldn't because fu
 ```cpp
 template <typename T, bool uses_transfer>
 bool transfer(T& account, double amount, SWIFT &destination) {
-    return account.sendMoney(amount, destination) != -1;
+    return account.sendMoney(amount, destination);
 }
 
 template <typename T, true>
 bool transfer(T& account, double amount, SWIFT &destination) {
-    return account.transfer(amount, destination);
+    return account.transfer(amount, destination) != -1;
 }
 ```
 
@@ -556,7 +556,7 @@ template <typename T,
           typename std::enable_if<!bank_account_uses_transfer_method_v<T>>::type* = nullptr
 >
 bool transfer(T& account, double amount, SWIFT &destination) {
-    return account.sendMoney(amount, destination) != -1;
+    return account.sendMoney(amount, destination);
 }
 
 template <typename T,
@@ -645,9 +645,25 @@ Which works! The type is successfully deduces as `BankA_Account`.
 This `enable_if` has allowed us to select a function instatiation at compile time!
 
 
+It is also worth noting that `enable_if` could have been used in the return value as well:
+
+```cpp
+template <typename T>
+typename std::enable_if<!bank_account_uses_transfer_method_v<T>, bool>::type
+transfer(T& account, double amount, SWIFT &destination) {
+    return account.sendMoney(amount, destination);
+}
+
+template <typename T>
+typename std::enable_if<bank_account_uses_transfer_method_v<T>, bool>::type
+transfer(T& account, double amount, SWIFT &destination) {
+    return account.transfer(amount, destination) != -1;
+}
+```
+[See full example here](https://cpp.sh/?source=%23include%20%3Ciostream%3E%0A%0Aclass%20SWIFT%20%7B%0A%7D%3B%0A%0Aclass%20BankA_Account%20%7B%0Apublic%3A%0A%20%20%20%20%2F%2F%20...%0A%20%20%20%20int%20transfer%28double%20amount%2C%20SWIFT%20%26destination%29%20%7B%0A%20%20%20%20%20%20%20%20%2F%2F%20...%0A%20%20%20%20%20%20%20%20std%3A%3Acout%3C%3C%20%22Bank%20A%20transfer%20%22%20%3C%3C%20amount%20%3C%3C%20%22%5Cn%22%3B%0A%20%20%20%20%20%20%20%20return%200%3B%0A%20%20%20%20%7D%0A%7D%3B%0A%0Aclass%20BankB_Account%20%7B%0Apublic%3A%0A%20%20%20%20%2F%2F%20...%0A%20%20%20%20bool%20sendMoney%28double%20amount%2C%20SWIFT%20%26destination%29%20%7B%0A%20%20%20%20%20%20%20%20%2F%2F%20...%0A%20%20%20%20%20%20%20%20std%3A%3Acout%3C%3C%20%22Bank%20B%20transfer%20%22%20%3C%3C%20amount%20%3C%3C%20%22%5Cn%22%3B%0A%20%20%20%20%20%20%20%20return%20true%3B%0A%20%20%20%20%7D%0A%7D%3B%0A%0Atemplate%20%3Ctypename%20T%3E%0Astruct%20bank_account_uses_transfer_method%20%7B%0A%20%20%20%20static%20constexpr%20bool%20value%20%3D%20false%3B%0A%7D%3B%0A%0Atemplate%20%3C%3E%0Astruct%20bank_account_uses_transfer_method%3CBankA_Account%3E%20%7B%0A%20%20%20%20static%20constexpr%20bool%20value%20%3D%20true%3B%0A%7D%3B%0A%0Atemplate%20%3Ctypename%20T%3E%0Ainline%20constexpr%20bool%20bank_account_uses_transfer_method_v%20%3D%20bank_account_uses_transfer_method%3CT%3E%3A%3Avalue%3B%0A%0Atemplate%20%3Ctypename%20T%3E%0Atypename%20std%3A%3Aenable_if%3C%21bank_account_uses_transfer_method_v%3CT%3E%2C%20bool%3E%3A%3Atype%0Atransfer%28T%26%20account%2C%20double%20amount%2C%20SWIFT%20%26destination%29%20%7B%0A%20%20%20%20return%20account.sendMoney%28amount%2C%20destination%29%3B%0A%7D%0A%0Atemplate%20%3Ctypename%20T%3E%0Atypename%20std%3A%3Aenable_if%3Cbank_account_uses_transfer_method_v%3CT%3E%2C%20bool%3E%3A%3Atype%0Atransfer%28T%26%20account%2C%20double%20amount%2C%20SWIFT%20%26destination%29%20%7B%0A%20%20%20%20return%20account.transfer%28amount%2C%20destination%29%20%21%3D%20-1%3B%0A%7D%0A%0A%0Aint%20main%28%29%20%7B%0A%20%20%20%20SWIFT%20s%3B%0A%20%20%20%20BankA_Account%20a%3B%0A%20%20%20%20BankB_Account%20b%3B%0A%20%20%20%20%0A%20%20%20%20transfer%28a%2C%2011%2C%20s%29%3B%0A%20%20%20%20transfer%28b%2C%20321%2C%20s%29%3B%0A%20%20%20%20%0A%20%20%20%20return%200%3B%0A%7D)
+
 
 ## Compile Time If: `if constexpr`
-
 
 The following is taken from [n3329](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3329.pdf), where `static if` was proposed, and eventually became `if constexpr`. I've changed it to use `if constexpr`, removed a check on the iterators for simplicity and changed `has_trivial_copy_constructor` to `is_trivially_constructible`.
 
