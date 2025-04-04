@@ -211,8 +211,8 @@ Function called as an expression - only the first result returned kept
 Function is last or only expression in list of expressions - All results kept
 
 
-# C API
-## Object Orientism Through Prototypical Inheritance
+## C API
+### Object Orientism Through Prototypical Inheritance
 If a variable or function does not exist in the type then lookup the thing in the metatable. 
 
 The general pattern is this:
