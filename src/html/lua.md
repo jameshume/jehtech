@@ -246,3 +246,25 @@ meta table. If it finds that it then looks it up in the meta table.
 
 Thus by putting values and functions in the meta table, and associating it with that type, the type "inherits"
 those things from the meta table.
+
+To put functions etc in the meta table, the following pattern can be used:
+
+```C
+static const luaL_Reg METHOD_FUNCS[] = {
+        {"func_name_1",  func_name_1},
+        // ...
+        {NULL, NULL}
+};
+
+// create metatable containing buffer object methods
+luaL_newmetatable(L, APP_LUA_BUFFER_METATABLE);
+// Stack = [..., MT]
+
+// Add the functions in METHOD_FUNCS to the metatable object
+luaL_setfuncs(L, METHOD_FUNCS, 0);
+// Stack = [..., MT]
+
+// Pop the MT off the stack to retore the stacks state
+lua_pop(L, 1);
+// Stack = [...]
+```
