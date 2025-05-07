@@ -256,7 +256,7 @@ static const luaL_Reg METHOD_FUNCS[] = {
         {NULL, NULL}
 };
 
-// create metatable containing buffer object methods
+// create a new meta table on the top of the stack, and associate it with the given name in the registry.
 luaL_newmetatable(L, "name of meta table");
 // Stack = [..., MT]
 
