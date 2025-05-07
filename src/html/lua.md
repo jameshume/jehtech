@@ -257,7 +257,7 @@ static const luaL_Reg METHOD_FUNCS[] = {
 };
 
 // create metatable containing buffer object methods
-luaL_newmetatable(L, APP_LUA_BUFFER_METATABLE);
+luaL_newmetatable(L, "name of meta table");
 // Stack = [..., MT]
 
 // Add the functions in METHOD_FUNCS to the metatable object

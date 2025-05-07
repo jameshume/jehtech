@@ -618,6 +618,11 @@ sudo <em>usermod</em> -a -G sudo the_new_guy</pre>
               <td>Switch Java vers:</td>
               <td><code>alternatives --config java</code></td>
             </tr>
+            <tr>
+              <td>Filter out blank lines and specific line:</td>
+              <td><code>awk 'NF && $0 != "Filter out line containing this string:"' input.txt
+              </code></td>
+            </tr>
           </table>
         </p>
 
