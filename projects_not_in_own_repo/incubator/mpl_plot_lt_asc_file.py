@@ -91,6 +91,7 @@ def lt_plot_asc(fig, ax, filename):
     components = []
     mpl_flag_texts = []
 
+    print(f"OPENING {filename}")
     for line in open(filename, "r"):
         if (prev_line_cache is not None):
             if line.startswith("IOPIN "):
@@ -240,6 +241,9 @@ if __name__ == "__main__":
                 for spine in ax.spines.values():
                     spine.set_visible(False)
                 ax.tick_params(left=False, bottom=False, labelleft=False, labelbottom=False)
+            except Exception as exc:
+                print(f"FAILED TO DRAW {filename} because {exc}")
+                raise
             except:
                 print(f"FAILED TO DRAW {filename}")
                 raise
