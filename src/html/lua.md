@@ -212,33 +212,88 @@ Function is last or only expression in list of expressions - All results kept
 
 
 ## C API
-### Object Orientism Through Prototypical Inheritance
-If a variable or function does not exist in the type then lookup the thing in the metatable. 
+### The LUA Stack
+LUA passes data between itself and C in both directions using a single stack:
 
-The general pattern is this:
+```
+STACK                                     INDEX FROM      INDEX FROM
+                                          BOTTOM          TOP
++-----------------------+ Stack top   
+|                       |                 3               -1
++-----------------------+
+|                       |                 2               -2
++-----------------------+
+|                       |                 1               -1
++-----------------------+ Stack bottom
+```
+
+> Each slot in this stack can hold any Lua value. [[Ref]](https://www.lua.org/pil/24.2.html)
+> ...
+> When Lua starts and any time that Lua calls C, the stack has at least 20 free slots 
+> (this constant is defined as LUA_MINSTACK in lua.h). This is more than enough for most common uses, 
+> so usually we do not even think about that. [[Ref]](https://www.lua.org/pil/24.2.1.html)
+
+When LUA calls a C function, it places the arguments on the stack, and when a C function returns
+"things" to LUA it also places them on the stack.
+
+### API Helper (LUA Aux Library)
+
+> The auxiliary library provides several convenient functions to interface C with Lua. While the 
+> basic API provides the primitive functions for all interactions between C and Lua, the auxiliary 
+> library provides higher-level functions for some common tasks.
+
+See `lauxlib.h`.
+
+### Object Orientism Through Prototypical Inheritance
+Prototypical inheritance is a feature where objects can inherit properties and methods directly from other
+objects, rather than from classes, as in classical inheritance. Prototypical inheritance just links objects
+via prototypes, or in the LUA world, via metatables.
+
+If a variable or function does not exist in the table then LUA lookups the thing in the metatable, if that metatable
+has an `__index` field. 
+
+* If `__index` is a function, it is called.
+* If `__index` is a table, Lua looks up the key in that table.
+
+This lets one table "inherit" from another. Objects can create chains of prototypes by setting the `__index` field
+of their metatables.
+
+E.g. class A sets `__index` of its metatable to class B, which in turn sets `__index` of its metatable to class C.
+Then if a name is not found in an A, it will be looked up in B, and if not found in B, looked up in C and so on.
+
+To set this up from within a C function, the general pattern is this:
 
 ```c
 // In this example the thing being created is a blob of user data, which is pushed onto the stack.
 my_user_data = lua_newuserdatauv(L, my_user_data_size, num_user_data_slots); 
-// Stack = [UD]
+// Stack = [UD ]
+//         [...]
 
 // Next the metatable associated with the type of thing is pushed onto the top of the stack.
 luaL_getmetatable(L, "type-of-thing");
-// Stack = [UD, MT]
+// Stack = [MT ]
+//         [UD ]
+//         [...]
 
 // Duplicate the top of the stack and push it onto the stack - in this case duplicates MT.
 lua_pushvalue(L, -1);
-// Stack = [UD, MT, MT]
+// Stack = [MT ]
+//         [MT ]
+//         [UD ]
+//         [...]
+
 
 // Set MT.__index = MT. This tells Lua that if it can't find a field in the thing, look for it in the thing's metatable.
 // The setfield function sets "__index" to whatever is on the top of the stack, in this case the MT. It then pops the 
 // value off stack.
 lua_setfield(L, -1, "__index");        
-// Stack = [UD, MT]
+// Stack = [MT ]
+//         [UD ]
+//         [...]
 
 // Associate the metatable with the thing. Set UD.__metatable = MT. Pop value off stack. 
 lua_setmetatable(L, -2);                        
-// Stack [UD]
+// Stack = [UD]
 ```
 
 The way lookup works is that if the member being looked up in the thing is not found, Lua looks for an associated

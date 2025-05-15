@@ -15,6 +15,22 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER I
 OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
+"""
+Install LTSpice on Linux using Wine:
+
+    sudo dpkg --add-architecture i386
+    sudo apt update
+    sudo apt install wine64 wine32 winetricks \
+                    x11-utils x11-xserver-utils xauth xvfb \
+                    libwine libwine:i386
+
+Install LTSpie:
+    wget https://ltspice.analog.com/software/LTspice64.exe -O ~/LTspice64.exe
+
+Run installer:
+    wine ~/LTspice64.exe
+"""
+
 import matplotlib.pyplot as pl
 import matplotlib.patches as mpatches
 
@@ -216,15 +232,19 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         test_file_names = [sys.argv[1]]
 
-    for filename in test_file_names:
-        fig, ax = pl.subplots()
-        try:
-            d = lt_plot_asc(fig, ax, filename)
-        except:
-            print(f"FAILED TO DRAW {filename}")
-            raise
-        print(d['name_to_component'])
-        
-        fig.show()
-        pl.show()
-        pl.close(fig)
+    with pl.xkcd():
+        for filename in test_file_names:
+            fig, ax = pl.subplots()
+            try:
+                d = lt_plot_asc(fig, ax, filename)
+                for spine in ax.spines.values():
+                    spine.set_visible(False)
+                ax.tick_params(left=False, bottom=False, labelleft=False, labelbottom=False)
+            except:
+                print(f"FAILED TO DRAW {filename}")
+                raise
+            print(d['name_to_component'])
+            
+            fig.show()
+            pl.show()
+            pl.close(fig)
