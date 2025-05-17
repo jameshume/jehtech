@@ -80,6 +80,12 @@ class MPL_LTLine(PlottedLTLine):
     def set_colour(self, colour):
         self._mpl_line.set_color(colour)
 
+    def __str__(self):
+        return f"MPL_LTLine({self._p1}, {self._p2})"
+    
+    def __repr__(self):
+        return self.__str__()
+
 def lt_plot_asc(fig, ax, filename):
     state                     = "normal"
     flag_x, flag_y, flag_type = None, None, None
@@ -242,6 +248,27 @@ if __name__ == "__main__":
             for spine in ax.spines.values():
                 spine.set_visible(False)
             ax.tick_params(left=False, bottom=False, labelleft=False, labelbottom=False)
+            
+            print(d['points_to_pins'])
+
+            top_net_from_vcc = d['wires'][0:5]
+            for wire in top_net_from_vcc: wire.set_colour('red')
+            
+            a_input_net = d['wires'][5:7] + d['wires'][17:19]
+            for wire in a_input_net: wire.set_colour('green')
+            
+            b_input_net = d['wires'][7:11] + d['wires'][20:22]
+            for wire in b_input_net: wire.set_colour('cyan')
+                        
+            m1_m2_to_m3_and_out_net = d['wires'][11:17]
+            for wire in m1_m2_to_m3_and_out_net: wire.set_colour('pink')
+
+            m3_to_m4_net = d['wires'][19:20]
+            for wire in m3_to_m4_net: wire.set_colour('purple')
+
+            m4_to_groupd_net = d['wires'][22:23]
+            for wire in m4_to_groupd_net: wire.set_colour('black')
+
         except Exception as exc:
             print(f"FAILED TO DRAW {filename} because {exc}")
             raise
