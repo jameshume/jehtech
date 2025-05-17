@@ -233,22 +233,23 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         test_file_names = [sys.argv[1]]
 
-    with pl.xkcd():
-        for filename in test_file_names:
-            fig, ax = pl.subplots()
-            try:
-                d = lt_plot_asc(fig, ax, filename)
-                for spine in ax.spines.values():
-                    spine.set_visible(False)
-                ax.tick_params(left=False, bottom=False, labelleft=False, labelbottom=False)
-            except Exception as exc:
-                print(f"FAILED TO DRAW {filename} because {exc}")
-                raise
-            except:
-                print(f"FAILED TO DRAW {filename}")
-                raise
-            print(d['name_to_component'])
-            
-            fig.show()
-            pl.show()
-            pl.close(fig)
+    
+    #with pl.xkcd(randomness=0, scale=.1, length=100):
+    for filename in test_file_names:
+        fig, ax = pl.subplots()
+        try:
+            d = lt_plot_asc(fig, ax, filename)
+            for spine in ax.spines.values():
+                spine.set_visible(False)
+            ax.tick_params(left=False, bottom=False, labelleft=False, labelbottom=False)
+        except Exception as exc:
+            print(f"FAILED TO DRAW {filename} because {exc}")
+            raise
+        except:
+            print(f"FAILED TO DRAW {filename}")
+            raise
+        print(d['name_to_component'])
+        
+        fig.show()
+        pl.show()
+        pl.close(fig)
