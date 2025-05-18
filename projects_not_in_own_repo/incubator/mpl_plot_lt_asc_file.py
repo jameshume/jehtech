@@ -41,6 +41,9 @@ from typing import Union, List
 from dataclasses import dataclass
 from collections import defaultdict
 
+pl.rcParams['lines.linewidth'] = 2
+
+
 
 def parse_flag_line(line, minmax, ax, draw=True):
     flag_x, flag_y, flag_type = line.strip().split(" ")[1:]
@@ -86,6 +89,17 @@ class MPL_LTLine(PlottedLTLine):
     def __repr__(self):
         return self.__str__()
 
+class MPL_IoPin:
+    def __init__(self, is_out, lines, text_xy, text_str):
+        self._is_out   = is_out
+        self._lines    = lines
+        self._text_xy  = text_xy
+        self._text_str = text_str
+
+    def set_colour(self, colour):
+        for line in self._lines:
+            line.set_color(colour)
+
 def lt_plot_asc(fig, ax, filename):
     state                     = "normal"
     flag_x, flag_y, flag_type = None, None, None
@@ -93,6 +107,7 @@ def lt_plot_asc(fig, ax, filename):
     first_line                = True
     wires                     = []
     minmax                    = MinMax()
+    pins                      = {}
 
     components = []
     mpl_flag_texts = []
@@ -106,23 +121,26 @@ def lt_plot_asc(fig, ax, filename):
                 h = 20
                 warrow = 20
                 minmax.add(LTPoint(x, y))
+                l1, l2 = None, None
                 if inout == "Out":
                     minmax.add(LTPoint(x - warrow, y - h))
                     minmax.add(LTPoint(x - warrow, y + h))
-                    ax.plot([x, x - warrow], [y, y - h], c='b')
-                    ax.plot([x, x - warrow], [y, y + h], c='b')
+                    l1, = ax.plot([x, x - warrow], [y, y - h], c='b')
+                    l2, = ax.plot([x, x - warrow], [y, y + h], c='b')
                 elif inout == "In":
                     minmax.add(LTPoint(x + warrow, y - h))
                     minmax.add(LTPoint(x + warrow, y + h))
-                    ax.plot([x, x + warrow], [y, y - h], c='b')
-                    ax.plot([x, x + warrow], [y, y + h], c='b')
+                    l1, = ax.plot([x, x + warrow], [y, y - h], c='b')
+                    l2, = ax.plot([x, x + warrow], [y, y + h], c='b')
                 else:
                     print(f"##### IO pin type {inout} not supported")
 
                 flag_x, flag_y, flag_text = parse_flag_line(prev_line_cache, minmax, ax, draw=False)
                 minmax.add(LTPoint(flag_x, flag_y))
                 mpl_flag_text = ax.text(flag_x, flag_y, flag_text, fontsize=10)
-                mpl_flag_texts.append(mpl_flag_text)                                
+                mpl_flag_texts.append(mpl_flag_text)
+
+                pins[flag_text] = MPL_IoPin(inout=="Out", [l1, l2], LTPoint(flag_x, flag_y), flag_text )
             else:
                 parse_flag_line(prev_line_cache, minmax, ax)
             
@@ -219,6 +237,7 @@ def lt_plot_asc(fig, ax, filename):
         'points_to_wires'   : points_to_wires,
         'points_to_pins'    : points_to_pins,
         'name_to_component' : name_to_component,
+        'pins'              : pins
     }
 
 
@@ -249,25 +268,27 @@ if __name__ == "__main__":
                 spine.set_visible(False)
             ax.tick_params(left=False, bottom=False, labelleft=False, labelbottom=False)
             
-            print(d['points_to_pins'])
-
             top_net_from_vcc = d['wires'][0:5]
             for wire in top_net_from_vcc: wire.set_colour('red')
-            
+
             a_input_net = d['wires'][5:7] + d['wires'][17:19]
             for wire in a_input_net: wire.set_colour('green')
+            d['pins']['A'].set_colour('green')
             
             b_input_net = d['wires'][7:11] + d['wires'][20:22]
             for wire in b_input_net: wire.set_colour('cyan')
+            d['pins']['B'].set_colour('cyan')
                         
             m1_m2_to_m3_and_out_net = d['wires'][11:17]
             for wire in m1_m2_to_m3_and_out_net: wire.set_colour('pink')
+            d['pins']['Out'].set_colour('pink')
 
             m3_to_m4_net = d['wires'][19:20]
             for wire in m3_to_m4_net: wire.set_colour('purple')
 
             m4_to_groupd_net = d['wires'][22:23]
             for wire in m4_to_groupd_net: wire.set_colour('black')
+
 
         except Exception as exc:
             print(f"FAILED TO DRAW {filename} because {exc}")
