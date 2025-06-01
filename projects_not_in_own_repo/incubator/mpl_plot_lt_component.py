@@ -69,45 +69,127 @@ def rotate_quadrants(quad):
 #######################################################################################################################
 def draw_ltspice_arc(ax, arc : LTArc, idx, debug=True):
     print(f"DRAW ARC {arc}")
-    ax.add_patch(
-        mpatches.Arc(
-            arc.bbox.center.as_tuple(), *arc.bbox.dimensions.as_tuple(), angle=0, theta1=arc.t1_degs, theta2=arc.t2_degs, color='b', linewidth=pl.rcParams['lines.linewidth']))
+    mplarc = mpatches.Arc(
+            arc.bbox.center.as_tuple(), 
+            *arc.bbox.dimensions.as_tuple(), 
+            angle=0, 
+            theta1=arc.t1_degs, 
+            theta2=arc.t2_degs, 
+            color='b', 
+            linewidth=pl.rcParams['lines.linewidth'])
+    ax.add_patch(mplarc)
+    return mplarc
+
+
+class MPL_LTComponent(LTComponent):
+    
+
+    def __init__(self, totalname, name):
+        super().__init__(totalname, name)
+        self._mpllines      : list[pl.Line2D]      = []
+        self._mplrectangles : list[mpatches.Patch] = []
+        self._mplellipses   : list[mpatches.Patch] = []
+        self._mplpins       : list[mpatches.Patch] = []
+        self._mplpin_labels : list[pl.Text]        = []
+        self._mplarcs       : list[mpatches.Patch] = []
+        self._mplname       : pl.Text              = None
+    
+    def set_colour(self, colour):
+        for line in self._mpllines:
+            line.set_color(colour)
+        for rect in self._mplrectangles:
+            rect.set_edgecolor(colour)
+        for ellipse in self._mplellipses:
+            ellipse.set_edgecolor(colour)
+        for pin in self._mplpins:
+            pin.set_edgecolor(colour)
+        for arc in self._mplarcs:
+            arc.set_colour(colour)
+        
+
+    def add_line(self, line):
+        self._mpllines.append(line)
+
+    def add_rectangle(self, rect):
+        self._mplrectangles.append(rect)
+    
+    def add_ellipse(self, ellipse):
+        self._mplellipses.append(ellipse)
+
+    def add_pin(self, pin):
+        self._mplpins.append(pin)
+    
+    def add_pin_label(self, label):
+        self._mplpin_labels.append(label)
+
+    def add_arc(self, arc):
+        self._mplarcs.append(arc)
+    
+    def add_name_text(self, name):
+        self._mplname = name
+
+    def get_minmax(self):
+        return self.minmax
 
 
 
 
 #######################################################################################################################
 def matplotlib_plot_component(
-        component   : LTComponent,
+        totalname, name, rotation, x, y,
         ax          : pl.Axes,
         show_labels : bool = False):
+    
+    mpl_component = MPL_LTComponent(totalname, name)
+    mpl_component.rotate(rotation)
+    mpl_component.translate(LTPoint(x, y))
 
     # Now draw the component
-    for line in component.lines:
-        ax.plot([line.p1.x, line.p2.x], [line.p1.y, line.p2.y], color='b')
+    for line in mpl_component.lines:
+        mplline, = ax.plot([line.p1.x, line.p2.x], [line.p1.y, line.p2.y], color='b')
+        mpl_component.add_line(mplline)
 
-    for rect in component.rectangles:
-        ax.add_patch(
-            mpatches.Rectangle(rect.topleft.as_tuple(), *rect.dimensions.as_tuple(), fill=False, color='b', linewidth=pl.rcParams['lines.linewidth']))
+    for rect in mpl_component.rectangles:
+        mplpatch = ax.add_patch(
+            mpatches.Rectangle(
+                rect.topleft.as_tuple(), 
+                *rect.dimensions.as_tuple(), 
+                fill=False, 
+                color='b', 
+                linewidth=pl.rcParams['lines.linewidth']))
+        mpl_component.add_rectangle(mplpatch)
 
-    for ellipse in component.ellipses:
-        ax.add_patch(
-            mpatches.Ellipse(ellipse.xy.as_tuple(), ellipse.w, ellipse.h, fill=False, color='b', linewidth=pl.rcParams['lines.linewidth']))
+    for ellipse in mpl_component.ellipses:
+        mplpatch = ax.add_patch(
+            mpatches.Ellipse(
+                ellipse.xy.as_tuple(), 
+                ellipse.w, 
+                ellipse.h, 
+                fill=False, 
+                color='b', 
+                linewidth=pl.rcParams['lines.linewidth']))
+        mpl_component.add_ellipse(mplpatch)
 
-    for pin in component.pins:
-        ax.add_patch(mpatches.Circle(pin.p.as_tuple(), 1, color='r', linewidth=pl.rcParams['lines.linewidth']))
+    for pin in mpl_component.pins:
+        mplpatch = ax.add_patch(
+            mpatches.Circle(pin.p.as_tuple(), 1, color='r', linewidth=pl.rcParams['lines.linewidth']))
+        mpl_component.add_pin(mplpatch)
         if show_labels and pin.name is not None:
-            ax.text(pin.p.x, pin.p.y, pin.name)
+            mplpatch = ax.text(pin.p.x, pin.p.y, pin.name)
+            mpl_component.add_pin_label(mplpatch)
 
-    for arc, arc_index in component.arcs:
-        draw_ltspice_arc(ax, arc, arc_index, debug=False)
+    for arc, arc_index in mpl_component.arcs:
+        mplarc = draw_ltspice_arc(ax, arc, arc_index, debug=False)
+        mpl_component.add_arc(mplarc)
 
-    ax.text( 
-        component.minmax.max.x + (component.minmax.max.x - component.minmax.min.x) *.05, 
-        component.minmax.min.y + (component.minmax.max.y - component.minmax.min.y) / 2, 
-        component.name)
 
-    return component.minmax
+    mplname = ax.text( 
+        mpl_component.minmax.max.x + (mpl_component.minmax.max.x - mpl_component.minmax.min.x) *.05, 
+        mpl_component.minmax.min.y + (mpl_component.minmax.max.y - mpl_component.minmax.min.y) / 2, 
+        mpl_component.name)
+    mpl_component.add_name_text(mplname)
+
+    return mpl_component
 
 
 if __name__ == "__main__":
@@ -134,7 +216,8 @@ if __name__ == "__main__":
             ax.spines[['left', 'bottom', 'right', 'top']].set_visible(False)
             ax.set_xticks([]) 
             ax.set_yticks([]) 
-            minmax = matplotlib_plot_component(LTComponent(fn), ax)
+            mpl_ltcomponent = matplotlib_plot_component(LTComponent(fn), ax)
+            minmax = mpl_ltcomponent.get_minmax()
             MARGIN = 5
             ax.set_xlim(minmax.min.x - MARGIN, minmax.max.x + MARGIN)
             ax.set_ylim(minmax.min.y - MARGIN, minmax.max.y + MARGIN)

@@ -177,7 +177,8 @@ def lt_plot_asc(fig, ax, filename):
             component = LTComponent(totalname, name)
             component.rotate(rotation)
             component.translate(LTPoint(x, y))
-            component_minmax = matplotlib_plot_component(component, ax, show_labels=False)
+            mpl_ltcomponent = matplotlib_plot_component(component, ax, show_labels=False)
+            component_minmax = mpl_ltcomponent.get_minmax()
             components.append(component)
             minmax.merge(component_minmax)
 

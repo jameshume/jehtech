@@ -1540,6 +1540,10 @@ if (adaption_field_contains_pcr) {
             To <b>compress</b> your video or <b>change its size</b> try the following:
         </p>
         <pre>ffmpeg -i &lt;inputfilename&gt; -s 640x480 -b:v 512k &lt;outputfilename&gt;</pre>
+		<P>
+			For example, my screen captures from OBS:
+		</P>
+		<pre>ffmpeg -i input.mkv -c:v libx265 -crf 28 -c:a aac -b:a 128k output.mp4</pre>
 
         <h4>Duplicate Sources</h4>
         <p>The following copies one V4L2 source to two other V4L2 loopback devices...</p>
