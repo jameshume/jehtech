@@ -177,6 +177,17 @@ sudo update-alternatives --install /usr/local/bin/usbip usbip /usr/lib/linux-too
 			<p>Fixed using:</p>
 			<pre>sc start usbipd</pre>
 			<p></p>
+
+			<h3> WSL kernel is not USBIP capable</h3>
+			<p>
+				If you see this:
+			</p>
+			<pre>usbipd: error: WSL kernel is not USBIP capable; update with 'wsl --update'.</pre>
+			<p>
+				In WSL type this:
+			</p>
+			<pre>sudo modprobe vhci-hcd</pre>
+			<p></p>
 		</div>
 
 		<h2>Get WSL Distribution Name From Within Distribution</h2>
