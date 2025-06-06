@@ -1,6 +1,6 @@
 ## Command Cheat Sheet
 ### Process control
-
+<p></p>
 | Command     | Description                                              |
 | ----------- | -------------------------------------------------------- |
 | `run`       | Starts (or restarts) the program from the entry point.   |
@@ -10,7 +10,7 @@
 | `next`      | Runs one source line, stepping over functions.           |
 | `finish`    | Runs until the current function returns.                 |
 | `continue`  | Resumes execution after a stop (like after `interrupt`). |
-
+<p></p>
 
 ### Remote control
 The `monitor` commands send raw commands directly to the remote target—often through a GDB server like OpenOCD.
@@ -22,10 +22,11 @@ The `monitor` commands send raw commands directly to the remote target—often t
 | `monitor reset run`            | Sends the reset and run command to the remote target.                         |
 | `monitor halt`                 | Stops (halts) the target immediately.                                         |
 | `monitor reset`                | Resets the target (may halt or run depending on default behavior).            |
-
+<p></p>
 
 ### Info
 
+<p></p>
 | Command                 | Description                                                |
 | ----------------------- | ---------------------------------------------------------- |
 | `info registers`        | Shows the current contents of CPU registers.               |
@@ -36,10 +37,11 @@ The `monitor` commands send raw commands directly to the remote target—often t
 | `thread <N>`            | Switches context to thread number `<N>`.                   |
 | `info locals`           | Displays local variables in the current frame.             |
 | `info frame`            | Shows detailed info about the current stack frame.         |
-
+<p></p>
 
 ### Code navigation
 
+<p></p>
 | Command  | Description                                      |
 | -------- | ------------------------------------------------ |
 | `step`   | Runs one source line; steps into function calls. |
@@ -47,10 +49,12 @@ The `monitor` commands send raw commands directly to the remote target—often t
 | `finish` | Runs until the current function returns.         |
 | `stepi`  | Steps one assembly instruction.                  |
 | `nexti`  | Steps over one assembly instruction.             |
+<p></p>
 
 
 ### Breakpoints
 
+<p></p>
 | Command                        | Description                                                      |
 | ------------------------------ | ---------------------------------------------------------------- |
 | `break filename:linenumber`    | Sets a breakpoint at the given file and line number.             |
@@ -63,10 +67,11 @@ The `monitor` commands send raw commands directly to the remote target—often t
 | `watch *(uint32_t*)0xADDRESS`  | Sets a watchpoint to stop when the value at the address changes. |
 | `rwatch *(uint32_t*)0xADDRESS` | Stops when the value at the address is **read**.                 |
 | `awatch *(uint32_t*)0xADDRESS` | Stops when the value at the address is **read or written**.      |
-
+<p></p>
 
 ### Examining Memory
 
+<p></p>
 | Command                                                          | Description                                                |
 | ---------------------------------------------------------------- | ---------------------------------------------------------- |
 | `dump binary memory <filename> <start_address> <end_address>`    | Saves the memory range to a binary file.                   |
@@ -74,7 +79,7 @@ The `monitor` commands send raw commands directly to the remote target—often t
 | `dump intel-hex memory <filename> <start_address> <end_address>` | Alternate name for `ihex` format.                          |
 | `x /Nxf ADDRESS`                                                 | Displays memory in hex (not to a file; prints to console). |
 | `x /Nxb ADDRESS`                                                 | Displays memory in binary (not to a file).                 |
-
+<p></p>
 
 #### Log Buffer In Memory
 For really simple logging, a small, wrapping, buffer in memory with a size will do the job. The buffer is just a set of NULL terminated strings.
