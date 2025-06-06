@@ -1,4 +1,16 @@
 ## Command Cheat Sheet
+
+### Loading
+
+<p></p>
+| Command                                    | Description                                                                 |
+| ------------------------------------------ | --------------------------------------------------------------------------- |
+| `load`                                     | Loads the binary (like an ELF file) into the target’s memory.               |
+| `file your_program.elf`                    | Loads the program’s symbol table and executable file into GDB.              |
+| `symbol-file your_program.elf`             | Loads just the symbol table (no code download).                             |
+| `add-symbol-file your_program.elf address` | Adds an extra symbol file at a specific address (like for RAM-loaded code). |
+<p></p>
+
 ### Process control
 <p></p>
 | Command     | Description                                              |
@@ -79,6 +91,21 @@ The `monitor` commands send raw commands directly to the remote target—often t
 | `dump intel-hex memory <filename> <start_address> <end_address>` | Alternate name for `ihex` format.                          |
 | `x /Nxf ADDRESS`                                                 | Displays memory in hex (not to a file; prints to console). |
 | `x /Nxb ADDRESS`                                                 | Displays memory in binary (not to a file).                 |
+<p></p>
+
+### Debugging the debugger
+
+<p></p>
+| Command                                                     | Description                                                                 |
+| ----------------------------------------------------------- | --------------------------------------------------------------------------- |
+| `set verbose on`                                            | Turns on verbose output in GDB, making it more talkative.                   |
+| `set debug remote 1`                                        | Enables detailed debug logging of remote communication (like with OpenOCD). |
+| `set remotelogfile ${workspaceFolder}/gdb-server-debug.txt` | Sets a file to log remote GDB server (target) communication.                |
+| `set logging file ${workspaceFolder}/gdb-client-debug.log`  | Sets a file to log GDB client-side output.                                  |
+| `set logging debugredirect on`                              | Redirects all debug output to the log file instead of the console.          |
+| `set logging overwrite on`                                  | Overwrites the log file each time GDB starts logging.                       |
+| `set logging enabled on`                                    | Turns on logging (starts logging to the file you set).                      |
+
 <p></p>
 
 #### Log Buffer In Memory
