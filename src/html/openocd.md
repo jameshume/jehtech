@@ -248,6 +248,8 @@ script
     * `openocd -f interface/stlink.cfg -f target/stm32h7x_dual_bank.cfg -c "\$_CHIPNAME.cpu0 configure -rtos FreeRTOS" -c "reset_config none" -c "init"`
 * Connect to and reset n' run a target
     * `openocd -f interface/stlink.cfg -f target/stm32h7x_dual_bank.cfg -c "\$_CHIPNAME.cpu0 configure -rtos FreeRTOS" -c "init" -c "reset run"`
+* Flash target
+    * `openocd -f your/openocd.cfg -c "program your/application" -c "reset run" -c "shutdown"`
 
 ## Flash Programming Notes
 To program flash on STM devices, generally OpenOCD writes a program to flash (which is why `WORKAREASIZE` is important - this is the amount of RAM that can be used for this program). This program is then used to write to flash. If this fails, it is possible to fall back to a host-controlled halfword by halfword access. For F1's, for example, see `stm32x_write_block` in `src/flash/nor/stm32f1x.c` of OpenOCD source.
