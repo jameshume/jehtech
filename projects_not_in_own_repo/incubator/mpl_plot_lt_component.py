@@ -82,8 +82,6 @@ def draw_ltspice_arc(ax, arc : LTArc, idx, debug=True):
 
 
 class MPL_LTComponent(LTComponent):
-    
-
     def __init__(self, totalname, name):
         super().__init__(totalname, name)
         self._mpllines      : list[pl.Line2D]      = []

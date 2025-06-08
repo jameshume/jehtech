@@ -270,6 +270,8 @@ if __name__ == "__main__":
             d['pins']['B'].set_colour(colour)
                     
         m1_m2_to_m3_and_out_net = d['wires'][11:17]
+        m1_out = d['wires'][11]
+        m2_out = d['wires'][13]
         def set_m1_m2_to_m3_and_out_net_colour(colour):
             for wire in m1_m2_to_m3_and_out_net: wire.set_colour(colour)
             d['pins']['Out'].set_colour(colour)
@@ -287,9 +289,73 @@ if __name__ == "__main__":
             set_net_a_colour("red")
             #set_net_b_colour("black")
             set_m1_m2_to_m3_and_out_net_colour("red")
+            m1_out.set_colour("blue")
             set_m3_to_m4_net_colour("red")
             #set_m4_to_groupd_net("black")
             #d['name_to_component']['V1'].set_colour("black")
+            
+            mm = d['name_to_component']['M1'].minmax
+            mm.merge(d['name_to_component']['M2'].minmax)
+            mm.min = mm.min - mm.min * 0.09
+            mm.max = mm.max + mm.max * 0.09
+            print(mm)
+            with pl.xkcd(randomness=6, scale=2, length=30):
+                mplpatch = ax.add_patch(
+                    mpatches.Rectangle(
+                        mm.min.as_tuple(), 
+                        mm.width(), 
+                        mm.height(), 
+                        fill=None,
+                        edgecolor="black",
+                        linestyle="-", 
+                        alpha=0.5,
+                        linewidth=pl.rcParams['lines.linewidth']*1.5))
+            annotxy = mm.max
+            annotxy.y = mm.min.y
+            ax.annotate('M1 and M2 act as an OR:\n'
+                        'if either A or B are 0\n' \
+                        'then current can flow\n' \
+                        'from drain to source', 
+                        fontsize=14,
+                        xy=annotxy.as_tuple(), 
+                        xytext=mm.max.as_tuple(),
+                        )
+
+            mm = d['name_to_component']['M3'].minmax
+            mm.merge(d['name_to_component']['M4'].minmax)
+            mm.min = mm.min - mm.min * 0.09
+            mm.max = mm.max + mm.max * 0.09
+            mm.max.x = mm.max.x * 1.05
+            with pl.xkcd(randomness=6, scale=2, length=30):
+                mplpatch = ax.add_patch(
+                    mpatches.Rectangle(
+                        mm.min.as_tuple(), 
+                        mm.width(), 
+                        mm.height(), 
+                        fill=None,
+                        edgecolor="black",
+                        linestyle="-", 
+                        alpha=0.5,
+                        linewidth=pl.rcParams['lines.linewidth']*1.5))
+            annotxy = mm.max
+            print(annotxy)
+            annotxy.x = mm.max.x * 1.05
+            print(annotxy)
+            ax.annotate('M3 and M4 act as an AND:\n'
+                        'if both A or B are 1\n' \
+                        'then current can flow\n' \
+                        'from drain to source\n' \
+                        'through both MOSFETS\n' \
+                        'creating a path to GND\n' \
+                        'and thus out will be\n' \
+                        'pulled low. Hence NAND\n' \
+                        'as out only low when\n' \
+                        'A = B = 1', 
+                        fontsize=14,
+                        xy=annotxy.as_tuple(), 
+                        xytext=annotxy.as_tuple(),
+                        )
+    
             #d['name_to_component']['M1'].set_colour("black")
             d['name_to_component']['M2'].set_colour("red")
             d['name_to_component']['M3'].set_colour("red")
@@ -300,6 +366,7 @@ if __name__ == "__main__":
             #set_net_a_colour("red")
             set_net_b_colour("red")
             set_m1_m2_to_m3_and_out_net_colour("red")
+            m2_out.set_colour("blue")
             #set_m3_to_m4_net_colour("red")
             #set_m4_to_groupd_net("black")
             #d['name_to_component']['V1'].set_colour("black")
@@ -308,7 +375,7 @@ if __name__ == "__main__":
             #d['name_to_component']['M3'].set_colour("red")
             d['name_to_component']['M4'].set_colour("red")
                     
-        plot_b_on()
+        plot_a_on()
 
     except Exception as exc:
         print(f"FAILED TO DRAW {filename} because {exc}")

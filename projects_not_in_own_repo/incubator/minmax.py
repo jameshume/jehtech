@@ -35,3 +35,13 @@ class MinMax:
     def merge(self, other_minmax):
         self.add(other_minmax.min)
         self.add(other_minmax.max)
+
+    def width(self):
+        return self.max.x - self.min.x
+
+    def height(self):
+        return self.max.y - self.min.y
+
+    def center(self):
+        return LTPoint(self.min.x + self.width() / 2,
+                       self.min.y + self.height() / 2)
