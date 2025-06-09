@@ -312,10 +312,13 @@ if __name__ == "__main__":
                         linewidth=pl.rcParams['lines.linewidth']*1.5))
             annotxy = mm.max
             annotxy.y = mm.min.y
-            ax.annotate('M1 and M2 act as an OR:\n'
-                        'if either A or B are 0\n' \
-                        'then current can flow\n' \
-                        'from drain to source', 
+            ax.annotate('M1 and M2 act as an OR:\n'     \
+                        'if either A or B are OFF\n'    \
+                        'then current can flow\n'       \
+                        'from drain to source\n'        \
+                        'through one or both MOSFETS\n' \
+                        'and if either M3 or M4 are\n'  \
+                        'off then out will be ON', 
                         fontsize=14,
                         xy=annotxy.as_tuple(), 
                         xytext=mm.max.as_tuple(),
@@ -341,8 +344,8 @@ if __name__ == "__main__":
             print(annotxy)
             annotxy.x = mm.max.x * 1.05
             print(annotxy)
-            ax.annotate('M3 and M4 act as an AND:\n'
-                        'if both A or B are 1\n' \
+            ann = ax.annotate('M3 and M4 act as an AND:\n'
+                        'if both A or B are ON\n' \
                         'then current can flow\n' \
                         'from drain to source\n' \
                         'through both MOSFETS\n' \
@@ -350,7 +353,7 @@ if __name__ == "__main__":
                         'and thus out will be\n' \
                         'pulled low. Hence NAND\n' \
                         'as out only low when\n' \
-                        'A = B = 1', 
+                        'A = B = ON', 
                         fontsize=14,
                         xy=annotxy.as_tuple(), 
                         xytext=annotxy.as_tuple(),
@@ -360,6 +363,35 @@ if __name__ == "__main__":
             d['name_to_component']['M2'].set_colour("red")
             d['name_to_component']['M3'].set_colour("red")
             #d['name_to_component']['M4'].set_colour("black")
+
+            fig.canvas.draw()
+
+            # get annotation bounding box in display (pixel) coordinates
+            bbox = ann.get_window_extent(renderer=fig.canvas.get_renderer())
+
+            # convert bbox to data coordinates
+            inv = ax.transData.inverted()
+            bbox_data = bbox.transformed(inv)
+
+            # get current axis limits
+            xmin, xmax = ax.get_xlim()
+            ymin, ymax = ax.get_ylim()
+            print(xmin, xmax)
+            print(ymin, ymax)
+
+            # expand limits only if needed
+            new_xmin = min(xmin, bbox_data.x0)
+            new_xmax = max(xmax, bbox_data.x1)
+            new_ymin = max(ymin, bbox_data.y0)
+            new_ymax = min(ymax, bbox_data.y1)
+            print(new_xmin, new_xmax)
+            print(new_ymin, new_ymax)
+
+            #
+            ## set new axis limits
+            ax.set_xlim(new_xmin, new_xmax)
+            ax.set_ylim(new_ymin, new_ymax)
+            fig.canvas.draw()
 
         def plot_b_on():
             set_top_net_from_vcc_colour("red")
