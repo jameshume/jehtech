@@ -243,6 +243,36 @@ def lt_plot_asc(fig, ax, filename):
     }
 
 
+def resize_plot_for_annotation(fig, ax, ann):
+    fig.canvas.draw()
+
+    # get annotation bounding box in display (pixel) coordinates
+    bbox = ann.get_window_extent(renderer=fig.canvas.get_renderer())
+
+    # convert bbox to data coordinates
+    inv = ax.transData.inverted()
+    bbox_data = bbox.transformed(inv)
+
+    # get current axis limits
+    xmin, xmax = ax.get_xlim()
+    ymin, ymax = ax.get_ylim()
+    print(xmin, xmax)
+    print(ymin, ymax)
+
+    # expand limits only if needed
+    new_xmin = min(xmin, bbox_data.x0)
+    new_xmax = max(xmax, bbox_data.x1)
+    new_ymin = max(ymin, bbox_data.y0)
+    new_ymax = min(ymax, bbox_data.y1)
+    print(new_xmin, new_xmax)
+    print(new_ymin, new_ymax)
+
+    #
+    ## set new axis limits
+    ax.set_xlim(new_xmin, new_xmax)
+    ax.set_ylim(new_ymin, new_ymax)
+    fig.canvas.draw()
+
 if __name__ == "__main__":
     filename = "../../src/images/jeh-tech/electronics_cmos_nand.asc"
     
@@ -294,104 +324,13 @@ if __name__ == "__main__":
             #set_m4_to_groupd_net("black")
             #d['name_to_component']['V1'].set_colour("black")
             
-            mm = d['name_to_component']['M1'].minmax
-            mm.merge(d['name_to_component']['M2'].minmax)
-            mm.min = mm.min - mm.min * 0.09
-            mm.max = mm.max + mm.max * 0.09
-            print(mm)
-            with pl.xkcd(randomness=6, scale=2, length=30):
-                mplpatch = ax.add_patch(
-                    mpatches.Rectangle(
-                        mm.min.as_tuple(), 
-                        mm.width(), 
-                        mm.height(), 
-                        fill=None,
-                        edgecolor="black",
-                        linestyle="-", 
-                        alpha=0.5,
-                        linewidth=pl.rcParams['lines.linewidth']*1.5))
-            annotxy = mm.max
-            annotxy.y = mm.min.y
-            ax.annotate('M1 and M2 act as an OR:\n'     \
-                        'if either A or B are OFF\n'    \
-                        'then current can flow\n'       \
-                        'from drain to source\n'        \
-                        'through one or both MOSFETS\n' \
-                        'and if either M3 or M4 are\n'  \
-                        'off then out will be ON', 
-                        fontsize=14,
-                        xy=annotxy.as_tuple(), 
-                        xytext=mm.max.as_tuple(),
-                        )
-
-            mm = d['name_to_component']['M3'].minmax
-            mm.merge(d['name_to_component']['M4'].minmax)
-            mm.min = mm.min - mm.min * 0.09
-            mm.max = mm.max + mm.max * 0.09
-            mm.max.x = mm.max.x * 1.05
-            with pl.xkcd(randomness=6, scale=2, length=30):
-                mplpatch = ax.add_patch(
-                    mpatches.Rectangle(
-                        mm.min.as_tuple(), 
-                        mm.width(), 
-                        mm.height(), 
-                        fill=None,
-                        edgecolor="black",
-                        linestyle="-", 
-                        alpha=0.5,
-                        linewidth=pl.rcParams['lines.linewidth']*1.5))
-            annotxy = mm.max
-            print(annotxy)
-            annotxy.x = mm.max.x * 1.05
-            print(annotxy)
-            ann = ax.annotate('M3 and M4 act as an AND:\n'
-                        'if both A or B are ON\n' \
-                        'then current can flow\n' \
-                        'from drain to source\n' \
-                        'through both MOSFETS\n' \
-                        'creating a path to GND\n' \
-                        'and thus out will be\n' \
-                        'pulled low. Hence NAND\n' \
-                        'as out only low when\n' \
-                        'A = B = ON', 
-                        fontsize=14,
-                        xy=annotxy.as_tuple(), 
-                        xytext=annotxy.as_tuple(),
-                        )
-    
+   
             #d['name_to_component']['M1'].set_colour("black")
             d['name_to_component']['M2'].set_colour("red")
             d['name_to_component']['M3'].set_colour("red")
             #d['name_to_component']['M4'].set_colour("black")
 
-            fig.canvas.draw()
-
-            # get annotation bounding box in display (pixel) coordinates
-            bbox = ann.get_window_extent(renderer=fig.canvas.get_renderer())
-
-            # convert bbox to data coordinates
-            inv = ax.transData.inverted()
-            bbox_data = bbox.transformed(inv)
-
-            # get current axis limits
-            xmin, xmax = ax.get_xlim()
-            ymin, ymax = ax.get_ylim()
-            print(xmin, xmax)
-            print(ymin, ymax)
-
-            # expand limits only if needed
-            new_xmin = min(xmin, bbox_data.x0)
-            new_xmax = max(xmax, bbox_data.x1)
-            new_ymin = max(ymin, bbox_data.y0)
-            new_ymax = min(ymax, bbox_data.y1)
-            print(new_xmin, new_xmax)
-            print(new_ymin, new_ymax)
-
-            #
-            ## set new axis limits
-            ax.set_xlim(new_xmin, new_xmax)
-            ax.set_ylim(new_ymin, new_ymax)
-            fig.canvas.draw()
+            
 
         def plot_b_on():
             set_top_net_from_vcc_colour("red")
@@ -408,6 +347,77 @@ if __name__ == "__main__":
             d['name_to_component']['M4'].set_colour("red")
                     
         plot_a_on()
+
+        mm = d['name_to_component']['M1'].minmax
+        mm.merge(d['name_to_component']['M2'].minmax)
+        mm.min = mm.min - mm.min * 0.09
+        mm.max = mm.max + mm.max * 0.09
+        print(mm)
+        with pl.xkcd(randomness=6, scale=2, length=30):
+            mplpatch = ax.add_patch(
+                mpatches.Rectangle(
+                    mm.min.as_tuple(), 
+                    mm.width(), 
+                    mm.height(), 
+                    fill=None,
+                    edgecolor="black",
+                    linestyle="-", 
+                    alpha=0.5,
+                    linewidth=pl.rcParams['lines.linewidth']*1.5))
+        annotxy = mm.max
+        annotxy.y = mm.min.y * 2.8
+        annotxy.x *= 1.05
+        ann = ax.annotate('M1 and M2 act as an OR:\n'     \
+                    'if either A or B are OFF\n'    \
+                    'then current can flow\n'       \
+                    'from drain to source\n'        \
+                    'through one or both\n' \
+                    'MOSFETS. So as long as\n'\
+                    'one is OFF, out will be\n' \
+                    'high...',
+                    fontsize=14,
+                    xy=annotxy.as_tuple(), 
+                    xytext=mm.max.as_tuple(),
+                    )
+        resize_plot_for_annotation(fig, ax, ann)
+
+        mm = d['name_to_component']['M3'].minmax
+        mm.merge(d['name_to_component']['M4'].minmax)
+        mm.min = mm.min - mm.min * 0.09
+        mm.max = mm.max + mm.max * 0.09
+        mm.max.x = mm.max.x * 1.05
+        
+        with pl.xkcd(randomness=6, scale=2, length=30):
+            mplpatch = ax.add_patch(
+                mpatches.Rectangle(
+                    mm.min.as_tuple(), 
+                    mm.width(), 
+                    mm.height(), 
+                    fill=None,
+                    edgecolor="black",
+                    linestyle="-", 
+                    alpha=0.5,
+                    linewidth=pl.rcParams['lines.linewidth']*1.5))
+        annotxy = mm.max
+        print(annotxy)
+        annotxy.x = mm.max.x * 1.05
+        annotxy.y *= 0.95
+        print(annotxy)
+        ann = ax.annotate('M3 and M4 act as an AND:\n'
+                    'if both A or B are ON\n' \
+                    'then current can flow\n' \
+                    'from drain to source\n' \
+                    'through both MOSFETS\n' \
+                    'creating a path to GND\n' \
+                    'and thus out will be\n' \
+                    'pulled low. Hence NAND\n' \
+                    'as out only low when\n' \
+                    'A = B = ON', 
+                    fontsize=14,
+                    xy=annotxy.as_tuple(), 
+                    xytext=annotxy.as_tuple(),
+                    )
+        resize_plot_for_annotation(fig, ax, ann)
 
     except Exception as exc:
         print(f"FAILED TO DRAW {filename} because {exc}")

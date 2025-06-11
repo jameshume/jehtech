@@ -251,7 +251,11 @@ The NSS is responsible for all the call switching and routing and tracking the l
 The Mobile Switching Center (MSC) is a digital switch that performs call setup, routing between the MS & other MSCs or
 external networks.
 
-<q>A Mobile Switching Center (MSC) is a core part of the GSM/CDMA network system. It acts as a control center of a Network Switching Subsystem (NSS). The MSC connects calls between subscribers by switching the digital voice packets between network paths. It also provides information needed to support mobile service subscribers.</q> [[Ref]](https://www.simbase.com/iot-glossary-dictionary/mobile-switching-center#:~:text=A%20Mobile%20Switching%20Center%20(MSC,voice%20packets%20between%20network%20paths.)
+<blockquote>
+<p>
+A Mobile Switching Center (MSC) is a core part of the GSM/CDMA network system. It acts as a control center of a Network Switching Subsystem (NSS). The MSC connects calls between subscribers by switching the digital voice packets between network paths. It also provides information needed to support mobile service subscribers. [[Ref]](https://www.simbase.com/iot-glossary-dictionary/mobile-switching-center#:~:text=A%20Mobile%20Switching%20Center%20(MSC,voice%20packets%20between%20network%20paths)
+</p>
+</blockquote>
 
 It also handles inter BSS and inter MSC handovers. When a mobile moves between two BSCs the handover has to be
 handled by the MSC as this is the common parent. If a mobile moved between two BTS within one BSC coverage area then the
