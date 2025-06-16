@@ -1,0 +1,26 @@
+Circuit: * C:\Users\JamesHume\Documents\wsl\jehtech\src\images\jeh-tech\electronics_bjt_inverting_buffer.asc
+
+Warning: Multiple definitions of model "2scr375p" Type: BJT
+Warning: Multiple definitions of model "bc857b" Type: BJT
+Warning: Multiple definitions of model "bc847c" Type: BJT
+Warning: Multiple definitions of model "bc847b" Type: BJT
+Direct Newton iteration for .op point succeeded.
+
+Date: Mon Jun 16 15:44:53 2025
+Total elapsed time: 0.217 seconds.
+
+tnom = 27
+temp = 27
+method = modified trap
+totiter = 2356
+traniter = 2344
+tranpoints = 1135
+accept = 1128
+rejected = 7
+matrix size = 7
+fillins = 0
+solver = Normal
+Avg thread counts: 4.1/7.5/7.5/4.1
+Matrix Compiler1: 250 bytes object code size  0.2/0.2/[0.2]
+Matrix Compiler2: off  [0.2]/0.2/0.2
+

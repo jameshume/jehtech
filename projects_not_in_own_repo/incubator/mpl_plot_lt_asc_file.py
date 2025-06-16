@@ -46,11 +46,15 @@ pl.rcParams['lines.linewidth'] = 2
 
 
 def parse_flag_line(line, minmax, ax, draw=True):
-    flag_x, flag_y, flag_type = line.strip().split(" ")[1:]
+    print(f"parse_flag_line - {line.strip()}")
+    flag_x, flag_y, flag_txt = line.strip().split(" ")[1:]
     flag_x, flag_y = (float(flag_x), float(flag_y))
     
-    if flag_type == "0":
-        if draw:
+    if draw:
+        if flag_txt == "0":
+            # Plotting ground here - function badly designed as overloaded to not draw for pins :/
+            # Todo - to know the orientation we would need to know the "direction" of the wire or component
+            # connected to te ground
             circle1 = mpatches.Circle((flag_x, flag_y), 1, color='r', linewidth=pl.rcParams['lines.linewidth'])
             ax.add_patch(circle1)
             minmax.add(LTPoint(flag_x, flag_y))
@@ -65,10 +69,9 @@ def parse_flag_line(line, minmax, ax, draw=True):
             minmax.add(LTPoint(flag_x + hw, flag_y))
             minmax.add(LTPoint(flag_x, flag_y + h))
             minmax.add(LTPoint(flag_x + hw, flag_y))
-    else:
-        print(f"##### Flag type {flag_type} not supported")
-
-    return flag_x, flag_y, flag_type
+        else:
+            ax.text(x=flag_x, y=flag_y, s=flag_txt)
+    return flag_x, flag_y, flag_txt
 
 class PlottedLTLine(LTLine):
     pass
@@ -112,11 +115,19 @@ def lt_plot_asc(fig, ax, filename):
     components = []
     mpl_flag_texts = []
 
+
+    # Really I should have a .asc file parsed and work from there into a plot!
+    # Also the plot could be used to generate a graph - which components are connected to which.
+    # But there is the netlist for that.
     print(f"OPENING {filename}")
     for line in open(filename, "r"):
+        print(line.strip())
+
         if (prev_line_cache is not None):
             if line.startswith("IOPIN "):
+                print(line.strip())
                 x, y, inout = line.strip().split(" ")[1:]
+                print(x, y, inout)
                 x, y = float(x), float(y)
                 h = 20
                 warrow = 20
@@ -133,7 +144,7 @@ def lt_plot_asc(fig, ax, filename):
                     l1, = ax.plot([x, x + warrow], [y, y - h], c='b')
                     l2, = ax.plot([x, x + warrow], [y, y + h], c='b')
                 else:
-                    print(f"##### IO pin type {inout} not supported")
+                    print(f"##### IO pin type '{inout}' not supported")
 
                 flag_x, flag_y, flag_text = parse_flag_line(prev_line_cache, minmax, ax, draw=False)
                 minmax.add(LTPoint(flag_x, flag_y))
@@ -170,18 +181,30 @@ def lt_plot_asc(fig, ax, filename):
             name = tokens[0].replace("\\", "/")
             totalname = f"/home/james/.wine/drive_c/Program Files/LTC/LTspiceXVII/lib/sym/{name}.asy"
             x, y, rotation = float(tokens[1]), float(tokens[2]), float(tokens[3][1:])
-            
+        
         elif line.startswith("SYMATTR InstName "):
             # Add a new proprty to component with its name
             name = line[len("SYMATTR InstName "):].strip()
-            component = LTComponent(totalname, name)
-            component.rotate(rotation)
-            component.translate(LTPoint(x, y))
-            mpl_ltcomponent = matplotlib_plot_component(component, ax, show_labels=False)
+            mpl_ltcomponent = matplotlib_plot_component(totalname, name, rotation, x, y, ax, show_labels=False)
             component_minmax = mpl_ltcomponent.get_minmax()
-            components.append(component)
+            components.append(mpl_ltcomponent)
             minmax.merge(component_minmax)
 
+        # TODO
+        # Symbol can be follwed by window commands:
+        # The WINDOW command just sets the position and alignment of labels in the schematic view.
+        # WINDOW <index> <x> <y> <alignment> <flags>
+        # Field	Meaning
+        # index	Which text label it refers to:
+        #   - 0 is the component name (e.g., R1, V1)
+        #   - 3 is the value (e.g., 1k, 5V)
+        # x, y	The position (offset) of the label relative to the symbol origin
+        # alignment	Text alignment: Left, Right, Center
+        # flags	Usually 0; can affect visibility or font, but not often used manually
+
+        # Also multiple SYMATTR
+        #    SYMATTR InstName
+        #    SYMATTR Value
 
     if prev_line_cache is not None:
         prev_line_cache = None
@@ -262,6 +285,7 @@ if __name__ == "__main__":
     
     #with pl.xkcd(randomness=0, scale=.1, length=100):
     for filename in test_file_names:
+        pl.rcParams['font.size'] = 14
         fig, ax = pl.subplots()
         try:
             d = lt_plot_asc(fig, ax, filename)
@@ -269,26 +293,6 @@ if __name__ == "__main__":
                 spine.set_visible(False)
             ax.tick_params(left=False, bottom=False, labelleft=False, labelbottom=False)
             
-            top_net_from_vcc = d['wires'][0:5]
-            for wire in top_net_from_vcc: wire.set_colour('red')
-
-            a_input_net = d['wires'][5:7] + d['wires'][17:19]
-            for wire in a_input_net: wire.set_colour('green')
-            d['pins']['A'].set_colour('green')
-            
-            b_input_net = d['wires'][7:11] + d['wires'][20:22]
-            for wire in b_input_net: wire.set_colour('cyan')
-            d['pins']['B'].set_colour('cyan')
-                        
-            m1_m2_to_m3_and_out_net = d['wires'][11:17]
-            for wire in m1_m2_to_m3_and_out_net: wire.set_colour('pink')
-            d['pins']['Out'].set_colour('pink')
-
-            m3_to_m4_net = d['wires'][19:20]
-            for wire in m3_to_m4_net: wire.set_colour('purple')
-
-            m4_to_groupd_net = d['wires'][22:23]
-            for wire in m4_to_groupd_net: wire.set_colour('black')
 
 
         except Exception as exc:

@@ -1,0 +1,13 @@
+* C:\Users\JamesHume\Documents\wsl\jehtech\src\images\jeh-tech\electronics_bjt_inverting_buffer.asc
+Q1 VQ1c VQ1B Vsrc 0 NPN
+Q2 Out VQ1c 0 0 NPN
+V1 N001 0 5v
+R1 N001 VQ1B 100k
+R2 N001 Out 2k7
+V2 Vsrc 0 PULSE(0 5 1s 1n 1n 1s 1s 1)
+.model NPN NPN
+.model PNP PNP
+.lib C:\Users\JamesHume\AppData\Local\LTspice\lib\cmp\standard.bjt
+.tran 3
+.backanno
+.end
