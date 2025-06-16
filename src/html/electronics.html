@@ -2399,14 +2399,30 @@
 			</div>
 		</div>
 
-		
+
 		<!-- --------------------------------------------------------------------------------------- -->
 		<a name="bjt_inverting_buffer"></a>
 		<h2>Buffers</h2>
 		<div>
 			<p>
-				<img src="##IMG_DIR##/electronics_bjt_inverting_buffer.png">
+				Why buffers? To isolate one part of a circuit from another. For example, if the output
+				of part A of the circuit is high impedance and is input to part B, which is low impedance
+				then there will be a loss of voltage signal. 
+				<a href="https://ultimateelectronicsbook.com/maximum-signal-transfer-and-minimizing-interstage-loading/" target="_blank">[Ref]</a>
+				Overcome this with a buffer, which will have
+				a low impedance output. 
 			</p>
+			<h3>Inverting Buffer</h3>
+			<div>
+				<p>
+					<img src="##IMG_DIR##/electronics_bjt_inverting_buffer.png">
+				</p>
+				<p>
+					What suprised me about the inverting buffer, as an electronics newbie trying to teach himself,
+					was that when the input is high, the base current flows from the base to the collector, rather than
+					the emitter because the BC junction becomes forward biased.
+				</p>
+			</div>
 		</div>
 
 		
