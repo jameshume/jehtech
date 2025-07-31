@@ -31,4 +31,12 @@ Once we have done the 16 GPIO EXIT sources things become a little harder. What, 
 
 This is a bit more work but we can see were the mapping is coming from. We can see that in `[16-19] -> nvic@[1, 41, 2, 3]` the event inputs are 16-19, and by looking each one up individually we can find the NVIC position they map to. This particular line says that EXTI event 16 maps to NVIC position 1, 17 to 41, and so on.
 
+For the NVIC positions that have multiple things mapped into them, like `[5-9] -> nvicInput23@[0-4]`, the following is also seen below the EXTI source to NVIC position map in the REPL file:
+
+```
+nvicInput23: Miscellaneous.CombinedInput @ none
+    numberOfInputs: 5
+    -> nvic@23
+```
+
 So that is how the EXTI map is created.
