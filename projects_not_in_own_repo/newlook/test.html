@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JEHTECH - Advanced Computing Solutions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+/* Headings */
+
+h2, h3, h4, h5, h6 {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    background: rgba(0, 174, 255, 0.1);
+    border: 1px solid rgba(0, 174, 255, 0.3);
+    border-radius: 6px;
+    padding: 0.4rem 0.6rem;
+    color: #00aeff;
+    margin: 2rem 0 1rem 0;
+    box-shadow: 0 0 5px rgba(0, 174, 255, 0.2);
+}
+
+h2 {
+    font-size: 1.8rem;
+}
+
+h3 {
+    font-size: 1.4rem;
+}
+
+h4 {
+    font-size: 1.2rem;
+}
+
+h2 img, h3 img, h4 img {
+    height: 1.2rem;
+    margin-right: 0.6rem;
+    vertical-align: middle;
+}
+
+/* Preformatted blocks */
+pre {
+    background-color: rgba(0, 0, 0, 0.4);
+    color: #e0e6ed;
+    padding: 1rem;
+    border-left: 3px solid #00aeff;
+    border-radius: 6px;
+    font-family: 'Consolas', 'Courier New', monospace;
+    overflow-x: auto;
+    margin: 1rem 0;
+    box-shadow: 0 0 15px rgba(0, 174, 255, 0.05);
+}
+
+/* Inline code */
+code {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #ffa500;
+    font-family: 'Consolas', 'Courier New', monospace;
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    font-size: 0.95em;
+}
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0f1c 0%, #1a2332 50%, #0d1421 100%);
+            color: #e0e6ed;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: url('jehtech-back.png');
+            background-position: left center, left center;
+            background-repeat: no-repeat, no-repeat;
+            background-color: #000000;
+            border-bottom: 3px solid rgba(0, 174, 255, 0.4);
+            padding: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 150px;
+            overflow: hidden;
+        }
+
+
+        .header-content {
+            display: flex;
+            justify-content: right;
+            align-items: center;
+            margin: 0 auto;
+            height: 150px;
+            padding: 0;
+            padding-right:2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo-section {
+            display: flex;
+            flex-direction: column;
+            align-items: right;
+            justify-content: right;
+            z-index: 3;
+            text-align: right;
+        }
+
+        /* Remove chip image styles */
+
+        .logo {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #00aeff;
+            text-shadow: 0 0 15px rgba(0, 174, 255, 0.6);
+            letter-spacing: 3px;
+            margin: 0;
+        }
+
+        .logo-subtitle {
+            font-size: 0.9rem;
+            color: #b8c5d1;
+            margin-top: -5px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Main Container */
+        .container {
+            display: flex;
+            margin-top: 150px;
+            min-height: calc(100vh - 325px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, rgba(13, 20, 33, 0.9) 0%, rgba(26, 35, 50, 0.9) 100%);
+            border-right: 1px solid rgba(0, 174, 255, 0.2);
+            padding: 2rem 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .sidebar h3 {
+            color: #00aeff;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu a {
+            color: #b8c5d1;
+            text-decoration: none;
+            padding: 0.8rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            cursor: pointer;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: rgba(0, 174, 255, 0.1);
+            color: #00aeff;
+            border-left-color: #00aeff;
+            transform: translateX(5px);
+        }
+
+        .menu-item {
+            position: relative;
+        }
+
+        .menu-item.has-submenu > a::after {
+            content: '▶';
+            font-size: 0.8rem;
+            transition: transform 0.3s ease;
+            color: #b8c5d1;
+        }
+
+        .menu-item.has-submenu.expanded > a::after {
+            transform: rotate(90deg);
+            color: #00aeff;
+        }
+
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            margin-left: 1rem;
+            border-left: 2px solid rgba(0, 174, 255, 0.2);
+            margin-top: 0.5rem;
+        }
+
+        .submenu.expanded {
+            max-height: 500px;
+        }
+
+        .submenu li {
+            margin-bottom: 0.3rem;
+        }
+
+        .submenu a {
+            padding: 0.6rem 1rem;
+            font-size: 0.9rem;
+            border-left: 2px solid transparent;
+        }
+
+        .submenu a:hover,
+        .submenu a.active {
+            background: rgba(0, 174, 255, 0.08);
+            border-left-color: #00aeff;
+            transform: translateX(3px);
+        }
+
+        /* Third level nesting */
+        .submenu .submenu {
+            margin-left: 1.5rem;
+            border-left-color: rgba(255, 165, 0, 0.3);
+        }
+
+        .submenu .submenu a {
+            padding: 0.5rem 0.8rem;
+            font-size: 0.85rem;
+        }
+
+        .submenu .submenu a:hover,
+        .submenu .submenu a.active {
+            background: rgba(255, 165, 0, 0.08);
+            border-left-color: #ffa500;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 0 2rem 0 2rem;
+            background: rgba(10, 15, 28, 0.3);
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #00aeff, #0099cc, #00aeff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(0, 174, 255, 0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: #b8c5d1;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                padding: 1rem;
+            }
+            
+            .main-content {
+                padding: 2rem 1rem;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .chip-image {
+                width: 70px;
+                height: 70px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo">JEHTECH</div>
+                <div class="logo-subtitle">Est. 2015</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <ul class="sidebar-menu">
+
+	<li class="menu-item"><a href="index.html">Home</a><hr/></li>
+	<li class="menu-item"><a href="android.html">Android</a></li>
+	<li class="menu-item has-submenu">
+        <a href="#" class="menu-toggle">ARM</a>
+        <ul class="submenu">
+            <li>
+                General
+                <ul>
+                    <li><a href="arm.html">ARM</a></li>
+                    <li><a href="linker_files.html">Linker Scripts</a></li>
+                </ul>
+            </li>
+            <li>Dev Envs
+                <ul>
+                    <li><a href="openocd.html">OpenOCD</a></li>
+                    <li><a href="arm_eclipse.html">Eclipse &amp; OpenOCD</a></li>
+                </ul>
+            </li>
+            <li>Chips
+                <ul>
+                    <li><a href="saml21.html">SAML21</a></li>
+                </ul>
+            </li>
+        </ul>
+	</li>
+	<li class="menu-item"><a href="ansible.html">Ansible</a></li>
+	<li class="menu-item has-submenu">
+        <a href="#" class="menu-toggle">Audio/Video</a>
+		<ul class="submenu">
+			<li><a href="mpeg.html">Audio/Video Intro &amp; MPEG</a></li>
+			<li><a href="machine-vision.html">Machine Vision</a></li>
+			<li><a href="webrtc.html">WebRTC</a></li>
+		</ul>
+	</li>
+	<li class="menu-item has-submenu">
+        <a href="#" class="menu-toggle">AWS</a>
+		<ul class="submenu">
+				<li><a href="aws-cheat-sheet.html">Cheat Sheet</a></li>
+				<li><a href="aws.html">Notes</a></li>
+		</ul>
+	</li>
+	<li class="menu-item has-submenu">
+        <a href="#" class="menu-toggle">Boards/Chips</a>
+		<ul class="submenu">
+			<li><a href="le-potatoe-aml-s905x-cc.html">AML-S905X-CC<br>(Le Potatoe)</a></li>
+			<li><a href="msp430.html">TI MSP430</a>
+			</li>
+			<li><a href="raspberry-pi.html">Raspberry Pi</a>
+			</li>
+			<li><a href="st-nucleo.html">ST Nucleo</a>
+			</li>
+			<li><a href="stm32f042g6.html">STM32f04x</a></li>
+		</ul>
+	</li>
+	<li class="menu-item has-submenu">
+        <a href="#" class="menu-toggle">Build Systems</a>
+		<ul class="submenu">
+			<li><a href="cmake.html">CMake</a></li>
+			<li><a href="makefiles.html">(GNU) Make</a></li>
+		</ul>
+	</li>
+	<li class="menu-item has-submenu">
+        <a class="menu-toggle" href="c-and-c-cplus-plus-programming-language.html">C/C++</a>
+		<ul class="submenu">
+			<li><a href="c_and_cpp/c-and-cpp-arrays.html">Arrays</a></li>
+			<li>C
+				<ul>
+					<li><a href="c_and_cpp/coccinelle.html">Coccinelle</a></li>
+					<li><a href="c_and_cpp/optimisations.html">Optimisations</a></li>
+					<li><a href="c_and_cpp/c-types-and-type-punning.html">Types &amp; Punning</a></li>
+					<li><a href="c_and_cpp/volatile-variables-in-c-and-c++.html">Volatile</a></li>
+				</ul>
+			</li>
+			<li>C++
+				<ul>
+					<li><a href="c_and_cpp/cpp_atomics.html">Atomics</a></li>
+					<li><a href="c_and_cpp/libclang.html">Lib Clang</a></li>
+					<li>Modern C++
+						<ul>
+							<li><a href="c_and_cpp/concurrency.html">Concurrency</a></li>
+							<li><a href="c_and_cpp/cpp-constexpr-consteval.html">Constexpr/eval</a></li>
+							<li><a href="cpp_move_sem.html">Move Semantics</a></li>
+							<li><a href="c_and_cpp/modern_c++.html">Quick Tour</a></li>
+							<li><a href="c_and_cpp/spaceship.html">Spaceship Operator</a></li>
+							<li><a href="c_and_cpp/templates.html">Templates</a></li>
+						</ul>
+					</li>
+					<li><a href="c_and_cpp/cpp-strings.html">Strings</a></li>
+					<li><a href="c_and_cpp/vectors.html">Vectors</a></li>
+				</ul>
+			</li>
+			<li>Testing
+				<ul>
+					<li><a href="c_and_cpp/google-test.html">GTest</a></li>
+					<li><a href="c_and_cpp/gcc-wrap-system-functions.html">Wrapping System Calls</a></li>
+					<li><a href="c_and_cpp/gcc-instrument-function-calls.html">Instrument Function Calls</a></li>
+				</ul>
+			</li>
+			<li>Misc
+				<ul>
+					<li><a href="c_and_cpp/protobuf.html">Protobufs</a></li>
+					<li><a href="gdb.html">GDB</a></li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+	<li class="menu-item"><a href="docker.html">Docker</a></li>
+	<li class="menu-item"><a href="dsp/notes.html">DSP</a></li>
+	<li class="menu-item"><a href="DWARF.html">DWARF</a></li>
+	<li class="menu-item has-submenu">
+        <a href="#" class="menu-toggle">Editors</a>
+		<ul class="submenu">
+			<li><a href="sublime.html">Sublime</a></li>
+			<li><a href="vi.html">Vi</a></li>
+			<li><a href="vscode.html">VSCode</a></li>
+		</ul>
+	</li>
+	<li><a href="ElasticSearch.html">ElasticSearch</a></li>
+	<li class="menu-item has-submenu">
+        <a href="#" class="menu-toggle">Electronics</a>
+		<ul class="submenu">
+            <li><a href="electronics.html">General</a></li>
+			<li><a href="electronics-batteries.html">Batteries</a></li>
+			<li><a href="verilog.html">Verilog</a></li>
+		</ul>
+	</li>
+	<li class="menu-item"><a href="excel.html">Excel</a></li>
+	<li class="menu-item"><a href="gas-networks.html">Gas Networks</a></li>
+	<li class="menu-item"><a href="gnss.html">GNSS</a></li>
+	<li class="menu-item has-submenu">
+        <a href="#" class="menu-toggle">Hardware</a>
+		<ul class="submenu">
+			<li><a href="usb-bus.html">USB</a></li>
+		</ul>
+	</li>
+	<li class="menu-item"><a href="java.html">Java</a></li>
+	<li class="menu-item"><a href="m4.html">M4 Macro Expansion</a></li>
+	<li class="menu-item"><a href="magento-2.html">Magento-2</a></li>
+	<li class="menu-item has-submenu">
+        <a href="#" class="menu-toggle">Maths</a>
+		<ul class="submenu">
+			<li><a href="mathsy_stuff/gaussians.html">Gaussians</a></li>
+			<li><a href="mathsy_stuff/linear_alg.html">Linear Algebra</a></li>
+			<li><a href="mathsy_stuff/math_revision.html">Math Cheat Sheets</a></li>
+			<li><a href="mathsy_stuff/stats.html">Statistics</a></li>
+		</ul>
+	</li>
+	<li class="menu-item"><a href="mobile_comms.html">Mobile Comms</a></li>
+	<li class="menu-item"><a href="micro-services.html">Micro Services</a></li>
+	<li class="menu-item has-submenu">
+        <a href="#" class="menu-toggle">Linux</a>
+		<ul class="submenu">
+			<li><a href="linux_bash_commands_cheat_sheet.html">Bash Cheat Sheet</a></li>
+			<li><a href="linux_bbb_build.html">BBB Build</a></li>
+			<li><a href="linux_kernel.html">Kernel</a></li>
+			<li><a href="linux_packages.html">Pacakges</a></li>
+			<li><a href="linux_apis.html">Programming</a></li>
+			<li><a href="linux_tty_pty.html">PTY &amp; TTY</a></li>
+			<li><a href="linux_realtime.html">Real Time</a></li>
+			<li><a href="linux_security.html">Security</a></li>
+			<li><a href="linux_script.html">Shell</a></li>
+			<li><a href="linux_socat.html">SOCat &amp; TUN/TAP</a></li>
+			<li><a href="linux_traps.html">Traps</a></li>
+		</ul>
+	</li>
+	<li class="menu-item"><a href="lua.html">LUA</a></li>
+	<li class="menu-item"><a href="misc.html">Misc</a></li>
+	<li class="menu-item has-submenu">
+        <a href="#" class="menu-toggle">RTOS</a>
+		<ul class="submenu">
+			<li><a href="freertos.html">FreeRTOS</a></li>
+		</ul>
+	</li>
+	<li class="menu-item has-submenu">
+        <a href="#" class="menu-toggle">Software Engineering</a>
+		<ul class="submenu">
+			<li>
+				<ul>Agile
+					<li><a href="DSDM.html">DSDM</a></li>
+					<li><a href="risk.html">Risk</a></li>
+					<li><a href="scrum.html">Scrum</a></li>
+				</ul>
+			</li>
+            <li><a href="misra.html">MISRA</a></li>
+            <li>Patterns
+                <ul>
+                    <li><a href="mvc.html">MVC/MVP</a></li>
+					<li><a href="gang_of_four_patterns.html">Patterns (GoF)</a></li>
+                    <li><a href="reactor-pattern.html">Reactor</a></li>
+                </ul>
+            </li>
+            <li><a href="software-engineering.html">Practices</a></li>
+			<li><a href="software_testing.html">Testing</a></li>
+            <li><a href="UML.html">UML</a></li>
+		</ul>
+	</li>
+	<li class="menu-item"><a href="networking.html">Networking</a></li>
+	<li class="menu-item"><a href="ntp-and-ptp.html">NTP &amp; PTP</a></li>
+	<li class="menu-item"><a href="phabricator.html">Phabricator</a></li>
+	<li class="menu-item has-submenu">
+        <a href="#" class="menu-toggle">Python</a>
+		<ul class="submenu">
+			<li><a href="python/asyncio.html">Asyncio</a></li>
+			<li><a href="python/python_cheat_sheet.html">Cheat Sheet</a></li>
+			<li><a href="python/concurrency.html">Concurrency</a></li>
+			<li><a href="python/time.html">Dates &amp; Time</a></li>
+			<li><a href="python/django.html">DJango</a></li>
+			<li><a href="python/python_environments.html">Environments</a></li>
+			<li><a href="python/python.html">General Python</a></li>
+			<li><a href="python/logging.html">Logging</a></li>
+			<li><a href="python/numpy.html">NumPy: Numeric Python</a></li>
+			<li><a href="python/opencv.html">OpenCV</a></li>
+			<li><a href="python/pandas.html">Pandas: R for Python</a></li>
+			<li><a href="python/pycairo.html">PyCairo</a></li>
+			<li><a href="python/pyplot.html">Python Graphs</a></li>
+			<li><a href="python/ipython_notebooks.html">Python Notebooks</a></li>
+			<li><a href="python/wxpython.html">wxPython</a></li>
+			<li>Python modules
+				<ul>
+					<li><a href="python/argparse.html">ArgParse</a></li>
+					<li><a href="python/paramiko.html">Paramiko (SSH)</a></li>
+					<li><a href="python/pyclang.html">PyClang</a></li>
+					<li><a href="python/pysvn.html">PySvn</a></li>
+					<li><a href="python/psutil.html">PsUtil</a></li>
+					<li><a href="python/pyvisa.html">PyVISA</a></li>
+					<li><a href="python/selenium.html">Selenium</a></li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+	<li class="menu-item"><a href="php.html">PHP</a></li>
+	<li class="menu-item"><a href="R.html">R</a></li>
+	<li class="menu-item has-submenu">
+        <a href="#" class="menu-toggle">Security</a>
+		<ul class="submenu">
+			<li><a href="attack_trees.html">Attack Trees</a></li>
+			<li><a href="linux_security.html">Linux Sec</a></li>
+			<li><a href="oauth.html">OAuth</a></li>
+			<li><a href="security_piv.html">PIV</a></li>
+			<li><a href="secure-remote-password-protocol.html">SRP</a></li>
+			<li><a href="ssl.html">SSL/TLS/Certs</a></li>
+		</ul>
+	</li>
+    <li class="menu-item has-submenu">
+        <a href="#" class="menu-toggle">Serial</a>
+		<ul class="submenu">
+			<li><a href="serial_i2c.html">I2C</a></li>
+			<li><a href="modbus.html">Modbus</a></li>
+			<li><a href="serial_rs232_rs422_rs485.html">RS232/422/485</a></li>
+			<li><a href="serial_spi.html">SPI</a></li>
+		</ul>
+	</li>
+	<li class="menu-item has-submenu">
+        <a href="#" class="menu-toggle">Simulators</a>
+		<ul class="submenu">
+			<li><a href="renode.html">Renode</a></li>
+			<li><a href="qemu.html">QEMU</a></li>
+		</ul>
+	</li>	
+	<li class="menu-item"><a href="spin.html">SPIN &amp; Promela</a></li>
+	<li class="menu-item"><a href="soft-skills.html">Soft Skills</a></li>
+	<li class="menu-item has-submenu">
+        <a href="#" class="menu-toggle">Source Control</a>
+		<ul class="submenu">
+			<li><a href="git.html">Git</a></li>
+			<li><a href="svn.html">Subversion</a></li>
+		</ul>
+	</li>
+	<li class="menu-item has-submenu">
+        <a href="#" class="menu-toggle">SQL</a>
+		<ul class="submenu">
+			<li><a href="mysql.html">MySQL</a></li>
+			<li><a href="oracle.html">Oracle</a></li>
+			<li><a href="sqlite.html">SQLite</a></li>
+		</ul>
+	</li>
+	<li class="menu-item"><a href="tcl.html">TCL</a></li>
+	<li class="menu-item"><a href="umlet.html">Umlet</a></li>
+	<li class="menu-item has-submenu">
+        <a href="#" class="menu-toggle">Utilities</a>
+		<ul class="submenu">
+			<li><a href="http://epicplanner.jehtech.com" target="_blank">Epic Planner</a></li>
+			<li><a href="comment_reformatter.html">Comment Reformatter</a></li>
+		</ul>
+	</li>
+	<li class="menu-item"><a href="virtualbox.html">Virtual Box</a></li>
+	<li class="menu-item has-submenu">
+        <a href="#" class="menu-toggle">Web Dev</a>
+		<ul class="submenu">
+			<li><a href="angular.html">Angular</a></li>
+			<li><a href="bootstrap.html">Bootstrap</a></li>
+			<li><a href="css.html">CSS</a> </li>
+			<li><a href="javascript.html">JavaScript</a></li>
+			<li><a href="reactjs.html">ReactJS</a></li>
+			<li><a href="rxjs.html">RxJS</a></li>
+			<li><a href="typescript.html">TypeScript</a></li>
+			<li><a href="web-infrastructure.html">Infrastructure</a></li>
+			<li><a href="web-security.html">Security</a></li>
+		</ul>
+	</li>
+	<li class="menu-item has-submenu">
+        <a href="#" class="menu-toggle">Windows</a>
+		<ul class="submenu">
+			<li><a href="win_script.html">Scripting</a></li>
+			<li><a href="wsl.html">WSL</a></li>
+		</ul>
+	</li>
+	<li class="menu-item"><a href="xml.html">XML</a></li>
+	<li class="menu-item"><a href="yorick-programming-language.html">Yorick</a><hr/></li>
+    <li class="menu-item"><a href="quotes.html">Quotes</a></li>
+
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <section class="hero-section">
+                <h1 class="hero-title floating">JEHTECH </h1>
+                <p class="hero-subtitle">
+                    Established in 2015. These are notes, some quite rough and ready, on various things software and electronics that I don't want to forget.
+                </p>
+                <IMG SRC="jehtech-large.png"/>
+            </section>
+
+            <h2 ><img src="jehtech-header-chip.png" alt="chip icon">sdsd</h2>
+            <p>
+                sdsdsd <code>lalalalala</code>
+            </p>
+            <h3><img src="jehtech-header-chip.png" alt="chip icon">ddfdf</h3>
+            <pre>dkdkglkfhgkljfhglkj</pre>
+            <p>
+                dfgds lfdgsa fldsag kljasdhgf jlkdsahg kfjas dgh
+            </p>
+            <h2><img src="jehtech-header-chip.png" alt="chip icon">System Architecture</h2>
+            <p>
+                This is some crap here
+            </p>
+            <h3><img src="jehtech-header-chip.png" alt="chip icon">System Architecture</h3>
+            <p>
+                This is some other crap here
+            </p>
+        </main>
+    </div>
+
+    <script>
+        // Add smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Collapsible sidebar menu functionality
+        document.querySelectorAll('.menu-toggle').forEach(toggle => {
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                const menuItem = this.closest('.menu-item');
+                const submenu = menuItem.querySelector('.submenu');
+                
+                if (menuItem.classList.contains('expanded')) {
+                    // Collapse this menu
+                    menuItem.classList.remove('expanded');
+                    submenu.classList.remove('expanded');
+                } else {
+                    // Collapse all other menus at the same level first
+                    const parentMenu = menuItem.closest('.sidebar-menu, .submenu');
+                    parentMenu.querySelectorAll(':scope > .menu-item.expanded').forEach(expandedItem => {
+                        if (expandedItem !== menuItem) {
+                            expandedItem.classList.remove('expanded');
+                            expandedItem.querySelector('.submenu').classList.remove('expanded');
+                        }
+                    });
+                    
+                    // Expand this menu
+                    menuItem.classList.add('expanded');
+                    submenu.classList.add('expanded');
+                }
+            });
+        });
+
+        // Add active state to all sidebar links (including submenu items)
+        document.querySelectorAll('.sidebar-menu a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Don't handle click for menu toggles (they have their own handler)
+                if (this.classList.contains('menu-toggle')) {
+                    return;
+                }
+                
+                e.preventDefault();
+                
+                // Remove active class from all links
+                document.querySelectorAll('.sidebar-menu a').forEach(l => l.classList.remove('active'));
+                
+                // Add active class to clicked link
+                this.classList.add('active');
+                
+                // If this is a submenu item, make sure its parent menu is expanded
+                const parentMenuItem = this.closest('.menu-item.has-submenu');
+                if (parentMenuItem && !parentMenuItem.classList.contains('expanded')) {
+                    parentMenuItem.classList.add('expanded');
+                    parentMenuItem.querySelector('.submenu').classList.add('expanded');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

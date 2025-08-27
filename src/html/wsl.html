@@ -126,6 +126,30 @@ fi</pre>
 			<p></p>
 		</div>
 
+		<h2>Wine In WSL?</h2>
+		<div>
+			<p>
+				Seems a bit weird to run WSL on Windows and then a Windows emulator in WSL. But, I want to compile in WSL and then do a simple
+				installer that needs to run on Windows and uses PyInstaller, so needs to be "compiled" on Windows. And I want to automate
+				so running in Docker would be nice.
+			</p>
+			<p>
+				Interestingly it was possible and actually worked! Windows emulation also mounts the WSL drive to `Z:` so I could
+				event access that.
+			</p>
+			<pre>sudo dpkg --add-architecture i386
+sudo mkdir -pm755 /etc/apt/keyrings
+sudo wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
+sudo wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/$(lsb_release -cs)/winehq-$(lsb_release -cs).sources
+sudo apt update
+sudo apt install --install-recommends winehq-stable
+winecfg # Set the emulated Windows to Windows 10
+wine cmd # Run wine. Run Python 3.12 installer.</pre>
+			<p>
+				Then run <code>wine cmd</code> and run the Python installer. Install pip, then PyInstaller and off you go.
+			</p>
+		</div>
+
 		<h2>Connect USB Devices WSL2</h2>
 		<div>
 			<p>
@@ -206,6 +230,7 @@ sudo update-binfmts --disable cli</pre>
 </body>
 </html>
 
+ 
  
  
  
