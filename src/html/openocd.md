@@ -267,7 +267,13 @@ From the docs:
 > board requirements that all reset pulses last for at least a certain amount of time; and reset buttons commonly have hardware 
 > debouncing. Use the adapter srst delay and jtag_ntrst_delay commands to say when extra delays are needed.
 
+You might need the reset delay because, for example, power supplies require stabalisation time after a reset, external
+crystals need time to fire up, or maybe even a the reset circuitry or a reset supervisor adding delays.
 
+For the pulse width, you might need to set it because perhipherals and debug logic need a longer delay to reset cleanly
+for example.
+
+The delays seen above are for debug purposes... wouldn't normally be that high.
 
 ## Command Cheat Sheet
 
