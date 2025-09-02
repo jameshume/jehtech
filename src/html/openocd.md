@@ -228,6 +228,11 @@ Tune the delays as appropriate... here I set them arbitrarily to a figure that s
 connect under reset using trial and error.
 
 ```
+# srst_nogate - indicates that JTAG commands (and presumable SWD??) can safely be issued while SRST is active
+# connect_deassert_srst - (default) indicates that SRST will not be asserted while connecting to the target. 
+# Its converse is connect_assert_srst, indicating that SRST will be asserted before any target connection. 
+# Only some targets support this feature, STM32 and STR9 are examples. This feature is useful if you are 
+# unable to connect to your target due to incorrect options byte config or illegal program execution.
 reset_config srst_only srst_nogate connect_deassert_srst
 
 # How long (in milliseconds) OpenOCD should wait after deasserting nSRST (active-low system reset)
