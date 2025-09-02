@@ -233,15 +233,30 @@ connect under reset using trial and error.
 # Its converse is connect_assert_srst, indicating that SRST will be asserted before any target connection. 
 # Only some targets support this feature, STM32 and STR9 are examples. This feature is useful if you are 
 # unable to connect to your target due to incorrect options byte config or illegal program execution.
-reset_config srst_only srst_nogate connect_deassert_srst
+reset_config srst_only srst_nogate connect_assert_srst
 
 # How long (in milliseconds) OpenOCD should wait after deasserting nSRST (active-low system reset)
 # before starting new JTAG operations. When a board has a reset button connected to SRST line it 
 # will probably have hardware debouncing, implying you should use this.
+#
+# NRST Pin:  ___________             ___________________
+#                       |___________|  
+#                       Assert      Release
+#                       Reset       Reset
+#                                    |<-- adapter_nsrst_delay -->|
+#                                                                Start Debug
+#                                                                Communication
 adapter srst delay 1000
 
 # Minimum amount of time (in milliseconds) OpenOCD should wait after asserting nSRST (active-low 
 # system reset) before allowing it to be deasserted.
+#
+# NRST Pin:  ___________             ___________________
+#                       |___________|  
+#                       Assert      Release
+#                       Reset       Reset
+#                       |<--------->|
+#                        Pulse width
 adapter srst pulse_width 1000
 ```
 
