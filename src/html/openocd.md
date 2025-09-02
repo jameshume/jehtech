@@ -222,6 +222,31 @@ shutdown
 openocd -f interface/stlink.cfg -f target/stm32f3x.cfg -c "init" -c "reset halt"  -c "flash erase_sector 0 0 last" -c "shutdown"
 ```
 
+## Connect Under Reset
+
+Tune the delays as appropriate... here I set them arbitrarily to a figure that successfully let me
+connect under reset using trial and error.
+
+```
+reset_config srst_only srst_nogate connect_deassert_srst
+
+# How long (in milliseconds) OpenOCD should wait after deasserting nSRST (active-low system reset)
+# before starting new JTAG operations. When a board has a reset button connected to SRST line it 
+# will probably have hardware debouncing, implying you should use this.
+adapter srst delay 1000
+
+# Minimum amount of time (in milliseconds) OpenOCD should wait after asserting nSRST (active-low 
+# system reset) before allowing it to be deasserted.
+adapter srst pulse_width 1000
+```
+
+From the docs:
+
+> Timing ... Reset circuitry like a resistor/capacitor delay circuit, reset supervisor, or on-chip features can extend the 
+> effect of a JTAG adapter’s reset for some time after the adapter stops issuing the reset. For example, there may be chip or 
+> board requirements that all reset pulses last for at least a certain amount of time; and reset buttons commonly have hardware 
+> debouncing. Use the adapter srst delay and jtag_ntrst_delay commands to say when extra delays are needed.
+
 
 
 ## Command Cheat Sheet
