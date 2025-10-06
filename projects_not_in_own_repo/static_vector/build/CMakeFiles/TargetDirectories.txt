@@ -1,0 +1,3 @@
+/mnt/c/Users/JamesHume/Documents/wsl/jehtech/projects_not_in_own_repo/static_vector/build/CMakeFiles/static_buffer.dir
+/mnt/c/Users/JamesHume/Documents/wsl/jehtech/projects_not_in_own_repo/static_vector/build/CMakeFiles/edit_cache.dir
+/mnt/c/Users/JamesHume/Documents/wsl/jehtech/projects_not_in_own_repo/static_vector/build/CMakeFiles/rebuild_cache.dir

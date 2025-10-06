@@ -226,6 +226,11 @@ sudo update-binfmts --disable cli</pre>
 			<pre>echo $WSL_DISTRO_NAME</pre>
 			<p></p>
 		</div>
+
+		<h2>Create Link From Windows FS to Linux FS</h2>
+		<p>Program that doesn't understand <code>\\wsl...</code> paths? You can simlink them...</p>
+		<pre>mklink /D C:\firmware_projects \\wsl.localhost\Ubuntu-22.04\home\jehtech</pre>
+		<p></p>
 	</div> <!-- End Content Div -->
 </body>
 </html>

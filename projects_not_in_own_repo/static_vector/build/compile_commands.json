@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/mnt/c/Users/JamesHume/Documents/wsl/jehtech/projects_not_in_own_repo/static_vector/build",
+  "command": "/usr/bin/g++ -g -std=gnu++23 -o CMakeFiles/static_buffer.dir/main.cpp.o -c /mnt/c/Users/JamesHume/Documents/wsl/jehtech/projects_not_in_own_repo/static_vector/main.cpp",
+  "file": "/mnt/c/Users/JamesHume/Documents/wsl/jehtech/projects_not_in_own_repo/static_vector/main.cpp",
+  "output": "CMakeFiles/static_buffer.dir/main.cpp.o"
+}
+]
