@@ -34,7 +34,29 @@
     * PHysical Layer | Direct Test Mode
 * Can have as a single chip solution or 2-bip solution with host on an MCU and Controller on separate RF chip.
 
-
+```
+┌─────────────────┐
+│ Application     │
+└─────────────────┘
+┌─────────────────┐
+│ GATT            │
+└─────────────────┘
+┌────┐ ┌──┐ ┌─────┐
+│ GAP│ │SM│ │ATT  │
+└────┘ └──┘ └─────┘
+┌─────────────────┐
+│ L2CAP           │
+└─────────────────┘
+┌─────────────────┐
+│ HCI             │
+└─────────────────┘
+┌─────────────────┐
+│ Link Layer      │
+└─────────────────┘
+┌─────────────────┐
+│ RF and PHY      │
+└─────────────────┘
+```
 
 ## Layers
 ### Physical Layer (PHY)
