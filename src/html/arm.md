@@ -624,6 +624,13 @@ rm -rf /tmp/build
 ```
 <p></p>
 
+If you are using link time optimisations `-flto` and building some parts of the program into static libraries, the `gcc` `ar` tool needs this:
+
+```
+# Needed for AR to support LTO - link time optimisation
+set(CMAKE_C_ARCHIVE_CREATE "<CMAKE_AR> qc --plugin /opt/gcc-arm-none-eabi/libexec/gcc/arm-none-eabi/12.3.1/liblto_plugin.so <TARGET> <LINK_FLAGS> <OBJECTS>")
+```
+
 ### Setup GCC Cross Compiler
 <p></p>
 ```bash

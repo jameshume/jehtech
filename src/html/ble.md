@@ -80,7 +80,7 @@
     * Scanner    - scans for adverttising packets.
     * Master     - initialites and manages a connection.
     * Slave      - accepts a connection request.
-* Ensures packets are structured properly
+* Defines packet structure, includes the state machine and radio control, and provides link layer-level encryption.
 
 ```
                       ┌─────────────┐
@@ -111,6 +111,15 @@
                       (Device has establish a link with another device.)
 ```
 
+#### Device Address
+* Like an Ethernet MAC. 
+* 48-bit (6-byte) unique identifier.
+* Two types:
+    * Public device address - Fixed, factory-programmed address, registered with IEEE.
+    * Random - preogrammed or dynamically generated at runtime.
+    * A BLE device distinguishes between a public and a random device address by examining the
+      TxAdd and RxAdd bits in the Protocol Data Unit (PDU) header. If the address is public, these
+      bits are set to 0, while a setting of 1 indicates a random address.
 
 #### Packets
 
@@ -118,10 +127,17 @@
 * Data - For sending/receving data once a connection is made.
 
 ```
-PACKET STRUCTURE FOR LR UNCODED PHYs
+PACKET STRUCTURE FOR LE UNCODED PHYs
 ┌─────────┐┌──────────────────┐┌──────────┐┌────────────────────┐┌─────┐┌─────┐┌───────┐
-│         ││                  ││ PDU Hdr  ││ PDU Payload        ││ MIC ││ CRC ││ TERM2 │
+│Preamble ││ Access Address   ││ PDU Hdr  ││ PDU Payload        ││ MIC ││ CRC ││ TERM2 │
 └─────────┘└──────────────────┘└──────────┘└────────────────────┘└─────┘└─────┘└───────┘
+                                           /                     \
+                                          /                       \
+                                         /                         \   
+               ┌─────────────┐┌────────┐┌────────┐┌────────┐┌────────┐┌─────────────────┐
+ PDU Payload:  │PDU Type     ││RFU     ││ChSel   ││TxAdd   ││RXAdd   ││Length           │
+               │(4 bits)     ││(1 bit) ││(1 bit) ││(1 bit) ││(1 bit) ││(8 bits)         │
+               └─────────────┘└────────┘└────────┘└────────┘└────────┘└─────────────────┘
 
 
 PACKET STRUCTURE FOR LE CODED PHYs
@@ -132,16 +148,24 @@ PACKET STRUCTURE FOR LE CODED PHYs
 
 * Access address
     * 32-bites in size.
-    * Advertising - for broadcasting data or when advertising, scanning, or intiatin connections
-    * Data access address - used in connection adter a connection has been establish between two devices
+    * Advertising - for broadcasting data or when advertising, scanning, or intiating connections
+    * Data access address - used in connection after a connection has been establish between two devices
 
 * Header
-    * Different for ad vs data packet.
+    * Different for advertisement vs data packet.
 
-* The shortes allowable packet is with no data is 80 microseconds long.
+* The shortest allowable packet is with no data is 80 microseconds long.
 * Longest allowable packet is a fully loaded advertising packet, 376 microseconds long.
 * Typical advertising packet is 128 microseconds long.
 * Typical data packet is 144 microseconds long.
+
+
+
+#### Advertising
+* Allows device to broadcast prescense and therefore connections.
+* Broadcast data, e.g. supported services, name, etc.
+
+
 
 ### HCI - Host Controller Inteface
 * Sends commands to controller and receives events back.
@@ -160,6 +184,57 @@ PACKET STRUCTURE FOR LE CODED PHYs
 * Enables segmentation and reassembly of packets that are larger than what the radio can deliver.
 * Error control and retransmissions.
 
+### Generic Access Profile (GAP)
+
+> Application interoperability in the Bluetooth system is accomplished by Bluetooth profiles. Bluetooth profiles define the
+> required functions and features of each layer in the Bluetooth system from the PHY to L2CAP and any other protocols
+> outside of this specification ...
+>
+> ... The Bluetooth system defines a base profile which all Bluetooth devices implement. This profile is the Generic Access
+> Profile (GAP), which defines the basic requirements of a Bluetooth device.
+
+> The GAP is used to control how a device is visible and connectable by other devices and also how to discover and connect
+> to remote devices.
+
+* Descibes:
+    * Device roles. Roles allow devices to have radios that either transmit (TX) only, receive (RX) only, or do both.
+        * Broadcaster - (Beacon) A device that sends advertising packets. Does not use connectable ad packets - no one can connect to a broadcaster.
+        * Observer    - Device that scans for broadcasters and reports this information to an app.
+        * Peripheral  - Device that advertises by using connectable advert packets.
+        * Control     - Device that initialates connections to peripherals.
+    * Modes
+        * Connectable  - Can make a connection. State: Non-connectable, connectable.
+        * Discoverable - Can be discovered (is advertising). State: None, limited, general.
+        * Bondable     - If connectable, will pair with connected device for a long-term connection.
+    * Advertisement
+    * Connection establishment
+
+|          | Broadcaster                 | Observer                       | Peripheral          | Control            |
+|----------|-----------------------------|--------------------------------|---------------------|--------------------|
+| Radio    | Radio receiver not required | Radio transmitter not required | Both required       | Both required      |
+| Transfer | One way data                | One way data                   | Two way data        | Two way data       |
+| Stack    | Reduced h/w and stack       | Reduced h/w and stack          | Full h/w and stack  | Full h/w and stack |
+
+In the advertising state:
+
+* Device sends out packets at fixes intervals.
+* Same packet transmitted on each of the 3 primary advertisement channels.
+    * Primary channel limited to 31 bytes
+    * Secondary limited to 254 bytes
+* Scan request and response to send additional data that exceeds above limits. This is _active scanning_
+    * Receiving scans for advertisment data and sends a _scan request_
+    * Advertiser provides _scan response_ if supported.
+* _Passive scanning_ is where the device just listens for advertisment data without sending scan requests subsequently.
+
+Advertising events:
+
+| Connectable | Scannable | Directed | Description                                                                                |
+|-------------|-----------|----------|--------------------------------------------------------------------------------------------|
+| Yes         | Yes       | No       | Listeners can receive the ad packets, send scan requests and establish a connection.       |
+| Yes         | No        | No       | Listeners can receive the ad packets and establish a connection.                           |
+| Yes         | No        | Yes      | Specific device receives ad packets and can establish connection.                          |
+| No          | No        | No       | Listeners can receive the ad packets, canNOT sent scan requests or establish a connection. |
+
 
 ### Attribute Protocol (ATT)
 
@@ -170,6 +245,10 @@ PACKET STRUCTURE FOR LE CODED PHYs
 > Attribute protocol messages are sent over L2CAP channels, known as the _ATT bearers_.
 >
 > Attribute protocol defines two roles: Client and Server
+
+* Attributes are arrays that can vary from 0 to 512 bytes.
+* Can be fixed or variable length.
+* Have a type, described by a UUID. The UUID determines what the attribute value means.
 
 ### GAT
 
@@ -186,42 +265,6 @@ PACKET STRUCTURE FOR LE CODED PHYs
 >
 > In LE, GAP defines four specific roles: Broadcaster, Observer, Peripheral, and Central ... In LE, GAP defines four specific
 > roles: Broadcaster, Observer, Peripheral, and Central.
-
-### Generic Access Profile (GAP)
-
-> Application interoperability in the Bluetooth system is accomplished by Bluetooth profiles. Bluetooth profiles define the
-> required functions and features of each layer in the Bluetooth system from the PHY to L2CAP and any other protocols
-> outside of this specification ...
->
-> ... The Bluetooth system defines a base profile which all Bluetooth devices implement. This profile is the Generic Access
-> Profile (GAP), which defines the basic requirements of a Bluetooth device.
-
-* Descibes:
-    * Device roles.
-        * Broadcaster - (Beacon) A device that sends advertising packets. Does not use connectable ad packets - no one can connect to a broadcaster.
-        * Observer    - Device that scans for broadcasters and reports this information to an app.
-        * Peripheral  - Device that advertises by using connectable advert packets.
-        * Control     - Device that initialates connections to peripherals.
-    * Device roles
-    * Advertisement
-    * Connection establishment
-
-|          | Broadcaster                 | Observer                       | Peripheral          | Control            |
-|----------|-----------------------------|--------------------------------|---------------------|--------------------|
-| Radio    | Radio receiver not required | Radio transmitter not required | Both required       | Both required      |
-| Transfer | One way data                | One way data                   | Two way data        | Two way data       |
-| Stack    | Reduced h/w and stack       | Reduced h/w and stack          | Full h/w and stack  | Full h/w and stack |
-
-In the advertising stateL
-
-* Device sends out packets at fixes intervals.
-* Same packet transmitted on each of the 3 primary advertisement channels.
-    * Primary channel limited to 31 bytes
-    * Secondary limited to 254 bytes
-* Scan request and response to send additional data that exceeds above limits. This is _active scanning_
-    * Receiving scans for advertisment data and sends a _scan request_
-    * Advertiser provides _scan response_ if supported.
-* _Passive scanning_ is where the device just listends for advertisment data without sending scan requests subsequently.
 
 
 
