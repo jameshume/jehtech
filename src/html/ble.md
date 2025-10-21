@@ -201,7 +201,7 @@ PACKET STRUCTURE FOR LE CODED PHYs
         * Broadcaster - (Beacon) A device that sends advertising packets. Does not use connectable ad packets - no one can connect to a broadcaster.
         * Observer    - Device that scans for broadcasters and reports this information to an app.
         * Peripheral  - Device that advertises by using connectable advert packets.
-        * Control     - Device that initialates connections to peripherals.
+        * Central     - Device that initialates connections to peripherals.
     * Modes
         * Connectable  - Can make a connection. State: Non-connectable, connectable.
         * Discoverable - Can be discovered (is advertising). State: None, limited, general.
@@ -215,9 +215,14 @@ PACKET STRUCTURE FOR LE CODED PHYs
 | Transfer | One way data                | One way data                   | Two way data        | Two way data       |
 | Stack    | Reduced h/w and stack       | Reduced h/w and stack          | Full h/w and stack  | Full h/w and stack |
 
+#### Advertising
+
 In the advertising state:
 
-* Device sends out packets at fixes intervals.
+* Device sends out packets at fixes intervals to announce its presense.
+    * Advertising intervals: The interval at which an advertising packet is sent. In the range of 20 ms to 10.24 s, with a 
+      step increase of 0.625 ms.
+    * Tradeoff power consumption v.s. time for device to be discovered.
 * Same packet transmitted on each of the 3 primary advertisement channels.
     * Primary channel limited to 31 bytes
     * Secondary limited to 254 bytes
@@ -228,29 +233,90 @@ In the advertising state:
 
 Advertising events:
 
-| Connectable | Scannable | Directed | Description                                                                                |
-|-------------|-----------|----------|--------------------------------------------------------------------------------------------|
-| Yes         | Yes       | No       | Listeners can receive the ad packets, send scan requests and establish a connection.       |
-| Yes         | No        | No       | Listeners can receive the ad packets and establish a connection.                           |
-| Yes         | No        | Yes      | Specific device receives ad packets and can establish connection.                          |
-| No          | No        | No       | Listeners can receive the ad packets, canNOT sent scan requests or establish a connection. |
+| Connectable | Scannable | Directed | Description                                                                                                  |
+|-------------|-----------|----------|--------------------------------------------------------------------------------------------------------------|
+| Yes         | Yes       | No       | ADV_IND -Listeners can receive the ad packets, send scan requests and establish a connection.                |
+| Yes         | No        | No       | Listeners can receive the ad packets and establish a connection.                                             |
+| Yes         | No        | Yes      | ADV_DIRECT_IND - Specific device receives ad packets and can establish connection.                           |
+| No          | No        | No       | ADV_NONCONN_IND - Listeners can receive the ad packets, canNOT sent scan requests or establish a connection. |
+| No          | Yes       | No       | ADV_SCAN_IND - Only accept scan requests, but will not allow establishing a connection with it.              |
 
+#### Connection (Event)
+Establishing a connection requires two devices, one acting as a peripheral that is currently advertising, and one acting as a central that is currently scanning.
+
+* Start of a group of data packets, sent from the master to the slave and back.
+* Done periodically until connection is closed/lost.
+* Advertises has short RX window after each advert to listen for incoming connection requests.
+    * Perhipheral mostly has to accept connection req (and disconnect later if it wants) unless accpt list filter is used.
+* Connection interval: The interval at which two devices in a connection wake up to exchange data.
+    * Set by the central in the connection request packet. Can later be changed.
+    * 7.5ms to 4s
+    * Smaller interval == greater power consumption but higher throughput
+* Connection event: Occurs every connection interval, when the central sends a packet to the peripheral.
+* Peripheral latency: # connection events peripheral can skip without risking disconnection.
+* Payload:
+    * Default size is 27 bytes
+    * Increase up to 251 bytes using Data Length Extensions (DLE)
+* Connection supervision timeout:
+    * Max time between two received data packets before connection dead.
+    * 100ms to 32s.
+     
 
 ### Attribute Protocol (ATT)
-
-> To allow devices to read and write small data values held on a server, an Attribute Protocol (ATT) is defined.
-> Each stored value, typically only a few octets, is known as an attribute. This protocol allows attribute to be
-> self identifying using UUIDs to identify the type of data.
->
+> The Attribute protocol allows a device referred to as the server to expose a set
+> of attributes and their associated values to a peer device referred to as the client
+> ...
+> To allow devices to read and write small data values held on a server, an Attribute Protocol 
+> (ATT) is defined. Each stored value, typically only a few octets, is known as an attribute. 
+> This protocol allows attribute to be self identifying using UUIDs to identify the type of data.
+> ...
 > Attribute protocol messages are sent over L2CAP channels, known as the _ATT bearers_.
->
+> ...
 > Attribute protocol defines two roles: Client and Server
+> ...
+> An ATT bearer is a channel used to send Attribute protocol PDUs. Each ATT
+> bearer uses an L2CAP channel. A device may have any number of ATT bearers to a peer device.
 
+* Server is the device that is exposing the data and the client is the device consuming it.
 * Attributes are arrays that can vary from 0 to 512 bytes.
 * Can be fixed or variable length.
-* Have a type, described by a UUID. The UUID determines what the attribute value means.
+* E.g. a device could expose its battery level. It acts as the ATT server.
+* An attribute is composed of handle | type | value | permissions
+    * Handle: 16-bit, unique, non-zero value that is assigned by each server to its own attributes.
+    * Type: A UUID is used to identify every attribute type (no central registry for UUIDs).
+    * Value: Byte array of fixed or variable length. May require multiple PDUs to transmit.
+    * Permission: Read or write, notified or indicated, security level required to access:
+        * Readable, writable or readable and writable.
+        * Encryption required or not.
+        * Authentication or not.
+        * Authorisation required or not.
+* An attribute has a type, described by a UUID. The UUID determines what the attribute value means. 
+    * 16-bit for official atts
+    * 128-bit number for custom atts.
+        * But 128-but very large (link layer PDU is 27 bytes) so can also use
+            * 16 and 32-bit UUIDs - only used for UUIDs defined be Bluetooth SIG.
 
-### GAT
+> To reduce the burden of storing and transferring 128-bit UUID values, a range
+> of UUID values has been pre-allocated for assignment to often-used,
+> registered purposes. The first UUID in this pre-allocated range is known as the
+> Bluetooth Base UUID and has the value 00000000-0000-1000-8000-
+> 00805F9B34FB, from [Assigned Numbers](https://www.bluetooth.com/specifications/assigned-numbers/). UUID values in the pre-allocated
+> range have aliases that are represented as 16-bit or 32-bit values. These
+> aliases are often called 16-bit and 32-bit UUIDs, but each actually represents a
+> 128-bit UUID value.
+
+* ATT PDUs have one of 6 types:
+
+| Type | Purpose | Suffix |
+|------|---------|--------|
+| Commands | PDUs sent to a server by a client that do not invoke a response. | CMD |
+| Requests | PDUs sent to a server by a client that invoke a response. | REQ |
+| Responses | PDUs sent to a client by a server in response to a request. | RSP |
+| Notifications | Unsolicited PDUs sent to a client by a server that do not invoke a confirmation. | NTF |
+| Indications | Unsolicited PDUs sent to a client by a server that invoke a confirmation. | IND |
+| Confirmations | PDUs sent to a server by a client to confirm receipt of an indication. | CFM |
+
+### Generic Attribute Profile (GATT)
 
 > Generic Attribute Profile (GATT) is built on top of the Attribute protocol (ATT) and establishes common operations and
 > a framework for the data transported and stored by the Attribute protocol...
@@ -266,6 +332,68 @@ Advertising events:
 > In LE, GAP defines four specific roles: Broadcaster, Observer, Peripheral, and Central ... In LE, GAP defines four specific
 > roles: Broadcaster, Observer, Peripheral, and Central.
 
+
+```
++---------------------------------------------------------------------------------+
+|  Profile                                                                        |
+|                                                                                 |
+|  +---------------------+                    +-----------------------------+    |
+|  | Service             |                    | Service                     |    |
+|  |                     |                    |                             |    |
+|  | +----------------+  |                    | +------------------------+  |    |
+|  | | Include        |  |                    | | Include                |  |    |
+|  | +----------------+  |                    | +------------------------+  |    |
+|  |        :            |                    |           :                 |    |
+|  |        :            |                    |           :                 |    |
+|  |        :            |                    |           :                 |    |
+|  | +----------------+  |                    | +------------------------+  |    |
+|  | | Include        |  |                    | | Include                |  |    |
+|  | +----------------+  |        ...         | +------------------------+  |    |
+|  |                     |                    |                             |    |
+|  | +----------------+  |                    | +------------------------+  |    |
+|  | | Characteristic |  |                    | | Characteristic         |  |    |
+|  | |                |  |                    | |                        |  |    |
+|  | | +-----------+  |  |                    | | +-------------------+  |  |    |
+|  | | |Properties |  |  |                    | | | Properties        |  |  |    |
+|  | | +-----------+  |  |                    | | +-------------------+  |  |    |
+|  | | +-----------+  |  |                    | | +-------------------+  |  |    |
+|  | | | Value     |  |  |                    | | | Value             |  |  |    |
+|  | | +-----------+  |  |                    | | +-------------------+  |  |    |
+|  | | +-----------+  |  |                    | | +-------------------+  |  |    |
+|  | | |Descriptor |  |  |                    | | | Descriptor        |  |  |    |
+|  | | +-----------+  |  |                    | | +-------------------+  |  |    |
+|  | |       o        |  |                    | |          :             |  |    |
+|  | |       o        |  |                    | |          :             |  |    |
+|  | |       o        |  |                    | |          :             |  |    |
+|  | | +-----------+  |  |                    | | +-------------------+  |  |    |
+|  | | |Descriptor |  |  |                    | | | Descriptor        |  |  |    |
+|  | | +-----------+  |  |                    | | +-------------------+  |  |    |
+|  | +----------------+  |                    | +------------------------+  |    |
+|  |        :            |                    |           :                 |    |
+|  |        :            |                    |           :                 |    |
+|  |        :            |                    |           :                 |    |
+|  | +----------------+  |                    | +------------------------+  |    |
+|  | | Characteristic |  |                    | | Characteristic         |  |    |
+|  | |                |  |                    | |                        |  |    |
+|  | | +-----------+  |  |                    | | +-------------------+  |  |    |
+|  | | |Properties |  |  |                    | | | Properties        |  |  |    |
+|  | | +-----------+  |  |                    | | +-------------------+  |  |    |
+|  | | +-----------+  |  |                    | | +-------------------+  |  |    |
+|  | | | Value     |  |  |                    | | | Value             |  |  |    |
+|  | | +-----------+  |  |                    | | +-------------------+  |  |    |
+|  | | +-----------+  |  |                    | | +-------------------+  |  |    |
+|  | | |Descriptor |  |  |                    | | | Descriptor        |  |  |    |
+|  | | +-----------+  |  |                    | | +-------------------+  |  |    |
+|  | |       :        |  |                    | |          :             |  |    |
+|  | |       :        |  |                    | |          :             |  |    |
+|  | |       :        |  |                    | |          :             |  |    |
+|  | | +-----------+  |  |                    | | +-------------------+  |  |    |
+|  | | |Descriptor |  |  |                    | | | Descriptor        |  |  |    |
+|  | | +-----------+  |  |                    | | +-------------------+  |  |    |
+|  | +----------------+  |                    | +------------------------+  |    |
+|  +---------------------+                    +-----------------------------+    |
++---------------------------------------------------------------------------------+
+```
 
 
 ## Pairing
