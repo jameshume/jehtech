@@ -1,7 +1,9 @@
 ## The Basics
 
 * Low power, low bandwidth application focus
-* 2.4GHz ISM Band (Industrial Scientific Medical Band)
+* 2.4GHz ISM Band (Industrial Scientific Medical Band) (2400 MHz – 2483.5 MHz)
+    * Channel bandwidth is 2Mhz
+    * 40 RF channels
 * Range 10-30 meters depending on the environment
 * Optimised for low power
 * Peak current under 15mA typically.
@@ -16,7 +18,6 @@
 * Bluetooth Smart - BLE only - single mode
 * Bluetooth Smart Ready - BLE and bluetooth classic - dual mode
 * Bluetooth - Classic only (BR - basic rate/EBR - enhanced basic rate)
-
 
 
 ### BLE architecture blocks
@@ -35,27 +36,29 @@
 * Can have as a single chip solution or 2-bip solution with host on an MCU and Controller on separate RF chip.
 
 ```
-┌─────────────────┐
-│ Application     │
-└─────────────────┘
-┌─────────────────┐
-│ GATT            │
-└─────────────────┘
-┌────┐ ┌──┐ ┌─────┐
-│ GAP│ │SM│ │ATT  │
-└────┘ └──┘ └─────┘
-┌─────────────────┐
-│ L2CAP           │
-└─────────────────┘
-┌─────────────────┐
-│ HCI             │
-└─────────────────┘
-┌─────────────────┐
-│ Link Layer      │
-└─────────────────┘
-┌─────────────────┐
-│ RF and PHY      │
-└─────────────────┘
+                        ┌────────────────────────────────────────┐
+                        │              Application               │
+                        └────────────────────────────────────────┘
+                        ┌────────────────────────────────────────┐
+                        │                 Host                   │
+                        ├──────────────┬─────────────────────────┤
+Subprocedures for  ---->│     GATT     │    GAP                  │ <--- Interfaces directly with app
+using ATT layer         |              |                         |      to handle device discovery and
+                        ├──────────────┼──────────────┐          │      connection related services
+Allow dev to expose --->│     ATT      │    SMP <-----|----------│----- Security Manage Protocol: defines
+attributes to others    |              |              |          |      and provides methods for secure
+                        ├──────────────┴──────────────┤          │      comms.
+Data encapsulation ---->│           L2CAP             │          │
+services to upper       |                             |          |
+layers                  └─────────────────────────────┴──────────┘
+                      - - - - Host Controller Interface (HCI) - - - -
+                        ┌────────────────────────────────────────┐
+                        │              Controller                │
+                        ├────────────────────────────────────────┤
+                        │         Link Layer (LL)                │
+                        ├────────────────────────────────────────┤
+                        │         Physical Layer (PHY)           │
+                        └────────────────────────────────────────┘
 ```
 
 ## Layers
@@ -110,13 +113,15 @@
                       └─────────────┘
                       (Device has establish a link with another device.)
 ```
+<p></p>
 
 #### Device Address
+
 * Like an Ethernet MAC. 
 * 48-bit (6-byte) unique identifier.
 * Two types:
     * Public device address - Fixed, factory-programmed address, registered with IEEE.
-    * Random - preogrammed or dynamically generated at runtime.
+    * Random - preprogammed or dynamically generated at runtime.
     * A BLE device distinguishes between a public and a random device address by examining the
       TxAdd and RxAdd bits in the Protocol Data Unit (PDU) header. If the address is public, these
       bits are set to 0, while a setting of 1 indicates a random address.
@@ -167,6 +172,8 @@ PACKET STRUCTURE FOR LE CODED PHYs
 │Preamble ││ Access Address   ││ CI   ││ TERM1   ││ PDU Hdr  ││ PDU Payload        ││ MIC ││ CRC ││ TERM2 │
 └─────────┘└──────────────────┘└──────┘└─────────┘└──────────┘└────────────────────┘└─────┘└─────┘└───────┘
 ```
+<p></p>
+
 
 * Access address
     * 32-bites in size.
@@ -207,6 +214,8 @@ LSB                                                                    MSB
 │ (4 bits) │ (1 bit) │ (1 bit) │ (1 bit) │ (1 bit) │     (8 bits)     │
 └──────────┴─────────┴─────────┴─────────┴─────────┴──────────────────┘
 ```
+<p></p>
+
 
 #### Data
 
@@ -229,6 +238,7 @@ Data Physical Channel PDU header
 │        │        │        │        │        │        │        │(optional)│
 └────────┴────────┴────────┴────────┴────────┴────────┴────────┴──────────┘
 ```
+<p></p>
 
 
 ### HCI - Host Controller Inteface
@@ -237,6 +247,8 @@ Data Physical Channel PDU header
 * Interface between the physical and logical interface between devices.
     * Loigical interface defines packet formats for commands, events and data.
     * Physical interface defines how logical packets are send between host and controller.
+
+See [Core Spec](https://www.bluetooth.com/wp-content/uploads/Files/Specification/HTML/Core-54/out/en/host-controller-interface/host-controller-interface-functional-specification.html) for a list of all HCI commands and events - too many to summarise here!!
 
 ### Logical Link Control and Adaption Protocol (L2CAP)
 
@@ -278,6 +290,7 @@ Data Physical Channel PDU header
 | Radio    | Radio receiver not required | Radio transmitter not required | Both required       | Both required      |
 | Transfer | One way data                | One way data                   | Two way data        | Two way data       |
 | Stack    | Reduced h/w and stack       | Reduced h/w and stack          | Full h/w and stack  | Full h/w and stack |
+<p></p>
 
 #### Advertising
 
@@ -304,6 +317,8 @@ Advertising events:
 | Yes         | No        | Yes      | ADV_DIRECT_IND - Specific device receives ad packets and can establish connection.                           |
 | No          | No        | No       | ADV_NONCONN_IND - Listeners can receive the ad packets, canNOT sent scan requests or establish a connection. |
 | No          | Yes       | No       | ADV_SCAN_IND - Only accept scan requests, but will not allow establishing a connection with it.              |
+<p></p>
+
 
 #### Connection (Event)
 Establishing a connection requires two devices, one acting as a peripheral that is currently advertising, and one acting as a central that is currently scanning.
@@ -379,6 +394,8 @@ Establishing a connection requires two devices, one acting as a peripheral that 
 | Notifications | Unsolicited PDUs sent to a client by a server that do not invoke a confirmation. | NTF |
 | Indications | Unsolicited PDUs sent to a client by a server that invoke a confirmation. | IND |
 | Confirmations | PDUs sent to a server by a client to confirm receipt of an indication. | CFM |
+<p></p>
+
 
 ### Generic Attribute Profile (GATT)
 
@@ -478,6 +495,8 @@ Establishing a connection requires two devices, one acting as a peripheral that 
 |  +---------------------+                    +-----------------------------+    |
 +--------------------------------------------------------------------------------+
 ```
+<p></p>
+
 
 Characteristics look like this:
 
@@ -496,6 +515,8 @@ Characteristics look like this:
 | Descriptor Declaration            |
 +-----------------------------------+
 ```
+<p></p>
+
 
 The characteristic declaration:
 
@@ -517,6 +538,8 @@ The characteristic declaration:
                                         be used: Broadcast, Read, Write Without Response, Write, Notify
                                         Indicate, Authenticated Signed Writes, Extended Properties.
 ```
+<p></p>
+
 
 * GAP service is *manditory*. 
     * A device shall have only one instance of the GAP service in the GATT server
