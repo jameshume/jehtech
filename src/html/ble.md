@@ -150,6 +150,10 @@ PACKET STRUCTURE FOR LE UNCODED PHYs
                                     Carries the Link Layer Protocol
 
 
+PDUs on ad channels use the Adverising Physical Channel PDU.
+On a data channel use the Data Channel PDU.
+On Osochronous Pysical Channel uses that PDU.
+
 Where PDU playload looks like...
 
                ┌─────────────┐┌────────┐┌────────┐┌────────┐┌────────┐┌─────────────────┐
@@ -183,6 +187,48 @@ PACKET STRUCTURE FOR LE CODED PHYs
 * Allows device to broadcast prescense and therefore connections.
 * Broadcast data, e.g. supported services, name, etc.
 
+Advertising channel PDU:
+
+```
+Advertising physical channel PDU
+
+LSB                                                                    MSB
+┌─────────────┬──────────────────────────────────────────────────────────┐
+│   Header    │                    Payload                               │
+│  (16 bits)  │                  (1-255 octets)                          │
+└─────────────┴──────────────────────────────────────────────────────────┘
+
+
+Advertising physical channel PDU header
+
+LSB                                                                    MSB
+┌──────────┬─────────┬─────────┬─────────┬─────────┬──────────────────┐
+│ PDU Type │   RFU   │  ChSel  │  TxAdd  │  RxAdd  │      Length      │
+│ (4 bits) │ (1 bit) │ (1 bit) │ (1 bit) │ (1 bit) │     (8 bits)     │
+└──────────┴─────────┴─────────┴─────────┴─────────┴──────────────────┘
+```
+
+#### Data
+
+```
+Data Physical Channel PDU
+
+LSB                                                                    MSB
+┌───────────────────┬─────────────────────────────┬─────────────────────┐
+│      Header       │          Payload            │        MIC          │
+│ (16 bits or 24    │                             │      (32 bits)      │
+│      bits)        │                             │     (optional)      │
+└───────────────────┴─────────────────────────────┴─────────────────────┘
+
+Data Physical Channel PDU header
+
+                           Header
+┌────────┬────────┬────────┬────────┬────────┬────────┬────────┬──────────┐
+│  LLID  │  NESN  │   SN   │   MD   │   CP   │  RFU   │ Length │ CTEInfo  │
+│(2 bits)│(1 bit) │(1 bit) │(1 bit) │(1 bit) │(2 bits)│(8 bits)│ (8 bits) │
+│        │        │        │        │        │        │        │(optional)│
+└────────┴────────┴────────┴────────┴────────┴────────┴────────┴──────────┘
+```
 
 
 ### HCI - Host Controller Inteface
