@@ -274,10 +274,12 @@ See [Core Spec](https://www.bluetooth.com/wp-content/uploads/Files/Specification
 
 * Descibes:
     * Device roles. Roles allow devices to have radios that either transmit (TX) only, receive (RX) only, or do both.
+                    They determine things like how the device advertises its presence, or how it scans and connects 
+                    to other nodes.
         * Broadcaster - (Beacon) A device that sends advertising packets. Does not use connectable ad packets - no one can connect to a broadcaster.
         * Observer    - Device that scans for broadcasters and reports this information to an app.
         * Peripheral  - Device that advertises by using connectable advert packets.
-        * Central     - Device that initialates connections to peripherals.
+        * Central     - Device that scans for and initialates connections to peripherals.
     * Modes
         * Connectable  - Can make a connection. State: Non-connectable, connectable.
         * Discoverable - Can be discovered (is advertising). State: None, limited, general.
@@ -319,6 +321,35 @@ Advertising events:
 | No          | Yes       | No       | ADV_SCAN_IND - Only accept scan requests, but will not allow establishing a connection with it.              |
 <p></p>
 
+Advertising channels:
+```
+Frequency: 2402 MHz ─────────────────────────────────────────► 2480 MHz
+           │                                                     │
+Channel:   37  0  1  2  3  4  5  6  7  8  9  10 38 11 12...23 24 39
+           │                                    │                │
+           ▼                                    ▼                ▼
+         ┌───┐                                ┌───┐             ┌───┐
+         │ ■ │ Primary Advertisement          │ ■ │             │ ■ │
+         └───┘ (Ch 37, 38, 39)                └───┘             └───┘
+          2MHz                                                    
+           │
+         ┌───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┐
+         │ □ │ □ │ □ │ □ │ □ │ □ │ □ │ □ │ □ │ □ │ □ │ □ │ □ │ □ │
+         └───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┴───┘
+          0   1   2   3   4   5   6   7   8   9  10  11  12 ...36
+         
+         Data Transfer (Channels 0-36)
+
+
+Legend:
+  ■ = Primary Advertisement Channels (37, 38, 39)
+  □ = Data Transfer Channels (0-36)
+  
+  • 3 advertising channels spaced across the band
+  • 37 data channels for actual communication
+  • 2 MHz spacing between channels
+```
+<p></p>
 
 #### Connection (Event)
 Establishing a connection requires two devices, one acting as a peripheral that is currently advertising, and one acting as a central that is currently scanning.
@@ -355,6 +386,16 @@ Establishing a connection requires two devices, one acting as a peripheral that 
 > ...
 > An ATT bearer is a channel used to send Attribute protocol PDUs. Each ATT
 > bearer uses an L2CAP channel. A device may have any number of ATT bearers to a peer device.
+> -- BLE Specification
+<p></p>
+
+> The Attribute protocol (ATT) layer, and the Generic Attribute Profile (GATT) layer right 
+> above it, define how data is represented and exchanged between Bluetooth LE devices. The 
+> ATT and GATT layers are concerned with the phase after a connection has been established,
+> as opposed to the GAP layer which takes care of the advertisement process which occurs before 
+> a connection is established.
+> -- Nordic Semiconductor Academy
+<p></p>
 
 * Server is the device that is exposing the data and the client is the device consuming it.
 * Attributes are arrays that can vary from 0 to 512 bytes.
@@ -412,7 +453,12 @@ Establishing a connection requires two devices, one acting as a peripheral that 
 >
 > In LE, GAP defines four specific roles: Broadcaster, Observer, Peripheral, and Central ... In LE, GAP defines four specific
 > roles: Broadcaster, Observer, Peripheral, and Central.
+<p></p>
 
+> The Generic Attribute Profile (GATT) layer sits directly on top of the ATT layer, 
+> and builds on it by hierarchically classifying attributes into profiles, services and characteristics.
+> -- Nordic Semiconductor Academy
+<p></p>
 
 * Attributes grouped into services
 * Services and characteristics are both attributes.
