@@ -128,12 +128,30 @@
 
 ```
 PACKET STRUCTURE FOR LE UNCODED PHYs
-┌─────────┐┌──────────────────┐┌──────────┐┌────────────────────┐┌─────┐┌─────┐┌───────┐
-│Preamble ││ Access Address   ││ PDU Hdr  ││ PDU Payload        ││ MIC ││ CRC ││ TERM2 │
-└─────────┘└──────────────────┘└──────────┘└────────────────────┘└─────┘└─────┘└───────┘
-                                           /                     \
-                                          /                       \
-                                         /                         \   
+
+┌─────────┬────────────────┬────────────┬─────────────────────────────┬─────┬─────┬──────────────┐
+│Preamble │Access Address  │ PDU Header │       PDU Payload           │ MIC │ CRC │ Constant Tone│
+│         │                │            │                             │     │     │  Extension   │
+└─────────┴────────────────┴────────────┴─────────────────────────────┴─────┴─────┴──────────────┘
+              :            :       :                   :                          :       :
+              :            :       :                   :                          :       :
+         Carries physical  :       :                   :                          : Carries direction
+         channel access    : Carries the logical       :                          : finding information
+         code              : transport and logical     :                          :
+                           : link identifiers          :                          :
+                           :                           :                          :
+                           :                     Carries one of the following:    :
+                           :                     L2CAP signals, L2CAP frames,     :
+                           :                     ISOAL segments, isochronous      :
+                           :                     data, or other user data         :
+                           :                                                      :
+                           \______________________________________________________/
+                                                    |
+                                    Carries the Link Layer Protocol
+
+
+Where PDU playload looks like...
+
                ┌─────────────┐┌────────┐┌────────┐┌────────┐┌────────┐┌─────────────────┐
  PDU Payload:  │PDU Type     ││RFU     ││ChSel   ││TxAdd   ││RXAdd   ││Length           │
                │(4 bits)     ││(1 bit) ││(1 bit) ││(1 bit) ││(1 bit) ││(8 bits)         │
@@ -333,10 +351,30 @@ Establishing a connection requires two devices, one acting as a peripheral that 
 > roles: Broadcaster, Observer, Peripheral, and Central.
 
 
+* Attributes grouped into services
+* Services and characteristics are both attributes.
+    * Characteristic is a container for user data
+    * Include at least
+        * characteristic declaration - metadata
+        * characteristic value - user data in the value field
+    * And can be followed by descriptors.
+* GATT defines how services and characteristics can be discovered and used.
+
+> A service is a collection of data and associated behaviors to accomplish a
+> particular function or feature.
+> ...
+> There are two types of services: primary service and secondary service
+
+* Primary service exposes the primary usable functionality of the device.
+    * Can be included in other services
+    * Can be discovered using Primary Service Discovery procedures. 
+* Secondary service only intended to be included from a primary service
+  or another secondary service.
+
 ```
-+---------------------------------------------------------------------------------+
-|  Profile                                                                        |
-|                                                                                 |
++--------------------------------------------------------------------------------+
+|  Profile                                                                       |
+|                                                                                |
 |  +---------------------+                    +-----------------------------+    |
 |  | Service             |                    | Service                     |    |
 |  |                     |                    |                             |    |
@@ -392,9 +430,57 @@ Establishing a connection requires two devices, one acting as a peripheral that 
 |  | | +-----------+  |  |                    | | +-------------------+  |  |    |
 |  | +----------------+  |                    | +------------------------+  |    |
 |  +---------------------+                    +-----------------------------+    |
-+---------------------------------------------------------------------------------+
++--------------------------------------------------------------------------------+
 ```
 
+Characteristics look like this:
+
+```
++-----------------------------------+
+| Characteristic Declaration        | - An attribute. UUID set to "characteristic" - 0x2803.
++-----------------------------------+
+| Characteristic Value              |
+| Declaration                       |
++-----------------------------------+
+| Descriptor Declaration            |
++-----------------------------------+
+              o o o
+              
++-----------------------------------+
+| Descriptor Declaration            |
++-----------------------------------+
+```
+
+The characteristic declaration:
+
+```
++----------------+------------------+-------------------------------------+----------------------+
+| Attribute      | Attribute Type   | Attribute Value                     | Attribute            |
+| Handle         |                  |                                     | Permission           |
++----------------+------------------+-------------------------------------+----------------------+
+| 0xNNNN         | Characteristic   | +----------------+--------+------+  | Read Only            |
+|                | (0x2803)         | | Properties     | Handle | UUID |  | No Authenticatio     |
+|                |                  | +-|--------------+-|------+-|----+  | No Authorization     |
++----------------+------------------+---|----------------|--------|-------+----------------------+
+                                        |                |        |
+                                        |                |        16-bit or 128-bit UUID describing type 
+                                        |                |        of Characteristic Value
+                                        |                Attribute Handle of the Attribute that contains 
+                                        |                the Characteristic Value
+                                        A bit field that determines how the Characteristic Value can 
+                                        be used: Broadcast, Read, Write Without Response, Write, Notify
+                                        Indicate, Authenticated Signed Writes, Extended Properties.
+```
+
+* GAP service is *manditory*. 
+    * A device shall have only one instance of the GAP service in the GATT server
+    * Characteristic is the device name string and a value that determines device appearance:   
+        * Device name - the name of the device as an UTF-8 string - type is set to 0x2A00
+        * Appearance - type is set to 0x2A01 - enables the discovering device to represent the
+          device to the user using an icon, or a string, etc.
+        * Peripheral Preferred Connection Parameters
+        * Central Address Resolution
+        * Resolvable Private Address Only
 
 ## Pairing
 Paring means that devices establish a connection with these properties:
