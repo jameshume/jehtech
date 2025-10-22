@@ -116,12 +116,15 @@ layers                  └─────────────────�
 <p></p>
 
 #### Device Address
+Every Bluetooth LE device is identified by a unique 48-bit address.
 
 * Like an Ethernet MAC. 
 * 48-bit (6-byte) unique identifier.
 * Two types:
-    * Public device address - Fixed, factory-programmed address, registered with IEEE.
+    * Public device address - Fixed, factory-programmed address, registered with IEEE registration authority.
     * Random - preprogammed or dynamically generated at runtime.
+        * Does not require registration with the IEEE.
+        * Can be manually configured.
     * A BLE device distinguishes between a public and a random device address by examining the
       TxAdd and RxAdd bits in the Protocol Data Unit (PDU) header. If the address is public, these
       bits are set to 0, while a setting of 1 indicates a random address.
@@ -352,9 +355,23 @@ Legend:
 <p></p>
 
 #### Connection (Event)
+
+> The most common way to achieve two-way communication in Bluetooth Low Energy is to use connections.
+> In addition, a connection grants you benefits like higher data throughput, mechanisms to handle 
+> packet loss, and added security.
+> -- Nordic Academy
+<p></p>
+
 Establishing a connection requires two devices, one acting as a peripheral that is currently advertising, and one acting as a central that is currently scanning.
 
 * Start of a group of data packets, sent from the master to the slave and back.
+* Connection no longer uses ad channels, but other 37 data channels.
+* Connection parameters include:
+    * Connection interval
+    * Supervision timeout
+    * Prehipheral latency
+    * PHY radio mode
+    * Data length and MTU
 * Done periodically until connection is closed/lost.
 * Advertises has short RX window after each advert to listen for incoming connection requests.
     * Perhipheral mostly has to accept connection req (and disconnect later if it wants) unless accpt list filter is used.
@@ -370,20 +387,29 @@ Establishing a connection requires two devices, one acting as a peripheral that 
 * Connection supervision timeout:
     * Max time between two received data packets before connection dead.
     * 100ms to 32s.
+
      
 
 ### Attribute Protocol (ATT)
 > The Attribute protocol allows a device referred to as the server to expose a set
 > of attributes and their associated values to a peer device referred to as the client
+>
 > ...
+>
 > To allow devices to read and write small data values held on a server, an Attribute Protocol 
 > (ATT) is defined. Each stored value, typically only a few octets, is known as an attribute. 
 > This protocol allows attribute to be self identifying using UUIDs to identify the type of data.
+>
 > ...
+>
 > Attribute protocol messages are sent over L2CAP channels, known as the _ATT bearers_.
+>
 > ...
+>
 > Attribute protocol defines two roles: Client and Server
+>
 > ...
+>
 > An ATT bearer is a channel used to send Attribute protocol PDUs. Each ATT
 > bearer uses an L2CAP channel. A device may have any number of ATT bearers to a peer device.
 > -- BLE Specification
@@ -424,6 +450,7 @@ Establishing a connection requires two devices, one acting as a peripheral that 
 > range have aliases that are represented as 16-bit or 32-bit values. These
 > aliases are often called 16-bit and 32-bit UUIDs, but each actually represents a
 > 128-bit UUID value.
+<p></p>
 
 * ATT PDUs have one of 6 types:
 
@@ -443,13 +470,16 @@ Establishing a connection requires two devices, one acting as a peripheral that 
 > Generic Attribute Profile (GATT) is built on top of the Attribute protocol (ATT) and establishes common operations and
 > a framework for the data transported and stored by the Attribute protocol...
 >
-> ... The Bluetooth system defines a base profile which all Bluetooth devices implement. This profile is the Generic Access
+>...
+>
+> The Bluetooth system defines a base profile which all Bluetooth devices implement. This profile is the Generic Access
 > Profile (GAP), which defines the basic requirements of a Bluetooth device. For instance, or BR/EDR, it defines a
 > Bluetooth device to include the Radio, Baseband, Link Manager, L2CAP, and the Service Discovery protocol functionality;
 > for LE, it defines the Physical Layer, Link Layer, L2CAP, Security Manager, Attribute Protocol and Generic Attribute Profile.
 > This ties all the various layers together to form the basic requirements for a Bluetooth device. It also describes the
 > behaviors and methods for device discovery, connection establishment, security, authentication, association models and service
 > discovery.
+>
 >
 > In LE, GAP defines four specific roles: Broadcaster, Observer, Peripheral, and Central ... In LE, GAP defines four specific
 > roles: Broadcaster, Observer, Peripheral, and Central.
@@ -597,14 +627,47 @@ The characteristic declaration:
         * Central Address Resolution
         * Resolvable Private Address Only
 
-## Pairing
-Paring means that devices establish a connection with these properties:
 
-* Connection it capable of data encryption to keep the communication confidential.
-* Connection it capable of data authentication, ensuring the data comes from a trusted source.
+#### Sending Data
+* The server can send information to the client, without a client actually requesting information, or a client
+  can request data from the server.
+    * Service discovery: The process in which a GATT client discovers the services and characteristics in
+      an attribute table hosted by a GATT server.
+* Client initiated data requests:
+    * Read, write, write without reponse
+* Servier initiated: Client must subscribe to characteristics and enable notifiy/indicate ops.
+    * Noitfy: automatically push the value of a certain attribute to the client. Client not required to ack.
+    * Indicate: Like notify but client must ack. Can only send one per connection interval so slower than notifications.       
+
+## Pairing
+Paring means that devices establish a secure connection with these properties:
+
+* Connection is capable of data encryption to keep the communication confidential.
+* Connection is capable of data authentication, ensuring the data comes from a trusted source.
 * Connection offers device authentication, confirming the identity of the devices.
 * Connection provides device tracking protection, preventing unwanted tracking.
 
+Generating, distributing and authenticating the encruption keys is what the pairing process does.
+
+Process has 3 phases:
+1. Initiate paring.
+    * Central sends pairing request. Periphal responds with pairing response.
+    * Exchance or pairing features, including IO capabilities:
+        * DisplayOnly - Peer only has a display
+        * DisplayYesNo - Peer can ask user to select yes or no
+        * KeyboardOnly - Peer has a keyboard
+        * NoInputNoOuput - No IO!
+        * KeyboardDisplay - Both keyboard and display 
+2. Perform paring.
+    * Keys generated
+    * Bluetooth v4.2 introduced more secure keys ("LE Secure Connections" - uses elliptic curve pub/priv keys).
+    * Methods - determied my OOB, MITM flags and I/O capabilities:
+        * Just works - Short Term Key (STK) generated based on info exhanged in plain text - eek! UNAUTHENTICATED!
+        * Passkey - 6-digit number shown on one device entered on the other. I/O capabilities determine who displays.
+        * Out of band - Keys exchanged by some other means.
+        * Numeric comparison - Both devices display a 6-digit number and user selects y/n to confirm.
+3. Key distribution.
+    * Long Term Key (LTK) is used to distribute the rest of the keys
 
 ### Steps
 1. Feature exchange: paring request and response packets whcih detail a device's features and capabilities.
@@ -612,5 +675,5 @@ Paring means that devices establish a connection with these properties:
 3. Transport-specific key distribution.
 
 ## Bonding
-* Devices remember the security information exchanged during a successful pairing. 
+* Devices remember the security information exchanged during a successful pairing.  I.e. caches the keys.
 * Enables automatic re-connect without having to re-pair.
