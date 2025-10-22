@@ -359,6 +359,7 @@ Legend:
 > The most common way to achieve two-way communication in Bluetooth Low Energy is to use connections.
 > In addition, a connection grants you benefits like higher data throughput, mechanisms to handle 
 > packet loss, and added security.
+>
 > -- Nordic Academy
 <p></p>
 
@@ -412,6 +413,7 @@ Establishing a connection requires two devices, one acting as a peripheral that 
 >
 > An ATT bearer is a channel used to send Attribute protocol PDUs. Each ATT
 > bearer uses an L2CAP channel. A device may have any number of ATT bearers to a peer device.
+>
 > -- BLE Specification
 <p></p>
 
@@ -420,6 +422,7 @@ Establishing a connection requires two devices, one acting as a peripheral that 
 > ATT and GATT layers are concerned with the phase after a connection has been established,
 > as opposed to the GAP layer which takes care of the advertisement process which occurs before 
 > a connection is established.
+>
 > -- Nordic Semiconductor Academy
 <p></p>
 
@@ -427,11 +430,13 @@ Establishing a connection requires two devices, one acting as a peripheral that 
 * Attributes are arrays that can vary from 0 to 512 bytes.
 * Can be fixed or variable length.
 * E.g. a device could expose its battery level. It acts as the ATT server.
-* An attribute is composed of handle | type | value | permissions
-    * Handle: 16-bit, unique, non-zero value that is assigned by each server to its own attributes.
-    * Type: A UUID is used to identify every attribute type (no central registry for UUIDs).
-    * Value: Byte array of fixed or variable length. May require multiple PDUs to transmit.
-    * Permission: Read or write, notified or indicated, security level required to access:
+* An attribute is composed of [handle | type | value | permissions]
+    * **Handle**: A 16-bit, unique, non-zero value that is assigned by each server to its own attributes.
+      It makes the attribute "addressable" and does not change during a single connection.
+    * **Type**: A UUID (2-byte or 16-byte) is used to identify every attribute type (no central registry for UUIDs). 
+      There are two types of UUIDs: Service UUID and Characteristic UUID.
+    * **Value**: Byte array of fixed or variable length. May require multiple PDUs to transmit.
+    * **Permission**: Read or write, notified or indicated, security level required to access:
         * Readable, writable or readable and writable.
         * Encryption required or not.
         * Authentication or not.
@@ -465,6 +470,7 @@ Establishing a connection requires two devices, one acting as a peripheral that 
 <p></p>
 
 
+
 ### Generic Attribute Profile (GATT)
 
 > Generic Attribute Profile (GATT) is built on top of the Attribute protocol (ATT) and establishes common operations and
@@ -487,7 +493,14 @@ Establishing a connection requires two devices, one acting as a peripheral that 
 
 > The Generic Attribute Profile (GATT) layer sits directly on top of the ATT layer, 
 > and builds on it by hierarchically classifying attributes into profiles, services and characteristics.
+>
 > -- Nordic Semiconductor Academy
+<p></p>
+
+> The GATT layer is in charge of defining a hierarchical data structure that demonstrates the 
+> relationship or connection between the data stored in an ATT server.
+>
+> -- Novel bits.
 <p></p>
 
 * Attributes grouped into services
@@ -512,12 +525,12 @@ Establishing a connection requires two devices, one acting as a peripheral that 
 
 ```
 +--------------------------------------------------------------------------------+
-|  Profile                                                                       |
-|                                                                                |
-|  +---------------------+                    +-----------------------------+    |
-|  | Service             |                    | Service                     |    |
-|  |                     |                    |                             |    |
-|  | +----------------+  |                    | +------------------------+  |    |
+|  Profile                                                                       | The GATT layer defines a 4-level tree-like framework:
+|                                                                                |    - The root node is named the profile. (level 0)
+|  +---------------------+                    +-----------------------------+    |    - Children of the profile are named services. (level 1)
+|  | Service             |                    | Service                     |    |    - Children of services are named characteristics. (level 2)
+|  |                     |                    |                             |    |    - And characteristics can be defined by a single value and 
+|  | +----------------+  |                    | +------------------------+  |    |      0-n descriptors (level 3)
 |  | | Include        |  |                    | | Include                |  |    |
 |  | +----------------+  |                    | +------------------------+  |    |
 |  |        :            |                    |           :                 |    |
@@ -580,7 +593,7 @@ Characteristics look like this:
 +-----------------------------------+
 | Characteristic Declaration        | - An attribute. UUID set to "characteristic" - 0x2803.
 +-----------------------------------+
-| Characteristic Value              |
+| Characteristic Value              | - An attribute. Contains the _value_ of a characteristic.
 | Declaration                       |
 +-----------------------------------+
 | Descriptor Declaration            |
