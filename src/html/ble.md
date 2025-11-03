@@ -599,7 +599,6 @@ Characteristics look like this:
 | Descriptor Declaration            |
 +-----------------------------------+
               o o o
-              
 +-----------------------------------+
 | Descriptor Declaration            |
 +-----------------------------------+

@@ -45,6 +45,7 @@ The `monitor` commands send raw commands directly to the remote target—often t
 | `disassemble 0xADDRESS` | Shows the assembly code around the given address.          |
 | `info symbol 0xADDRESS` | Shows the nearest symbol and offset for the given address. |
 | `bt`                    | Shows the backtrace (call stack).                          |
+| `thread apply all bt`   | Shows the backtrace for ALL threads in one dump.           |
 | `info threads`          | Lists all threads (if applicable, like in an RTOS).        |
 | `thread <N>`            | Switches context to thread number `<N>`.                   |
 | `info locals`           | Displays local variables in the current frame.             |
