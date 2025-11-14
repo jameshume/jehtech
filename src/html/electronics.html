@@ -1439,8 +1439,6 @@
 			</tbody>
 			</table>
 
-
-
 			<h3>Decoupling Capacitors</h3>
 			<p>
 			</p>
@@ -1489,13 +1487,26 @@
 				</p>
 				<footer>--<a href="https://electronics.stackexchange.com/a/289709">De-coupling capacitor and Bulk capacitor SO question</a></footer>
 			</blockquote>
-			<p></p>
+			<p>
+				From good ol' ChatGPT: Decoupling Capacitors:
+			</p>
+			<ul>
+				<li>Purpose: Reduce high-frequency noise and voltage spikes on a power rail.</li>
+				<li>Capacitance: Usually small (pF to low µF).</li>
+				<li>Placement: Placed very close to IC power pins.</li>
+				<li>Type: Often MLCCs or small ceramics because they respond quickly to fast changes.</li>
+				<li>Function: Smooth short-term voltage fluctuations caused by switching ICs.</li>
+			</ul>
 
 			<h3>Bypass Capacictors</h3>
-			<p>
-				TODO
-			</p>
+			<ul>
+				<li>Purpose: Provide a low-impedance path to ground for high-frequency noise.</li>
+				<li>Function: “Bypass” AC noise away from sensitive parts of the circuit.</li>
+				<li>Placement: Usually very close to IC power pins.</li>
+				<li>Type: Small ceramic capacitors (pF to nF range).</li>
+			</ul>
 
+			
 			<h3>TO READ</h3>
 			<ol>
 				<li>What they don't teach you about capactors - https://resources.altium.com/p/what-they-do-not-teach-you-about-capacitors</li>
