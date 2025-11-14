@@ -1375,6 +1375,88 @@
 				So, to eliminate the sinusoids, we could express sine as a rotation of a cosine. TODO
 			</p>
 
+			<h3>Parasitics</h3>
+			<p>
+				&quot;Parasitics&quot; are things that happen in a circuit that you didn't design on purpose, but are there anyway because real parts aren't perfect.
+				Capacitors are not perfect. Their parasitics are represented like this (there are probably more complex models):
+			</p>
+			<img src="##IMG_DIR##/capacitor_parasitics_model.png"/>
+			<p>
+				ESL stands for equivalent series inducance. Its a small inductance that every real capacitor has because of its leads, internal wiring, and layout. It acts like a tiny inductor in series with the component and can cause voltage spikes or ringing at high frequencies, especially in switching circuits.
+			</p><p>
+				ESR for equivalent series resistance. It represents losses inside the component due to the material and construction. High ESR can cause heat generation and affect stability in voltage regulators.
+			</p><p>
+				R<sub>ISO</sub> and R<sub>Leak</sub> refer to the insulation and leakage resistance. Insulation resistance is the resistance of a dielectric (insulator) between conductors. Leakage resistance is the actual resistance that allows tiny unwanted current to flow through a capacitor or insulating material.
+			</p>
+			<p>
+				So, the lower the ESL, ESR and higher the R<sub>ISO</sub> and R<sub>Leak</sub>, the better the capacitor.
+			</p>
+
+			<h3>Materials</h3>
+			<table>
+				<thead>
+					<tr>
+						<th>Technology</th>
+						<th>Max. Capacitance</th>
+						<th>Max. Voltage</th>
+						<th>Max. Current</th>
+						<th>Max. Temperature range</th>
+						<th>Application examples</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Aluminum Electrolytic Capacitors</td>
+						<td>&gt; 1F</td>
+						<td>ca. 650 V</td>
+						<td>ca. 0,05 A/µF</td>
+						<td>85°C up to 150°C</td>
+						<td>smoothing, storage, DC-Link</td>
+					</tr>
+					<tr>
+						<td>Aluminum Polymer Capacitors</td>
+						<td>&gt; 4 mF</td>
+						<td>ca. 250 V</td>
+						<td>Ca. 0,1 A/µF</td>
+						<td>85°C up to 150°C</td>
+						<td>smoothing, filtering</td>
+					</tr>
+					<tr>
+						<td>Al. Hybrid Polymer Capacitors</td>
+						<td>&gt; 1 mF</td>
+						<td>ca. 400 V</td>
+						<td>Ca. 0,1 A/µF</td>
+						<td>85°C up to 150°C</td>
+						<td>smoothing, filtering, DC Link</td>
+					</tr>
+					<tr>
+						<td>Film Capacitors</td>
+						<td>&gt; 8 mF</td>
+						<td>ca. 3 kV</td>
+						<td>ca. 1 A/µF</td>
+						<td>max. 110°C</td>
+						<td>DC Link, interference suppression, filtering</td>
+					</tr>
+					<tr>
+						<td>MLCC</td>
+						<td>&gt; 100 µF</td>
+						<td>ca. 10 kV</td>
+						<td>ca. 10 A/µF</td>
+						<td>85°C up to 200°C</td>
+						<td>interference suppression, coupling, filtering</td>
+					</tr>
+					<tr>
+						<td>Supercapacitors (EDLCs)</td>
+						<td>&gt; 350 F</td>
+						<td>ca. 3.3 V</td>
+						<td>ca. 0,21 A/F</td>
+						<td>65° up to 85°C</td>
+						<td>UPS, storage</td>
+					</tr>
+				</tbody>
+			</table>
+			
+
 			<h3>Decoupling Capacitors</h3>
 			<p>
 			</p>
