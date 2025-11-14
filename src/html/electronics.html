@@ -1393,69 +1393,53 @@
 			</p>
 
 			<h3>Materials</h3>
-			<table>
-				<thead>
-					<tr>
-						<th>Technology</th>
-						<th>Max. Capacitance</th>
-						<th>Max. Voltage</th>
-						<th>Max. Current</th>
-						<th>Max. Temperature range</th>
-						<th>Application examples</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>Aluminum Electrolytic Capacitors</td>
-						<td>&gt; 1F</td>
-						<td>ca. 650 V</td>
-						<td>ca. 0,05 A/µF</td>
-						<td>85°C up to 150°C</td>
-						<td>smoothing, storage, DC-Link</td>
-					</tr>
-					<tr>
-						<td>Aluminum Polymer Capacitors</td>
-						<td>&gt; 4 mF</td>
-						<td>ca. 250 V</td>
-						<td>Ca. 0,1 A/µF</td>
-						<td>85°C up to 150°C</td>
-						<td>smoothing, filtering</td>
-					</tr>
-					<tr>
-						<td>Al. Hybrid Polymer Capacitors</td>
-						<td>&gt; 1 mF</td>
-						<td>ca. 400 V</td>
-						<td>Ca. 0,1 A/µF</td>
-						<td>85°C up to 150°C</td>
-						<td>smoothing, filtering, DC Link</td>
-					</tr>
-					<tr>
-						<td>Film Capacitors</td>
-						<td>&gt; 8 mF</td>
-						<td>ca. 3 kV</td>
-						<td>ca. 1 A/µF</td>
-						<td>max. 110°C</td>
-						<td>DC Link, interference suppression, filtering</td>
-					</tr>
-					<tr>
-						<td>MLCC</td>
-						<td>&gt; 100 µF</td>
-						<td>ca. 10 kV</td>
-						<td>ca. 10 A/µF</td>
-						<td>85°C up to 200°C</td>
-						<td>interference suppression, coupling, filtering</td>
-					</tr>
-					<tr>
-						<td>Supercapacitors (EDLCs)</td>
-						<td>&gt; 350 F</td>
-						<td>ca. 3.3 V</td>
-						<td>ca. 0,21 A/F</td>
-						<td>65° up to 85°C</td>
-						<td>UPS, storage</td>
-					</tr>
-				</tbody>
+			<p>
+				Some common kinds...
+			</p>
+			<table border="1" cellpadding="5" cellspacing="0" class="jehtable">
+			<thead>
+				<tr>
+				<th>Capacitor Type</th>
+				<th>Advantages</th>
+				<th>Disadvantages</th>
+				<th>Common Uses</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+				<td>Film</td>
+				<td>Stable capacitance, low ESR, long life, high voltage rating, low dielectric absorption, non-polarized, good pulse handling, low noise</td>
+				<td>Larger size for high capacitance, more expensive than electrolytics for same capacitance</td>
+				<td>AC filtering, precision timing circuits, audio circuits, pulse circuits, snubber circuits</td>
+				</tr>
+				<tr>
+				<td>MLCC (Ceramic)</td>
+				<td>Small size, low cost, high capacitance per volume (low voltage), non-polarized, high reliability</td>
+				<td>Capacitance varies with DC bias and temperature, microphonic effect, limited high-voltage options</td>
+				<td>Decoupling, bypassing, RF circuits, high-frequency applications</td>
+				</tr>
+				<tr>
+				<td>Aluminum Electrolytic</td>
+				<td>High capacitance, cheap, good for bulk energy storage, high energy storage</td>
+				<td>Polarized, short lifespan, poor stability, high ESR, limited high-frequency performance</td>
+				<td>Power supply filtering, bulk energy storage, smoothing DC voltage</td>
+				</tr>
+				<tr>
+				<td>Aluminum Polymer</td>
+				<td>Low ESR, longer life, stable capacitance, high ripple current, high temperature tolerance</td>
+				<td>Lower capacitance per volume than standard electrolytic, higher cost, voltage limits</td>
+				<td>Switching power supplies, DC-DC converters, high-frequency circuits, automotive electronics</td>
+				</tr>
+				<tr>
+				<td>Aluminum Hybrid Polymer</td>
+				<td>Low ESR, high capacitance, longer life than standard electrolytic, good ripple current handling, moderate temperature stability</td>
+				<td>Higher cost than standard electrolytic, less stable than film or MLCC, voltage limits</td>
+				<td>Power supply filtering, high-capacitance applications needing better lifetime and ripple performance, automotive electronics</td>
+				</tr>
+			</tbody>
 			</table>
-			
+
+
 
 			<h3>Decoupling Capacitors</h3>
 			<p>
