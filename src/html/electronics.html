@@ -1908,6 +1908,9 @@
 					<a href="https://www.udemy.com/course/analog-electronics-robotics-learn-by-building/" target="_blank">[Ref]</a>
 				</p>
 				<p>
+					And now some help from my good friends ChatGPT:
+				</p>
+				<p>
 					By forward biasing the emitter to base junction with even a small current, the
 					transistor's resistance between the emitter and collector quickly decreses, allowing
 					a relatively large current to flow from the emitter to collector. I.e., <b>base current
@@ -1916,7 +1919,7 @@
 				<p>
 					A BJT works by controlling how many charge carriers move through the base region. The base 
 					current injects these carriers. More carriers means more collector-to-emitter current can flow. 
-					That's why I<sub>c follows I<sub>b</sub>.
+					That's why I<sub>c</sub> follows I<sub>b</sub>.
 				</p>
 				<p>
 					When you put current into the base, you inject charge carriers (electrons or holes depending 
@@ -1934,7 +1937,36 @@
 					Note that the base current does not supply all the carriers that flow as collector current. It only seeds the region 
 					with enough carriers so the collector-emitter path can pull in many more from the emitter. In other words,
 					most of the carriers that make up the collector current actually come from the emitter, not the base.
-					The base current just makes the junction "open" enough so the emitter can supply a much larger flow.
+					The base current just makes the junction "open enough so the emitter can supply a much larger flow.
+				</p>
+				<p>
+					Understand that $V = I \cdot R$ only works for things that act like resistors. A base-emitter junction is not a 
+					resistor. It's a diode, which  doesn't follow $V = I \cdot R$. In a diode, current grows exponentially with voltage. 
+					A tiny rise in voltage gives a huge rise in current:
+				</p>
+				<p>
+					$$$
+					I = I_s · \exp(V_{be} / (n \cdot V_t))
+					$$$
+				</p>
+				<p>
+					Where I<sub>s</sub> is the leakage current, which is extremely small (nanoamps or less). V<sub>t</sub> is the 
+					thermal voltage. 
+				</p>
+				<p>
+					Basically, the voltage controls the current in an exponential way with I<sub>s</sub> scaling the current through
+					the diode and V<sub>t</sub> setting the rate of rise.
+				</p>
+				<p>
+					In practice, don't use the diode equation just that you need:
+				</p>
+				<ul>
+					<li>about 0.6 to 0.7 V for a silicon transistor when it's on</li>
+					<li>maybe 0.75 to 0.85 V if the current is high</li>
+					<li>maybe 0.5 to 0.55 V if the current is tiny</li>
+				</ul>
+				<p>
+					--- End ChatGPT content.
 				</p>
 				<p>
 					The circuit in its most basic form looks like:
@@ -1974,6 +2006,18 @@
 						If you try to force more than Vbe(sat) across the junction then the device will conduct enough current
 						to destroy itself. That is the principal reason for the base resistor in switching circuits: to limit
 						the base current.
+					</p>
+				</blockquote>
+				<p>
+					The Art Of Electronics has this to say about $\Beta$:
+				</p>
+				<blockquote>
+					<p>
+						An important warning: the current gain β is not a
+"good" transistor parameter; for instance, its value can vary
+from 50 to 250 for different specimens of a given transistor
+type. It also depends on the collector current, collector-toemitter voltage, and temperature. A circuit that depends on
+a particular value for beta is a bad circuit.
 					</p>
 				</blockquote>
 				<p>
@@ -2044,7 +2088,7 @@
 				<p>
 					NPN transistors can <b>typically handle up to about 0.8 A</b>. They will also have a maximum power
 					rating - the average small transistor can only handle about 250mW of heat dissipation. Thus,
-					they are <b>low current</b>devices. For large currents MOSFETs are used (later section).
+					they are <b>low current</b> devices. For large currents MOSFETs are used (later section).
 				</p>
 				<p><b>Saturation region</b> is where the maximum collector current flows and the transistor
 				is basically a closed switch from collector to emitter. The collector-emitter voltage (VCE)
