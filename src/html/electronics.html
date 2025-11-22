@@ -1506,7 +1506,7 @@
 				<li>Type: Small ceramic capacitors (pF to nF range).</li>
 			</ul>
 
-			
+
 			<h3>TO READ</h3>
 			<ol>
 				<li>What they don't teach you about capactors - https://resources.altium.com/p/what-they-do-not-teach-you-about-capacitors</li>
@@ -1912,6 +1912,29 @@
 					transistor's resistance between the emitter and collector quickly decreses, allowing
 					a relatively large current to flow from the emitter to collector. I.e., <b>base current
 					controls current at emitter and collector</b>.
+				</p>
+				<p>
+					A BJT works by controlling how many charge carriers move through the base region. The base 
+					current injects these carriers. More carriers means more collector-to-emitter current can flow. 
+					That's why I<sub>c follows I<sub>b</sub>.
+				</p>
+				<p>
+					When you put current into the base, you inject charge carriers (electrons or holes depending 
+					on NPN/PNP). These carriers spread into a thin region inside the transistor. That region is like a "valve body". 
+					The collector-emitter current is basically how many of those carriers are available for the collector to 
+					"pull" across.
+				</p>
+				<ol>
+					<li>The base current fills the base region with carriers.</li>
+					<li>The collector voltage pulls those carriers across the junction.</li>
+					<li>The more carriers you’ve injected, the more current the collector can draw.</li>
+					<li>When the collector tries to draw more current than the injected carriers allow, the transistor limits the current.</li>
+				</ol>
+				<p>
+					Note that the base current does not supply all the carriers that flow as collector current. It only seeds the region 
+					with enough carriers so the collector-emitter path can pull in many more from the emitter. In other words,
+					most of the carriers that make up the collector current actually come from the emitter, not the base.
+					The base current just makes the junction "open" enough so the emitter can supply a much larger flow.
 				</p>
 				<p>
 					The circuit in its most basic form looks like:
@@ -2402,6 +2425,12 @@
 				</li>
 			</ol>
 			<p>
+				In an N-channel MOSFET, used in the normal way (low-side switch), conventional current goes from drain to source.
+			</p>
+			<p>
+				For a P-channel MOSFET the normal current direction is the opposite. Conventional current flows from source to drain in a P-channel device.
+			</p>
+			<p>
 				The simples model of a FET is:
 				
 				$$
@@ -2438,6 +2467,11 @@
 				should be used. it should be positioned to the &quot;right&quot; of the pull up/down resistor so that
 				no voltage divider is created and the gate still receives (most of) the full voltage.
 			</p>
+			<p>
+				When driving MOSFETs as an on/off switch take note of the V<sub>GS</sub> and the RDS<sub>(on)</sub>:
+			</p>
+			<img src="##IMG_DIR##/../mosfet_rds_vgs.png"/>
+			<p></p>
 			
 			<h3>NMOS and PMOS Pairs In Logic Gates</h3>
 			<p>
