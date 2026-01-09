@@ -127,7 +127,7 @@ MyObj r1;              // Default constructor used
 r1 = CreateObj_URVO(); // No RVO possible.
 ```
 
-## Wasted Allocations And Copies
+## Wasted Allocations and Copies: Move Semantics To The Rescue
 
 In the following example the Junk class is far from perfrect - its just demonstrating a point.
 
@@ -212,6 +212,7 @@ Now watch with move semantics turned on, we must add this function to the class:
 Where `Junk&&` is an rvalue reference. An rvalue reference is a reference type introduced in C plus plus 11 that can bind to temporary objects and to objects explicitly cast to an rvalue. It is written using `&&`.
 
 It binds to rvalues, which are typically
+
 * temporary objects
 * the result of expressions
 * objects marked with std::move
@@ -219,13 +220,15 @@ It binds to rvalues, which are typically
 Unlike lvalue references, rvalue references do not bind to named lvalues unless those lvalues are explicitly converted to rvalues.
 
 Rule of thumb is that rvalue references can only refer to temporary objects that:
+
 * Do not have a name, and
 * Cannot have their address taken
+
 Or to objects marked with `std::move()`.
 
 NOTE const objects cannot, therefore, be moved! This applies to return values too!! Thus *best not to return const objects since C11*.
 
-NOTE the moved-from object is still a valid object and must be left is a valid state. So its reusable.-
+NOTE the moved-from object is still a valid object and must be left is a valid state. So its reusable.
 
 Now the output is:
 
@@ -339,6 +342,15 @@ Junk string destructor
 ```
 
 Sweet, by using `std::move(s)` we told the compiler that we'd no longer use `s`, so the compiler could now move it rather than copy it.
+
+## Automatic Move Semantic Generation
+In many cases the compiler can automatically generate the move-related functions. It didn't in the previous section because automatic generation of move operations is disabled when ny of the following member functions are define:
+
+* Copy constructor
+* Copy assignment operator
+* Another move operation
+* Destructor (*even if it is emppy and does nothing!*)
+
 
 ## Links / Quotes Not Yet Organised
 
