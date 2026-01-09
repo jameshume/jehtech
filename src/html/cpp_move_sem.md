@@ -199,7 +199,7 @@ We can see that the copy constructor is called to copy it into the vector. The t
 Now watch with move semantics turned on, we must add this function to the class:
 
 ```cpp
-    Junk(Junk &&other) {
+    Junk(Junk &&other) noexcept {
         std::cout << "Junk move constructor\n";
         m_txt = other.m_txt;
         m_len = other.m_len;
@@ -228,7 +228,9 @@ Or to objects marked with `std::move()`.
 
 NOTE const objects cannot, therefore, be moved! This applies to return values too!! Thus *best not to return const objects since C11*.
 
-NOTE the moved-from object is still a valid object and must be left is a valid state. So its reusable.
+NOTE the moved-from object is still a valid object and must be left is a valid state, even if that state is unspecified. So its reusable.
+
+NOTE move operators should be `noexcept`.
 
 Now the output is:
 
@@ -272,8 +274,7 @@ Junk string destructor
 Junk string destructor
 ```
 
-There is one more copy constructor than expected. Why is this? This is because the vector is re-sizing itself, which forces
-a reallocation and relocatation of the elements that are already inside the vector.
+There is one more copy constructor than expected. Why is this? This is because the vector is re-sizing itself, which forces a reallocation and relocatation of the elements that are already inside the vector. Also it used a copy because when I first did this I didnt declare the move operator as `noexcept`!
 
 Lets fix this:
 
@@ -281,7 +282,7 @@ Lets fix this:
 int main() {
     std::vector<Junk> v;
     Junk s {"superjunk"};
-    v.reserve(2);
+    v.reserve(2); // Allocate enough space so vector doesnt need to resize
     std::cout << "1\n";
     v.push_back(s+s); 
     std::cout << "2\n";
@@ -350,6 +351,62 @@ In many cases the compiler can automatically generate the move-related functions
 * Copy assignment operator
 * Another move operation
 * Destructor (*even if it is emppy and does nothing!*)
+
+## Special Member Functions
+These are:
+
+1. Default constructor
+2. Copy constructor
+3. Copy assignment operator
+4. Move constructor
+5. Move assignment operator
+6. Destructor
+
+When the user declares nothing:
+
+* All 6 special member functions are defaulted
+
+When any constructor is declared:
+
+* Default constructor is not automatically created
+* Everything else defaulted
+
+When default constructor is declared:
+
+* Everything else defaulted
+
+When copy constructor is declared:
+
+* Default constructor not generated
+* Move operators not generated
+* Everything else defaulted
+
+When copy assignment operator is declared:
+
+* Default constructor generated
+* Move operators not generated
+* Everything else defaulted
+
+When move constructor is declared:
+
+* Default constructor not generated
+* Copy constructor and assignment operated deleted
+* Move assignment undeclared  with *fallback disabled*
+* Destructor defaulted
+
+When move assignment is declared:
+
+* Default constructor not generated
+* Copy constructor and assignment operated deleted
+* Move constructor undeclared with *fallback disabled*
+* Destructor defaulted
+
+When destructor declared:
+
+* Moves undeclared but have fallback enabled
+* Everything else defaulted
+
+Unless stated fallback is enabled, which means that a move degrades to a copy when tried.
 
 
 ## Links / Quotes Not Yet Organised
