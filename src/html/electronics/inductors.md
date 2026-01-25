@@ -28,9 +28,10 @@ And changing current IN means magnetic force OUT
         without any work. Electric potential energy would have been created, violating the conservation of energy.
     </p>
     <footer>-- From [OpenStax](https://openstax.org/books/university-physics-volume-2/pages/13-2-lenzs-law) (emphasis mine)</footer>
-</bl`ockquote>
+</blockquote>
 
 ## Faraday's Law
+
 INSERT DIAGRAM HERE
 
 The flux density is $\mathbf{B}$.
