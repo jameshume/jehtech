@@ -29,6 +29,8 @@ And changing current IN means magnetic force OUT
     </p>
     <footer>-- From [OpenStax](https://openstax.org/books/university-physics-volume-2/pages/13-2-lenzs-law) (emphasis mine)</footer>
 </blockquote>
+<p></p>
+
 
 ## Faraday's Law
 
@@ -38,9 +40,9 @@ The flux density is $\mathbf{B}$.
 
 The total flux is $\Phi$, also called "flux linkage":
 
-$$$
+$$
 \Phi = N\mathbf{B}A
-$$$
+$$
 
 Where $N$ is the number of turns in the coil and $A$ is the area of the coil.
 
