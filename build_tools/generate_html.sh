@@ -89,12 +89,15 @@ cat "${DST}" >> "${DEBUG_OUT_FILE}"
 if grep --ignore-case "<!--\s*MATHJAX\s*-->" "${DST}" > /dev/null
 then
     echo "   Pre-rendering MathJax for ${DST}"
+    echo "=============================================================================================" >> "${DEBUG_OUT_FILE}"
+    echo "=============================================================================================" >> "${DEBUG_OUT_FILE}"
+    echo "   Pre-rendering MathJax for ${DST}" >> "${DEBUG_OUT_FILE}"
     TMP=$(mktemp)
+
     node -r esm tex2html-cpage.js "${DST}" > "${TMP}"
+
     mv "${TMP}" "${DST}"
 
-    echo "=============================================================================================" >> "${DEBUG_OUT_FILE}"
-    echo "=============================================================================================" >> "${DEBUG_OUT_FILE}"
     echo "POST MATHJAX:" >> "${DEBUG_OUT_FILE}"
     cat "${DST}" >> "${DEBUG_OUT_FILE}"
 fi
