@@ -82,6 +82,17 @@ else
 fi
 cat "${DST}" >> "${DEBUG_OUT_FILE}"
 
+# Process snippet inserts - must be done before all other in-place sed'ing
+# Process the destination file but give the dirname of the source file so that
+# the snippet can be found.
+# Must also be done before MathJax stuff because HTML files that import MD content
+# need the content rendered in the doc for MathJax to process it.
+python3 process_snippets.py "${DST}" "$(dirname "${SRC}")" "${IMG_DIR}"
+echo "=============================================================================================" >> "${DEBUG_OUT_FILE}"
+echo "=============================================================================================" >> "${DEBUG_OUT_FILE}"
+echo "POST SNIPPETS:" >> "${DEBUG_OUT_FILE}"
+cat "${DST}" >> "${DEBUG_OUT_FILE}"
+
 # All files that contain MathJax to be be pre-processed should have the string "<!-- MATHJAX -->"
 # somewhere in the file. Its easier doing this than it is to "guess" as to whether the HTML
 # contains MathJax by trying to, for example, parse the HTML to see if there is MathJax content.
@@ -101,15 +112,6 @@ then
     echo "POST MATHJAX:" >> "${DEBUG_OUT_FILE}"
     cat "${DST}" >> "${DEBUG_OUT_FILE}"
 fi
-
-# Process snippet inserts - must be done before all other in-place sed'ing
-# Process the destination file but give the dirname of the source file so that
-# the snippet can be found.
-python3 process_snippets.py "${DST}" "$(dirname "${SRC}")" "${IMG_DIR}"
-echo "=============================================================================================" >> "${DEBUG_OUT_FILE}"
-echo "=============================================================================================" >> "${DEBUG_OUT_FILE}"
-echo "POST SNIPPETS:" >> "${DEBUG_OUT_FILE}"
-cat "${DST}" >> "${DEBUG_OUT_FILE}"
 
 # Each file contains a marker that must be replaced with the contents of the _link.html page
 # NOTE: <div id="includedContent"> must have the closing tag on the SAME LINE and be one a
