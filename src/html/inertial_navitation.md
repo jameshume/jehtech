@@ -3,6 +3,7 @@
 * [Basic Inertial Navigation](https://www.slideshare.net/slideshow/basicnav/22449233)
 * [NED (North-East-Down) Frame](https://www.sbg-systems.com/glossary/ned-north-east-down/)
 * [How does an INS work?](https://inertiallabs.com/how-does-an-ins-works/)
+* [Towards understanding IMU: Frames of reference used to represent IMU orientation and how to visualize the circuit orientation using Vpython library](https://atadiat.com/en/e-towards-understanding-imu-frames-vpython-visualize-orientation/)
 
 ## Pitch, Roll, Yaw, and Attitude
 ![Pitch Roll and Yaw of a plane](##IMG_DIR##/../IMU_inertial_frame_atadiat.com.png)
@@ -62,6 +63,6 @@ $$
 These forces measured by the IMU are accelleration. Integrate to get velocity and again to get distance.
 
 $$
-V_{x_i}(t) = \int_{t_0}^{t} x_i(\tau) \, d\tau \\
-           = \int_{t_0}^{t} \left| z_b(\tau) \right| \sin(\theta(\tau)) + \left| x_b(\tau) \right| \cos(\theta(\tau)) \, d\tau
+V_{x_i}(t) = \int_{t_0}^{t} x_i(\tau) \, d\tau + V_0 \\
+           = \int_{t_0}^{t} \left| z_b(\tau) \right| \sin(\theta(\tau)) + \left| x_b(\tau) \right| \cos(\theta(\tau)) \, d\tau  + V_0
 $$
