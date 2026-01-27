@@ -26,3 +26,6 @@ Attitude can be represented by the vector [roll, pitch, yaw], but attitude itsel
 ## Rotating Body Frame To Reference (Navigation) Frame
 
 ![Rotating body frame to reference fame image](##IMG_DIR##/imu_body_frame_to_reference_frame_rotation.png)
+
+## A 2D navigation example
+![2D Example](##IMG_DIR##/2d_inertial_nav_example.png)
