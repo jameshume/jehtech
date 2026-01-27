@@ -1,5 +1,3 @@
-# Induction
-
 DC current through a wire creates a non-uniform, stable, magnetic field.
 
 PICTURE HERE
@@ -20,7 +18,7 @@ And changing current IN means magnetic force OUT
 
 <blockquote>
     <p>
-        Lenz’s law can also be considered in terms of conservation of energy. If pushing a magnet into a coil causes 
+        Lenz's law can also be considered in terms of conservation of energy. If pushing a magnet into a coil causes 
         current, the energy in that current must have come from somewhere. If the <b>induced current causes a magnetic 
         field opposing the increase in field of the magnet we pushed in</b>, then the situation is clear. We <b>pushed 
         a magnet against a field and did work on the system, and that showed up as current</b>. If it were not the case 
