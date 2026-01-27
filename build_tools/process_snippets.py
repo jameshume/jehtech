@@ -56,7 +56,6 @@ def inject_markdown_snippet(match_object_for_snippet_placeholder):
                   'tables', 
                   'toc', 
                   'pymdownx.superfences',
-                  'pymdownx.arithmatex',
                   CodeHiliteExtension(linenums=True)])
         return(md)
 
