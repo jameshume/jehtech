@@ -63,6 +63,8 @@ $$
 These forces measured by the IMU are accelleration. Integrate to get velocity and again to get distance.
 
 $$
-V_{x_i}(t) = \int_{t_0}^{t} x_i(\tau) \, d\tau + V_0 \\
-           = \int_{t_0}^{t} \left| z_b(\tau) \right| \sin(\theta(\tau)) + \left| x_b(\tau) \right| \cos(\theta(\tau)) \, d\tau  + V_0
+\begin{aligned}
+V_{x_i}(t) &= \int_{t_0}^{t} x_i(\tau) \, d\tau + V_0 \\
+           &= \int_{t_0}^{t} \left| z_b(\tau) \right| \sin(\theta(\tau)) + \left| x_b(\tau) \right| \cos(\theta(\tau)) \, d\tau  + V_0
+\end{aligned}
 $$
