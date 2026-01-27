@@ -29,6 +29,7 @@ Attitude can be represented by the vector [roll, pitch, yaw], but attitude itsel
 
 ## A 2D navigation example
 A vehicle lets say, moving at a constant attitude.
+
 ![2D Example](##IMG_DIR##/2d_inertial_nav_example.png)
 
 A gyro measures angular velocity, $\omega$, so get get the angle of the base frame w.r.t to the navigation frame
