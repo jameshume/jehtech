@@ -65,9 +65,9 @@ These forces measured by the IMU are accelleration. Integrate to get velocity an
 $$
 \begin{align}
 V_{x_i}(t) &= \int_{t_0}^{t} x_i(\tau) \, d\tau + V_0 \\\\
-           &= \int_{t_0}^{t} \left| z_b(\tau) \right| \sin(\theta(\tau)) + \left| x_b(\tau) \right| \cos(\theta(\tau)) \, d\tau  + V_0 \\
+           &= \int_{t_0}^{t} \left| z_b(\tau) \right| \sin(\theta(\tau)) + \left| x_b(\tau) \right| \cos(\theta(\tau)) \, d\tau  + V_0 \\\\
            &= \Bigl[ \left| z_b(t) \right| -\cos(\theta(t))  + \left| x_b(t) \right| \sin(\theta(t)) + K_1 \Bigr]
-              - \Bigl[ \left| z_b(t_0) \right| -\cos(\theta(t_0))  + \left| x_b(t_0) \right| \sin(\theta(t_0)) + K_2 \Bigr] + V_0 \\
+              - \Bigl[ \left| z_b(t_0) \right| -\cos(\theta(t_0))  + \left| x_b(t_0) \right| \sin(\theta(t_0)) + K_2 \Bigr] + V_0 \\\\
            &= \Bigl[ \left| z_b(t_0) \right| \cos(\theta(t_0)) -\left| z_b(t) \right| \cos(\theta(t)) \Bigr]
                 + \Bigl[ \left| x_b(t) \right| \sin(\theta(t)) - \left| x_b(t_0) \right| \sin(\theta(t_0)) \Bigr] + V_0 + K
                         
