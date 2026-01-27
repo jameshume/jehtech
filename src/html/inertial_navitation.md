@@ -2,6 +2,7 @@
 * [Strapdown Inertial Navigation Technology (IEE Radar, Sonar, Navigation and Avionics Series)](https://www.slideshare.net/slideshow/strapdown-inertial-navigation-technology-iee-radar-sonar-navigation-and-avionics-series-pdfdrive-pdf/276598897)
 * [Basic Inertial Navigation](https://www.slideshare.net/slideshow/basicnav/22449233)
 * [NED (North-East-Down) Frame](https://www.sbg-systems.com/glossary/ned-north-east-down/)
+* [How does an INS work?](https://inertiallabs.com/how-does-an-ins-works/)
 
 ## Pitch, Roll, Yaw, and Attitude
 ![Pitch Roll and Yaw of a plane](##IMG_DIR##/../IMU_inertial_frame_atadiat.com.png)
@@ -46,4 +47,21 @@ of a projection of the body force vectors onto the nagivation frames axis:
 
 ![Project body frame force vectors onto navigation frame E, or x, axis](##IMG_DIR##/inertial_nav_project_body_forces_to_reference_x.png)
 
+So we get:
 
+$$
+x_i = \left| z_b \right| \sin(\theta) + \left| x_b \right| \cos(\theta)
+$$
+
+And using similar reasoning:
+
+$$
+z_i = \left| -x_b \right| \sin(\theta) + \left| z_b \right| \cos(\theta)
+$$
+
+These forces measured by the IMU are accelleration. Integrate to get velocity and again to get distance.
+
+$$
+V_{x_i}(t) = \int_{t_0}^{t} x_i(\tau) \, d\tau \\
+           = \int_{t_0}^{t} \left| z_b(\tau) \right| \sin(\theta(\tau)) + \left| x_b(\tau) \right| \cos(\theta(\tau)) \, d\tau
+$$
