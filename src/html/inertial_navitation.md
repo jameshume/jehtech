@@ -39,7 +39,7 @@ $$
 \theta(t) = \int_{t_0}^{t} \omega(\tau)\, d\tau
 $$
 
-Where $\tua$ is a dummy variable for integration ($t$ used for the integration limits).
+Where $\tau$ is a dummy variable for integration ($t$ used for the integration limits).
 
 Once we have $\theta$ that will rotate the force from the body to reference frame we can do the rotation - well i think it is more
 of a projection of the body force vectors onto the nagivation frames axis:
