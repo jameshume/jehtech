@@ -739,4 +739,176 @@ The reason is that **deduction only works for directly used template parameters*
 template (like `std::enable_if<>`), it is not considered for deduction. Stack overflow to the rescue with a [detailed explaination](https://stackoverflow.com/a/25245676/1517244).
 
 
+## Concepts
+### A Motivation
+Concepts are used to constrain templates
+
+Basic example:
+
+```cpp
+#include <type_traits>
+
+template<typename T>
+concept number = std::is_floating_v<T> || std::is_integral_v<T>;
+```
+
+Then we can write.
+
+```cpp
+template<number N>
+class Something {
+    ...
+    N some_member_number;
+};
+```
+
+In the above example, at compile time, only floating point or integral types can be specified for realisations
+of the class `Something`. Anything else will generate compile time errors;
+
+Without concepts, we are back to SFINAE:
+
+```cpp
+// For this example lets pretend std::is_integral and std::is_floating_point dont exist to make
+// the point more forceful...
+template <typename T>
+struct is_number
+{
+    static constexpr bool value = false;
+};
+
+
+template <>
+struct is_number<float>
+{
+    static constexpr bool value = true;
+};
+
+
+template <>
+struct is_number<double>
+{
+    static constexpr bool value = true;
+};
+
+
+template <>
+struct is_number<int>
+{
+    static constexpr bool value = true;
+};
+
+// ... and so on for the type traits
+
+
+template<typename N, typename = std::enable_if<is_numeric<N>::value>::value>
+class Something {
+    ...
+    N some_member_number;
+};
+```
+
+But with concepts we can do other things, like require a type to have a certain function that returns a string, for example:
+
+```cpp
+template <typename T>
+concept SomeFunction = requires(T v)
+{
+    {v.mySpecialFunction()} -> std::convertible_to<std::string>;
+};
+```
+
+Again, without concepts this is much harder and less intuitive to create or read:
+
+```cpp
+#include <type_traits>
+#include <string>
+#include <utility>
+
+// Pre C++17 need to define std::void_t
+template<class...>
+using void_t = void;
+
+template<class, class = void>
+struct is_label : std::false_type {};
+
+template<class T>
+struct is_label<T, void_t<decltype(std::declval<T&>().mySpecialFunction())>>
+  : std::is_convertible<decltype(std::declval<T&>().mySpecialFunction()), std::string> {};
+//
+// std::declval<T&>().mySpecialFunction()           -- call mySpecialFunction() on a phantom T()
+// decltype(std::declval<T&>().mySpecialFunction()) -- get the type of the return value of mySpecialFunction()
+// 
+// void_t is used to trigger SFINAE. If decltype(std::declval<T&>().mySpecialFunction()) is well formed
+// it just becomes void. It is only well formed when the type T has a function mySpecialFunction().
+// Otherwise substiution fails and this realisation of is_label silently fails and we fall back to the 
+// default is_label with a false value.
+//
+// This we can then use enable_if to constrain the class SomthingNeedingSomeFunction to have to have
+// the function SomeFunction()!
+
+template<class T, class = typename std::enable_if<is_label<T>::value>::type>
+struct SomethingNeedingSomeFunction
+{
+};
+```
+
+So, the above works, but it is ot easy to read and easily assertain what is happening. Concepts
+lower the barrier to entry to constraining templates.
+
+### Generic Syntax To Contrain A Template
+
+```cpp
+template <typename T>
+requires CONDITION
+void Stuff(T param) { }
+```
+
+or 
+
+```cpp
+template <typename T>
+void Stuff(T param) requires CONDITION { }
+```
+
+In these examples CONDITION is a constant expression `boolean`, i.e., evaluated at *compile time*.
+
+This boolean expression can be a combination of booleans with `!`, `&&` and `||`.
+
+### Requires Expression To Create A Concept
+
+```cpp
+template<typename T>
+concept a_concept_name = requires(T v) { 
+    { some expressoin involving T } -> std::convertible_to<a type>; 
+};
+```
+
+For example, a concept that says a type must support addition or subtraction is this:
+
+```cpp
+template<typename T>
+concept can_add_and_subtract_type = requires(T a, T b) { 
+    a + b;
+    a - b;
+};
+```
+
+Or a concept that requires a type to have a member typename:
+
+```cpp
+template <typename T>
+concept type_test = requires {
+    typename T::ElementType; // ElementType member type must exist
+};
+```
+
+Or a concept that requires a type to have member functions:
+
+```cpp
+template <typename T>
+concept has_functions_a_and_b = requires(T t) {
+    { t.a() } -> std::convertible_to<std::string>;
+    { t.b() } -> std::convertible_to<std::string>;
+};
+```
 

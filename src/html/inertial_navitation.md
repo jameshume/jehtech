@@ -60,7 +60,7 @@ $$
 z_i = \left| -x_b \right| \sin(\theta) + \left| z_b \right| \cos(\theta)
 $$
 
-These forces measured by the IMU are accelleration. Integrate to get velocity and again to get distance.
+These forces measured by the IMU are accelleration. Integrate to get velocity.
 
 
 $$
@@ -73,3 +73,6 @@ V_{x_i}(t) &= \int_{t_0}^{t} x_i(\tau) \, d\tau + V_0 \\\\
                 + \Bigl[ \left| x_b(t) \right| \sin(\theta(t)) - \left| x_b(t_0) \right| \sin(\theta(t_0)) \Bigr] + V_0 + K
 \end{align}
 $$
+
+
+ Integrate again to get distance.
