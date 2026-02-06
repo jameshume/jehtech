@@ -17,7 +17,9 @@ For a coil, however, the magnetic field *inside* the coil is *uniform* and can b
 <br><sup>Image from [University of Central Florida College Physics eBook](https://pressbooks.online.ucf.edu/phy2053bc/chapter/magnetic-fields-produced-by-currents-amperes-law/)</sup>
 
 ## Lenz's Law
-Lenz's law states that the induced electromotive force in a circuit is directed so that the current it drives produces a magnetic field opposing the change in magnetic flux that produced it. This is why Faraday's (next section) law includes a minus sign.
+Lenz's law states that the induced e.m.f in a circuit is directed so that the current it drives produces a magnetic field opposing the change in magnetic flux that produced it. And if we use the right hand rule (section above) we see therefore that the induced current opposes the current that is flowing through the coil. This is why Faraday's (next section) law includes a minus sign.
+
+***Induced e.m.f produces current opposing inducing current***
 
 In simpler terms, when you try to change the magnetic environment of a circuit, the circuit responds in a way that pushes back against that change. 
 
