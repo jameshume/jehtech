@@ -1,3 +1,4 @@
+## Magnetic Fields Caused By Currents Brief Intro
 DC current through a wire creates a non-uniform, stable, magnetic field.
 
 ![](##IMG_DIR##/../uni_florida_mag_field_single_wire1.jpg)
@@ -6,6 +7,7 @@ DC current through a wire creates a non-uniform, stable, magnetic field.
 For a single wire use the right hand rule: thumb for current, curled fingers give the direction of the magnetic field.
 
 For a single loop we have: 
+
 ![](##IMG_DIR##/../uni_florida_mag_field_loop1.jpg)
 <br><sup>Image from [University of Central Florida College Physics eBook](https://pressbooks.online.ucf.edu/phy2053bc/chapter/magnetic-fields-produced-by-currents-amperes-law/)</sup>
 
