@@ -17,7 +17,7 @@ For a coil, however, the magnetic field *inside* the coil is *uniform* and can b
 <br><sup>Image from [University of Central Florida College Physics eBook](https://pressbooks.online.ucf.edu/phy2053bc/chapter/magnetic-fields-produced-by-currents-amperes-law/)</sup>
 
 ## Lenz's Law
-Lenz’s law states that the induced electromotive force in a circuit is directed so that the current it drives produces a magnetic field opposing the change in magnetic flux that produced it. This is why Faraday's (next section) law includes a minus sign.
+Lenz's law states that the induced electromotive force in a circuit is directed so that the current it drives produces a magnetic field opposing the change in magnetic flux that produced it. This is why Faraday's (next section) law includes a minus sign.
 
 In simpler terms, when you try to change the magnetic environment of a circuit, the circuit responds in a way that pushes back against that change. 
 
@@ -43,14 +43,16 @@ More easily digested like this: Imagine pushing a magnet toward a loop of wire. 
 
 A changing magnetic field through a conductor induces a voltage. That voltage drives a current around the loop. The direction of that current is not arbitrary. It is chosen so that the magnetic field produced by the current opposes the original change in magnetic flux.
 
-This direction rule is Lenz’s law.
+This direction rule is Lenz's law.
 
 In an inductor, a changing current creates a changing magnetic field. That field induces a voltage in the same conductor which opposes the change in current. This is why inductors resist sudden changes in current.
 
 
 ## Faraday's Law
 
-INSERT DIAGRAM HERE
+![](##IMG_DIR##/../fardays_law_physics_stackexchange.png)
+<br><sup>Image from [Physics Stack Exchange](https://physics.stackexchange.com/q/459470)</sup>
+
 
 The flux density is $\mathbf{B}$.
 
