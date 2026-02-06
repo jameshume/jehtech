@@ -187,6 +187,17 @@ For inductors think ELI - Voltage leads current, or put another way current lags
 
 <img src="##IMG_DIR##/electronics_inductor_current_lags_voltage.png">
 
+In the above the voltage and current aren't exactly 90 degrees out of phase. This is because the modelled components are non-ideal
+and the 90 degree phase shift is for an ideal resistor and ideal inductor, where the latter would have pure inductance etc.
+
+[This article](https://electricalacademia.com/basic-electrical/rl-series-circuit) explains it futher.
+
+The two voltages across the resitor and inductor are a **vector** sum, and are not directly additive as such:
+
+![](##IMG_DIR##/../electricalacademia.com_rl_vector_sum.png)
+<br><sup>Image from [Electrical Academia - RL Series Circuit](https://electricalacademia.com/basic-electrical/rl-series-circuit/)</sup>
+
+
 ## Adding Complexity
 Reactance is not complex in itself. Reactance is a real valued quantity. The complexity appears when reactance is combined with $j$ to represent phase.
 
