@@ -66,7 +66,7 @@ $$
 
 Where $N$ is the number of turns in the coil and $A$ is the area of the coil.
 
-*Faraday's law says that the **EMF induced is proportional to the rate of change of flux through the loop*:
+***Faraday's law says that the **EMF induced is proportional to the rate of change of flux through the loop***:
 
 $$
 e.m.f \propto -\frac{d\Phi}{dt}
@@ -77,7 +77,7 @@ The $-$ (negation) is from Lenz's law to show the induced e.m.f will *oppose* th
 What is the constant of proportionality? It is the *indictance* of the coil:
 
 $$
-e.m.f = L -\frac{dI}{dt}
+e.m.f = -L\frac{dI}{dt}
 $$
 
 Where $L$ is the inductance measured in "Henrys". 
