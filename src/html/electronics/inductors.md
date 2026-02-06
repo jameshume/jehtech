@@ -66,7 +66,7 @@ $$
 
 Where $N$ is the number of turns in the coil and $A$ is the area of the coil.
 
-***Faraday's law says that the **EMF induced is proportional to the rate of change of flux through the loop***:
+Faraday's law says that the **EMF induced is proportional to the rate of change of flux through the loop**:
 
 $$
 e.m.f \propto -\frac{d\Phi}{dt}
