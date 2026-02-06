@@ -1,5 +1,5 @@
 ## Magnetic Fields Caused By Currents Brief Intro
-DC current through a wire creates a non-uniform, stable, magnetic field.
+DC current through a wire creates a non-uniform, stable, magnetic field:
 
 ![](##IMG_DIR##/../uni_florida_mag_field_single_wire1.jpg)
 <br><sup>Image (modified) from [University of Central Florida College Physics eBook](https://pressbooks.online.ucf.edu/phy2053bc/chapter/magnetic-fields-produced-by-currents-amperes-law/)</sup>
@@ -17,7 +17,9 @@ For a coil, however, the magnetic field *inside* the coil is *uniform* and can b
 <br><sup>Image from [University of Central Florida College Physics eBook](https://pressbooks.online.ucf.edu/phy2053bc/chapter/magnetic-fields-produced-by-currents-amperes-law/)</sup>
 
 ## Lenz's Law
-Lenz's Law states that the direction of an induced electric current or electromotive force (EMF) in a conductor, caused by a changing magnetic field, always opposes the change in magnetic flux that produced it
+Lenz’s law states that the induced electromotive force in a circuit is directed so that the current it drives produces a magnetic field opposing the change in magnetic flux that produced it. This is why Faraday's (next section) law includes a minus sign.
+
+In simpler terms, when you try to change the magnetic environment of a circuit, the circuit responds in a way that pushes back against that change. 
 
 This means that when current is first passed through the inductor, the magnetic field is establish and for an incredibly short time, before it becomes stable, is changing. Thus a momentary EMF, opposing the EMF across the inductor, is generated.
 
@@ -36,6 +38,14 @@ And changing current IN means magnetic force OUT
     <footer>-- From [OpenStax](https://openstax.org/books/university-physics-volume-2/pages/13-2-lenzs-law) (emphasis mine)</footer>
 </blockquote>
 <p></p>
+
+More easily digested like this: Imagine pushing a magnet toward a loop of wire. As the magnet gets closer, the magnetic field through the loop increases. The loop responds by creating its own magnetic field that tries to oppose the magnet coming closer.
+
+A changing magnetic field through a conductor induces a voltage. That voltage drives a current around the loop. The direction of that current is not arbitrary. It is chosen so that the magnetic field produced by the current opposes the original change in magnetic flux.
+
+This direction rule is Lenz’s law.
+
+In an inductor, a changing current creates a changing magnetic field. That field induces a voltage in the same conductor which opposes the change in current. This is why inductors resist sudden changes in current.
 
 
 ## Faraday's Law
