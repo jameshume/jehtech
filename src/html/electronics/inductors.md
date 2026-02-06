@@ -99,7 +99,7 @@ $$
 Thence we got to
 
 $$
-e.m.f = L -\frac{dI}{dt}
+e.m.f = -L \frac{dI}{dt}
 $$
 
 ### Calculating L
