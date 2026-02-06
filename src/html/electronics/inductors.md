@@ -11,7 +11,7 @@ For a single loop we have:
 
 For a coil, however, the magnetic field *inside* the coil is *uniform* and can be concentrated using a ferrous metal core. Outside the coil it is not uniform. For a loop/coil still use the right hand, but now the fingers are used for the current direction and the thumb gives the direction of the magnetic field through the coil.
 
-![](##IMG_DIR##/../uni_florida_mag_field_single_coil1.jpg)
+![](##IMG_DIR##/../uni_florida_field_coil1.jpg.jpg)
 <br><sup>Image from [University of Central Florida College Physics eBook](https://pressbooks.online.ucf.edu/phy2053bc/chapter/magnetic-fields-produced-by-currents-amperes-law/)</sup>
 
 ## Lenz's Law
