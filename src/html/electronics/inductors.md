@@ -1,6 +1,7 @@
 DC current through a wire creates a non-uniform, stable, magnetic field.
 
-PICTURE HERE
+![](##IMG_DIR##/../uni_florida_mag_field_single_wire.jpg)
+<br><sup>Image from [University of Central Florida College Physics eBook](https://pressbooks.online.ucf.edu/phy2053bc/chapter/magnetic-fields-produced-by-currents-amperes-law/)</sup>
 
 For a single wire  use the right hand rule: thumb for current, curled fingers give the direction of the magnetic field.
 
