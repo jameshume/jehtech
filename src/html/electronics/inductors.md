@@ -87,7 +87,7 @@ TODO
 The following animation what happens when a square voltage pulse is put across an inductor for increasing values
 of inductance.
 
-IMAGE /ltspice/electronics_pulse_into_ind_vary_inductance.mp4
+![](##IMG_DIR##/ltspice/electronics_pulse_into_ind_vary_inductance.mp4)
 
 We can see that the instantaneous change of voltage across the inductor slows the increase of current so
 that current *cannot change instantaneously* through an inductor. 
@@ -137,17 +137,47 @@ As bost $V$ and $L$ are finite values, the induced current is limited, i.e., not
 be very large if $V$ is large and/or $L$ is small.
 
 
-
-## Impedance
+## Reactance
 This opposition to the current creating the magnetic field, as described by Lenz's law, is *like* a resistance, but because it is not exactly resistance, even though it opposes current. Unlike resistors, which dissipate energy as heat, inductors (minus parasitics) do not dissipate energy, they store energy and return it later! I.e:
 
 * Resistance removes energy from the circuit as heat.
 * Reactance swaps energy back and forth between the source and the fields.
 
 
+An indictor's reactance $X_L$ at frequency $f$ is given by the following formula:
 
+$$
+X_L = 2\pi fL
+$$
 
-## Voltage and current
+Where $X_L$ is the ractance of the inductor in Ohms, f is the frequency of the 
+signal in Hz and L is the inductance in Henrys.
 
-Because of Len'z law
+## Voltage Leads Current
+if $i = \sin(\ometa t)$, then
 
+$$
+v = L\frac{di}{dt} = L \cdot \omega \cos(\omega t)
+$$
+
+For inductors think ELI - Voltage leads current, or put another way current lags voltage:
+
+<img src="##IMG_DIR##/electronics_inductor_current_lags_voltage.png">
+
+## Inductors In Series
+
+$$
+L_{\text{eq}} = L_1 + L_2 + \cdots + L_n
+$$
+
+## Inductors In Parallel
+
+$$
+\frac{1}{L_{\text{eq}}} = \frac{1}{L_1} + \frac{1}{L_2} + \cdots + \frac{1}{L_n}
+$$
+
+So, for 2 inductors in parallel:
+
+$$
+L_{\text{eq}} = \frac{L_1L_2}{L_1 + L_2}
+$$

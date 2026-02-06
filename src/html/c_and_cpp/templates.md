@@ -1,3 +1,11 @@
+## TODO
+### Interesting Stuff with Tuples
+https://devblogs.microsoft.com/oldnewthing/20200624-00/?p=103902
+
+* `std::tuple_element`
+* `std::index_sequence`
+
+
 ## Variadic Templates
 
 ![](##IMG_DIR##/variadic-template-ellipsis-meanings.png)
