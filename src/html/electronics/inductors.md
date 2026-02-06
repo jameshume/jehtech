@@ -44,7 +44,7 @@ $$
 
 Where $N$ is the number of turns in the coil and $A$ is the area of the coil.
 
-*Faraday's law says that the **EMF induced is proportional to the rate of change of flux through the loop***:
+*Faraday's law says that the **EMF induced is proportional to the rate of change of flux through the loop*:
 
 $$
 e.m.f \propto -\frac{d\Phi}{dt}
@@ -138,16 +138,17 @@ be very large if $V$ is large and/or $L$ is small.
 
 
 ## Reactance
-This opposition to the current creating the magnetic field, as described by Lenz's law, is *like* a resistance, but because it is not exactly resistance, even though it opposes current. Unlike resistors, which dissipate energy as heat, inductors (minus parasitics) do not dissipate energy, they store energy and return it later! I.e:
+This *opposition to the current* creating the magnetic field, as described by Lenz's law, is *like* a resistance, but because it is not exactly resistance, even though it opposes current. Unlike resistors, which dissipate energy as heat, inductors (minus parasitics) do not dissipate energy, they store energy and return it later! I.e:
 
 * Resistance removes energy from the circuit as heat.
 * Reactance swaps energy back and forth between the source and the fields.
 
+Reactance X is defined as a real number that measures how strongly an inductor, in this case, opposes AC at a given angular frequency.
 
 An indictor's reactance $X_L$ at frequency $f$ is given by the following formula:
 
 $$
-X_L = 2\pi fL
+X_L = 2\pi fL = \omega L
 $$
 
 Where $X_L$ is the reactance of the inductor in Ohms, f is the frequency of the 
@@ -163,6 +164,22 @@ $$
 For inductors think ELI - Voltage leads current, or put another way current lags voltage:
 
 <img src="##IMG_DIR##/electronics_inductor_current_lags_voltage.png">
+
+## Adding Complexity
+Reactance is not complex in itself. Reactance is a real valued quantity. The complexity appears when reactance is combined with $j$ to represent phase.
+
+When we move to impedance, we need to represent both magnitude and phase. A +90 degree phase shift corresponds to multiplication by $j$, a -90 degree shift corresponds to minus $j$.
+
+Thats why we sometimes see
+
+$$
+X_L = j \omega L
+$$
+
+The j does not mean the component itself is imaginary. It is a mathematical marker that encodes the phase relationship between voltage and current. It allows phase shifts to be handled using algebra instead of trigonometry. 
+
+*The physical quantity reactance remains real, but its effect on phase is represented using the imaginary axis.*
+
 
 ## Inductors In Series
 
