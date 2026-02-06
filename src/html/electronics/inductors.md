@@ -150,11 +150,11 @@ $$
 X_L = 2\pi fL
 $$
 
-Where $X_L$ is the ractance of the inductor in Ohms, f is the frequency of the 
+Where $X_L$ is the reactance of the inductor in Ohms, f is the frequency of the 
 signal in Hz and L is the inductance in Henrys.
 
 ## Voltage Leads Current
-if $i = \sin(\ometa t)$, then
+if $i = \sin(\omega t)$, then
 
 $$
 v = L\frac{di}{dt} = L \cdot \omega \cos(\omega t)
