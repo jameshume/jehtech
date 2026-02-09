@@ -2,12 +2,12 @@
 Inductor voltage is proportional to rate of change of current:
 
 $$
-V = L\frac{dI}{dt}
+V = L\frac{\textrm{d}I}{\textrm{d}t} \text{and } i = \frac{1}{L}\int_0^T v\ \textrm{d}t + i_0
 $$
 
 Putting a constant voltage actoss an inductor causes the current to rise as a ramp: 1V across 1H produces a ramp of 1 amp per second.
 
-Once current is stable, i.e. when a constant current flows in an inductor, then $di/dt = 0$, so there is zero voltage across the inductor. This means the inductor looks like a short circuit, the same as a plain wire. [[Ref]](https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/ee-natural-and-forced-response/a/wmc-inductor-in-action)
+Once current is stable, i.e. when a constant current flows in an inductor, then $\textrm{d}i/\textrm{d}t = 0$, so there is zero voltage across the inductor. This means the inductor looks like a short circuit, the same as a plain wire. [[Ref]](https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/ee-natural-and-forced-response/a/wmc-inductor-in-action)
 
 Enery spent ramping up current:
 
@@ -92,7 +92,7 @@ Where $N$ is the number of turns in the coil and $A$ is the area of the coil.
 Faraday's law says that the **EMF induced is proportional to the rate of change of flux through the loop**:
 
 $$
-e.m.f \propto -\frac{d\Phi}{dt}
+e.m.f \propto -\frac{\textrm{d}\Phi}{\textrm{d}t}
 $$
 
 The $-$ (negation) is from Lenz's law to show the induced e.m.f will *oppose* the voltage generating it.
@@ -100,14 +100,14 @@ The $-$ (negation) is from Lenz's law to show the induced e.m.f will *oppose* th
 What is the constant of proportionality? It is the *indictance* of the coil:
 
 $$
-e.m.f = -L\frac{dI}{dt}
+e.m.f = -L\frac{\textrm{d}I}{\textrm{d}t}
 $$
 
 Where $L$ is the inductance measured in "Henrys". 
 
 ***THUS, INDUCTORS OPPOSE CHANGES IN CURRENT***
 
-But wait a minute! We just replaced $\frac{d\Phi}{dt}$ with $\frac{dI}{dt}$. Why were we able to do this?
+But wait a minute! We just replaced $\frac{\textrm{d}\Phi}{\textrm{d}t}$ with $\frac{\textrm{d}I}{\textrm{d}t}$. Why were we able to do this?
 
 The answer is that we can replace "rate of change of flux" with "rate of change of current" only in the special case where the flux is produced by that same current, which is what happens in self inductance.
 
@@ -116,13 +116,13 @@ For a coil (or any inductor), the magnetic field it produces is proportional to 
 So,
 
 $$
-e.m.f \propto -\frac{d\Phi}{dt} \propto -\frac{dI}{dt}
+e.m.f \propto -\frac{\textrm{d}\Phi}{\textrm{d}t} \propto -\frac{\textrm{d}I}{\textrm{d}t}
 $$
 
 Thence we got to
 
 $$
-e.m.f = -L \frac{dI}{dt}
+e.m.f = -L \frac{\textrm{d}I}{\textrm{d}t}
 $$
 
 In words, *the rate of current change in an inductor is proportional to the voltage across it*.
@@ -160,7 +160,7 @@ $$
 We know how to define the two volates so we can write:
 
 $$
-V = iR + L\frac{di}{dt}
+V = iR + L\frac{\textrm{d}i}{\textrm{d}t}
 $$
 
 So, when voltage first goes high, because no current is flowing (as per the graphs above) the
@@ -175,17 +175,17 @@ $$
 But, here's the thing, the change in current is *not* zero, so we get, at the start ($t = 0$):
 
 $$
-V = v_l = L\frac{di}{dt}
+V = v_l = L\frac{\textrm{d}i}{\textrm{d}t}
 $$
 
 If we know the inducance we know that the rate of change of current must be, just by rearranging the above
 equation (again at $t = 0$):
 
 $$
-\left.\frac{di}{dt}\right|_{t=0}=\frac{V}{L}
+\left.\frac{\textrm{d}i}{\textrm{d}t}\right|_{t=0}=\frac{V}{L}
 $$
 
-As bost $V$ and $L$ are finite values, the induced current is limited, i.e., not infinite, but it can
+As both $V$ and $L$ are finite values, the induced current is limited, i.e., not infinite, but it can
 be very large if $V$ is large and/or $L$ is small.
 
 
@@ -210,7 +210,7 @@ signal in Hz and L is the inductance in Henrys.
 if $i = \sin(\omega t)$, then
 
 $$
-v = L\frac{di}{dt} = L \cdot \omega \cos(\omega t)
+v = L\frac{\textrm{d}i}{\textrm{d}t} = L \cdot \omega \cos(\omega t)
 $$
 
 For inductors think ELI - Voltage leads current, or put another way current lags voltage:
@@ -220,7 +220,7 @@ For inductors think ELI - Voltage leads current, or put another way current lags
 In the above the voltage and current aren't exactly 90 degrees out of phase. This is because the modelled components are non-ideal
 and the 90 degree phase shift is for an ideal resistor and ideal inductor, where the latter would have pure inductance etc.
 
-[This article](https://electricalacademia.com/basic-electrical/rl-series-circuit) explains it futher.
+[This article](https://electricalacademia.com/basic-electrical/rl-series-circuit) and [this article (much simpler explanation I liked it more)](https://www.hamradioschool.com/post/complex-impedance-part-3-putting-it-all-together) explains it futher.
 
 The two voltages across the resitor and inductor are a **vector** sum, and are not directly additive as such:
 
