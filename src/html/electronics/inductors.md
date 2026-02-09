@@ -1,3 +1,24 @@
+## TL;DR
+The rate of current change in an inductor is proportional to the voltage across it:
+
+$$
+V = L\frac{dI}{dt}
+$$
+
+Putting a constant voltage actoss an inductor causes the current to rise as a ramp: 1V across 1H produces a ramp of 1 amp per second.
+
+Enery spent ramping up current:
+
+$$
+U_L = \frac{1}{2}LI^2
+$$
+Unlike resitors, power is not turned into heat: stoed as energy in magnatic field.
+
+Current flowing though coil creates a magnetic field.
+
+Change in magnetic field induce a boltage (back EMF) in a way that tries to cancel out those changes.
+
+
 ## Magnetic Fields Caused By Currents Brief Intro
 DC current through a wire creates a non-uniform, stable, magnetic field:
 
@@ -101,6 +122,8 @@ Thence we got to
 $$
 e.m.f = -L \frac{dI}{dt}
 $$
+
+In words, *the rate of current change in an inductor is proportional to the voltage across it*.
 
 ### Calculating L
 TODO
