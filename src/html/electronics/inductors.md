@@ -109,7 +109,10 @@ TODO
 The following animation what happens when a square voltage pulse is put across an inductor for increasing values
 of inductance.
 
-![](##IMG_DIR##/ltspice/electronics_pulse_into_ind_vary_inductance.mp4)
+<video controls>
+  <source src="##IMG_DIR##/ltspice/electronics_pulse_into_ind_vary_inductance.mp4" type="video/mp4">
+  Your browser does not support the video element.
+</video>
 
 We can see that the instantaneous change of voltage across the inductor slows the increase of current so
 that current *cannot change instantaneously* through an inductor. 
