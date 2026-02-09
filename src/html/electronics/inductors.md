@@ -1,11 +1,13 @@
 ## TL;DR
-The rate of current change in an inductor is proportional to the voltage across it:
+Inductor voltage is proportional to rate of change of current:
 
 $$
 V = L\frac{dI}{dt}
 $$
 
 Putting a constant voltage actoss an inductor causes the current to rise as a ramp: 1V across 1H produces a ramp of 1 amp per second.
+
+Once current is stable, i.e. when a constant current flows in an inductor, then $di/dt = 0$, so there is zero voltage across the inductor. This means the inductor looks like a short circuit, the same as a plain wire. [[Ref]](https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/ee-natural-and-forced-response/a/wmc-inductor-in-action)
 
 Enery spent ramping up current:
 
@@ -137,15 +139,18 @@ of inductance.
   Your browser does not support the video element.
 </video>
 
-We can see that the instantaneous change of voltage across the inductor slows the increase of current so
-that current *cannot change instantaneously* through an inductor. 
+We can see that there is an instantaneous change of voltage across the inductor, but that the inductor slows the increase of current: current *cannot change instantaneously* through an inductor. 
 
-The current through the inductor will eventually be stable, and so threfore will the magnetic field will become
-stable. We know from Faray's law that it is a *changing* current that the oposing e.m.f.
+The current through the inductor will eventually be stable, and therefore the magnetic field will become
+stable. We know from Faray's law that it is a *changing* current that generates a changing magnatic field and therefore
+the "back EMF".
+
+We can also see that when the voltage is "turned off", the inductor "fights" this. The change in voltage again
+causes a change in magnetic field, which the inductor tries to oppose.
 
 At the start, although the current is small, the *change in current* is *not* small, it can be quite large.
 
-At the start, the induced e.m.f. is limited. In a simple series RL circuit with a step DC voltage 
+At the start, the induced back e.m.f. is limited. In a simple series RL circuit with a step DC voltage 
 $𝑉$:
 
 $$
@@ -166,7 +171,6 @@ Therefore, at $t = 0$, the entire voltage is across the inductor:
 $$
 V = v_l
 $$
-
 
 But, here's the thing, the change in current is *not* zero, so we get, at the start ($t = 0$):
 
@@ -257,3 +261,6 @@ So, for 2 inductors in parallel:
 $$
 L_{\text{eq}} = \frac{L_1L_2}{L_1 + L_2}
 $$
+
+
+## Switch Example
