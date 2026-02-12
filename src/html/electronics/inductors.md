@@ -238,6 +238,9 @@ $$
 i = \Im(e^{j\omega t})
 $$
 
+So one complex number represents not only the voltage and current, *but also the phase difference between them*: we get voltage and current
+via the real and imaginary magnitudes of the complex number, and the phase difference by taking the arctan of both.
+
 NOOOOOOP GETTING THIS WRONG :(
 
 
