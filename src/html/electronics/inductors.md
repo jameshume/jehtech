@@ -2,7 +2,7 @@
 Inductor voltage is proportional to rate of change of current:
 
 $$
-V = L\frac{\textrm{d}I}{\textrm{d}t} \text{and } i = \frac{1}{L}\int_0^T v\ \textrm{d}t + i_0
+V = L\frac{\textrm{d}I}{\textrm{d}t} \text{  and  } i = \frac{1}{L}\int_0^T v\ \textrm{d}t + i_0
 $$
 
 Putting a constant voltage actoss an inductor causes the current to rise as a ramp: 1V across 1H produces a ramp of 1 amp per second.
@@ -268,4 +268,6 @@ $$
 ### 1
 
 ![](##IMG_DIR##/electronics_inductance_worked_example_1.png)
+
+We know $X_L = 2 \pi fL = 2 \pi \cdot 10^7 \cdot 2 \cdot 10^{-3} = 4\pi 10^4$.
 
