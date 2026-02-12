@@ -263,4 +263,9 @@ L_{\text{eq}} = \frac{L_1L_2}{L_1 + L_2}
 $$
 
 
-## Switch Example
+## Worked Examples
+
+### 1
+
+![](##IMG_DIR##/electronics_inductance_worked_example_1.png)
+
