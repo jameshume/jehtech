@@ -212,7 +212,7 @@ signal in Hz and L is the inductance in Henrys.
 If we say that $i = \sin(\omega t)$, then
 
 $$
-v = L\frac{\textrm{d}i}{\textrm{d}t} = L \cdot \omega \cos(\omega t)
+v = L\frac{\textrm{d}i}{\textrm{d}t} = L \omega \cos(\omega t)
 $$
 
 For inductors think ELI - Voltage leads current, or put another way current lags voltage. In the example above
@@ -223,13 +223,13 @@ that they are 90 degrees out of phase.
 Using Euler's identity:
 
 $$
-e^{j\omega t} = \cos(\omega t) + j\cdot\sin(\omega t)
+e^{j\omega t} = \cos(\omega t) + jsin(\omega t)
 $$
 
 We can say that 
 
 $$
-v = L \cdot \Re(e^{j\omega t})
+v = L \omega \Re(e^{j\omega t})
 $$
 
 and
