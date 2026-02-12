@@ -134,6 +134,8 @@ TODO
 The following animation what happens when a square voltage pulse is put across an inductor for increasing values
 of inductance.
 
+FIXME? Not sure this is quite right?
+
 <video controls>
   <source src="##IMG_DIR##/ltspice/electronics_pulse_into_ind_vary_inductance.mp4" type="video/mp4">
   Your browser does not support the video element.
@@ -207,13 +209,37 @@ Where $X_L$ is the reactance of the inductor in Ohms, f is the frequency of the
 signal in Hz and L is the inductance in Henrys.
 
 ## Voltage Leads Current
-if $i = \sin(\omega t)$, then
+If we say that $i = \sin(\omega t)$, then
 
 $$
 v = L\frac{\textrm{d}i}{\textrm{d}t} = L \cdot \omega \cos(\omega t)
 $$
 
-For inductors think ELI - Voltage leads current, or put another way current lags voltage:
+For inductors think ELI - Voltage leads current, or put another way current lags voltage. In the example above
+we note that because current is a sine wave and voltage is a cosine wave, both of the same frequency, 
+that they are 90 degrees out of phase.
+
+
+Using Euler's identity:
+
+$$
+e^{j\omega t} = \cos(\omega t) + j\cdot\sin(\omega t)
+$$
+
+We can say that 
+
+$$
+v = L \cdot \Re(e^{j\omega t})
+$$
+
+and
+
+$$
+i = \Im(e^{j\omega t})
+$$
+
+NOOOOOOP GETTING THIS WRONG :(
+
 
 <img src="##IMG_DIR##/electronics_inductor_current_lags_voltage.png">
 
@@ -221,6 +247,10 @@ In the above the voltage and current aren't exactly 90 degrees out of phase. Thi
 and the 90 degree phase shift is for an ideal resistor and ideal inductor, where the latter would have pure inductance etc.
 
 [This article](https://electricalacademia.com/basic-electrical/rl-series-circuit) and [this article (much simpler explanation I liked it more)](https://www.hamradioschool.com/post/complex-impedance-part-3-putting-it-all-together) explains it futher.
+
+
+
+
 
 The two voltages across the resitor and inductor are a **vector** sum, and are not directly additive as such:
 
