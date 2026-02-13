@@ -14,11 +14,11 @@ Enery spent ramping up current:
 $$
 U_L = \frac{1}{2}LI^2
 $$
-Unlike resitors, power is not turned into heat: stoed as energy in magnatic field.
+Unlike resitors, power is not turned into heat: stored as energy in magnatic field.
 
 Current flowing though coil creates a magnetic field.
 
-Change in magnetic field induce a boltage (back EMF) in a way that tries to cancel out those changes.
+Change in magnetic field induce a voltage (back EMF) in a way that tries to cancel out those changes.
 
 
 ## Magnetic Fields Caused By Currents Brief Intro
@@ -127,8 +127,6 @@ $$
 
 In words, *the rate of current change in an inductor is proportional to the voltage across it*.
 
-### Calculating L
-TODO
 
 ## The Effect Of Inductance
 The following animation what happens when a square voltage pulse is put across an inductor for increasing values
@@ -241,7 +239,7 @@ $$
 So one complex number represents not only the voltage and current, *but also the phase difference between them*: we get voltage and current
 via the real and imaginary magnitudes of the complex number, and the phase difference by taking the arctan of both.
 
-NOOOOOOP GETTING THIS WRONG :(
+AM I GETTING THIS WRONG :(
 
 
 <img src="##IMG_DIR##/electronics_inductor_current_lags_voltage.png">
