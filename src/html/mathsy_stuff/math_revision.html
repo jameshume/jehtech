@@ -654,7 +654,84 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
   <p>
     <img src="##IMG_DIR##/complex_mult_j_rotates_anitclockwise.png" alt="Rotating by j rotates AC in complex plane"/>
   </p>
+  <p>
+    This is because $e^{j\pi/2} = j$, so $2j = 2e^{j\pi/2}$, hence the 90 degree rotation (recall $180\deg = \pi so 90\deg = \pi/2$).
+  </p>
 
+  <h3>Addition, Subtraction, Multiplication, Division</h3>
+  <div>
+    <p>
+      To multiple or divide complex numbers, convert them to exponential form and use:
+
+      $$
+        Me^{j\theta}Ne^{j\phi} = (MN)e^{j(\theta+phi)}
+      $$
+
+      This is much simpler than tring to multiple in rectangular form
+    </p>
+    <p>
+      To add or subtract convert to rectuangule form and use: 
+      
+      $$
+        (a + jb)+(c + jd) = (a+c) + j(b+d)
+      $$
+    </p>
+  </div>
+
+  <h3>Phasors</h3>
+  <p>
+    A phasor is a complex number used to represent a sinusoid at a point in time.
+
+    Using Euler:
+
+    $$
+      Me^{jA} = M\cos(A) + jM\sin(A)
+    $$
+
+    Now consider this sinusoid:
+
+    $$
+    x(t) = M\cos(\omega t + \theta)
+    $$
+
+    Substiute $\omega t + \theta$ for $A$ and we get:
+
+    $$
+    Me^{j(\omega t + \theta)} = M\cos(\omega t + \theta) + jM\sin(\omega t + \theta)
+    $$
+
+    So, now we can say
+    
+    $$
+    \begin{align}
+      x(t) &= M\cos(\omega t + \theta) \\
+           &= \mathscr{R}[Me^{j(\omega t + \theta)}] \\
+           &= \mathscr{R}[Me^{j\theta}e^{j\omega t}]
+    \end{align}
+    $$
+
+    Because the phasor represents the sinusoid at a *point in time*, the $e^{j\omega t}$ bit is giving us the frequency (the rate at which this phasor would rotate) and $e^{j\theta}$ 
+    gives us the starting phase, or offset, if you like at $t=0$.
+  </p>
+  <p>
+    So, to encode the phase and magnitude of a sinusoid we use the *phasor* $X$:
+
+    $$
+      X = Me^{j\theta}
+    $$
+
+    Which means we can now write:
+
+    $$
+      \mathscr{R}[Me^{j\theta}e^{j\omega t}] = \mathscr{R}[Xe^{j\omega t}] = x(t)
+    $$
+
+    Which is, summarised:
+
+    $$
+      x(t) = \mathscr{R}[Xe^{j\omega t}] = \mathscr{R}[Me^{j\theta}e^{j\omega t}] = \mathscr{R}[Me^{j(\omega t + \theta)}] = M\cos(\omega t + \theta)
+    $$ 
+  </p>
 </div>
 
 <a name="combinations_permutations"></a>

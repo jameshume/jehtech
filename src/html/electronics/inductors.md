@@ -227,13 +227,13 @@ $$
 We can say that 
 
 $$
-v = L \omega \Re(e^{j\omega t})
+v = L \omega \mathscr{R}(e^{j\omega t})
 $$
 
 and
 
 $$
-i = \Im(e^{j\omega t})
+i = \mathscr{I}(e^{j\omega t})
 $$
 
 So one complex number represents not only the voltage and current, *but also the phase difference between them*: we get voltage and current
