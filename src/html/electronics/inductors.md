@@ -217,29 +217,34 @@ For inductors think ELI - Voltage leads current, or put another way current lags
 we note that because current is a sine wave and voltage is a cosine wave, both of the same frequency, 
 that they are 90 degrees out of phase.
 
+Why was current chosen as a sine and not a cosine? Well, first, the current was specified rather than the
+voltage because we get a simple derivative rather than an integral - a little easier I guess. Second, it
+doesn't matter whether we say the current is a sine or cosine as the physics wont change! Voltage will
+always lead current.
 
-Using Euler's identity:
-
-$$
-e^{j\omega t} = \cos(\omega t) + jsin(\omega t)
-$$
-
-We can say that 
+Lets instead say that $i = \cos(\omega t)$. We then get this:
 
 $$
-v = L \omega \mathscr{R}(e^{j\omega t})
+v = L\frac{\textrm{d}i}{\textrm{d}t} = -L \omega \sin(\omega t)
 $$
 
-and
+It might look, if you consider the signals at time $t = 0$, that current leads voltage, but it does *not*: 
+the confusion comes from using the value at a single instant to judge phase. Phase lead or lag is not determined 
+by which signal is larger at t equals 0. It is determined by the relative phase angle between the two sinusoids.
+
+But, we know 
 
 $$
-i = \mathscr{I}(e^{j\omega t})
+\sin(\omega t) = \cos\left(\omega t - \frac{\pi}{2}\right)
 $$
 
-So one complex number represents not only the voltage and current, *but also the phase difference between them*: we get voltage and current
-via the real and imaginary magnitudes of the complex number, and the phase difference by taking the arctan of both.
+So, we rewrite the voltage in this case as:
 
-AM I GETTING THIS WRONG :(
+$$
+v = L\frac{\textrm{d}i}{\textrm{d}t} = -L \omega \sin(\omega t) = -L \omega \cos\left(\omega t - \frac{\pi}{2}\right)
+$$
+
+Hence they are still 90 degrees out of phase, with voltage leading current :)
 
 
 <img src="##IMG_DIR##/electronics_inductor_current_lags_voltage.png">
@@ -248,9 +253,6 @@ In the above the voltage and current aren't exactly 90 degrees out of phase. Thi
 and the 90 degree phase shift is for an ideal resistor and ideal inductor, where the latter would have pure inductance etc.
 
 [This article](https://electricalacademia.com/basic-electrical/rl-series-circuit) and [this article (much simpler explanation I liked it more)](https://www.hamradioschool.com/post/complex-impedance-part-3-putting-it-all-together) explains it futher.
-
-
-
 
 
 The two voltages across the resitor and inductor are a **vector** sum, and are not directly additive as such:
