@@ -690,7 +690,7 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
 
   <h3>Phasors</h3>
   <p>
-    A phasor is a complex number used to represent a sinusoid at a point in time.
+    A phasor is a complex number used to represent a sinusoid at a point in time. I.e., they represent the amplitude and phase of a sinusoid <em>with the time dependence removed</em>.
 
     Using Euler:
 
@@ -720,17 +720,20 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
     \end{align}
     $$
 
-    Because the phasor represents the sinusoid at a *point in time*, the $e^{j\omega t}$ bit is giving us the frequency (the rate at which this phasor would rotate) and $e^{j\theta}$ 
+    Because the phasor represents the sinusoid at a <em>point in time</em>, the $e^{j\omega t}$ bit is giving us the frequency (the rate at which this phasor would rotate) and $e^{j\theta}$ 
     gives us the starting phase, or offset, if you like at $t=0$.
   </p>
   <p>
-    So, to encode the phase and magnitude of a sinusoid we use the *phasor* $X$:
+    So, to encode the phase and magnitude of a sinusoid we use the <em>phasor</em> $X$:
 
     $$
       X = Me^{j\theta}
     $$
 
-    Which means we can now write:
+    This phasor contains only magnitude and phase. It does not contain the time variation. The time variation $e^{j \omega t}$ has been factored out.
+  </p>
+  <p>
+    This means we can now write:
 
     $$
       \mathscr{R}[Me^{j\theta}e^{j\omega t}] = \mathscr{R}[Xe^{j\omega t}] = x(t)
@@ -740,7 +743,9 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
 
     $$
       x(t) = \mathscr{R}[Xe^{j\omega t}] = \mathscr{R}[Me^{j\theta}e^{j\omega t}] = \mathscr{R}[Me^{j(\omega t + \theta)}] = M\cos(\omega t + \theta)
-    $$ 
+    $$
+
+    Thus, to reconstruct the actual time domain signal, we must multiply the phasor by $e^{j \omega t}$ to restore the sinusoidal time dependence that was removed when forming the phasor.
   </p>
 </div>
 

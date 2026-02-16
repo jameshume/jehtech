@@ -223,7 +223,7 @@ So we are comparing:
 
 $$
 \begin{align}
-    i &= \sin(\omega t) \\
+    i &= \sin(\omega t) \\\\
     v &= L \omega \cos(\omega t)
 \end{align}
 $$
@@ -239,7 +239,7 @@ So we are comparing:
 
 $$
 \begin{align}
-    i &= \sin(\omega t) \\
+    i &= \sin(\omega t) \\\\
     v &= L\omega \sin\left(\omega t + \frac{\pi}{2}\right)
 \end{align}
 $$
@@ -289,7 +289,7 @@ So we are comparing:
 
 $$
 \begin{align}
-i &= \cos(\omega t) \\
+i &= \cos(\omega t) \\\\
 v &= -L \omega \cos\left(\omega t - \frac{\pi}{2}\right)
 \end{align}
 
