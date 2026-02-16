@@ -227,8 +227,13 @@ $$
 The ratio of *magnitudes* gives reactance, our resistance-like quantity:
 
 $$
-\frac{|V|}{|I|} = \frac{L \omega I_0}{I_0+ = \omega L}
+\begin{align}
+    \frac{|V|}{|I|} &= \frac{L \omega I_0}{I_0}  \\\\
+                    &= \omega L \\\\
+                    &= X_L
+\end{align}
 $$
+
 
 
 ## Voltage Leads Current
