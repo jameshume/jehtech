@@ -219,7 +219,7 @@ Then the voltage across the inductor will be:
 
 $$
 \begin{align}
-V(t) &= L\frac{\mathrm{d}I(t)}{\mathrm{d}t}
+V(t) &= L\frac{\mathrm{d}I(t)}{\mathrm{d}t} \\\\
      &= L\omega I_0 \cos(\omega t)
 \end{align}
 $$
