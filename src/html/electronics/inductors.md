@@ -1,14 +1,3 @@
-<script>
-window.MathJax = {
-  tex: {
-    displayMath: [['$$','$$'], ['\\[','\\]']]
-  },
-  chtml: {
-    displayAlign: 'left'
-  }
-};
-</script>
-
 ## TL;DR
 Inductor voltage is proportional to rate of change of current:
 
