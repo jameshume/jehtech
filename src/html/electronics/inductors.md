@@ -1,3 +1,14 @@
+<script>
+window.MathJax = {
+  tex: {
+    displayMath: [['$$','$$'], ['\\[','\\]']]
+  },
+  chtml: {
+    displayAlign: 'left'
+  }
+};
+</script>
+
 ## TL;DR
 Inductor voltage is proportional to rate of change of current:
 
@@ -207,22 +218,63 @@ Where $X_L$ is the reactance of the inductor in Ohms, f is the frequency of the
 signal in Hz and L is the inductance in Henrys.
 
 ## Voltage Leads Current
-If we say that $i = \sin(\omega t)$, then
+If we say that 
+
+$$
+i = \sin(\omega t)
+$$
+
+Then
 
 $$
 v = L\frac{\textrm{d}i}{\textrm{d}t} = L \omega \cos(\omega t)
 $$
 
+So we are comparing:
+
+$$
+\begin{align}
+    i &= \sin(\omega t) \\
+    v &= L \omega \cos(\omega t)
+\end{align}
+$$
+
+Thus voltage leads current because the voltage cosine reaches its peak earlier in time. To know this, write one
+function in terms of the other:
+
+$$
+\cos(\omega t) = \sin\left(\omega t + \frac{\pi}{2}\right)
+$$
+
+So we are comparing:
+
+$$
+\begin{align}
+    i &= \sin(\omega t) \\
+    v &= L\omega \sin\left(\omega t + \frac{\pi}{2}\right)
+\end{align}
+$$
+
+This tells you directly that cosine is a sine shifted forward by pi over 2 radians. A positive phase shift corresponds
+to a shift to the left in time, meaning the waveform reaches its peaks earlier. *So cosine leads sine by 90 degrees.*
+
 For inductors think ELI - Voltage leads current, or put another way current lags voltage. In the example above
 we note that because current is a sine wave and voltage is a cosine wave, both of the same frequency, 
 that they are 90 degrees out of phase.
 
-Why was current chosen as a sine and not a cosine? Well, first, the current was specified rather than the
+### A Little Aside...
+But.... why was current chosen as a sine and not a cosine? Well, first, the current was specified rather than the
 voltage because we get a simple derivative rather than an integral - a little easier I guess. Second, it
 doesn't matter whether we say the current is a sine or cosine as the physics wont change! Voltage will
 always lead current.
 
-Lets instead say that $i = \cos(\omega t)$. We then get this:
+Lets instead say that:
+
+$$
+i = \cos(\omega t)
+$$
+
+Then, we get this:
 
 $$
 v = L\frac{\textrm{d}i}{\textrm{d}t} = -L \omega \sin(\omega t)
@@ -244,7 +296,16 @@ $$
 v = L\frac{\textrm{d}i}{\textrm{d}t} = -L \omega \sin(\omega t) = -L \omega \cos\left(\omega t - \frac{\pi}{2}\right)
 $$
 
-Hence they are still 90 degrees out of phase, with voltage leading current :)
+So we are comparing:
+
+$$
+\begin{align}
+i &= \cos(\omega t) \\
+v &= -L \omega \cos\left(\omega t - \frac{\pi}{2}\right)
+\end{align}
+
+Hence they are still 90 degrees out of phase, with voltage leading current (a negative phase shift means a shift to 
+the right in time and the minus sign inverts the waveform.)
 
 
 <img src="##IMG_DIR##/electronics_inductor_current_lags_voltage.png">
