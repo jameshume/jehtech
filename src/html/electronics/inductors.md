@@ -281,6 +281,20 @@ For inductors think ELI - Voltage leads current, or put another way current lags
 we note that because current is a sine wave and voltage is a cosine wave, both of the same frequency, 
 that they are 90 degrees out of phase.
 
+<img src="##IMG_DIR##/electronics_inductor_current_lags_voltage.png">
+
+In the above the voltage and current aren't exactly 90 degrees out of phase. This is because the modelled components are non-ideal
+and the 90 degree phase shift is for an ideal resistor and ideal inductor, where the latter would have pure inductance etc.
+
+[This article](https://electricalacademia.com/basic-electrical/rl-series-circuit) and [this article (much simpler explanation I liked it more)](https://www.hamradioschool.com/post/complex-impedance-part-3-putting-it-all-together) explains it futher.
+
+
+The two voltages across the resitor and inductor are a **vector** sum, and are not directly additive as such:
+
+![](##IMG_DIR##/../electricalacademia.com_rl_vector_sum.png)
+<br><sup>Image from [Electrical Academia - RL Series Circuit](https://electricalacademia.com/basic-electrical/rl-series-circuit/)</sup>
+
+
 ### A Little Aside...
 But.... why was current chosen as a sine and not a cosine? Well, first, the current was specified rather than the
 voltage because we get a simple derivative rather than an integral - a little easier I guess. Second, it
@@ -322,23 +336,13 @@ $$
 i &= \cos(\omega t) \\\\
 v &= -L \omega \cos\left(\omega t - \frac{\pi}{2}\right)
 \end{align}
+$$
 
 Hence they are still 90 degrees out of phase, with voltage leading current (a negative phase shift means a shift to 
 the right in time and the minus sign inverts the waveform.)
 
 
-<img src="##IMG_DIR##/electronics_inductor_current_lags_voltage.png">
 
-In the above the voltage and current aren't exactly 90 degrees out of phase. This is because the modelled components are non-ideal
-and the 90 degree phase shift is for an ideal resistor and ideal inductor, where the latter would have pure inductance etc.
-
-[This article](https://electricalacademia.com/basic-electrical/rl-series-circuit) and [this article (much simpler explanation I liked it more)](https://www.hamradioschool.com/post/complex-impedance-part-3-putting-it-all-together) explains it futher.
-
-
-The two voltages across the resitor and inductor are a **vector** sum, and are not directly additive as such:
-
-![](##IMG_DIR##/../electricalacademia.com_rl_vector_sum.png)
-<br><sup>Image from [Electrical Academia - RL Series Circuit](https://electricalacademia.com/basic-electrical/rl-series-circuit/)</sup>
 
 
 ## Adding Complexity
