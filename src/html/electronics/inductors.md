@@ -134,7 +134,7 @@ of inductance.
 
 FIXME? Not sure this is quite right?
 
-<video controls>
+<video autoplay loop muted playsinline>
   <source src="##IMG_DIR##/ltspice/electronics_pulse_into_ind_vary_inductance.mp4" type="video/mp4">
   Your browser does not support the video element.
 </video>
@@ -178,7 +178,7 @@ $$
 V = v_l = L\frac{\textrm{d}i}{\textrm{d}t}
 $$
 
-If we know the inducance we know that the rate of change of current must be, just by rearranging the above
+If we know the inductance, we know that the rate of change of current must be, just by rearranging the above
 equation (again at $t = 0$):
 
 $$
@@ -200,11 +200,36 @@ Reactance X is defined as a real number that measures how strongly an inductor, 
 An indictor's reactance $X_L$ at frequency $f$ is given by the following formula:
 
 $$
-X_L = 2\pi fL = \omega L
+\begin{align}
+X_L &= 2\pi fL \\\\
+    &= \omega L
+\end{align}
 $$
 
 Where $X_L$ is the reactance of the inductor in Ohms, f is the frequency of the 
 signal in Hz and L is the inductance in Henrys.
+
+How did we get here? We set current like so:
+
+$$
+I(t) = I_0\sin(\omega t) \\\\
+$$
+
+Then the voltage across the inductor will be:
+
+$$
+\begin{align}
+V(t) &= L\frac{\mathrm{d}I(t)}{\mathrm{d}t}
+     &= L\omega I_0 \cos(\omega t)
+\end{align}
+$$
+
+The ratio of *magnitudes* gives reactance, our resistance-like quantity:
+
+$$
+\frac{|V|}{|I|} = \frac{L \omega I_0}{I_0+ = \omega L}
+$$
+
 
 ## Voltage Leads Current
 If we say that 
