@@ -348,3 +348,31 @@ be done by adding a `.gitinit` file to you home directory:
 ```
 add-auto-load-safe-path /path/to/script
 ```
+
+
+## VSCode and CortexDebug
+
+```
+    "configurations": [
+        {
+            ...
+            ...
+            "rttConfig": {
+                "enabled": true,
+                "address": "auto",
+                "searchId": "SEGGER RTT",
+                "searchSize": 4096,
+                "polling_interval": 10,
+                "clearSearch": false,
+                "rtt_start_retry": 1000,
+                "decoders": [
+                    {
+                        "label": "RTT ch0",
+                        "port": 0,
+                        "type": "console"
+                    }
+                ]
+            },
+            ...
+            ...
+```
