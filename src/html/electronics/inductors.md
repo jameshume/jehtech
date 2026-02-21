@@ -357,8 +357,6 @@ For pure resistance, lets choose current as our reference. We would then, on an 
 But, for a purely reactive inductance, voltage and current are out of phase. Again, choose I as our reference (this is somewhat arbitrary, we could choose voltage) and we can plot on an argand diagram (see [maths revision notes on complex numbers](../mathsy_stuff/math_revision.html#complex-numbers)):
 
 
-AAAAH penny drop moment - ARE WE INFACT ENCODING THE PHASE DIFFERENCE BETWEEN VOLTAGE-R AND VOLTAGE-XL, AND BETWEEN CURRENT-R AND CURRNT-XL, RATHER THAN BEETWEEN CURRENT AND VOLTAGE????? OTHERWISE WE'D BE SAYING CURRENT AND VOLTAGE HAVE TO HAVE THE SAME AMPLITUDE.... STILL SOME CONFUSION TO WORK THROUGH.
-
 ```
      V
      ^
