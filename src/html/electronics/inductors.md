@@ -366,7 +366,7 @@ $$
 And the angle is:
 
 $$
-\theta = \tan^-1\left(\frac{X}{R}\right)
+\theta = \tan^{-1}\left(\frac{X}{R}\right)
 $$
 
 Impedance determines both how much current flows and the phase shift between voltage and current.
