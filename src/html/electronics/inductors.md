@@ -274,7 +274,7 @@ $$
 \end{align}
 $$
 
-This tells you directly that cosine is a sine shifted forward by $\pi\2$ radians. A positive phase shift corresponds
+This tells you directly that cosine is a sine shifted forward by $\pi/2$ radians. A positive phase shift corresponds
 to a shift to the left in time, meaning the waveform reaches its peaks earlier (see [maths revision notes](../mathsy_stuff/math_revision.html#function-scaling)). *So cosine leads sine by 90 degrees.*
 
 For inductors think ELI - Voltage leads current, or put another way current lags voltage. In the example above
@@ -356,7 +356,7 @@ $$
 X_L = j \omega L
 $$
 
-The $j$ does not mean the component itself is imaginary. It is a mathematical marker that encodes the phase relationship between voltage and current. It allows phase shifts to be handled using algebra instead of trigonometry. (see [maths revision notes of phasors](../mathsy_stuff/math_revision.html#phasors))
+The $j$ does not mean the component itself is imaginary. It is a mathematical marker that encodes the phase relationship between voltage and current. It allows phase shifts to be handled using algebra instead of trigonometry (see [maths revision notes on phasors](../mathsy_stuff/math_revision.html#phasors)).
 
 *The physical quantity reactance remains real, but its effect on phase is represented using the imaginary axis.*
 
