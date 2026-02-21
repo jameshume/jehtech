@@ -344,8 +344,55 @@ Hence they are still 90 degrees out of phase, with voltage leading current (a ne
 the right in time and the minus sign inverts the waveform.)
 
 
-## Adding Complexity
-Reactance is not complex in itself. Reactance is a real valued quantity. The complexity appears when reactance is combined with $j$ to represent phase. This is done when we talk about impedance, because impedance is $R + X_L$. We know that the voltage and current across the purely resistive component, $R$, are in phase, but across the inductive reactance component, voltage leads current; the two are out of phase by 90 degrees.
+## Adding Complexity (Reactance & Impedance)
+First we need to talk about reactance and impedance.
+
+Impedance is the full opposition to AC current and consists of resistive and reactive parts:
+
+$$
+Z = R + jX
+$$
+
+The reactance is the complex part, but note that reactance is not complex in itself. Reactance is a real valued quantity. The complexity appears when reactance is combined with $j$ to represent its phase relationship with respect to resistance. This is done when we talk about impedance (see previous formula), We know that the voltage and current across the purely resistive component, $R$, are in phase, but across the inductor, voltage leads current; the two are out of phase by 90 degrees.
+
+The complex quantity $Z$ can be interpreted geometrically as a vector in the complex plane (see [maths revision notes on complex numbers](../mathsy_stuff/math_revision.html#complex-numbers)).
+
+Thus, impedance encodes both magnitude and phase information. The magnitude is:
+
+$$
+|Z| = \sqrt{R^2 + X^2}
+$$
+
+And the angle is:
+
+$$
+\theta = \tan^-1\left(\frac{X}{R}\right)
+$$
+
+Impedance determines both how much current flows and the phase shift between voltage and current.
+
+The angle represents the phase difference between voltage and current:
+
+* $\theta > 0$ means that the circuit is inductive and voltage leads current.
+* $\theta < 0$ means that the circuit is capacitive and current leads voltage.
+* $\theta = 0$ means that the circuit is resistive and voltage and current are in phase.
+
+
+The magnitude of $Z$ determines how large the current is for a given voltage because:
+
+$$
+\begin{align}
+Z = \frac{\tilde{V}}{\tilde{I}} \\
+\therefore \tilde{I} = Z\tilde{V}
+\end{align}
+$$
+
+Where $\tilde{V}$ and $\tilde{I}$ are the phasor representations of voltage and current respectively. Impedance is a complex number, but not a phasor as it is not a time varying signal, which phasors usually represent (see [maths revision notes on phasors](../mathsy_stuff/math_revision.html#phasors)).
+
+
+-----
+TODO
+
 
 For pure resistance, lets choose current as our reference. We would then, on an argand diagram plot curret and voltage on the same axis, for example:
 
@@ -354,7 +401,7 @@ For pure resistance, lets choose current as our reference. We would then, on an 
            v(t)
 ```
 
-But, for a purely reactive inductance, voltage and current are out of phase. Again, choose I as our reference (this is somewhat arbitrary, we could choose voltage) and we can plot on an argand diagram (see [maths revision notes on complex numbers](../mathsy_stuff/math_revision.html#complex-numbers)):
+But, for a purely reactive inductance, voltage and current are out of phase. Again, choose $I$ as our reference (this is somewhat arbitrary, we could choose $V$) and we can plot on an argand diagram (see [maths revision notes on complex numbers](../mathsy_stuff/math_revision.html#complex-numbers)):
 
 
 ```
@@ -395,7 +442,9 @@ $$
 r e^{j\theta}
 $$
 
-Thus, we have represented the amplitude of the signal and the phase relationship beteen voltage and current in one neat little package - the complex number.
+
+Thus, we have represented the amplitude of the signal and the phase relationship beteen voltage and current in one neat little package - the complex number. We can go in reverse and, from this complex number, derive both the
+current a voltage.
 
 Note that $j$ does not mean the component itself is imaginary. It is a mathematical marker that encodes the phase relationship between voltage and current. It allows phase shifts to be handled using algebra instead of trigonometry (see [maths revision notes on phasors](../mathsy_stuff/math_revision.html#phasors)).
 
