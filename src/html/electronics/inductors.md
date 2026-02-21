@@ -356,6 +356,9 @@ For pure resistance, lets choose current as our reference. We would then, on an 
 
 But, for a purely reactive inductance, voltage and current are out of phase. Again, choose I as our reference (this is somewhat arbitrary, we could choose voltage) and we can plot on an argand diagram (see [maths revision notes on complex numbers](../mathsy_stuff/math_revision.html#complex-numbers)):
 
+
+AAAAH penny drop moment - ARE WE INFACT ENCODING THE PHASE DIFFERENCE BETWEEN VOLTAGE-R AND VOLTAGE-XL, AND BETWEEN CURRENT-R AND CURRNT-XL, RATHER THAN BEETWEEN CURRENT AND VOLTAGE????? OTHERWISE WE'D BE SAYING CURRENT AND VOLTAGE HAVE TO HAVE THE SAME AMPLITUDE.... STILL SOME CONFUSION TO WORK THROUGH.
+
 ```
      V
      ^
@@ -391,7 +394,7 @@ $$
 Which can just be represented generically as:
 
 $$
-e^{j\theta}
+r e^{j\theta}
 $$
 
 Thus, we have represented the amplitude of the signal and the phase relationship beteen voltage and current in one neat little package - the complex number.
@@ -401,7 +404,7 @@ Note that $j$ does not mean the component itself is imaginary. It is a mathemati
 *The physical quantity reactance remains real, but its effect on phase is represented using the imaginary axis.*
 
 
-
+<iframe scrolling="no" title="Driven RLC Circuit Using Phasors" src="https://www.geogebra.org/material/iframe/id/Xujs5xXN/width/800/height/600/border/888888/sfsb/true/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/false/ctl/false" width="800px" height="600px" style="border:0px;"> </iframe>
 
 
 
