@@ -97,7 +97,7 @@ $$
 
 The $-$ (negation) is from Lenz's law to show the induced e.m.f will *oppose* the voltage generating it.
 
-What is the constant of proportionality? It is the *indictance* of the coil:
+What is the constant of proportionality? It is the *inductance* of the coil:
 
 $$
 e.m.f = -L\frac{\textrm{d}I}{\textrm{d}t}
@@ -190,7 +190,7 @@ be very large if $V$ is large and/or $L$ is small.
 
 
 ## Reactance
-This *opposition to the current* creating the magnetic field, as described by Lenz's law, is *like* a resistance, but because it is not exactly resistance, even though it opposes current. Unlike resistors, which dissipate energy as heat, inductors (minus parasitics) do not dissipate energy, they store energy and return it later! I.e:
+This *opposition to the current* creating the magnetic field, as described by Lenz's law, is *like* a resistance, but it is not exactly resistance, even though it opposes current. Unlike resistors, which dissipate energy as heat, inductors (minus parasitics) do not dissipate energy, they store energy and return it later! I.e:
 
 * Resistance removes energy from the circuit as heat.
 * Reactance swaps energy back and forth between the source and the fields.
@@ -274,8 +274,8 @@ $$
 \end{align}
 $$
 
-This tells you directly that cosine is a sine shifted forward by pi over 2 radians. A positive phase shift corresponds
-to a shift to the left in time, meaning the waveform reaches its peaks earlier. *So cosine leads sine by 90 degrees.*
+This tells you directly that cosine is a sine shifted forward by $\pi\2$ radians. A positive phase shift corresponds
+to a shift to the left in time, meaning the waveform reaches its peaks earlier (see [maths revision notes](../mathsy_stuff/math_revision.html#function-scaling)). *So cosine leads sine by 90 degrees.*
 
 For inductors think ELI - Voltage leads current, or put another way current lags voltage. In the example above
 we note that because current is a sine wave and voltage is a cosine wave, both of the same frequency, 
@@ -286,7 +286,7 @@ that they are 90 degrees out of phase.
 In the above the voltage and current aren't exactly 90 degrees out of phase. This is because the modelled components are non-ideal
 and the 90 degree phase shift is for an ideal resistor and ideal inductor, where the latter would have pure inductance etc.
 
-[This article](https://electricalacademia.com/basic-electrical/rl-series-circuit) and [this article (much simpler explanation I liked it more)](https://www.hamradioschool.com/post/complex-impedance-part-3-putting-it-all-together) explains it futher.
+[This article](https://electricalacademia.com/basic-electrical/rl-series-circuit) and [this article (much simpler explanation I liked it more)](https://www.hamradioschool.com/post/complex-impedance-part-3-putting-it-all-together) explain it futher.
 
 
 The two voltages across the resitor and inductor are a **vector** sum, and are not directly additive as such:
@@ -356,7 +356,7 @@ $$
 X_L = j \omega L
 $$
 
-The j does not mean the component itself is imaginary. It is a mathematical marker that encodes the phase relationship between voltage and current. It allows phase shifts to be handled using algebra instead of trigonometry. 
+The $j$ does not mean the component itself is imaginary. It is a mathematical marker that encodes the phase relationship between voltage and current. It allows phase shifts to be handled using algebra instead of trigonometry. (see [maths revision notes of phasors](../mathsy_stuff/math_revision.html#phasors))
 
 *The physical quantity reactance remains real, but its effect on phase is represented using the imaginary axis.*
 
