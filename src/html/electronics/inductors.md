@@ -382,7 +382,7 @@ The magnitude of $Z$ determines how large the current is for a given voltage bec
 
 $$
 \begin{align}
-Z = \frac{\tilde{V}}{\tilde{I}} \\
+Z = \frac{\tilde{V}}{\tilde{I}} \\\\
 \therefore \tilde{I} = Z\tilde{V}
 \end{align}
 $$
