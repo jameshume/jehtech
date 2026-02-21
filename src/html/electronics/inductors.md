@@ -234,6 +234,8 @@ $$
 \end{align}
 $$
 
+This shows that inductors have a frequency-dependent reactance, which increases with increasing frequency. So, a  series inductor could be used to pass dc and low frequencies (where its reactance is small) while blocking high
+frequencies (where its reactance is high), for example.
 
 
 ## Voltage Leads Current
@@ -275,7 +277,7 @@ $$
 $$
 
 This tells you directly that cosine is a sine shifted forward by $\pi/2$ radians. A positive phase shift corresponds
-to a shift to the left in time, meaning the waveform reaches its peaks earlier (see [maths revision notes](../mathsy_stuff/math_revision.html#function-scaling)). *So cosine leads sine by 90 degrees.*
+to a shift to the left in time, meaning the waveform reaches its peaks earlier (see [maths revision notes on function scaling and shifting](../mathsy_stuff/math_revision.html#function-scaling)). *So cosine leads sine by 90 degrees.*
 
 For inductors think ELI - Voltage leads current, or put another way current lags voltage. In the example above
 we note that because current is a sine wave and voltage is a cosine wave, both of the same frequency, 
@@ -342,12 +344,70 @@ Hence they are still 90 degrees out of phase, with voltage leading current (a ne
 the right in time and the minus sign inverts the waveform.)
 
 
-
-
-
 ## Adding Complexity
-Reactance is not complex in itself. Reactance is a real valued quantity. The complexity appears when reactance is combined with $j$ to represent phase.
+Reactance is not complex in itself. Reactance is a real valued quantity. The complexity appears when reactance is combined with $j$ to represent phase. This is done when we talk about impedance, because impedance is $R + X_L$. We know that the voltage and current across the purely resistive component, $R$, are in phase, but across the inductive reactance component, voltage leads current; the two are out of phase by 90 degrees.
 
+For pure resistance, lets choose current as our reference. We would then, on an argand diagram plot curret and voltage on the same axis, for example:
+
+```
+----------->--------> i(t)
+           v(t)
+```
+
+But, for a purely reactive inductance, voltage and current are out of phase. Again, choose I as our reference (this is somewhat arbitrary, we could choose voltage) and we can plot on an argand diagram (see [maths revision notes on complex numbers](../mathsy_stuff/math_revision.html#complex-numbers)):
+
+```
+     V
+     ^
+     |
+v(t) -
+     |
+     |-------|-------> I
+             i(t)
+```
+
+We still maintain the corrrect magnitude for the voltage and current, but we have now also shown that they are
+90 degrees out of phase. We'd express this relationship using a complex number in rectangular form as:
+
+$$
+v(t) + j i(t)
+$$
+
+Goto polar form:
+
+$$
+\begin{align}
+r &= \sqrt{v(t)^2 + i(t)^2} \\\\
+\theta &= \tan^{-1}(\frac{v(t)}{i(t)})
+\end{align}
+$$
+
+To complex form:
+
+$$
+\sqrt{v(t)^2 + i(t)^2} e^{\tan^{-1}(\frac{v(t)}{i(t)})}
+$$
+
+Which can just be represented generically as:
+
+$$
+e^{j\theta}
+$$
+
+Thus, we have represented the amplitude of the signal and the phase relationship beteen voltage and current in one neat little package - the complex number.
+
+Note that $j$ does not mean the component itself is imaginary. It is a mathematical marker that encodes the phase relationship between voltage and current. It allows phase shifts to be handled using algebra instead of trigonometry (see [maths revision notes on phasors](../mathsy_stuff/math_revision.html#phasors)).
+
+*The physical quantity reactance remains real, but its effect on phase is represented using the imaginary axis.*
+
+
+
+
+
+
+--
+TODO
+--
 When we move to impedance, we need to represent both magnitude and phase. A +90 degree phase shift corresponds to multiplication by $j$, a -90 degree shift corresponds to minus $j$.
 
 Thats why we sometimes see
@@ -356,9 +416,20 @@ $$
 X_L = j \omega L
 $$
 
-The $j$ does not mean the component itself is imaginary. It is a mathematical marker that encodes the phase relationship between voltage and current. It allows phase shifts to be handled using algebra instead of trigonometry (see [maths revision notes on phasors](../mathsy_stuff/math_revision.html#phasors)).
 
-*The physical quantity reactance remains real, but its effect on phase is represented using the imaginary axis.*
+So... we have complex inductance. The phase shift is the phase shift between voltage and current. We can no longer
+represent current at some time, $t$, as just an amplitude, because we need to know its phase with respect to the voltage and vice versa.
+
+We have already seen that we can write this (with phase now included):
+
+$$
+\begin{align}
+I(t) &= I_0 \sin(\omega t ) \\
+V(t) &= L \omega I_0 \cos(\omega t)
+\end{align}
+$$
+--
+
 
 
 ## Inductors In Series
