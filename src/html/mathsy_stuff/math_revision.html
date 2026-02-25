@@ -668,6 +668,67 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
     This is because $e^{j\pi/2} = j$, so $2j = 2e^{j\pi/2}$, hence the 90 degree rotation (recall $180\deg = \pi so 90\deg = \pi/2$).
   </p>
 
+  <h3 id="complex_representation_conversion_summary">Polar to Rectangular and Back Again</h3>
+  <div>
+    <h4>Polar to Rectangular</h4>
+    <p>
+      The polar form $z = Me^{j\theta}$ in rectangular form is $z = x + jy$, where $x$ and $y$ are calculated like this:
+
+      $$
+      \begin{align}
+        x &= M\cos(\theta) &= \mathscr{R}(z) \\
+        y &= M\sin(\theta) &= \mathscr{I}(z)
+      \end{align}
+      $$
+    </p>
+
+    <h4>Rectangular to Polar</h4>
+    <p>
+      The rectangular form $z = x + jy$ can be converted to the polar form $z = Me^{j\theta}$ this way:
+
+      $$
+      \begin{align}
+        M &= \sqrt{x^2 + y^2} &= |z|\ \text{(magnitude of z)} \\
+        \theta &= \tan^{-1}\left(\frac{y}{x}\right) \ \text{phase of z}
+      \end{align}
+      $$
+
+      <em>But</em>, there are two solutions to the arctan solution. Both are correct, but the correct one for this conversion
+      has to be chosen. Use the sign of the real part, $x$, to decide.
+    </p>
+    <p>
+      The reason for this is that the tangent has a period of $\pi$:
+
+      $$
+      \tan(\theta) = \tan(\theta + \pi)
+      $$
+
+      Which means that there are always two angles, 190 degrees apart, that give the same value of $\frac{y}{x}$.
+    </p>
+    <p>
+      The ratio $\frac{y}{x}$ only gives the slope of the line from the origin to the point. It does not say which quadrant the point is in.
+    </p>
+    <p>
+      The sign of x determines whether the point lies in:
+    </p>
+    <ul>
+      <li>Quadrant I or IV, where x is positive</li>
+      <li>Quadrant II or III, where x is negative</li>
+    </ul>
+    <p>
+      The principal arctan function returns values only in
+
+      $$
+      \left(-\frac{\pi}{2}, \frac{\pi}{2}\right)
+      $$
+
+      That range corresponds only to Quadrants I and IV. So:
+    </p>
+    <ul>
+      <li>If x is positive, the arctan result is already correct.</li>
+      <li>If x is negative, the true angle must lie in Quadrant II or III, so you add pi.</li>
+    </ul>
+
   <h3>Addition, Subtraction, Multiplication, Division</h3>
   <div>
     <p>
@@ -688,7 +749,10 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
     </p>
   </div>
 
+  </div> <!-- END complex_representation_conversion_summary -->
+
   <h3 id="phasors">Phasors</h3>
+  <div>
   <p>
     A phasor is a complex number used to represent a sinusoid at a point in time. I.e., they represent the amplitude and phase of a sinusoid <em>with the time dependence removed</em>.
 
@@ -755,7 +819,10 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
 		</p><p>
 			<img src="##IMG_DIR##/phasor_animation.gif" style="max-width:100%"/>
 		</p>
-</div>
+
+      <h4 id="phasors_why_helpful">Why Is This Helpful?</h4>
+    </div> <!-- END phasors -->
+</div> <!-- END complex numbers -->
 
 <a name="combinations_permutations"></a>
 <h2>Combinations &amp; Permutations</h2>
@@ -1528,6 +1595,7 @@ pl.show()</pre>
 </body>
 </html>
 
+ 
  
  
  
