@@ -76,7 +76,7 @@ $$
 Thus we have a forumla that results in $a\frac{T}{2}$. Multiple by $\frac{2}{T}$ to remove the half-period to ge just $a$. This gives us the result
 
 $$
-a = \frac{2}{T} \int_{0}^{T} a\,\cos(\omega t)\,\mathrm{d}t
+a = \frac{2}{T} \int_{0}^{T} x(t)\,\cos(\omega t)\,\mathrm{d}t
 $$
 
 This completely an unambiguously extracts the "amount", $a$ of the basis vector $\cos(\omega t)$ contained in our signal $x(t)$.
