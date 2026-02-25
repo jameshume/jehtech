@@ -24,6 +24,12 @@ can yield the vector $[a, b]$. It's like I could mix two "signals", the vectors 
 Same with the signal $x(t) = a\cos(\omega t) + b\sin(\omega t)$. If I just have the signal $x(t)$, in the same way as I did above,
 I can decompose it into the basis functions $\cos(\omega t)$ and $\sin(\omega t)$. I.e. $x(t)$ is some mixed up jumble of two sinusoidal signals and I can recover the exact mix of the two sinusoids because those sinusoids are orthogonal or **quadrature** signals.
 
+Sine and cosine are othogonal because:
+
+$$
+\int_{0}^{T} \cos(\omega t)\sin(\omega t)\,\mathrm{d}t = 0
+$$
+
 How?
 
 To get $a$, do the following...
@@ -43,7 +49,7 @@ TEST
 
 $$
 \begin{align}
-\int_{0}^{T} a\,\underbrace{\cos^2(\omega t)}_{\int =\,\frac{T}{2}} + b\,\underbrace{\sin(\omega t)\cos(\omega t)}_{\int =\, 0} \\\\
+\int_{0}^{T} a\,\underbrace{\cos^2(\omega t)}_{\int =\,\frac{T}{2}} + b\,\underbrace{\sin(\omega t)\cos(\omega t)}_{\int =\, 0} \,\mathrm{d}t\\\\
  = a\frac{T}{2}
 \end{align}
 $$
@@ -51,8 +57,13 @@ $$
 Thus we have a forumla that results in $a\frac{T}{2}$. Multiple by $\frac{T}{2}$ to remove the half-period to ge just $a$. This gives us the result
 
 $$
-a = \frac{T}{2} \int_{0}^{T} a\,\cos^2(\omega t) + b\,\sin(\omega t)\cos(\omega t)
+a = \frac{T}{2} \int_{0}^{T} a\,\cos^2(\omega t) + b\,\sin(\omega t)\cos(\omega t) \,\mathrm{d}t
 $$
 
 This completely an unambiguously extracts the "amount", $a$ of the basis vector $\cos(\omega t)$ contained in our signal $x(t)$.
 
+To find $b$ the same method is repeated, but with sine, to get:
+
+$$
+b = \frac{2}{T}\int_{0}^{T} x(t)\sin(\omega t)\,dt
+$$
