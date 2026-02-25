@@ -50,7 +50,7 @@ Integrate that result over one period.
 
 $$
 \begin{align}
-    \int_{0}^{T} a\,\underbrace{\cos^2(\omega t)}_{\text{integrates to}\ T/2} + \overbrace{b\sin(\omega t)\cos(\omega t)}^{\text{integrates to}\ 0}\,\mathrm{d}t\\\\
+    &\int_{0}^{T} a\,\underbrace{\cos^2(\omega t)}_{\text{integrates to}\ T/2} + b\overbrace{\sin(\omega t)\cos(\omega t)}^{\text{integrates to}\ 0}\,\mathrm{d}t\\\\
     &= a\frac{T}{2}
 \end{align}
 $$
