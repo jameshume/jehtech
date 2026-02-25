@@ -50,7 +50,7 @@ Integrate that result over one period.
 
 $$
 \begin{align}
-    &\int_{0}^{T} a\,\underbrace{\cos^2(\omega t)}_{\text{integrates to}\ T/2} + b\overbrace{\sin(\omega t)\cos(\omega t)}^{\text{integrates to}\ 0}\,\mathrm{d}t\\\\
+    &\int_{0}^{T} a\,\underbrace{\cos^2(\omega t)}_{\text{integrates to}\ T/2} + b\,\overbrace{\sin(\omega t)\cos(\omega t)}^{\text{integrates to}\ 0}\,\mathrm{d}t\\\\
     &= a\frac{T}{2}
 \end{align}
 $$
@@ -59,7 +59,7 @@ $$
 Thus we have a forumla that results in $a\frac{T}{2}$. Multiple by $\frac{2}{T}$ to remove the half-period to ge just $a$. This gives us the result
 
 $$
-a = \frac{2}{T} \int_{0}^{T} a\,\cos^2(\omega t) + b\,\sin(\omega t)\cos(\omega t)\,\mathrm{d}t
+a = \frac{2}{T} \int_{0}^{T} a\,\cos(\omega t)\,\mathrm{d}t
 $$
 
 This completely an unambiguously extracts the "amount", $a$ of the basis vector $\cos(\omega t)$ contained in our signal $x(t)$.
@@ -67,9 +67,10 @@ This completely an unambiguously extracts the "amount", $a$ of the basis vector 
 To find $b$ the same method is repeated, but with sine, to get:
 
 $$
-b = \frac{2}{T}\int_{0}^{T} x(t)\sin(\omega t)\,dt
+b = \frac{2}{T}\int_{0}^{T} x(t)\sin(\omega t)\,\mathrm{d}t
 $$
 
 
+## IQ (Quadrature) Demodulator
+A signal composed of two quadrature waveforms can be "demixed", as described above by an IQ demodulator, a.k.a., a quadrature demodulator.
 
-## IQ Demodulator
