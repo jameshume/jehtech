@@ -915,6 +915,43 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
 		</p>
 
       <h4 id="phasors_why_helpful">Why Is This Helpful?</h4>
+      <div>
+        <p>
+          A motivating example. Simplify $5\,\cos(\omega t + 53^\circ) + \sqrt{2}\,\cos(\omega t + 45^\circ)$ first without using phasors, then using phasors...
+        </p>
+
+        <h5>Without Phasors</h5>
+        Using the trig identity for $\cos(a+b) = \cos(a)\cos(b) - \sin(a)\sin(b)$:
+
+        $$
+        5\,\cos(\omega t + 53^\circ) = 5\cos(\omega t)\cos(53^\circ) - 5\sin(\omega t)\sin(53^\circ)
+        $$
+
+        And,
+
+        $$
+        \sqrt{2}\,\cos(\omega t + 45^\circ) = \sqrt{2}\cos(\omega t)\cos(45^\circ) - \sqrt{2}\sin(\omega t)\sin(45^\circ)
+        $$
+
+        So,
+
+        $$
+        \begin{align}
+          5\,\cos(\omega t + 53^\circ) + \sqrt{2}\,\cos(\omega t + 45^\circ) = &5\,\cos(\omega t)\cos(53^\circ) - 5\,\sin(\omega t)\sin(53^\circ) + \\
+                                                                               &\sqrt{2}\,\cos(\omega t)\cos(45^\circ) - \sqrt{2}\,\sin(\omega t)\sin(45^\circ) \\
+                                                                             = &\cos(\omega t)(5\,\cos(45^\circ) + \sqrt{2}\,\cos(45^\circ)) + \\
+                                                                               &\sin(\omega t)(5\,\sin(45^\circ) + \sqrt{2}\,\sin(45^\circ))
+        \end{align}
+        $$
+
+        Oh good lord this is already painful. Now we need the identity $a\,\cos(x) + b\,\sin(x) = R\,\cos(x - \alpha). From the above we let...
+
+        $$
+        \begin{align}
+        \end{align}
+        $$
+
+      </div> <!-- End Why is this helpful -->
     </div> <!-- END phasors -->
 </div> <!-- END complex numbers -->
 
