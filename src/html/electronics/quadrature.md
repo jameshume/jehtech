@@ -62,10 +62,10 @@ $$
 $$
 
 
-Thus we have a forumla that results in $a\frac{T}{2}$. Multiple by $\frac{T}{2}$ to remove the half-period to ge just $a$. This gives us the result
+Thus we have a forumla that results in $a\frac{T}{2}$. Multiple by $\frac{2}{T}$ to remove the half-period to ge just $a$. This gives us the result
 
 $$
-a = \frac{T}{2} \int_{0}^{T} a\,\cos^2(\omega t) + b\,\sin(\omega t)\cos(\omega t) \,\mathrm{d}t
+a = \frac{2}{T} \int_{0}^{T} a\,\cos^2(\omega t) + b\,\overbrace{\sin(\omega t)\cos(\omega t)}\,\mathrm{d}t
 $$
 
 This completely an unambiguously extracts the "amount", $a$ of the basis vector $\cos(\omega t)$ contained in our signal $x(t)$.
