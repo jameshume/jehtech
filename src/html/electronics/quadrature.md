@@ -39,11 +39,12 @@ $$
 $$
 
 Integrate that result over one period.
+TEST
 
 $$
 \begin{align}
-&\int_{0}^{T} a\,\underbrace{\cos^2(\omega t)}_{\int =\,\frac{T}{2}} + b\,\underbrace{\sin(\omega t)\cos(\omega t)}_{\int =\, 0} \\\\
-& = a\frac{T}{2}
+\int_{0}^{T} a\,\underbrace{\cos^2(\omega t)}_{\int =\,\frac{T}{2}} + b\,\underbrace{\sin(\omega t)\cos(\omega t)}_{\int =\, 0} \\\\
+ = a\frac{T}{2}
 \end{align}
 $$
 
@@ -54,3 +55,4 @@ a = \frac{T}{2} \int_{0}^{T} a\,\cos^2(\omega t) + b\,\sin(\omega t)\cos(\omega 
 $$
 
 This completely an unambiguously extracts the "amount", $a$ of the basis vector $\cos(\omega t)$ contained in our signal $x(t)$.
+
