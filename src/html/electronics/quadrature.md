@@ -89,5 +89,9 @@ $$
 
 
 ## IQ (Quadrature) Demodulator
-A signal composed of two quadrature waveforms can be "demixed", as described above by an IQ demodulator, a.k.a., a quadrature demodulator.
+This [All About Circuits article] is a good ref(https://www.allaboutcircuits.com/textbook/radio-frequency-analysis-design/radio-frequency-demodulation/understanding-i-q-signals-and-quadrature-modulation/).
+
+A signal composed of two quadrature waveforms can be "decoded" by an IQ demodulator to extract the in phase component and the quad component.
+
+If I have a singal I
 

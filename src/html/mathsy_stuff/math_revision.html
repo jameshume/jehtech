@@ -349,6 +349,87 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
        $$\cos(2\theta)=\cos^2(\theta)-\sin^2(\theta)$$
        $$\tan(2\theta)=\frac{2\tan(\theta)}{1-\tan^2(\theta)}$$
     </p>
+    <h3>Sum Of Cos And Sin With Different Ampltidues</h3>
+    <p>
+      $$a\,\cos(x) + b\,\sin(x) = R\,\cos(x - \alpha)$$
+
+      Why?
+      
+      $$
+      \begin{align}
+        R\,\cos(x - \alpha) &= R(\cos(x)\cos(\alpha) + \sin(x)\sin(\alpha)) \\
+                            &= R\cos(x)\cos(\alpha) + R\sin(x)\sin(\alpha)
+      \end{align}
+      $$
+
+      Re-order as (just moved the $\alpha$ around):
+
+      $$
+      R\,\cos(x - \alpha) = (R\cos(\alpha))\cos(x) + (R\sin(\alpha))\sin(x)
+      $$
+
+      Now, let
+
+      $$
+      a = R\cos(\alpha) \text{ and,} \\
+      b = R\sin(\alpha)
+      $$
+
+      Then we can re-write the above as:
+
+      $$
+      \begin{align}
+      R\,\cos(x - \alpha) &= \underbrace{(R\cos(\alpha))}_{a}\cos(x) + \overbrace{(R\sin(\alpha))}^{b}\sin(x) \\
+                          &= a\,\cos(x) + b\,\sin(x)
+      \end{align}
+      $$
+
+      Oh! We have written $R\,\cos(x - \alpha)$ in terms of $a\,\cos(x) + b\,\sin(x)$:
+
+      $$
+      R\,\cos(x - \alpha) = a\,\cos(x) + b\,\sin(x) \text{  (just a repeat of the above)}
+      $$
+
+      We know $a$ and $b$ from the above.
+
+      $$
+      \begin{align}
+      a &=R\cos(\alpha) \\
+      b &=R\sin(\alpha)
+      \end{align}
+      $$
+
+      We have to use these to find $R$ and $\alpha$. Now for some trickery...
+
+      $$
+      \begin{align}
+      a^2 + b^2 &= R^2\cos^2(\alpha) + R^2\sin^2(\alpha) \\
+                &= R^2\underbrace{(cos^2(\alpha) +\sin^2(\alpha))}_{\text{Is 1: see pythagorian identities}} \\
+                &= R^2
+      \end{align}
+      $$
+
+      Thus,
+
+      $$
+      \begin{align}
+      R &= \sqrt(a^2 + b^2)
+        &= \sqrt(R^2\cos^2(\alpha) + R^2\sin^2(\alpha))
+      \end{align}
+      $$
+      
+      OK, we have $R$. It is conventional to choose only the positive square root, and hence R will always be positive.
+      Well, we almost have $R$... we need $\alpha$ to get it!
+
+      $$
+      \begin{align}
+      \frac{a}{b} &= \frac{R\cos(\alpha)}{R\sin(\alpha)} 
+                  &= \frac{\cos(\alpha)}{\sin(\alpha)} \text{  (identity of tan, so...)}
+                  &= \tan(\alpha)
+      \end{align}
+      $$
+
+    </p>
 
     <h3>A Nice GIF Relating Sin And Cos</h3>
     <p>
