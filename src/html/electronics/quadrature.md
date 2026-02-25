@@ -22,25 +22,23 @@ In linear algebra world, assuming the normal cartesian basis vectors, if I have 
 can yield the vector $[a, b]$. It's like I could mix two "signals", the vectors $[0,1]$ and $[1,0]$ in various quantities into a third signal, and then recover the original two signals and their "amplitudes" from that third, mixed up signal.
 
 Same with the signal $x(t) = a\cos(\omega t) + b\sin(\omega t)$. If I just have the signal $x(t)$, in the same way as I did above,
-I can decompose it into the basis functions $\cos(\omega t)$ and $\sin(\omega t)$. I.e. $x(t)$ is some mixed up jumble of two sinusoidal signals and I can recover the exact mix of the two sinusoids because those sinusoids are orthogonal or quadrature signals.
+I can decompose it into the basis functions $\cos(\omega t)$ and $\sin(\omega t)$. I.e. $x(t)$ is some mixed up jumble of two sinusoidal signals and I can recover the exact mix of the two sinusoids because those sinusoids are orthogonal or **quadrature** signals.
 
 How?
 
 To get $a$, do the following...
 
-Multiply both sides by \cos(\omega t). This gives
+Multiply both sides of $x(t) = a\,\cos(\omega t) + b\,\sin(\omega t)$ by $\cos(\omega t)$. This gives
 
 $$
 \begin{align}
-    \text{As}\ x(t) = a\cos(\omega t) + b\sin(\omega t) \\\\
-    \therefore x(t)\cos(\omega t) &= [a\cos(\omega t) + b\sin(\omega t)]\cos(\omega t) \\\\
-                                  &= a\cos(\omega t)\cos(\omega t) + b\sin(\omega t)\cos(\omega t) \\\\
-                                  &= a\cos^2(\omega t) + b\sin(\omega t)\cos(\omega t)
+    x(t)\cos(\omega t) &= [a\,\cos(\omega t) + b\,\sin(\omega t)]\cos(\omega t) \\\\
+                                  &= a\,\cos(\omega t)\cos(\omega t) + b\,\sin(\omega t)\cos(\omega t) \\\\
+                                  &= a\,\cos^2(\omega t) + b\,\sin(\omega t)\cos(\omega t)
 \end{align}
 $$
 
 Integrate that result over one period.
-
 
 $$
 \begin{align}
