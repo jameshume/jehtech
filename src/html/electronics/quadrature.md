@@ -56,7 +56,7 @@ $$
 
 $$
 \begin{align}
-    \int_{0}^{T} a\,\underbrace{\cos^2(\omega t)}_{test} + \overbrace b{\sin(\omega t)\cos(\omega t)}^{test}\,\mathrm{d}t\\\\
+    \int_{0}^{T} a\,\underbrace{\cos^2(\omega t)}_{becomes T/2} + \overbrace{b\sin(\omega t)\cos(\omega t)}^{becomes 0}\,\mathrm{d}t\\\\
     &= a\frac{T}{2}
 \end{align}
 $$
