@@ -49,10 +49,18 @@ TEST
 
 $$
 \begin{align}
-\int_{0}^{T} a\,\underbrace{\cos^2(\omega t)}_{\int =\,\frac{T}{2}} + b\,\underbrace{\sin(\omega t)\cos(\omega t)}_{\int =\, 0} \,\mathrm{d}t\\\\
- = a\frac{T}{2}
+    &\int_{0}^{T} a\,\underbrace{\cos^2(\omega t)}_{\int =\,\frac{T}{2}} + b\,\underbrace{\sin(\omega t)\cos(\omega t)}_{\int =\, 0} \,\mathrm{d}t\\\\
+    &= a\frac{T}{2}
 \end{align}
 $$
+
+$$
+\begin{align}
+    \int_{0}^{T} a\,\cos^2(\omega t) + b\sin(\omega t)\cos(\omega t)\,\mathrm{d}t\\\\
+    &= a\frac{T}{2}
+\end{align}
+$$
+
 
 Thus we have a forumla that results in $a\frac{T}{2}$. Multiple by $\frac{T}{2}$ to remove the half-period to ge just $a$. This gives us the result
 
