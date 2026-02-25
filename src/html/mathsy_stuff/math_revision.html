@@ -351,6 +351,8 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
     </p>
     <h3>Sum Of Cos And Sin With Different Ampltidues</h3>
     <p>
+      Want to be able to do the following...
+
       $$a\,\cos(x) + b\,\sin(x) = R\,\cos(x - \alpha)$$
 
       Why?
@@ -371,8 +373,10 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
       Now, let
 
       $$
-      a = R\cos(\alpha) \text{ and,} \\
-      b = R\sin(\alpha)
+      \begin{align}
+      a &= R\cos(\alpha) \text{  and,} \\
+      b &= R\sin(\alpha)
+      \end{align}
       $$
 
       Then we can re-write the above as:
@@ -384,13 +388,14 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
       \end{align}
       $$
 
-      Oh! We have written $R\,\cos(x - \alpha)$ in terms of $a\,\cos(x) + b\,\sin(x)$:
+      **Oh! We have written $R\,\cos(x - \alpha)$ in terms of $a\,\cos(x) + b\,\sin(x)$**:
 
       $$
       R\,\cos(x - \alpha) = a\,\cos(x) + b\,\sin(x) \text{  (just a repeat of the above)}
       $$
 
-      We know $a$ and $b$ from the above.
+      This means that if we had something like $5\cos(22) + 7\sin(22)$ we can say it equals $R\,\cos(x - \alpha)$.
+      We know $a$ and $b$ now, in this case they are $5$ and $7$ respectively.
 
       $$
       \begin{align}
@@ -404,7 +409,7 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
       $$
       \begin{align}
       a^2 + b^2 &= R^2\cos^2(\alpha) + R^2\sin^2(\alpha) \\
-                &= R^2\underbrace{(cos^2(\alpha) +\sin^2(\alpha))}_{\text{Is 1: see pythagorian identities}} \\
+                &= R^2\underbrace{(cos^2(\alpha) +\sin^2(\alpha))}_{\text{equals 1: see pythagorian identities}} \\
                 &= R^2
       \end{align}
       $$
@@ -413,13 +418,12 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
 
       $$
       \begin{align}
-      R &= \sqrt(a^2 + b^2)
-        &= \sqrt(R^2\cos^2(\alpha) + R^2\sin^2(\alpha))
+      R &= \sqrt(a^2 + b^2) 
       \end{align}
       $$
       
-      OK, we have $R$. It is conventional to choose only the positive square root, and hence R will always be positive.
-      Well, we almost have $R$... we need $\alpha$ to get it!
+      OK, we have $R$. From our little example above it would be $\sqrt(5^2 + 7^2) \approx 8.6 $. It is conventional to choose only the positive square root, and hence R will always be positive.
+      Now lets get $\alpha$
 
       $$
       \begin{align}
@@ -429,6 +433,13 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
       \end{align}
       $$
 
+      Thus:
+
+      $$
+      \alpha = \tan^{-1}(\frac{a}{b})
+      $$
+
+      Which in our little example is $\tan^{-1}(\frac{5}{7}) \approx 35.5$ degrees.
     </p>
 
     <h3>A Nice GIF Relating Sin And Cos</h3>
