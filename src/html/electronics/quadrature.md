@@ -1,3 +1,5 @@
+## Quadrature Signals
+
 Two signals are in quadrature if:
 
 * They have the same frequency
@@ -48,7 +50,7 @@ Integrate that result over one period.
 
 $$
 \begin{align}
-    \int_{0}^{T} a\,\underbrace{\cos^2(\omega t)}_{becomes\ T/2} + \overbrace{b\sin(\omega t)\cos(\omega t)}^{\text{becomes}\ 0}\,\mathrm{d}t\\\\
+    \int_{0}^{T} a\,\underbrace{\cos^2(\omega t)}_{\text{integrates to}\ T/2} + \overbrace{b\sin(\omega t)\cos(\omega t)}^{\text{integrates to}\ 0}\,\mathrm{d}t\\\\
     &= a\frac{T}{2}
 \end{align}
 $$
@@ -67,3 +69,7 @@ To find $b$ the same method is repeated, but with sine, to get:
 $$
 b = \frac{2}{T}\int_{0}^{T} x(t)\sin(\omega t)\,dt
 $$
+
+
+
+## IQ Demodulator
