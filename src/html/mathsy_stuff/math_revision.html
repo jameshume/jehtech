@@ -997,13 +997,31 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
         $$
         \begin{align}
         M &= \sqrt{(5\cos(53^\circ) + 1)^2 + (5\sin(53^\circ) + 1)^2} \\
-          &\approx 6.4034 \\
+          &\approx 6.403 \\
         \theta &= \tan^{-1}\left(\frac{5\sin(53^\circ) + 1}{5\cos(53^\circ) + 1}\right) \\
-               &\approx 51.24
+               &\approx 51.24^\circ
         \end{align}
         $$
 
-        A bit easier than using all that trig?
+        Se we end up with
+
+        $$
+        6.403\,e^{51.24^\circ}
+        $$
+
+        Factoring frequency back into the phasor gives
+
+        $$
+        6.403\,e^{\omega t + 51.24^\circ}
+        $$
+        
+        The real part of which is 
+
+        $$
+        6.403\,\cos(\omega t + 51.24^\circ)
+        $$
+
+        Was that easier than the trig way? Yeah maybe a little friendlier...
 
       </div> <!-- End Why is this helpful -->
     </div> <!-- END phasors -->
