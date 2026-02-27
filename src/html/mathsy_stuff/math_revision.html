@@ -445,7 +445,7 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
     <h3>A Nice GIF Relating Sin And Cos</h3>
     <p>
       <video autoplay loop>
-          <source src="##IMG_DIR##/../sin_and_cosine_from_phasor.mp4" type="video/mp4">    
+          <source src="##IMG_DIR##/../sin_and_cosine_from_phasor_from_redit.mp4" type="video/mp4">    
       </video><br/>
     </p>
     <p>
@@ -894,7 +894,7 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
     This means we can now write:
 
     $$
-      \mathscr{R}[Me^{j\theta}e^{j\omega t}] = \mathscr{R}[Xe^{j(\omega t + \threta)}] = x(t)
+      \mathscr{R}[Me^{j\theta}e^{j\omega t}] = \mathscr{R}[Xe^{j(\omega t + \theta)}] = x(t)
     $$
 
     Which is, summarised:
@@ -937,18 +937,27 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
 
         $$
         \begin{align}
-          5\,\cos(\omega t + 53^\circ) + \sqrt{2}\,\cos(\omega t + 45^\circ) = &5\,\cos(\omega t)\cos(53^\circ) - 5\,\sin(\omega t)\sin(53^\circ) + \\
-                                                                               &\sqrt{2}\,\cos(\omega t)\cos(45^\circ) - \sqrt{2}\,\sin(\omega t)\sin(45^\circ) \\
-                                                                             = &\cos(\omega t)(5\,\cos(45^\circ) + \sqrt{2}\,\cos(45^\circ)) + \\
-                                                                               &\sin(\omega t)(5\,\sin(45^\circ) + \sqrt{2}\,\sin(45^\circ))
+          5\,\cos(\omega t + 53^\circ) + \sqrt{2}\,\cos(\omega t + 45^\circ) = &\ 5\,\cos(\omega t)\cos(53^\circ) - 5\,\sin(\omega t)\sin(53^\circ) + \\
+                                                                               &\ \sqrt{2}\,\cos(\omega t)\cos(45^\circ) - \sqrt{2}\,\sin(\omega t)\sin(45^\circ) \\
+                                                                             = &\ \cos(\omega t)(5\,\cos(53^\circ) + \sqrt{2}\,\cos(45^\circ)) + \\
+                                                                               &\ \sin(\omega t)(-5\,\sin(53^\circ) - \sqrt{2}\,\sin(45^\circ)) \\
         \end{align}
         $$
 
-        Oh good lord this is already painful. Now we need the identity $a\,\cos(x) + b\,\sin(x) = R\,\cos(x - \alpha). From the above we let...
-
+        Oh good lord this is already painful. Now we need the identity $a\,\cos(x) + b\,\sin(x) = R\,\cos(x - \alpha)$ (see trig rules section):
+        
         $$
         \begin{align}
+          R &= \sqrt{a^2 + b^2} \\
+            &= \sqrt{(5\,\cos(53^\circ) + \sqrt{2}\,\cos(45^\circ))^2 + (-5\,\sin(53^\circ) - \sqrt{2}\,\sin(45^\circ))^2} \\
+            &\approx 6.403
         \end{align}
+        $$
+
+        And we get alpha as:
+
+        $$
+        \alpha = tan^{-1}\left(\frac{5\,\cos(53^\circ) + \sqrt{2}\,\cos(45^\circ)}{-5\,\sin(53^\circ) - \sqrt{2}\,\sin(45^\circ)}\right)
         $$
 
       </div> <!-- End Why is this helpful -->
