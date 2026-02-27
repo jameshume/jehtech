@@ -436,10 +436,10 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
       Thus:
 
       $$
-      \alpha = \tan^{-1}(\frac{a}{b})
+      \alpha = \tan^{-1}(\frac{b}{a})
       $$
 
-      Which in our little example is $\tan^{-1}(\frac{5}{7}) \approx 35.5$ degrees.
+      Which in our little example is $\tan^{-1}(\frac{7}{5}) \approx 54.46$ degrees.
     </p>
 
     <h3>A Nice GIF Relating Sin And Cos</h3>
@@ -939,12 +939,12 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
         \begin{align}
           5\,\cos(\omega t + 53^\circ) + \sqrt{2}\,\cos(\omega t + 45^\circ) = &\ 5\,\cos(\omega t)\cos(53^\circ) - 5\,\sin(\omega t)\sin(53^\circ) + \\
                                                                                &\ \sqrt{2}\,\cos(\omega t)\cos(45^\circ) - \sqrt{2}\,\sin(\omega t)\sin(45^\circ) \\
-                                                                             = &\ \cos(\omega t)(5\,\cos(53^\circ) + \sqrt{2}\,\cos(45^\circ)) + \\
-                                                                               &\ \sin(\omega t)(-5\,\sin(53^\circ) - \sqrt{2}\,\sin(45^\circ)) \\
+                                                                             = &\ \cos(\omega t)\color{red}{(5\,\cos(53^\circ) + \sqrt{2}\,\cos(45^\circ))} + \\
+                                                                               &\ \sin(\omega t)\color{blue}{(-5\,\sin(53^\circ) - \sqrt{2}\,\sin(45^\circ))} \\
         \end{align}
         $$
 
-        Oh good lord this is already painful. Now we need the identity $a\,\cos(x) + b\,\sin(x) = R\,\cos(x - \alpha)$ (see trig rules section):
+        Oh good lord this is already painful. Now we need the identity $\color{red}{a}\,\cos(x) + \color{blue}{b}\,\sin(x) = R\,\cos(x - \alpha)$ (see trig rules section):
         
         $$
         \begin{align}
@@ -957,8 +957,16 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
         And we get alpha as:
 
         $$
-        \alpha = tan^{-1}\left(\frac{5\,\cos(53^\circ) + \sqrt{2}\,\cos(45^\circ)}{-5\,\sin(53^\circ) - \sqrt{2}\,\sin(45^\circ)}\right)
+        \begin{align}
+        \alpha &= tan^{-1}\left(\frac{-5\,\sin(53^\circ) - \sqrt{2}\,\sin(45^\circ)}{5\,\cos(53^\circ) + \sqrt{2}\,\cos(45^\circ)}\right) \\
+               &= -51.24^\circ
+        \end{align}
         $$
+
+        Blimey!
+
+        <h5>With Phasors</h5>
+
 
       </div> <!-- End Why is this helpful -->
     </div> <!-- END phasors -->
