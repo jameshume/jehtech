@@ -944,7 +944,7 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
         \end{align}
         $$
 
-        Oh good lord this is already painful. Now we need the identity $\color{red}{a}\,\cos(x) + \color{blue}{b}\,\sin(x) = R\,\cos(x - \alpha)$ (see trig rules section):
+        Oh good lord this is already painful. Now we need the identity $\color{red}{a}\,\color{black}{\cos(x)} + \color{blue}{b}\,\color{black}{\sin(x)} = R\,\cos(x - \alpha)$ (see trig rules section):
         
         $$
         \begin{align}
@@ -963,9 +963,33 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
         \end{align}
         $$
 
-        Blimey!
+        Blimey! Eeek, problem - wasnt quite right there! needed it to be positive.
 
         <h5>With Phasors</h5>
+        We saw that we can write $M\cos(\omega t + \theta)$ as the real part of the phasor $Me^{j\theta}. Thus we can encode 
+        $5\cos(\omega t + 53^\circ)$ as $5e^{j\,53^\circ}$ and $\sqrt{2}\,\cos(\omega t + 45^\circ)$ as $\sqrt{2}e^{j\,45^\circ}$. Thus,
+
+        $$
+        5\,\cos(\omega t + 53^\circ) + \sqrt{2}\,\cos(\omega t + 45^\circ) = 5e^{j\,53^\circ} + \sqrt{2}e^{j\,45^\circ}
+        $$
+
+        As per the guide above, to add complex numbers we go to rectangular form.
+
+        $$
+        \begin{align}
+        5e^{j\,53^\circ} &= 5\cos(53^\circ) + 5j\sin(53^\circ) \\
+        \sqrt{2}e^{j\,45^\circ} &= \sqrt{2}\cos(45^\circ) + j \sqrt{2}\sin(45^\circ)
+        \end{align}
+        $$
+
+        Add the rectangular forms:
+
+        $$
+        \begin{align}
+        \left(5\cos(53^\circ) + \sqrt{2}\cos(45^\circ)\right) + j\left(5\sin(53^\circ) + \sqrt{2}\sin(45^\circ)\right) = \\
+
+        \begin{end}
+        $$
 
 
       </div> <!-- End Why is this helpful -->
