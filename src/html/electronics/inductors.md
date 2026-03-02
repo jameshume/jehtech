@@ -60,7 +60,7 @@ And changing current IN means magnetic force OUT
         that the induced field opposes the change in the flux, the magnet would be pulled in and produce a current 
         without any work. Electric potential energy would have been created, violating the conservation of energy.
     </p>
-    <footer>-- From [OpenStax](https://openstax.org/books/university-physics-volume-2/pages/13-2-lenzs-law) (emphasis mine)</footer>
+    <footer>-- From <a href="https://openstax.org/books/university-physics-volume-2/pages/13-2-lenzs-law" target="__blank">OpenStax</a> (emphasis mine)</footer>
 </blockquote>
 <p></p>
 
@@ -360,7 +360,7 @@ The complex quantity $Z$ can be interpreted geometrically as a vector in the com
 Thus, impedance encodes both magnitude and phase information. The magnitude is:
 
 $$
-|Z| = \sqrt{R^2 + X^2}
+|Z| = \sqrt{\overbrance{R^2}^{constant} + \underbrace{X^2}^{frequency dependent}}
 $$
 
 And the angle is:
