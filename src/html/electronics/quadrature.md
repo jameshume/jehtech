@@ -89,7 +89,7 @@ $$
 
 
 ## IQ (Quadrature) Demodulator
-This [All About Circuits article] is a good ref(https://www.allaboutcircuits.com/textbook/radio-frequency-analysis-design/radio-frequency-demodulation/understanding-i-q-signals-and-quadrature-modulation/).
+This [All About Circuits article](https://www.allaboutcircuits.com/textbook/radio-frequency-analysis-design/radio-frequency-demodulation/understanding-i-q-signals-and-quadrature-modulation/) is a good ref.
 
 A signal composed of two quadrature waveforms can be "decoded" by an IQ demodulator to extract the in phase component and the quad component.
 
