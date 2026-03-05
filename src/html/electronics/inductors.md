@@ -357,7 +357,7 @@ The reactance is the complex part, but note that reactance is not complex in its
 
 The complex quantity $Z$ can be interpreted geometrically as a vector in the complex plane (see [maths revision notes on complex numbers](../mathsy_stuff/math_revision.html#complex-numbers)).
 
-Thus, impedance encodes both magnitude and phase information. The magnitude is:
+Thus, impedance encodes both magnitude and phase information. The magnitude is: 
 
 $$
 |Z| = \sqrt{\overbrace{R^2}^{constant} + \underbrace{X^2}^{frequency dependent}}
