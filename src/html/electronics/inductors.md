@@ -360,7 +360,7 @@ The complex quantity $Z$ can be interpreted geometrically as a vector in the com
 Thus, impedance encodes both magnitude and phase information. The magnitude is:
 
 $$
-|Z| = \sqrt{\overbrance{R^2}^{constant} + \underbrace{X^2}^{frequency dependent}}
+|Z| = \sqrt{\overbrace{R^2}^{constant} + \underbrace{X^2}^{frequency dependent}}
 $$
 
 And the angle is:
