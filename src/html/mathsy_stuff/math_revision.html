@@ -683,7 +683,7 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
 
     <div style="display: flex; align-items: flex-start; gap: 20px;">
       <img src="##IMG_DIR##/complex_numbers_rectangular_to_polar.png">
-      <div style="flex: 1;">
+      <div style="flex: 1;"><p>
         $$
         \begin{align}
           \cos(\theta) = \frac{a}{r} \\
@@ -693,17 +693,19 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
           \therefore r\sin(\theta) = b
         \end{align}
         $$
-      </div>
+
+        This means that we can re-write $z = a + bi$ as
+
+        $$
+        \begin{align}
+          z &= r\cos(\theta) + r\sin(\theta)i \\
+            &= r[\cos(\theta) + i\sin(\theta)]
+        \end{align}
+        $$
+      </p></div>
     </div>
 
-    This means that we can re-write $z = a + bi$ as
-
-    $$
-    \begin{align}
-      z &= r\cos(\theta) + r\sin(\theta)i \\
-        &= r[\cos(\theta) + i\sin(\theta)]
-    \end{align}
-    $$
+    
 
     And using Euler's amazing formula $e^{i\theta} = \cos(\theta) + i\sin(\theta)$,
     we can write...
