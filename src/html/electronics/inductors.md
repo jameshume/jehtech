@@ -349,7 +349,7 @@ $$
 V_T = \sqrt{13}\cos(\omega t -56.31^\circ)
 $$
 
-Blimey that was a bit of a mouthful! But we got there, we found the total voltage and its phase.
+Blimey that was a bit of a mouthful! But we got there, we found the total voltage and its phase!
 
 
 ### A Little Aside...
