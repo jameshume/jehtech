@@ -26,7 +26,7 @@ Change in magnetic field induce a voltage (back EMF) in a way that tries to canc
 Reactance is:
 
 $$
-X_L = 2\pi\,f\,L = \omega L
+X_L = 2\pi fL = \omega L
 $$
 
 
@@ -369,7 +369,7 @@ The complex quantity $Z$ can be interpreted geometrically as a vector in the com
 Thus, impedance encodes both magnitude and phase information. The magnitude is: 
 
 $$
-|Z| = \sqrt{\overbrace{R^2}^{constant} + \underbrace{X^2}^{frequency dependent}}
+|Z| = \sqrt{\overbrace{R^2}^{\text{constant}} + \underbrace{X^2}^{\text{frequency dependent}}}
 $$
 
 And the angle is:
