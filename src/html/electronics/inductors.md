@@ -2,7 +2,10 @@
 Inductor voltage is proportional to rate of change of current:
 
 $$
-V = L\frac{\textrm{d}I}{\textrm{d}t} \text{  and  } i = \frac{1}{L}\int_0^T v\ \textrm{d}t + i_0
+\begin{align}
+V &= L\frac{\textrm{d}I}{\textrm{d}t} \text{   and} \\\\
+i &= \frac{1}{L}\int_0^T v\ \textrm{d}t + i_0
+\end{align}
 $$
 
 Putting a constant voltage actoss an inductor causes the current to rise as a ramp: 1V across 1H produces a ramp of 1 amp per second.
@@ -19,6 +22,12 @@ Unlike resitors, power is not turned into heat: stored as energy in magnatic fie
 Current flowing though coil creates a magnetic field.
 
 Change in magnetic field induce a voltage (back EMF) in a way that tries to cancel out those changes.
+
+Reactance is:
+
+$$
+X_L = 2\pi\,f\,L = \omega L
+$$
 
 
 ## Magnetic Fields Caused By Currents Brief Intro
