@@ -305,6 +305,52 @@ The two voltages across the resitor and inductor are a **vector** sum, and are n
 ![](##IMG_DIR##/../electricalacademia.com_rl_vector_sum.png)
 <br><sup>Image from [Electrical Academia - RL Series Circuit](https://electricalacademia.com/basic-electrical/rl-series-circuit/)</sup>
 
+Lets take an example...
+
+![](##IMG_DIR##/electronics_inductance_worked_example_1.png)
+
+Imagine we have put an oscilloscope over the resistor and find that $V_R = 3\sin(\omega t)$. For the inductor we find $V_L = 2\sin{\omega t}$.
+
+$$
+\begin{align}
+V_T &= V_R + V_L \\\\
+    &= 3\sin(\omega t) + 2\cos(\omega t) \\\\
+    &= 3\cos\left(\omega t - \frac{\pi}{2}\right) + 2\cos(\omega t) \\\\
+    &= 3\cos(\omega t)\cos\left(\frac{\pi}2\right) + 3\sin(\omega t)\sin\left(\frac\pi 2\right) + 2\cos(\omega t) & \left(\text{Using } \cos(a - b) = \cos(a)\cos(b) + \sin(a)\sin(b)\right) \\\\ 
+    &= \cos(\omega t)\underbrace{\left[3\cos\left(\frac \pi 2\right) + 2\right]}_{a} + \underbrace{\sin(\omega t)\left[3\sin\left(\frac \pi 2\right)\right]}_{b} & \left(\text{Collecting terms}\right)\\\\
+\end{align}
+$$
+
+To continue we equate the above with the identity $a\cos(x) + b\sin(x) = R\cos(x - \alpha)$ and get:
+
+$$
+\begin{align}
+a &= 3\cos\left(\frac \pi 2\right) + 2 \\\\
+  &=2 \\\\\\\\
+b &= 3\sin\left(\frac \pi 2\right) \\\\
+  &= 3
+\end{align}
+$$
+
+Thus we get:
+
+$$
+\begin{align}
+R &= \sqrt{2^2 + 3^2}\\\\
+  &= \sqrt{13} \\\\\\\\
+\alpha &= tan^{-1}\left(\frac 3 2\right) \\\\
+       &\approx 56.31^\circ
+\end{align}
+$$
+
+Therefore,
+
+$$
+V_T = \sqrt{13}\cos(\omega t -56.31^\circ)
+$$
+
+Blimey that was a bit of a mouthful! But we got there, we found the total voltage and its phase.
+
 
 ### A Little Aside...
 But.... why was current chosen as a sine and not a cosine? Well, first, the current was specified rather than the
@@ -369,7 +415,7 @@ The complex quantity $Z$ can be interpreted geometrically as a vector in the com
 Thus, impedance encodes both magnitude and phase information. The magnitude is: 
 
 $$
-|Z| = \sqrt{\overbrace{R^2}^{\text{constant}} + \underbrace{X^2}^{\text{frequency dependent}}}
+|Z| = \sqrt{\overbrace{R^2}^{\text{constant}} + \underbrace{X^2}_{\text{frequency dependent}}}
 $$
 
 And the angle is:
