@@ -317,7 +317,7 @@ V_T &= V_R + V_L \\\\
     &= 3\sin(\omega t) + 2\cos(\omega t) \\\\
     &= 3\cos\left(\omega t - \frac{\pi}{2}\right) + 2\cos(\omega t) \\\\
     &= 3\cos(\omega t)\cos\left(\frac{\pi}2\right) + 3\sin(\omega t)\sin\left(\frac\pi 2\right) + 2\cos(\omega t) & \left(\text{Using } \cos(a - b) = \cos(a)\cos(b) + \sin(a)\sin(b)\right) \\\\ 
-    &= \cos(\omega t)\underbrace{\left[3\cos\left(\frac \pi 2\right) + 2\right]}_{a} + \underbrace{\sin(\omega t)\left[3\sin\left(\frac \pi 2\right)\right]}_{b} & \left(\text{Collecting terms}\right)\\\\
+    &= \cos(\omega t)\underbrace{\left[3\cos\left(\frac \pi 2\right) + 2\right]}_{a} + \overbrace{\sin(\omega t)\left[3\sin\left(\frac \pi 2\right)\right]}^{b} & \left(\text{Collecting terms}\right)\\\\
 \end{align}
 $$
 
