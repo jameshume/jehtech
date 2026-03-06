@@ -307,7 +307,7 @@ The two voltages across the resitor and inductor are a **vector** sum, and are n
 
 Lets take an example...
 
-![](##IMG_DIR##/electronics_inductance_worked_example_1.png)
+![](##IMG_DIR##/electronics_inductance_worked_example_0.png)
 
 Imagine we have put an oscilloscope over the resistor and find that $V_R = 3\sin(\omega t)$. For the inductor we find $V_L = 2\sin{\omega t}$.
 
