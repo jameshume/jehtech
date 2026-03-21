@@ -314,23 +314,11 @@ Imagine we have put an oscilloscope over the resistor and find that $V_R = 3\sin
 $$
 \begin{align}
 V_T &= V_R + V_L \\\\
-    &= 3\sin(\omega t) + 2\cos(\omega t) \\\\
-    &= 3\cos\left(\omega t - \frac{\pi}{2}\right) + 2\cos(\omega t) \\\\
-    &= 3\cos(\omega t)\cos\left(\frac{\pi}2\right) + 3\sin(\omega t)\sin\left(\frac\pi 2\right) + 2\cos(\omega t) & \left(\text{Using } \cos(a - b) = \cos(a)\cos(b) + \sin(a)\sin(b)\right) \\\\ 
-    &= \cos(\omega t)\underbrace{\left[3\cos\left(\frac \pi 2\right) + 2\right]}_{a} + \overbrace{\sin(\omega t)\left[3\sin\left(\frac \pi 2\right)\right]}^{b} & \left(\text{Collecting terms}\right)\\\\
+    &= 3\sin(\omega t) + 2\cos(\omega t)
 \end{align}
 $$
 
 To continue we equate the above with the identity $a\cos(x) + b\sin(x) = R\cos(x - \alpha)$ and get:
-
-$$
-\begin{align}
-a &= 3\cos\left(\frac \pi 2\right) + 2 \\\\
-  &=2 \\\\\\\\
-b &= 3\sin\left(\frac \pi 2\right) \\\\
-  &= 3
-\end{align}
-$$
 
 Thus we get:
 
@@ -349,7 +337,13 @@ $$
 V_T = \sqrt{13}\cos(\omega t -56.31^\circ)
 $$
 
-Blimey that was a bit of a mouthful! But we got there, we found the total voltage and its phase!
+We got there, we found the total voltage and its phase!
+
+But here's a question, *phase relative to what?!*.
+
+---
+
+That looks quite easy, but I think the maths just worked out in this example. Mostly doing it the "pure trig" way is much harder than using phasors...
 
 Now lets solve it a different way, using [phasors](../mathsy_stuff/math_revision.html#phasors) to make the maths simpler!
 
@@ -407,7 +401,7 @@ $$
 We have arrived at the same answer far more quickly and without having to remember lots of trig identities
 and the "pattern" used to solve it using trig. Woop!
 
-But what phase angle have we discovered. We have found the *angle with respect to the resistor voltage*.
+But what phase angle have we discovered? We have found the *phase angle of V<sub>T</sub> with respect to the resistor voltage*.
 
 So, one would think we could plot directly onto an argand diagram without the need to even go to rectangular
 form.
