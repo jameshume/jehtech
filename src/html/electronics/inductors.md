@@ -375,7 +375,9 @@ $$
                     &= 3\,\underbrace{\cos(-\frac{\pi}{2})}_{=0} -3\,j \\\\
                     &= -3\,j
 \end{align}
-                    \\\\
+$$
+
+$$
 \begin{align}
 2e^0 &= 2\,\cos(0) + 2\,j\,\sin(0) \\\\
      &= 2
@@ -393,7 +395,9 @@ $$
 \therefore M &= \sqrt{2^2 + (-3)^2} \\\\
              &= \sqrt{13} \\\\
 \end{align}
-\\\\
+$$
+
+$$
 \begin{align}
 \therefore \theta &= \tan^{-1}\left(\frac{3}{2}\right) \\\\
                   &= 56.31^\circ
@@ -403,6 +407,10 @@ $$
 We have arrived at the same answer far more quickly and without having to remember lots of trig identities
 and the "pattern" used to solve it using trig. Woop!
 
+But what phase angle have we discovered. We have found the *angle with respect to the resistor voltage*.
+
+So, one would think we could plot directly onto an argand diagram without the need to even go to rectangular
+form.
 
 ### A Little Aside...
 But.... why was current chosen as a sine and not a cosine? Well, first, the current was specified rather than the
