@@ -371,7 +371,7 @@ we need to convert to rectangular form like so:
 
 $$
 \begin{align}
-3e^{-\frac{\pi}{2}} &= 3\,\cos(-\frac{\pi}{2}) +3\,j\,\underbrace{\sin(-\frac{\pi}{2})}_{= - 1} \\\\
+3e^{-\frac{\pi}{2}} &= 3\,\cos(-\frac{\pi}{2}) +3\,j\,\overbrace{\sin(-\frac{\pi}{2})}^{= - 1} \\\\
                     &= 3\,\underbrace{\cos(-\frac{\pi}{2})}_{=0} -3\,j \\\\
                     &= -3\,j
 \end{align}
