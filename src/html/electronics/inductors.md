@@ -351,6 +351,58 @@ $$
 
 Blimey that was a bit of a mouthful! But we got there, we found the total voltage and its phase!
 
+Now lets solve it a different way, using [phasors](../mathsy_stuff/math_revision.html#phasors) to make the maths simpler!
+
+We can write
+
+$$
+3\cos(\omega t - \frac{\pi}{2}) + 2\cos(\omega t)
+$$
+
+As
+
+$$
+3e^{-\frac{\pi}{2}} + 2e^0
+$$
+
+
+Consulting the [phasors](../mathsy_stuff/math_revision.html#phasors) notes we realise to add these two phasors
+we need to convert to rectangular form like so:
+
+$$
+\begin{align}
+3e^{-\frac{\pi}{2}} &= 3\,\cos(-\frac{\pi}{2}) +3\,j\,\underbrace{\sin(-\frac{\pi}{2})}_{= - 1} \\\\
+                    &= 3\,\underbrace{\cos(-\frac{\pi}{2})}_{=0} -3\,j \\\\
+                    &= -3\,j
+\end{align}
+                    \\\\
+\begin{align}
+2e^0 &= 2\,\cos(0) + 2\,j\,\sin(0) \\\\
+     &= 2
+\end{align}
+$$
+
+Add the two phasors:
+
+$$
+2 - 3\,j 
+$$
+
+$$
+\begin{align}
+\therefore M &= \sqrt{2^2 + (-3)^2} \\\\
+             &= \sqrt{13} \\\\
+\end{align}
+\\\\
+\begin{align}
+\therefore \theta &= \tan^{-1}\left(\frac{3}{2}\right) \\\\
+                  &= 56.31^\circ
+\end{align}
+$$
+
+We have arrived at the same answer far more quickly and without having to remember lots of trig identities
+and the "pattern" used to solve it using trig. Woop!
+
 
 ### A Little Aside...
 But.... why was current chosen as a sine and not a cosine? Well, first, the current was specified rather than the
