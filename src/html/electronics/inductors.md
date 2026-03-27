@@ -341,9 +341,6 @@ We got there, we found the total voltage and its phase!
 
 But here's a question, *phase relative to what?!*.
 
-Thew final result uses $\cos()$. Because we know voltage leads current in an inductor, $\cos()$ generally is taken to be voltage across the inductor, so $V_T$
-is relative to the voltage across the inductor.
-
 ---
 
 That looks quite easy, but I think the maths just worked out in this example. Mostly doing it the "pure trig" way is much harder than using phasors...
