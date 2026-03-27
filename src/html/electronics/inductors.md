@@ -309,7 +309,7 @@ Lets take an example...
 
 ![](##IMG_DIR##/electronics_inductance_worked_example_0.png)
 
-Imagine we have put an oscilloscope over the resistor and find that $V_R = 3\sin(\omega t)$. For the inductor we find $V_L = 2\sin{\omega t}$.
+Imagine we have put an oscilloscope over the resistor and find that $V_R = 3\sin(\omega t)$. For the inductor we find $V_L = 2\cos{\omega t}$.
 
 $$
 \begin{align}
@@ -340,6 +340,9 @@ $$
 We got there, we found the total voltage and its phase!
 
 But here's a question, *phase relative to what?!*.
+
+Thew final result uses $\cos()$. Because we know voltage leads current in an inductor, $\cos()$ generally is taken to be voltage across the inductor, so $V_T$
+is relative to the voltage across the inductor.
 
 ---
 
