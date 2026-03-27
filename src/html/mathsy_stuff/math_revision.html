@@ -353,7 +353,7 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
     <p>
       Want to be able to do the following...
       
-      <div style="border:2px solid red; padding:12pt;">
+      <div style="border:2px solid red; padding:0;">
       $$a\,\cos(x) + b\,\sin(x) = R\,\cos(x - \alpha)$$
       </div>
 
@@ -446,9 +446,29 @@ The Laplace Transform - A Graphical Approach - https://www.youtube.com/watch?v=Z
     <p>
       Interestingly, using the exact same logic we can arrive at:
           
-      <div style="border:2px solid red; padding:12pt;">
+      <div style="border:2px solid red; padding:0pt;">
       $$a\,\sin(x) + b\,\cos(x) = R\,\sin(x + \phi)$$
       </div>
+
+      Here we will end up with the same definition for $R$:
+
+      $$
+      \begin{align}
+      R &= \sqrt{a^2 + b^2} 
+      \end{align}
+      $$
+
+      But the angle is:
+
+      $$
+      \phi = \tan^{-1}(\frac{a}{b})
+      $$
+
+      The relationship between the two being:
+
+      $$
+      \alpha = 90^\circ - \phi
+      $$
     </p>
 
     <h3>A Nice GIF Relating Sin And Cos</h3>
