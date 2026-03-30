@@ -719,7 +719,7 @@ $$
 ### 2 Find steady state current
 **Question:**
 
-A circuit consists of a 12V ideal battery connected in series with a 50$\ohm$ resistor and a 0.2H inductor. The switch in the circuit has been open for an extended period of time. At $t = 0$ seconds, the switch is closed. Calculate the stead-state current established in the circuit.
+A circuit consists of a 12V ideal battery connected in series with a 50$\Omega$ resistor and a 0.2H inductor. The switch in the circuit has been open for an extended period of time. At $t = 0$ seconds, the switch is closed. Calculate the stead-state current established in the circuit.
 
 **Answer:**
 
