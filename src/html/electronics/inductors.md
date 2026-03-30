@@ -676,8 +676,6 @@ I(t) &= I_0 \sin(\omega t ) \\\\
 V(t) &= L \omega I_0 \cos(\omega t)
 \end{align}
 $$
---
-
 
 
 ## Inductors In Series
@@ -701,9 +699,54 @@ $$
 
 ## Worked Examples
 
-### 1
+### 1 Find the impedance
+
+**Question:**
+Given the circuit below, find the impedance of the inductor.
 
 ![](##IMG_DIR##/electronics_inductance_worked_example_1.png)
 
-We know $X_L = 2 \pi fL = 2 \pi \cdot 10^7 \cdot 2 \cdot 10^{-3} = 4\pi 10^4$.
+**Answer:**
 
+$$
+\begin{align}
+X_L &= 2 \pi fL \\\\
+    &= 2 \pi \cdot 10^7 \cdot 2 \cdot 10^{-3} \\\\
+    &= 4\pi 10^4
+\end{align}
+$$
+
+### 2 Find steady state current
+**Question:**
+
+A circuit consists of a 12V ideal battery connected in series with a 50$\ohm$ resistor and a 0.2H inductor. The switch in the circuit has been open for an extended period of time. At $t = 0$ seconds, the switch is closed. Calculate the stead-state current established in the circuit.
+
+**Answer:**
+
+We have seen
+
+$$
+v = i\,R + L\,\frac{\mathrm{d}i}{\mathrm{d}t}
+$$
+
+However, when the current reaches a steady-state, we also know that
+
+$$
+\frac{\mathrm{d}i}{\mathrm{d}t} = 0
+$$
+
+Therefore, at stead-state current, all the voltage is dropped across the resistor:
+
+$$
+v = i\,R
+$$
+
+Therefore
+
+$$
+12 = 50\,i
+$$
+
+$$
+\therefore i = \frac{12}{50} = 0.24 A
+$$
