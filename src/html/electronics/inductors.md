@@ -318,28 +318,83 @@ V_T &= V_R + V_L \\\\
 \end{align}
 $$
 
-To continue we equate the above with the identity $a\cos(x) + b\sin(x) = R\cos(x - \alpha)$ and get:
+We can go about solving this in two ways. The reason I show this is that I went down one route and then wondered what the phase of $V_T$ that
+I had found was relative to... hopefully this paints the full picture :/
 
-Thus we get:
+<style>
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
 
-$$
-\begin{align}
-R &= \sqrt{2^2 + 3^2}\\\\
-  &= \sqrt{13} \\\\\\\\
-\alpha &= tan^{-1}\left(\frac 3 2\right) \\\\
-       &\approx 56.31^\circ
-\end{align}
-$$
+.column {
+  padding: 
+  10px;
+  border: 1px solid #ccc;
+}
+</style>
 
-Therefore,
+<div class="container">
+    <div class="column">
+        <p>
+        To continue we equate the above with the identity $a\cos(x) + b\sin(x) = R\cos(x - \alpha)$ and get:
+        </p>
+        <p>
+            Thus we get:
 
-$$
-V_T = \sqrt{13}\cos(\omega t -56.31^\circ)
-$$
+            $$
+            \begin{align}
+            R &= \sqrt{2^2 + 3^2}\\\\
+            &= \sqrt{13} \\\\\\\\
+            \alpha &= tan^{-1}\left(\frac 3 2\right) \\\\
+                &\approx 56.31^\circ
+            \end{align}
+            $$
 
-We got there, we found the total voltage and its phase!
+            Therefore,
 
-But here's a question, *phase relative to what?!*.
+            $$
+            V_T = \sqrt{13}\cos(\omega t -56.31^\circ)
+            $$
+
+            We got there, we found the total voltage and its phase!
+        </p>
+        <p>
+            But here's a question, *phase relative to what?!*.
+        </p>
+    </div>
+  <div class="column">
+<p>
+        To continue we equate the above with the identity $a\sin(x) + b\cos(x) = R\sin(x + \phi)$ and get:
+        </p>
+        <p>
+            Thus we get:
+
+            $$
+            \begin{align}
+            R &= \sqrt{2^2 + 3^2}\\\\
+            &= \sqrt{13} \\\\\\\\
+            \alpha &= tan^{-1}\left(\frac 2 3\right) \\\\
+                &\approx 33.69^\circ
+            \end{align}
+            $$
+
+            Therefore,
+
+            $$
+            V_T = \sqrt{13}\cos(\omega t -56.31^\circ)
+            $$
+
+            We got there, we found the total voltage and its phase!
+        </p>
+        <p>
+            But here's a question, *phase relative to what?!*.
+        </p>
+  </div>
+</div>
+
+
 
 ---
 
