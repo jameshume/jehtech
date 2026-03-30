@@ -442,6 +442,10 @@ I had found was relative to... hopefully this paints the full picture :/
             Turns out I could have gone even quicker and just plotted it on an argand diagram being carefull to put my reference,
             in this case $V_L$ on the horizontal axis.
         </p>
+        <p>
+            <img src="##IMG_DIR##/electronics_inductance_argand_ref_inductor.png>
+        </p>
+        <p>Now that was super quick!</p>
     </div>
     <div class="column">
         <p><b>
@@ -551,6 +555,10 @@ I had found was relative to... hopefully this paints the full picture :/
             Turns out I could have gone even quicker and just plotted it on an argand diagram being carefull to put my reference,
             in this case $V_R$ on the horizontal axis.
         </p>
+        <p>
+            <img src="##IMG_DIR##/electronics_inductance_argand_ref_resistor.png>
+        </p>
+        <p>Now that was super quick!</p>
     </div>
 </div>
 
