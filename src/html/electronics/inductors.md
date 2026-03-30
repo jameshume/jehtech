@@ -443,7 +443,7 @@ I had found was relative to... hopefully this paints the full picture :/
             in this case $V_L$ on the horizontal axis.
         </p>
         <p>
-            <img src="##IMG_DIR##/electronics_inductance_argand_ref_inductor.png>
+            <img src="##IMG_DIR##/electronics_inductance_argand_ref_inductor.png">
         </p>
         <p>Now that was super quick!</p>
     </div>
@@ -556,14 +556,11 @@ I had found was relative to... hopefully this paints the full picture :/
             in this case $V_R$ on the horizontal axis.
         </p>
         <p>
-            <img src="##IMG_DIR##/electronics_inductance_argand_ref_resistor.png>
+            <img src="##IMG_DIR##/electronics_inductance_argand_ref_resistor.png">
         </p>
         <p>Now that was super quick!</p>
     </div>
 </div>
-
-
-
 
 
 ### A Little Aside...
