@@ -329,9 +329,8 @@ I had found was relative to... hopefully this paints the full picture :/
 }
 
 .column {
-  padding: 
-  10px;
-  border: 1px solid #ccc;
+  padding: 10px;
+  border: 0px;
 }
 </style>
 
@@ -361,11 +360,75 @@ I had found was relative to... hopefully this paints the full picture :/
             We got there, we found the total voltage and its phase!
         </p>
         <p>
-            But here's a question, *phase relative to what?!*.
+            But here's a question, <em>phase relative to what?!</em>.
+        </p>
+        <p>
+            Because we have used the identitity that expresses the sum as a $\cos$, and the voltage across the inuctor is a $\cos$,
+            we have taken the phase <em>relative to the inductor</em>.
+        </p>        
+        <p>
+            That looks quite easy, but I think the maths just worked out in this example. Mostly doing it the "pure trig" way is much harder than using phasors...
+        </p>
+        <p>
+            Now lets solve it a different way, using [phasors](../mathsy_stuff/math_revision.html#phasors) to make the maths simpler!
+        </p>
+        <p>
+            We can write
+
+            $$
+            3\cos(\omega t - \frac{\pi}{2}) + 2\cos(\omega t)
+            $$
+
+            As
+
+            $$
+            3e^{-\frac{\pi}{2}} + 2e^0
+            $$
+
+            Consulting the [phasors](../mathsy_stuff/math_revision.html#phasors) notes we realise to add these two phasors
+            we need to convert to rectangular form like so:
+
+            $$
+            \begin{align}
+            3e^{-\frac{\pi}{2}} &= 3\,\cos(-\frac{\pi}{2}) +3\,j\,\overbrace{\sin(-\frac{\pi}{2})}^{= - 1} \\\\
+                                &= 3\,\underbrace{\cos(-\frac{\pi}{2})}_{=0} -3\,j \\\\
+                                &= -3\,j
+            \end{align}
+            $$
+
+            $$
+            \begin{align}
+            2e^0 &= 2\,\cos(0) + 2\,j\,\sin(0) \\\\
+                &= 2
+            \end{align}
+            $$
+
+            Add the two phasors:
+
+            $$
+            2 - 3\,j 
+            $$
+
+            $$
+            \begin{align}
+            \therefore M &= \sqrt{2^2 + (-3)^2} \\\\
+                        &= \sqrt{13} \\\\
+            \end{align}
+            $$
+
+            $$
+            \begin{align}
+            \therefore \theta &= \tan^{-1}\left(\frac{3}{2}\right) \\\\
+                            &= 56.31^\circ
+            \end{align}
+            $$
+
+            We have arrived at the same answer far more quickly and without having to remember lots of trig identities
+            and the "pattern" used to solve it using trig.
         </p>
     </div>
-  <div class="column">
-<p>
+    <div class="column">
+    <p>
         To continue we equate the above with the identity $a\sin(x) + b\cos(x) = R\sin(x + \phi)$ and get:
         </p>
         <p>
@@ -389,77 +452,18 @@ I had found was relative to... hopefully this paints the full picture :/
             We got there, we found the total voltage and its phase!
         </p>
         <p>
-            But here's a question, *phase relative to what?!*.
+            But here's a question, <em>phase relative to what?!</em>.
         </p>
-  </div>
+        <p>
+            Because we have used the identitity that expresses the sum as a $\sin$, and the voltage across the resistor is a $\sin$,
+            we have taken the phase <em>relative to the resistor</em>.
+        </p>
+    </div>
 </div>
 
 
 
----
 
-That looks quite easy, but I think the maths just worked out in this example. Mostly doing it the "pure trig" way is much harder than using phasors...
-
-Now lets solve it a different way, using [phasors](../mathsy_stuff/math_revision.html#phasors) to make the maths simpler!
-
-We can write
-
-$$
-3\cos(\omega t - \frac{\pi}{2}) + 2\cos(\omega t)
-$$
-
-As
-
-$$
-3e^{-\frac{\pi}{2}} + 2e^0
-$$
-
-
-Consulting the [phasors](../mathsy_stuff/math_revision.html#phasors) notes we realise to add these two phasors
-we need to convert to rectangular form like so:
-
-$$
-\begin{align}
-3e^{-\frac{\pi}{2}} &= 3\,\cos(-\frac{\pi}{2}) +3\,j\,\overbrace{\sin(-\frac{\pi}{2})}^{= - 1} \\\\
-                    &= 3\,\underbrace{\cos(-\frac{\pi}{2})}_{=0} -3\,j \\\\
-                    &= -3\,j
-\end{align}
-$$
-
-$$
-\begin{align}
-2e^0 &= 2\,\cos(0) + 2\,j\,\sin(0) \\\\
-     &= 2
-\end{align}
-$$
-
-Add the two phasors:
-
-$$
-2 - 3\,j 
-$$
-
-$$
-\begin{align}
-\therefore M &= \sqrt{2^2 + (-3)^2} \\\\
-             &= \sqrt{13} \\\\
-\end{align}
-$$
-
-$$
-\begin{align}
-\therefore \theta &= \tan^{-1}\left(\frac{3}{2}\right) \\\\
-                  &= 56.31^\circ
-\end{align}
-$$
-
-We have arrived at the same answer far more quickly and without having to remember lots of trig identities
-and the "pattern" used to solve it using trig. Woop!
-
-But what phase angle have we discovered? We have found the *phase angle of V<sub>T</sub> with respect to the resistor voltage*.
-
-So, one would think we could plot directly onto an argand diagram without the need to even go to rectangular
-form.
 
 ### A Little Aside...
 But.... why was current chosen as a sine and not a cosine? Well, first, the current was specified rather than the
