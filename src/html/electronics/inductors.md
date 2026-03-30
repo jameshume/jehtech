@@ -339,6 +339,9 @@ I had found was relative to... hopefully this paints the full picture :/
         <p><b>
         Using this method I found the phase of the total voltage relative to the inductor...
         </b></p>
+        <p><b>
+        Trig...
+        </b></p>
         <p>
         To continue we equate the above with the identity $a\cos(x) + b\sin(x) = R\cos(x - \alpha)$ and get:
         </p>
@@ -372,6 +375,9 @@ I had found was relative to... hopefully this paints the full picture :/
         <p>
             That looks quite easy, but I think the maths just worked out in this example. Mostly doing it the "pure trig" way is much harder than using phasors...
         </p>
+        <p><b>
+        Phasors...
+        </b></p>
         <p>
             Now lets solve it a different way, using <a href="../mathsy_stuff/math_revision.html#phasors" target="_blank">phasors</a> to make the maths simpler!
         </p>
@@ -429,10 +435,20 @@ I had found was relative to... hopefully this paints the full picture :/
             We have arrived at the same answer far more quickly and without having to remember lots of trig identities
             and the "pattern" used to solve it using trig.
         </p>
+        <p><b>
+        Argand diagram...
+        </b></p>
+        <p>
+            Turns out I could have gone even quicker and just plotted it on an argand diagram being carefull to put my reference,
+            in this case $V_L$ on the horizontal axis.
+        </p>
     </div>
     <div class="column">
         <p><b>
         Using this method I found the phase of the total voltage relative to the resistor...
+        </b></p>
+        <p><b>
+        Trig...
         </b></p>
         <p>
         To continue we equate the above with the identity $a\sin(x) + b\cos(x) = R\sin(x + \phi)$ and get:
@@ -464,9 +480,12 @@ I had found was relative to... hopefully this paints the full picture :/
             Because we have used the identitity that expresses the sum as a $\sin$, and the voltage across the resistor is a $\sin$,
             we have taken the phase <em>relative to the resistor</em>.
         </p>
-<p>
+        <p>
             That looks quite easy, but I think the maths just worked out in this example. Mostly doing it the "pure trig" way is much harder than using phasors...
         </p>
+        <p><b>
+        Phasors...
+        </b></p>        
         <p>
             Now lets solve it a different way, using <a href="../mathsy_stuff/math_revision.html#phasors" target="_blank">phasors</a> to make the maths simpler!
         </p>
@@ -524,7 +543,14 @@ I had found was relative to... hopefully this paints the full picture :/
 
             We have arrived at the same answer far more quickly and without having to remember lots of trig identities
             and the "pattern" used to solve it using trig.
-        </p>        
+        </p>
+        <p><b>
+        Argand diagram...
+        </b></p>
+        <p>
+            Turns out I could have gone even quicker and just plotted it on an argand diagram being carefull to put my reference,
+            in this case $V_R$ on the horizontal axis.
+        </p>
     </div>
 </div>
 
