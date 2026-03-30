@@ -336,6 +336,9 @@ I had found was relative to... hopefully this paints the full picture :/
 
 <div class="container">
     <div class="column">
+        <p><b>
+        Using this method I found the phase of the total voltage relative to the inductor...
+        </b></p>
         <p>
         To continue we equate the above with the identity $a\cos(x) + b\sin(x) = R\cos(x - \alpha)$ and get:
         </p>
@@ -428,7 +431,10 @@ I had found was relative to... hopefully this paints the full picture :/
         </p>
     </div>
     <div class="column">
-    <p>
+        <p><b>
+        Using this method I found the phase of the total voltage relative to the resistor...
+        </b></p>
+        <p>
         To continue we equate the above with the identity $a\sin(x) + b\cos(x) = R\sin(x + \phi)$ and get:
         </p>
         <p>
