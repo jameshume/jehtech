@@ -345,9 +345,9 @@ I had found was relative to... hopefully this paints the full picture :/
 
             $$
             \begin{align}
-            R &= \sqrt{2^2 + 3^2}\\\\
-            &= \sqrt{13} \\\\\\\\
-            \alpha &= tan^{-1}\left(\frac 3 2\right) \\\\
+            R &= \sqrt{2^2 + 3^2}\\
+            &= \sqrt{13} \\\\
+            \alpha &= tan^{-1}\left(\frac 3 2\right) \\
                 &\approx 56.31^\circ
             \end{align}
             $$
@@ -355,7 +355,7 @@ I had found was relative to... hopefully this paints the full picture :/
             Therefore,
 
             $$
-            V_T = \sqrt{13}\cos(\omega t -56.31^\circ)
+            V_T = \sqrt{13}\cos(\omega t - 56.31^\circ)
             $$
 
             We got there, we found the total voltage and its phase!
@@ -373,9 +373,9 @@ I had found was relative to... hopefully this paints the full picture :/
 
             $$
             \begin{align}
-            R &= \sqrt{2^2 + 3^2}\\\\
-            &= \sqrt{13} \\\\\\\\
-            \alpha &= tan^{-1}\left(\frac 2 3\right) \\\\
+            R &= \sqrt{2^2 + 3^2}\\
+            &= \sqrt{13} \\\\
+            \alpha &= tan^{-1}\left(\frac 2 3\right) \\
                 &\approx 33.69^\circ
             \end{align}
             $$
@@ -383,7 +383,7 @@ I had found was relative to... hopefully this paints the full picture :/
             Therefore,
 
             $$
-            V_T = \sqrt{13}\cos(\omega t -56.31^\circ)
+            V_T = \sqrt{13}\\in(\omega t + 33.69^\circ)
             $$
 
             We got there, we found the total voltage and its phase!
