@@ -610,7 +610,7 @@ Hence they are still 90 degrees out of phase, with voltage leading current (a ne
 the right in time and the minus sign inverts the waveform.)
 
 
-## Adding Complexity (Reactance & Impedance)
+## Impedance
 First we need to talk about reactance and impedance.
 
 Impedance is the full opposition to AC current and consists of resistive and reactive parts:
@@ -656,74 +656,6 @@ $$
 Where $\tilde{V}$ and $\tilde{I}$ are the phasor representations of voltage and current respectively. Impedance is a complex number, but not a phasor as it is not a time varying signal, which phasors usually represent (see [maths revision notes on phasors](../mathsy_stuff/math_revision.html#phasors)).
 
 
------
-TODO
-
-
-For pure resistance, lets choose current as our reference. We would then, on an argand diagram plot curret and voltage on the same axis, for example:
-
-```
------------>--------> i(t)
-           v(t)
-```
-
-But, for a purely reactive inductance, voltage and current are out of phase. Again, choose $I$ as our reference (this is somewhat arbitrary, we could choose $V$) and we can plot on an argand diagram (see [maths revision notes on complex numbers](../mathsy_stuff/math_revision.html#complex-numbers)):
-
-
-```
-     V
-     ^
-     |
-v(t) -
-     |
-     |-------|-------> I
-             i(t)
-```
-
-We still maintain the corrrect magnitude for the voltage and current, but we have now also shown that they are
-90 degrees out of phase. We'd express this relationship using a complex number in rectangular form as:
-
-$$
-v(t) + j i(t)
-$$
-
-Goto polar form:
-
-$$
-\begin{align}
-r &= \sqrt{v(t)^2 + i(t)^2} \\\\
-\theta &= \tan^{-1}(\frac{v(t)}{i(t)})
-\end{align}
-$$
-
-To complex form:
-
-$$
-\sqrt{v(t)^2 + i(t)^2} e^{\tan^{-1}(\frac{v(t)}{i(t)})}
-$$
-
-Which can just be represented generically as:
-
-$$
-r e^{j\theta}
-$$
-
-
-Thus, we have represented the amplitude of the signal and the phase relationship beteen voltage and current in one neat little package - the complex number. We can go in reverse and, from this complex number, derive both the
-current a voltage.
-
-Note that $j$ does not mean the component itself is imaginary. It is a mathematical marker that encodes the phase relationship between voltage and current. It allows phase shifts to be handled using algebra instead of trigonometry (see [maths revision notes on phasors](../mathsy_stuff/math_revision.html#phasors)).
-
-*The physical quantity reactance remains real, but its effect on phase is represented using the imaginary axis.*
-
-
-<iframe scrolling="no" title="Driven RLC Circuit Using Phasors" src="https://www.geogebra.org/material/iframe/id/Xujs5xXN/width/800/height/600/border/888888/sfsb/true/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/false/ctl/false" width="800px" height="600px" style="border:0px;"> </iframe>
-
-
-
---
-TODO
---
 When we move to impedance, we need to represent both magnitude and phase. A +90 degree phase shift corresponds to multiplication by $j$, a -90 degree shift corresponds to minus $j$.
 
 Thats why we sometimes see
@@ -740,7 +672,7 @@ We have already seen that we can write this (with phase now included):
 
 $$
 \begin{align}
-I(t) &= I_0 \sin(\omega t ) \\
+I(t) &= I_0 \sin(\omega t ) \\\\
 V(t) &= L \omega I_0 \cos(\omega t)
 \end{align}
 $$
