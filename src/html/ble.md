@@ -76,13 +76,19 @@ layers                  └─────────────────�
     * 2 Mbps PHY. x2 speedup! Reduces power consuption because same data transfered in less time == less radio on time.
     * Coded PHY. Longer range compared to v4 BLE. Increases power consuption because multiple symbols needed transmitted for 1 bit of data. Reduces speed since more bits required for same data.
 * Bit stream encoded using Guassian Frequency Shift Keying (GFSK).
+* Data rates:
+    * 1 Mbps (standard)
+    * 2 Mbps (high speed)
+    * 125/500 Kbps (long range - LE coded PHY, S=8, S=2 respectively)
+
 
 ### Link Layer (LL)
 * Responsible for advertising, scanning and creating/maintaining a connection.
-    * Advertises - sends advertising packets.
-    * Scanner    - scans for adverttising packets.
-    * Master     - initialites and manages a connection.
-    * Slave      - accepts a connection request.
+    * Advertises      - sends advertising packets on channels 37, 38, and 39.
+    * Scanner         - scans for adverttising packets.
+    * Master          - initialites and manages a connection.
+    * Slave           - accepts a connection request.
+    * Channel hopping - hop channels to avoid interference.
 * Defines packet structure, includes the state machine and radio control, and provides link layer-level encryption.
 
 ```
@@ -263,7 +269,14 @@ See [Core Spec](https://www.bluetooth.com/wp-content/uploads/Files/Specification
 * Enables segmentation and reassembly of packets that are larger than what the radio can deliver.
 * Error control and retransmissions.
 
+* 3 main channels:
+    * Channel 0x0004: ATT (Attribute Protocol) traffic
+    * Channel 0x0006: SMP (Security Manager Protocol) traffic
+    * Channel 0x0005: L2CAP signaling (like connection parameter updates)
+
 ### Generic Access Profile (GAP)
+
+<p></p>
 
 > Application interoperability in the Bluetooth system is accomplished by Bluetooth profiles. Bluetooth profiles define the
 > required functions and features of each layer in the Bluetooth system from the PHY to L2CAP and any other protocols
@@ -355,6 +368,7 @@ Legend:
 <p></p>
 
 #### Connection (Event)
+<p></p>
 
 > The most common way to achieve two-way communication in Bluetooth Low Energy is to use connections.
 > In addition, a connection grants you benefits like higher data throughput, mechanisms to handle 
@@ -392,6 +406,8 @@ Establishing a connection requires two devices, one acting as a peripheral that 
      
 
 ### Attribute Protocol (ATT)
+<p></p>
+
 > The Attribute protocol allows a device referred to as the server to expose a set
 > of attributes and their associated values to a peer device referred to as the client
 >
@@ -427,6 +443,7 @@ Establishing a connection requires two devices, one acting as a peripheral that 
 <p></p>
 
 * Server is the device that is exposing the data and the client is the device consuming it.
+    * So controller is usually the client and the peripheral is usually the servier.
 * Attributes are arrays that can vary from 0 to 512 bytes.
 * Can be fixed or variable length.
 * E.g. a device could expose its battery level. It acts as the ATT server.
@@ -444,7 +461,7 @@ Establishing a connection requires two devices, one acting as a peripheral that 
 * An attribute has a type, described by a UUID. The UUID determines what the attribute value means. 
     * 16-bit for official atts
     * 128-bit number for custom atts.
-        * But 128-but very large (link layer PDU is 27 bytes) so can also use
+        * But 128-but very large (link layer PDU is 27 bytes) so thats why standard ones are defined:
             * 16 and 32-bit UUIDs - only used for UUIDs defined be Bluetooth SIG.
 
 > To reduce the burden of storing and transferring 128-bit UUID values, a range
@@ -459,19 +476,20 @@ Establishing a connection requires two devices, one acting as a peripheral that 
 
 * ATT PDUs have one of 6 types:
 
-| Type | Purpose | Suffix |
-|------|---------|--------|
-| Commands | PDUs sent to a server by a client that do not invoke a response. | CMD |
-| Requests | PDUs sent to a server by a client that invoke a response. | REQ |
-| Responses | PDUs sent to a client by a server in response to a request. | RSP |
-| Notifications | Unsolicited PDUs sent to a client by a server that do not invoke a confirmation. | NTF |
-| Indications | Unsolicited PDUs sent to a client by a server that invoke a confirmation. | IND |
-| Confirmations | PDUs sent to a server by a client to confirm receipt of an indication. | CFM |
+| Type          | Purpose                                                                          | Suffix |
+|---------------|----------------------------------------------------------------------------------|--------|
+| Commands      | PDUs sent to a server by a client that do not invoke a response.                 | CMD    |
+| Requests      | PDUs sent to a server by a client that invoke a response.                        | REQ    |
+| Responses     | PDUs sent to a client by a server in response to a request.                      | RSP    |
+| Notifications | Unsolicited PDUs sent to a client by a server that do not invoke a confirmation. | NTF    |
+| Indications   | Unsolicited PDUs sent to a client by a server that invoke a confirmation.        | IND    |
+| Confirmations | PDUs sent to a server by a client to confirm receipt of an indication.           | CFM    |
 <p></p>
 
 
 
 ### Generic Attribute Profile (GATT)
+<p></p>
 
 > Generic Attribute Profile (GATT) is built on top of the Attribute protocol (ATT) and establishes common operations and
 > a framework for the data transported and stored by the Attribute protocol...
@@ -532,29 +550,29 @@ Establishing a connection requires two devices, one acting as a peripheral that 
 |  |                     |                    |                             |    |    - And characteristics can be defined by a single value and 
 |  | +----------------+  |                    | +------------------------+  |    |      0-n descriptors (level 3)
 |  | | Include        |  |                    | | Include                |  |    |
-|  | +----------------+  |                    | +------------------------+  |    |
-|  |        :            |                    |           :                 |    |
-|  |        :            |                    |           :                 |    |
-|  |        :            |                    |           :                 |    |
-|  | +----------------+  |                    | +------------------------+  |    |
-|  | | Include        |  |                    | | Include                |  |    |
-|  | +----------------+  |        ...         | +------------------------+  |    |
-|  |                     |                    |                             |    |
-|  | +----------------+  |                    | +------------------------+  |    |
-|  | | Characteristic |  |                    | | Characteristic         |  |    |
-|  | |                |  |                    | |                        |  |    |
-|  | | +-----------+  |  |                    | | +-------------------+  |  |    |
-|  | | |Properties |  |  |                    | | | Properties        |  |  |    |
-|  | | +-----------+  |  |                    | | +-------------------+  |  |    |
-|  | | +-----------+  |  |                    | | +-------------------+  |  |    |
-|  | | | Value     |  |  |                    | | | Value             |  |  |    |
-|  | | +-----------+  |  |                    | | +-------------------+  |  |    |
-|  | | +-----------+  |  |                    | | +-------------------+  |  |    |
-|  | | |Descriptor |  |  |                    | | | Descriptor        |  |  |    |
-|  | | +-----------+  |  |                    | | +-------------------+  |  |    |
-|  | |       o        |  |                    | |          :             |  |    |
-|  | |       o        |  |                    | |          :             |  |    |
-|  | |       o        |  |                    | |          :             |  |    |
+|  | +----------------+  |                    | +------------------------+  |    |    GATT Server
+|  |        :            |                    |           :                 |    |       |
+|  |        :            |                    |           :                 |    |       +---- Service
+|  |        :            |                    |           :                 |    |       |        |
+|  | +----------------+  |                    | +------------------------+  |    |       |        +---- Characteristic
+|  | | Include        |  |                    | | Include                |  |    |       |        |        |
+|  | +----------------+  |        ...         | +------------------------+  |    |       |        |        +---- Value
+|  |                     |                    |                             |    |       |        |        |
+|  | +----------------+  |                    | +------------------------+  |    |       |        |        +---- Descriptor
+|  | | Characteristic |  |                    | | Characteristic         |  |    |       |        |
+|  | |                |  |                    | |                        |  |    |       |        +---- Characteristic
+|  | | +-----------+  |  |                    | | +-------------------+  |  |    |       |                 |
+|  | | |Properties |  |  |                    | | | Properties        |  |  |    |       |                 +---- Value
+|  | | +-----------+  |  |                    | | +-------------------+  |  |    |       |                 |
+|  | | +-----------+  |  |                    | | +-------------------+  |  |    |       |                 +---- Descriptor
+|  | | | Value     |  |  |                    | | | Value             |  |  |    |       |
+|  | | +-----------+  |  |                    | | +-------------------+  |  |    |       +---- Service
+|  | | +-----------+  |  |                    | | +-------------------+  |  |    |                |
+|  | | |Descriptor |  |  |                    | | | Descriptor        |  |  |    |                +---- Characteristic
+|  | | +-----------+  |  |                    | | +-------------------+  |  |    |                         |
+|  | |       o        |  |                    | |          :             |  |    |                         +---- Value
+|  | |       o        |  |                    | |          :             |  |    |                         |
+|  | |       o        |  |                    | |          :             |  |    |                         +---- Descriptor
 |  | | +-----------+  |  |                    | | +-------------------+  |  |    |
 |  | | |Descriptor |  |  |                    | | | Descriptor        |  |  |    |
 |  | | +-----------+  |  |                    | | +-------------------+  |  |    |
@@ -627,7 +645,6 @@ The characteristic declaration:
                                         Indicate, Authenticated Signed Writes, Extended Properties.
 ```
 <p></p>
-
 
 * GAP service is *manditory*. 
     * A device shall have only one instance of the GAP service in the GATT server
