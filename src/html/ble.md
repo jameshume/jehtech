@@ -1,3 +1,6 @@
+## Links
+* [BLE Advertising Benchmarks For Vendors](https://github.com/em-foundation/BlueJoule/blob/main/docs/ReadMore.md)
+
 ## The Basics
 
 * Low power, low bandwidth application focus
@@ -18,7 +21,6 @@
 * Bluetooth Smart - BLE only - single mode
 * Bluetooth Smart Ready - BLE and bluetooth classic - dual mode
 * Bluetooth - Classic only (BR - basic rate/EBR - enhanced basic rate)
-
 
 ### BLE architecture blocks
 
