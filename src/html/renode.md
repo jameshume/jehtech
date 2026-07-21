@@ -1,3 +1,53 @@
+## References
+* [Cortex-M MCU Emulation with Renode, Memfault](https://interrupt.memfault.com/blog/intro-to-renode)
+
+## Cheat
+
+Starting renode:
+```
+renode [--disable-gui] --console <path to .resc file>
+```
+
+Simple .resc:
+
+```
+Clear
+
+using sysbus
+mach create "stm32u5-osmium"
+
+machine LoadPlatformDescription $ORIGIN/stm32u5.repl
+
+# Load the application before exposing the CPU to GDB. This initializes the
+# Cortex-M reset vectors without starting the emulation.
+sysbus LoadELF $ORIGIN/../out/build/Debug/src/test-crash-dump-u5
+
+# GDB starts the already loaded application with `monitor start`.
+machine StartGdbServer 3333 false
+```
+
+Then start GDB:
+
+```bash
+/opt/gcc-arm-none-eabi/bin/arm-none-eabi-gdb <path to ELF>
+```
+
+Then in GDB:
+
+```gdb
+set pagination off
+target remote localhost:3333
+break main
+monitor start
+continue
+```
+
+To see a serial do:
+
+```
+showAnalyzer sysbus.uart2
+```
+
 ## REPL Files
 ### EXTI
 Taken from the `stmh743.repl` file one can see the following:
