@@ -563,6 +563,21 @@ P2P connection of "things", like cars, for example.
 
 ## Power Saving
 
+When a modem is registered with the network by is not actively having to exchange any data it is normally idling. The network
+won't keep a continuoys radio connection to it. From the mobile's point of view it doesn't have to and this eats up power so 
+why would it?!
+
+So, no active data exchange, mobile can turn off radio and save power. But then how can it respond to requests from the network.
+Answer, wake up ever so often and listen. But, of course, cellular tower doesn't want to just shout into the void and hope it
+is heard either, so the mobile and network agree a wakeup schedule: the mobile agrees to wake up at a defined interval and 
+the network knows, therefore, when it should attempt to reach the mobile.
+
+When the mobile wakes during this agreed interval it does not, however, fully power up. Only enough to listen for a "page"
+from the network. ***Paging** a device means that the network sends a short message saying "Device X, wake up and connect
+with me". A ***page*** is just a request to a device to connect with the network. From 3GPP TS 23.401, section 5.3.4.3:
+
+![3GPP-TS-23.401 Figure 5.3.4.3-1: Network triggered Service Request procedure](##IMG_DIR##/../3GPP-TS-23.401-section-5.3.4.3png.png)
+
 There are two solutions that optimize device power consumption: PSM and eDRX.
 
 ### PSM
