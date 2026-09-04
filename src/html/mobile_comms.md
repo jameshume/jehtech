@@ -573,14 +573,36 @@ is heard either, so the mobile and network agree a wakeup schedule: the mobile a
 the network knows, therefore, when it should attempt to reach the mobile.
 
 When the mobile wakes during this agreed interval it does not, however, fully power up. Only enough to listen for a "page"
-from the network. ***Paging** a device means that the network sends a short message saying "Device X, wake up and connect
-with me". A ***page*** is just a request to a device to connect with the network. From 3GPP TS 23.401, section 5.3.4.3:
+from the network. **Paging** a device means that the network sends a short message saying "Device X, wake up and connect
+with me". A **page** is just a request to a device to connect with the network. 
+
+From 3GPP TS 23.401, section 5.3.4.3:
 
 ![3GPP-TS-23.401 Figure 5.3.4.3-1: Network triggered Service Request procedure](##IMG_DIR##/../3GPP-TS-23.401-section-5.3.4.3png.png)
 
-There are two solutions that optimize device power consumption: PSM and eDRX.
+When there is something being delivered to the device, the network pages the device (4a and 4b). The device then wakes up and
+data transmission can occur. When listening for pages it's worth noting that the device only normally wakes only enough of the 
+modem to receive and decode the paging channels. If the page is for that modem, it powers up additional circuitry needed to 
+transmit and establish a connection.
+
+So thats paging. By default a device sleeps and wakes up to listen for pages regularly.
+
+There are two solutions that optimize device power consumption: PSM and eDRX. 
+
+A cellular modem normally spends time in three broad conditions:
+
+1. Actively transmitting or receiving.
+2. Registered and waiting for incoming traffic.
+3. Deeply asleep.
+
+Normal idle DRX and eDRX concern condition 2. They control how often the modem checks whether the network is calling it.
+
+PSM is condition 3. The modem stops checking completely.
 
 ### PSM
+
+TL;DR: PSM means, "The network cannot contact me. I will wake when I have something to send, or when my periodic network timer expires."
+
 * See [POWER SAVINGS FOR CELLULAR IOT DEVICES by Yong Shi  January 31, 2022](https://incompliancemag.com/article/power-savings-for-cellular-iot-devices/)
 * Mobile does <b>not monitor paging</b> (broadcasts sent to all cells in a location area/routing area/tracking area) and becomes unreachable for Mobile Terminated (MT) services, which are services where the mobile is contacted via the network. For example an SMS is terminated at the mobile which receives it.
      * This goes beyond Idle Mode behavior because in this mode power hungy tasks like neighbour cell measurements and
@@ -620,6 +642,8 @@ All timers are negotiated on network connect. The T3142 timer can be very long w
 <p></p>
 
 ## eDRX
+TL;DR: eDRX means, "The network can contact me, but it may need to wait until I next listen."
+
 * Extends the DRX cycles to allow a device to remain in a lower power state for longer <b>between paging occasions</b>. This has the advantage, v.s. PSM, that the device is periodically available for longer for MT terminated services without requiring an MO trigger.
 
 <p>
