@@ -67,9 +67,8 @@ def inject_markdown_snippet(match_object_for_snippet_placeholder):
                 'toc',
                 'pymdownx.superfences',
                 CodeHiliteExtension(linenums=True)])
-        if md_filename.name == 'ble.md':
-            renderer.treeprocessors.register(
-                JehTableProcessor(renderer), 'jeh_tables', 15)
+        renderer.treeprocessors.register(
+            JehTableProcessor(renderer), 'jeh_tables', 15)
         return renderer.convert(md_file.read())
 
 
