@@ -140,4 +140,4 @@ return the last updated value.
 * See [CQRS facts and myths explained](https://event-driven.io/en/cqrs_facts_and_myths_explained/).
 
 
-### Database Per Service Pattern
+### Database Per Service Pattern 

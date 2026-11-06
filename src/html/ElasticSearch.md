@@ -99,4 +99,4 @@
             * One shard must be on a single node and can be placed on any node. Many to one.
         * Horizontally scale the data volume.
         * Each shard in an Apache Lucene index
-        * Can improve performance by running queries on multiple shards at the same time.
+        * Can improve performance by running queries on multiple shards at the same time. 

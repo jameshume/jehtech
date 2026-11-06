@@ -239,3 +239,4 @@ Install using `code --install-extension my-extension-0.0.1.vsix` [[Ref]](https:/
 Test using `npm run test`
 
 `npm install --save-dev mocha chai`
+ 

@@ -28,3 +28,4 @@ which will have the following contents:
 The **access_key is secret: never commit to your repository!**.
 
 To do the deploy from the command line use `docker-compose up upload`.
+ 

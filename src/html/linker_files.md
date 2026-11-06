@@ -253,3 +253,4 @@ Lets say that upon link, the linker assigns the value `0x8000_0000` to `mysec_st
 
 mysec_start == What ever is in memory at the address 0x8000_0000
 ```
+ 

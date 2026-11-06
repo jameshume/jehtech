@@ -12,4 +12,4 @@
 ![Proxy pattern notes](##IMG_DIR##/patterns/patterns_proxy.png")
 ![State pattern notes](##IMG_DIR##/patterns/patterns_state.png")
 ![Strategy pattern notes](##IMG_DIR##/patterns/patterns_strategy.png")
-![Template pattern notes](##IMG_DIR##/patterns/patterns_template.png")
+![Template pattern notes](##IMG_DIR##/patterns/patterns_template.png") 

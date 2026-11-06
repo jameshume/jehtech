@@ -75,4 +75,4 @@ V_{x_i}(t) &= \int_{t_0}^{t} x_i(\tau) \, d\tau + V_0 \\\\
 $$
 
 
- Integrate again to get distance.
+ Integrate again to get distance. 

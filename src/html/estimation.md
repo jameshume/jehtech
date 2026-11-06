@@ -29,3 +29,4 @@ Ranked success factors:
 
 
 ## [Delivering large-scale IT projects on time, on budget, and on value](https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/delivering-large-scale-it-projects-on-time-on-budget-and-on-value)
+ 

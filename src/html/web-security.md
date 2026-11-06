@@ -11,4 +11,4 @@ These types of attachs are generall divided into two categories.
 2. Blind Cross Site Scripting
 3. Reflected XSS Attacks
 
-## Cross Site Request Forgery (CSRF)
+## Cross Site Request Forgery (CSRF) 

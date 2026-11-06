@@ -113,4 +113,4 @@ This leave me with the question, why was is_move_constructible defined this way?
 be true when there is a default or explicitly defiend move constructor? The answer is that 
 `is_move_constructible` is just defined as the object can be constructed from an rvalue: how it's
 constructed doesn't matter. It's constructed by a copy constructor, or a move constructor, and how the
-constructor is implemented, like if it's actually doing a "move", doesn't matter
+constructor is implemented, like if it's actually doing a "move", doesn't matter 

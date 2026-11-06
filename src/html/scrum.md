@@ -492,3 +492,4 @@ According to [Scrum.org](https://scrum.org):
 * For every week of sprint fo 45 minutes of retro.
 * Review - 1 hour for each week in pstring
 * Retro - max 1.5 hours for 2 week sprint
+ 

@@ -15,3 +15,4 @@ The way this is normally handled is with a **Systems** approach: boundaries betw
 A Systems approach also handles another weakness frequently exposed by projects in this company: from the top down, the **Stage and Gate** process looks like it will structure and organise a large project effectively; In practice, unless a Systems approach is adopted, PDR and CDR gates are effectively impossible to pass, because there is no way to validate the disciplinary boundaries (like Software/Hardware) until integration testing, by which time it is far too late.
 
 Copious examples are available, if required.
+ 

@@ -70,4 +70,4 @@ By setting Developer Mode, Errors are displayed in the browser and can be seen b
 
     2. You can check the errors for var/log and var/reports folder
 
-```
+``` 

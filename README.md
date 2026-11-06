@@ -70,3 +70,4 @@ sudo apt install oracle-java10-set-default
 sudo apt-get install ttf-mscorefonts-installer
 sudo fc-cache
 ```
+ 

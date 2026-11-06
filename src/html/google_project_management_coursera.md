@@ -105,4 +105,4 @@
     * Scope creep is when a project’s work starts to grow beyond what was originally agreed upon during the initiation phase.
     * Set up a change control process. During the course of your project, some changes are inevitable. Determine the process for how each change will be defined, reviewed, and approved (or rejected) before you add it to your project plan. Make sure your project team is aware of this process.
     * Triple constraint model: scope, time, cost (all effect quality). All interelated - a change in one effects the others. E.g. a change in scope may change the time and/or the cost of the project.
-    * 
+    *  

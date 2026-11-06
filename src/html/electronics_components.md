@@ -10,3 +10,4 @@ Peak pulse power P<sub>pp</sub>, t<sub>p</sub> = 8/20 us: 100W
 Input volatage V<sub>I</sub>: GND - 0.5V to 5.5V
 Electrostatic discharge voltage V<sub>ESD</sub>: 15kV to 15kV
 
+ 

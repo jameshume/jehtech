@@ -680,3 +680,4 @@ bool is_debugger_attached(void) {
     return (DBGMCU->CR & (DBGMCU_CR_DBG_STOP | DBGMCU_CR_DBG_STANDBY)) != 0;
 }
 ```
+ 

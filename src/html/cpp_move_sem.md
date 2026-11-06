@@ -423,3 +423,4 @@ From https://stackoverflow.com/a/14303116/1517244:
 From https://stackoverflow.com/a/79336090/1517244
 > "Move" just means you don't care what happens to the old object, right? So "it stays the same", which is what happens for a copy, is also perfectly valid for a move. Move isn't required to change it. So the immutable object can still very well have a move constructor (synthesized from copy). 
 
+ 

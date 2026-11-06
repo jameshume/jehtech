@@ -87,4 +87,4 @@ block diagram. From here one can see that it is connected to the APB2 bus.
 
 To find out how to enable the USART_1 module consult the [RM0368 Reference manual](https://www.st.com/resource/en/reference_manual/rm0368-stm32f401xbc-and-stm32f401xde-advanced-armbased-32bit-mcus-stmicroelectronics.pdf), specifically the
 Reset and clock control (RCC) section for the "RCC APB2 peripheral clock enable register (RCC_APB2ENR)" register
-definition.
+definition. 

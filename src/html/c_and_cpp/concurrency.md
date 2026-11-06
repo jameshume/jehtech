@@ -156,4 +156,4 @@ void do_something(void) {
 * When locks cannot be reliably acquired in the same order use `std::lock()` - it can lock two or more
   mutexes at once without risk of deadlock.
 
-#### std::unique_lock
+#### std::unique_lock 

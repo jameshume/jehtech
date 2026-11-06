@@ -100,4 +100,4 @@ nvicInput23: Miscellaneous.CombinedInput @ none
     -> nvic@23
 ```
 
-So that is how the EXTI map is created.
+So that is how the EXTI map is created. 

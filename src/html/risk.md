@@ -37,3 +37,4 @@ Simple table as follows, where the scores are as described for the risk heat map
 | 1  | A description |  2              |  5           |  10       | JH    | Open/Waiting/Closed   | dd/mm/yyy       | 13          |
 | 2  | ...
 
+ 

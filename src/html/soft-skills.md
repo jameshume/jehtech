@@ -148,4 +148,4 @@ This is good when the conversation is nearer "nasty" than "nice" on the not-nast
 	* Could you tell me again a little bit more aout the pressures your under so we can keep it in mind.
 	* WHAT IS THEIR NARATIVE
 	* USE ADVACOCY TO PAINT WHAT CAN BE DONE - ADVOCATE FOR THEM & THEIR NEEDS!!!
-		  * Advacy - just means you are sharing your statements & get understanding via enquiry.
+		  * Advacy - just means you are sharing your statements & get understanding via enquiry. 

@@ -67,3 +67,4 @@ In `lwipopts.h`:
 extern void my_debug_printf_function(const char*fmt, ...);
 #define LWIP_PLATFORM_DIAG(x) do {my_debug_printf_function x;} while(0)
 ```
+ 
