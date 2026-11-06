@@ -815,6 +815,22 @@ You'll also encounter two infrastructure services:
     * Noitfy: automatically push the value of a certain attribute to the client. Client not required to ack.
     * Indicate: Like notify but client must ack. Can only send one per connection interval so slower than notifications.       
 
+#### Service Discovery
+To discover services:
+
+* The client sends ATT discovery requests that ask the server to describe its GATT database. It learns service UUIDs and handle ranges, then discovers the characteristics and descriptors within them.
+* After connecting, the client sends an ATT Read By Group Type Request, asking to find Primary Service declarations (UUID `0x2800`) between handlers `0x0001` and `0xFFFF`.
+* The server returns a set of entries so that the client can know which services exist and where each service's attributes live. If they do not all fit in one response, it repeats the request starting after the last returned service end handle. An "Attribute Not Found" response normally marks the end of the search.
+
+To discover a service's characteristics:
+
+* The client sends an ATT Read By Type Request asking to "find Characteristic declarations (UUID `0x2803`) between handles A and B".
+* The response descrobes the characteristics.
+
+Then to discover the descriptors:
+* The client sends an ATT Find Information Request over the space after the characteristic value, up to the end of that characteristic.
+
+
 ### SMP (Security Manager Protocol)
 #### Pairing
 Paring means that devices establish a secure connection with these properties:
