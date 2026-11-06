@@ -45,10 +45,10 @@
                         │                 Host                   │
                         ├──────────────┬─────────────────────────┤
 Subprocedures for  ---->│     GATT     │    GAP                  │ <--- Interfaces directly with app
-using ATT layer         |              |                         |      to handle device discovery and
+using ATT layer         │              |                         │      to handle device discovery and
                         ├──────────────┼──────────────┐          │      connection related services
 Allow dev to expose --->│     ATT      │    SMP <-----|----------│----- Security Manage Protocol: defines
-attributes to others    |              |              |          |      and provides methods for secure
+attributes to others    │              |              |          │      and provides methods for secure
                         ├──────────────┴──────────────┤          │      comms.
 Data encapsulation ---->│           L2CAP             │          │
 services to upper       |                             |          |
@@ -292,9 +292,10 @@ See [Core Spec](https://www.bluetooth.com/wp-content/uploads/Files/Specification
 
 * Descibes:
     * Device roles. Roles allow devices to have radios that either transmit (TX) only, receive (RX) only, or do both.
-                    They determine things like how the device advertises its presence, or how it scans and connects to other nodes.
 
-                    NOTE: GAP roles (Central/Peripheral) describe the connection relationship: who initiates and who accepts. But once connected, the GATT client/server relationship is separate.
+      They determine things like how the device advertises its presence, or how it scans and connects to other nodes.
+      NOTE: GAP roles (Central/Peripheral) describe the **connection relationship: who initiates and who accepts**. The GATT client/server relationship is separate.
+      
         * Broadcaster - (Beacon) A device that sends advertising packets. Does not use connectable ad packets - no one can connect to a broadcaster.
         * Observer    - Device that scans for broadcasters and reports this information to an app.
         * Peripheral  - Device that advertises by using connectable advert packets.
