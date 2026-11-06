@@ -2,9 +2,16 @@
 * [Cortex-M MCU Emulation with Renode, Memfault](https://interrupt.memfault.com/blog/intro-to-renode)
 
 ## Cheat
+Install latest version (at time of writing):
+
+```bash
+wget https://github.com/renode/renode/releases/download/v1.17.0/renode_1.17.0_amd64.deb
+sudo apt install ./renode_1.17.0_amd64.deb
+```
 
 Starting renode:
-```
+
+```bash
 renode [--disable-gui] --console <path to .resc file>
 ```
 
@@ -24,6 +31,10 @@ sysbus LoadELF $ORIGIN/../out/build/Debug/src/test-crash-dump-u5
 
 # GDB starts the already loaded application with `monitor start`.
 machine StartGdbServer 3333 false
+
+## OR
+# true argument configures Renode to start the emulation when GDB connects
+machine StartGdbServer 3333 true
 ```
 
 Then start GDB:

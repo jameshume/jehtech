@@ -292,8 +292,9 @@ See [Core Spec](https://www.bluetooth.com/wp-content/uploads/Files/Specification
 
 * Descibes:
     * Device roles. Roles allow devices to have radios that either transmit (TX) only, receive (RX) only, or do both.
-                    They determine things like how the device advertises its presence, or how it scans and connects 
-                    to other nodes.
+                    They determine things like how the device advertises its presence, or how it scans and connects to other nodes.
+
+                    NOTE: GAP roles (Central/Peripheral) describe the connection relationship: who initiates and who accepts. But once connected, the GATT client/server relationship is separate.
         * Broadcaster - (Beacon) A device that sends advertising packets. Does not use connectable ad packets - no one can connect to a broadcaster.
         * Observer    - Device that scans for broadcasters and reports this information to an app.
         * Peripheral  - Device that advertises by using connectable advert packets.
@@ -311,6 +312,39 @@ See [Core Spec](https://www.bluetooth.com/wp-content/uploads/Files/Specification
 | Transfer | One way data                | One way data                   | Two way data        | Two way data       |
 | Stack    | Reduced h/w and stack       | Reduced h/w and stack          | Full h/w and stack  | Full h/w and stack |
 <p></p>
+
+#### Discovery Modes and Proceedures
+Discovery modes describe whether an advertising device should appear during device discovery. This happens
+before GATT service discovery: first you find the device, then you explore its services and characteristics.
+
+BLE has three discoverability modes:
+
+| Mode | Meaning | Example use |
+|---|---|---|
+| **Non-discoverable** | Excluded from GAP's general and limited discovery procedures | A configured sensor that no longer needs to appear during setup |
+| **General discoverable** | Available for discovery without a mandated time limit | A sensor available for an app to find |
+| **Limited discoverable** | Temporarily available for discovery, for at most **180 seconds** | A device whose setup button was just pressed |
+
+A non-discoverable device can still advertise. Its packets remain visible to scanning tools, so this mode does not hide its radio traffic.
+
+The advertising device has a mode; the scanning device follows a procedure.
+
+The names are similar, but their relationship is:
+
+| Scanner’s discovery procedure | Finds general-discoverable devices? | Finds limited-discoverable devices? |
+|---|---:|---:|
+| **General discovery** | Yes | Yes |
+| **Limited discovery** | No | Yes |
+
+The advertiser communicates its mode through the Flags field in its advertising data. General mode sets the General Discoverable flag; limited mode sets the Limited Discoverable flag; non-discoverable mode sets neither.
+
+NOTE: Discoverability is separate from connectability:
+
+* *Advertising*: Is the device transmitting announcements?
+* *Discoverability*: Should GAP discovery procedures report it?
+* *Connectability*: Is it accepting connection requests?
+
+
 
 #### Advertising
 
@@ -409,6 +443,8 @@ Establishing a connection requires two devices, one acting as a peripheral that 
 
 ### Attribute Protocol (ATT)
 <p></p>
+ATT (Attribute Protocol) is the message protocol that lets one Bluetooth device discover, read, and write data on another. GATT uses those messages to give the data a useful structure: services, characteristics, and descriptors.
+
 
 > The Attribute protocol allows a device referred to as the server to expose a set
 > of attributes and their associated values to a peer device referred to as the client
@@ -450,12 +486,18 @@ Establishing a connection requires two devices, one acting as a peripheral that 
 * Can be fixed or variable length.
 * E.g. a device could expose its battery level. It acts as the ATT server.
 * An attribute is composed of [handle | type | value | permissions]
-    * **Handle**: A 16-bit, unique, non-zero value that is assigned by each server to its own attributes.
-      It makes the attribute "addressable" and does not change during a single connection.
-    * **Type**: A UUID (2-byte or 16-byte) is used to identify every attribute type (no central registry for UUIDs). 
+    * **Handle**: 	The attribute’s address within this server. A 16-bit, unique, non-zero value that is assigned by each server to its own attributes. 
+    
+    It makes the attribute "addressable" and does not change during a single connection.
+
+    The handle tells you where to access the value.
+    * **Type**: Describes what the value represents, using a UUID (2-byte or 16-byte) to identify every attribute type (no central registry for UUIDs). 
+
       There are two types of UUIDs: Service UUID and Characteristic UUID.
+
+      The UUID tells you what something is.
     * **Value**: Byte array of fixed or variable length. May require multiple PDUs to transmit.
-    * **Permission**: Read or write, notified or indicated, security level required to access:
+    * **Permission**: 	Rules governing access. Read or write, notified or indicated, security level required to access:
         * Readable, writable or readable and writable.
         * Encryption required or not.
         * Authentication or not.
@@ -476,7 +518,21 @@ Establishing a connection requires two devices, one acting as a peripheral that 
 > 128-bit UUID value.
 <p></p>
 
-* ATT PDUs have one of 6 types:
+For the 5 main operations one does, the ATT exchanges look like this:
+
+| Operation | ATT messages | Direction |
+|---|---|---|
+| Read | Read Request → Read Response | Client asks; server returns bytes |
+| Write with response | Write Request → Write Response | Client supplies bytes; server reports success or an error |
+| Write without response | Write Command | Client supplies bytes; no ATT reply |
+| Notify | Handle Value Notification | Server supplies bytes; no ATT reply |
+| Indicate | Handle Value Indication → Confirmation | Server supplies bytes; client confirms receipt |
+<p></p>
+
+Here, "without response" means no acknowledgement at the ATT level. BLE’s lower layers still provide radio retransmission. An indication’s confirmation also does not prove that the receiving application has finished acting on the data.
+
+
+ATT PDUs have one of 6 types:
 
 | Type          | Purpose                                                                          | Suffix |
 |---------------|----------------------------------------------------------------------------------|--------|
@@ -488,9 +544,12 @@ Establishing a connection requires two devices, one acting as a peripheral that 
 | Confirmations | PDUs sent to a server by a client to confirm receipt of an indication.           | CFM    |
 <p></p>
 
+A Protocol Data Unit, or PDU, is one ATT message. It begins with an opcode identifying the operation, followed by operation-specific fields.
 
 
 ### Generic Attribute Profile (GATT)
+GATT (Generic Attribute Profile) defines how Bluetooth devices organise data and how other devices interact with it. It gives you the services, characteristics, and descriptors you see when working with Bluetooth Low Energy.
+
 <p></p>
 
 > Generic Attribute Profile (GATT) is built on top of the Attribute protocol (ATT) and establishes common operations and
@@ -523,13 +582,19 @@ Establishing a connection requires two devices, one acting as a peripheral that 
 > -- Novel bits.
 <p></p>
 
-* Attributes grouped into services
+The GATT layer groups attributes from the ATT layer into services, further subdivided into characteristics, where each characteristic
+has a value and a descriptor.
+
+**Services, characteristics, and descriptors are all represented using ATT attributes**.
+
+
 * Services and characteristics are both attributes.
-    * Characteristic is a container for user data
+    * Services group related functionality (like "Heart Rate" or "Battery")
+    * Characteristic is a container for user data: they represent individual data points within a service (like "Heart Rate Measurement" or "Battery Level")
     * Include at least
         * characteristic declaration - metadata
         * characteristic value - user data in the value field
-    * And can be followed by descriptors.
+    * And can be followed by descriptors, which provide metadata about characteristics (like whether notifications are enabled)
 * GATT defines how services and characteristics can be discovered and used.
 
 > A service is a collection of data and associated behaviors to accomplish a
@@ -542,6 +607,66 @@ Establishing a connection requires two devices, one acting as a peripheral that 
     * Can be discovered using Primary Service Discovery procedures. 
 * Secondary service only intended to be included from a primary service
   or another secondary service.
+
+GATT uses a client-server architecture:
+
+* The GATT Server holds the database of services and characteristics. It responds to read/write requests and sends notifications/indications.
+* The GATT Client discovers the server's database and performs read/write operations. It subscribes to notifications and indications.
+
+Imagine a Bluetooth temperature sensor connected to your phone. The sensor exposes a structured collection of data, and GATT tells the phone how to discover and use it.
+
+The structure has three main building blocks:
+
+| Building block | Purpose | Example |
+|---|---|---|
+| **Service** | Groups related functionality | Battery Service |
+| **Characteristic** | Holds a value and describes the supported operations | Battery Level: 85%, readable and notifiable |
+| **Descriptor** | Supplies extra information or configuration for a characteristic | A setting that enables battery notifications |
+
+A device might expose this structure:
+
+```
+Temperature sensor
+│
+├── Temperature Service
+│   └── Temperature Measurement characteristic
+│       ├── Value: encoded temperature
+│       └── Descriptor: configuration for updates
+│
+└── Battery Service
+    └── Battery Level characteristic
+        ├── Value: 85%
+        └── Descriptor: configuration for updates
+```
+
+Each service and characteristic has a UUID, an identifier describing its type. Standard UUIDs let devices from different manufacturers agree on meanings such as "Battery Level". Custom UUIDs support application-specific functionality.
+
+For the above its GATT database would be a flat table of ATT attributes. The declarations and their order give that table the service → characteristic → descriptor structure:
+
+| Handle | Attribute type UUID | Attribute value / meaning |
+|---|---|---|
+| `0x0001` | Primary Service — `0x2800` | Health Thermometer Service UUID: `0x1809` |
+| `0x0002` | Characteristic Declaration — `0x2803` | Properties: **Indicate**; value handle: `0x0003`; characteristic UUID: `0x2A1C` |
+| `0x0003` | Temperature Measurement — `0x2A1C` | Encoded temperature measurement |
+| `0x0004` | CCCD — `0x2902` | `00 00`: indications disabled for this client |
+| `0x0005` | Primary Service — `0x2800` | Battery Service UUID: `0x180F` |
+| `0x0006` | Characteristic Declaration — `0x2803` | Properties: **Read + Notify**; value handle: `0x0007`; characteristic UUID: `0x2A19` |
+| `0x0007` | Battery Level — `0x2A19` | `55` hex = **85%** |
+| `0x0008` | CCCD — `0x2902` | `00 00`: notifications disabled for this client |
+
+Each row also has permissions, omitted here to keep the table readable.
+
+CCCD stands for Client Characteristic Configuration Descriptor, UUID `0x2902`. It's the setting your phone writes to enable or disable updates from a particular characteristic.
+
+UUID vs Handle:
+
+| | UUID | Handle |
+|---|---|---|
+| Purpose | Identifies a type or meaning | Addresses a specific attribute |
+| Size | 128 bits; assigned Bluetooth UUIDs can use a shortened form | 16 bits |
+| Unique within a database? | Can appear multiple times | Each attribute has its own |
+| Example | `0x2902` means CCCD | `0x0008` identifies one particular CCCD |
+
 
 ```
 +--------------------------------------------------------------------------------+
@@ -634,19 +759,22 @@ The characteristic declaration:
 | Handle         |                  |                                     | Permission           |
 +----------------+------------------+-------------------------------------+----------------------+
 | 0xNNNN         | Characteristic   | +----------------+--------+------+  | Read Only            |
-|                | (0x2803)         | | Properties     | Handle | UUID |  | No Authenticatio     |
-|                |                  | +-|--------------+-|------+-|----+  | No Authorization     |
-+----------------+------------------+---|----------------|--------|-------+----------------------+
-                                        |                |        |
-                                        |                |        16-bit or 128-bit UUID describing type 
-                                        |                |        of Characteristic Value
-                                        |                Attribute Handle of the Attribute that contains 
-                                        |                the Characteristic Value
-                                        A bit field that determines how the Characteristic Value can 
-                                        be used: Broadcast, Read, Write Without Response, Write, Notify
-                                        Indicate, Authenticated Signed Writes, Extended Properties.
+| |              | (0x2803)         | | Properties     | Handle | UUID |  | No Authenticatio     |
+| |              |                  | +-|--------------+-|------+-|----+  | No Authorization     |
++-|--------------+------------------+---|----------------|--------|-------+----------------------+
+  |                                     |                |        |
+  |                                     |                |        16-bit or 128-bit UUID describing type 
+  |                                     |                |        of Characteristic Value
+  |                                     |                Attribute Handle of the Attribute that contains 
+  |                                     |                the Characteristic Value
+  |                                     A bit field that determines how the Characteristic Value can 
+  |                                     be used: Broadcast, Read, Write Without Response, Write, Notify
+  |                                     Indicate, Authenticated Signed Writes, Extended Properties.
+  A handle identifies where that particular attribute is in a device’s database.
+  This is different from a UUID, which identifies what an attribute is.
 ```
 <p></p>
+
 
 * GAP service is *manditory*. 
     * A device shall have only one instance of the GAP service in the GATT server
@@ -658,6 +786,23 @@ The characteristic declaration:
         * Central Address Resolution
         * Resolvable Private Address Only
 
+Most likely services you'll bump into:
+
+| GATT service | UUID | What it provides | Typical devices |
+|---|---|---|---|
+| **Battery** | `0x180F` | Battery level and related information | Sensors, wearables, keyboards |
+| **Device Information** | `0x180A` | Manufacturer, model, serial number, firmware version | Many types of peripherals |
+| **Heart Rate** | `0x180D` | Heart-rate measurements | Chest straps, fitness sensors |
+| **Human Interface Device (HID)** | `0x1812` | Input reports such as key presses and mouse movement | Keyboards, mice, controllers |
+| **Environmental Sensing** | `0x181A` | Measurements such as temperature, humidity, and pressure | Environmental monitors |
+| **Health Thermometer** | `0x1809` | Temperature measurements for health applications | Medical thermometers |
+| **Cycling Speed and Cadence** | `0x1816` | Wheel and crank revolution measurements | Bicycle sensors |
+| **Blood Pressure** | `0x1810` | Blood-pressure measurements | Blood-pressure monitors |
+
+You'll also encounter two infrastructure services:
+
+* Generic Access / GAP Service (0x1800) exposes information such as the device name and appearance.
+* Generic Attribute / GATT Service (0x1801) supports managing the GATT database—for example, informing a client that the services have changed through the Service Changed characteristic.
 
 #### Sending Data
 * The server can send information to the client, without a client actually requesting information, or a client
@@ -670,7 +815,8 @@ The characteristic declaration:
     * Noitfy: automatically push the value of a certain attribute to the client. Client not required to ack.
     * Indicate: Like notify but client must ack. Can only send one per connection interval so slower than notifications.       
 
-## Pairing
+### SMP (Security Manager Protocol)
+#### Pairing
 Paring means that devices establish a secure connection with these properties:
 
 * Connection is capable of data encryption to keep the communication confidential.
@@ -700,11 +846,13 @@ Process has 3 phases:
 3. Key distribution.
     * Long Term Key (LTK) is used to distribute the rest of the keys
 
-### Steps
+##### Steps
 1. Feature exchange: paring request and response packets whcih detail a device's features and capabilities.
 2. Key generation.
 3. Transport-specific key distribution.
 
-## Bonding
+#### Bonding
 * Devices remember the security information exchanged during a successful pairing.  I.e. caches the keys.
 * Enables automatic re-connect without having to re-pair.
+
+
