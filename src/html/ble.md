@@ -292,18 +292,17 @@ See [Core Spec](https://www.bluetooth.com/wp-content/uploads/Files/Specification
 
 * Descibes:
     * Device roles. Roles allow devices to have radios that either transmit (TX) only, receive (RX) only, or do both.
-
-      They determine things like how the device advertises its presence, or how it scans and connects to other nodes.
-      NOTE: GAP roles (Central/Peripheral) describe the **connection relationship: who initiates and who accepts**. The GATT client/server relationship is separate.
-      
-        * Broadcaster - (Beacon) A device that sends advertising packets. Does not use connectable ad packets - no one can connect to a broadcaster.
-        * Observer    - Device that scans for broadcasters and reports this information to an app.
-        * Peripheral  - Device that advertises by using connectable advert packets.
-        * Central     - Device that scans for and initialates connections to peripherals.
+        * They determine things like how the device advertises its presence, or how it scans and connects to other nodes.
+        * NOTE: GAP roles (Central/Peripheral) describe the **connection relationship: who initiates and who accepts**. The GATT client/server relationship is separate.
+        * Roles include:
+            * **Broadcaster** - (Beacon) A device that sends advertising packets. Does not use connectable ad packets - no one can connect to a broadcaster.
+            * **Observer**    - Device that scans for broadcasters and reports this information to an app.
+            * **Peripheral**  - Device that advertises by using connectable advert packets.
+            * **Central**     - Device that scans for and initialates connections to peripherals.
     * Modes
-        * Connectable  - Can make a connection. State: Non-connectable, connectable.
-        * Discoverable - Can be discovered (is advertising). State: None, limited, general.
-        * Bondable     - If connectable, will pair with connected device for a long-term connection.
+        * **Connectable**  - Can make a connection. State: Non-connectable, connectable.
+        * **Discoverable** - Can be discovered (is advertising). State: None, limited, general.
+        * **Bondable**     - If connectable, will pair with connected device for a long-term connection.
     * Advertisement
     * Connection establishment
 
