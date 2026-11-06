@@ -487,15 +487,11 @@ ATT (Attribute Protocol) is the message protocol that lets one Bluetooth device 
 * E.g. a device could expose its battery level. It acts as the ATT server.
 * An attribute is composed of [handle | type | value | permissions]
     * **Handle**: 	The attribute’s address within this server. A 16-bit, unique, non-zero value that is assigned by each server to its own attributes. 
-    
-    It makes the attribute "addressable" and does not change during a single connection.
-
-    The handle tells you where to access the value.
+        * It makes the attribute "addressable" and does not change during a single connection.
+        * **The handle tells you where to access the value**.
     * **Type**: Describes what the value represents, using a UUID (2-byte or 16-byte) to identify every attribute type (no central registry for UUIDs). 
-
-      There are two types of UUIDs: Service UUID and Characteristic UUID.
-
-      The UUID tells you what something is.
+        * There are two types of UUIDs: Service UUID and Characteristic UUID.
+        * **The UUID tells you what something is**.
     * **Value**: Byte array of fixed or variable length. May require multiple PDUs to transmit.
     * **Permission**: 	Rules governing access. Read or write, notified or indicated, security level required to access:
         * Readable, writable or readable and writable.
@@ -843,6 +839,7 @@ Paring means that devices establish a secure connection with these properties:
 Generating, distributing and authenticating the encruption keys is what the pairing process does.
 
 Process has 3 phases:
+
 1. Initiate paring.
     * Central sends pairing request. Periphal responds with pairing response.
     * Exchance or pairing features, including IO capabilities:
