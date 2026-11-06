@@ -1,0 +1,22 @@
+Circuit: * C:\Users\JamesHume\Documents\wsl\jehtech\src\images\jeh-tech\Draft6.asc
+
+Direct Newton iteration for .op point succeeded.
+
+Date: Fri Mar  6 15:32:22 2026
+Total elapsed time: 0.096 seconds.
+
+tnom = 27
+temp = 27
+method = modified trap
+totiter = 2085
+traniter = 2082
+tranpoints = 1042
+accept = 1042
+rejected = 0
+matrix size = 4
+fillins = 0
+solver = Normal
+Avg thread counts: 4.5/8.1/8.1/4.5
+Matrix Compiler1:       6 opcodes  0.1/[0.1]/0.1
+Matrix Compiler2: off  [0.1]/0.1/0.1
+

@@ -291,7 +291,7 @@ See [Core Spec](https://www.bluetooth.com/wp-content/uploads/Files/Specification
 > to remote devices.
 
 * Descibes:
-    * Device roles. Roles allow devices to have radios that either transmit (TX) only, receive (RX) only, or do both.
+    * **Device roles**. Roles allow devices to have radios that either transmit (TX) only, receive (RX) only, or do both.
         * They determine things like how the device advertises its presence, or how it scans and connects to other nodes.
         * NOTE: GAP roles (Central/Peripheral) describe the **connection relationship: who initiates and who accepts**. The GATT client/server relationship is separate.
         * Roles include:
@@ -299,12 +299,14 @@ See [Core Spec](https://www.bluetooth.com/wp-content/uploads/Files/Specification
             * **Observer**    - Device that scans for broadcasters and reports this information to an app.
             * **Peripheral**  - Device that advertises by using connectable advert packets.
             * **Central**     - Device that scans for and initialates connections to peripherals.
-    * Modes
+    * **Device modes**.
         * **Connectable**  - Can make a connection. State: Non-connectable, connectable.
         * **Discoverable** - Can be discovered (is advertising). State: None, limited, general.
         * **Bondable**     - If connectable, will pair with connected device for a long-term connection.
     * Advertisement
     * Connection establishment
+* GAP uses HCI directly for advertising, scanning and connection control. It doesn't have its own L2CAP channel.
+* The GAP GATT service is distinct from GAP’s discovery/connection logic.
 
 |          | Broadcaster                 | Observer                       | Peripheral          | Control            |
 |----------|-----------------------------|--------------------------------|---------------------|--------------------|

@@ -212,8 +212,10 @@ table caption   { background-color: #CAD7E3;
 	background-color: #7999B9 !important;
 }
 
-.jehtable thead tr td {
+.jehtable thead tr td,
+.jehtable thead tr th {
 	border-radius: 5px;
+	background-color: #7999B9;
 }
 
 
@@ -225,7 +227,8 @@ table caption   { background-color: #CAD7E3;
  	background-color: #FFFFFF;
 }
 
-.jehtable td {
+.jehtable td,
+.jehtable th {
 	padding: 5px 8px 5px 8px;
 }
 

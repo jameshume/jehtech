@@ -15,6 +15,7 @@ import sys
 from pathlib import Path
 import markdown
 from markdown.extensions.codehilite import CodeHiliteExtension
+from markdown.treeprocessors import Treeprocessor
 
 from snippet_regular_expressions import (
     PRE_TAG_IMG_SPLIT_REGEX, RAW_FILE_INSERT_REGEX, ESCAPED_FILE_INSERT_REGEX, MARKDOWN_FILE_REGEX
@@ -45,19 +46,31 @@ def inject_raw_snippet(match_object_for_snippet_placeholder):
         return raw_snippet_file.read()
 
 
+class JehTableProcessor(Treeprocessor):
+    """ Apply the site's table styling to Markdown-generated tables. """
+    def run(self, root):
+        for table in root.iter('table'):
+            classes = table.get('class', '').split()
+            if 'jehtable' not in classes:
+                classes.append('jehtable')
+            table.set('class', ' '.join(classes))
+
+
 def inject_markdown_snippet(match_object_for_snippet_placeholder):
     """ Include a markdown file, converted to HTML, as a snippet """
-    md_filname = SNIPPET_DIRNAME / match_object_for_snippet_placeholder.group(1)
-    print(f"   Inserting MD snippet (now using CodeHiliteExt) {md_filname}")
-    with codecs.open(md_filname, 'r', 'utf-8') as md_file:
-        md= markdown.markdown(
-            md_file.read(),
-              extensions=[
-                  'tables', 
-                  'toc', 
-                  'pymdownx.superfences',
-                  CodeHiliteExtension(linenums=True)])
-        return(md)
+    md_filename = SNIPPET_DIRNAME / match_object_for_snippet_placeholder.group(1)
+    print(f"   Inserting MD snippet (now using CodeHiliteExt) {md_filename}")
+    with codecs.open(md_filename, 'r', 'utf-8') as md_file:
+        renderer = markdown.Markdown(
+            extensions=[
+                'tables',
+                'toc',
+                'pymdownx.superfences',
+                CodeHiliteExtension(linenums=True)])
+        if md_filename.name == 'ble.md':
+            renderer.treeprocessors.register(
+                JehTableProcessor(renderer), 'jeh_tables', 15)
+        return renderer.convert(md_file.read())
 
 
 def inject_processed_snippet(match_object_for_snippet_placeholder):
