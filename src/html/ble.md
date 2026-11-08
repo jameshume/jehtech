@@ -285,19 +285,29 @@ jitter, up to 10ms, to helpa void collisisions.
 
 Shorter adv interval means faster discovery but more power consumption, whereas longer interval means slower discovery, but less power consumption.
 
-These are the advertising PDU types (BLE 5.4):
+Four legacy advertising type:
 
-| PDU type | Family | Channel | Purpose / behaviour |
-|---|---|---|---|
-| `ADV_IND` | Legacy | Primary | General advertising: accepts both connection requests and scan requests. |
-| `ADV_DIRECT_IND` | Legacy | Primary | Invites a specific device to connect; does not accept scan requests. |
-| `ADV_NONCONN_IND` | Legacy | Primary | Broadcasts data; accepts neither connection requests nor scan requests. |
-| `ADV_SCAN_IND` | Legacy | Primary | Advertises and accepts scan requests for additional information; does not accept connections. |
-| `ADV_EXT_IND` | Extended | Primary | Announces extended advertising, usually pointing to an auxiliary packet on a secondary channel. |
-| `AUX_ADV_IND` | Extended | Secondary | Carries the auxiliary advertisement; can support connections, scanning, or neither, depending on its mode. |
-| `AUX_CHAIN_IND` | Extended | Secondary / periodic | Carries additional advertising data that continues from an earlier packet. |
-| `AUX_SYNC_IND` | Extended | Periodic | Carries periodic advertisements
+| Advertising type | PDU name | Connectable? | Scannable? | Typical use |
+|---|---|---|---|---|
+| **Connectable undirected** | `ADV_IND` | Yes | Yes | General discovery: devices can request extra data or initiate a connection. |
+| **Connectable directed** | `ADV_DIRECT_IND` | Yes | No | Targets a specific device by address, commonly for reconnection. |
+| **Scannable undirected** | `ADV_SCAN_IND` | No | Yes | Broadcasts data and allows scan requests for additional information. |
+| **Non-connectable, non-scannable undirected** | `ADV_NONCONN_IND` | No | No | Broadcasts data without accepting scan or connection requests; typical for beacons. |
 <p></p>
+
+The new ones: For extended advertising, several advertising types share the same PDU names; the advertising mode determines their behaviour...
+
+| Advertising type | PDU names | Connectable? | Scannable? | Use case |
+|---|---|---|---|---|
+| **Extended connectable undirected** | `ADV_EXT_IND` → `AUX_ADV_IND` | Yes | No | General discovery and connection establishment using secondary channels. |
+| **Extended connectable directed** | `ADV_EXT_IND` → `AUX_ADV_IND` | Yes | No | Invites a specific device to connect. |
+| **Extended scannable undirected** | `ADV_EXT_IND` → `AUX_ADV_IND` | No | Yes | Provides advertising data through an auxiliary scan response. |
+| **Extended scannable directed** | `ADV_EXT_IND` → `AUX_ADV_IND` | No | Yes | Allows a specific device to request an auxiliary scan response. |
+| **Extended non-connectable, non-scannable undirected** | `ADV_EXT_IND`, optionally `AUX_ADV_IND` | No | No | Broadcasts data; additional packets can carry larger datasets. |
+| **Extended non-connectable, non-scannable directed** | `ADV_EXT_IND`, optionally `AUX_ADV_IND` | No | No | Sends advertising information intended for a specific device. |
+| **Periodic advertising** | `AUX_SYNC_IND`, optionally `AUX_CHAIN_IND` | No | No | Scheduled broadcasts that receivers synchronise with. |
+| **Periodic advertising with responses (PAwR)** | `AUX_SYNC_SUBEVENT_IND` / `AUX_SYNC_SUBEVENT_RSP` | No | No | Scheduled broadcasts with allocated slots for receiver replies. |
+
 
 #### Data
 
