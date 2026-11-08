@@ -871,16 +871,12 @@ Process has 3 phases:
 * Enables automatic re-connect without having to re-pair.
 
 
- # BleuIO BLE Dongle AT Command Cheatsheet
+## BleuIO BLE Dongle AT Command Cheatsheet
  (AI Generated)
 
 Quick reference for the most commonly used [BleuIO USB BLE Dongle commands](https://www.bleuio.com/getting_started/docs/commands/), covering scanning, advertising, connecting and GATT operations.
 
-# BleuIO BLE Dongle AT Command Cheatsheet
-
-Reference: https://www.bleuio.com/getting_started/docs/commands/
-
-## 1. Basic Commands and Device Configuration
+### 1. Basic Commands and Device Configuration
 
 | Command | Description |
 |---|---|
@@ -894,7 +890,7 @@ Reference: https://www.bleuio.com/getting_started/docs/commands/
 | `AT+GETMAC` | Get dongle BLE MAC address |
 | `AT+DEVICENAME` | Get or set the BLE device name |
 
-## 2. Scanning for BLE Devices
+### 2. Scanning for BLE Devices
 
 | Command | Description |
 |---|---|
@@ -907,7 +903,7 @@ Reference: https://www.bleuio.com/getting_started/docs/commands/
 | `AT+SCANPARAM` | Get or configure scan parameters |
 | `Ctrl+C` | Stop an active scan |
 
-## 3. Connecting and Disconnecting
+### 3. Connecting and Disconnecting
 
 | Command | Description |
 |---|---|
@@ -919,7 +915,7 @@ Reference: https://www.bleuio.com/getting_started/docs/commands/
 | `AT+GETCONN` | List connected devices |
 | `AT+TARGETCONN=0000` | Select connection index 0 |
 
-## 4. GATT Services and Characteristics
+### 4. GATT Services and Characteristics
 
 | Command | Description |
 |---|---|
@@ -950,7 +946,7 @@ Reference: https://www.bleuio.com/getting_started/docs/commands/
   cheatsheet uses `AT+SETNOTI`, `AT+CLEARNOTI` and `AT+SETINDI`.
   Check which variants your firmware supports.
 
-## 5. BLE Advertising
+### 5. BLE Advertising
 
 | Command | Description |
 |---|---|
@@ -969,7 +965,7 @@ Reference: https://www.bleuio.com/getting_started/docs/commands/
   manufacturer-specific information.
 - Scan response data can provide additional information to scanners.
 
-## 6. Security, Pairing and Bonding (SMP)
+### 6. Security, Pairing and Bonding (SMP)
 
 | Command | Description |
 |---|---|
@@ -992,7 +988,7 @@ Reference: https://www.bleuio.com/getting_started/docs/commands/
 - Just Works pairing does not provide MITM protection.
 - BLE Secure Connections uses ECDH key agreement.
 
-## 7. Connection Parameters, Scanning and MTU
+### 7. Connection Parameters, Scanning and MTU
 
 | Command | Description |
 |---|---|
@@ -1000,7 +996,7 @@ Reference: https://www.bleuio.com/getting_started/docs/commands/
 | `AT+SCANPARAM` | Get or configure scan interval and window |
 | `AT+MTU` | Configure ATT Maximum Transmission Unit |
 
-### Connection Parameters
+#### Connection Parameters
 
 | Parameter | Description |
 |---|---|
@@ -1025,7 +1021,7 @@ Reference: https://www.bleuio.com/getting_started/docs/commands/
 - ATT MTU negotiation does not directly change the Link Layer
   data length. These are separate mechanisms.
 
-## 8. Typical BLE Central Connection Sequence
+### 8. Typical BLE Central Connection Sequence
 
 ```text
 AT
@@ -1039,7 +1035,7 @@ AT+SETNOTI=0012
 AT+GAPDISCONNECT
 ```
 
-## 9. Typical BLE Peripheral Sequence
+### 9. Typical BLE Peripheral Sequence
 
 ```text
 AT
@@ -1053,7 +1049,7 @@ AT+ADVSTOP
 For a custom GATT server, configure the required services and
 characteristics before starting advertising.
 
-## 10. BLE Protocol Stack Command Mapping
+### 10. BLE Protocol Stack Command Mapping
 
 | Protocol Layer | AT Commands | Purpose |
 |---|---|---|
