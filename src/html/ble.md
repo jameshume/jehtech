@@ -874,7 +874,7 @@ Process has 3 phases:
  # BleuIO BLE Dongle AT Command Cheatsheet
  (AI Generated)
 
-Quick reference for the most commonly used [BleuIO USB BLE Dongle commands](https://www.bleuio.com/getting_started/docs/commands/?utm_source=chatgpt.com), covering scanning, advertising, connecting and GATT operations.
+Quick reference for the most commonly used [BleuIO USB BLE Dongle commands](https://www.bleuio.com/getting_started/docs/commands/), covering scanning, advertising, connecting and GATT operations.
 
 # BleuIO BLE Dongle AT Command Cheatsheet
 
@@ -892,6 +892,7 @@ Reference: https://www.bleuio.com/getting_started/docs/commands/
 | `AT+PERIPHERAL` | Set peripheral role |
 | `AT+DUAL` | Set dual role |
 | `AT+GETMAC` | Get dongle BLE MAC address |
+| `AT+DEVICENAME` | Get or set the BLE device name |
 
 ## 2. Scanning for BLE Devices
 
@@ -903,7 +904,7 @@ Reference: https://www.bleuio.com/getting_started/docs/commands/
 | `AT+SCANFILTER=UUID=180F` | Filter by service UUID |
 | `AT+SCANFILTER=CLEAR` | Clear scan filter |
 | `AT+SCANTARGET=[0]AA:BB:CC:DD:EE:FF=5` | Scan one device for 5 seconds |
-| `AT+SCANPARAM` | Show scan configuration |
+| `AT+SCANPARAM` | Get or configure scan parameters |
 | `Ctrl+C` | Stop an active scan |
 
 ## 3. Connecting and Disconnecting
@@ -924,14 +925,30 @@ Reference: https://www.bleuio.com/getting_started/docs/commands/
 |---|---|
 | `AT+GETSERVICES` | Discover remote GATT services and characteristics |
 | `AT+GETSERVICESONLY` | Discover services only |
-| `AT+GETSERVICEDETAILS=0017` | Get details of service at handle 0x0017 |
+| `AT+GETSERVICEDETAILS=0017` | Get characteristics for service at handle 0x0017 |
 | `AT+GATTCREAD=0012` | Read attribute handle 0x0012 |
 | `AT+GATTCWRITE=0012 HELLO` | Write ASCII data |
 | `AT+GATTCWRITEB=0012 010203` | Write binary data as hex |
 | `AT+GATTCWRITEWR=0012 HELLO` | Write ASCII without response |
 | `AT+SETNOTI=0012` | Enable characteristic notifications |
-| `AT+CLEARNOTI=0012` | Disable notifications |
-| `AT+SETINDI=0012` | Enable indications |
+| `AT+CLEARNOTI=0012` | Disable characteristic notifications |
+| `AT+SETINDI=0012` | Enable characteristic indications |
+| `AT+NOTI` | Configure notifications (course command) |
+| `AT+INDI` | Configure indications (course command) |
+| `AT+CUSTOMSERVICE` | Create a custom local GATT service |
+
+**Notes:**
+
+- GATT read/write operations use attribute handles, not UUIDs.
+- Attribute handles are specific to the remote GATT database.
+- Discover services and characteristics before accessing their handles.
+- Notifications do not require acknowledgement at the ATT layer.
+- Indications require acknowledgement at the ATT layer.
+- Notifications and indications are generally enabled by configuring
+  the Client Characteristic Configuration Descriptor (CCCD).
+- The course lists `AT+NOTI` and `AT+INDI`, whereas the original
+  cheatsheet uses `AT+SETNOTI`, `AT+CLEARNOTI` and `AT+SETINDI`.
+  Check which variants your firmware supports.
 
 ## 5. BLE Advertising
 
@@ -944,7 +961,71 @@ Reference: https://www.bleuio.com/getting_started/docs/commands/
 | `AT+ADVRESP` | Read scan response data |
 | `AT+ADVRESP=00` | Clear scan response data |
 
-## 6. Typical BLE Connection Sequence
+**Notes:**
+
+- Legacy BLE advertising uses channels 37, 38 and 39.
+- Advertising allows nearby central devices to discover the dongle.
+- Advertising data can include device names, service UUIDs and
+  manufacturer-specific information.
+- Scan response data can provide additional information to scanners.
+
+## 6. Security, Pairing and Bonding (SMP)
+
+| Command | Description |
+|---|---|
+| `AT+GAPPAIR` | Initiate BLE pairing |
+| `AT+ENTERPASSKEY` | Enter a passkey during pairing |
+| `AT+NUMCOMPA` | Confirm numeric comparison during pairing |
+| `AT+SECLVL` | Set minimum security level |
+| `AT+GETBOND` | List bonded devices |
+| `AT+GAPUNPAIR` | Remove stored bonding information |
+| `AT+GAPIOCAP` | Configure device I/O capabilities |
+
+**Notes:**
+
+- Pairing establishes security keys between devices.
+- Bonding stores keys for reuse on subsequent connections.
+- Encryption protects communication over an established BLE link.
+- I/O capabilities influence the pairing method selected.
+- Numeric Comparison requires user confirmation of matching numbers.
+- Passkey Entry requires a six-digit passkey.
+- Just Works pairing does not provide MITM protection.
+- BLE Secure Connections uses ECDH key agreement.
+
+## 7. Connection Parameters, Scanning and MTU
+
+| Command | Description |
+|---|---|
+| `AT+CONNPARAM` | Get or configure BLE connection parameters |
+| `AT+SCANPARAM` | Get or configure scan interval and window |
+| `AT+MTU` | Configure ATT Maximum Transmission Unit |
+
+### Connection Parameters
+
+| Parameter | Description |
+|---|---|
+| Connection Interval | Time between connection events |
+| Peripheral Latency | Number of consecutive connection events the peripheral may skip |
+| Supervision Timeout | Maximum time without successful communication before connection loss |
+| Scan Interval | Time between the starts of consecutive scan windows |
+| Scan Window | Duration spent scanning during each scan interval |
+| ATT MTU | Maximum size of an ATT protocol data unit |
+
+**Notes:**
+
+- Shorter connection intervals can reduce communication latency
+  but may increase power consumption.
+- Peripheral latency allows a peripheral to skip connection events
+  to reduce power consumption.
+- The supervision timeout determines when a connection is considered lost.
+- A larger ATT MTU can improve throughput for larger GATT values.
+- The default ATT MTU is 23 bytes.
+- The maximum attribute value in a single ATT notification is
+  typically ATT_MTU - 3 bytes.
+- ATT MTU negotiation does not directly change the Link Layer
+  data length. These are separate mechanisms.
+
+## 8. Typical BLE Central Connection Sequence
 
 ```text
 AT
@@ -956,3 +1037,38 @@ AT+GETSERVICES
 AT+GATTCREAD=0012
 AT+SETNOTI=0012
 AT+GAPDISCONNECT
+```
+
+## 9. Typical BLE Peripheral Sequence
+
+```text
+AT
+ATI
+AT+PERIPHERAL
+AT+ADVSTART
+AT+GAPSTATUS
+AT+ADVSTOP
+```
+
+For a custom GATT server, configure the required services and
+characteristics before starting advertising.
+
+## 10. BLE Protocol Stack Command Mapping
+
+| Protocol Layer | AT Commands | Purpose |
+|---|---|---|
+| Application | `AT`, `ATI`, `ATR` | Dongle control and information |
+| GAP | `AT+CENTRAL`, `AT+PERIPHERAL`, `AT+DUAL` | Device roles |
+| GAP | `AT+GAPSCAN`, `AT+GAPCONNECT`, `AT+GAPDISCONNECT` | Discovery and connections |
+| GAP | `AT+ADVSTART`, `AT+ADVSTOP`, `AT+DEVICENAME` | Advertising and device identity |
+| GATT | `AT+GETSERVICES`, `AT+GETSERVICEDETAILS` | Service and characteristic discovery |
+| GATT / ATT | `AT+GATTCREAD`, `AT+GATTCWRITE`, `AT+GATTCWRITEB` | Attribute read/write |
+| GATT / ATT | `AT+NOTI`, `AT+INDI`, `AT+SETNOTI`, `AT+SETINDI` | Notifications and indications |
+| GATT | `AT+CUSTOMSERVICE` | Local GATT server configuration |
+| SMP | `AT+GAPPAIR`, `AT+ENTERPASSKEY`, `AT+NUMCOMPA` | Pairing |
+| SMP | `AT+SECLVL`, `AT+GAPIOCAP` | Security configuration |
+| SMP | `AT+GETBOND`, `AT+GAPUNPAIR` | Bond management |
+| Link Layer | `AT+CONNPARAM` | Connection timing |
+| GAP / Link Layer | `AT+SCANPARAM` | Scanning configuration |
+| ATT / L2CAP | `AT+MTU` | ATT MTU configuration |
+
