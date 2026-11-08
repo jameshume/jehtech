@@ -16,6 +16,24 @@
 * Operates over 40 RF channels
 * Discovery occurs over 3 channels (quicker connection)
 
+```
+Bluetooth LE: 40 channels, spaced 2 MHz apart                 Frequency increases -->
+
+     2402 MHz                           2426 MHz                                                                         2480 MHz
+      |                                  |                                                                                |
+      A  D  D  D  D  D  D  D  D  D  D  D  A  D  D  D  D  D  D  D  D  D  D  D  D  D  D  D  D  D  D  D  D  D  D  D  D  D  D  A
+     37 00 01 02 03 04 05 06 07 08 09 10 38 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 39
+
+     +-------------------------------+    +-------------------------------+    +-------------------------------+
+     |         Wi-Fi channel 1       |    |         Wi-Fi channel 6       |    |         Wi-Fi channel 11      |
+     |           2412 MHz            |    |           2437 MHz            |    |           2462 MHz            |
+     +-------------------------------+    +-------------------------------+    +-------------------------------+
+                         Wi-Fi band positions and widths are approximate.
+
+     A = Primary advertising channel (37, 38, 39)
+     D = Data channel (0-36)
+```
+
 ### Device Types
 
 * Bluetooth Smart - BLE only - single mode
@@ -170,7 +188,7 @@ PDUs on ad channels use the Adverising Physical Channel PDU.
 On a data channel use the Data Channel PDU.
 On Osochronous Pysical Channel uses that PDU.
 
-Where PDU playload looks like...
+Where PDU advertising PDU header looks like...
 
                ┌─────────────┐┌────────┐┌────────┐┌────────┐┌────────┐┌─────────────────┐
  PDU Payload:  │PDU Type     ││RFU     ││ChSel   ││TxAdd   ││RXAdd   ││Length           │
@@ -199,7 +217,29 @@ PACKET STRUCTURE FOR LE CODED PHYs
 * Typical advertising packet is 128 microseconds long.
 * Typical data packet is 144 microseconds long.
 
+A list of PDU types:
 
+| PDU Type | PDU Name | Physical Channel | LE 1M | LE 2M | LE Coded |
+|----------|----------|------------------|-------|-------|----------|
+| 0b0000 | ADV_IND | Primary Advertising | x | | |
+| 0b0001 | ADV_DIRECT_IND | Primary Advertising | x | | |
+| 0b0010 | ADV_NONCONN_IND | Primary Advertising | x | | |
+| 0b0011 | SCAN_REQ | Primary Advertising | x | | |
+| 0b0011 | AUX_SCAN_REQ | Secondary Advertising | x | x | x |
+| 0b0100 | SCAN_RSP | Primary Advertising | x | | |
+| 0b0101 | CONNECT_IND | Primary Advertising | x | | |
+| 0b0101 | AUX_CONNECT_REQ | Secondary Advertising | x | x | x |
+| 0b0110 | ADV_SCAN_IND | Primary Advertising | x | | |
+| 0b0111 | ADV_EXT_IND | Primary Advertising | x | | x |
+| 0b0111 | AUX_ADV_IND | Secondary Advertising | x | x | x |
+| 0b0111 | AUX_SCAN_RSP | Secondary Advertising | x | x | x |
+| 0b0111 | AUX_SYNC_IND | Periodic | x | x | x |
+| 0b0111 | AUX_CHAIN_IND | Secondary Advertising and Periodic | x | x | x |
+| 0b0111 | AUX_SYNC_SUBEVENT_IND | Periodic | x | x | x |
+| 0b0111 | AUX_SYNC_SUBEVENT_RSP | Periodic | x | x | x |
+| 0b1000 | AUX_CONNECT_RSP | Secondary Advertising | x | x | x |
+| All other values | Reserved for future use | | | | |
+<p></p>
 
 #### Advertising
 * Allows device to broadcast prescense and therefore connections.
@@ -227,6 +267,37 @@ LSB                                                                    MSB
 ```
 <p></p>
 
+In the PDU, 255 octets does not mean 255 bytes of application advertising data. For example, legacy `ADV_IND` has a 6-byte advertiser address plus 0–31 bytes of advertising data, giving a 6–37-byte payload. Extended advertising permits larger payloads, which also contain protocol fields. See [Part B. Link Layer Specification](https://www.bluetooth.com/wp-content/uploads/Files/Specification/HTML/Core-54/out/en/low-energy-controller/link-layer-specification.html).
+
+
+The 3 advertising channels are:
+
+| Channel Index | Center Frequency  | Position in Band |
+|---------------|-------------------|------------------|
+| 37	| 2402 MHz	| Bottom of the band |
+| 38	| 2426 MHz	| Middle of the band |
+| 39	| 2480 MHz	| Top of the band    |
+
+The are spread out to avoid a single noise source knocking out all advertising bands.
+
+Advertising interval = time between start of one advertising event and the next +/- some random
+jitter, up to 10ms, to helpa void collisisions.
+
+Shorter adv interval means faster discovery but more power consumption, whereas longer interval means slower discovery, but less power consumption.
+
+These are the advertising PDU types (BLE 5.4):
+
+| PDU type | Family | Channel | Purpose / behaviour |
+|---|---|---|---|
+| `ADV_IND` | Legacy | Primary | General advertising: accepts both connection requests and scan requests. |
+| `ADV_DIRECT_IND` | Legacy | Primary | Invites a specific device to connect; does not accept scan requests. |
+| `ADV_NONCONN_IND` | Legacy | Primary | Broadcasts data; accepts neither connection requests nor scan requests. |
+| `ADV_SCAN_IND` | Legacy | Primary | Advertises and accepts scan requests for additional information; does not accept connections. |
+| `ADV_EXT_IND` | Extended | Primary | Announces extended advertising, usually pointing to an auxiliary packet on a secondary channel. |
+| `AUX_ADV_IND` | Extended | Secondary | Carries the auxiliary advertisement; can support connections, scanning, or neither, depending on its mode. |
+| `AUX_CHAIN_IND` | Extended | Secondary / periodic | Carries additional advertising data that continues from an earlier packet. |
+| `AUX_SYNC_IND` | Extended | Periodic | Carries periodic advertisements
+<p></p>
 
 #### Data
 
