@@ -34,6 +34,8 @@ Bluetooth LE: 40 channels, spaced 2 MHz apart                 Frequency increase
      D = Data channel (0-36)
 ```
 
+Channel indices in Bluetooth LE are assigned by function, not by frequency order.
+
 ### Device Types
 
 * Bluetooth Smart - BLE only - single mode
@@ -955,6 +957,8 @@ Process has 3 phases:
 ## BleuIO BLE Dongle AT Command Cheatsheet
  (AI Generated)
 
+Baud = 57600
+
 Quick reference for the most commonly used [BleuIO USB BLE Dongle commands](https://www.bleuio.com/getting_started/docs/commands/), covering scanning, advertising, connecting and GATT operations.
 
 ### 1. Basic Commands and Device Configuration
@@ -970,6 +974,7 @@ Quick reference for the most commonly used [BleuIO USB BLE Dongle commands](http
 | `AT+DUAL` | Set dual role |
 | `AT+GETMAC` | Get dongle BLE MAC address |
 | `AT+DEVICENAME` | Get or set the BLE device name |
+<p></p>
 
 ### 2. Scanning for BLE Devices
 
@@ -984,6 +989,22 @@ Quick reference for the most commonly used [BleuIO USB BLE Dongle commands](http
 | `AT+SCANPARAM` | Get or configure scan parameters |
 | `Ctrl+C` | Stop an active scan |
 
+Example Output of `GAPSCAN`:
+
+```
+[01] Device: [0]40:48:FD:EA:EE:DE  RSSI: -13
+```
+
+There are two different numbers in square brackets:
+
+|Field	|Meaning|
+|---|---|
+|[01]|	Scan result index. This is the first device in the scan results.|
+|[0]|	BLE address type. 0 means public device address, 1 means random device address.|
+|40:48:FD:EA:EE:DE|	Device's 48-bit Bluetooth address|
+|RSSI: -13|	Received signal strength in dBm|
+<p></p>
+
 ### 3. Connecting and Disconnecting
 
 | Command | Description |
@@ -995,6 +1016,7 @@ Quick reference for the most commonly used [BleuIO USB BLE Dongle commands](http
 | `AT+GAPDISCONNECTALL` | Disconnect all peers |
 | `AT+GETCONN` | List connected devices |
 | `AT+TARGETCONN=0000` | Select connection index 0 |
+<p></p>
 
 ### 4. GATT Services and Characteristics
 
@@ -1076,6 +1098,7 @@ Quick reference for the most commonly used [BleuIO USB BLE Dongle commands](http
 | `AT+CONNPARAM` | Get or configure BLE connection parameters |
 | `AT+SCANPARAM` | Get or configure scan interval and window |
 | `AT+MTU` | Configure ATT Maximum Transmission Unit |
+<p></p>
 
 #### Connection Parameters
 
@@ -1115,6 +1138,7 @@ AT+GATTCREAD=0012
 AT+SETNOTI=0012
 AT+GAPDISCONNECT
 ```
+<p></p>
 
 ### 9. Typical BLE Peripheral Sequence
 
@@ -1148,4 +1172,4 @@ characteristics before starting advertising.
 | Link Layer | `AT+CONNPARAM` | Connection timing |
 | GAP / Link Layer | `AT+SCANPARAM` | Scanning configuration |
 | ATT / L2CAP | `AT+MTU` | ATT MTU configuration |
-
+<p></p>
