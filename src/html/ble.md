@@ -871,4 +871,88 @@ Process has 3 phases:
 * Enables automatic re-connect without having to re-pair.
 
 
- 
+ # BleuIO BLE Dongle AT Command Cheatsheet
+ (AI Generated)
+
+Quick reference for the most commonly used [BleuIO USB BLE Dongle commands](https://www.bleuio.com/getting_started/docs/commands/?utm_source=chatgpt.com), covering scanning, advertising, connecting and GATT operations.
+
+# BleuIO BLE Dongle AT Command Cheatsheet
+
+Reference: https://www.bleuio.com/getting_started/docs/commands/
+
+## 1. Basic Commands and Device Configuration
+
+| Command | Description |
+|---|---|
+| `AT` | Test communication with dongle |
+| `ATI` | Show firmware version and device information |
+| `ATR` | Reset dongle |
+| `AT+GAPSTATUS` | Show BLE role and connection status |
+| `AT+CENTRAL` | Set central role |
+| `AT+PERIPHERAL` | Set peripheral role |
+| `AT+DUAL` | Set dual role |
+| `AT+GETMAC` | Get dongle BLE MAC address |
+
+## 2. Scanning for BLE Devices
+
+| Command | Description |
+|---|---|
+| `AT+GAPSCAN` | Scan continuously |
+| `AT+GAPSCAN=5` | Scan for 5 seconds |
+| `AT+SCANFILTER=NAME=Sensor` | Filter by advertised name |
+| `AT+SCANFILTER=UUID=180F` | Filter by service UUID |
+| `AT+SCANFILTER=CLEAR` | Clear scan filter |
+| `AT+SCANTARGET=[0]AA:BB:CC:DD:EE:FF=5` | Scan one device for 5 seconds |
+| `AT+SCANPARAM` | Show scan configuration |
+| `Ctrl+C` | Stop an active scan |
+
+## 3. Connecting and Disconnecting
+
+| Command | Description |
+|---|---|
+| `AT+GAPCONNECT=[0]AA:BB:CC:DD:EE:FF` | Connect to public address |
+| `AT+GAPCONNECT=[1]AA:BB:CC:DD:EE:FF` | Connect to random address |
+| `AT+GAPCONNECT=1!` | Connect using scan result index 1 |
+| `AT+GAPDISCONNECT` | Disconnect current peer |
+| `AT+GAPDISCONNECTALL` | Disconnect all peers |
+| `AT+GETCONN` | List connected devices |
+| `AT+TARGETCONN=0000` | Select connection index 0 |
+
+## 4. GATT Services and Characteristics
+
+| Command | Description |
+|---|---|
+| `AT+GETSERVICES` | Discover remote GATT services and characteristics |
+| `AT+GETSERVICESONLY` | Discover services only |
+| `AT+GETSERVICEDETAILS=0017` | Get details of service at handle 0x0017 |
+| `AT+GATTCREAD=0012` | Read attribute handle 0x0012 |
+| `AT+GATTCWRITE=0012 HELLO` | Write ASCII data |
+| `AT+GATTCWRITEB=0012 010203` | Write binary data as hex |
+| `AT+GATTCWRITEWR=0012 HELLO` | Write ASCII without response |
+| `AT+SETNOTI=0012` | Enable characteristic notifications |
+| `AT+CLEARNOTI=0012` | Disable notifications |
+| `AT+SETINDI=0012` | Enable indications |
+
+## 5. BLE Advertising
+
+| Command | Description |
+|---|---|
+| `AT+ADVSTART` | Start advertising |
+| `AT+ADVSTOP` | Stop advertising |
+| `AT+ADVDATA` | Read configured advertising data |
+| `AT+ADVDATA=04:09:43:41:54` | Set advertising data (example name CAT) |
+| `AT+ADVRESP` | Read scan response data |
+| `AT+ADVRESP=00` | Clear scan response data |
+
+## 6. Typical BLE Connection Sequence
+
+```text
+AT
+ATI
+AT+CENTRAL
+AT+GAPSCAN=5
+AT+GAPCONNECT=[0]AA:BB:CC:DD:EE:FF
+AT+GETSERVICES
+AT+GATTCREAD=0012
+AT+SETNOTI=0012
+AT+GAPDISCONNECT
